@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Codeflow Lens — Codebase Intelligence Demo</title>
+    <meta
+      name="description"
+      content="Codeflow Lens is an interactive 2.5D / Universe visualizer that turns a codebase into a navigable city of files, dependencies, and hotspots."
+    />
+    <meta name="theme-color" content="#0a0d12" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Codeflow Lens — Codebase Intelligence Demo" />
+    <meta
+      property="og:description"
+      content="Interactive 2.5D / Universe visualizer that turns a codebase into a navigable city of files, dependencies, and hotspots."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Codeflow Lens — Codebase Intelligence Demo" />
+    <meta
+      name="twitter:description"
+      content="Interactive 2.5D / Universe visualizer that turns a codebase into a navigable city of files, dependencies, and hotspots."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- No-flash background: paint the canvas in the active theme color before
+         React mounts. Theme is mirrored onto <html data-theme="..."> by
+         applyTokens(); the default attribute above keeps SSR-less first paint
+         dark, which matches the dominant UI surface.
+
+         The blocking script reads the persisted theme (or falls back to dark)
+         and stamps `data-theme` synchronously so the CSS below picks the
+         correct background before paint. -->
+    <script>
+      try {
+        var t = localStorage.getItem('app:theme');
+        if (t !== 'dark' && t !== 'light') t = 'dark';
+        document.documentElement.dataset.theme = t;
+      } catch (e) { /* localStorage may be blocked — fall back to default attr */ }
+    </script>
+    <style>
+      :root { color-scheme: dark light; }
+      html, body { background: #0a0d12; }
+      html[data-theme="light"], html[data-theme="light"] body { background: #f4f6f9; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

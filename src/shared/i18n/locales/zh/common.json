@@ -1,0 +1,47 @@
+{
+  "workspace": "工作区",
+  "folder": "文件夹",
+  "file": "文件",
+  "files": "文件",
+  "files_one": "{{count}} 个文件",
+  "files_other": "{{count}} 个文件",
+  "fresh": "最新",
+  "stale": "陈旧",
+  "main": "main",
+  "loc": "LOC",
+  "close": "关闭",
+  "cancel": "取消",
+  "reset": "重置",
+  "save": "保存",
+  "open": "打开",
+  "ok": "确定",
+  "yes": "是",
+  "no": "否",
+  "loading": "加载中…",
+  "empty": "暂无内容",
+  "comingSoon": "即将推出",
+  "filesByConfidence": "按置信度的文件",
+  "tone": {
+    "critical": "严重",
+    "warn": "需复查",
+    "ok": "就绪",
+    "info": "信息"
+  },
+  "grade": {
+    "good": "良好",
+    "fair": "一般",
+    "poor": "较差"
+  },
+  "status": {
+    "STABLE": "稳定",
+    "MODIFIED": "已修改",
+    "NEW": "新增",
+    "SECURITY_ALERT": "有漏洞"
+  },
+  "plan": {
+    "current": "当前套餐"
+  },
+  "score": {
+    "vsLastWeek": "与上周相比"
+  }
+}

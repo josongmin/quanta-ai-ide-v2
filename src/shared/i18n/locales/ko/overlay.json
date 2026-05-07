@@ -1,0 +1,52 @@
+{
+  "title": "히트 오버레이",
+  "apply": "히트 적용",
+  "metric": "지표",
+  "buttonTitle": "히트 오버레이: {{label}}",
+  "controls": {
+    "intensity": "강도",
+    "radius": "반지름",
+    "threshold": "임계값"
+  },
+  "panel": {
+    "title": "오버레이",
+    "heading": "시각 오버레이",
+    "resetAll": "모두 끄기",
+    "off": "끔",
+    "on": "켬",
+    "enable": "켜기",
+    "disable": "끄기",
+    "tile": {
+      "heat": "히트",
+      "time": "시간 창",
+      "timeIdle": "히트(시간) 선택 시 활성화됩니다",
+      "risk": "리스크 렌즈",
+      "api": "공개 API",
+      "boundaries": "경계"
+    },
+    "detail": {
+      "apiBody": "외부에서 폭넓게 소비되는 파일에 얇은 외곽 링을 표시해, 공개 API 표면을 한눈에 보여줍니다."
+    }
+  },
+  "boundaries": {
+    "entry": "진입 지점",
+    "entryCaption": "앱 실행이 시작되는 위치",
+    "ingress": "인그레스",
+    "ingressCaption": "외부에서 도달 가능한 파일",
+    "egress": "이그레스",
+    "egressCaption": "외부 시스템을 호출하는 파일",
+    "protocol": {
+      "http": "HTTP",
+      "webhook": "Webhook",
+      "queue": "Queue",
+      "grpc": "gRPC",
+      "db": "DB",
+      "fs": "FS"
+    },
+    "summary": {
+      "entry": "진입",
+      "ingress": "인그레스",
+      "egress": "이그레스"
+    }
+  }
+}

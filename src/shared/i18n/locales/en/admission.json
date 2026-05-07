@@ -1,0 +1,57 @@
+{
+  "section": {
+    "liveSignal": "Live signal",
+    "ruleSources": "Rule sources",
+    "costLedger": "Cost ledger",
+    "ruleConstellation": "Rule constellation",
+    "livePrFeed": "Live PR feed",
+    "retroactive": "Retroactive · last 30 PRs",
+    "activeVsTotal": "Active vs total",
+    "ifTodayRan": "If today's PRs ran",
+    "rolloutsInProgress": "Rollouts in progress",
+    "overrideAudit": "Override audit",
+    "versionLog": "Version log",
+    "export": "Export",
+    "import": "Import",
+    "filesInPr": "Files in PR",
+    "filesInThisPr": "Files in this PR"
+  },
+  "table": {
+    "rule": "Rule",
+    "source": "Source",
+    "severity": "Severity",
+    "matches": "Matches",
+    "cost": "Cost",
+    "date": "Date",
+    "files": "Files",
+    "ripple": "Ripple",
+    "outcome": "Outcome",
+    "firedRules": "Fired rules"
+  },
+  "empty": {
+    "noOverrides": "No overrides yet."
+  },
+  "search": {
+    "rulesPlaceholder": "Search rules"
+  },
+  "rule": {
+    "whyExistsPlaceholder": "Why this rule exists",
+    "deleteTitle": "Delete rule",
+    "livePreview": "Live preview",
+    "ifEnabled": "If enabled (last 30d)"
+  },
+  "card": {
+    "bySource": "By source",
+    "bySourceHint": "★ native = engine-only signals",
+    "bySeverity": "By severity",
+    "bySeverityHint": "What gating actually does",
+    "byCost": "By cost",
+    "byCostHint": "Drives whether live preview can run inline",
+    "evidenceQuality": "Evidence quality",
+    "evidenceQualityHint": "Honesty layer · how precise the matches are",
+    "topBlockers": "Top blockers across simulated PRs"
+  },
+  "override": {
+    "whyPlaceholder": "Why is this safe? Cross-link an issue or doc."
+  }
+}

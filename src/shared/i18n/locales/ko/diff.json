@@ -1,0 +1,22 @@
+{
+  "comment": {
+    "linePlaceholder": "이 줄에 댓글 추가…",
+    "lineTitle": "이 줄에 댓글 추가"
+  },
+  "view": {
+    "whitespaceTitle": "공백 표시 (시각적 스텁)"
+  },
+  "preview": {
+    "openLabel": "PR 미리보기",
+    "openTitle": "이 저장소에 대한 합성 PR diff 샘플",
+    "regenerate": "재생성",
+    "regenerateAria": "PR 재생성",
+    "regenerateTitle": "다른 PR 샘플",
+    "closeAria": "PR 미리보기 닫기",
+    "closeTitle": "PR 미리보기 닫기",
+    "changeCountsAria": "변경 수"
+  },
+  "thread": {
+    "reopen": "스레드 다시 열기"
+  }
+}

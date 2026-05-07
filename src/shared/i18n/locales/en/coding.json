@@ -1,0 +1,166 @@
+{
+  "rail": {
+    "title": "Projects",
+    "newProject": "New project",
+    "newTaskInProject": "New task in this project",
+    "untitled": "Untitled",
+    "searchPlaceholder": "Search…",
+    "taskOne": "task",
+    "taskMany": "tasks",
+    "filter": {
+      "all": "All",
+      "mine": "Mine",
+      "archived": "Archived"
+    },
+    "empty": "Nothing matches."
+  },
+  "header": {
+    "openPr": "Open PR"
+  },
+  "composer": {
+    "code": "Code",
+    "ask": "Ask",
+    "placeholder": {
+      "code": "Describe a change for the agent. / for commands, # for files, @ for symbols…",
+      "ask": "Ask anything about this codebase…"
+    },
+    "shortcut": "⌘↵ to run",
+    "runCode": "Run",
+    "runAsk": "Send",
+    "stop": "Stop",
+    "attach": "Attach file",
+    "image": "Attach image",
+    "mentionFile": "Mention file",
+    "mentionSymbol": "Mention symbol",
+    "web": "Web search",
+    "suggest": "Prompt suggestions"
+  },
+  "empty": {
+    "title": "What should we build?",
+    "subtitle": "Describe a change or ask a question about your codebase."
+  },
+  "section": {
+    "recentRun": "Recent run",
+    "suggestions": "Suggested tasks"
+  },
+  "diff": {
+    "changes": "Changes",
+    "files": "{{count}} files",
+    "summary": "Agent finished — review the diff and open a PR when ready.",
+    "viewFull": "View full diff",
+    "openPr": "Open PR"
+  },
+  "suggestion": {
+    "fixFlaky": {
+      "title": "Fix flaky tests",
+      "body": "Triage recent e2e failures and add regression coverage."
+    },
+    "addTests": {
+      "title": "Add missing tests",
+      "body": "Start with the lowest-coverage edge cases."
+    },
+    "refactor": {
+      "title": "Refactor complex code",
+      "body": "Suggest extract-method candidates in high-complexity functions."
+    },
+    "review": {
+      "title": "Self-review PR",
+      "body": "Review the current branch before merging."
+    }
+  },
+  "demo": {
+    "t001": {
+      "title": "Swap session token storage in the auth middleware",
+      "t12m": "12m ago",
+      "t8m": "8m ago",
+      "t6m": "6m ago",
+      "u1": "Swap the session token in the auth middleware to match the new policy. Rotate every 15 minutes, store in an httpOnly cookie. Don't break existing callers.",
+      "u2": "Good. Build the adapter first and add the tests up front.",
+      "a1": {
+        "thinking": "Find every withSession caller first, then weigh an adapter pattern to preserve the signature. The localStorage→cookie migration is fragile across SSR boundaries, so split server/client.",
+        "text1": "Let me lay out the plan. `withSession` currently reads the token from sessionStorage; to avoid breaking the 23 call sites we need to wrap it in an adapter.",
+        "planTitle": "3-step refactor plan",
+        "plan1": "Introduce SessionAdapter (abstract over both sessionStorage and cookie)",
+        "plan2": "Add 15-minute rotation + httpOnly cookie issuance path",
+        "plan3": "Write 6 regression tests, verify all 23 callers",
+        "plan4": "Update docs/auth.md"
+      },
+      "a2": {
+        "text1": "Added `SessionAdapter` and kept the `withSession` signature. 6 regression tests added, all passing.",
+        "text2": "Ready for review. Want me to draft the PR message?"
+      }
+    },
+    "t002": {
+      "title": "Polish the Korean copy on the catalog listing page",
+      "t2m": "2m ago",
+      "tNow": "just now",
+      "u1": "Make the Korean copy on the catalog listing more natural. Leave technical terms alone, just the sentences.",
+      "a1": {
+        "thinking": "Keep the Korean tone consistent — review the mix of noun-ending vs verb-ending sentences.",
+        "text1": "Polishing 6 of 14 keys. Awkward literal translation \"갱신율\" → \"업데이트 빈도\"…"
+      }
+    },
+    "t006": {
+      "title": "Add jitter to webhook retry backoff",
+      "t2h": "2h ago",
+      "t1h": "1h ago",
+      "u1": "Add jitter to webhook retry backoff. Don't break the tests.",
+      "a1": {
+        "text1": "Added it, but one e2e test fails because it's timing-dependent."
+      }
+    },
+    "t003": {
+      "title": "Add regression tests for session-scoped receipt read logic",
+      "t1h": "1h ago",
+      "t58m": "58m ago",
+      "u1": "Last week's regression — receipts go stale when the session drops. Add tests.",
+      "a1": {
+        "text1": "Identified 3 reproduction scenarios. I'll split them into fixtures and add the tests.",
+        "planTitle": "Reproduction cases",
+        "plan1": "Look up receipt after a forced session termination",
+        "plan2": "Race just before refresh-token expiry",
+        "plan3": "Dual-read during concurrent rotation"
+      }
+    },
+    "t004": {
+      "title": "Split out gqlang e2e check fixtures"
+    },
+    "t005": {
+      "title": "Fix the published vector authority join plan"
+    },
+    "t007": {
+      "title": "Fix cold-start metric labels"
+    },
+    "t008": {
+      "title": "Refine the admin widget onboarding flow"
+    }
+  },
+  "context": {
+    "title": "Context",
+    "project": "Project",
+    "environment": "Environment",
+    "repo": "Repo",
+    "branch": "Branch",
+    "base": "Base",
+    "runtime": "Runtime",
+    "activity": "Recent activity",
+    "activityStarted": "Agent run started",
+    "activityPlanned": "Plan drafted",
+    "activityEdited": "Edited 7 files",
+    "activityTests": "Tests passed",
+    "shortcuts": "Shortcuts",
+    "kbRun": "Run",
+    "kbNew": "New task",
+    "kbSearch": "Search tasks",
+    "kbSlash": "Slash commands",
+    "footer": "se-dot-field-demo · coding"
+  },
+  "block": {
+    "thoughtFor": "Thought for {{seconds}}s",
+    "fileOne": "file",
+    "fileMany": "files",
+    "readyToReview": "ready to review",
+    "patch": "patch",
+    "openPr": "open PR"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "switcher": {
+    "heading": "ビューモード",
+    "tooltip": "ビューを切り替え",
+    "buttonTitle": "ビューモード: {{label}}"
+  },
+  "dot-field": {
+    "label": "ドットフィールド",
+    "hint": "ファイルのグリッドヒートマップ"
+  },
+  "universe": {
+    "label": "ユニバース",
+    "hint": "フォルダ階層で配置されたスター"
+  },
+  "unknown": {
+    "label": "不明",
+    "hint": "信頼度マップ — アナライザが不確実な箇所"
+  },
+  "cycles": {
+    "label": "サイクル",
+    "hint": "強連結 import 循環 (Tarjan)"
+  }
+}

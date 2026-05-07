@@ -1,0 +1,54 @@
+{
+  "placeholder": {
+    "text": "搜索文件、路径、符号…",
+    "regex": "^src/.*\\.tsx?$",
+    "dsl": "complexity:>30 churn:>0.5 layer:service !cyclic"
+  },
+  "action": {
+    "clear": "清除",
+    "advanced": "高级",
+    "caseSensitive": "区分大小写",
+    "recent": "最近搜索"
+  },
+  "mode": {
+    "title": "搜索模式",
+    "text": {
+      "label": "文本",
+      "title": "字面文本",
+      "hint": "在路径与文件名中匹配子串"
+    },
+    "regex": {
+      "label": "正则",
+      "title": "正则表达式",
+      "hint": "不区分大小写的正则"
+    },
+    "dsl": {
+      "label": "查询",
+      "title": "分面查询",
+      "hint": "分面查询语言"
+    }
+  },
+  "samples": {
+    "title": "示例查询",
+    "highRisk": "高风险热点",
+    "vulnerableHubs": "易受攻击枢纽",
+    "staleCode": "陈旧代码",
+    "longFiles": "长文件",
+    "untested": "未测试",
+    "typeUnsafe": "类型不安全",
+    "busFactor1": "巴士系数 1",
+    "cycleMembers": "循环成员"
+  },
+  "reference": {
+    "title": "参考",
+    "allFields": "所有字段",
+    "numeric": "数值:",
+    "string": "字符串:",
+    "flags": "标志:"
+  },
+  "regexHint": {
+    "prefix": "模式将 ",
+    "emphasis": "不区分大小写地",
+    "suffix": " 匹配 "
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "empty": {
+    "noDescription": "설명이 없습니다.",
+    "noSuggestions": "이 PR에 대한 제안이 없습니다.",
+    "noSuggestionsShort": "이 PR에 대한 제안 없음",
+    "noFindings": "이 필터에 해당하는 항목이 없습니다.",
+    "noFiles": "이 PR에 파일이 없습니다.",
+    "noCi": "이 PR에 구성된 CI가 없습니다.",
+    "noActivity": "아직 활동이 없습니다.",
+    "noReviewers": "지정된 리뷰어가 없습니다.",
+    "noFailingTests": "실패한 테스트가 없습니다.",
+    "allResolved": "모든 스레드가 해결됨"
+  },
+  "merge": {
+    "conflictsPresent": "병합 충돌이 있습니다.",
+    "aheadBehind": "앞섬 / 뒤처짐",
+    "needsManualReview": "수동 검토 필요"
+  },
+  "search": {
+    "scopeAria": "Pull request 범위",
+    "placeholder": "제목 또는 브랜치 검색…",
+    "clearAria": "검색 지우기",
+    "prsPlaceholder": "PR 검색"
+  },
+  "comment": {
+    "placeholder": "댓글을 입력하세요… (⌘↵ 로 전송)",
+    "prPlaceholder": "이 pull request에 댓글 남기기…"
+  },
+  "section": {
+    "suggestedReviewers": "추천 리뷰어",
+    "suggestedReviewersHint": "p0 라우터 · 소유권 × 주제 × 이력",
+    "riskProfile": "리스크 프로파일"
+  },
+  "risk": {
+    "headers": {
+      "file": "파일",
+      "blast": "영향 범위",
+      "fanIn": "Fan-in",
+      "editSafety": "편집 안전성",
+      "coverage": "커버리지",
+      "confidence": "신뢰도"
+    },
+    "seedTitle": "이 파일에서 dot-field 블라스트 뷰 시작"
+  },
+  "checks": {
+    "headers": {
+      "check": "검사",
+      "required": "필수",
+      "status": "상태",
+      "duration": "소요 시간",
+      "action": "작업"
+    }
+  }
+}

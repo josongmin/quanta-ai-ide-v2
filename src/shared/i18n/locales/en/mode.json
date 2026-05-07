@@ -1,0 +1,23 @@
+{
+  "switcher": {
+    "heading": "View mode",
+    "tooltip": "Switch view",
+    "buttonTitle": "View mode: {{label}}"
+  },
+  "dot-field": {
+    "label": "Dot Field",
+    "hint": "Grid heatmap of files"
+  },
+  "universe": {
+    "label": "Universe",
+    "hint": "Stars laid out by folder depth"
+  },
+  "unknown": {
+    "label": "Unknown",
+    "hint": "Confidence map — what the analyzer is unsure of"
+  },
+  "cycles": {
+    "label": "Cycles",
+    "hint": "Strongly-connected import cycles (Tarjan)"
+  }
+}

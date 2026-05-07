@@ -1,0 +1,16 @@
+{
+  "title": "键盘快捷键",
+  "hint": "提示：在文本输入框中输入时，大多数快捷键将被禁用。",
+  "column": {
+    "action": "操作",
+    "shortcut": "快捷键"
+  },
+  "action": {
+    "focusSearch": "聚焦搜索",
+    "openSettings": "打开设置",
+    "openActivity": "打开 AI 活动",
+    "toggleHelp": "切换此帮助",
+    "closeOrBlur": "关闭对话框 / 清除焦点",
+    "focusSearchSlash": "聚焦搜索 (备用)"
+  }
+}

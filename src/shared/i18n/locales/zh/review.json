@@ -1,0 +1,54 @@
+{
+  "empty": {
+    "noDescription": "未提供描述。",
+    "noSuggestions": "此 PR 没有建议。",
+    "noSuggestionsShort": "此 PR 没有建议",
+    "noFindings": "当前筛选下没有发现项。",
+    "noFiles": "此 PR 中没有文件。",
+    "noCi": "此 PR 未配置 CI。",
+    "noActivity": "暂无活动。",
+    "noReviewers": "未指定审阅者。",
+    "noFailingTests": "没有失败的测试。",
+    "allResolved": "所有线程已解决"
+  },
+  "merge": {
+    "conflictsPresent": "存在合并冲突。",
+    "aheadBehind": "领先 / 落后",
+    "needsManualReview": "需要手动审阅"
+  },
+  "search": {
+    "scopeAria": "Pull request 范围",
+    "placeholder": "搜索标题或分支…",
+    "clearAria": "清除搜索",
+    "prsPlaceholder": "搜索 PR"
+  },
+  "comment": {
+    "placeholder": "留下评论… (⌘↵ 发送)",
+    "prPlaceholder": "在此 pull request 上留言…"
+  },
+  "section": {
+    "suggestedReviewers": "推荐审阅者",
+    "suggestedReviewersHint": "p0 路由器 · 所有权 × 主题 × 历史",
+    "riskProfile": "风险概况"
+  },
+  "risk": {
+    "headers": {
+      "file": "文件",
+      "blast": "影响范围",
+      "fanIn": "Fan-in",
+      "editSafety": "编辑安全性",
+      "coverage": "覆盖率",
+      "confidence": "置信度"
+    },
+    "seedTitle": "从此文件开始 dot-field 影响视图"
+  },
+  "checks": {
+    "headers": {
+      "check": "检查",
+      "required": "必需",
+      "status": "状态",
+      "duration": "时长",
+      "action": "操作"
+    }
+  }
+}

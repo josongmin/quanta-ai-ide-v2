@@ -1,0 +1,22 @@
+{
+  "comment": {
+    "linePlaceholder": "この行にコメントを追加…",
+    "lineTitle": "この行にコメントを追加"
+  },
+  "view": {
+    "whitespaceTitle": "空白を表示 (ビジュアルスタブ)"
+  },
+  "preview": {
+    "openLabel": "PRをプレビュー",
+    "openTitle": "このリポジトリに対する合成PR diffのサンプル",
+    "regenerate": "再生成",
+    "regenerateAria": "PRを再生成",
+    "regenerateTitle": "別のPRをサンプル",
+    "closeAria": "PRプレビューを閉じる",
+    "closeTitle": "PRプレビューを閉じる",
+    "changeCountsAria": "変更数"
+  },
+  "thread": {
+    "reopen": "スレッドを再開"
+  }
+}

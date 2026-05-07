@@ -1,0 +1,14 @@
+node_modules
+dist
+.pnpm-store
+*.snap
+*.lock
+pnpm-lock.yaml
+.semgrep_logs
+# Legacy shim files — they only re-export and would otherwise dilute findings
+src/components/**/*.tsx
+src/components/**/*.ts
+src/modes/**/*.ts
+src/state/**/*.ts
+src/state/**/*.tsx
+src/data/**/*.ts

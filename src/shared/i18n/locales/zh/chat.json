@@ -1,0 +1,127 @@
+{
+  "agent": {
+    "title": "编码智能体",
+    "openTitle": "打开编码智能体 (⌘K)",
+    "openAria": "打开编码智能体",
+    "closeAria": "关闭编码智能体"
+  },
+  "tabs": {
+    "newTitle": "新建对话 (⌘T)",
+    "newAria": "新建对话",
+    "closeTitle": "关闭标签 (⌘W)",
+    "closeAria": "关闭标签",
+    "defaultTitle": "对话 {{n}}"
+  },
+  "suggestions": {
+    "heading": "试着询问",
+    "items": {
+      "lowSafety": "查找编辑安全度低的文件",
+      "unknownFlag": "为什么 core/auth.ts 被标为 unknown？",
+      "refactor": "src/hooks 的重构方案",
+      "blastRadius": "显示当前选择的传递影响半径"
+    }
+  },
+  "composer": {
+    "placeholder": "询问任何文件、符号或风险…",
+    "send": "发送",
+    "sendAria": "发送消息",
+    "hintSend": "发送",
+    "hintNewline": "换行",
+    "attachFile": "附加文件",
+    "mentionFile": "提及文件 (#)",
+    "mentionPerson": "提及成员 (@)",
+    "model": "模型"
+  },
+  "inlineComment": {
+    "placeholder": "留下评论…",
+    "shortcuts": "⌘↵ 提交 · Esc 取消",
+    "cancel": "取消",
+    "submit": "评论"
+  },
+  "synthReply": {
+    "blast": "反向依赖 BFS（≤4 跳）显示约 12 个受影响文件。主要矢量:\n  • core/auth.ts → 5 个调用方\n  • src/hooks/use-session.ts → 4 个调用方\n  • core/router.ts → 3 个调用方\n运行 Deep Scan 获取传递性证明。",
+    "refactor": "src/hooks 的重构方案:\n  1. 把重复的 effect 依赖抽取到共享的 use-prev 辅助方法\n  2. 替换 use-query 中 12 处 any 泛型\n  3. 将 use-form、use-validation 的测试同位放置\n预估编辑安全度: 78 / 100。",
+    "unknown": "core/auth.ts 被标为 \"unknown\" 的原因:\n  • 公共表面 14 处 `any`\n  • 基于反射的中间件查找（过度近似的调用解析）\n  • 令牌刷新路径上 1 处 @ts-ignore\n收紧 `AuthCtx` 的类型即可提升为 \"overapprox\"。",
+    "safety": "仓库中最低编辑安全度:\n  • vendor/openai.ts — 12  (生成文件，请勿编辑)\n  • core/billing.ts — 28  (影响范围大，无测试)\n  • core/migrations.ts — 31 (涉及数据库)\n已应用过滤。点击任一文件可打开 Focus Scan。",
+    "fallback": "我会针对 \"{{q}}\" 检视仓库图，呈现最相关的文件。（演示模式 — 接入真实模型即可获得完整答复。）"
+  },
+  "activity": {
+    "tasks": {
+      "rateLimit": "为 auth 端点添加速率限制",
+      "flakyTest": "修复 CI 中的不稳定测试",
+      "reactMigration": "迁移到 React 19",
+      "prod500": "排查 checkout 生产环境 500",
+      "strictTypes": "严格模式切换后收紧类型",
+      "bundleSize": "削减 vendor chunk 的体积",
+      "serviceTests": "补足服务层测试",
+      "routingRefactor": "重构分层模块的路由",
+      "cve": "修补上游客户端 CVE",
+      "reviewPr": "评审 PR #482 (auth 重写)"
+    },
+    "intent": {
+      "lookingAround": "正在查看周边",
+      "triagingSecret": "正在分流疑似密钥泄露",
+      "reviewingSast": "正在审视 {{n}} 项 SAST 发现",
+      "reviewingSecurity": "正在审视安全告警",
+      "flakyCoverage": "正在排查不稳定/低覆盖",
+      "lintCleanup": "正在清理 {{n}} 个 lint 错误",
+      "removingTsIgnore": "正在移除 ts-ignore",
+      "fixingBug": "正在修复报告的缺陷",
+      "backfillTests": "正在补回缺失的测试",
+      "raisingCoverage": "正在从 {{n}}% 提升覆盖率",
+      "strongerAsserts": "正在加强测试断言",
+      "edgeCaseTest": "正在添加边界测试",
+      "splitCyclomatic": "正在拆分 cyclomatic-{{n}} 函数",
+      "improveMaintainability": "正在改善可维护性",
+      "breakCycle": "正在打破 import 循环",
+      "fixLayer": "正在修复分层违规",
+      "extractHelper": "正在抽取辅助 / 简化",
+      "resolveTodos": "正在解决 {{n}} 个 TODO",
+      "adjustPublicApi": "正在调整公共 API 面",
+      "smallChange": "正在应用小型变更",
+      "docPublicApi": "正在为公共 API 添加 JSDoc",
+      "documenting": "文档化 (jsdoc {{n}}%)",
+      "reviewRecentPrs": "正在评审最近 {{n}} 个 PR",
+      "highChurn": "正在调查高变更区域",
+      "callGraph": "正在梳理调用图",
+      "wideModule": "正在查看被广泛引用的模块",
+      "dynamicDispatch": "正在跟进动态分派",
+      "readingContext": "正在了解上下文"
+    }
+  },
+  "tokens": {
+    "title": "设计令牌",
+    "subtitle": "实时编辑 — 持久化到 localStorage",
+    "closeAria": "关闭设计令牌面板",
+    "groups": {
+      "color": "颜色",
+      "glass": "玻璃",
+      "shape": "形状",
+      "type": "字体与密度",
+      "presets": "快速预设"
+    },
+    "labels": {
+      "accent": "强调色",
+      "bgDark": "背景 (深)",
+      "bgLight": "背景 (浅)",
+      "alphaDark": "透明度 · 深",
+      "alphaLight": "透明度 · 浅",
+      "borderDark": "边框 · 深",
+      "borderLight": "边框 · 浅",
+      "blur": "模糊",
+      "radiusLg": "圆角 (大)",
+      "radiusSm": "圆角 (小)",
+      "fontScale": "字体缩放",
+      "cardPad": "卡片内边距",
+      "gapY": "区块间距"
+    },
+    "presets": {
+      "default": "默认",
+      "sharper": "锐利",
+      "softer": "柔和",
+      "compact": "紧凑",
+      "cozy": "舒适",
+      "cyberpunk": "赛博朋克"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "title": "Heat overlay",
+  "apply": "Apply heat",
+  "metric": "Metric",
+  "buttonTitle": "Heat overlay: {{label}}",
+  "controls": {
+    "intensity": "Intensity",
+    "radius": "Radius",
+    "threshold": "Threshold"
+  },
+  "panel": {
+    "title": "Overlays",
+    "heading": "Visual overlays",
+    "resetAll": "Reset all",
+    "off": "Off",
+    "on": "On",
+    "enable": "Enable",
+    "disable": "Disable",
+    "tile": {
+      "heat": "Heat",
+      "time": "Time window",
+      "timeIdle": "Activates with Hotspot (time)",
+      "risk": "Risk lens",
+      "api": "Public API",
+      "boundaries": "Boundaries"
+    },
+    "detail": {
+      "apiBody": "Draws a thin outer ring around files whose external fan-in suggests they're widely consumed — your public API surface at a glance."
+    }
+  },
+  "boundaries": {
+    "entry": "Entry points",
+    "entryCaption": "Where the app starts running",
+    "ingress": "Ingress",
+    "ingressCaption": "Files reachable from outside",
+    "egress": "Egress",
+    "egressCaption": "Files calling out to external systems",
+    "protocol": {
+      "http": "HTTP",
+      "webhook": "Webhook",
+      "queue": "Queue",
+      "grpc": "gRPC",
+      "db": "DB",
+      "fs": "FS"
+    },
+    "summary": {
+      "entry": "Entry",
+      "ingress": "Ingress",
+      "egress": "Egress"
+    }
+  }
+}

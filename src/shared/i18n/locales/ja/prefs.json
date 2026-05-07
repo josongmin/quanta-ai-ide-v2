@@ -1,0 +1,55 @@
+{
+  "title": "ファセット設定",
+  "subtitle": "プラン階層で利用可能項目、個人設定で表示項目を制御",
+  "buttonLabel": "ファセット設定",
+  "openTitle": "ファセット設定",
+  "openAria": "ファセット設定",
+  "closeAria": "設定を閉じる",
+  "plan": {
+    "heading": "プラン (デモ)",
+    "free": "Free",
+    "pro": "Pro",
+    "enterprise": "Enterprise"
+  },
+  "visibility": {
+    "heading": "表示するファセット",
+    "pin": "ピン留め",
+    "hide": "非表示",
+    "resetDefaults": "デフォルトに戻す"
+  },
+  "language": {
+    "title": "言語",
+    "en": "英語",
+    "ko": "韓国語",
+    "ja": "日本語",
+    "zh": "中国語"
+  },
+  "hud": {
+    "engine": "エンジン"
+  },
+  "aiActivity": {
+    "title": "AI 活動",
+    "hint": "AI が現在触れているファイルをリアルタイムで表示します。",
+    "enabled": "有効化",
+    "layers": "レイヤー",
+    "ring": "ドット上のパルスリング",
+    "line": "チャットからの接続線",
+    "zone": "フォルダゾーン枠線",
+    "motion": "モーション",
+    "speed": {
+      "slow": "遅い",
+      "normal": "通常",
+      "fast": "速い"
+    },
+    "intensity": {
+      "subtle": "控えめ",
+      "normal": "通常",
+      "loud": "強い"
+    },
+    "cap": "制限",
+    "maxConcurrent": "同時表示の最大数",
+    "resetDefaults": "デフォルトに戻す",
+    "done": "完了",
+    "closeBackdrop": "パネルを閉じる"
+  }
+}

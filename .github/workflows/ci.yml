@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: i18n audit
+        run: pnpm i18n:audit
+
+      - name: Lint (strict)
+        run: pnpm lint:strict
+
+      - name: Setup Python (for semgrep)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install semgrep
+        run: pip install semgrep
+
+      - name: Semgrep
+        run: pnpm semgrep:ci
+
+      - name: Test
+        run: |
+          if pnpm run | grep -qE '^\s*test'; then
+            pnpm test
+          else
+            echo "No test script defined; skipping."
+          fi
+
+      - name: Build
+        run: pnpm build
+
+      - name: Bundle-size budget
+        run: pnpm bundle-budget
+
+  tauri-build-check:
+    # Smoke-test that the Rust shell still compiles. Skipped on PRs from forks
+    # to keep CI fast; the release workflow handles full installers.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: cargo check --manifest-path src-tauri/Cargo.toml --locked

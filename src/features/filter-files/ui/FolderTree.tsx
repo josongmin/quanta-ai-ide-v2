@@ -1,0 +1,259 @@
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
+import { ChevronRight, Folder, FolderOpen, FileCode } from 'lucide-react';
+import { useTheme } from '@shared/theme';
+import { useTranslation } from '@shared/i18n';
+import type { FileRecord, FolderRecord } from '@entities/repo';
+import { useFilterStore } from '../model/FilterContext';
+
+type Tree = { folder: FolderRecord; children: Tree[] };
+
+// Callbacks lifted from the inspect-target StackContext so this tree no
+// longer reaches into a sibling slice. The host wires `onOpenFolder` /
+// `onOpenFile` to whichever stack/tab system is active.
+export type FolderTreeProps = {
+  onOpenFolder?: (path: string) => void;
+  onOpenFile?: (id: number) => void;
+  activeKey?: string | null;
+};
+
+function build(folders: FolderRecord[]): Tree {
+  const map = new Map<string, Tree>();
+  for (const f of folders) map.set(f.path, { folder: f, children: [] });
+  let root: Tree | null = null;
+  for (const f of folders) {
+    const node = map.get(f.path)!;
+    if (f.parentPath === null) root = node;
+    else map.get(f.parentPath)?.children.push(node);
+  }
+  return root!;
+}
+
+function Row({
+  node, depth, expanded, toggle, counts, files, onOpenFolder, onOpenFile, activeKey,
+}: {
+  node: Tree; depth: number;
+  expanded: Set<string>;
+  toggle: (p: string) => void;
+  counts: { matched: Map<string, number>; total: Map<string, number> };
+  files: FileRecord[];
+  onOpenFolder?: (path: string) => void;
+  onOpenFile?: (id: number) => void;
+  activeKey?: string | null;
+}) {
+  const { isDark } = useTheme();
+  const { t: tr } = useTranslation('inspect');
+  // Narrow selectors. Each row in a deep tree subscribes only to the slices
+  // it actually reads, so a slider tweak elsewhere won't re-render every row.
+  const selectedFolders = useFilterStore((s) => s.state.selectedFolders);
+  const toggleFolder = useFilterStore((s) => s.toggleFolder);
+  const matched = useFilterStore((s) => s.matched);
+  const path = node.folder.path;
+  const isOpen = expanded.has(path) || depth === 0;
+  const isSelected = selectedFolders.has(path);
+  const folderFiles = node.folder.fileIds.map((id) => files[id]);
+  const hasChildren = node.children.length > 0 || folderFiles.length > 0;
+  const m = counts.matched.get(path) ?? 0;
+  const t = counts.total.get(path) ?? 0;
+
+  return (
+    <div className="relative">
+      {depth > 0 && (
+        // Vertical guide aligned with the parent row's chevron center.
+        // Each level indents the row by 14px; chevron center sits 15px in.
+        // Subtracting 0.5 visually centers a 1px line on a sub-pixel.
+        <div
+          className={`absolute top-0 bottom-0 w-px ${isDark ? 'bg-white/10' : 'bg-black/10'}`}
+          style={{ left: `${(depth - 1) * 14 + 15 - 0.5}px` }}
+        />
+      )}
+      <div
+        onClick={() => { toggleFolder(path); onOpenFolder?.(path); }}
+        className={`group flex items-center gap-2 py-1.5 px-2 rounded-lg cursor-pointer transition-all duration-200 ${
+          isSelected
+            ? (isDark ? 'bg-[#4f9a5c]/15 text-white' : 'bg-[#4f9a5c]/20 text-black')
+            : (isDark ? 'hover:bg-white/[0.05]' : 'hover:bg-black/[0.05]')
+        }`}
+        style={{ marginLeft: `${depth * 14}px` }}
+      >
+        <button type="button"
+          onClick={(e) => { e.stopPropagation(); if (hasChildren) toggle(path); }}
+          className="w-3.5 h-3.5 flex items-center justify-center"
+          tabIndex={hasChildren ? 0 : -1}
+        >
+          {hasChildren
+            ? <ChevronRight className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-90' : ''} ${isDark ? 'text-white/70' : 'text-black/70'}`} />
+            : <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-white/30' : 'bg-black/30'}`} />}
+        </button>
+        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+          {hasChildren
+            ? (isOpen
+              ? <FolderOpen className={`w-3.5 h-3.5 ${isDark ? 'text-white/80' : 'text-black/80'}`} />
+              : <Folder className={`w-3.5 h-3.5 ${isDark ? 'text-white/50' : 'text-black/50'}`} />)
+            : <FileCode className={`w-3.5 h-3.5 ${isDark ? 'text-white/30' : 'text-black/30'}`} />}
+          <span className={`text-[10.5px] truncate ${depth === 0 ? 'font-black uppercase tracking-wider' : 'font-medium'} ${
+            isSelected ? '' : isDark ? 'text-white/60' : 'text-black/60'
+          }`}>
+            {depth === 0 ? tr('tree.repo') : node.folder.name}
+          </span>
+        </div>
+        <span className={`tabular-nums text-[9px] ${m === 0 ? (isDark ? 'text-white/15' : 'text-black/15') : (isDark ? 'text-white/40' : 'text-black/40')}`}>
+          {m}/{t}
+        </span>
+      </div>
+      {isOpen && hasChildren && (
+        <div className="mt-0.5">
+          {node.children.map((c) => (
+            <Row
+              key={c.folder.path}
+              node={c}
+              depth={depth + 1}
+              expanded={expanded}
+              toggle={toggle}
+              counts={counts}
+              files={files}
+              onOpenFolder={onOpenFolder}
+              onOpenFile={onOpenFile}
+              activeKey={activeKey}
+            />
+          ))}
+          {folderFiles.map((f) => (
+            <FileRow
+              key={f.id}
+              file={f}
+              depth={depth + 1}
+              matched={Boolean(matched[f.id])}
+              isDark={isDark}
+              onOpenFile={onOpenFile}
+              isActive={activeKey === `file:${f.id}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FileRow({
+  file, depth, matched, isDark, onOpenFile, isActive,
+}: {
+  file: FileRecord; depth: number; matched: boolean; isDark: boolean;
+  onOpenFile?: (id: number) => void;
+  isActive: boolean;
+}) {
+  // Mirror the map click: invoking `onOpenFile` lets the host (typically
+  // an inspect stack / tab strip) decide how to surface the file.
+  return (
+    <div
+      onClick={() => { onOpenFile?.(file.id); }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onOpenFile?.(file.id);
+        }
+      }}
+      className={`group flex items-center gap-2 py-1 px-2 rounded-lg cursor-pointer transition-colors ${
+        isActive
+          ? (isDark ? 'bg-[#4f9a5c]/15 text-white' : 'bg-[#4f9a5c]/20 text-black')
+          : (isDark ? 'hover:bg-white/[0.05]' : 'hover:bg-black/[0.05]')
+      }`}
+      style={{ marginLeft: `${depth * 14}px` }}
+      title={`${file.folderPath}/${file.name}`}
+    >
+      <span className="w-3.5 h-3.5 flex items-center justify-center">
+        <span className={`w-1 h-1 rounded-full ${
+          matched
+            ? 'bg-[#4f9a5c]'
+            : (isDark ? 'bg-white/15' : 'bg-black/15')
+        }`} />
+      </span>
+      <FileCode className={`w-3 h-3 shrink-0 ${
+        isActive ? (isDark ? 'text-white/70' : 'text-black/70') : (isDark ? 'text-white/30' : 'text-black/30')
+      }`} />
+      <span className={`flex-1 min-w-0 truncate text-[10px] font-mono ${
+        isActive
+          ? (isDark ? 'text-white' : 'text-black')
+          : matched
+            ? (isDark ? 'text-white/75' : 'text-black/75')
+            : (isDark ? 'text-white/35' : 'text-black/35')
+      }`}>
+        {file.name}
+      </span>
+    </div>
+  );
+}
+
+// Imperative handle so parents (FilterBar's Files card header) can drive
+// expand-all / collapse-all from IDE-style toolbar buttons without lifting
+// the entire `expanded` Set into a global store.
+export type FolderTreeHandle = {
+  expandAll: () => void;
+  collapseAll: () => void;
+};
+
+const FolderTree = forwardRef<FolderTreeHandle, FolderTreeProps>(function FolderTree(
+  { onOpenFolder, onOpenFile, activeKey }, ref,
+) {
+  const repo = useFilterStore((s) => s.repo);
+  const matched = useFilterStore((s) => s.matched);
+  const tree = useMemo(() => build(repo.folders), [repo.folders]);
+  const [expanded, setExpanded] = useState<Set<string>>(() => {
+    const s = new Set<string>();
+    s.add('');
+    for (const f of repo.folders) if (f.depth === 1) s.add(f.path);
+    return s;
+  });
+  const toggle = (p: string) => { setExpanded((cur) => {
+    const next = new Set(cur);
+    next.has(p) ? next.delete(p) : next.add(p);
+    return next;
+  }); };
+
+  useImperativeHandle(ref, () => ({
+    expandAll: () => {
+      // Every folder path becomes "open". Root row treats `''` and depth===0
+      // specially, so include both for symmetry.
+      const all = new Set<string>(['']);
+      for (const f of repo.folders) all.add(f.path);
+      setExpanded(all);
+    },
+    collapseAll: () => {
+      // Keep only the root open — the root row is force-open via depth===0
+      // anyway, but storing it keeps the chevron state consistent.
+      setExpanded(new Set<string>(['']));
+    },
+  }), [repo.folders]);
+
+  const counts = useMemo(() => {
+    const total = new Map<string, number>();
+    const m = new Map<string, number>();
+    for (const f of repo.folders) { total.set(f.path, 0); m.set(f.path, 0); }
+    for (const file of repo.files) {
+      const parts = file.folderParts;
+      for (let i = parts.length; i >= 0; i--) {
+        const ap = parts.slice(0, i).join('.');
+        if (!total.has(ap)) continue;
+        total.set(ap, total.get(ap)! + 1);
+        if (matched[file.id]) m.set(ap, m.get(ap)! + 1);
+      }
+    }
+    return { matched: m, total };
+  }, [repo, matched]);
+
+  return (
+    <Row
+      node={tree}
+      depth={0}
+      expanded={expanded}
+      toggle={toggle}
+      counts={counts}
+      files={repo.files}
+      onOpenFolder={onOpenFolder}
+      onOpenFile={onOpenFile}
+      activeKey={activeKey}
+    />
+  );
+});
+
+export default FolderTree;

@@ -1,0 +1,54 @@
+{
+  "empty": {
+    "noDescription": "No description provided.",
+    "noSuggestions": "No suggestions for this PR.",
+    "noSuggestionsShort": "No suggestions for this PR",
+    "noFindings": "No findings at this filter.",
+    "noFiles": "No files in this PR.",
+    "noCi": "No CI configured for this PR.",
+    "noActivity": "No activity yet.",
+    "noReviewers": "No reviewers requested.",
+    "noFailingTests": "No failing tests.",
+    "allResolved": "All threads resolved"
+  },
+  "merge": {
+    "conflictsPresent": "Merge conflicts present.",
+    "aheadBehind": "Ahead / behind",
+    "needsManualReview": "Needs manual review"
+  },
+  "search": {
+    "scopeAria": "Pull request scope",
+    "placeholder": "Search title or branch…",
+    "clearAria": "Clear search",
+    "prsPlaceholder": "Search PRs"
+  },
+  "comment": {
+    "placeholder": "Leave a comment… (⌘↵ to send)",
+    "prPlaceholder": "Leave a comment on this pull request…"
+  },
+  "section": {
+    "suggestedReviewers": "Suggested reviewers",
+    "suggestedReviewersHint": "p0 router · ownership × topic × history",
+    "riskProfile": "Risk profile"
+  },
+  "risk": {
+    "headers": {
+      "file": "File",
+      "blast": "Blast",
+      "fanIn": "Fan-in",
+      "editSafety": "Edit safety",
+      "coverage": "Coverage",
+      "confidence": "Confidence"
+    },
+    "seedTitle": "Seed the dot-field blast view from this file"
+  },
+  "checks": {
+    "headers": {
+      "check": "Check",
+      "required": "Required",
+      "status": "Status",
+      "duration": "Duration",
+      "action": "Action"
+    }
+  }
+}

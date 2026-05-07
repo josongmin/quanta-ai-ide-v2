@@ -1,0 +1,82 @@
+{
+  "section": {
+    "savedQueries": "已保存查询",
+    "files": "文件",
+    "status": "状态",
+    "sortAndHighlight": "排序与高亮"
+  },
+  "category": {
+    "identity": "标识与搜索",
+    "flow": "流向与依赖",
+    "quality": "复杂度与质量",
+    "typeSafety": "类型安全",
+    "coverage": "测试覆盖率",
+    "evolution": "演进与 Git",
+    "lints": "Lint 与规范",
+    "security": "安全",
+    "perf": "性能",
+    "architecture": "架构",
+    "docs": "文档",
+    "sort": "排序"
+  },
+  "status": {
+    "STABLE": "稳定",
+    "MODIFIED": "已修改",
+    "NEW": "新增",
+    "SECURITY_ALERT": "有漏洞"
+  },
+  "toggle": {
+    "on": "开",
+    "off": "关",
+    "any": "任意",
+    "only": "仅",
+    "exclude": "排除"
+  },
+  "preset": {
+    "hotspot": {
+      "label": "热点",
+      "hint": "变更 × 复杂度"
+    },
+    "vulnerableHub": {
+      "label": "易受攻击枢纽",
+      "hint": "漏洞 + 多引用"
+    },
+    "stale": {
+      "label": "陈旧",
+      "hint": "稳定 + 低变更"
+    },
+    "longFiles": {
+      "label": "长文件",
+      "hint": "LOC ≥ 500"
+    }
+  },
+  "tree": {
+    "expandAll": "展开所有文件夹",
+    "collapseAll": "折叠所有文件夹"
+  },
+  "selector": {
+    "subtitle": "工作区 · 选择已保存的查询",
+    "clearPreset": "清除预设"
+  },
+  "sort": {
+    "glowTop": "高亮置顶",
+    "off": "关",
+    "options": {
+      "none": "无",
+      "loc-desc": "LOC ↓",
+      "complexity-desc": "圈复杂度 ↓",
+      "cognitive-desc": "认知复杂度 ↓",
+      "maintainability-asc": "可维护性 ↑",
+      "fanIn-desc": "入扇 ↓",
+      "fanOut-desc": "出扇 ↓",
+      "churn-desc": "变更 ↓",
+      "pagerank-desc": "PageRank ↓",
+      "coverage-asc": "覆盖率 ↑ (低优先)",
+      "eslint-desc": "ESLint 问题 ↓",
+      "anyCount-desc": "any 数 ↓",
+      "todo-desc": "TODO ↓",
+      "authors-desc": "作者数 ↓",
+      "staleness-desc": "陈旧度 ↓"
+    }
+  }
+}

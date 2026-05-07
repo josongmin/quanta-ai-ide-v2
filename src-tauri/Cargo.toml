@@ -1,0 +1,58 @@
+[package]
+name = "se-dot-field-demo"
+version = "0.1.0"
+description = "2.5D Code City — Tauri shell"
+authors = ["se-dot-field-demo"]
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-os = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+# ─── Profiles ────────────────────────────────────────────────────────────
+# `dev` is tuned for fast incremental compiles during `tauri dev`. Optimising
+# dev builds is wasted time when you'll iterate dozens of times before
+# shipping; the slowdown of any opt-level >0 dwarfs three.js webview perf.
+[profile.dev]
+opt-level = 0
+debug = 1            # line tables only — backtraces work, .pdb stays small
+incremental = true
+codegen-units = 256
+
+# Speed up debug builds of heavy crates (mostly Tauri's macros) without
+# slowing down our own crate, which we want to recompile cheaply.
+[profile.dev.package."*"]
+opt-level = 1
+
+# Release: size-first. `opt-level = "z"` saves another 5–10% over "s" on a
+# Tauri shell because the binary is mostly setup glue, not hot loops.
+[profile.release]
+codegen-units = 1
+lto = "fat"
+opt-level = "z"
+panic = "abort"
+strip = "symbols"
+incremental = false
+overflow-checks = false
+
+# A faster-to-compile release variant for CI smoke tests / nightly builds —
+# preserves panic=abort + strip but skips fat LTO. Use via `cargo build
+# --profile release-fast` or `tauri build --debug`.
+[profile.release-fast]
+inherits = "release"
+lto = "thin"
+codegen-units = 16
+opt-level = "s"

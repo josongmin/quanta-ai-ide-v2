@@ -1,0 +1,166 @@
+{
+  "rail": {
+    "title": "プロジェクト",
+    "newProject": "新規プロジェクト",
+    "newTaskInProject": "このプロジェクトに新規タスク",
+    "untitled": "無題",
+    "searchPlaceholder": "検索…",
+    "taskOne": "タスク",
+    "taskMany": "タスク",
+    "filter": {
+      "all": "すべて",
+      "mine": "自分",
+      "archived": "アーカイブ"
+    },
+    "empty": "該当する項目はありません。"
+  },
+  "header": {
+    "openPr": "PRを開く"
+  },
+  "composer": {
+    "code": "コード",
+    "ask": "質問",
+    "placeholder": {
+      "code": "エージェントへの指示を入力。/でコマンド、#でファイル、@でシンボル…",
+      "ask": "コードベースについて質問…"
+    },
+    "shortcut": "⌘↵ で実行",
+    "runCode": "実行",
+    "runAsk": "送信",
+    "stop": "停止",
+    "attach": "ファイル添付",
+    "image": "画像添付",
+    "mentionFile": "ファイル参照",
+    "mentionSymbol": "シンボル参照",
+    "web": "Web検索",
+    "suggest": "プロンプト提案"
+  },
+  "empty": {
+    "title": "何を作りましょうか？",
+    "subtitle": "エージェントに変更を依頼するか、コードベースに質問してください。"
+  },
+  "section": {
+    "recentRun": "最近の実行",
+    "suggestions": "おすすめタスク"
+  },
+  "diff": {
+    "changes": "変更",
+    "files": "{{count}} ファイル",
+    "summary": "エージェントが変更を完了しました。差分を確認してPRを開いてください。",
+    "viewFull": "全差分を表示",
+    "openPr": "PRを開く"
+  },
+  "suggestion": {
+    "fixFlaky": {
+      "title": "不安定なテストを修正",
+      "body": "最近失敗したe2eを分析し、回帰テストを追加します。"
+    },
+    "addTests": {
+      "title": "不足テストを追加",
+      "body": "カバレッジが低い境界ケースから埋めます。"
+    },
+    "refactor": {
+      "title": "複雑なコードを整理",
+      "body": "高複雑度関数の抽出候補を提案します。"
+    },
+    "review": {
+      "title": "PRをセルフレビュー",
+      "body": "マージ前に現在のブランチを自己レビューします。"
+    }
+  },
+  "demo": {
+    "t001": {
+      "title": "auth ミドルウェアのセッショントークン保存方法を差し替え",
+      "t12m": "12分前",
+      "t8m": "8分前",
+      "t6m": "6分前",
+      "u1": "auth ミドルウェアのセッショントークンを新しいポリシーに合わせて差し替え。ローテーション周期は15分、保存先は httpOnly クッキー。既存の呼び出しは壊さないこと。",
+      "u2": "OK。アダプタから作って先にテストを追加して。",
+      "a1": {
+        "thinking": "withSession の呼び出し箇所をまず洗い出し、シグネチャ維持のためアダプタパターンを検討。localStorage→cookie のマイグレーションは SSR 境界で壊れやすいので server/client を分ける必要あり。",
+        "text1": "まず計画を整理します。現状 `withSession` は sessionStorage からトークンを読んでいるので、23箇所の呼び出しを壊さないためにアダプタで包む必要があります。",
+        "planTitle": "3ステップのリファクタ計画",
+        "plan1": "SessionAdapter 導入（sessionStorage / cookie の両方を抽象化）",
+        "plan2": "15分ローテーション + httpOnly クッキー発行経路を追加",
+        "plan3": "回帰テスト6件を作成、既存呼び出し23箇所を検証",
+        "plan4": "docs/auth.md を更新"
+      },
+      "a2": {
+        "text1": "`SessionAdapter` を追加し、`withSession` のシグネチャは維持しました。回帰テスト6件追加、すべて通過。",
+        "text2": "レビュー準備できました。PR メッセージのドラフトを作りますか？"
+      }
+    },
+    "t002": {
+      "title": "catalog アルゴリズム一覧ページの韓国語コピーを整える",
+      "t2m": "2分前",
+      "tNow": "たった今",
+      "u1": "catalog 一覧の韓国語コピーをより自然に。技術用語はそのまま、文章だけ。",
+      "a1": {
+        "thinking": "韓国語の文体を統一 — 名詞止めと終止形が混在しているので見直し。",
+        "text1": "14 キーのうち 6 件を整えています。直訳の \"갱신율\" → \"업데이트 빈도\"…"
+      }
+    },
+    "t006": {
+      "title": "webhook リトライの backoff に jitter を適用",
+      "t2h": "2時間前",
+      "t1h": "1時間前",
+      "u1": "webhook リトライの backoff に jitter を追加。テストを壊さないように。",
+      "a1": {
+        "text1": "追加しましたが、e2e テスト1件がタイミング依存で失敗しています。"
+      }
+    },
+    "t003": {
+      "title": "session-scoped receipt の読み取りロジックに回帰テストを追加",
+      "t1h": "1時間前",
+      "t58m": "58分前",
+      "u1": "先週の回帰 — セッションが切れると receipt が stale のままになるケース。テストを追加して。",
+      "a1": {
+        "text1": "再現シナリオを3件特定。fixture に分離してテストを追加します。",
+        "planTitle": "再現ケース",
+        "plan1": "セッションを強制終了した後に receipt を取得",
+        "plan2": "リフレッシュトークン失効直前の race",
+        "plan3": "同時ローテーション時の dual-read"
+      }
+    },
+    "t004": {
+      "title": "gqlang e2e チェックのフィクスチャを分離"
+    },
+    "t005": {
+      "title": "公開された vector authority join プランを修正"
+    },
+    "t007": {
+      "title": "コールドスタートのメトリックラベルを修正"
+    },
+    "t008": {
+      "title": "admin ウィジェットのオンボーディング導線を整える"
+    }
+  },
+  "context": {
+    "title": "コンテキスト",
+    "project": "プロジェクト",
+    "environment": "環境",
+    "repo": "リポジトリ",
+    "branch": "ブランチ",
+    "base": "ベース",
+    "runtime": "ランタイム",
+    "activity": "最近の活動",
+    "activityStarted": "エージェント実行開始",
+    "activityPlanned": "変更計画を作成",
+    "activityEdited": "ファイル7件を編集",
+    "activityTests": "テスト通過",
+    "shortcuts": "ショートカット",
+    "kbRun": "実行",
+    "kbNew": "新規タスク",
+    "kbSearch": "タスク検索",
+    "kbSlash": "スラッシュコマンド",
+    "footer": "se-dot-field-demo · coding"
+  },
+  "block": {
+    "thoughtFor": "{{seconds}}秒間思考",
+    "fileOne": "ファイル",
+    "fileMany": "ファイル",
+    "readyToReview": "レビュー準備完了",
+    "patch": "パッチ",
+    "openPr": "PRを開く"
+  }
+}

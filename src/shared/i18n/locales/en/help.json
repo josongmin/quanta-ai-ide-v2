@@ -1,0 +1,16 @@
+{
+  "title": "Keyboard shortcuts",
+  "hint": "Tip: most shortcuts are disabled while you are typing in a text field.",
+  "column": {
+    "action": "Action",
+    "shortcut": "Shortcut"
+  },
+  "action": {
+    "focusSearch": "Focus search",
+    "openSettings": "Open settings",
+    "openActivity": "Open AI activity",
+    "toggleHelp": "Toggle this help",
+    "closeOrBlur": "Close dialog / clear focus",
+    "focusSearchSlash": "Focus search (alt)"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "tab": {
+    "intelligence": "インテリジェンス",
+    "coding": "コーディング",
+    "agents": "エージェント",
+    "reviews": "レビュー",
+    "admission": "アドミッション"
+  },
+  "action": {
+    "resetFilters": "フィルタをリセット",
+    "toggleTheme": "テーマ切り替え",
+    "designTokens": "デザイントークン",
+    "notifications": "通知",
+    "aiActivity": "AI 活動"
+  },
+  "tooltip": {
+    "loc": "LOC",
+    "complexity": "複雑度",
+    "fanInOut": "ファンイン / ファンアウト",
+    "blastRadius": "ブラスト半径",
+    "editSafety": "編集安全度",
+    "confidence": "信頼度",
+    "warning": "⚠ {{reasons}}"
+  },
+  "placeholder": {
+    "comingSoon": "近日公開"
+  },
+  "review": {
+    "empty": {
+      "noMatches": "このビューに一致する PR はありません。",
+      "noPrTitle": "PR が選択されていません",
+      "noPrSubtitle": "キューから PR を選ぶか、スコープフィルタを切り替えてください。"
+    },
+    "queue": {
+      "hints": "j/k 移動 · ? ヘルプ"
+    },
+    "rail": {
+      "prContext": "PR コンテキスト",
+      "nothingSelected": "選択なし。"
+    },
+    "footer": {
+      "left": "p0 review · PR ごとに決定的な静的エンジン",
+      "right": "サイエンティフィックレイアウト — F パターン · 重要度固定の色調 · 単一決定スパイン"
+    },
+    "cheat": {
+      "jk": "次 / 前の PR",
+      "np": "次 / 前のファイル (Files セクション)",
+      "v": "現在ファイルの既読を切り替え",
+      "r": "コメント入力にフォーカス",
+      "go": "Overview にジャンプ",
+      "gf": "Files にジャンプ",
+      "gr": "Risk にジャンプ",
+      "gc": "CI checks にジャンプ",
+      "ga": "Activity にジャンプ",
+      "q": "このチートシートを切り替え"
+    }
+  },
+  "admission": {
+    "sidebar": {
+      "verdict": "判定",
+      "activeRules": "有効ルール",
+      "engine": "エンジン",
+      "engineReady": "準備完了",
+      "syncedJustNow": "たった今同期"
+    },
+    "decisionFlow": {
+      "title": "決定フロー",
+      "subtitle": "この PR がゲートを通過 · 上位 {{count}} ルール"
+    },
+    "gate": {
+      "allChecksPassed": "すべてのチェック通過"
+    },
+    "override": {
+      "title": "アドミッションルールをオーバーライド",
+      "notice": "ルールのバイパスは監査ログに記録されます。誰が、いつ、なぜ行ったかを誰でも確認できます。"
+    }
+  }
+}

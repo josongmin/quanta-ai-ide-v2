@@ -1,0 +1,127 @@
+{
+  "agent": {
+    "title": "コーディングエージェント",
+    "openTitle": "コーディングエージェントを開く (⌘K)",
+    "openAria": "コーディングエージェントを開く",
+    "closeAria": "コーディングエージェントを閉じる"
+  },
+  "tabs": {
+    "newTitle": "新しいチャット (⌘T)",
+    "newAria": "新しいチャット",
+    "closeTitle": "タブを閉じる (⌘W)",
+    "closeAria": "タブを閉じる",
+    "defaultTitle": "チャット {{n}}"
+  },
+  "suggestions": {
+    "heading": "質問してみる",
+    "items": {
+      "lowSafety": "編集安全度が低いファイルを探す",
+      "unknownFlag": "core/auth.ts が unknown とされる理由は？",
+      "refactor": "src/hooks のリファクタプラン",
+      "blastRadius": "現在の選択範囲の推移的ブラスト半径を表示"
+    }
+  },
+  "composer": {
+    "placeholder": "ファイル・シンボル・リスクについて質問…",
+    "send": "送信",
+    "sendAria": "メッセージを送信",
+    "hintSend": "送信",
+    "hintNewline": "改行",
+    "attachFile": "ファイルを添付",
+    "mentionFile": "ファイルをメンション (#)",
+    "mentionPerson": "ユーザーをメンション (@)",
+    "model": "モデル"
+  },
+  "inlineComment": {
+    "placeholder": "コメントを残す…",
+    "shortcuts": "⌘↵ 送信 · Esc キャンセル",
+    "cancel": "キャンセル",
+    "submit": "コメント"
+  },
+  "synthReply": {
+    "blast": "逆方向依存 BFS（≤4 ホップ）で影響を受けるファイルは約 12 件。主なベクター:\n  • core/auth.ts → 呼び出し元 5\n  • src/hooks/use-session.ts → 呼び出し元 4\n  • core/router.ts → 呼び出し元 3\n推移的証明は Deep Scan を実行してください。",
+    "refactor": "src/hooks のリファクタ案:\n  1. 重複した effect 依存を共通 use-prev ヘルパーに集約\n  2. use-query の any ジェネリック 12 箇所を置換\n  3. use-form / use-validation のテストを共置\n推定編集安全度: 78 / 100。",
+    "unknown": "core/auth.ts が \"unknown\" とされる理由:\n  • 公開表面での `any` 使用 14 件\n  • リフレクションベースのミドルウェア参照（over-approx の呼び出し解決）\n  • トークン更新パスに @ts-ignore 1 件\n`AuthCtx` の型を強化すると \"overapprox\" に格上げできます。",
+    "safety": "リポジトリ内で最も低い編集安全度:\n  • vendor/openai.ts — 12  （生成ファイル、編集不可）\n  • core/billing.ts — 28  （ブラスト大、テストなし）\n  • core/migrations.ts — 31 （DB 変更を伴う）\nフィルタを適用しました。ファイルをクリックすると Focus Scan が開きます。",
+    "fallback": "\"{{q}}\" についてリポジトリグラフを調べ、関連ファイルを抽出します。（デモモード — 実モデルを接続すると詳細な回答が得られます。）"
+  },
+  "activity": {
+    "tasks": {
+      "rateLimit": "auth エンドポイントにレート制限を追加",
+      "flakyTest": "CI のフレーキーテストを修正",
+      "reactMigration": "React 19 へ移行",
+      "prod500": "checkout の本番 500 エラーを調査",
+      "strictTypes": "strict モード切り替え後の型強化",
+      "bundleSize": "vendor チャンクのバンドルサイズ削減",
+      "serviceTests": "サービス層のテスト補完",
+      "routingRefactor": "レイヤードモジュールのルーティングをリファクタ",
+      "cve": "アップストリームクライアントの CVE 対応",
+      "reviewPr": "PR #482 (auth 書き換え) のレビュー"
+    },
+    "intent": {
+      "lookingAround": "周辺を確認中",
+      "triagingSecret": "秘密漏洩の疑いをトリアージ中",
+      "reviewingSast": "SAST 検出 {{n}} 件をレビュー中",
+      "reviewingSecurity": "セキュリティ検出を確認中",
+      "flakyCoverage": "フレーキー / 弱いカバレッジを調査中",
+      "lintCleanup": "lint エラー {{n}} 件を整理中",
+      "removingTsIgnore": "ts-ignore を除去中",
+      "fixingBug": "報告済みバグを修正中",
+      "backfillTests": "欠落テストを補完中",
+      "raisingCoverage": "カバレッジを {{n}}% から引き上げ中",
+      "strongerAsserts": "テストアサーションを強化中",
+      "edgeCaseTest": "エッジケーステストを追加中",
+      "splitCyclomatic": "cyclomatic {{n}} の関数を分割中",
+      "improveMaintainability": "保守性を改善中",
+      "breakCycle": "import 循環を解消中",
+      "fixLayer": "レイヤー違反を修正中",
+      "extractHelper": "ヘルパー抽出 / 単純化中",
+      "resolveTodos": "TODO {{n}} 件を解消中",
+      "adjustPublicApi": "公開 API 面を調整中",
+      "smallChange": "小さな変更を適用中",
+      "docPublicApi": "公開 API に JSDoc を追加中",
+      "documenting": "ドキュメント化 (jsdoc {{n}}%)",
+      "reviewRecentPrs": "最近の PR {{n}} 件をレビュー中",
+      "highChurn": "変更頻度の高い領域を調査中",
+      "callGraph": "コールグラフを把握中",
+      "wideModule": "広く使われるモジュールを確認中",
+      "dynamicDispatch": "動的ディスパッチを追跡中",
+      "readingContext": "コンテキストを読み込み中"
+    }
+  },
+  "tokens": {
+    "title": "デザイントークン",
+    "subtitle": "ライブ編集 — localStorage に保存",
+    "closeAria": "デザイントークンパネルを閉じる",
+    "groups": {
+      "color": "カラー",
+      "glass": "グラス",
+      "shape": "シェイプ",
+      "type": "タイポ & 密度",
+      "presets": "クイックプリセット"
+    },
+    "labels": {
+      "accent": "アクセント",
+      "bgDark": "BG (ダーク)",
+      "bgLight": "BG (ライト)",
+      "alphaDark": "アルファ · ダーク",
+      "alphaLight": "アルファ · ライト",
+      "borderDark": "ボーダー · ダーク",
+      "borderLight": "ボーダー · ライト",
+      "blur": "ブラー",
+      "radiusLg": "角丸 (大)",
+      "radiusSm": "角丸 (小)",
+      "fontScale": "フォントスケール",
+      "cardPad": "カード余白",
+      "gapY": "セクション間隔"
+    },
+    "presets": {
+      "default": "デフォルト",
+      "sharper": "シャープ",
+      "softer": "ソフト",
+      "compact": "コンパクト",
+      "cozy": "コージー",
+      "cyberpunk": "サイバーパンク"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "empty": {
+    "noDescription": "説明はありません。",
+    "noSuggestions": "このPRに対する提案はありません。",
+    "noSuggestionsShort": "このPRに対する提案なし",
+    "noFindings": "このフィルタに該当する項目はありません。",
+    "noFiles": "このPRにファイルはありません。",
+    "noCi": "このPRに設定されたCIはありません。",
+    "noActivity": "まだアクティビティはありません。",
+    "noReviewers": "指定されたレビュワーはいません。",
+    "noFailingTests": "失敗したテストはありません。",
+    "allResolved": "すべてのスレッドが解決済み"
+  },
+  "merge": {
+    "conflictsPresent": "マージコンフリクトがあります。",
+    "aheadBehind": "進行 / 遅延",
+    "needsManualReview": "手動レビューが必要"
+  },
+  "search": {
+    "scopeAria": "Pull request スコープ",
+    "placeholder": "タイトルまたはブランチを検索…",
+    "clearAria": "検索をクリア",
+    "prsPlaceholder": "PRを検索"
+  },
+  "comment": {
+    "placeholder": "コメントを入力… (⌘↵ で送信)",
+    "prPlaceholder": "このpull requestにコメントを残す…"
+  },
+  "section": {
+    "suggestedReviewers": "推奨レビュワー",
+    "suggestedReviewersHint": "p0 ルーター · オーナーシップ × トピック × 履歴",
+    "riskProfile": "リスクプロファイル"
+  },
+  "risk": {
+    "headers": {
+      "file": "ファイル",
+      "blast": "影響範囲",
+      "fanIn": "Fan-in",
+      "editSafety": "編集安全性",
+      "coverage": "カバレッジ",
+      "confidence": "信頼度"
+    },
+    "seedTitle": "このファイルからdot-fieldブラストビューを開始"
+  },
+  "checks": {
+    "headers": {
+      "check": "チェック",
+      "required": "必須",
+      "status": "ステータス",
+      "duration": "所要時間",
+      "action": "アクション"
+    }
+  }
+}

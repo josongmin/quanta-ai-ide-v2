@@ -1,0 +1,22 @@
+{
+  "comment": {
+    "linePlaceholder": "Add a comment on this line…",
+    "lineTitle": "Add a comment on this line"
+  },
+  "view": {
+    "whitespaceTitle": "Show whitespace (visual stub)"
+  },
+  "preview": {
+    "openLabel": "Preview a PR",
+    "openTitle": "Sample a synthetic PR diff against this repo",
+    "regenerate": "Regenerate",
+    "regenerateAria": "Regenerate PR",
+    "regenerateTitle": "Sample a different PR",
+    "closeAria": "Close PR preview",
+    "closeTitle": "Close PR preview",
+    "changeCountsAria": "Change counts"
+  },
+  "thread": {
+    "reopen": "Reopen thread"
+  }
+}

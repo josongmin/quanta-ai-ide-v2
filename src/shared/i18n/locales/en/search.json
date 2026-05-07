@@ -1,0 +1,54 @@
+{
+  "placeholder": {
+    "text": "Search files, paths, symbols…",
+    "regex": "^src/.*\\.tsx?$",
+    "dsl": "complexity:>30 churn:>0.5 layer:service !cyclic"
+  },
+  "action": {
+    "clear": "Clear",
+    "advanced": "Advanced",
+    "caseSensitive": "Case sensitive",
+    "recent": "Recent searches"
+  },
+  "mode": {
+    "title": "Search Mode",
+    "text": {
+      "label": "Text",
+      "title": "Literal text",
+      "hint": "Substring on path & filename"
+    },
+    "regex": {
+      "label": "Regex",
+      "title": "Regular expression",
+      "hint": "Case-insensitive regex"
+    },
+    "dsl": {
+      "label": "Query",
+      "title": "Faceted query",
+      "hint": "Faceted query language"
+    }
+  },
+  "samples": {
+    "title": "Sample queries",
+    "highRisk": "High-risk hotspots",
+    "vulnerableHubs": "Vulnerable hubs",
+    "staleCode": "Stale code",
+    "longFiles": "Long files",
+    "untested": "Untested",
+    "typeUnsafe": "Type-unsafe",
+    "busFactor1": "Bus-factor 1",
+    "cycleMembers": "Cycle members"
+  },
+  "reference": {
+    "title": "Reference",
+    "allFields": "All fields",
+    "numeric": "Numeric:",
+    "string": "String:",
+    "flags": "Flags:"
+  },
+  "regexHint": {
+    "prefix": "Pattern is matched ",
+    "emphasis": "case-insensitively",
+    "suffix": " against "
+  }
+}

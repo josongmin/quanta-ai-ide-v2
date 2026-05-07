@@ -1,0 +1,166 @@
+{
+  "rail": {
+    "title": "项目",
+    "newProject": "新建项目",
+    "newTaskInProject": "在该项目新建任务",
+    "untitled": "未命名",
+    "searchPlaceholder": "搜索…",
+    "taskOne": "任务",
+    "taskMany": "任务",
+    "filter": {
+      "all": "全部",
+      "mine": "我的",
+      "archived": "已归档"
+    },
+    "empty": "没有匹配的项。"
+  },
+  "header": {
+    "openPr": "打开 PR"
+  },
+  "composer": {
+    "code": "代码",
+    "ask": "提问",
+    "placeholder": {
+      "code": "描述要让代理执行的改动。/ 命令，# 文件，@ 符号…",
+      "ask": "对这个代码库提问…"
+    },
+    "shortcut": "⌘↵ 运行",
+    "runCode": "运行",
+    "runAsk": "发送",
+    "stop": "停止",
+    "attach": "附加文件",
+    "image": "附加图片",
+    "mentionFile": "引用文件",
+    "mentionSymbol": "引用符号",
+    "web": "网络搜索",
+    "suggest": "提示建议"
+  },
+  "empty": {
+    "title": "想要做什么？",
+    "subtitle": "向代理描述改动，或对代码库提问。"
+  },
+  "section": {
+    "recentRun": "最近运行",
+    "suggestions": "推荐任务"
+  },
+  "diff": {
+    "changes": "变更",
+    "files": "{{count}} 个文件",
+    "summary": "代理已完成更改 — 检查差异并打开 PR。",
+    "viewFull": "查看完整差异",
+    "openPr": "打开 PR"
+  },
+  "suggestion": {
+    "fixFlaky": {
+      "title": "修复不稳定测试",
+      "body": "分析最近失败的 e2e，补充回归覆盖。"
+    },
+    "addTests": {
+      "title": "补充测试",
+      "body": "从覆盖率最低的边界用例开始。"
+    },
+    "refactor": {
+      "title": "整理复杂代码",
+      "body": "建议高复杂度函数的抽取候选。"
+    },
+    "review": {
+      "title": "自检 PR",
+      "body": "在合并前对当前分支进行自我评审。"
+    }
+  },
+  "demo": {
+    "t001": {
+      "title": "替换 auth 中间件的会话令牌存储方式",
+      "t12m": "12 分钟前",
+      "t8m": "8 分钟前",
+      "t6m": "6 分钟前",
+      "u1": "按新策略替换 auth 中间件中的会话令牌。轮换周期 15 分钟，存储在 httpOnly cookie 中。不要破坏现有调用方。",
+      "u2": "好。先做适配器并先加测试。",
+      "a1": {
+        "thinking": "先找出所有 withSession 调用点，再权衡使用适配器模式以保留签名。localStorage→cookie 的迁移在 SSR 边界容易出错，server/client 必须分离。",
+        "text1": "先把方案理清楚。当前 `withSession` 从 sessionStorage 读取令牌，要不破坏 23 个调用点就必须用适配器包装。",
+        "planTitle": "3 步重构方案",
+        "plan1": "引入 SessionAdapter（同时抽象 sessionStorage 与 cookie）",
+        "plan2": "增加 15 分钟轮换 + httpOnly cookie 颁发链路",
+        "plan3": "编写 6 个回归测试，验证 23 处调用",
+        "plan4": "更新 docs/auth.md"
+      },
+      "a2": {
+        "text1": "已添加 `SessionAdapter`，保留了 `withSession` 的签名。新增 6 个回归测试，全部通过。",
+        "text2": "可以评审。需要我起草 PR 描述吗？"
+      }
+    },
+    "t002": {
+      "title": "打磨 catalog 算法列表页的韩文文案",
+      "t2m": "2 分钟前",
+      "tNow": "刚刚",
+      "u1": "把 catalog 列表的韩文文案润色得更自然。技术术语保留，只改句子。",
+      "a1": {
+        "thinking": "保持韩文语气一致 — 检查名词收尾与动词收尾的混用。",
+        "text1": "正在润色 14 个键中的 6 个。生硬直译 \"갱신율\" → \"업데이트 빈도\"…"
+      }
+    },
+    "t006": {
+      "title": "为 webhook 重试退避加上 jitter",
+      "t2h": "2 小时前",
+      "t1h": "1 小时前",
+      "u1": "在 webhook 重试 backoff 中加入 jitter。别让测试挂掉。",
+      "a1": {
+        "text1": "已添加，但 1 个 e2e 测试因依赖时序而失败。"
+      }
+    },
+    "t003": {
+      "title": "为 session-scoped receipt 读取逻辑补充回归测试",
+      "t1h": "1 小时前",
+      "t58m": "58 分钟前",
+      "u1": "上周的回归 — 会话断开后 receipt 仍处于陈旧状态。补测试。",
+      "a1": {
+        "text1": "已识别 3 个复现场景。我会拆出 fixture 并增加测试。",
+        "planTitle": "复现用例",
+        "plan1": "强制终止会话后查询 receipt",
+        "plan2": "刷新令牌即将过期前的竞态",
+        "plan3": "并发轮换时的双读"
+      }
+    },
+    "t004": {
+      "title": "拆分 gqlang e2e 检查的 fixture"
+    },
+    "t005": {
+      "title": "修正已发布的 vector authority join 方案"
+    },
+    "t007": {
+      "title": "修正冷启动指标标签"
+    },
+    "t008": {
+      "title": "调整 admin 组件的引导流程"
+    }
+  },
+  "context": {
+    "title": "上下文",
+    "project": "项目",
+    "environment": "环境",
+    "repo": "仓库",
+    "branch": "分支",
+    "base": "基础",
+    "runtime": "运行时",
+    "activity": "最近活动",
+    "activityStarted": "代理开始运行",
+    "activityPlanned": "已制定方案",
+    "activityEdited": "已编辑 7 个文件",
+    "activityTests": "测试通过",
+    "shortcuts": "快捷键",
+    "kbRun": "运行",
+    "kbNew": "新建任务",
+    "kbSearch": "搜索任务",
+    "kbSlash": "斜杠命令",
+    "footer": "se-dot-field-demo · coding"
+  },
+  "block": {
+    "thoughtFor": "思考了 {{seconds}} 秒",
+    "fileOne": "个文件",
+    "fileMany": "个文件",
+    "readyToReview": "准备审阅",
+    "patch": "补丁",
+    "openPr": "打开 PR"
+  }
+}

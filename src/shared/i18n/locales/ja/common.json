@@ -1,0 +1,47 @@
+{
+  "workspace": "ワークスペース",
+  "folder": "フォルダ",
+  "file": "ファイル",
+  "files": "ファイル",
+  "files_one": "{{count}} ファイル",
+  "files_other": "{{count}} ファイル",
+  "fresh": "最新",
+  "stale": "古い",
+  "main": "main",
+  "loc": "LOC",
+  "close": "閉じる",
+  "cancel": "キャンセル",
+  "reset": "リセット",
+  "save": "保存",
+  "open": "開く",
+  "ok": "OK",
+  "yes": "はい",
+  "no": "いいえ",
+  "loading": "読み込み中…",
+  "empty": "表示する項目がありません",
+  "comingSoon": "近日公開",
+  "filesByConfidence": "信頼度別ファイル",
+  "tone": {
+    "critical": "重大",
+    "warn": "要確認",
+    "ok": "問題なし",
+    "info": "情報"
+  },
+  "grade": {
+    "good": "良好",
+    "fair": "普通",
+    "poor": "不良"
+  },
+  "status": {
+    "STABLE": "安定",
+    "MODIFIED": "変更",
+    "NEW": "新規",
+    "SECURITY_ALERT": "脆弱性あり"
+  },
+  "plan": {
+    "current": "現在のプラン"
+  },
+  "score": {
+    "vsLastWeek": "先週比"
+  }
+}

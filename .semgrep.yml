@@ -1,0 +1,254 @@
+# Semgrep config — local custom rules tuned to this codebase.
+#
+# Categories:
+#   • design-system     — token / palette / chrome discipline
+#   • fsd-architecture  — Feature-Sliced layer hygiene beyond ESLint
+#   • react-safety      — patterns that have previously been paid for
+#   • security          — sinks (innerHTML, eval, dangerouslySetInnerHTML)
+#   • performance       — hot-path footguns (animate-loop allocations, etc.)
+#
+# Severity: ERROR fails CI; WARNING is a nudge; INFO is reference only.
+#
+# Languages: semgrep treats `typescript` as ts+tsx and `javascript` as js+jsx.
+# We keep rules language-narrow (typescript only) where TSX is required.
+
+rules:
+  # ── Design system ─────────────────────────────────────────────────────
+
+  - id: ds-no-raw-hex-in-features
+    message: |
+      Use semantic tokens (`var(--fg-default)`, `var(--intent-danger-fg)`, etc.)
+      or the identity / intensity CSS vars instead of raw hex literals in
+      features / widgets / pages. Raw hex bypasses the theme system.
+    severity: WARNING
+    languages: [typescript]
+    paths:
+      include:
+        - src/features
+        - src/widgets
+        - src/pages
+      exclude:
+        # Imperative three.js modes work directly with hex numbers (0xff7b72)
+        # — semantic tokens don't apply to GL materials yet.
+        - src/features/switch-mode/lib
+        - src/widgets/edge-bundling-map
+        - src/widgets/stage
+    pattern-regex: |
+      ['"]#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})['"]
+
+  - id: ds-no-hardcoded-tailwind-bg-fg
+    message: |
+      Don't hardcode `bg-white`/`bg-black`/`text-white`/`text-black` outside
+      of `shared/ui`. Use `bg-[var(--bg-surface)]`,
+      `text-[var(--fg-default)]`, etc. for theme-aware surfaces.
+    severity: WARNING
+    languages: [typescript]
+    paths:
+      include:
+        - src/features
+        - src/widgets
+        - src/pages
+      exclude:
+        - src/shared
+    pattern-regex: |
+      \b(bg-white|bg-black|text-white|text-black)(\b|/)
+
+  - id: ds-prefer-shared-modal
+    message: |
+      Reach for the shared `<Modal>` / `<Drawer>` from `@shared/ui` instead
+      of building another `fixed inset-0 ... createPortal(...)` block.
+    severity: WARNING
+    languages: [typescript]
+    paths:
+      include:
+        - src/features
+        - src/widgets
+        - src/pages
+      exclude:
+        - src/shared
+    pattern: |
+      createPortal($JSX, ...)
+
+  # ── Feature-Sliced architecture (deeper than ESLint boundaries) ───────
+
+  - id: fsd-no-deep-feature-import
+    message: |
+      Cross-feature imports must go through the feature's public `index.ts`,
+      not into `model/` / `ui/` / `lib/` directly. ESLint catches the layer
+      direction; this catches *internal* boundaries within the same layer.
+    severity: ERROR
+    languages: [typescript]
+    paths:
+      include:
+        - src/features
+        - src/widgets
+        - src/pages
+        - src/app
+    pattern-regex: |
+      from\s+['"]@features/[^/]+/(model|ui|lib)/[^'"]+['"]
+
+  - id: fsd-no-deep-shared-ui-import
+    message: |
+      Import shared UI from the barrel: `@shared/ui` (or `../ui`). Reaching
+      into individual files prevents shared/ui evolution.
+    severity: WARNING
+    languages: [typescript]
+    paths:
+      include:
+        - src/features
+        - src/widgets
+        - src/pages
+        - src/app
+    pattern-regex: |
+      from\s+['"]@shared/ui/[^'"]+['"]
+
+  - id: fsd-no-shim-imports
+    message: |
+      Don't import from the legacy shim folders (`src/components`, `src/modes`,
+      `src/state`, `src/data`). Use the FSD path (`@features/...`,
+      `@entities/...`, `@widgets/...`, `@shared/...`) — the shim is being
+      removed.
+    severity: WARNING
+    languages: [typescript]
+    paths:
+      include:
+        - src
+      exclude:
+        - src/components
+        - src/modes
+        - src/state
+        - src/data
+    pattern-regex: |
+      from\s+['"](?:\.\./|\./)*\b(components|modes|state|data)/
+
+  # ── React safety ──────────────────────────────────────────────────────
+
+  - id: react-no-index-as-key
+    message: |
+      `key={index}` defeats React reconciliation when the list reorders.
+      Use a stable id from the data instead.
+    severity: WARNING
+    languages: [typescript]
+    pattern-either:
+      - pattern: |
+          $LIST.map(($ITEM, $I) => <$T key={$I} ...>...</$T>)
+      - pattern: |
+          $LIST.map(($ITEM, $I) => <$T key={$I} ... />)
+
+  - id: react-state-mutation
+    message: |
+      Don't mutate React state directly — call the setter with a fresh
+      value or `setX(prev => ...)`. (Mutating a plain class field or a
+      working array outside React state is fine.)
+    severity: ERROR
+    languages: [typescript]
+    # Anchor the rule to a `useState` pair so we only catch genuine state
+    # arrays (not all `.push` / `.splice` calls on local arrays).
+    patterns:
+      - pattern-either:
+          - pattern: $STATE.push($...A)
+          - pattern: $STATE.shift()
+          - pattern: $STATE.unshift($...A)
+          - pattern: $STATE.splice($...A)
+      - pattern-inside: |
+          function $F(...) {
+            ...
+            const [$STATE, $SETTER] = useState($...INIT);
+            ...
+          }
+
+  # ── Security ──────────────────────────────────────────────────────────
+
+  - id: sec-no-inner-html-assignment
+    message: |
+      Assigning to `.innerHTML` is an XSS sink — any interpolated string
+      becomes live markup. Use `document.createElement` + `textContent`,
+      or sanitize with a vetted library at the boundary.
+    severity: ERROR
+    languages: [typescript, javascript]
+    pattern: $X.innerHTML = $Y
+
+  - id: sec-no-dangerously-set-inner-html
+    message: |
+      `dangerouslySetInnerHTML` defeats React's XSS protection.
+      Use text + composition, or sanitize at the boundary.
+    severity: ERROR
+    languages: [typescript]
+    paths:
+      exclude:
+        - src/shared/ui
+    pattern: |
+      <$T dangerouslySetInnerHTML={...} />
+
+  - id: sec-no-eval
+    message: |
+      `eval` / `new Function` execute arbitrary strings. Never needed in this
+      app. Reach for a parser (we already have a DSL parser in @entities/facet).
+    severity: ERROR
+    languages: [typescript, javascript]
+    pattern-either:
+      - pattern: eval($X)
+      - pattern: new Function($...A)
+
+  - id: sec-no-document-write
+    message: |
+      `document.write` blows up React hydration and is a known XSS sink.
+    severity: ERROR
+    languages: [typescript, javascript]
+    pattern: document.write($X)
+
+  - id: sec-window-open-noopener
+    message: |
+      `window.open(url)` without `noopener,noreferrer` lets the opened tab
+      reach back into our `window` (`opener.location = ...` phishing).
+    severity: WARNING
+    languages: [typescript, javascript]
+    pattern-either:
+      - pattern: window.open($URL)
+      - pattern: window.open($URL, $TARGET)
+    pattern-not: window.open($URL, $TARGET, "...noopener...")
+
+  # ── Performance ───────────────────────────────────────────────────────
+
+  - id: perf-no-allocations-in-three-animate
+    message: |
+      Avoid allocating new THREE objects every frame inside `animate()`.
+      Hoist `new THREE.Vector3` / `new THREE.Color` / `new THREE.Quaternion`
+      outside the loop and reuse via `.set(...)`.
+    severity: WARNING
+    languages: [typescript]
+    paths:
+      include:
+        - src/features/switch-mode/lib
+        - src/widgets/stage
+        - src/widgets/edge-bundling-map
+    pattern-either:
+      - patterns:
+          - pattern: new THREE.$CLS($...A)
+          - pattern-inside: |
+              function animate(...) { ... }
+      - patterns:
+          - pattern: new THREE.$CLS($...A)
+          - pattern-inside: |
+              const animate = (...) => { ... }
+
+  - id: perf-no-json-in-render
+    message: |
+      `JSON.parse` / `JSON.stringify` in a render path is a CPU hog.
+      Memoize with `useMemo`, or move to a worker.
+    severity: WARNING
+    languages: [typescript]
+    paths:
+      include:
+        - src/features
+        - src/widgets
+        - src/pages
+    pattern-either:
+      - patterns:
+          - pattern: JSON.parse($X)
+          - pattern-inside: |
+              function $F(...) { return ($JSX); }
+      - patterns:
+          - pattern: JSON.stringify($X)
+          - pattern-inside: |
+              function $F(...) { return ($JSX); }

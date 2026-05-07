@@ -1,0 +1,57 @@
+{
+  "section": {
+    "liveSignal": "실시간 시그널",
+    "ruleSources": "규칙 출처",
+    "costLedger": "비용 원장",
+    "ruleConstellation": "규칙 상관도",
+    "livePrFeed": "실시간 PR 피드",
+    "retroactive": "소급 적용 · 최근 30개 PR",
+    "activeVsTotal": "활성 vs 전체",
+    "ifTodayRan": "오늘의 PR이 실행된다면",
+    "rolloutsInProgress": "진행 중인 롤아웃",
+    "overrideAudit": "오버라이드 감사",
+    "versionLog": "버전 로그",
+    "export": "내보내기",
+    "import": "가져오기",
+    "filesInPr": "PR 내 파일",
+    "filesInThisPr": "이 PR의 파일"
+  },
+  "table": {
+    "rule": "규칙",
+    "source": "출처",
+    "severity": "심각도",
+    "matches": "일치",
+    "cost": "비용",
+    "date": "날짜",
+    "files": "파일",
+    "ripple": "파급",
+    "outcome": "결과",
+    "firedRules": "발동된 규칙"
+  },
+  "empty": {
+    "noOverrides": "아직 오버라이드가 없습니다."
+  },
+  "search": {
+    "rulesPlaceholder": "규칙 검색"
+  },
+  "rule": {
+    "whyExistsPlaceholder": "이 규칙이 존재하는 이유",
+    "deleteTitle": "규칙 삭제",
+    "livePreview": "실시간 미리보기",
+    "ifEnabled": "활성화된 경우 (최근 30일)"
+  },
+  "card": {
+    "bySource": "출처별",
+    "bySourceHint": "★ native = 엔진 전용 시그널",
+    "bySeverity": "심각도별",
+    "bySeverityHint": "게이팅이 실제로 하는 일",
+    "byCost": "비용별",
+    "byCostHint": "실시간 미리보기 인라인 실행 가능 여부 결정",
+    "evidenceQuality": "증거 품질",
+    "evidenceQualityHint": "정직성 레이어 · 일치 정확도",
+    "topBlockers": "시뮬레이션된 PR의 주요 차단 요소"
+  },
+  "override": {
+    "whyPlaceholder": "왜 안전한가요? 이슈나 문서를 연결하세요."
+  }
+}

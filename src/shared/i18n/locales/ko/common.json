@@ -1,0 +1,47 @@
+{
+  "workspace": "워크스페이스",
+  "folder": "폴더",
+  "file": "파일",
+  "files": "파일",
+  "files_one": "파일 {{count}}개",
+  "files_other": "파일 {{count}}개",
+  "fresh": "최신",
+  "stale": "오래됨",
+  "main": "main",
+  "loc": "LOC",
+  "close": "닫기",
+  "cancel": "취소",
+  "reset": "초기화",
+  "save": "저장",
+  "open": "열기",
+  "ok": "확인",
+  "yes": "예",
+  "no": "아니오",
+  "loading": "로딩 중…",
+  "empty": "표시할 내용 없음",
+  "comingSoon": "준비 중",
+  "filesByConfidence": "신뢰도별 파일 수",
+  "tone": {
+    "critical": "긴급",
+    "warn": "검토",
+    "ok": "정상",
+    "info": "안내"
+  },
+  "grade": {
+    "good": "양호",
+    "fair": "보통",
+    "poor": "미흡"
+  },
+  "status": {
+    "STABLE": "안정",
+    "MODIFIED": "수정됨",
+    "NEW": "신규",
+    "SECURITY_ALERT": "취약"
+  },
+  "plan": {
+    "current": "현재 플랜"
+  },
+  "score": {
+    "vsLastWeek": "지난주 대비"
+  }
+}

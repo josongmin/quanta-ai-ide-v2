@@ -1,0 +1,56 @@
+# Per-target rustflags. Picked conservatively: every flag here ships a
+# measurable size or performance benefit and is well-supported on stable.
+
+# ─── macOS ──────────────────────────────────────────────────────────────
+# Apple Silicon — set the platform floor to macOS 11 (matches
+# `bundle.macOS.minimumSystemVersion`) so codegen can use newer instructions
+# without a runtime check. `-dead_strip` removes unreferenced symbols at
+# link time; saves ~3% on shipped Mach-O.
+[target.aarch64-apple-darwin]
+rustflags = [
+  "-C", "link-arg=-Wl,-dead_strip",
+  "-C", "link-arg=-mmacosx-version-min=11.0",
+]
+
+# Intel Macs — same posture. Universal binaries are produced by `cargo
+# build` with `--target aarch64-apple-darwin --target x86_64-apple-darwin`
+# and `lipo`, which the Tauri release workflow already does.
+[target.x86_64-apple-darwin]
+rustflags = [
+  "-C", "link-arg=-Wl,-dead_strip",
+  "-C", "link-arg=-mmacosx-version-min=11.0",
+]
+
+# ─── Windows (MSVC) ─────────────────────────────────────────────────────
+# `/OPT:REF,ICF` — dead-strip + identical-COMDAT folding, both default in
+# MSVC release link but worth being explicit.
+# `/DEBUG:NONE` keeps the binary lean; the `.pdb` is generated separately
+# in CI for crash-symbolication only.
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+  "-C", "link-arg=/OPT:REF",
+  "-C", "link-arg=/OPT:ICF",
+]
+
+[target.aarch64-pc-windows-msvc]
+rustflags = [
+  "-C", "link-arg=/OPT:REF",
+  "-C", "link-arg=/OPT:ICF",
+]
+
+# ─── Linux ──────────────────────────────────────────────────────────────
+# `--gc-sections` + `--strip-all` shave a few hundred KB off the AppImage.
+# `-z relro -z now` hardens against GOT overwrite — cheap and standard.
+[target.x86_64-unknown-linux-gnu]
+rustflags = [
+  "-C", "link-arg=-Wl,--gc-sections",
+  "-C", "link-arg=-Wl,-z,relro",
+  "-C", "link-arg=-Wl,-z,now",
+]
+
+[target.aarch64-unknown-linux-gnu]
+rustflags = [
+  "-C", "link-arg=-Wl,--gc-sections",
+  "-C", "link-arg=-Wl,-z,relro",
+  "-C", "link-arg=-Wl,-z,now",
+]

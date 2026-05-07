@@ -1,0 +1,82 @@
+{
+  "section": {
+    "savedQueries": "Saved Queries",
+    "files": "Files",
+    "status": "Status",
+    "sortAndHighlight": "Sort & Highlight"
+  },
+  "category": {
+    "identity": "Identity & Search",
+    "flow": "Flow & Dependencies",
+    "quality": "Complexity & Quality",
+    "typeSafety": "Type Safety",
+    "coverage": "Test Coverage",
+    "evolution": "Evolution & Git",
+    "lints": "Lints & Hygiene",
+    "security": "Security",
+    "perf": "Performance",
+    "architecture": "Architecture",
+    "docs": "Documentation",
+    "sort": "Sort"
+  },
+  "status": {
+    "STABLE": "Stable",
+    "MODIFIED": "Modified",
+    "NEW": "New",
+    "SECURITY_ALERT": "Vulnerable"
+  },
+  "toggle": {
+    "on": "on",
+    "off": "off",
+    "any": "any",
+    "only": "only",
+    "exclude": "exclude"
+  },
+  "preset": {
+    "hotspot": {
+      "label": "Hotspots",
+      "hint": "churn × complexity"
+    },
+    "vulnerableHub": {
+      "label": "Vulnerable Hubs",
+      "hint": "vuln + many refs"
+    },
+    "stale": {
+      "label": "Stale",
+      "hint": "stable + low churn"
+    },
+    "longFiles": {
+      "label": "Long Files",
+      "hint": "LOC ≥ 500"
+    }
+  },
+  "tree": {
+    "expandAll": "Expand all folders",
+    "collapseAll": "Collapse all folders"
+  },
+  "selector": {
+    "subtitle": "workspace · pick a saved query",
+    "clearPreset": "Clear preset"
+  },
+  "sort": {
+    "glowTop": "Glow Top",
+    "off": "off",
+    "options": {
+      "none": "None",
+      "loc-desc": "LOC ↓",
+      "complexity-desc": "Cyclomatic ↓",
+      "cognitive-desc": "Cognitive ↓",
+      "maintainability-asc": "Maintainability ↑",
+      "fanIn-desc": "Fan-in ↓",
+      "fanOut-desc": "Fan-out ↓",
+      "churn-desc": "Churn ↓",
+      "pagerank-desc": "PageRank ↓",
+      "coverage-asc": "Coverage ↑ (worst first)",
+      "eslint-desc": "ESLint findings ↓",
+      "anyCount-desc": "any count ↓",
+      "todo-desc": "TODOs ↓",
+      "authors-desc": "Authors ↓",
+      "staleness-desc": "Staleness ↓"
+    }
+  }
+}

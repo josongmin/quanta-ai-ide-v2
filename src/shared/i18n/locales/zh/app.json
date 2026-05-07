@@ -1,0 +1,78 @@
+{
+  "tab": {
+    "intelligence": "智能",
+    "coding": "编码",
+    "agents": "智能体",
+    "reviews": "评审",
+    "admission": "准入"
+  },
+  "action": {
+    "resetFilters": "重置筛选",
+    "toggleTheme": "切换主题",
+    "designTokens": "设计令牌",
+    "notifications": "通知",
+    "aiActivity": "AI 活动"
+  },
+  "tooltip": {
+    "loc": "LOC",
+    "complexity": "复杂度",
+    "fanInOut": "入扇 / 出扇",
+    "blastRadius": "影响半径",
+    "editSafety": "编辑安全度",
+    "confidence": "置信度",
+    "warning": "⚠ {{reasons}}"
+  },
+  "placeholder": {
+    "comingSoon": "敬请期待"
+  },
+  "review": {
+    "empty": {
+      "noMatches": "没有匹配该视图的 PR。",
+      "noPrTitle": "未选择 PR",
+      "noPrSubtitle": "从队列中选择一个 PR，或切换范围筛选。"
+    },
+    "queue": {
+      "hints": "j/k 切换 · ? 帮助"
+    },
+    "rail": {
+      "prContext": "PR 上下文",
+      "nothingSelected": "未选择。"
+    },
+    "footer": {
+      "left": "p0 review · 每个 PR 的确定性静态引擎",
+      "right": "科学化布局 — F 型 · 严重度固定色调 · 单一决策主轴"
+    },
+    "cheat": {
+      "jk": "下一个 / 上一个 PR",
+      "np": "下一个 / 上一个文件 (Files 区段)",
+      "v": "切换当前文件已查看",
+      "r": "聚焦评论输入框",
+      "go": "跳转到 Overview",
+      "gf": "跳转到 Files",
+      "gr": "跳转到 Risk",
+      "gc": "跳转到 CI checks",
+      "ga": "跳转到 Activity",
+      "q": "切换此速查表"
+    }
+  },
+  "admission": {
+    "sidebar": {
+      "verdict": "判定",
+      "activeRules": "活跃规则",
+      "engine": "引擎",
+      "engineReady": "就绪",
+      "syncedJustNow": "刚刚同步"
+    },
+    "decisionFlow": {
+      "title": "决策流",
+      "subtitle": "此 PR 通过门禁 · 前 {{count}} 条规则"
+    },
+    "gate": {
+      "allChecksPassed": "所有检查通过"
+    },
+    "override": {
+      "title": "覆盖准入规则",
+      "notice": "绕过规则将记录在审计日志中，任何人都可以查看是谁、何时、为何执行。"
+    }
+  }
+}

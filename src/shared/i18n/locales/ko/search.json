@@ -1,0 +1,54 @@
+{
+  "placeholder": {
+    "text": "파일, 경로, 심볼 검색…",
+    "regex": "^src/.*\\.tsx?$",
+    "dsl": "complexity:>30 churn:>0.5 layer:service !cyclic"
+  },
+  "action": {
+    "clear": "지우기",
+    "advanced": "고급",
+    "caseSensitive": "대소문자 구분",
+    "recent": "최근 검색"
+  },
+  "mode": {
+    "title": "검색 모드",
+    "text": {
+      "label": "텍스트",
+      "title": "리터럴 텍스트",
+      "hint": "경로 및 파일명 부분 일치"
+    },
+    "regex": {
+      "label": "정규식",
+      "title": "정규 표현식",
+      "hint": "대소문자 구분 없는 정규식"
+    },
+    "dsl": {
+      "label": "쿼리",
+      "title": "패싯 쿼리",
+      "hint": "패싯 쿼리 언어"
+    }
+  },
+  "samples": {
+    "title": "예제 쿼리",
+    "highRisk": "고위험 핫스팟",
+    "vulnerableHubs": "취약 허브",
+    "staleCode": "오래된 코드",
+    "longFiles": "긴 파일",
+    "untested": "미테스트",
+    "typeUnsafe": "타입 불안전",
+    "busFactor1": "단독 작성자",
+    "cycleMembers": "순환 참조 멤버"
+  },
+  "reference": {
+    "title": "참조",
+    "allFields": "전체 필드",
+    "numeric": "숫자:",
+    "string": "문자열:",
+    "flags": "플래그:"
+  },
+  "regexHint": {
+    "prefix": "패턴은 ",
+    "emphasis": "대소문자 구분 없이",
+    "suffix": " 다음에 매칭됩니다: "
+  }
+}

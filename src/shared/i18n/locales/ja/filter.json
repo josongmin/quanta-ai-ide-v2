@@ -1,0 +1,82 @@
+{
+  "section": {
+    "savedQueries": "保存済みクエリ",
+    "files": "ファイル",
+    "status": "ステータス",
+    "sortAndHighlight": "ソート & ハイライト"
+  },
+  "category": {
+    "identity": "識別 & 検索",
+    "flow": "フロー & 依存",
+    "quality": "複雑度 & 品質",
+    "typeSafety": "型安全性",
+    "coverage": "テストカバレッジ",
+    "evolution": "変遷 & Git",
+    "lints": "Lint & 衛生",
+    "security": "セキュリティ",
+    "perf": "パフォーマンス",
+    "architecture": "アーキテクチャ",
+    "docs": "ドキュメント",
+    "sort": "ソート"
+  },
+  "status": {
+    "STABLE": "安定",
+    "MODIFIED": "変更",
+    "NEW": "新規",
+    "SECURITY_ALERT": "脆弱性あり"
+  },
+  "toggle": {
+    "on": "オン",
+    "off": "オフ",
+    "any": "任意",
+    "only": "のみ",
+    "exclude": "除外"
+  },
+  "preset": {
+    "hotspot": {
+      "label": "ホットスポット",
+      "hint": "変更頻度 × 複雑度"
+    },
+    "vulnerableHub": {
+      "label": "脆弱なハブ",
+      "hint": "脆弱性 + 多数参照"
+    },
+    "stale": {
+      "label": "古いコード",
+      "hint": "安定 + 低変更頻度"
+    },
+    "longFiles": {
+      "label": "長大ファイル",
+      "hint": "LOC ≥ 500"
+    }
+  },
+  "tree": {
+    "expandAll": "すべてのフォルダを展開",
+    "collapseAll": "すべてのフォルダを折りたたむ"
+  },
+  "selector": {
+    "subtitle": "ワークスペース · 保存済みクエリを選択",
+    "clearPreset": "プリセットを解除"
+  },
+  "sort": {
+    "glowTop": "上位を強調",
+    "off": "オフ",
+    "options": {
+      "none": "なし",
+      "loc-desc": "LOC ↓",
+      "complexity-desc": "循環的複雑度 ↓",
+      "cognitive-desc": "認知的複雑度 ↓",
+      "maintainability-asc": "保守性 ↑",
+      "fanIn-desc": "ファンイン ↓",
+      "fanOut-desc": "ファンアウト ↓",
+      "churn-desc": "変更頻度 ↓",
+      "pagerank-desc": "PageRank ↓",
+      "coverage-asc": "カバレッジ ↑ (低い順)",
+      "eslint-desc": "ESLint 検出 ↓",
+      "anyCount-desc": "any 数 ↓",
+      "todo-desc": "TODO ↓",
+      "authors-desc": "作成者数 ↓",
+      "staleness-desc": "陳腐度 ↓"
+    }
+  }
+}

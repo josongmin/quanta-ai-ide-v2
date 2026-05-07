@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Codeflow Lens — Account & Identity</title>
+<meta name="theme-color" content="#0a0d12" />
+<meta name="color-scheme" content="dark light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+/* ─────────────────────────────────────────────────────────
+   Design tokens — mirrors the parent app (Codeflow Lens)
+   ───────────────────────────────────────────────────────── */
+:root[data-theme="dark"]{
+  --bg-canvas:#0a0d12;
+  --bg-surface:#0f141b;
+  --bg-surface-muted:#0c1117;
+  --bg-overlay:rgba(20,26,34,.72);
+  --fg-default:#e6edf3;
+  --fg-muted:#9ba6b2;
+  --fg-subtle:#6b7682;
+  --fg-on-accent:#06120a;
+  --border-default:rgba(255,255,255,.10);
+  --border-muted:rgba(255,255,255,.05);
+  --border-strong:rgba(255,255,255,.18);
+  --border-focus:#4f9a5c;
+  --accent:#4f9a5c;
+  --accent-hi:#6dbe7c;
+  --accent-glow:rgba(79,154,92,.35);
+  --intent-success-fg:#7bd494;
+  --intent-success-bg:rgba(79,154,92,.14);
+  --intent-warn-fg:#e0b86b;
+  --intent-warn-bg:rgba(224,184,107,.12);
+  --intent-danger-fg:#e87b7b;
+  --intent-danger-bg:rgba(232,123,123,.12);
+  --intent-info-fg:#7bb8e8;
+  --intent-info-bg:rgba(123,184,232,.12);
+  --shadow-md:0 4px 14px rgba(0,0,0,.30);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.40);
+  --shadow-xl:0 20px 60px rgba(0,0,0,.55);
+  --glass-alpha:.04;
+  --glass-border:.10;
+  --glass-blur:22px;
+}
+:root[data-theme="light"]{
+  --bg-canvas:#f4f6f9;
+  --bg-surface:#ffffff;
+  --bg-surface-muted:#f7f8fa;
+  --bg-overlay:rgba(255,255,255,.78);
+  --fg-default:#0d1117;
+  --fg-muted:#586069;
+  --fg-subtle:#8b949e;
+  --fg-on-accent:#06120a;
+  --border-default:rgba(0,0,0,.08);
+  --border-muted:rgba(0,0,0,.04);
+  --border-strong:rgba(0,0,0,.16);
+  --border-focus:#4f9a5c;
+  --accent:#3f8a4d;
+  --accent-hi:#4f9a5c;
+  --accent-glow:rgba(79,154,92,.20);
+  --intent-success-fg:#1e7a35;
+  --intent-success-bg:rgba(79,154,92,.10);
+  --intent-warn-fg:#a07020;
+  --intent-warn-bg:rgba(224,184,107,.18);
+  --intent-danger-fg:#b13b3b;
+  --intent-danger-bg:rgba(232,123,123,.14);
+  --intent-info-fg:#2c6fb0;
+  --intent-info-bg:rgba(123,184,232,.16);
+  --shadow-md:0 4px 14px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.08);
+  --shadow-xl:0 20px 60px rgba(0,0,0,.12);
+  --glass-alpha:.65;
+  --glass-border:.40;
+  --glass-blur:22px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{color-scheme:dark light}
+body{
+  font-family:'Inter','SF Pro Display',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size:13px;line-height:1.5;
+  background:var(--bg-canvas);
+  color:var(--fg-default);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  letter-spacing:-0.005em;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ─── Ambient background ───────────────────────────────── */
+.aurora{
+  position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+}
+.aurora::before,.aurora::after{
+  content:"";position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;
+}
+.aurora::before{
+  width:680px;height:680px;left:-180px;top:-180px;
+  background:radial-gradient(circle,rgba(79,154,92,.35),transparent 60%);
+  animation:aurora-shift 14s ease-in-out infinite alternate;
+}
+.aurora::after{
+  width:560px;height:560px;right:-160px;bottom:-160px;
+  background:radial-gradient(circle,rgba(123,184,232,.25),transparent 60%);
+  animation:aurora-shift 16s ease-in-out infinite alternate-reverse;
+}
+:root[data-theme="light"] .aurora::before{opacity:.40}
+:root[data-theme="light"] .aurora::after{opacity:.35}
+@keyframes aurora-shift{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  100%{transform:translate3d(40px,30px,0) scale(1.08)}
+}
+
+.grid-bg{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);
+}
+:root[data-theme="light"] .grid-bg{
+  background-image:
+    linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px);
+}
+
+/* ─── Glass surfaces ──────────────────────────────────── */
+.glass{
+  background-color:rgba(255,255,255,var(--glass-alpha));
+  border:1px solid rgba(255,255,255,var(--glass-border));
+  backdrop-filter:blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(160%);
+  border-radius:24px;
+}
+:root[data-theme="light"] .glass{
+  background-color:rgba(255,255,255,.65);
+  border-color:rgba(0,0,0,.06);
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset, var(--shadow-md);
+}
+
+.card{
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:16px;
+}
+.card-muted{
+  background:var(--bg-surface-muted);
+  border:1px solid var(--border-muted);
+  border-radius:12px;
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn{
+  position:relative;display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:10px;font-size:12px;font-weight:500;
+  border:1px solid var(--border-default);
+  background:var(--bg-surface-muted);
+  color:var(--fg-default);
+  cursor:pointer;
+  transition:all 180ms cubic-bezier(0.22,1,0.36,1);
+  white-space:nowrap;
+}
+.btn:hover{border-color:var(--border-strong);background:var(--bg-surface)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--border-focus)}
+.btn-primary{
+  background:var(--accent);
+  color:var(--fg-on-accent);
+  border-color:transparent;
+  font-weight:600;
+}
+.btn-primary:hover{background:var(--accent-hi);box-shadow:0 4px 18px var(--accent-glow)}
+.btn-ghost{background:transparent;border-color:transparent}
+.btn-ghost:hover{background:var(--border-muted)}
+.btn-danger{
+  background:var(--intent-danger-bg);
+  color:var(--intent-danger-fg);
+  border-color:rgba(232,123,123,.2);
+}
+.btn-danger:hover{background:rgba(232,123,123,.18)}
+.btn-lg{padding:11px 18px;font-size:13px;border-radius:12px}
+.btn-block{width:100%;justify-content:center}
+
+/* ─── Inputs ─────────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{
+  font-size:11px;font-weight:500;color:var(--fg-muted);
+  letter-spacing:.02em;
+}
+.field-row{display:flex;gap:8px}
+
+.input{
+  width:100%;padding:11px 14px;
+  background:var(--bg-surface-muted);
+  border:1px solid var(--border-default);
+  border-radius:10px;font-size:13px;color:var(--fg-default);
+  transition:all 180ms cubic-bezier(0.22,1,0.36,1);
+}
+.input::placeholder{color:var(--fg-subtle)}
+.input:hover{border-color:var(--border-strong)}
+.input:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-glow);
+  background:var(--bg-surface);
+}
+.input-group{position:relative}
+.input-group .input{padding-left:38px}
+.input-group .icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  color:var(--fg-subtle);width:16px;height:16px;
+}
+.input-group .trailing{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  display:flex;gap:4px;
+}
+
+.field-hint{font-size:11px;color:var(--fg-subtle);margin-top:2px}
+.field-error{font-size:11px;color:var(--intent-danger-fg);margin-top:2px}
+
+/* ─── Misc atoms ─────────────────────────────────────── */
+.kbd{
+  display:inline-flex;align-items:center;
+  padding:1px 5px;border-radius:4px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:10px;font-weight:600;
+  background:var(--bg-surface-muted);
+  border:1px solid var(--border-default);
+  color:var(--fg-muted);
+}
+.divider{
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;color:var(--fg-subtle);text-transform:uppercase;letter-spacing:.1em;
+}
+.divider::before,.divider::after{
+  content:"";flex:1;height:1px;background:var(--border-default);
+}
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:9999px;
+  font-size:10px;font-weight:600;letter-spacing:.02em;
+  border:1px solid var(--border-default);
+  background:var(--bg-surface-muted);
+  color:var(--fg-muted);
+}
+.badge-success{background:var(--intent-success-bg);color:var(--intent-success-fg);border-color:rgba(79,154,92,.25)}
+.badge-warn{background:var(--intent-warn-bg);color:var(--intent-warn-fg);border-color:rgba(224,184,107,.25)}
+.badge-danger{background:var(--intent-danger-bg);color:var(--intent-danger-fg);border-color:rgba(232,123,123,.25)}
+.badge-info{background:var(--intent-info-bg);color:var(--intent-info-fg);border-color:rgba(123,184,232,.25)}
+.badge-accent{background:rgba(79,154,92,.14);color:var(--accent-hi);border-color:rgba(79,154,92,.30)}
+
+.dot{display:inline-block;width:6px;height:6px;border-radius:9999px;background:currentColor}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.switch{
+  position:relative;width:34px;height:20px;
+  background:var(--border-default);border-radius:9999px;cursor:pointer;
+  transition:background 180ms;
+}
+.switch::after{
+  content:"";position:absolute;top:2px;left:2px;
+  width:16px;height:16px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);
+  transition:left 180ms cubic-bezier(0.22,1,0.36,1);
+}
+.switch.on{background:var(--accent)}
+.switch.on::after{left:16px}
+
+/* ─── App shell ──────────────────────────────────────── */
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.sidebar{
+  border-right:1px solid var(--border-default);
+  background:linear-gradient(180deg,var(--bg-surface) 0%, var(--bg-canvas) 100%);
+  padding:16px 12px;
+  display:flex;flex-direction:column;gap:4px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 8px 14px;
+  border-bottom:1px solid var(--border-muted);
+  margin-bottom:10px;
+}
+.brand-mark{
+  width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent) 0%,#2c5e36 100%);
+  display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 4px 12px var(--accent-glow);
+}
+.brand-name{font-size:13px;font-weight:600;letter-spacing:-.01em}
+.brand-sub{font-size:10px;color:var(--fg-subtle);letter-spacing:.04em;text-transform:uppercase}
+
+.nav-section-label{
+  font-size:10px;color:var(--fg-subtle);
+  text-transform:uppercase;letter-spacing:.08em;font-weight:600;
+  padding:14px 10px 6px;
+}
+.nav-link{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:8px;
+  font-size:12px;font-weight:500;color:var(--fg-muted);
+  cursor:pointer;
+  transition:all 120ms cubic-bezier(0.22,1,0.36,1);
+}
+.nav-link:hover{background:var(--border-muted);color:var(--fg-default)}
+.nav-link.active{
+  background:var(--bg-surface-muted);color:var(--fg-default);
+  border:1px solid var(--border-default);
+  box-shadow:inset 0 0 0 1px rgba(79,154,92,.12);
+}
+.nav-link .icon{width:14px;height:14px;flex-shrink:0;opacity:.85}
+.nav-link.active .icon{color:var(--accent-hi);opacity:1}
+.nav-link .count{
+  margin-left:auto;font-size:10px;
+  padding:1px 6px;border-radius:9999px;
+  background:var(--bg-surface-muted);color:var(--fg-subtle);
+  border:1px solid var(--border-muted);
+}
+
+.sidebar-foot{margin-top:auto;border-top:1px solid var(--border-muted);padding-top:10px}
+.user-chip{
+  display:flex;align-items:center;gap:10px;padding:8px;
+  border-radius:10px;cursor:pointer;
+  transition:background 120ms;
+}
+.user-chip:hover{background:var(--border-muted)}
+.avatar{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#7bb8e8,#4f9a5c);
+  display:grid;place-items:center;color:#fff;font-weight:600;font-size:11px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+}
+.avatar-lg{width:64px;height:64px;font-size:22px;border-radius:14px}
+
+/* ─── Main pane ──────────────────────────────────────── */
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 24px;
+  border-bottom:1px solid var(--border-default);
+  background:var(--bg-overlay);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:10;
+}
+.crumbs{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg-muted)}
+.crumbs .sep{color:var(--fg-subtle)}
+.crumbs .here{color:var(--fg-default);font-weight:500}
+.search{
+  flex:1;max-width:380px;margin-left:8px;position:relative;
+}
+.search input{
+  width:100%;padding:7px 10px 7px 32px;font-size:12px;
+  background:var(--bg-surface-muted);border:1px solid var(--border-default);
+  border-radius:8px;color:var(--fg-default);
+}
+.search .icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--fg-subtle)}
+.search .kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%)}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:6px}
+.icon-btn{
+  width:32px;height:32px;border-radius:8px;
+  display:grid;place-items:center;cursor:pointer;
+  border:1px solid transparent;color:var(--fg-muted);
+  transition:all 120ms;
+  position:relative;
+}
+.icon-btn:hover{background:var(--border-muted);color:var(--fg-default)}
+.icon-btn .dot-indicator{
+  position:absolute;top:6px;right:6px;
+  width:6px;height:6px;border-radius:50%;background:var(--accent-hi);
+  box-shadow:0 0 0 2px var(--bg-surface);
+}
+
+.content{padding:28px 28px 60px;max-width:1080px;width:100%;margin:0 auto}
+.page-header{margin-bottom:24px}
+.page-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0}
+.page-sub{font-size:13px;color:var(--fg-muted);margin-top:4px}
+
+/* Section header for cards */
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border-muted);
+}
+.section-title{font-size:14px;font-weight:600;letter-spacing:-.01em;margin:0}
+.section-sub{font-size:11px;color:var(--fg-muted);margin-top:2px}
+.section-body{padding:20px}
+
+.row-list>.row+.row{border-top:1px solid var(--border-muted)}
+.row{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 20px;
+  transition:background 120ms;
+}
+.row:hover{background:var(--border-muted)}
+.row .row-main{flex:1;min-width:0}
+.row .row-title{font-size:13px;font-weight:500}
+.row .row-meta{font-size:11px;color:var(--fg-muted);margin-top:2px}
+
+/* ─── Auth shell ─────────────────────────────────────── */
+.auth-shell{
+  min-height:100vh;display:grid;place-items:center;
+  padding:24px;position:relative;
+}
+.auth-card{
+  width:100%;max-width:420px;
+  padding:32px;
+  animation:rise 520ms cubic-bezier(0.22,1,0.36,1) both;
+}
+.auth-card.wide{max-width:780px}
+.auth-head{text-align:center;margin-bottom:24px}
+.auth-head .brand-mark{margin:0 auto 14px}
+.auth-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0}
+.auth-sub{font-size:13px;color:var(--fg-muted);margin-top:6px}
+
+.auth-foot{
+  text-align:center;margin-top:18px;font-size:12px;color:var(--fg-muted);
+}
+.auth-foot a{color:var(--accent-hi);font-weight:500;cursor:pointer}
+.auth-foot a:hover{text-decoration:underline}
+
+.auth-back{
+  position:absolute;top:24px;left:24px;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--fg-muted);cursor:pointer;
+  padding:6px 10px;border-radius:8px;
+}
+.auth-back:hover{background:var(--border-muted);color:var(--fg-default)}
+
+.theme-toggle{
+  position:absolute;top:24px;right:24px;
+  width:34px;height:34px;border-radius:10px;
+  display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--border-default);background:var(--bg-surface-muted);
+  color:var(--fg-muted);transition:all 120ms;
+}
+.theme-toggle:hover{color:var(--fg-default);border-color:var(--border-strong)}
+
+@keyframes rise{
+  from{opacity:0;transform:translate3d(0,12px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+.rise-1{animation-delay:60ms}
+.rise-2{animation-delay:120ms}
+.rise-3{animation-delay:180ms}
+
+/* OTP grid */
+.otp{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.otp input{
+  width:100%;aspect-ratio:1/1.15;
+  text-align:center;font-size:20px;font-weight:600;
+  background:var(--bg-surface-muted);
+  border:1px solid var(--border-default);
+  border-radius:12px;color:var(--fg-default);
+  transition:all 180ms cubic-bezier(0.22,1,0.36,1);
+}
+.otp input:focus{
+  outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-glow);
+  background:var(--bg-surface);
+}
+.otp input.filled{border-color:var(--accent);color:var(--accent-hi)}
+
+/* Password strength */
+.strength{display:flex;gap:4px;margin-top:8px}
+.strength-bar{
+  flex:1;height:3px;border-radius:9999px;
+  background:var(--border-default);
+  transition:background 200ms;
+}
+.strength-bar.s1{background:var(--intent-danger-fg)}
+.strength-bar.s2{background:var(--intent-warn-fg)}
+.strength-bar.s3{background:var(--accent-hi)}
+.strength-label{font-size:11px;color:var(--fg-muted);margin-top:6px}
+
+/* SSO buttons */
+.sso-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-sso{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 14px;border-radius:10px;font-size:12px;font-weight:500;
+  border:1px solid var(--border-default);
+  background:var(--bg-surface-muted);
+  color:var(--fg-default);cursor:pointer;
+  transition:all 180ms cubic-bezier(0.22,1,0.36,1);
+}
+.btn-sso:hover{background:var(--bg-surface);border-color:var(--border-strong)}
+.btn-sso svg{width:14px;height:14px}
+
+/* Plan cards */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.plan{
+  padding:20px;border-radius:14px;
+  background:var(--bg-surface);border:1px solid var(--border-default);
+  position:relative;cursor:pointer;
+  transition:all 180ms cubic-bezier(0.22,1,0.36,1);
+}
+.plan:hover{border-color:var(--border-strong);transform:translateY(-2px)}
+.plan.current{
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent),0 8px 24px var(--accent-glow);
+}
+.plan-badge{
+  position:absolute;top:-9px;right:14px;
+  padding:2px 9px;border-radius:9999px;font-size:10px;font-weight:600;
+  background:var(--accent);color:var(--fg-on-accent);
+  letter-spacing:.04em;
+}
+.plan-name{font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--fg-muted)}
+.plan-price{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:4px}
+.plan-price small{font-size:12px;color:var(--fg-muted);font-weight:500}
+.plan-list{list-style:none;padding:14px 0 0;margin:0;display:flex;flex-direction:column;gap:8px}
+.plan-list li{font-size:12px;color:var(--fg-muted);display:flex;gap:8px;align-items:flex-start}
+.plan-list li svg{flex-shrink:0;margin-top:2px;color:var(--accent-hi)}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border-default);margin-bottom:20px;overflow-x:auto}
+.tab{
+  padding:10px 14px;font-size:12px;font-weight:500;color:var(--fg-muted);
+  cursor:pointer;border-bottom:2px solid transparent;
+  margin-bottom:-1px;white-space:nowrap;
+  transition:all 120ms;
+}
+.tab:hover{color:var(--fg-default)}
+.tab.active{color:var(--fg-default);border-bottom-color:var(--accent)}
+
+/* Stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat{padding:16px;border-radius:12px;background:var(--bg-surface);border:1px solid var(--border-default)}
+.stat-label{font-size:11px;color:var(--fg-muted);font-weight:500}
+.stat-value{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:4px}
+.stat-trend{font-size:11px;margin-top:6px;display:flex;align-items:center;gap:4px}
+
+/* Table */
+.table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+.table th{
+  text-align:left;padding:10px 14px;font-weight:500;color:var(--fg-muted);
+  font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+  background:var(--bg-surface-muted);
+  border-top:1px solid var(--border-default);
+  border-bottom:1px solid var(--border-default);
+}
+.table th:first-child{border-left:1px solid var(--border-default);border-top-left-radius:8px}
+.table th:last-child{border-right:1px solid var(--border-default);border-top-right-radius:8px}
+.table td{
+  padding:12px 14px;border-bottom:1px solid var(--border-muted);
+  vertical-align:middle;
+}
+.table tr:last-child td{border-bottom:none}
+.table tr:last-child td:first-child{border-bottom-left-radius:8px}
+.table tr:last-child td:last-child{border-bottom-right-radius:8px}
+.table tbody tr{transition:background 120ms}
+.table tbody tr:hover{background:var(--border-muted)}
+
+.table-wrap{
+  border:1px solid var(--border-default);border-top:none;
+  border-radius:8px;overflow:hidden;
+}
+
+/* Mono */
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;letter-spacing:-.01em}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:100;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;font-size:12px;
+  background:var(--bg-surface);border:1px solid var(--border-default);
+  box-shadow:var(--shadow-lg);
+  animation:rise 320ms cubic-bezier(0.22,1,0.36,1);
+}
+.toast.success{border-color:rgba(79,154,92,.4)}
+.toast .icon{color:var(--accent-hi)}
+
+/* Responsive */
+@media (max-width:880px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .plan-grid{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Hide scrollbar */
+*::-webkit-scrollbar{width:8px;height:8px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:rgba(127,127,127,.22);border-radius:9999px}
+*::-webkit-scrollbar-thumb:hover{background:rgba(127,127,127,.4)}
+
+/* Skeleton shimmer for empty states */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* Reduce motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div class="aurora"></div>
+<div class="grid-bg"></div>
+
+<div id="app"></div>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+   Inline icon library (Lucide-ish, 16px)
+   ───────────────────────────────────────────────────────── */
+const I = (name, size = 16, extra = '') => {
+  const sw = 'stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+  const head = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" ${sw} class="icon ${extra}">`;
+  const paths = {
+    mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+    lock: '<rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+    'eye-off': '<path d="m3 3 18 18"/><path d="M10.6 10.6a3 3 0 0 0 4.2 4.2"/><path d="M9.9 4.2A10.5 10.5 0 0 1 12 4c6.5 0 10 7 10 7a17 17 0 0 1-3.4 4.3"/><path d="M6.6 6.6A17 17 0 0 0 2 11s3.5 7 10 7a10 10 0 0 0 4.5-1.1"/>',
+    check: '<path d="m5 12 5 5L20 7"/>',
+    'check-circle': '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    arrow: '<path d="M5 12h14"/><path d="m13 5 7 7-7 7"/>',
+    'arrow-left': '<path d="M19 12H5"/><path d="m11 5-7 7 7 7"/>',
+    google: '<path d="M21 12c0-.7-.06-1.4-.2-2H12v3.8h5.1A4.4 4.4 0 0 1 15 16.5V19h3.4A8.5 8.5 0 0 0 21 12z" fill="#4285F4" stroke="none"/><path d="M12 21a8.5 8.5 0 0 0 6.4-2.5L15 16.5a5 5 0 0 1-7.5-2.6H4v2.6A9 9 0 0 0 12 21z" fill="#34A853" stroke="none"/><path d="M7.5 13.9a5 5 0 0 1 0-3.8V7.5H4a9 9 0 0 0 0 9z" fill="#FBBC05" stroke="none"/><path d="M12 7a5 5 0 0 1 3.5 1.4L18.5 5.5A8.7 8.7 0 0 0 12 3a9 9 0 0 0-8 5L7.5 10.6A5 5 0 0 1 12 7z" fill="#EA4335" stroke="none"/>',
+    github: '<path d="M9 19c-4 1.3-4-1.5-6-2m12 5v-3.6c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6.1A4.7 4.7 0 0 0 18.7 7a4.4 4.4 0 0 0-.1-3.3s-1.1-.4-3.5 1.3a12 12 0 0 0-6.2 0C6.5 3.3 5.4 3.7 5.4 3.7A4.4 4.4 0 0 0 5.3 7a4.7 4.7 0 0 0-1.3 3.2c0 4.7 2.7 5.7 5.5 6.1-.6.6-.6 1.2-.5 2V22"/>',
+    apple: '<path d="M16 8a5 5 0 0 0-5 5 5 5 0 0 0 5-5z"/><path d="M19 16.5a4 4 0 0 1-4 4.5 4 4 0 0 1-3-1 4 4 0 0 1-3 1 4 4 0 0 1-4-4.5C5 12 7 9 9 9c1.7 0 2.3 1 3 1s1.4-1 3-1c2 0 4 3 4 7.5z"/>',
+    home: '<path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/>',
+    settings: '<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3 1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8 1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+    shield: '<path d="M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6l-8-3z"/>',
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+    'credit-card': '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
+    key: '<circle cx="7.5" cy="15.5" r="3.5"/><path d="m10 13 9-9"/><path d="m17 6 3 3"/><path d="m14 9 3 3"/>',
+    activity: '<path d="m3 12 4-9 4 18 4-13 4 9 2-5"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/>',
+    moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+    plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+    'log-out': '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+    monitor: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>',
+    smartphone: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18"/><path d="M12 3a14 14 0 0 0 0 18"/>',
+    chevron: '<path d="m9 18 6-6-6-6"/>',
+    'chevron-down': '<path d="m6 9 6 6 6-6"/>',
+    'more': '<circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+    copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+    trash: '<path d="M3 6h18"/><path d="m19 6-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>',
+    refresh: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+    'alert-tri': '<path d="m11 3-9 16h20L13 3a1 1 0 0 0-2 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+    code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+    sparkles: '<path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/><path d="m5.6 5.6 2.1 2.1"/><path d="m16.3 16.3 2.1 2.1"/><path d="m5.6 18.4 2.1-2.1"/><path d="m16.3 7.7 2.1-2.1"/>',
+    fingerprint: '<path d="M12 11a3 3 0 0 0-3 3 6 6 0 0 1-2 4.5"/><path d="M12 7a7 7 0 0 1 7 7c0 1.4-.3 2.7-.8 3.9"/><path d="M3 13a9 9 0 0 1 9-9 8.9 8.9 0 0 1 6 2.3"/><path d="M14 21c.5-1.4.7-2.9.7-4.4"/><path d="M9 19a8 8 0 0 0 1-3"/>',
+    'qr': '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h2v2"/><path d="M19 14h2"/><path d="M14 19h2v2"/><path d="M19 17v4"/>',
+    flag: '<path d="M4 22V4a1 1 0 0 1 1-1h12.5a.5.5 0 0 1 .4.8L15 8l3 4.2a.5.5 0 0 1-.4.8H5"/>',
+    'sliders': '<path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M2 14h4"/><path d="M10 8h4"/><path d="M18 16h4"/>'
+  };
+  return head + (paths[name] || '') + '</svg>';
+};
+
+/* ─────────────────────────────────────────────────────────
+   Theme toggle
+   ───────────────────────────────────────────────────────── */
+function getTheme(){return document.documentElement.dataset.theme || 'dark'}
+function setTheme(t){
+  document.documentElement.dataset.theme = t;
+  try{localStorage.setItem('account:theme', t)}catch(e){}
+  // Rerender so any nested icons update
+  render();
+}
+try{
+  const t = localStorage.getItem('account:theme');
+  if(t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+}catch(e){}
+
+/* ─────────────────────────────────────────────────────────
+   Toast
+   ───────────────────────────────────────────────────────── */
+function toast(msg, kind = 'success'){
+  const el = document.createElement('div');
+  el.className = 'toast ' + kind;
+  el.innerHTML = `${I('check-circle')}<span>${msg}</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity 200ms, transform 200ms';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(8px)';
+    setTimeout(() => el.remove(), 220);
+  }, 2400);
+}
+
+/* ─────────────────────────────────────────────────────────
+   Router (hash-based)
+   ───────────────────────────────────────────────────────── */
+const ROUTES = [
+  { path: '#/signin',          render: SignInPage,         layout: 'auth' },
+  { path: '#/signup',          render: SignUpPage,         layout: 'auth' },
+  { path: '#/2fa',             render: TwoFactorPage,      layout: 'auth' },
+  { path: '#/forgot',          render: ForgotPage,         layout: 'auth' },
+  { path: '#/reset',           render: ResetPasswordPage,  layout: 'auth' },
+  { path: '#/sso',             render: SSOPage,            layout: 'auth' },
+  { path: '#/welcome',         render: WelcomePage,        layout: 'auth' },
+  { path: '#/account',         render: ProfilePage,        layout: 'app', nav: 'profile' },
+  { path: '#/account/profile', render: ProfilePage,        layout: 'app', nav: 'profile' },
+  { path: '#/account/security',render: SecurityPage,       layout: 'app', nav: 'security' },
+  { path: '#/account/sessions',render: SessionsPage,       layout: 'app', nav: 'sessions' },
+  { path: '#/account/billing', render: BillingPage,        layout: 'app', nav: 'billing' },
+  { path: '#/account/team',    render: TeamPage,           layout: 'app', nav: 'team' },
+  { path: '#/account/api-keys',render: ApiKeysPage,        layout: 'app', nav: 'api-keys' },
+  { path: '#/account/notifications', render: NotificationsPage, layout: 'app', nav: 'notifications' },
+  { path: '#/account/audit',   render: AuditPage,          layout: 'app', nav: 'audit' },
+];
+
+function nav(p){location.hash = p}
+
+function render(){
+  let hash = location.hash || '#/signin';
+  let route = ROUTES.find(r => r.path === hash) || ROUTES[0];
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  if(route.layout === 'auth'){
+    app.appendChild(AuthLayout(route.render()));
+  } else {
+    app.appendChild(AppLayout(route));
+  }
+  // wire global handlers
+  wireGlobal(app);
+}
+
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', () => {
+  if(!location.hash) location.hash = '#/signin';
+  render();
+});
+
+function wireGlobal(root){
+  root.querySelectorAll('[data-nav]').forEach(el => {
+    el.addEventListener('click', (e) => { e.preventDefault(); nav(el.dataset.nav); });
+  });
+  root.querySelectorAll('[data-toast]').forEach(el => {
+    el.addEventListener('click', () => toast(el.dataset.toast));
+  });
+  root.querySelectorAll('[data-toggle-theme]').forEach(el => {
+    el.addEventListener('click', () => setTheme(getTheme() === 'dark' ? 'light' : 'dark'));
+  });
+  root.querySelectorAll('[data-switch]').forEach(el => {
+    el.addEventListener('click', () => el.classList.toggle('on'));
+  });
+  // Tabs (simple)
+  root.querySelectorAll('[data-tabs]').forEach(group => {
+    group.querySelectorAll('.tab').forEach(t => {
+      t.addEventListener('click', () => {
+        group.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+      });
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────────────────
+   Helpers
+   ───────────────────────────────────────────────────────── */
+function el(html){
+  const t = document.createElement('template');
+  t.innerHTML = html.trim();
+  return t.content.firstElementChild;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Auth layout shell
+   ───────────────────────────────────────────────────────── */
+function AuthLayout(inner){
+  const wrap = el(`
+    <div class="auth-shell">
+      <a class="auth-back" data-nav="#/signin" href="#">
+        ${I('arrow-left',14)}<span>Back</span>
+      </a>
+      <button class="theme-toggle" data-toggle-theme aria-label="Toggle theme">
+        ${getTheme() === 'dark' ? I('sun',16) : I('moon',16)}
+      </button>
+      <div></div>
+    </div>
+  `);
+  wrap.querySelector('div:last-child').appendChild(inner);
+  return wrap;
+}
+
+/* ─────────────────────────────────────────────────────────
+   AUTH PAGES
+   ───────────────────────────────────────────────────────── */
+
+function AuthHead(title, sub){
+  return `
+    <div class="auth-head">
+      <div class="brand-mark" style="width:42px;height:42px;border-radius:12px;font-size:16px">CL</div>
+      <h1 class="auth-title">${title}</h1>
+      <p class="auth-sub">${sub}</p>
+    </div>
+  `;
+}
+
+function SignInPage(){
+  const node = el(`
+    <div class="glass auth-card">
+      ${AuthHead('Welcome back','Sign in to continue to Codeflow Lens')}
+
+      <div class="sso-grid" style="margin-bottom:14px">
+        <button class="btn-sso">${I('google',14)}<span>Google</span></button>
+        <button class="btn-sso">${I('github',14)}<span>GitHub</span></button>
+      </div>
+      <div class="divider" style="margin-bottom:14px">or with email</div>
+
+      <form id="signin-form" style="display:flex;flex-direction:column;gap:14px">
+        <div class="field">
+          <label class="field-label">Email</label>
+          <div class="input-group">
+            ${I('mail',16)}
+            <input class="input" type="email" placeholder="you@company.com" required autocomplete="email" />
+          </div>
+        </div>
+        <div class="field">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <label class="field-label">Password</label>
+            <a class="auth-foot" style="font-size:11px;margin:0" data-nav="#/forgot" href="#">Forgot?</a>
+          </div>
+          <div class="input-group">
+            ${I('lock',16)}
+            <input id="pw" class="input" type="password" placeholder="••••••••••" required autocomplete="current-password" />
+            <div class="trailing">
+              <button type="button" class="icon-btn" id="pw-toggle" style="width:24px;height:24px">${I('eye',14)}</button>
+            </div>
+          </div>
+        </div>
+
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--fg-muted);cursor:pointer">
+          <input type="checkbox" style="accent-color:var(--accent)" /> Remember me for 30 days
+        </label>
+
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          <span>Sign in</span>${I('arrow',14)}
+        </button>
+      </form>
+
+      <div class="auth-foot">
+        Don't have an account? <a data-nav="#/signup" href="#">Sign up</a> &middot;
+        <a data-nav="#/sso" href="#">SSO</a>
+      </div>
+    </div>
+  `);
+
+  // password toggle
+  const pw = node.querySelector('#pw');
+  const tg = node.querySelector('#pw-toggle');
+  tg.addEventListener('click', () => {
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+    tg.innerHTML = pw.type === 'password' ? I('eye',14) : I('eye-off',14);
+  });
+
+  node.querySelector('#signin-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    nav('#/2fa');
+  });
+
+  return node;
+}
+
+function SignUpPage(){
+  const node = el(`
+    <div class="glass auth-card">
+      ${AuthHead('Create your account','Start building in under a minute')}
+
+      <div class="sso-grid" style="margin-bottom:14px">
+        <button class="btn-sso">${I('google',14)}<span>Google</span></button>
+        <button class="btn-sso">${I('github',14)}<span>GitHub</span></button>
+      </div>
+      <div class="divider" style="margin-bottom:14px">or sign up with email</div>
+
+      <form id="signup-form" style="display:flex;flex-direction:column;gap:14px">
+        <div class="field-row">
+          <div class="field" style="flex:1">
+            <label class="field-label">First name</label>
+            <input class="input" type="text" placeholder="Songmin" />
+          </div>
+          <div class="field" style="flex:1">
+            <label class="field-label">Last name</label>
+            <input class="input" type="text" placeholder="Park" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Work email</label>
+          <div class="input-group">
+            ${I('mail',16)}
+            <input class="input" type="email" placeholder="you@company.com" required />
+          </div>
+          <div class="field-hint">We'll send a verification link.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <div class="input-group">
+            ${I('lock',16)}
+            <input id="pw2" class="input" type="password" placeholder="At least 10 characters" required />
+          </div>
+          <div class="strength" id="strength">
+            <div class="strength-bar"></div>
+            <div class="strength-bar"></div>
+            <div class="strength-bar"></div>
+          </div>
+          <div class="strength-label" id="strength-label">Use 10+ characters with a mix of letters, numbers & symbols.</div>
+        </div>
+
+        <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--fg-muted);cursor:pointer">
+          <input type="checkbox" required style="accent-color:var(--accent);margin-top:2px" />
+          <span>I agree to the <a style="color:var(--accent-hi)">Terms</a> and <a style="color:var(--accent-hi)">Privacy Policy</a>.</span>
+        </label>
+
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          <span>Create account</span>${I('arrow',14)}
+        </button>
+      </form>
+
+      <div class="auth-foot">
+        Already have an account? <a data-nav="#/signin" href="#">Sign in</a>
+      </div>
+    </div>
+  `);
+
+  const pw = node.querySelector('#pw2');
+  const bars = node.querySelectorAll('.strength-bar');
+  const lbl = node.querySelector('#strength-label');
+  pw.addEventListener('input', () => {
+    const v = pw.value;
+    let s = 0;
+    if(v.length >= 8) s++;
+    if(/[A-Z]/.test(v) && /[0-9]/.test(v)) s++;
+    if(v.length >= 12 && /[^A-Za-z0-9]/.test(v)) s++;
+    bars.forEach((b,i) => {
+      b.classList.remove('s1','s2','s3');
+      if(i < s) b.classList.add(['s1','s2','s3'][s-1]);
+    });
+    lbl.textContent = ['Use 10+ characters with a mix of letters, numbers & symbols.',
+                       'Weak — add length and variety.',
+                       'Decent — keep going for stronger.',
+                       'Strong — looks great.'][s];
+  });
+
+  node.querySelector('#signup-form').addEventListener('submit', (e) => {
+    e.preventDefault(); nav('#/welcome');
+  });
+
+  return node;
+}
+
+function TwoFactorPage(){
+  const node = el(`
+    <div class="glass auth-card">
+      ${AuthHead('Two-factor verification', 'Enter the 6-digit code from your authenticator app')}
+
+      <div class="otp" id="otp" style="margin:14px 0 6px">
+        ${[0,1,2,3,4,5].map(i => `<input maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-i="${i}" />`).join('')}
+      </div>
+      <div class="field-hint" style="text-align:center;margin-bottom:18px">
+        Code expires in <span id="countdown" style="color:var(--fg-default);font-weight:500">29s</span>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" id="verify-btn" disabled style="opacity:.5;cursor:not-allowed">
+        <span>Verify and continue</span>${I('arrow',14)}
+      </button>
+
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--fg-muted)">
+        Didn't get a code? <a class="auth-foot" style="margin:0;font-size:12px" href="#">Resend</a> ·
+        <a class="auth-foot" style="margin:0;font-size:12px" href="#">Use recovery key</a>
+      </div>
+
+      <div class="auth-foot">
+        <a data-nav="#/signin" href="#">Sign in with another account</a>
+      </div>
+    </div>
+  `);
+
+  const inputs = node.querySelectorAll('.otp input');
+  const verify = node.querySelector('#verify-btn');
+  const cd = node.querySelector('#countdown');
+
+  inputs.forEach((inp, i) => {
+    inp.addEventListener('input', () => {
+      inp.value = inp.value.replace(/\D/g,'').slice(0,1);
+      if(inp.value){ inp.classList.add('filled'); if(i < 5) inputs[i+1].focus(); }
+      else inp.classList.remove('filled');
+      const all = [...inputs].every(x => x.value);
+      verify.disabled = !all;
+      verify.style.opacity = all ? 1 : .5;
+      verify.style.cursor = all ? 'pointer' : 'not-allowed';
+    });
+    inp.addEventListener('keydown', (e) => {
+      if(e.key === 'Backspace' && !inp.value && i > 0) inputs[i-1].focus();
+    });
+    inp.addEventListener('paste', (e) => {
+      const txt = (e.clipboardData.getData('text') || '').replace(/\D/g,'').slice(0,6);
+      if(!txt) return;
+      e.preventDefault();
+      [...txt].forEach((c, k) => { if(inputs[k]){ inputs[k].value = c; inputs[k].classList.add('filled'); }});
+      inputs[Math.min(txt.length, 5)].focus();
+      verify.disabled = txt.length < 6;
+      verify.style.opacity = txt.length < 6 ? .5 : 1;
+      verify.style.cursor = txt.length < 6 ? 'not-allowed' : 'pointer';
+    });
+  });
+
+  let s = 29;
+  const t = setInterval(() => {
+    s--;
+    if(s < 0){ s = 29; }
+    cd.textContent = s + 's';
+  }, 1000);
+
+  verify.addEventListener('click', () => {
+    if(verify.disabled) return;
+    clearInterval(t);
+    nav('#/account/profile');
+  });
+
+  setTimeout(() => inputs[0].focus(), 100);
+  return node;
+}
+
+function ForgotPage(){
+  const node = el(`
+    <div class="glass auth-card">
+      ${AuthHead('Forgot password?', 'Enter your email and we\\'ll send a reset link')}
+
+      <form id="forgot-form" style="display:flex;flex-direction:column;gap:14px">
+        <div class="field">
+          <label class="field-label">Email</label>
+          <div class="input-group">
+            ${I('mail',16)}
+            <input class="input" type="email" placeholder="you@company.com" required />
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          <span>Send reset link</span>${I('arrow',14)}
+        </button>
+      </form>
+
+      <div class="auth-foot">
+        Remembered it? <a data-nav="#/signin" href="#">Sign in</a>
+      </div>
+    </div>
+  `);
+  node.querySelector('#forgot-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    toast('Reset link sent — check your inbox');
+    nav('#/reset');
+  });
+  return node;
+}
+
+function ResetPasswordPage(){
+  const node = el(`
+    <div class="glass auth-card">
+      ${AuthHead('Set a new password', 'Choose something strong you haven\\'t used before')}
+
+      <form id="reset-form" style="display:flex;flex-direction:column;gap:14px">
+        <div class="field">
+          <label class="field-label">New password</label>
+          <div class="input-group">
+            ${I('lock',16)}
+            <input class="input" type="password" placeholder="New password" required />
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Confirm password</label>
+          <div class="input-group">
+            ${I('lock',16)}
+            <input class="input" type="password" placeholder="Confirm new password" required />
+          </div>
+        </div>
+
+        <div class="card-muted" style="padding:12px 14px">
+          <div style="font-size:11px;color:var(--fg-muted);font-weight:500;margin-bottom:8px">Password requirements</div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--fg-muted)">
+            <span style="display:flex;align-items:center;gap:6px;color:var(--accent-hi)">${I('check',12)} At least 10 characters</span>
+            <span style="display:flex;align-items:center;gap:6px;color:var(--accent-hi)">${I('check',12)} Mix of letters & numbers</span>
+            <span style="display:flex;align-items:center;gap:6px">${I('check',12)} A symbol like !@#$</span>
+            <span style="display:flex;align-items:center;gap:6px">${I('check',12)} Not used in last 5 passwords</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          <span>Update password</span>${I('arrow',14)}
+        </button>
+      </form>
+    </div>
+  `);
+  node.querySelector('#reset-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    toast('Password updated');
+    nav('#/signin');
+  });
+  return node;
+}
+
+function SSOPage(){
+  return el(`
+    <div class="glass auth-card">
+      ${AuthHead('Sign in with SSO', 'Use your organization\\'s identity provider')}
+      <form style="display:flex;flex-direction:column;gap:14px" onsubmit="event.preventDefault();location.hash='#/2fa'">
+        <div class="field">
+          <label class="field-label">Workspace URL</label>
+          <div class="input-group">
+            ${I('globe',16)}
+            <input class="input" placeholder="acme" />
+            <div class="trailing"><span style="font-size:12px;color:var(--fg-subtle);padding-right:6px">.codeflow.dev</span></div>
+          </div>
+          <div class="field-hint">Or enter your work email to detect provider automatically.</div>
+        </div>
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          <span>Continue with SSO</span>${I('arrow',14)}
+        </button>
+      </form>
+      <div class="auth-foot"><a data-nav="#/signin" href="#">Back to standard sign in</a></div>
+    </div>
+  `);
+}
+
+function WelcomePage(){
+  return el(`
+    <div class="glass auth-card">
+      <div class="auth-head">
+        <div class="brand-mark pulse" style="width:56px;height:56px;border-radius:16px;font-size:0;margin:0 auto 14px;color:#fff;background:linear-gradient(135deg,var(--accent) 0%,#2c5e36 100%);box-shadow:0 8px 28px var(--accent-glow)">${I('check',24)}</div>
+        <h1 class="auth-title">Welcome aboard</h1>
+        <p class="auth-sub">Your account is ready. Verify your email to unlock full access.</p>
+      </div>
+
+      <div class="card-muted" style="padding:14px;margin-bottom:14px;display:flex;gap:12px;align-items:center">
+        ${I('mail',18)}
+        <div style="flex:1;font-size:12px;line-height:1.55">
+          <div style="font-weight:500">Verify your email</div>
+          <div style="color:var(--fg-muted);margin-top:2px">We sent a link to <strong style="color:var(--fg-default)">vmfhxhxh11@proton.me</strong>. Didn't arrive? <a style="color:var(--accent-hi)">Resend</a></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" data-nav="#/account/profile">
+        <span>Continue to dashboard</span>${I('arrow',14)}
+      </button>
+      <div class="auth-foot"><a data-nav="#/signin" href="#">Sign out</a></div>
+    </div>
+  `);
+}
+
+/* ─────────────────────────────────────────────────────────
+   App layout shell
+   ───────────────────────────────────────────────────────── */
+const NAV = [
+  { group: 'Account', items: [
+    { id: 'profile',       label: 'Profile',       icon: 'user',        href: '#/account/profile' },
+    { id: 'security',      label: 'Security',      icon: 'shield',      href: '#/account/security' },
+    { id: 'sessions',      label: 'Devices & sessions', icon: 'monitor', href: '#/account/sessions' },
+    { id: 'notifications', label: 'Notifications', icon: 'bell',        href: '#/account/notifications' },
+  ]},
+  { group: 'Workspace', items: [
+    { id: 'team',     label: 'Team',     icon: 'users',         href: '#/account/team',     count: '12' },
+    { id: 'billing',  label: 'Billing',  icon: 'credit-card',   href: '#/account/billing' },
+    { id: 'api-keys', label: 'API keys', icon: 'key',           href: '#/account/api-keys' },
+    { id: 'audit',    label: 'Audit log',icon: 'activity',      href: '#/account/audit' },
+  ]},
+];
+
+function AppLayout(route){
+  const wrap = el(`<div class="app"></div>`);
+
+  // Sidebar
+  const sb = el(`
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">CL</div>
+        <div>
+          <div class="brand-name">Codeflow Lens</div>
+          <div class="brand-sub">Acme Inc.</div>
+        </div>
+      </div>
+      ${NAV.map(group => `
+        <div class="nav-section-label">${group.group}</div>
+        ${group.items.map(it => `
+          <div class="nav-link ${route.nav === it.id ? 'active' : ''}" data-nav="${it.href}">
+            ${I(it.icon, 14)}
+            <span>${it.label}</span>
+            ${it.count ? `<span class="count">${it.count}</span>` : ''}
+          </div>
+        `).join('')}
+      `).join('')}
+
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="avatar">SP</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:500;line-height:1.2">Songmin Park</div>
+            <div style="font-size:10px;color:var(--fg-subtle);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">vmfhxhxh11@proton.me</div>
+          </div>
+          ${I('chevron',14)}
+        </div>
+      </div>
+    </aside>
+  `);
+
+  // Main
+  const main = el(`<main class="main"></main>`);
+  // Topbar
+  const top = el(`
+    <header class="topbar">
+      <div class="crumbs">
+        <span>Account</span>
+        ${I('chevron',12)}
+        <span class="here">${(route.nav || 'profile').replace('-', ' ')}</span>
+      </div>
+      <div class="search">
+        ${I('search',14)}
+        <input placeholder="Search settings, members, or keys…" />
+        <span class="kbd">⌘K</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" data-toggle-theme aria-label="theme">${getTheme() === 'dark' ? I('sun',16) : I('moon',16)}</button>
+        <button class="icon-btn" aria-label="notifications">${I('bell',16)}<span class="dot-indicator"></span></button>
+        <button class="icon-btn" aria-label="help">${I('info',16)}</button>
+      </div>
+    </header>
+  `);
+  main.appendChild(top);
+  const content = el(`<div class="content"></div>`);
+  content.appendChild(route.render());
+  main.appendChild(content);
+
+  wrap.appendChild(sb);
+  wrap.appendChild(main);
+  return wrap;
+}
+
+/* ─────────────────────────────────────────────────────────
+   APP PAGES
+   ───────────────────────────────────────────────────────── */
+
+function PageHeader(title, sub, actions = ''){
+  return `
+    <div class="page-header" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>
+        <h1 class="page-title">${title}</h1>
+        <p class="page-sub">${sub}</p>
+      </div>
+      <div style="display:flex;gap:8px">${actions}</div>
+    </div>
+  `;
+}
+
+function ProfilePage(){
+  return el(`
+    <div>
+      ${PageHeader('Profile', 'Your personal info and how others see you across the workspace.')}
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Identity</h3>
+            <p class="section-sub">Public details visible to your team.</p>
+          </div>
+          <span class="badge badge-success"><span class="dot"></span>Verified</span>
+        </div>
+        <div class="section-body" style="display:grid;grid-template-columns:96px 1fr;gap:24px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <div class="avatar avatar-lg">SP</div>
+            <button class="btn btn-ghost" style="font-size:11px">Replace</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="field">
+              <label class="field-label">First name</label>
+              <input class="input" value="Songmin" />
+            </div>
+            <div class="field">
+              <label class="field-label">Last name</label>
+              <input class="input" value="Park" />
+            </div>
+            <div class="field" style="grid-column:span 2">
+              <label class="field-label">Display name</label>
+              <input class="input" value="songmin" />
+              <div class="field-hint">Shown in @mentions and PR comments.</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Title</label>
+              <input class="input" placeholder="Senior Software Engineer" />
+            </div>
+            <div class="field">
+              <label class="field-label">Timezone</label>
+              <select class="input"><option>Asia/Seoul (GMT+9)</option><option>America/New_York</option><option>UTC</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Email & contact</h3>
+            <p class="section-sub">We use these for sign-in, alerts, and receipts.</p>
+          </div>
+        </div>
+        <div class="row-list">
+          <div class="row">
+            <div class="row-main">
+              <div class="row-title">vmfhxhxh11@proton.me</div>
+              <div class="row-meta">Primary · used for sign-in and security alerts</div>
+            </div>
+            <span class="badge badge-success"><span class="dot"></span>Verified</span>
+            <button class="btn btn-ghost">${I('more',14)}</button>
+          </div>
+          <div class="row">
+            <div class="row-main">
+              <div class="row-title">songmin@acme.com</div>
+              <div class="row-meta">Backup · added 2026-04-12</div>
+            </div>
+            <span class="badge badge-warn"><span class="dot"></span>Unverified</span>
+            <button class="btn">Resend</button>
+          </div>
+          <div class="row">
+            <button class="btn" data-toast="Email link sent">
+              ${I('plus',14)}<span>Add email</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn">Discard</button>
+        <button class="btn btn-primary" data-toast="Profile saved">
+          ${I('check',14)}<span>Save changes</span>
+        </button>
+      </div>
+    </div>
+  `);
+}
+
+function SecurityPage(){
+  return el(`
+    <div>
+      ${PageHeader('Security', 'Protect your account with strong authentication.')}
+
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-label">Account status</div>
+          <div class="stat-value" style="color:var(--accent-hi);font-size:14px;display:flex;align-items:center;gap:6px">
+            ${I('shield',16)}<span>Strong</span>
+          </div>
+          <div class="stat-trend" style="color:var(--fg-muted)">2FA on, recent rotation</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Last sign-in</div>
+          <div class="stat-value" style="font-size:14px">2 hours ago</div>
+          <div class="stat-trend mono" style="color:var(--fg-muted)">Seoul · 211.108.x.x</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Password age</div>
+          <div class="stat-value" style="font-size:14px">38 days</div>
+          <div class="stat-trend" style="color:var(--fg-muted)">Rotates every 90 days</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Active sessions</div>
+          <div class="stat-value" style="font-size:14px">3</div>
+          <div class="stat-trend" style="color:var(--accent-hi);cursor:pointer" data-nav="#/account/sessions">View all →</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Authentication</h3>
+            <p class="section-sub">How you prove who you are.</p>
+          </div>
+        </div>
+        <div class="row-list">
+          <div class="row">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-surface-muted);display:grid;place-items:center;color:var(--fg-muted)">${I('lock',16)}</div>
+            <div class="row-main">
+              <div class="row-title">Password</div>
+              <div class="row-meta">Last changed 38 days ago</div>
+            </div>
+            <button class="btn" data-nav="#/reset">Change</button>
+          </div>
+          <div class="row">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--intent-success-bg);display:grid;place-items:center;color:var(--accent-hi)">${I('shield',16)}</div>
+            <div class="row-main">
+              <div class="row-title">Two-factor authentication
+                <span class="badge badge-success" style="margin-left:6px"><span class="dot"></span>Active</span>
+              </div>
+              <div class="row-meta">Authenticator app · 8 recovery codes available</div>
+            </div>
+            <button class="btn">${I('refresh',12)}<span>Regenerate codes</span></button>
+            <div class="switch on" data-switch></div>
+          </div>
+          <div class="row">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-surface-muted);display:grid;place-items:center;color:var(--fg-muted)">${I('fingerprint',16)}</div>
+            <div class="row-main">
+              <div class="row-title">Passkeys
+                <span class="badge badge-accent" style="margin-left:6px">${I('sparkles',10)}<span>Recommended</span></span>
+              </div>
+              <div class="row-meta">Sign in with Touch ID, Face ID, or hardware key</div>
+            </div>
+            <button class="btn btn-primary" data-toast="Passkey added">${I('plus',12)}<span>Add passkey</span></button>
+          </div>
+          <div class="row">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-surface-muted);display:grid;place-items:center;color:var(--fg-muted)">${I('smartphone',16)}</div>
+            <div class="row-main">
+              <div class="row-title">Backup phone</div>
+              <div class="row-meta">Used for SMS recovery — not as a primary factor</div>
+            </div>
+            <button class="btn">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Single sign-on</h3>
+            <p class="section-sub">Linked identity providers.</p>
+          </div>
+        </div>
+        <div class="row-list">
+          <div class="row">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-surface-muted);display:grid;place-items:center">${I('google',18)}</div>
+            <div class="row-main">
+              <div class="row-title">Google · songmin@acme.com</div>
+              <div class="row-meta">Connected 2025-11-04</div>
+            </div>
+            <button class="btn">Disconnect</button>
+          </div>
+          <div class="row">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-surface-muted);display:grid;place-items:center;color:var(--fg-muted)">${I('github',18)}</div>
+            <div class="row-main">
+              <div class="row-title">GitHub</div>
+              <div class="row-meta">Not connected</div>
+            </div>
+            <button class="btn">Connect</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:rgba(232,123,123,.25)">
+        <div class="section-head" style="border-bottom-color:rgba(232,123,123,.16)">
+          <div>
+            <h3 class="section-title" style="color:var(--intent-danger-fg)">Danger zone</h3>
+            <p class="section-sub">Irreversible operations on your identity.</p>
+          </div>
+        </div>
+        <div class="row-list">
+          <div class="row">
+            <div class="row-main">
+              <div class="row-title">Sign out everywhere</div>
+              <div class="row-meta">End all sessions on all devices, including this one.</div>
+            </div>
+            <button class="btn btn-danger">${I('log-out',12)}<span>Sign out all</span></button>
+          </div>
+          <div class="row">
+            <div class="row-main">
+              <div class="row-title">Delete account</div>
+              <div class="row-meta">Permanently remove your account and personal data after a 30-day grace period.</div>
+            </div>
+            <button class="btn btn-danger">${I('trash',12)}<span>Delete</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function SessionsPage(){
+  const sessions = [
+    { id:1, device: 'MacBook Pro 16"', icon: 'monitor', os:'macOS 15.4 · Chrome 134', loc:'Seoul, KR', ip:'211.108.32.14', last:'Active now', current:true },
+    { id:2, device: 'iPhone 15 Pro',    icon: 'smartphone', os:'iOS 18.3 · Safari', loc:'Seoul, KR', ip:'211.108.32.14', last:'2 hours ago' },
+    { id:3, device: 'iPad Air',         icon: 'monitor',    os:'iPadOS 18.2 · Safari', loc:'Busan, KR', ip:'118.32.x.x', last:'Yesterday, 21:14' },
+  ];
+  return el(`
+    <div>
+      ${PageHeader('Devices & sessions', 'Where your account is currently signed in.', `
+        <button class="btn btn-danger">${I('log-out',12)}<span>Sign out everywhere</span></button>
+      `)}
+
+      <div class="card">
+        <div class="row-list">
+          ${sessions.map(s => `
+            <div class="row">
+              <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-surface-muted);display:grid;place-items:center;color:var(--fg-muted)">${I(s.icon,16)}</div>
+              <div class="row-main">
+                <div class="row-title">
+                  ${s.device}
+                  ${s.current ? `<span class="badge badge-success" style="margin-left:6px"><span class="dot pulse"></span>This device</span>` : ''}
+                </div>
+                <div class="row-meta">${s.os} · ${s.loc} · <span class="mono">${s.ip}</span></div>
+              </div>
+              <div style="font-size:11px;color:${s.current ? 'var(--accent-hi)' : 'var(--fg-muted)'};text-align:right">
+                <div style="font-weight:500">${s.last}</div>
+              </div>
+              ${s.current ? '' : `<button class="btn">Revoke</button>`}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function NotificationsPage(){
+  const groups = [
+    { title:'Product', items:[
+      { name:'Weekly digest',    desc:'Summary of activity in your projects every Monday', email:true,  push:false, slack:true },
+      { name:'New comments',     desc:'Mentions, replies, and review threads',                email:true,  push:true,  slack:true },
+      { name:'Releases',         desc:'New versions and feature flags',                       email:false, push:false, slack:false },
+    ]},
+    { title:'Security', items:[
+      { name:'Sign-in alerts',   desc:'Email when a new device signs in',                     email:true,  push:true,  slack:false, locked:true },
+      { name:'Sensitive actions',desc:'API key changes, billing, member removal',              email:true,  push:false, slack:true },
+    ]},
+    { title:'Billing', items:[
+      { name:'Invoices & receipts', desc:'Sent on every successful charge',                  email:true,  push:false, slack:false, locked:true },
+      { name:'Usage thresholds',    desc:'When you cross 70% / 90% / 100% of your plan',     email:true,  push:true,  slack:true },
+    ]},
+  ];
+  return el(`
+    <div>
+      ${PageHeader('Notifications', 'Control which channels each event reaches you on.')}
+
+      <div class="card">
+        <div class="section-head" style="padding:0">
+          <div style="display:grid;grid-template-columns:1fr 80px 80px 80px;width:100%;padding:14px 20px">
+            <div style="font-size:11px;color:var(--fg-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase">Event</div>
+            <div style="font-size:11px;color:var(--fg-muted);text-align:center">Email</div>
+            <div style="font-size:11px;color:var(--fg-muted);text-align:center">Push</div>
+            <div style="font-size:11px;color:var(--fg-muted);text-align:center">Slack</div>
+          </div>
+        </div>
+        ${groups.map(g => `
+          <div style="padding:14px 20px 4px;font-size:11px;color:var(--fg-muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-top:1px solid var(--border-muted)">${g.title}</div>
+          ${g.items.map(it => `
+            <div class="row" style="display:grid;grid-template-columns:1fr 80px 80px 80px;align-items:center">
+              <div class="row-main">
+                <div class="row-title">${it.name}${it.locked ? ` <span class="badge" style="margin-left:6px">${I('lock',10)}<span>Required</span></span>` : ''}</div>
+                <div class="row-meta">${it.desc}</div>
+              </div>
+              <div style="text-align:center"><div class="switch ${it.email?'on':''} ${it.locked?'on':''}" ${it.locked?'':'data-switch'}></div></div>
+              <div style="text-align:center"><div class="switch ${it.push?'on':''}" ${it.locked?'':'data-switch'}></div></div>
+              <div style="text-align:center"><div class="switch ${it.slack?'on':''}" ${it.locked?'':'data-switch'}></div></div>
+            </div>
+          `).join('')}
+        `).join('')}
+      </div>
+    </div>
+  `);
+}
+
+function TeamPage(){
+  const members = [
+    { name:'Songmin Park',    email:'songmin@acme.com',  role:'Owner',  status:'Active',  last:'now',     avatar:'SP', you:true },
+    { name:'Mira Chen',       email:'mira@acme.com',     role:'Admin',  status:'Active',  last:'15m ago', avatar:'MC' },
+    { name:'Theo Halvorsen',  email:'theo@acme.com',     role:'Member', status:'Active',  last:'2h ago',  avatar:'TH' },
+    { name:'Riya Patel',      email:'riya@acme.com',     role:'Member', status:'Active',  last:'Yesterday', avatar:'RP' },
+    { name:'Diego Alvarez',   email:'diego@acme.com',    role:'Billing',status:'Active',  last:'3d ago', avatar:'DA' },
+    { name:'wonyoung@…',      email:'wonyoung@acme.com', role:'Member', status:'Pending', last:'Invited 2d', avatar:'?' },
+  ];
+  return el(`
+    <div>
+      ${PageHeader('Team', '12 of 25 seats used on your <strong>Pro</strong> plan.', `
+        <button class="btn">${I('download',12)}<span>Export CSV</span></button>
+        <button class="btn btn-primary" data-toast="Invite sent">${I('plus',12)}<span>Invite member</span></button>
+      `)}
+
+      <div data-tabs class="tabs">
+        <div class="tab active">All <span style="color:var(--fg-subtle);margin-left:4px">12</span></div>
+        <div class="tab">Active <span style="color:var(--fg-subtle);margin-left:4px">10</span></div>
+        <div class="tab">Pending <span style="color:var(--fg-subtle);margin-left:4px">2</span></div>
+        <div class="tab">Suspended <span style="color:var(--fg-subtle);margin-left:4px">0</span></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr>
+            <th>Member</th><th>Role</th><th>Status</th><th>Last active</th><th></th>
+          </tr></thead>
+          <tbody>
+            ${members.map(m => `
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div class="avatar" style="background:linear-gradient(135deg,#${(m.name.length*123).toString(16).slice(0,3).padEnd(3,'a')},#4f9a5c)">${m.avatar}</div>
+                    <div>
+                      <div style="font-weight:500">${m.name}${m.you ? ' <span class="badge" style="margin-left:4px">You</span>' : ''}</div>
+                      <div class="mono" style="color:var(--fg-muted);font-size:11px">${m.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge ${m.role==='Owner' ? 'badge-accent' : m.role==='Admin' ? 'badge-info' : ''}">${m.role}</span>
+                </td>
+                <td>
+                  ${m.status==='Active'
+                    ? `<span class="badge badge-success"><span class="dot"></span>Active</span>`
+                    : `<span class="badge badge-warn"><span class="dot"></span>Pending</span>`}
+                </td>
+                <td style="color:var(--fg-muted)">${m.last}</td>
+                <td style="text-align:right">
+                  <button class="btn btn-ghost" style="padding:6px 8px">${I('more',14)}</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `);
+}
+
+function BillingPage(){
+  return el(`
+    <div>
+      ${PageHeader('Billing', 'Plan, usage, and payment methods.')}
+
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-label">Current plan</div>
+          <div class="stat-value" style="font-size:18px">Pro
+            <span class="badge badge-accent" style="margin-left:4px;font-size:9px">monthly</span>
+          </div>
+          <div class="stat-trend" style="color:var(--fg-muted)">$49 / seat · renews 2026-06-01</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Members</div>
+          <div class="stat-value">12 <span style="color:var(--fg-muted);font-size:13px;font-weight:500">/ 25</span></div>
+          <div class="stat-trend" style="color:var(--fg-muted)">
+            <div style="height:4px;width:100%;background:var(--border-default);border-radius:9999px;overflow:hidden">
+              <div style="height:100%;width:48%;background:var(--accent);border-radius:9999px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Indexed repos</div>
+          <div class="stat-value">42 <span style="color:var(--fg-muted);font-size:13px;font-weight:500">/ ∞</span></div>
+          <div class="stat-trend" style="color:var(--accent-hi)">Unlimited on Pro</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">This month</div>
+          <div class="stat-value">$588.00</div>
+          <div class="stat-trend" style="color:var(--accent-hi)">↘ 6% vs last month</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Plan</h3>
+            <p class="section-sub">Switch anytime. Prorated to the day.</p>
+          </div>
+          <div data-tabs class="tabs" style="border:none;margin:0;padding:0">
+            <div class="tab active">Monthly</div>
+            <div class="tab">Yearly <span class="badge badge-accent" style="margin-left:4px">−20%</span></div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="plan-grid">
+            <div class="plan">
+              <div class="plan-name">Starter</div>
+              <div class="plan-price">$0<small>/mo</small></div>
+              <ul class="plan-list">
+                <li>${I('check',12)}<span>Up to 3 members</span></li>
+                <li>${I('check',12)}<span>5 indexed repos</span></li>
+                <li>${I('check',12)}<span>Community support</span></li>
+              </ul>
+              <button class="btn btn-block" style="margin-top:14px">Downgrade</button>
+            </div>
+            <div class="plan current">
+              <span class="plan-badge">Current</span>
+              <div class="plan-name" style="color:var(--accent-hi)">Pro</div>
+              <div class="plan-price">$49<small>/seat/mo</small></div>
+              <ul class="plan-list">
+                <li>${I('check',12)}<span>Up to 25 members</span></li>
+                <li>${I('check',12)}<span>Unlimited indexed repos</span></li>
+                <li>${I('check',12)}<span>SSO + audit log</span></li>
+                <li>${I('check',12)}<span>Priority support</span></li>
+              </ul>
+              <button class="btn btn-block" disabled style="margin-top:14px;opacity:.55;cursor:default">Active</button>
+            </div>
+            <div class="plan">
+              <div class="plan-name">Enterprise</div>
+              <div class="plan-price" style="font-size:22px">Let's talk<small></small></div>
+              <ul class="plan-list">
+                <li>${I('check',12)}<span>Unlimited members</span></li>
+                <li>${I('check',12)}<span>SAML / SCIM provisioning</span></li>
+                <li>${I('check',12)}<span>Dedicated infra & SLAs</span></li>
+                <li>${I('check',12)}<span>Custom data retention</span></li>
+              </ul>
+              <button class="btn btn-primary btn-block" style="margin-top:14px">Contact sales</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Payment method</h3>
+            <p class="section-sub">All charges go to the card on file.</p>
+          </div>
+          <button class="btn">${I('plus',12)}<span>Add card</span></button>
+        </div>
+        <div class="row-list">
+          <div class="row">
+            <div style="width:42px;height:28px;border-radius:6px;background:linear-gradient(135deg,#1a1f2e,#0d1117);display:grid;place-items:center;border:1px solid var(--border-default);font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--fg-muted)">VISA</div>
+            <div class="row-main">
+              <div class="row-title">Visa ending in <span class="mono">4242</span></div>
+              <div class="row-meta">Expires 12/2027 · Default</div>
+            </div>
+            <span class="badge badge-success">Default</span>
+            <button class="btn">Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Invoices</h3>
+            <p class="section-sub">Last 12 months</p>
+          </div>
+          <button class="btn">${I('download',12)}<span>Download all</span></button>
+        </div>
+        <div class="table-wrap" style="border:none">
+          <table class="table">
+            <thead><tr>
+              <th>Date</th><th>Description</th><th>Amount</th><th>Status</th><th></th>
+            </tr></thead>
+            <tbody>
+              ${[
+                ['2026-05-01','Pro · 12 seats', '$588.00', 'Paid'],
+                ['2026-04-01','Pro · 11 seats', '$539.00', 'Paid'],
+                ['2026-03-01','Pro · 11 seats', '$539.00', 'Paid'],
+                ['2026-02-01','Pro · 9 seats', '$441.00', 'Paid'],
+                ['2026-01-01','Pro · 9 seats', '$441.00', 'Paid'],
+              ].map(r => `
+                <tr>
+                  <td class="mono" style="color:var(--fg-muted)">${r[0]}</td>
+                  <td>${r[1]}</td>
+                  <td style="font-weight:500">${r[2]}</td>
+                  <td><span class="badge badge-success"><span class="dot"></span>${r[3]}</span></td>
+                  <td style="text-align:right">
+                    <button class="btn btn-ghost" style="padding:6px 8px">${I('download',14)}</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function ApiKeysPage(){
+  const keys = [
+    { name:'production-api', prefix:'cfl_live_', tail:'a4f9', scope:'Read·Write', last:'5 min ago', created:'2026-01-14', by:'Songmin Park' },
+    { name:'ci-pipeline',    prefix:'cfl_live_', tail:'71c2', scope:'Read·Write', last:'2 hours ago', created:'2026-02-08', by:'Mira Chen' },
+    { name:'analytics-ro',   prefix:'cfl_live_', tail:'b88e', scope:'Read only',  last:'Yesterday',  created:'2026-03-02', by:'Theo Halvorsen' },
+    { name:'staging-debug',  prefix:'cfl_test_', tail:'02ad', scope:'Read only',  last:'Never',      created:'2026-04-22', by:'Songmin Park' },
+  ];
+  return el(`
+    <div>
+      ${PageHeader('API keys', 'Programmatic access to your workspace.', `
+        <button class="btn">${I('code',12)}<span>API docs</span></button>
+        <button class="btn btn-primary" data-toast="New key created — copy it now">${I('plus',12)}<span>Create key</span></button>
+      `)}
+
+      <div class="card-muted" style="padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:18px;border-color:rgba(123,184,232,.25);background:var(--intent-info-bg)">
+        <div style="color:var(--intent-info-fg);margin-top:2px">${I('info',16)}</div>
+        <div style="flex:1;font-size:12px;line-height:1.55">
+          <div style="font-weight:500;color:var(--intent-info-fg);margin-bottom:2px">Treat keys like passwords</div>
+          <div style="color:var(--fg-muted)">We only show the full key once at creation. Rotate any key you suspect is leaked — and never commit them to source control.</div>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="border-radius:12px">
+        <table class="table">
+          <thead><tr>
+            <th>Name</th><th>Token</th><th>Scope</th><th>Last used</th><th>Created</th><th></th>
+          </tr></thead>
+          <tbody>
+            ${keys.map(k => `
+              <tr>
+                <td style="font-weight:500">${k.name}</td>
+                <td>
+                  <span class="mono" style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px;background:var(--bg-surface-muted);border-radius:6px;border:1px solid var(--border-default)">
+                    ${k.prefix}••••••••${k.tail}
+                    <button class="btn btn-ghost" data-toast="Token prefix copied" style="padding:2px;border-radius:4px">${I('copy',12)}</button>
+                  </span>
+                </td>
+                <td><span class="badge ${k.scope === 'Read only' ? 'badge-info' : 'badge-accent'}">${k.scope}</span></td>
+                <td style="color:var(--fg-muted)">${k.last}</td>
+                <td style="color:var(--fg-muted)">${k.created} · <span style="color:var(--fg-subtle)">${k.by}</span></td>
+                <td style="text-align:right">
+                  <button class="btn btn-ghost" style="padding:6px 8px">${I('refresh',14)}</button>
+                  <button class="btn btn-ghost" style="padding:6px 8px;color:var(--intent-danger-fg)">${I('trash',14)}</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `);
+}
+
+function AuditPage(){
+  const events = [
+    { ts:'2026-05-07 14:22', actor:'Songmin Park',  action:'auth.signin',          target:'web · Seoul',                kind:'success' },
+    { ts:'2026-05-07 14:21', actor:'Songmin Park',  action:'auth.2fa.verify',      target:'TOTP',                       kind:'success' },
+    { ts:'2026-05-07 11:05', actor:'Mira Chen',     action:'team.member.invite',   target:'wonyoung@acme.com',          kind:'info' },
+    { ts:'2026-05-07 10:48', actor:'system',        action:'billing.invoice.paid', target:'INV-2026-05',                kind:'success' },
+    { ts:'2026-05-06 22:14', actor:'Theo Halvorsen',action:'apikey.rotate',        target:'analytics-ro',               kind:'warn' },
+    { ts:'2026-05-06 16:30', actor:'Songmin Park',  action:'security.passkey.add', target:'MacBook Pro 16"',            kind:'success' },
+    { ts:'2026-05-05 09:11', actor:'Mira Chen',     action:'team.role.change',     target:'theo@acme.com → Admin',      kind:'warn' },
+    { ts:'2026-05-04 18:40', actor:'system',        action:'auth.signin.blocked',  target:'unknown · 45.83.x.x · Russia', kind:'danger' },
+  ];
+  const kindMap = { success:'badge-success', info:'badge-info', warn:'badge-warn', danger:'badge-danger' };
+  return el(`
+    <div>
+      ${PageHeader('Audit log', 'Every sensitive action across your workspace, last 90 days.', `
+        <button class="btn">${I('sliders',12)}<span>Filter</span></button>
+        <button class="btn">${I('download',12)}<span>Export</span></button>
+      `)}
+
+      <div class="table-wrap" style="border-radius:12px">
+        <table class="table">
+          <thead><tr>
+            <th>When</th><th>Actor</th><th>Action</th><th>Target</th><th>Result</th>
+          </tr></thead>
+          <tbody>
+            ${events.map(e => `
+              <tr>
+                <td class="mono" style="color:var(--fg-muted);white-space:nowrap">${e.ts}</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div class="avatar" style="width:22px;height:22px;font-size:9px">${e.actor.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
+                    <span>${e.actor}</span>
+                  </div>
+                </td>
+                <td><span class="mono" style="font-weight:500">${e.action}</span></td>
+                <td style="color:var(--fg-muted)">${e.target}</td>
+                <td>
+                  <span class="badge ${kindMap[e.kind]}"><span class="dot"></span>${e.kind}</span>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `);
+}
+</script>
+</body>
+</html>

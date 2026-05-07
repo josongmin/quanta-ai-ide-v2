@@ -1,0 +1,78 @@
+{
+  "tab": {
+    "intelligence": "Intelligence",
+    "coding": "Coding",
+    "agents": "Agents",
+    "reviews": "Reviews",
+    "admission": "Admission"
+  },
+  "action": {
+    "resetFilters": "Reset filters",
+    "toggleTheme": "Toggle theme",
+    "designTokens": "Design tokens",
+    "notifications": "Notifications",
+    "aiActivity": "AI activity"
+  },
+  "tooltip": {
+    "loc": "LOC",
+    "complexity": "Complexity",
+    "fanInOut": "Fan-in / out",
+    "blastRadius": "Blast radius",
+    "editSafety": "Edit safety",
+    "confidence": "Confidence",
+    "warning": "⚠ {{reasons}}"
+  },
+  "placeholder": {
+    "comingSoon": "Coming soon"
+  },
+  "review": {
+    "empty": {
+      "noMatches": "No PRs match this view.",
+      "noPrTitle": "No PR selected",
+      "noPrSubtitle": "Pick a PR from the queue, or switch the scope filter."
+    },
+    "queue": {
+      "hints": "j/k navigate · ? help"
+    },
+    "rail": {
+      "prContext": "PR context",
+      "nothingSelected": "Nothing selected."
+    },
+    "footer": {
+      "left": "p0 review · static engine deterministic per PR",
+      "right": "scientific layout — F-pattern · severity-fixed hue · single decision spine"
+    },
+    "cheat": {
+      "jk": "Next / previous PR",
+      "np": "Next / previous file (Files section)",
+      "v": "Toggle viewed for current file",
+      "r": "Focus the comment composer",
+      "go": "Jump to Overview",
+      "gf": "Jump to Files",
+      "gr": "Jump to Risk",
+      "gc": "Jump to CI checks",
+      "ga": "Jump to Activity",
+      "q": "Toggle this cheat sheet"
+    }
+  },
+  "admission": {
+    "sidebar": {
+      "verdict": "Verdict",
+      "activeRules": "Active rules",
+      "engine": "Engine",
+      "engineReady": "ready",
+      "syncedJustNow": "Synced just now"
+    },
+    "decisionFlow": {
+      "title": "Decision flow",
+      "subtitle": "this PR through the gate · top {{count}} rules"
+    },
+    "gate": {
+      "allChecksPassed": "All checks passed"
+    },
+    "override": {
+      "title": "Override admission rule",
+      "notice": "Bypassing a rule is logged in the audit trail. Anyone can review who, when, and why."
+    }
+  }
+}

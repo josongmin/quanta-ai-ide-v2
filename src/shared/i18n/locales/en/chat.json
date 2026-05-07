@@ -1,0 +1,127 @@
+{
+  "agent": {
+    "title": "Coding agent",
+    "openTitle": "Open coding agent (⌘K)",
+    "openAria": "Open coding agent",
+    "closeAria": "Close coding agent"
+  },
+  "tabs": {
+    "newTitle": "New chat (⌘T)",
+    "newAria": "New chat",
+    "closeTitle": "Close tab (⌘W)",
+    "closeAria": "Close tab",
+    "defaultTitle": "Chat {{n}}"
+  },
+  "suggestions": {
+    "heading": "Try asking",
+    "items": {
+      "lowSafety": "Find files with low edit safety",
+      "unknownFlag": "Why is core/auth.ts flagged unknown?",
+      "refactor": "Refactor plan for src/hooks",
+      "blastRadius": "Show transitive blast radius for current selection"
+    }
+  },
+  "composer": {
+    "placeholder": "Ask about any file, symbol, or risk…",
+    "send": "Send",
+    "sendAria": "Send message",
+    "hintSend": "send",
+    "hintNewline": "newline",
+    "attachFile": "Attach file",
+    "mentionFile": "Mention file (#)",
+    "mentionPerson": "Mention person (@)",
+    "model": "Model"
+  },
+  "inlineComment": {
+    "placeholder": "Leave a comment…",
+    "shortcuts": "⌘↵ submit · Esc cancel",
+    "cancel": "Cancel",
+    "submit": "Comment"
+  },
+  "synthReply": {
+    "blast": "Reverse-dep BFS (≤4 hops) yields ~12 affected files. Top vectors:\n  • core/auth.ts → 5 callers\n  • src/hooks/use-session.ts → 4 callers\n  • core/router.ts → 3 callers\nRun a Deep Scan for a transitive proof.",
+    "refactor": "Proposed plan for src/hooks:\n  1. Lift duplicated effect deps into a shared use-prev helper\n  2. Replace any-typed generics in use-query (12 occurrences)\n  3. Co-locate tests for use-form, use-validation\nEstimated edit safety: 78 / 100.",
+    "unknown": "core/auth.ts is flagged \"unknown\" because:\n  • 14 `any` usages on the public surface\n  • Reflection-based middleware lookup (overapprox call resolution)\n  • One suppressed @ts-ignore in token refresh path\nTighten types on `AuthCtx` to lift it to \"overapprox\".",
+    "safety": "Lowest edit safety in repo:\n  • vendor/openai.ts — 12  (generated, do not edit)\n  • core/billing.ts — 28  (high blast, no tests)\n  • core/migrations.ts — 31 (DB-touching)\nFilter applied. Click any file to open Focus Scan.",
+    "fallback": "I would inspect the repo graph for \"{{q}}\" and surface the most relevant files. (Demo mode — wire in a real model to get full answers.)"
+  },
+  "activity": {
+    "tasks": {
+      "rateLimit": "Adding rate limit to auth endpoints",
+      "flakyTest": "Fixing flaky test on CI",
+      "reactMigration": "Migrating to React 19",
+      "prod500": "Investigating prod 500s in checkout",
+      "strictTypes": "Tightening types after strict-mode flip",
+      "bundleSize": "Cutting bundle size in vendor chunk",
+      "serviceTests": "Backfilling tests for service layer",
+      "routingRefactor": "Refactoring routing for layered modules",
+      "cve": "Patching CVE in upstream client",
+      "reviewPr": "Reviewing PR #482 (auth rewrite)"
+    },
+    "intent": {
+      "lookingAround": "looking around",
+      "triagingSecret": "Triaging suspected secret leak",
+      "reviewingSast": "Reviewing {{n}} SAST findings",
+      "reviewingSecurity": "Reviewing security finding",
+      "flakyCoverage": "Investigating flaky / weak coverage",
+      "lintCleanup": "Cleaning up {{n}} lint errors",
+      "removingTsIgnore": "Removing ts-ignore suppressions",
+      "fixingBug": "Fixing reported bug",
+      "backfillTests": "Backfilling missing tests",
+      "raisingCoverage": "Raising coverage from {{n}}%",
+      "strongerAsserts": "Strengthening test assertions",
+      "edgeCaseTest": "Adding edge-case test",
+      "splitCyclomatic": "Splitting cyclomatic-{{n}} function",
+      "improveMaintainability": "Improving maintainability",
+      "breakCycle": "Breaking import cycle",
+      "fixLayer": "Fixing layer violation",
+      "extractHelper": "Extracting helper / simplifying",
+      "resolveTodos": "Resolving {{n}} TODO{{plural}}",
+      "adjustPublicApi": "Adjusting public API surface",
+      "smallChange": "Applying small change",
+      "docPublicApi": "Adding JSDoc for public API",
+      "documenting": "Documenting (jsdoc {{n}}%)",
+      "reviewRecentPrs": "Reviewing {{n}} recent PRs",
+      "highChurn": "Investigating high-churn area",
+      "callGraph": "Mapping call graph",
+      "wideModule": "Surveying widely-used module",
+      "dynamicDispatch": "Working through dynamic dispatch",
+      "readingContext": "Reading for context"
+    }
+  },
+  "tokens": {
+    "title": "Design Tokens",
+    "subtitle": "Live editing — persisted to localStorage",
+    "closeAria": "Close design tokens panel",
+    "groups": {
+      "color": "Color",
+      "glass": "Glass",
+      "shape": "Shape",
+      "type": "Type & Density",
+      "presets": "Quick presets"
+    },
+    "labels": {
+      "accent": "Accent",
+      "bgDark": "BG (dark)",
+      "bgLight": "BG (light)",
+      "alphaDark": "Alpha · dark",
+      "alphaLight": "Alpha · light",
+      "borderDark": "Border · dark",
+      "borderLight": "Border · light",
+      "blur": "Blur",
+      "radiusLg": "Radius (lg)",
+      "radiusSm": "Radius (sm)",
+      "fontScale": "Font scale",
+      "cardPad": "Card padding",
+      "gapY": "Section gap"
+    },
+    "presets": {
+      "default": "Default",
+      "sharper": "Sharper",
+      "softer": "Softer",
+      "compact": "Compact",
+      "cozy": "Cozy",
+      "cyberpunk": "Cyberpunk"
+    }
+  }
+}

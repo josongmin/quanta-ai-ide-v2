@@ -1,0 +1,55 @@
+{
+  "title": "Facet Settings",
+  "subtitle": "Plan tier controls what's available · personal prefs control what's visible",
+  "buttonLabel": "Facet Settings",
+  "openTitle": "Facet settings",
+  "openAria": "Facet settings",
+  "closeAria": "Close settings",
+  "plan": {
+    "heading": "Plan (demo)",
+    "free": "Free",
+    "pro": "Pro",
+    "enterprise": "Enterprise"
+  },
+  "visibility": {
+    "heading": "Visible facets",
+    "pin": "Pin",
+    "hide": "Hide",
+    "resetDefaults": "Reset to defaults"
+  },
+  "language": {
+    "title": "Language",
+    "en": "English",
+    "ko": "Korean",
+    "ja": "Japanese",
+    "zh": "Chinese"
+  },
+  "hud": {
+    "engine": "Engine"
+  },
+  "aiActivity": {
+    "title": "AI Activity",
+    "hint": "Show what the AI is touching, in real time.",
+    "enabled": "Enable",
+    "layers": "Layers",
+    "ring": "Pulsing rings on dots",
+    "line": "Connection lines from chat",
+    "zone": "Folder zone outline",
+    "motion": "Motion",
+    "speed": {
+      "slow": "Slow",
+      "normal": "Normal",
+      "fast": "Fast"
+    },
+    "intensity": {
+      "subtle": "Subtle",
+      "normal": "Normal",
+      "loud": "Loud"
+    },
+    "cap": "Limits",
+    "maxConcurrent": "Max concurrent",
+    "resetDefaults": "Reset to defaults",
+    "done": "Done",
+    "closeBackdrop": "Close panel"
+  }
+}

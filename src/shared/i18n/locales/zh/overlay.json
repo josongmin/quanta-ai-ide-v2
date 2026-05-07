@@ -1,0 +1,52 @@
+{
+  "title": "热度叠加",
+  "apply": "应用热度",
+  "metric": "指标",
+  "buttonTitle": "热度叠加: {{label}}",
+  "controls": {
+    "intensity": "强度",
+    "radius": "半径",
+    "threshold": "阈值"
+  },
+  "panel": {
+    "title": "叠加层",
+    "heading": "可视叠加",
+    "resetAll": "全部清除",
+    "off": "关",
+    "on": "开",
+    "enable": "启用",
+    "disable": "停用",
+    "tile": {
+      "heat": "热度",
+      "time": "时间窗",
+      "timeIdle": "选择 Hotspot (time) 后启用",
+      "risk": "风险视角",
+      "api": "公共 API",
+      "boundaries": "边界"
+    },
+    "detail": {
+      "apiBody": "在被外部广泛引用的文件外侧绘制细环,直观展示公共 API 表面。"
+    }
+  },
+  "boundaries": {
+    "entry": "入口点",
+    "entryCaption": "应用启动的位置",
+    "ingress": "入站",
+    "ingressCaption": "可从外部访问的文件",
+    "egress": "出站",
+    "egressCaption": "调用外部系统的文件",
+    "protocol": {
+      "http": "HTTP",
+      "webhook": "Webhook",
+      "queue": "Queue",
+      "grpc": "gRPC",
+      "db": "DB",
+      "fs": "FS"
+    },
+    "summary": {
+      "entry": "入口",
+      "ingress": "入站",
+      "egress": "出站"
+    }
+  }
+}

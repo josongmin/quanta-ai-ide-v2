@@ -1,0 +1,23 @@
+{
+  "switcher": {
+    "heading": "视图模式",
+    "tooltip": "切换视图",
+    "buttonTitle": "视图模式: {{label}}"
+  },
+  "dot-field": {
+    "label": "点阵图",
+    "hint": "文件的网格热力图"
+  },
+  "universe": {
+    "label": "星图",
+    "hint": "按目录深度布局的星点"
+  },
+  "unknown": {
+    "label": "未知",
+    "hint": "置信度图 — 分析器不确定的部分"
+  },
+  "cycles": {
+    "label": "循环",
+    "hint": "强连通 import 环 (Tarjan)"
+  }
+}

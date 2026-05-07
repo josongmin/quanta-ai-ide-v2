@@ -1,0 +1,55 @@
+{
+  "title": "分面设置",
+  "subtitle": "套餐等级控制可用项 · 个人偏好控制可见项",
+  "buttonLabel": "分面设置",
+  "openTitle": "分面设置",
+  "openAria": "分面设置",
+  "closeAria": "关闭设置",
+  "plan": {
+    "heading": "套餐 (演示)",
+    "free": "Free",
+    "pro": "Pro",
+    "enterprise": "Enterprise"
+  },
+  "visibility": {
+    "heading": "可见分面",
+    "pin": "置顶",
+    "hide": "隐藏",
+    "resetDefaults": "恢复默认"
+  },
+  "language": {
+    "title": "语言",
+    "en": "英语",
+    "ko": "韩语",
+    "ja": "日语",
+    "zh": "中文"
+  },
+  "hud": {
+    "engine": "引擎"
+  },
+  "aiActivity": {
+    "title": "AI 活动",
+    "hint": "实时显示 AI 正在操作的文件。",
+    "enabled": "启用",
+    "layers": "图层",
+    "ring": "点上的脉冲圆环",
+    "line": "来自聊天的连接线",
+    "zone": "文件夹区域轮廓",
+    "motion": "动效",
+    "speed": {
+      "slow": "慢",
+      "normal": "正常",
+      "fast": "快"
+    },
+    "intensity": {
+      "subtle": "弱",
+      "normal": "正常",
+      "loud": "强"
+    },
+    "cap": "限制",
+    "maxConcurrent": "最大并发",
+    "resetDefaults": "恢复默认",
+    "done": "完成",
+    "closeBackdrop": "关闭面板"
+  }
+}

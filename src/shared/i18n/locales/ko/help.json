@@ -1,0 +1,16 @@
+{
+  "title": "키보드 단축키",
+  "hint": "팁: 텍스트 입력란에 입력 중일 때는 대부분의 단축키가 비활성화됩니다.",
+  "column": {
+    "action": "동작",
+    "shortcut": "단축키"
+  },
+  "action": {
+    "focusSearch": "검색에 포커스",
+    "openSettings": "설정 열기",
+    "openActivity": "AI 액티비티 열기",
+    "toggleHelp": "이 도움말 토글",
+    "closeOrBlur": "대화상자 닫기 / 포커스 해제",
+    "focusSearchSlash": "검색에 포커스 (대체)"
+  }
+}

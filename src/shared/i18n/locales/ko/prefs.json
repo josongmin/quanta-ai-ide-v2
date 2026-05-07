@@ -1,0 +1,55 @@
+{
+  "title": "패싯 설정",
+  "subtitle": "플랜 등급은 사용 가능한 항목을, 개인 설정은 보이는 항목을 제어합니다",
+  "buttonLabel": "패싯 설정",
+  "openTitle": "패싯 설정",
+  "openAria": "패싯 설정",
+  "closeAria": "설정 닫기",
+  "plan": {
+    "heading": "플랜 (데모)",
+    "free": "Free",
+    "pro": "Pro",
+    "enterprise": "Enterprise"
+  },
+  "visibility": {
+    "heading": "표시 패싯",
+    "pin": "고정",
+    "hide": "숨김",
+    "resetDefaults": "기본값으로 초기화"
+  },
+  "language": {
+    "title": "언어",
+    "en": "영어",
+    "ko": "한국어",
+    "ja": "일본어",
+    "zh": "중국어"
+  },
+  "hud": {
+    "engine": "엔진"
+  },
+  "aiActivity": {
+    "title": "AI 활동",
+    "hint": "AI가 지금 만지고 있는 파일을 실시간으로 표시합니다.",
+    "enabled": "활성화",
+    "layers": "레이어",
+    "ring": "점 위에 펄스 링",
+    "line": "채팅 연결선",
+    "zone": "폴더 영역 외곽선",
+    "motion": "모션",
+    "speed": {
+      "slow": "느림",
+      "normal": "보통",
+      "fast": "빠름"
+    },
+    "intensity": {
+      "subtle": "약함",
+      "normal": "보통",
+      "loud": "강함"
+    },
+    "cap": "한도",
+    "maxConcurrent": "동시 표시 최대",
+    "resetDefaults": "기본값으로 초기화",
+    "done": "완료",
+    "closeBackdrop": "패널 닫기"
+  }
+}

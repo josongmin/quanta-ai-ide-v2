@@ -1,0 +1,139 @@
+import { useEffect, useRef, useState } from 'react';
+import { ChevronDown, Flame, ShieldAlert, Skull, FileWarning, FolderGit2, X } from 'lucide-react';
+import { useFilterFacets, useFilterActions } from '../model/FilterContext';
+import { useTheme } from '@shared/theme';
+import { useTranslation } from '@shared/i18n';
+import { GlassCard } from '@shared/ui';
+import type { PresetKey } from '@entities/repo';
+
+const PRESETS: {
+  key: Exclude<PresetKey, null>;
+  icon: React.ComponentType<{ className?: string }>;
+  i18nKey: string;
+}[] = [
+  { key: 'hotspot',         icon: Flame,        i18nKey: 'hotspot' },
+  { key: 'vulnerable-hub',  icon: ShieldAlert,  i18nKey: 'vulnerableHub' },
+  { key: 'stale',           icon: Skull,        i18nKey: 'stale' },
+  { key: 'long-files',      icon: FileWarning,  i18nKey: 'longFiles' },
+];
+
+// Top-of-sidebar "project switcher" surface. The default chip shows the
+// project (workspace) name; the dropdown contains the saved-query presets.
+// The active preset becomes the visible label so the user can always see
+// which lens is on without opening the menu.
+export default function ProjectSelector() {
+  const { isDark } = useTheme();
+  const { t } = useTranslation('filter');
+  const { t: ti } = useTranslation('inspect');
+  const { state } = useFilterFacets();
+  const { applyPreset } = useFilterActions();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener('mousedown', handler);
+    return () => { window.removeEventListener('mousedown', handler); };
+  }, [open]);
+
+  const activePreset = PRESETS.find((p) => p.key === state.preset) ?? null;
+  const projectName = ti('header.workspaceName');
+
+  return (
+    <div ref={ref} className="relative">
+      <GlassCard className="p-1">
+        <button
+          type="button"
+          onClick={() => { setOpen((v) => !v); }}
+          className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left transition-colors ${
+            isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'
+          }`}
+        >
+          {activePreset ? (
+            <activePreset.icon className="w-3.5 h-3.5 shrink-0 text-[#4f9a5c]" />
+          ) : (
+            <FolderGit2 className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-white/55' : 'text-black/55'}`} />
+          )}
+          <div className="min-w-0 flex-1">
+            <div className={`text-[11px] font-bold truncate leading-tight ${
+              activePreset
+                ? 'text-[#4f9a5c]'
+                : (isDark ? 'text-white/85' : 'text-black/85')
+            }`}>
+              {activePreset ? t(`preset.${activePreset.i18nKey}.label`) : projectName}
+            </div>
+            <div className={`text-[9px] font-mono truncate leading-tight mt-0.5 ${
+              isDark ? 'text-white/40' : 'text-black/40'
+            }`}>
+              {activePreset ? t(`preset.${activePreset.i18nKey}.hint`) : t('selector.subtitle')}
+            </div>
+          </div>
+          {activePreset ? (
+            <button
+              type="button"
+              aria-label={t('selector.clearPreset')}
+              onClick={(e) => { e.stopPropagation(); applyPreset(null); }}
+              className={`shrink-0 p-1 rounded-md transition-colors ${
+                isDark ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/10'
+              }`}
+            >
+              <X className="w-3 h-3" />
+            </button>
+          ) : (
+            <ChevronDown
+              className={`shrink-0 w-3.5 h-3.5 transition-transform ${open ? 'rotate-180' : ''} ${
+                isDark ? 'text-white/40' : 'text-black/40'
+              }`}
+            />
+          )}
+        </button>
+      </GlassCard>
+
+      {open && (
+        <div className="absolute left-0 right-0 mt-1 z-10">
+          <GlassCard className="p-1.5">
+            <div className={`text-[9px] font-black uppercase tracking-[0.18em] mb-1 px-1.5 pt-0.5 ${
+              isDark ? 'text-white/40' : 'text-black/40'
+            }`}>
+              {t('section.savedQueries')}
+            </div>
+            <div className="space-y-0.5">
+              {PRESETS.map((p) => {
+                const active = state.preset === p.key;
+                const Icon = p.icon;
+                const label = t(`preset.${p.i18nKey}.label`);
+                const hint = t(`preset.${p.i18nKey}.hint`);
+                return (
+                  <button type="button"
+                    key={p.key}
+                    onClick={() => { applyPreset(active ? null : p.key); setOpen(false); }}
+                    className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-left transition-colors ${
+                      active
+                        ? 'bg-[#4f9a5c]/15'
+                        : (isDark ? 'hover:bg-white/5' : 'hover:bg-black/5')
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#4f9a5c]' : isDark ? 'text-white/55' : 'text-black/55'}`} />
+                    <span className={`text-[11px] font-bold flex-1 truncate ${
+                      active ? 'text-[#4f9a5c]' : (isDark ? 'text-white/85' : 'text-black/85')
+                    }`}>
+                      {label}
+                    </span>
+                    <span className={`text-[9px] font-mono truncate ${
+                      isDark ? 'text-white/30' : 'text-black/30'
+                    }`}>
+                      {hint}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </GlassCard>
+        </div>
+      )}
+    </div>
+  );
+}

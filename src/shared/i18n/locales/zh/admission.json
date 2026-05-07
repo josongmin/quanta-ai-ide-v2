@@ -1,0 +1,57 @@
+{
+  "section": {
+    "liveSignal": "实时信号",
+    "ruleSources": "规则来源",
+    "costLedger": "成本账本",
+    "ruleConstellation": "规则星座图",
+    "livePrFeed": "实时 PR 流",
+    "retroactive": "追溯 · 最近 30 个 PR",
+    "activeVsTotal": "活跃 vs 总数",
+    "ifTodayRan": "如果今日的 PR 运行",
+    "rolloutsInProgress": "正在进行的发布",
+    "overrideAudit": "覆盖审计",
+    "versionLog": "版本日志",
+    "export": "导出",
+    "import": "导入",
+    "filesInPr": "PR 中的文件",
+    "filesInThisPr": "此 PR 中的文件"
+  },
+  "table": {
+    "rule": "规则",
+    "source": "来源",
+    "severity": "严重性",
+    "matches": "匹配",
+    "cost": "成本",
+    "date": "日期",
+    "files": "文件",
+    "ripple": "涟漪",
+    "outcome": "结果",
+    "firedRules": "触发的规则"
+  },
+  "empty": {
+    "noOverrides": "尚无覆盖。"
+  },
+  "search": {
+    "rulesPlaceholder": "搜索规则"
+  },
+  "rule": {
+    "whyExistsPlaceholder": "此规则存在的原因",
+    "deleteTitle": "删除规则",
+    "livePreview": "实时预览",
+    "ifEnabled": "如果启用 (近 30 天)"
+  },
+  "card": {
+    "bySource": "按来源",
+    "bySourceHint": "★ native = 仅引擎信号",
+    "bySeverity": "按严重性",
+    "bySeverityHint": "门禁实际所做的事",
+    "byCost": "按成本",
+    "byCostHint": "决定实时预览能否内联运行",
+    "evidenceQuality": "证据质量",
+    "evidenceQualityHint": "诚实性层 · 匹配的精确度",
+    "topBlockers": "模拟 PR 中的主要阻塞项"
+  },
+  "override": {
+    "whyPlaceholder": "为何安全？请关联 issue 或文档。"
+  }
+}

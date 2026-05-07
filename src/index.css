@@ -1,0 +1,439 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #4f9a5c;
+  --bg-dark: #0d1117;
+  --bg-light: #ffffff;
+  --glass-alpha-dark: 0.04;
+  --glass-alpha-light: 0.8;
+  --glass-border-dark: 0.1;
+  --glass-border-light: 0.4;
+  --glass-blur: 22px;
+  --radius: 24px;
+  --radius-sm: 12px;
+  --font-scale: 1;
+  --card-pad: 16px;
+  --gap-y: 12px;
+}
+
+.glass-dark {
+  background-color: rgba(255, 255, 255, var(--glass-alpha-dark));
+  border-color: rgba(255, 255, 255, var(--glass-border-dark));
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-radius: var(--radius);
+}
+.glass-light {
+  background-color: rgba(255, 255, 255, var(--glass-alpha-light));
+  border-color: rgba(255, 255, 255, var(--glass-border-light));
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-radius: var(--radius);
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background-color: #020202;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  color-scheme: dark;
+}
+
+canvas {
+  display: block;
+}
+
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Thin, theme-friendly scrollbar for the coding-stage panes. */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(127,127,127,0.25) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(127,127,127,0.22);
+  border-radius: 999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(127,127,127,0.4);
+}
+
+/* Streaming progress strip used by the coding stage header. */
+@keyframes coding-shimmer {
+  0%   { background-position: -100% 0; }
+  100% { background-position:  200% 0; }
+}
+.coding-shimmer {
+  background-size: 200% 100%;
+  animation: coding-shimmer 1.6s linear infinite;
+}
+
+/* Theme-aware hover tint — uses border-muted as a low-contrast surface
+   that works on both light and dark backgrounds. */
+.hover-surface:hover {
+  background-color: var(--border-muted);
+  color: var(--fg-default);
+}
+
+/* ─────── Admission v2 motion ─────── */
+@keyframes admv2-rise {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.admv2-rise { animation: admv2-rise 520ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.admv2-rise-1 { animation-delay: 60ms; }
+.admv2-rise-2 { animation-delay: 120ms; }
+.admv2-rise-3 { animation-delay: 180ms; }
+.admv2-rise-4 { animation-delay: 240ms; }
+
+@keyframes admv2-glow-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.04); }
+}
+.admv2-glow-pulse { animation: admv2-glow-pulse 2.6s ease-in-out infinite; }
+
+@keyframes admv2-scan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.admv2-scan { animation: admv2-scan 4s linear infinite; }
+
+@keyframes admv2-dash {
+  to { stroke-dashoffset: -120; }
+}
+.admv2-dash { animation: admv2-dash 6s linear infinite; }
+
+@keyframes admv2-ping {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  80%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+.admv2-ping { animation: admv2-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+@keyframes admv2-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0.25; }
+}
+.admv2-blink { animation: admv2-blink 1.1s steps(1, end) infinite; }
+
+@keyframes admv2-stream {
+  0%   { transform: translateY(8%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-110%); opacity: 0; }
+}
+.admv2-stream { animation: admv2-stream 9s linear infinite; }
+
+@keyframes admv2-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.admv2-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255,255,255,0.06) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: admv2-shimmer 3.6s linear infinite;
+}
+
+@keyframes admv2-orbit {
+  to { transform: rotate(360deg); }
+}
+.admv2-orbit { animation: admv2-orbit 18s linear infinite; }
+
+@keyframes admv2-orbit-rev {
+  to { transform: rotate(-360deg); }
+}
+.admv2-orbit-rev { animation: admv2-orbit-rev 24s linear infinite; }
+
+@keyframes admv2-grid-drift {
+  to { background-position: 16px 16px; }
+}
+.admv2-grid-drift {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 16px 16px;
+  animation: admv2-grid-drift 8s linear infinite;
+}
+
+@keyframes admv2-aurora-shift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(-20px, 10px, 0); }
+}
+.admv2-aurora-shift { animation: admv2-aurora-shift 12s ease-in-out infinite; }
+
+@keyframes admv2-num-flip {
+  from { transform: translateY(-12px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+.admv2-num-flip { animation: admv2-num-flip 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes admv2-radar {
+  0%   { stroke-dashoffset: 0;   opacity: 1;   }
+  100% { stroke-dashoffset: -300; opacity: 0.4; }
+}
+.admv2-radar { animation: admv2-radar 3.6s linear infinite; }
+
+@keyframes admv2-sweep {
+  0%   { transform: rotate(0deg);   opacity: 0.55; }
+  50%  {                            opacity: 0.9;  }
+  100% { transform: rotate(360deg); opacity: 0.55; }
+}
+.admv2-sweep {
+  transform-origin: center;
+  animation: admv2-sweep 6s linear infinite;
+}
+
+@keyframes admv2-flow {
+  0%   { left: -10%;  opacity: 0; }
+  10%  {              opacity: 1; }
+  90%  {              opacity: 1; }
+  100% { left: 100%;  opacity: 0; }
+}
+
+/* ─────── Admission v2 light-theme inversion ───────
+ * The v2 surface is authored in dark mode (text-white/X, bg-white/Y).
+ * Rather than thread `isDark` through 3,000 lines, we mount the whole
+ * surface inside `[data-v2-theme="light"]` and invert the white tokens
+ * to black at CSS level. This is a pragmatic shortcut — Tailwind's
+ * `text-white/N` compiles to `rgb(255 255 255 / N%)`, so we just rewrite
+ * the colour channel. Severity colours and inline-styled accents are
+ * unaffected (they ship via the V2 token table or `style={{color}}`).
+ */
+[data-v2-theme="light"] .text-white       { color: rgb(0 0 0 / 1) !important; }
+[data-v2-theme="light"] .text-white\/95   { color: rgb(0 0 0 / 0.95) !important; }
+[data-v2-theme="light"] .text-white\/90   { color: rgb(0 0 0 / 0.90) !important; }
+[data-v2-theme="light"] .text-white\/85   { color: rgb(0 0 0 / 0.85) !important; }
+[data-v2-theme="light"] .text-white\/80   { color: rgb(0 0 0 / 0.80) !important; }
+[data-v2-theme="light"] .text-white\/75   { color: rgb(0 0 0 / 0.75) !important; }
+[data-v2-theme="light"] .text-white\/70   { color: rgb(0 0 0 / 0.72) !important; }
+[data-v2-theme="light"] .text-white\/65   { color: rgb(0 0 0 / 0.68) !important; }
+[data-v2-theme="light"] .text-white\/55   { color: rgb(0 0 0 / 0.60) !important; }
+[data-v2-theme="light"] .text-white\/50   { color: rgb(0 0 0 / 0.55) !important; }
+[data-v2-theme="light"] .text-white\/45   { color: rgb(0 0 0 / 0.50) !important; }
+[data-v2-theme="light"] .text-white\/40   { color: rgb(0 0 0 / 0.45) !important; }
+[data-v2-theme="light"] .text-white\/35   { color: rgb(0 0 0 / 0.40) !important; }
+[data-v2-theme="light"] .text-white\/30   { color: rgb(0 0 0 / 0.35) !important; }
+[data-v2-theme="light"] .text-white\/25   { color: rgb(0 0 0 / 0.30) !important; }
+
+/* Background opacities — invert the same way. We hit the most common
+ * Tailwind tones used inside v2 (the [0.0X] arbitrary syntax). */
+[data-v2-theme="light"] .bg-white         { background-color: rgb(255 255 255 / 1) !important; }
+[data-v2-theme="light"] .bg-white\/15     { background-color: rgb(0 0 0 / 0.10) !important; }
+[data-v2-theme="light"] .bg-white\/10     { background-color: rgb(0 0 0 / 0.08) !important; }
+[data-v2-theme="light"] .bg-white\/5      { background-color: rgb(0 0 0 / 0.05) !important; }
+[data-v2-theme="light"] .bg-white\/\[0\.04\]  { background-color: rgb(0 0 0 / 0.04) !important; }
+[data-v2-theme="light"] .bg-white\/\[0\.025\] { background-color: rgb(0 0 0 / 0.025) !important; }
+[data-v2-theme="light"] .bg-white\/\[0\.03\]  { background-color: rgb(0 0 0 / 0.03) !important; }
+[data-v2-theme="light"] .bg-white\/\[0\.06\]  { background-color: rgb(0 0 0 / 0.05) !important; }
+
+/* Borders — `border-white/X` and divides. Same invert. */
+[data-v2-theme="light"] .border-white\/10 { border-color: rgb(0 0 0 / 0.10) !important; }
+[data-v2-theme="light"] .border-white\/5  { border-color: rgb(0 0 0 / 0.06) !important; }
+[data-v2-theme="light"] .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(0 0 0 / 0.06) !important;
+}
+
+/* `text-black` button on white pill — flip to black-on-white still works
+ * in light, so we leave it alone. The reverse pair (`bg-white text-black`)
+ * is the primary CTA — we want it to become `bg-black text-white` in
+ * light mode so the CTA still pops. */
+[data-v2-theme="light"] .bg-white.text-black {
+  background-color: #0d1117 !important;
+  color: #fff !important;
+}
+
+/* ─────── Focus stack: active card swap ─────── */
+@keyframes stack-fade-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+.stack-fade-in {
+  animation: stack-fade-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: top center;
+}
+
+/* ─────── Dual range slider thumbs ─────── */
+.dual-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  pointer-events: none;
+}
+.dual-range-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: var(--fg-default);
+  border: 2px solid var(--border-strong);
+  cursor: grab;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+.dual-range-thumb::-webkit-slider-thumb:active { cursor: grabbing; background: #4f9a5c; }
+.dual-range-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: var(--fg-default);
+  border: 2px solid var(--border-strong);
+  cursor: grab;
+}
+
+/* ─────── Floating labels ─────── */
+.file-floating-label {
+  position: fixed;
+  pointer-events: none;
+  color: #8b949e;
+  font-size: 8px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.folder-label {
+  position: fixed;
+  pointer-events: none;
+  color: var(--fg-default);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 5;
+  white-space: nowrap;
+  padding: 2px 0;
+  text-shadow: 0 1px 4px var(--bg-canvas);
+}
+
+/* ─────── Universe-mode folder labels ─────── */
+.universe-folder-label {
+  position: fixed;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+.universe-folder-pill {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--fg-default);
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  backdrop-filter: blur(10px);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+.universe-folder-stem {
+  display: block;
+  width: 1px;
+  height: 24px;
+  margin-top: 4px;
+  background: linear-gradient(to bottom, var(--border-strong), transparent);
+  opacity: 0.4;
+}
+
+/* ─────── Reduced motion ───────
+ * Respect the OS-level "reduce motion" preference. Disables every infinite
+ * keyframe (coding-shimmer, admv2-rise/glow-pulse/scan/dash/...) and
+ * collapses transitions to near-zero so motion-sensitive users don't get
+ * battered by ambient animation. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─────── ReviewStage light-theme inversion ───────
+ * Same trick as `[data-v2-theme="light"]`. ReviewStage is authored in dark
+ * (text-white/X, bg-white/Y, border-white/X) — rather than rewrite the body
+ * we mount the entire surface inside `[data-review-theme="light"]` and
+ * invert the white tokens to black at the CSS level. */
+[data-review-theme="light"] .text-white       { color: rgb(0 0 0 / 1) !important; }
+[data-review-theme="light"] .text-white\/95   { color: rgb(0 0 0 / 0.95) !important; }
+[data-review-theme="light"] .text-white\/90   { color: rgb(0 0 0 / 0.90) !important; }
+[data-review-theme="light"] .text-white\/85   { color: rgb(0 0 0 / 0.85) !important; }
+[data-review-theme="light"] .text-white\/80   { color: rgb(0 0 0 / 0.80) !important; }
+[data-review-theme="light"] .text-white\/75   { color: rgb(0 0 0 / 0.75) !important; }
+[data-review-theme="light"] .text-white\/70   { color: rgb(0 0 0 / 0.72) !important; }
+[data-review-theme="light"] .text-white\/65   { color: rgb(0 0 0 / 0.68) !important; }
+[data-review-theme="light"] .text-white\/60   { color: rgb(0 0 0 / 0.65) !important; }
+[data-review-theme="light"] .text-white\/55   { color: rgb(0 0 0 / 0.60) !important; }
+[data-review-theme="light"] .text-white\/50   { color: rgb(0 0 0 / 0.55) !important; }
+[data-review-theme="light"] .text-white\/45   { color: rgb(0 0 0 / 0.50) !important; }
+[data-review-theme="light"] .text-white\/40   { color: rgb(0 0 0 / 0.45) !important; }
+[data-review-theme="light"] .text-white\/35   { color: rgb(0 0 0 / 0.40) !important; }
+[data-review-theme="light"] .text-white\/30   { color: rgb(0 0 0 / 0.35) !important; }
+[data-review-theme="light"] .text-white\/25   { color: rgb(0 0 0 / 0.30) !important; }
+[data-review-theme="light"] .text-white\/20   { color: rgb(0 0 0 / 0.25) !important; }
+
+[data-review-theme="light"] .bg-white         { background-color: rgb(255 255 255 / 1) !important; }
+[data-review-theme="light"] .bg-white\/90     { background-color: rgb(0 0 0 / 0.85) !important; }
+[data-review-theme="light"] .bg-white\/80     { background-color: rgb(0 0 0 / 0.75) !important; }
+[data-review-theme="light"] .bg-white\/30     { background-color: rgb(0 0 0 / 0.30) !important; }
+[data-review-theme="light"] .bg-white\/15     { background-color: rgb(0 0 0 / 0.10) !important; }
+[data-review-theme="light"] .bg-white\/10     { background-color: rgb(0 0 0 / 0.08) !important; }
+[data-review-theme="light"] .bg-white\/5      { background-color: rgb(0 0 0 / 0.05) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.10\] { background-color: rgb(0 0 0 / 0.08) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.1\]  { background-color: rgb(0 0 0 / 0.08) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.08\] { background-color: rgb(0 0 0 / 0.06) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.06\] { background-color: rgb(0 0 0 / 0.05) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.04\] { background-color: rgb(0 0 0 / 0.04) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.035\] { background-color: rgb(0 0 0 / 0.035) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.03\] { background-color: rgb(0 0 0 / 0.03) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.025\] { background-color: rgb(0 0 0 / 0.025) !important; }
+[data-review-theme="light"] .bg-white\/\[0\.02\] { background-color: rgb(0 0 0 / 0.02) !important; }
+
+[data-review-theme="light"] .border-white\/30 { border-color: rgb(0 0 0 / 0.25) !important; }
+[data-review-theme="light"] .border-white\/15 { border-color: rgb(0 0 0 / 0.12) !important; }
+[data-review-theme="light"] .border-white\/10 { border-color: rgb(0 0 0 / 0.10) !important; }
+[data-review-theme="light"] .border-white\/5  { border-color: rgb(0 0 0 / 0.06) !important; }
+[data-review-theme="light"] .border-white\/\[0\.04\] { border-color: rgb(0 0 0 / 0.05) !important; }
+[data-review-theme="light"] .border-white\/\[0\.06\] { border-color: rgb(0 0 0 / 0.06) !important; }
+[data-review-theme="light"] .border-white\/\[0\.08\] { border-color: rgb(0 0 0 / 0.08) !important; }
+[data-review-theme="light"] .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(0 0 0 / 0.06) !important;
+}
+[data-review-theme="light"] .divide-white\/\[0\.04\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(0 0 0 / 0.05) !important;
+}

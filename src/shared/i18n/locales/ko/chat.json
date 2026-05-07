@@ -1,0 +1,127 @@
+{
+  "agent": {
+    "title": "코딩 에이전트",
+    "openTitle": "코딩 에이전트 열기 (⌘K)",
+    "openAria": "코딩 에이전트 열기",
+    "closeAria": "코딩 에이전트 닫기"
+  },
+  "tabs": {
+    "newTitle": "새 채팅 (⌘T)",
+    "newAria": "새 채팅",
+    "closeTitle": "탭 닫기 (⌘W)",
+    "closeAria": "탭 닫기",
+    "defaultTitle": "채팅 {{n}}"
+  },
+  "suggestions": {
+    "heading": "이렇게 물어보세요",
+    "items": {
+      "lowSafety": "수정 안전도가 낮은 파일 찾기",
+      "unknownFlag": "core/auth.ts가 미지로 표시된 이유는?",
+      "refactor": "src/hooks 리팩터링 계획",
+      "blastRadius": "현재 선택의 전이 영향 범위 보기"
+    }
+  },
+  "composer": {
+    "placeholder": "파일, 심볼, 리스크 무엇이든 물어보세요…",
+    "send": "전송",
+    "sendAria": "메시지 전송",
+    "hintSend": "전송",
+    "hintNewline": "줄바꿈",
+    "attachFile": "파일 첨부",
+    "mentionFile": "파일 언급 (#)",
+    "mentionPerson": "사람 언급 (@)",
+    "model": "모델"
+  },
+  "inlineComment": {
+    "placeholder": "코멘트를 남겨주세요…",
+    "shortcuts": "⌘↵ 제출 · Esc 취소",
+    "cancel": "취소",
+    "submit": "코멘트"
+  },
+  "synthReply": {
+    "blast": "역방향 의존 BFS(≤4 hop) 결과 영향받는 파일 약 12개. 상위 벡터:\n  • core/auth.ts → 호출자 5\n  • src/hooks/use-session.ts → 호출자 4\n  • core/router.ts → 호출자 3\n전이 증명은 Deep Scan을 실행하세요.",
+    "refactor": "src/hooks 리팩터링 제안:\n  1. 중복된 effect 의존성을 공통 use-prev 헬퍼로 추출\n  2. use-query의 any 제네릭 12곳 교체\n  3. use-form, use-validation 테스트 동치 배치\n예상 편집 안전도: 78 / 100.",
+    "unknown": "core/auth.ts가 \"unknown\"으로 표시된 이유:\n  • 공개 표면에서 `any` 사용 14건\n  • 리플렉션 기반 미들웨어 조회(over-approx 호출 해결)\n  • 토큰 갱신 경로에 @ts-ignore 1건\n`AuthCtx` 타입을 강화하면 \"overapprox\"로 격상됩니다.",
+    "safety": "레포에서 가장 낮은 편집 안전도:\n  • vendor/openai.ts — 12  (생성 파일, 편집 금지)\n  • core/billing.ts — 28  (영향 범위 큼, 테스트 없음)\n  • core/migrations.ts — 31 (DB 변경 동반)\n필터 적용됨. 파일을 클릭하면 Focus Scan이 열립니다.",
+    "fallback": "\"{{q}}\"에 대해 레포 그래프를 살펴보고 관련 파일을 정리해 보겠습니다. (데모 모드 — 실제 모델을 연결하면 전체 답변을 받을 수 있습니다.)"
+  },
+  "activity": {
+    "tasks": {
+      "rateLimit": "auth 엔드포인트에 rate limit 추가",
+      "flakyTest": "CI 불안정 테스트 수정",
+      "reactMigration": "React 19 마이그레이션",
+      "prod500": "checkout 운영 500 에러 조사",
+      "strictTypes": "strict 모드 전환 후 타입 강화",
+      "bundleSize": "vendor 청크 번들 크기 줄이기",
+      "serviceTests": "서비스 계층 테스트 보강",
+      "routingRefactor": "레이어드 모듈 라우팅 리팩터",
+      "cve": "업스트림 클라이언트 CVE 패치",
+      "reviewPr": "PR #482 (auth 재작성) 리뷰"
+    },
+    "intent": {
+      "lookingAround": "주변 살펴보는 중",
+      "triagingSecret": "비밀키 누출 의심 분류 중",
+      "reviewingSast": "SAST 결과 {{n}}건 검토 중",
+      "reviewingSecurity": "보안 이슈 검토 중",
+      "flakyCoverage": "불안정 / 취약한 커버리지 조사",
+      "lintCleanup": "린트 오류 {{n}}건 정리 중",
+      "removingTsIgnore": "ts-ignore 제거 중",
+      "fixingBug": "보고된 버그 수정 중",
+      "backfillTests": "누락된 테스트 보강 중",
+      "raisingCoverage": "커버리지 {{n}}%에서 끌어올리는 중",
+      "strongerAsserts": "테스트 단정 보강 중",
+      "edgeCaseTest": "경계 케이스 테스트 추가 중",
+      "splitCyclomatic": "cyclomatic {{n}} 함수 분리 중",
+      "improveMaintainability": "유지보수성 개선 중",
+      "breakCycle": "임포트 사이클 끊는 중",
+      "fixLayer": "레이어 위반 수정 중",
+      "extractHelper": "헬퍼 추출 / 단순화 중",
+      "resolveTodos": "TODO {{n}}건 해결 중",
+      "adjustPublicApi": "공개 API 표면 조정 중",
+      "smallChange": "사소한 변경 적용 중",
+      "docPublicApi": "공개 API JSDoc 추가 중",
+      "documenting": "문서화 (jsdoc {{n}}%)",
+      "reviewRecentPrs": "최근 PR {{n}}건 검토 중",
+      "highChurn": "변경 잦은 영역 조사 중",
+      "callGraph": "호출 그래프 매핑 중",
+      "wideModule": "널리 쓰이는 모듈 살펴보는 중",
+      "dynamicDispatch": "동적 디스패치 추적 중",
+      "readingContext": "맥락 파악 중"
+    }
+  },
+  "tokens": {
+    "title": "디자인 토큰",
+    "subtitle": "실시간 편집 — localStorage에 저장됨",
+    "closeAria": "디자인 토큰 패널 닫기",
+    "groups": {
+      "color": "색상",
+      "glass": "글래스",
+      "shape": "모양",
+      "type": "타이포 & 밀도",
+      "presets": "빠른 프리셋"
+    },
+    "labels": {
+      "accent": "강조색",
+      "bgDark": "배경 (다크)",
+      "bgLight": "배경 (라이트)",
+      "alphaDark": "투명도 · 다크",
+      "alphaLight": "투명도 · 라이트",
+      "borderDark": "테두리 · 다크",
+      "borderLight": "테두리 · 라이트",
+      "blur": "블러",
+      "radiusLg": "반경 (대)",
+      "radiusSm": "반경 (소)",
+      "fontScale": "폰트 배율",
+      "cardPad": "카드 여백",
+      "gapY": "섹션 간격"
+    },
+    "presets": {
+      "default": "기본",
+      "sharper": "샤프",
+      "softer": "부드럽게",
+      "compact": "콤팩트",
+      "cozy": "코지",
+      "cyberpunk": "사이버펑크"
+    }
+  }
+}

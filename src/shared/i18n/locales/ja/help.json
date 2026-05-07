@@ -1,0 +1,16 @@
+{
+  "title": "キーボードショートカット",
+  "hint": "ヒント: テキスト入力中は、ほとんどのショートカットが無効になります。",
+  "column": {
+    "action": "アクション",
+    "shortcut": "ショートカット"
+  },
+  "action": {
+    "focusSearch": "検索にフォーカス",
+    "openSettings": "設定を開く",
+    "openActivity": "AI アクティビティを開く",
+    "toggleHelp": "このヘルプを切り替え",
+    "closeOrBlur": "ダイアログを閉じる / フォーカスを外す",
+    "focusSearchSlash": "検索にフォーカス (代替)"
+  }
+}

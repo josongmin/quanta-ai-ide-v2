@@ -1,0 +1,54 @@
+{
+  "placeholder": {
+    "text": "ファイル・パス・シンボルを検索…",
+    "regex": "^src/.*\\.tsx?$",
+    "dsl": "complexity:>30 churn:>0.5 layer:service !cyclic"
+  },
+  "action": {
+    "clear": "クリア",
+    "advanced": "詳細",
+    "caseSensitive": "大文字小文字を区別",
+    "recent": "最近の検索"
+  },
+  "mode": {
+    "title": "検索モード",
+    "text": {
+      "label": "テキスト",
+      "title": "リテラルテキスト",
+      "hint": "パスとファイル名の部分一致"
+    },
+    "regex": {
+      "label": "正規表現",
+      "title": "正規表現",
+      "hint": "大文字小文字を区別しない正規表現"
+    },
+    "dsl": {
+      "label": "クエリ",
+      "title": "ファセットクエリ",
+      "hint": "ファセットクエリ言語"
+    }
+  },
+  "samples": {
+    "title": "サンプルクエリ",
+    "highRisk": "高リスクなホットスポット",
+    "vulnerableHubs": "脆弱なハブ",
+    "staleCode": "古いコード",
+    "longFiles": "長大ファイル",
+    "untested": "未テスト",
+    "typeUnsafe": "型が安全でない",
+    "busFactor1": "バス係数 1",
+    "cycleMembers": "循環メンバー"
+  },
+  "reference": {
+    "title": "リファレンス",
+    "allFields": "全フィールド",
+    "numeric": "数値:",
+    "string": "文字列:",
+    "flags": "フラグ:"
+  },
+  "regexHint": {
+    "prefix": "パターンは ",
+    "emphasis": "大文字小文字を区別せず",
+    "suffix": " 以下に対して照合されます "
+  }
+}

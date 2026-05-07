@@ -1,0 +1,22 @@
+{
+  "comment": {
+    "linePlaceholder": "在此行添加评论…",
+    "lineTitle": "在此行添加评论"
+  },
+  "view": {
+    "whitespaceTitle": "显示空白 (视觉占位)"
+  },
+  "preview": {
+    "openLabel": "预览 PR",
+    "openTitle": "针对此仓库采样合成 PR diff",
+    "regenerate": "重新生成",
+    "regenerateAria": "重新生成 PR",
+    "regenerateTitle": "采样另一个 PR",
+    "closeAria": "关闭 PR 预览",
+    "closeTitle": "关闭 PR 预览",
+    "changeCountsAria": "变更数量"
+  },
+  "thread": {
+    "reopen": "重新打开线程"
+  }
+}

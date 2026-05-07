@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+.vite/
+src-tauri/target/
+src-tauri/gen/
+
+# Local environment
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs and caches
+*.log
+coverage/
+.vitest-cache/
+
+# OS / editor noise
+.DS_Store
+*.tsbuildinfo
+*.bak

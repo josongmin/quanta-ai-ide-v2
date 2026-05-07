@@ -1,0 +1,110 @@
+name: Tauri Release
+
+# Builds platform installers on tag push (`v*`) or manual dispatch and
+# attaches them to a draft GitHub Release. Each OS runs in parallel; the
+# matrix covers Apple Silicon + Intel macOS, Linux x64, Windows x64.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Cancel an in-flight run if a new tag arrives — saves CI minutes when
+# pushing a tag fix.
+concurrency:
+  group: tauri-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14            # Apple Silicon runner — native build, no rosetta
+            target: aarch64-apple-darwin
+            args: '--target aarch64-apple-darwin --bundles app,dmg,updater'
+          - os: macos-13            # Intel runner — keeps the Intel slice native too
+            target: x86_64-apple-darwin
+            args: '--target x86_64-apple-darwin --bundles app,dmg,updater'
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            args: '--bundles deb,appimage,rpm,updater'
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            args: '--bundles msi,nsis,updater'
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux build deps
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libxdo-dev \
+            libssl-dev
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+          # The release profile uses fat LTO; keep the cache key tight to
+          # avoid restoring an LTO-cold cache from a feature branch.
+          key: ${{ matrix.target }}-release
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install JS deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # macOS code-signing + notarization. Optional — when these
+          # secrets aren't set, tauri-action still produces an unsigned
+          # `.app`/`.dmg` (useful for prerelease testing). Set them in
+          # repo secrets to enable signed/notarized release artifacts.
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # Tauri updater signing key — separate from code-sign. Required
+          # only if the `updater` bundle target is enabled (it is, above).
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: ${{ github.ref_name }}
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

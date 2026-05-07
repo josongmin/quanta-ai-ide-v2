@@ -1,0 +1,57 @@
+{
+  "section": {
+    "liveSignal": "ライブシグナル",
+    "ruleSources": "ルールソース",
+    "costLedger": "コスト台帳",
+    "ruleConstellation": "ルール相関図",
+    "livePrFeed": "ライブPRフィード",
+    "retroactive": "遡及適用 · 直近30 PR",
+    "activeVsTotal": "アクティブ vs 全体",
+    "ifTodayRan": "今日のPRが実行されたら",
+    "rolloutsInProgress": "進行中のロールアウト",
+    "overrideAudit": "オーバーライド監査",
+    "versionLog": "バージョンログ",
+    "export": "エクスポート",
+    "import": "インポート",
+    "filesInPr": "PR内のファイル",
+    "filesInThisPr": "このPRのファイル"
+  },
+  "table": {
+    "rule": "ルール",
+    "source": "ソース",
+    "severity": "重大度",
+    "matches": "一致",
+    "cost": "コスト",
+    "date": "日付",
+    "files": "ファイル",
+    "ripple": "波及",
+    "outcome": "結果",
+    "firedRules": "発火したルール"
+  },
+  "empty": {
+    "noOverrides": "オーバーライドはまだありません。"
+  },
+  "search": {
+    "rulesPlaceholder": "ルールを検索"
+  },
+  "rule": {
+    "whyExistsPlaceholder": "このルールが存在する理由",
+    "deleteTitle": "ルールを削除",
+    "livePreview": "ライブプレビュー",
+    "ifEnabled": "有効化された場合 (直近30日)"
+  },
+  "card": {
+    "bySource": "ソース別",
+    "bySourceHint": "★ native = エンジン専用シグナル",
+    "bySeverity": "重大度別",
+    "bySeverityHint": "ゲーティングが実際に行うこと",
+    "byCost": "コスト別",
+    "byCostHint": "ライブプレビューをインライン実行できるかを決定",
+    "evidenceQuality": "エビデンス品質",
+    "evidenceQualityHint": "誠実性レイヤー · 一致の精度",
+    "topBlockers": "シミュレートされたPRの主要なブロッカー"
+  },
+  "override": {
+    "whyPlaceholder": "なぜ安全か？ Issueやドキュメントをリンクしてください。"
+  }
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+      Minimal Hardened Runtime entitlements for the Tauri shell.
+      Add capabilities only when a feature is wired up — every grant
+      widens what gets reviewed by App Notarization.
+    -->
+
+    <!-- WebView's JIT for V8. Required: WKWebView crashes without it on
+         signed + hardened builds. -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+
+    <!-- WKWebView allocates executable memory for asm.js / wasm fallbacks
+         in some macOS versions. Required for stability across 11.x–14.x. -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+
+    <!-- Outgoing HTTP for the dev URL during `tauri dev` (release builds
+         load from `frontendDist`, but the entitlement is harmless at rest
+         and required if the app ever fetches a remote resource). -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+</dict>
+</plist>

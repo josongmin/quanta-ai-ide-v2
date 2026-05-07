@@ -1,0 +1,82 @@
+{
+  "section": {
+    "savedQueries": "저장된 쿼리",
+    "files": "파일",
+    "status": "상태",
+    "sortAndHighlight": "정렬 및 강조"
+  },
+  "category": {
+    "identity": "식별 및 검색",
+    "flow": "흐름 및 의존성",
+    "quality": "복잡도 및 품질",
+    "typeSafety": "타입 안전성",
+    "coverage": "테스트 커버리지",
+    "evolution": "변경 이력 및 Git",
+    "lints": "린트 및 위생",
+    "security": "보안",
+    "perf": "성능",
+    "architecture": "아키텍처",
+    "docs": "문서",
+    "sort": "정렬"
+  },
+  "status": {
+    "STABLE": "안정",
+    "MODIFIED": "수정됨",
+    "NEW": "신규",
+    "SECURITY_ALERT": "취약"
+  },
+  "toggle": {
+    "on": "켜짐",
+    "off": "꺼짐",
+    "any": "전체",
+    "only": "포함",
+    "exclude": "제외"
+  },
+  "preset": {
+    "hotspot": {
+      "label": "핫스팟",
+      "hint": "churn × 복잡도"
+    },
+    "vulnerableHub": {
+      "label": "취약 허브",
+      "hint": "취약 + 참조 다수"
+    },
+    "stale": {
+      "label": "오래된 코드",
+      "hint": "안정 + 낮은 churn"
+    },
+    "longFiles": {
+      "label": "긴 파일",
+      "hint": "LOC ≥ 500"
+    }
+  },
+  "tree": {
+    "expandAll": "모든 폴더 펼치기",
+    "collapseAll": "모든 폴더 접기"
+  },
+  "selector": {
+    "subtitle": "워크스페이스 · 저장된 쿼리 선택",
+    "clearPreset": "프리셋 해제"
+  },
+  "sort": {
+    "glowTop": "강조 상위",
+    "off": "꺼짐",
+    "options": {
+      "none": "없음",
+      "loc-desc": "LOC ↓",
+      "complexity-desc": "순환 복잡도 ↓",
+      "cognitive-desc": "인지 복잡도 ↓",
+      "maintainability-asc": "유지보수성 ↑",
+      "fanIn-desc": "Fan-in ↓",
+      "fanOut-desc": "Fan-out ↓",
+      "churn-desc": "Churn ↓",
+      "pagerank-desc": "PageRank ↓",
+      "coverage-asc": "커버리지 ↑ (낮은순)",
+      "eslint-desc": "ESLint 결과 ↓",
+      "anyCount-desc": "any 개수 ↓",
+      "todo-desc": "TODO ↓",
+      "authors-desc": "작성자 ↓",
+      "staleness-desc": "오래된 정도 ↓"
+    }
+  }
+}
