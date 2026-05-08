@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import {
   Search, Plus, ChevronRight, MessageSquare,
-  Pin, FolderPlus, ListFilter,
+  Pin, FolderPlus, ListFilter, GripVertical, Cloud,
 } from 'lucide-react';
+import { ResizeHandle } from '@shared/ui';
 import type { Project, Task, TaskStatus } from './types';
 
 // Project-grouped task rail. Each project is a collapsible group; selected
@@ -16,12 +17,21 @@ type Props = {
   onSelect: (id: string) => void;
   onNewTask: (projectId: string) => void;
   onNewProject: () => void;
+  // Drag-and-drop reorder *within the same project*. The parent owns
+  // tasks; we hand back "task `srcId` should slot before `dstId`" and
+  // let the parent splice. Cross-project drops are rejected (different
+  // base branch + project context — needs a confirm dialog, out of v1).
+  onReorder?: (srcId: string, dstId: string) => void;
   isDark: boolean;
-  t: (k: string) => string;
+  t: (k: string, opts?: Record<string, unknown>) => string;
+  width: number;
+  onWidthChange: (next: number) => void;
 };
 
-// Tone down: all projects share a single neutral accent so the rail isn't
-// rainbow-keyed by project.
+export const TASK_RAIL_DEFAULT_WIDTH = 284;
+export const TASK_RAIL_MIN_WIDTH = 220;
+export const TASK_RAIL_MAX_WIDTH = 480;
+
 const NEUTRAL_ACCENT_DARK = '#a1a1aa';
 const NEUTRAL_ACCENT_LIGHT = '#71717a';
 const ACCENT_HEX = {
@@ -35,26 +45,46 @@ const ACCENT_HEX = {
 void NEUTRAL_ACCENT_LIGHT;
 
 export function TaskRail({
-  projects, tasks, activeId, onSelect, onNewTask, onNewProject, isDark, t,
+  projects, tasks, activeId, onSelect, onNewTask, onNewProject, onReorder, isDark, t,
+  width, onWidthChange,
 }: Props) {
   const [query, setQuery] = useState('');
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState<'all' | 'mine' | 'archived'>('all');
+  // Drag state — siblings of the dragged row light up an "insert here"
+  // indicator on dragOver. Lives at TaskRail so it resets cleanly when
+  // the drag ends or leaves the rail.
+  const [dragSrcId, setDragSrcId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const filteredTasks = useMemo(() => {
     let list = tasks;
     if (filter === 'archived') list = list.filter((task) => task.status === 'merged');
-    else list = list.filter((task) => task.status !== 'merged' || task.pinned);
+    else if (filter === 'mine') {
+      list = list.filter((task) => {
+        if (task.pinned === true) return true;
+        return task.status === 'open' || task.status === 'running' || task.status === 'review';
+      });
+    } else list = list.filter((task) => task.status !== 'merged' || task.pinned === true);
     if (!query.trim()) return list;
     const q = query.toLowerCase();
-    return list.filter((task) =>
-      task.title.toLowerCase().includes(q) ||
-      task.branch.toLowerCase().includes(q),
-    );
+    return list.filter((task) => {
+      if (task.title.toLowerCase().includes(q)) return true;
+      if (task.branch.toLowerCase().includes(q)) return true;
+      if (task.labels?.some((l) => l.toLowerCase().includes(q))) return true;
+      for (const turn of task.thread) {
+        if (turn.role === 'user' && turn.text.toLowerCase().includes(q)) return true;
+        if (turn.role === 'agent') {
+          for (const block of turn.blocks) {
+            if (block.kind === 'text' && block.text.toLowerCase().includes(q)) return true;
+            if (block.kind === 'tool' && block.label.toLowerCase().includes(q)) return true;
+          }
+        }
+      }
+      return false;
+    });
   }, [tasks, query, filter]);
 
-  // Project order: pinned first, then alphabetical. Empty projects (no
-  // matching tasks) are still shown so "new task" works for them.
   const visibleProjects = useMemo(() => {
     const order = [...projects].sort((a, b) => {
       const ap = a.pinned ? 0 : 1;
@@ -63,7 +93,6 @@ export function TaskRail({
       return a.name.localeCompare(b.name);
     });
     if (!query.trim() && filter === 'all') return order;
-    // When searching/filtering, hide projects with zero matching tasks.
     return order.filter((p) => filteredTasks.some((task) => task.projectId === p.id));
   }, [projects, filteredTasks, query, filter]);
 
@@ -73,25 +102,77 @@ export function TaskRail({
   const textMuted = isDark ? 'text-white/40' : 'text-black/55';
   const inputBg = isDark ? 'bg-white/[0.03]' : 'bg-black/[0.025]';
 
-  const totalActive = tasks.filter((task) => task.status === 'running' || task.status === 'review').length;
+  const runningCount = tasks.filter((task) => task.status === 'running').length;
+  const awaitingCount = tasks.filter((task) => task.status === 'review' || task.status === 'failed').length;
+  // Background-execution count — distinct from "running" because cloud
+  // tasks survive tab close. Surfaced as a small ribbon next to the
+  // counters so the user knows tab close is safe.
+  const cloudCount = tasks.filter((task) => task.execution?.surface === 'cloud').length;
 
   return (
-    <aside className={`shrink-0 w-[284px] flex flex-col ${panel} border-r ${border}`}>
-      {/* Top: brand-ish header with running count */}
+    <aside
+      className={`relative shrink-0 flex flex-col ${panel} border-r ${border}`}
+      style={{ width }}
+    >
+      <ResizeHandle
+        side="right"
+        width={width}
+        min={TASK_RAIL_MIN_WIDTH}
+        max={TASK_RAIL_MAX_WIDTH}
+        defaultWidth={TASK_RAIL_DEFAULT_WIDTH}
+        onChange={onWidthChange}
+        isDark={isDark}
+        ariaLabel={t('rail.resize')}
+        offset={-5}
+      />
       <div className="shrink-0 px-3 pt-3 pb-2">
-        <div className="flex items-center justify-between mb-2.5">
-          <div className="flex items-center gap-1.5">
+        {/* Min-w-0 lets the inner flex shrink instead of pushing the
+            "+" button off the right edge when the cloud-ribbon arrives. */}
+        <div className="flex items-center justify-between gap-2 mb-2.5">
+          <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
             <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
               {t('rail.title')}
             </span>
-            {totalActive > 0 && (
-              <span className={`flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono ${
-                isDark ? 'bg-white/[0.06] text-white/70' : 'bg-black/[0.05] text-black/65'
-              }`}>
-                <span className={`w-1 h-1 rounded-full animate-pulse ${
+            {runningCount > 0 && (
+              <span
+                className={`shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap ${
+                  isDark ? 'bg-white/[0.06] text-white/70' : 'bg-black/[0.05] text-black/65'
+                }`}
+                title={t('rail.running', { count: runningCount })}
+              >
+                <span className={`w-1 h-1 rounded-full coding-breath ${
                   isDark ? 'bg-white/60' : 'bg-black/55'
                 }`} />
-                {totalActive}
+                {runningCount}
+              </span>
+            )}
+            {awaitingCount > 0 && (
+              <span
+                className={`shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border ${
+                  isDark
+                    ? 'border-amber-400/30 text-amber-300 bg-amber-400/10'
+                    : 'border-amber-500/30 text-amber-700 bg-amber-50'
+                }`}
+                title={t('rail.awaitingYou', { count: awaitingCount })}
+              >
+                <span className="w-1 h-1 rounded-full coding-breath bg-current opacity-80" />
+                {awaitingCount}
+              </span>
+            )}
+            {/* Cloud ribbon — present when any task is running off-tab.
+                Slides in via coding-bg-arrive to draw attention exactly
+                once when a task switches surface. */}
+            {cloudCount > 0 && (
+              <span
+                className={`coding-bg-arrive shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border ${
+                  isDark
+                    ? 'border-sky-400/30 text-sky-300 bg-sky-400/10'
+                    : 'border-sky-500/30 text-sky-700 bg-sky-50'
+                }`}
+                title={t('background.ribbon', { count: cloudCount })}
+              >
+                <Cloud className="w-2.5 h-2.5" />
+                {cloudCount}
               </span>
             )}
           </div>
@@ -99,7 +180,7 @@ export function TaskRail({
             onClick={onNewProject}
             title={t('rail.newProject')}
             aria-label={t('rail.newProject')}
-            className={`p-1 rounded-md transition-colors ${
+            className={`shrink-0 p-1 rounded-md transition-colors ${
               isDark ? 'text-white/40 hover:text-white/85 hover:bg-white/[0.05]' : 'text-black/40 hover:text-black/85 hover:bg-black/[0.04]'
             }`}
           >
@@ -108,7 +189,6 @@ export function TaskRail({
         </div>
       </div>
 
-      {/* Search */}
       <div className="shrink-0 px-3 pb-2">
         <div className={`group flex items-center gap-2 px-2 h-7 rounded-md transition-colors ${inputBg}`}>
           <Search className={`w-3 h-3 ${textFaint}`} />
@@ -124,7 +204,6 @@ export function TaskRail({
         </div>
       </div>
 
-      {/* Filter chips */}
       <div className="shrink-0 px-3 pb-2 flex items-center gap-1">
         <ListFilter className={`w-3 h-3 mr-0.5 ${textFaint}`} />
         {(['all', 'mine', 'archived'] as const).map((f) => (
@@ -142,7 +221,6 @@ export function TaskRail({
         ))}
       </div>
 
-      {/* Project groups */}
       <div className="flex-1 min-h-0 overflow-auto px-2 pb-3">
         {visibleProjects.map((project) => {
           const projectTasks = filteredTasks.filter((task) => task.projectId === project.id);
@@ -159,6 +237,21 @@ export function TaskRail({
               collapsed={isCollapsed}
               isDark={isDark}
               t={t}
+              dragSrcId={dragSrcId}
+              dragOverId={dragOverId}
+              onDragStart={(id) => { setDragSrcId(id); }}
+              onDragOver={(id) => { setDragOverId(id); }}
+              onDragEnd={() => { setDragSrcId(null); setDragOverId(null); }}
+              onDrop={(srcId, dstId) => {
+                if (onReorder != null && srcId !== dstId) {
+                  const src = tasks.find((tsk) => tsk.id === srcId);
+                  const dst = tasks.find((tsk) => tsk.id === dstId);
+                  if (src?.projectId === dst?.projectId && src != null) {
+                    onReorder(srcId, dstId);
+                  }
+                }
+                setDragSrcId(null); setDragOverId(null);
+              }}
             />
           );
         })}
@@ -174,6 +267,7 @@ export function TaskRail({
 
 function ProjectGroup({
   project, tasks, activeId, onSelect, onNewTask, onToggle, collapsed, isDark, t,
+  dragSrcId, dragOverId, onDragStart, onDragOver, onDragEnd, onDrop,
 }: {
   project: Project;
   tasks: Task[];
@@ -183,7 +277,13 @@ function ProjectGroup({
   onToggle: () => void;
   collapsed: boolean;
   isDark: boolean;
-  t: (k: string) => string;
+  t: (k: string, opts?: Record<string, unknown>) => string;
+  dragSrcId: string | null;
+  dragOverId: string | null;
+  onDragStart: (id: string) => void;
+  onDragOver: (id: string) => void;
+  onDragEnd: () => void;
+  onDrop: (srcId: string, dstId: string) => void;
 }) {
   const accent = ACCENT_HEX[project.accent];
   const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
@@ -227,7 +327,7 @@ function ProjectGroup({
           </span>
           {running > 0 && (
             <span
-              className="shrink-0 w-1.5 h-1.5 rounded-full animate-pulse"
+              className="shrink-0 w-1.5 h-1.5 rounded-full coding-breath"
               style={{ background: accent }}
             />
           )}
@@ -268,8 +368,14 @@ function ProjectGroup({
                 task={task}
                 active={task.id === activeId}
                 onClick={() => { onSelect(task.id); }}
-                accent={accent}
                 isDark={isDark}
+                t={t}
+                isDragging={dragSrcId === task.id}
+                isDropTarget={dragOverId === task.id && dragSrcId !== null && dragSrcId !== task.id}
+                onDragStart={() => { onDragStart(task.id); }}
+                onDragOver={() => { onDragOver(task.id); }}
+                onDragEnd={onDragEnd}
+                onDrop={(srcId) => { onDrop(srcId, task.id); }}
               />
             ))
           )}
@@ -285,13 +391,20 @@ function ProjectGroup({
 }
 
 function TaskRow({
-  task, active, onClick, accent, isDark,
+  task, active, onClick, isDark, t,
+  isDragging, isDropTarget, onDragStart, onDragOver, onDragEnd, onDrop,
 }: {
   task: Task;
   active: boolean;
   onClick: () => void;
-  accent: string;
   isDark: boolean;
+  t: (k: string, opts?: Record<string, unknown>) => string;
+  isDragging: boolean;
+  isDropTarget: boolean;
+  onDragStart: () => void;
+  onDragOver: () => void;
+  onDragEnd: () => void;
+  onDrop: (srcId: string) => void;
 }) {
   const titleColor = active
     ? (isDark ? 'text-white' : 'text-black')
@@ -299,61 +412,172 @@ function TaskRow({
   const subColor = isDark ? 'text-white/40' : 'text-black/40';
   const hoverBg = isDark ? 'hover:bg-white/[0.025]' : 'hover:bg-black/[0.025]';
 
+  // Surface the *current* phase of any in-flight agent turn so the user
+  // can scan the rail and see "ah, that one's reading files, that one's
+  // editing". Multi-task fleet monitoring at a glance.
+  const streamingPhase = (() => {
+    for (let i = task.thread.length - 1; i >= 0; i--) {
+      const tn = task.thread[i];
+      if (tn.role === 'agent' && tn.streaming && tn.phase) return tn.phase;
+    }
+    return null;
+  })();
+
   return (
-    <button type="button"
-      onClick={onClick}
-      className={`relative w-full text-left rounded-md pl-2.5 pr-2 py-1.5 transition-colors ${hoverBg}`}
-      style={{
-        background: active ? (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)') : undefined,
+    <div
+      className="relative"
+      // Drop indicator above the row when it's the active target. Drawn
+      // as a 2px line on the *top* (never as a left-edge stripe — that
+      // violates the no-coloured-stripes rule).
+      onDragOver={(e) => { e.preventDefault(); onDragOver(); }}
+      onDrop={(e) => {
+        e.preventDefault();
+        const srcId = e.dataTransfer.getData('application/x-coding-task');
+        if (srcId) onDrop(srcId);
       }}
     >
-      {active && (
-        <span
-          className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r"
-          style={{ background: accent, boxShadow: `0 0 6px ${accent}80` }}
+      {isDropTarget && (
+        <div
+          className={`absolute -top-px left-2 right-2 h-0.5 rounded-full ${
+            isDark ? 'bg-white/60' : 'bg-black/60'
+          }`}
         />
       )}
-      <div className="flex items-start gap-2">
-        <StatusDot status={task.status} className="mt-1.5" />
-        <div className="flex-1 min-w-0">
-          <div className={`text-[12px] leading-snug line-clamp-2 ${titleColor}`}>
-            {task.title}
-          </div>
-          <div className={`mt-1 flex items-center gap-1.5 text-[10px] font-mono ${subColor}`}>
-            <span>{task.timeAgo}</span>
-            {task.diffStats.added + task.diffStats.removed > 0 && (
-              <>
-                <span className="opacity-50">·</span>
-                <span className="opacity-80">+{task.diffStats.added}</span>
-                <span className="opacity-60">−{task.diffStats.removed}</span>
-              </>
-            )}
-            {task.thread.length > 0 && (
-              <>
-                <span className="opacity-50">·</span>
-                <span className="flex items-center gap-0.5">
-                  <MessageSquare className="w-2.5 h-2.5" />
-                  {task.thread.length}
+      <button type="button"
+        draggable
+        onDragStart={(e) => {
+          e.dataTransfer.setData('application/x-coding-task', task.id);
+          e.dataTransfer.effectAllowed = 'move';
+          onDragStart();
+        }}
+        onDragEnd={onDragEnd}
+        onClick={onClick}
+        className={`group/row relative w-full text-left rounded-md pl-2.5 pr-2 py-1.5 transition-colors ${hoverBg} ${
+          active ? 'coding-task-active' : ''
+        } ${isDragging ? 'opacity-50' : ''}`}
+        style={{
+          background: active ? (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)') : undefined,
+        }}
+      >
+        <div className="flex items-start gap-2">
+          {/* Drag handle — only visible on hover so it doesn't crowd the row. */}
+          <span
+            className={`shrink-0 mt-0.5 opacity-0 group-hover/row:opacity-100 transition-opacity cursor-grab active:cursor-grabbing ${
+              isDark ? 'text-white/30' : 'text-black/30'
+            }`}
+            title="drag to reorder"
+            aria-hidden
+          >
+            <GripVertical className="w-3 h-3" />
+          </span>
+          <StatusDot status={task.status} className="mt-1" />
+          <div className="flex-1 min-w-0">
+            <div className={`text-[12px] leading-snug line-clamp-2 ${titleColor}`}>
+              {task.title}
+            </div>
+            <div className={`mt-1 flex items-center gap-1.5 text-[10px] font-mono ${subColor}`}>
+              {streamingPhase ? (
+                <span
+                  className={`inline-flex items-center gap-1 px-1 py-px rounded text-[9px] ${
+                    isDark ? 'bg-white/[0.05] text-white/65' : 'bg-black/[0.05] text-black/65'
+                  }`}
+                  title={t(`phase.${streamingPhase}`)}
+                >
+                  <span className="inline-flex items-center gap-px">
+                    <span className={`w-0.5 h-0.5 rounded-full coding-breath ${isDark ? 'bg-white/65' : 'bg-black/55'}`} />
+                    <span className={`w-0.5 h-0.5 rounded-full coding-breath ${isDark ? 'bg-white/65' : 'bg-black/55'}`} style={{ animationDelay: '180ms' }} />
+                    <span className={`w-0.5 h-0.5 rounded-full coding-breath ${isDark ? 'bg-white/65' : 'bg-black/55'}`} style={{ animationDelay: '360ms' }} />
+                  </span>
+                  {t(`phase.${streamingPhase}`)}
                 </span>
-              </>
-            )}
-            {task.pinned && (
-              <Pin className={`w-2.5 h-2.5 ml-auto`} fill="currentColor" />
-            )}
+              ) : (
+                <span>{task.timeAgo}</span>
+              )}
+              {task.diffStats.added + task.diffStats.removed > 0 && (
+                <>
+                  <span className="opacity-50">·</span>
+                  <span className="opacity-80">+{task.diffStats.added}</span>
+                  <span className="opacity-60">−{task.diffStats.removed}</span>
+                </>
+              )}
+              {task.thread.length > 0 && (
+                <>
+                  <span className="opacity-50">·</span>
+                  <span className="flex items-center gap-0.5">
+                    <MessageSquare className="w-2.5 h-2.5" />
+                    {task.thread.length}
+                  </span>
+                </>
+              )}
+              {/* Cloud chip — surfaces background-execution status on
+                  the row itself. Stays visible regardless of streaming
+                  state because that's the whole point: the user can
+                  close the tab and come back. */}
+              {task.execution?.surface === 'cloud' && (
+                <>
+                  <span className="opacity-50">·</span>
+                  <Cloud
+                    className={`w-2.5 h-2.5 ${isDark ? 'text-sky-300' : 'text-sky-700'}`}
+                    aria-label="cloud"
+                  />
+                </>
+              )}
+              {task.pinned && (
+                <Pin className={`w-2.5 h-2.5 ml-auto`} fill="currentColor" />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </button>
+      </button>
+    </div>
   );
 }
 
 function StatusDot({ status, className = '' }: { status: TaskStatus; className?: string }) {
-  // Single neutral dot; running gets a pulse, others are static. Status is
-  // still readable from the row text + count badges.
-  const pulse = status === 'running' ? 'animate-pulse' : '';
+  // Status communicated by *shape* rather than colour, so the rail stays
+  // monochrome (per the no-coloured-stripes design rule).
+  const base = 'inline-block w-2 h-2 shrink-0';
+  if (status === 'running') {
+    return (
+      <span
+        className={`${base} rounded-full bg-zinc-400/80 coding-breath ${className}`}
+        aria-label="running"
+      />
+    );
+  }
+  if (status === 'review') {
+    return (
+      <span
+        className={`${base} rounded-full ${className}`}
+        style={{ boxShadow: 'inset 0 0 0 1.5px rgb(161 161 170 / 0.85)' }}
+        aria-label="review"
+      />
+    );
+  }
+  if (status === 'merged') {
+    return (
+      <span
+        className={`${base} rounded-full bg-zinc-500/85 ${className}`}
+        aria-label="merged"
+      />
+    );
+  }
+  if (status === 'failed') {
+    return (
+      <span
+        className={`inline-flex items-center justify-center shrink-0 w-2 h-2 ${className}`}
+        aria-label="failed"
+      >
+        <span className="block w-2 h-px bg-zinc-400/80 rotate-45" />
+        <span className="block w-2 h-px bg-zinc-400/80 -rotate-45 -ml-2" />
+      </span>
+    );
+  }
   return (
     <span
-      className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 bg-zinc-400/70 ${pulse} ${className}`}
+      className={`${base} rounded-full ${className}`}
+      style={{ boxShadow: 'inset 0 0 0 1px rgb(161 161 170 / 0.55)' }}
+      aria-label="open"
     />
   );
 }

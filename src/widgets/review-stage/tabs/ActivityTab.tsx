@@ -58,7 +58,7 @@ const ActivityTab = forwardRef<ActivityTabHandle, Props>(function ActivityTab(
         <div className={`mb-3 text-[10px] font-bold uppercase tracking-[0.18em] ${muted}`}>
           Conversation
         </div>
-        <ConversationLog items={pr.conversation} isDark={isDark} />
+        <ConversationLog items={pr.conversation} />
       </section>
 
       <section className={`rounded-xl border ${card} p-3`}>

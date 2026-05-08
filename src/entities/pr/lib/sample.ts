@@ -17,10 +17,12 @@ function hunk(header: string, oldStart: number, newStart: number, body: string):
     const sign = raw[0] ?? ' ';
     const text = raw.slice(1);
     if (sign === '+') {
-      return { kind: 'add' as const, newNo: newStart + countAddBefore(body, i), oldNo: null, text };
+      // newNo advances on every line consuming a new-file slot — context AND add.
+      return { kind: 'add' as const, newNo: newStart + countNewBefore(body, i), oldNo: null, text };
     }
     if (sign === '-') {
-      return { kind: 'del' as const, newNo: null, oldNo: oldStart + countDelBefore(body, i), text };
+      // oldNo advances on every line consuming an old-file slot — context AND del.
+      return { kind: 'del' as const, newNo: null, oldNo: oldStart + countOldBefore(body, i), text };
     }
     return {
       kind: 'context' as const,
@@ -32,12 +34,6 @@ function hunk(header: string, oldStart: number, newStart: number, body: string):
   return { header, oldStart, newStart, lines };
 }
 
-function countAddBefore(body: string, untilIdx: number): number {
-  return countSign(body, untilIdx, '+');
-}
-function countDelBefore(body: string, untilIdx: number): number {
-  return countSign(body, untilIdx, '-');
-}
 function countNewBefore(body: string, untilIdx: number): number {
   // new = context + add
   let n = 0;
@@ -55,14 +51,6 @@ function countOldBefore(body: string, untilIdx: number): number {
   for (let i = 0; i < untilIdx; i++) {
     const s = lines[i]?.[0];
     if (s === ' ' || s === '-') n++;
-  }
-  return n;
-}
-function countSign(body: string, untilIdx: number, sign: string): number {
-  let n = 0;
-  const lines = body.split('\n').filter((l) => l.length > 0);
-  for (let i = 0; i < untilIdx; i++) {
-    if (lines[i]?.startsWith(sign)) n++;
   }
   return n;
 }

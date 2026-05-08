@@ -1,3 +1,5 @@
+// Public API for the facet entity:
+// facet/plan types, the canonical FACETS catalogue, and the DSL parser.
 export type {
   Plan,
   FacetCategoryKey,
@@ -15,10 +17,4 @@ export {
   FACETS,
   facetsByCategory,
 } from './model';
-export {
-  parseDsl,
-  DSL_FIELDS,
-  type DslPredicate,
-  type ParseResult,
-  type ParsedToken,
-} from './lib/dsl';
+export { parseDsl } from './lib/dsl';

@@ -22,6 +22,14 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"
 
+# macOS-only AppKit bridge for App Nap suppression and content-view layer
+# tweaks. `objc2` is the maintained successor to `objc`; we pin to the same
+# major Tauri's transitive `objc2-app-kit` (0.3) uses to keep the dep graph
+# de-duplicated and the compile fast.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSString"] }
+
 # ─── Profiles ────────────────────────────────────────────────────────────
 # `dev` is tuned for fast incremental compiles during `tauri dev`. Optimising
 # dev builds is wasted time when you'll iterate dozens of times before

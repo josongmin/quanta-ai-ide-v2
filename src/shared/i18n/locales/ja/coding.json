@@ -12,10 +12,431 @@
       "mine": "自分",
       "archived": "アーカイブ"
     },
-    "empty": "該当する項目はありません。"
+    "empty": "該当する項目はありません。",
+    "resize": "タスクリストのサイズ変更",
+    "awaitingYou": "確認待ち {{count}} 件",
+    "running": "実行中 {{count}} 件"
+  },
+  "checkpoint": {
+    "rewindHere": "ここまで戻す",
+    "forkFromHere": "ここから分岐",
+    "menu": "チェックポイント",
+    "rewindConfirm": "この時点以降の {{count}} ターンを削除します",
+    "rewindUndo": "戻し操作を取り消す",
+    "rewindUndone": "{{count}} ターンを復元"
+  },
+  "hunk": {
+    "accept": "適用",
+    "reject": "棄却",
+    "pending": "保留",
+    "summary": "{{accepted}}/{{total}} ハンク適用",
+    "acceptAll": "すべて適用",
+    "rejectAll": "すべて棄却"
+  },
+  "stop": {
+    "holdToStop": "長押しで停止",
+    "released": "キャンセル済"
+  },
+  "comment": {
+    "addNote": "メモを追加",
+    "askAgent": "エージェントに質問",
+    "placeholder": "このハンクへのメモ・質問…",
+    "submit": "保存",
+    "cancel": "キャンセル",
+    "header": "コメント {{count}}",
+    "kindNote": "メモ",
+    "kindAsk": "質問"
+  },
+  "diffPreview": {
+    "label": "差分プレビュー",
+    "summary": "{{added}}+ / {{removed}}- · {{files}} ファイル",
+    "askAbout": "この変更について質問",
+    "openInPr": "PR として開く"
+  },
+  "scrubber": {
+    "label": "タイムライン",
+    "live": "現在",
+    "showingTurn": "{{n}}/{{total}} ターン",
+    "previewingTurn": "プレビュー · {{n}}/{{total}}",
+    "back": "現在に戻る",
+    "tooltip": "この時点を表示（変更なし）",
+    "kbHint": "[ ] · ⌘.",
+    "youAsked": "ユーザー入力",
+    "moreFiles": "+ {{n}} 件",
+    "status": {
+      "user": "ユーザー",
+      "planned": "計画済み",
+      "thinking": "思考中",
+      "suggested": "差分提案",
+      "applied": "適用済み",
+      "rejected": "却下",
+      "failed": "ツール失敗",
+      "streaming": "ストリーミング"
+    },
+    "inverse": {
+      "safe": "安全な逆適用",
+      "risky": "レビュー必要",
+      "summary": "#{{n}} ターン（{{files}} ファイル）を新しい operation で打ち消し",
+      "overlap": "後で {{n}} 件のファイルがまた変更されました",
+      "applyClean": "逆 op 追加",
+      "applyReview": "逆 op · レビュー",
+      "applyTooltipSafe": "タイムラインの末尾に新しい recovery operation を追加します。履歴は削除されません。",
+      "applyTooltipRisky": "このターン以降に同じファイルが変更されています。適用前にレビューが必要です。"
+    }
+  },
+  "snapshotV2": {
+    "model": "モデル",
+    "phase": "段階",
+    "cost": "コスト",
+    "elapsed": "経過"
+  },
+  "emptyContext": {
+    "title": "続きの作業",
+    "subtitle": "最近の会話から抽出したコンテキスト",
+    "noContext": "最近の作業はありません。下のおすすめから始めましょう。"
+  },
+  "reply": {
+    "openCompose": "返信",
+    "placeholder": "返信を入力…",
+    "submit": "返信する",
+    "agentLabel": "エージェント",
+    "userLabel": "自分",
+    "resolve": "解決済みにする",
+    "reopen": "再オープン",
+    "resolved": "解決済み"
+  },
+  "reactions": {
+    "label": "リアクション",
+    "thumbsUp": "役立った",
+    "thumbsDown": "役立たなかった",
+    "heart": "気に入った",
+    "target": "的確"
+  },
+  "turnMenu": {
+    "copy": "テキストをコピー",
+    "copyMd": "Markdown でコピー",
+    "share": "共有",
+    "export": "エクスポート",
+    "openInNewTask": "新規タスクで開く"
+  },
+  "palette": {
+    "title": "コマンドパレット",
+    "placeholder": "コマンド、タスク、ファイルを検索…",
+    "sectionActions": "アクション",
+    "sectionTasks": "タスク",
+    "sectionSlash": "スラッシュコマンド",
+    "noResults": "該当なし",
+    "hint": "↑↓ 移動 · ↵ 実行 · esc 閉じる",
+    "openShortcut": "パレットを開く",
+    "actions": {
+      "newTask": "新規タスク",
+      "newProject": "新規プロジェクト",
+      "openPr": "PR を開く",
+      "rewindLast": "最後のターンを戻す",
+      "toggleScrubber": "タイムライン切替",
+      "switchModelCapable": "モデル: opus 4.7 に切替",
+      "switchModelBalanced": "モデル: sonnet 4.6 に切替",
+      "switchModelFast": "モデル: haiku 4.5 に切替"
+    }
+  },
+  "activityV2": {
+    "userTurn": "自分のメッセージ",
+    "agentTurn": "エージェント応答",
+    "diffEmitted": "diff 生成",
+    "toolEdit": "{{file}} を編集",
+    "toolRead": "{{file}} を読込",
+    "toolRun": "コマンド実行",
+    "toolSearch": "検索",
+    "planUpdated": "計画を更新",
+    "noActivity": "活動なし"
+  },
+  "voice": {
+    "start": "音声入力開始",
+    "stop": "音声入力停止",
+    "listening": "聞いています…",
+    "transcribing": "変換中…",
+    "tooltip": "マイクに話すとテキストに変換されます",
+    "unsupported": "このブラウザは音声入力に対応していません"
+  },
+  "diffView": {
+    "unified": "統合",
+    "split": "左右分割",
+    "toggleTooltip": "diff 表示の切替"
+  },
+  "lineEdit": {
+    "rewrite": "この行を書き直す",
+    "explain": "この行を説明",
+    "placeholder": "この行をどう変えますか?",
+    "submit": "書き直す",
+    "cancel": "キャンセル"
+  },
+  "batch": {
+    "selectMode": "複数選択",
+    "selected": "{{count}} 件選択中",
+    "forkBatch": "選択項目から分岐",
+    "rewindBatch": "選択項目まで戻す",
+    "clear": "選択解除",
+    "hint": "shift+クリックで範囲選択"
+  },
+  "defaultModel": {
+    "label": "デフォルトモデル",
+    "save": "このプロジェクトのデフォルトに保存",
+    "saved": "{{model}} をプロジェクトのデフォルトに設定",
+    "cleared": "プロジェクトのデフォルトを解除"
+  },
+  "autoadvance": {
+    "label": "自動進行",
+    "tooltip": "プラン項目をチェックすると次のステップを自動開始",
+    "triggered": "次のステップ開始: {{next}}",
+    "noNext": "残りのステップなし"
+  },
+  "integrations": {
+    "title": "連携ツール",
+    "connected": "接続済み",
+    "disconnected": "切断",
+    "addNew": "連携を追加",
+    "kind": {
+      "slack": "Slack",
+      "linear": "Linear",
+      "jira": "Jira",
+      "github": "GitHub",
+      "sentry": "Sentry",
+      "figma": "Figma"
+    }
+  },
+  "budget": {
+    "label": "予算",
+    "noBudget": "予算未設定",
+    "ok": "OK",
+    "alert": "警告",
+    "exceeded": "超過",
+    "remaining": "${{usd}} 残り",
+    "tooltip": "このタスクの累計コスト。閾値を超えると色がエスカレート。"
+  },
+  "projection": {
+    "label": "平均",
+    "tooltip": "このタスクの turn 平均コスト。次の turn が高ければ警告。",
+    "spike": "今回は平均の {{x}}倍",
+    "normal": "ほぼ平均"
+  },
+  "planMeta": {
+    "confidence": "信頼度 {{pct}}%",
+    "estTokens": "約 {{n}} トークン",
+    "estTime": "約 {{n}}秒",
+    "lowConfidence": "低 — 確認推奨"
+  },
+  "citationStale": {
+    "label": "stale",
+    "tooltip": "この引用以降にファイルが再度変更されました。現在の判断根拠として使う前に確認してください。"
+  },
+  "applyV2": {
+    "inverse": "この変更を取り消し",
+    "inverseTooltip": "git ではなく、変更を打ち消す新しい turn を追加します",
+    "inverseAdded": "取り消し turn を追加",
+    "conflictWarn": "同じファイルがこの後また編集されています — 適用すると後の編集が上書きされる可能性"
+  },
+  "history": {
+    "tooltip": "↑↓ で過去のプロンプトを呼び出し",
+    "empty": "過去のプロンプトなし"
+  },
+  "density": {
+    "label": "密度",
+    "compact": "コンパクト",
+    "comfortable": "標準",
+    "spacious": "ゆったり"
+  },
+  "a11y": {
+    "highContrast": "ハイコントラスト",
+    "reducedMotion": "アニメ低減",
+    "skipToComposer": "composer へ移動"
+  },
+  "drift": {
+    "label": "ドリフト",
+    "stuck": "思考が普段より長い ({{x}}倍)",
+    "noisy": "ツール呼び出しが普段の {{x}}倍",
+    "ok": "通常通り"
+  },
+  "latency": {
+    "label": "レイテンシ分布",
+    "tooltip": "このターンのフェーズ別所要時間",
+    "noData": "データなし",
+    "totalLabel": "合計 {{ms}}ms"
+  },
+  "successRate": {
+    "label": "ツール成功率",
+    "tooltip": "このタスクでのツール別 / モデル別成功率",
+    "byTool": "ツール別",
+    "byModel": "モデル別",
+    "noData": "データなし",
+    "rate": "{{ok}}/{{total}}"
+  },
+  "tps": {
+    "label": "tok/s",
+    "tooltip": "毎秒出力トークン — ストリーミング中"
+  },
+  "inverse": {
+    "arrowLabel": "ターン #{{n}} の逆操作",
+    "anchor": "逆操作対象"
+  },
+  "exportPr": {
+    "label": "PR 説明として書き出し",
+    "ready": "PR 説明をクリップボードにコピー"
+  },
+  "selfEval": {
+    "label": "信頼度",
+    "tooltip": "エージェント自己評価信頼度。70% 以上が安全圏。",
+    "high": "高 ({{pct}}%)",
+    "mid": "中 ({{pct}}%)",
+    "low": "低 — 確認推奨 ({{pct}}%)"
+  },
+  "latencyBaseline": {
+    "label": "基準比",
+    "tooltip": "このターンの phase 時間 vs このタスクの平均",
+    "faster": "{{x}}倍速い",
+    "slower": "{{x}}倍遅い",
+    "match": "平均と一致"
+  },
+  "forecast": {
+    "label": "予想コスト",
+    "tooltip": "現ペースで次ターンまでの累計予想",
+    "remaining": "次ターンまで +~${{usd}}",
+    "perSecond": "毎秒 ~${{usd}}"
+  },
+  "sideBySide": {
+    "label": "並列比較",
+    "tooltip": "2モデルで同じプロンプトを並列実行",
+    "leftLane": "{{model}} (左)",
+    "rightLane": "{{model}} (右)",
+    "togglePicker": "比較モデル選択",
+    "off": "単一",
+    "winner": "選好"
+  },
+  "secretGuard": {
+    "blockTitle": "機密情報を検出",
+    "blockBody": "入力に {{count}} 件の秘密が含まれています。",
+    "warnTitle": "機密の可能性",
+    "redactedChip": "[REDACTED:{{kind}}]",
+    "maskNow": "マスクして送信",
+    "sendAsIs": "そのまま送信",
+    "cancel": "キャンセル",
+    "revealOnce": "1回表示",
+    "patterns": {
+      "openai-key": "OpenAI APIキー",
+      "anthropic-key": "Anthropic APIキー",
+      "aws-access-key": "AWS Access Key",
+      "github-pat": "GitHub PAT",
+      "jwt": "JWT",
+      "email": "メール",
+      "us-ssn": "SSN パターン",
+      "credit-card": "クレジットカード"
+    },
+    "exportSanitized": "{{count}} 件の秘密を除去後に書き出し",
+    "tooltip": "GitHub Secret Scanning ルール + エントロピー検出"
+  },
+  "budgetV2": {
+    "alertBannerTitle": "予算閾値に接近",
+    "alertBannerBody": "次ターン後に {{from}} → {{to}} に自動ダウングレード。",
+    "alertDisable": "無効化",
+    "alertOk": "OK",
+    "softCapModalTitle": "ソフトキャップ到達",
+    "softCapModalBody": "このタスクで ${{used}} / ${{cap}} 使用中。続行方法を選択。",
+    "softCapAutoDown": "{{model}} に自動ダウングレード (約 ${{est}})",
+    "softCapOverride": "現モデル維持 (上限を ${{newCap}} に引き上げ)",
+    "softCapStop": "ここで停止 (再開まで費用 0)",
+    "hardCapBanner": "ハードキャップ — 進行中ターン完了後、次ターン遮断",
+    "tier": {
+      "normal": "正常",
+      "alert": "注意",
+      "softCap": "ソフトキャップ",
+      "hardCap": "ハードキャップ"
+    }
+  },
+  "testMap": {
+    "linkedFailures": "関連失敗",
+    "passedAll": "{{n}}/{{n}} 通過",
+    "rerun": "再実行",
+    "askAgent": "エージェントに原因を尋ねる",
+    "jumpToHunk": "該当 hunk へ",
+    "expectedGot": "期待 {{exp}} · 実際 {{got}}",
+    "stackHit": "{{file}}:{{line}}",
+    "noTests": "この変更のテストがまだありません",
+    "coverageDot": "失敗テストのスタックに含まれる行"
+  },
+  "prCi": {
+    "branchTitle": "ブランチ + PR",
+    "ahead": "ahead {{n}}",
+    "behind": "behind {{n}}",
+    "mergeable": "マージ可能",
+    "dirty": "競合",
+    "blocked": "ブロック",
+    "prOpen": "PR #{{n}} · オープン",
+    "prDraft": "PR #{{n}} · ドラフト",
+    "prMerged": "PR #{{n}} · マージ済",
+    "reviewers": "レビュアー",
+    "approved": "承認",
+    "pending": "保留",
+    "changesRequested": "変更要求",
+    "checks": "CI チェック",
+    "checkQueued": "待機",
+    "checkRunning": "実行中",
+    "checkSuccess": "成功",
+    "checkFailure": "失敗",
+    "checkCancelled": "キャンセル",
+    "conflicts": "{{n}} 件の競合",
+    "noConflicts": "競合なし",
+    "readyToMerge": "マージ準備完了",
+    "syncNow": "今すぐ同期",
+    "openOnGitHub": "GitHub で開く",
+    "lastPush": "最終 push {{ago}}"
+  },
+  "drift": {
+    "label": "ドリフト",
+    "stuck": "思考が普段より長い ({{x}}倍)",
+    "noisy": "ツール呼び出しが普段の {{x}}倍",
+    "ok": "通常通り",
+    "fileClean": "作業ツリー変更なし",
+    "fileShifted": "他の行が変更 (自動リベース)",
+    "fileOverlap": "同じ行が編集済 — 競合予想",
+    "fileGone": "作業ツリーで削除済",
+    "useWorking": "作業ツリー優先",
+    "forceApply": "強制適用",
+    "openMerge": "3-way マージを開く",
+    "lastTouched": "{{ago}} 編集",
+    "draftedAt": "{{ago}} 基準"
+  },
+  "background": {
+    "label": "バックグラウンド",
+    "runHere": "ここで実行",
+    "runCloud": "バックグラウンド実行",
+    "switchedToCloud": "クラウドに移行",
+    "running": "実行中",
+    "completed": "完了",
+    "notifyBrowser": "ブラウザ",
+    "notifyEmail": "メール",
+    "notifySilent": "サイレント",
+    "tabClosable": "タブを閉じても継続",
+    "ribbon": "{{count}} バックグラウンド · クラウド",
+    "completedToast": "{{title}} 完了 · +{{added}}/-{{removed}} · ${{usd}}",
+    "open": "開く"
   },
   "header": {
     "openPr": "PRを開く"
+  },
+  "snapshot": {
+    "title": "作業スナップショット",
+    "subtitle": "エージェントがこれまでに行ったこと",
+    "branch": "ブランチ",
+    "diff": "差分",
+    "files": "ファイル",
+    "touched": "触れたファイル",
+    "planRemaining": "残り計画 {{count}} 件",
+    "planAllDone": "計画完了",
+    "noPlan": "計画未策定",
+    "followups": "次のアクション",
+    "openDiff": "変更を表示",
+    "openPr": "PR を作成",
+    "continue": "続行",
+    "moreFiles": "他 {{count}} 件"
   },
   "composer": {
     "code": "コード",
@@ -33,7 +454,59 @@
     "mentionFile": "ファイル参照",
     "mentionSymbol": "シンボル参照",
     "web": "Web検索",
-    "suggest": "プロンプト提案"
+    "suggest": "プロンプト提案",
+    "modelTag": {
+      "capable": "最高性能",
+      "balanced": "バランス",
+      "fast": "最速"
+    }
+  },
+  "status": {
+    "running": "実行中",
+    "review": "レビュー",
+    "merged": "マージ済",
+    "open": "オープン",
+    "failed": "失敗"
+  },
+  "mention": {
+    "filesHeader": "ファイル",
+    "symbolsHeader": "シンボル",
+    "empty": "一致なし",
+    "hint": "↑↓ 移動 · ↵ 選択 · esc 閉じる"
+  },
+  "scroll": {
+    "newMessages": "最新へ移動"
+  },
+  "phase": {
+    "thinking": "思考中",
+    "reading": "読込中",
+    "searching": "検索中",
+    "editing": "編集中",
+    "running": "実行中",
+    "planning": "計画中",
+    "writing": "作成中"
+  },
+  "cost": {
+    "label": "累計",
+    "tokens": "トークン",
+    "estimate": "概算",
+    "tokensShort": "tok",
+    "tooltip": "このタスクの入出力トークン累計と推定コスト。opus 4.7 基準。"
+  },
+  "apply": {
+    "suggested": "提案",
+    "applied": "適用済",
+    "previewOnly": "プレビューのみ",
+    "applyToTree": "作業ツリーに適用",
+    "applyAndPr": "適用して PR",
+    "appliedNote": "ファイルは作業ツリーに書き込まれました。git で元に戻せます。",
+    "suggestedNote": "ファイルはまだ変更されていません。適用前に確認してください。"
+  },
+  "citations": {
+    "label": "参照",
+    "more": "他 {{count}} 件",
+    "noLines": "ファイル全体",
+    "lines": "L{{start}}-{{end}}"
   },
   "empty": {
     "title": "何を作りましょうか？",
@@ -153,7 +626,8 @@
     "kbNew": "新規タスク",
     "kbSearch": "タスク検索",
     "kbSlash": "スラッシュコマンド",
-    "footer": "se-dot-field-demo · coding"
+    "footer": "se-dot-field-demo · coding",
+    "resize": "コンテキストパネルのサイズ変更"
   },
   "block": {
     "thoughtFor": "{{seconds}}秒間思考",

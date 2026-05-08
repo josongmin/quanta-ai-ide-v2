@@ -20,7 +20,7 @@ export default function AdmissionRoot() {
         className="absolute bottom-4 right-4 z-50 flex items-center gap-px rounded-full overflow-hidden"
         style={{
           background: isDark ? 'rgba(13,17,23,0.75)' : 'rgba(255,255,255,0.75)',
-          border: `1px solid ${isDark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.10)'}`,
+          border: '1px solid var(--border-default)',
           backdropFilter: 'blur(22px) saturate(160%)',
           WebkitBackdropFilter: 'blur(22px) saturate(160%)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
@@ -35,7 +35,7 @@ export default function AdmissionRoot() {
               className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors ${
                 active
                   ? (isDark ? 'bg-white text-black' : 'bg-black text-white')
-                  : (isDark ? 'text-white/55 hover:text-white/85' : 'text-black/55 hover:text-black/85')
+                  : 'text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)]'
               }`}
             >
               {v}

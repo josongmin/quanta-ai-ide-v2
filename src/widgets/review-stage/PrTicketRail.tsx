@@ -8,7 +8,13 @@ import {
   type ReviewerState,
 } from '@entities/pr';
 import { useTranslation } from '@shared/i18n';
+import { ResizeHandle } from '@shared/ui';
 import { riskTierForPr, tierAccent } from './lib/risk-shared';
+import { timeAgo } from './lib/format';
+
+export const PR_RAIL_DEFAULT_WIDTH = 260;
+export const PR_RAIL_MIN_WIDTH = 220;
+export const PR_RAIL_MAX_WIDTH = 460;
 
 // Left rail mirroring CodingStage.TaskRail. Adds review-specific affordances:
 // a 3-way author/reviewer scope filter, a sort menu (risk / updated / size),
@@ -34,12 +40,15 @@ type Props = {
   /** Hook so the parent widget can know the post-filter, post-sort order
       (used for `j/k` keyboard navigation). Called once per render. */
   onVisibleChange?: (numbers: number[]) => void;
+  width: number;
+  onWidthChange: (next: number) => void;
 };
 
 export default function PrTicketRail({
   prs, activeNumber, onSelect, scope, onScopeChange,
   query, onQueryChange, sortKey, onSortChange,
   viewerLogin, repoForRisk, isDark, onVisibleChange,
+  width, onWidthChange,
 }: Props) {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -101,20 +110,32 @@ export default function PrTicketRail({
   }, [onVisibleChange, visibleNumbers]);
 
   const { t } = useTranslation('review');
-  const border = isDark ? 'border-white/5' : 'border-black/5';
-  const textMuted = isDark ? 'text-white/55' : 'text-black/55';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/30';
+  const border = 'border-[color:var(--border-muted)]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
   const inputBg = isDark ? 'bg-white/[0.04]' : 'bg-black/[0.03]';
 
   return (
     <aside
-      className="shrink-0 w-[260px] flex flex-col"
+      className="relative shrink-0 flex flex-col"
       style={{
+        width,
         backgroundColor: isDark ? 'rgba(8, 12, 20, 0.55)' : 'rgba(255, 255, 255, 0.55)',
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
       }}
     >
+      <ResizeHandle
+        side="right"
+        width={width}
+        min={PR_RAIL_MIN_WIDTH}
+        max={PR_RAIL_MAX_WIDTH}
+        defaultWidth={PR_RAIL_DEFAULT_WIDTH}
+        onChange={onWidthChange}
+        isDark={isDark}
+        ariaLabel={t('rail.resize')}
+        offset={-5}
+      />
       <ScopeStrip scope={scope} onChange={onScopeChange} isDark={isDark} />
 
       <div className={`shrink-0 px-3 py-2 border-b ${border} flex items-center gap-2`}>
@@ -191,7 +212,7 @@ function ScopeStrip({
   onChange: (s: PrScope) => void;
   isDark: boolean;
 }) {
-  const border = isDark ? 'border-white/5' : 'border-black/5';
+  const border = 'border-[color:var(--border-muted)]';
   const items: { key: PrScope; label: string }[] = [
     { key: 'mine-to-review', label: 'To review' },
     { key: 'my-prs',         label: 'Mine' },
@@ -249,6 +270,7 @@ function SortMenu({
         <ArrowUpDown className="w-3.5 h-3.5" />
       </button>
       {open && (
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- popover dismisses on mouse-leave; keyboard users dismiss via the trigger button (Enter toggles closed) and Esc
         <div
           className={`absolute right-0 top-8 z-10 w-44 rounded-md border shadow-lg ${panel}`}
           onMouseLeave={() => { setOpen(false); }}
@@ -258,9 +280,7 @@ function SortMenu({
               key={it.key}
               type="button"
               onClick={() => { onChange(it.key); setOpen(false); }}
-              className={`w-full text-left px-3 py-1.5 text-[11px] flex items-center gap-2 ${
-                isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'
-              }`}
+              className="w-full text-left px-3 py-1.5 text-[11px] flex items-center gap-2 hover:bg-[color:var(--bg-hover)]"
             >
               <span className="flex-1">{it.label}</span>
               {sortKey === it.key && <Check className="w-3 h-3" />}
@@ -285,7 +305,8 @@ function RailGroup({
 }) {
   const [collapsed, setCollapsed] = useState(startCollapsed);
   if (count === 0) return null;
-  const textFaint = isDark ? 'text-white/40' : 'text-black/40';
+  // Theme-agnostic via CSS var, but keep `isDark` lookup so the prop is read.
+  const textFaint = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
   return (
     <div className="mb-3">
       <button
@@ -318,9 +339,9 @@ function PrRow({
     ? (isDark ? 'bg-white/[0.06]' : 'bg-black/[0.05]')
     : (isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-black/[0.03]');
   const titleColor = active
-    ? (isDark ? 'text-white' : 'text-black')
-    : (isDark ? 'text-white/70' : 'text-black/70');
-  const subColor = isDark ? 'text-white/40' : 'text-black/40';
+    ? 'text-[color:var(--fg-strong)]'
+    : 'text-[color:var(--fg-default)]';
+  const subColor = 'text-[color:var(--fg-subtle)]';
 
   const tier = riskTierForPr(pr, repoForRisk);
   const ci = summariseChecks(pr.checks);
@@ -434,20 +455,4 @@ const REVIEWER_GLYPH: Record<ReviewerState, { Icon: LucideIcon; color: string; t
   commented:           { Icon: MessageSquare, color: '#8b949e', title: 'Commented' },
 };
 
-// ─── Time formatting ─────────────────────────────────────────────────────
-
-function timeAgo(iso: string): string {
-  const t = new Date(iso).getTime();
-  if (Number.isNaN(t)) return iso;
-  const diffMs = Date.now() - t;
-  const sec = Math.round(diffMs / 1000);
-  if (sec < 60) return `${String(sec)}s`;
-  const min = Math.round(sec / 60);
-  if (min < 60) return `${String(min)}m`;
-  const hr = Math.round(min / 60);
-  if (hr < 24) return `${String(hr)}h`;
-  const days = Math.round(hr / 24);
-  if (days < 30) return `${String(days)}d`;
-  const months = Math.round(days / 30);
-  return `${String(months)}mo`;
-}
+// ─── Time formatting — see ./lib/format.ts ──────────────────────────────

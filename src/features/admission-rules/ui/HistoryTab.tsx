@@ -61,9 +61,7 @@ export function HistoryTab() {
         className="shrink-0 px-8 py-3 flex items-center gap-3"
         style={{ borderBottom: `1px solid ${tokens(isDark).border}` }}
       >
-        <h2 className={`text-[11px] font-bold uppercase tracking-[0.18em] ${
-          isDark ? 'text-white/85' : 'text-black/85'
-        }`}>
+        <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--fg-strong)]">
           Retroactive simulation
         </h2>
         <span className={`text-[10px] font-mono ${isDark ? 'text-white/40' : 'text-black/55'}`}>
@@ -96,9 +94,7 @@ export function HistoryTab() {
             />
           ))}
         </div>
-        <div className={`mt-1 flex items-center justify-between text-[9px] font-mono ${
-          isDark ? 'text-white/40' : 'text-black/40'
-        }`}>
+        <div className="mt-1 flex items-center justify-between text-[9px] font-mono text-[color:var(--fg-subtle)]">
           <span>30d ago</span>
           <span>now</span>
         </div>
@@ -113,8 +109,8 @@ export function HistoryTab() {
               backgroundColor: isDark ? 'rgba(13,17,23,0.55)' : 'rgba(255,255,255,0.55)',
             }}
           >
-            <tr className={`text-left text-[10px] font-mono uppercase tracking-[0.18em] ${
-              isDark ? 'text-white/40 border-b border-white/5' : 'text-black/55 border-b border-black/5'
+            <tr className={`text-left text-[10px] font-mono uppercase tracking-[0.18em] border-b border-[color:var(--border-muted)] ${
+              isDark ? 'text-white/40' : 'text-black/55'
             }`}>
               <th className="pl-8 pr-2 py-2 w-2" />
               <th className="px-2 py-2">PR</th>
@@ -156,8 +152,8 @@ function Row({
   const fired = row.decision.ruleResults.filter((rr) => rr.status === 'block' || rr.status === 'warn');
 
   return (
-    <tr className={`group ${
-      dim ? 'border-b border-white/5 hover:bg-white/[0.025]' : 'border-b border-black/5 hover:bg-black/[0.02]'
+    <tr className={`group border-b border-[color:var(--border-muted)] ${
+      dim ? 'hover:bg-white/[0.025]' : 'hover:bg-black/[0.02]'
     }`}>
       {/* Outcome stripe */}
       <td className="pl-8 pr-0 py-2.5">
@@ -166,20 +162,16 @@ function Row({
           style={{ backgroundColor: outcomeColor, opacity: 0.85 }}
         />
       </td>
-      <td className={`px-2 py-2.5 font-mono ${dim ? 'text-white/85' : 'text-black/85'}`}>
+      <td className="px-2 py-2.5 font-mono text-[color:var(--fg-strong)]">
         #{row.seed}
       </td>
-      <td className={`px-2 py-2.5 font-mono text-[10px] ${dim ? 'text-white/55' : 'text-black/55'}`}>
+      <td className="px-2 py-2.5 font-mono text-[10px] text-[color:var(--fg-muted)]">
         {row.date}
       </td>
-      <td className={`px-2 py-2.5 text-right font-mono tabular-nums ${
-        dim ? 'text-white/70' : 'text-black/70'
-      }`}>
+      <td className="px-2 py-2.5 text-right font-mono tabular-nums text-[color:var(--fg-default)]">
         {row.filesChanged}
       </td>
-      <td className={`px-2 py-2.5 text-right font-mono tabular-nums ${
-        dim ? 'text-white/55' : 'text-black/55'
-      }`}>
+      <td className="px-2 py-2.5 text-right font-mono tabular-nums text-[color:var(--fg-muted)]">
         {row.ripple}
       </td>
       <td className="px-2 py-2.5">
@@ -192,12 +184,12 @@ function Row({
       </td>
       <td className="px-2 py-2.5 pr-8">
         {fired.length === 0 ? (
-          <span className={`font-mono text-[10px] ${dim ? 'text-white/30' : 'text-black/40'}`}>—</span>
+          <span className="font-mono text-[10px] text-[color:var(--fg-subtle)]">—</span>
         ) : (
           <span className={`font-mono text-[10px] ${dim ? 'text-white/55' : 'text-black/70'}`}>
             {fired.slice(0, 3).map((rr) => `${SOURCE_GLYPH[rr.source]} ${rr.ruleName}`).join(' · ')}
             {fired.length > 3 && (
-              <span className={dim ? 'text-white/40' : 'text-black/40'}> · +{fired.length - 3}</span>
+              <span className="text-[color:var(--fg-subtle)]"> · +{fired.length - 3}</span>
             )}
           </span>
         )}

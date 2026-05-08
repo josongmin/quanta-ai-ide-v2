@@ -53,5 +53,59 @@
   },
   "override": {
     "whyPlaceholder": "为何安全？请关联 issue 或文档。"
+  },
+  "confidence": {
+    "title": "通过率置信区间",
+    "sub": "Wilson {{level}}% CI · z = {{z}}",
+    "note": "样本越多区间越窄。小 N 下的宽区间不是噪声，而是诚实。"
+  },
+  "effect": {
+    "title": "效应量 · Cohen’s d",
+    "band": {
+      "negligible": "可忽略",
+      "small": "小",
+      "medium": "中",
+      "large": "大"
+    }
+  },
+  "anomaly": {
+    "title": "异常哨兵",
+    "sub": "30 天 · EWMA α=0.3 · |z|≥2 标记",
+    "outliers": "{{n}} 天中异常值",
+    "legend": { "trend": "EWMA", "anom": "|z| ≥ 2" }
+  },
+  "calibration": {
+    "title": "规则校准",
+    "sub": "精确率 · 召回率 · F1 · 假阳性率",
+    "col": { "rule": "规则" },
+    "empty": "暂无样本足够多的规则用于校准。"
+  },
+  "counterfactual": {
+    "title": "反事实影响",
+    "sub": "Difference-in-differences · 95% CI",
+    "significant": "显著",
+    "notSignificant": "不显著",
+    "treated": "处理组",
+    "control": "对照组"
+  },
+  "survival": {
+    "title": "合并时间生存曲线",
+    "sub": "Kaplan-Meier · Greenwood 95% CI 带",
+    "median": "中位数",
+    "vs": "对比",
+    "legend": { "treated": "规则触发", "control": "规则未触发" }
+  },
+  "cusum": {
+    "title": "CUSUM 漂移检测",
+    "sub": "Tabular CUSUM · K = 0.5σ · H = 4σ",
+    "stable": "稳定",
+    "noAlarm": "无警报",
+    "changePoint": "已检测变化点"
+  },
+  "reliability": {
+    "title": "可靠性图",
+    "sub": "{{n}} 区间 · 期望校准误差",
+    "over": "过度自信",
+    "under": "信心不足"
   }
 }

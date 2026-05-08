@@ -1,21 +1,22 @@
 {
-  "rail": {
-    "title": "프로젝트",
-    "newProject": "새 프로젝트",
-    "newTaskInProject": "이 프로젝트에 새 작업",
-    "untitled": "제목 없음",
-    "searchPlaceholder": "검색…",
-    "taskOne": "작업",
-    "taskMany": "작업",
-    "filter": {
-      "all": "전체",
-      "mine": "내 작업",
-      "archived": "보관"
-    },
-    "empty": "조건에 맞는 항목이 없습니다."
-  },
   "header": {
     "openPr": "PR 열기"
+  },
+  "snapshot": {
+    "title": "작업 스냅샷",
+    "subtitle": "에이전트가 지금까지 한 일",
+    "branch": "브랜치",
+    "diff": "변경",
+    "files": "파일",
+    "touched": "건드린 파일",
+    "planRemaining": "남은 계획 {{count}}개",
+    "planAllDone": "계획 완료",
+    "noPlan": "아직 계획 없음",
+    "followups": "다음 액션",
+    "openDiff": "변경사항 보기",
+    "openPr": "PR 만들기",
+    "continue": "계속 진행",
+    "moreFiles": "외 {{count}}개"
   },
   "composer": {
     "code": "코드",
@@ -33,7 +34,479 @@
     "mentionFile": "파일 멘션",
     "mentionSymbol": "심볼 멘션",
     "web": "웹 검색",
-    "suggest": "프롬프트 제안"
+    "suggest": "프롬프트 제안",
+    "modelTag": {
+      "capable": "최고 성능",
+      "balanced": "균형",
+      "fast": "최고 속도"
+    }
+  },
+  "status": {
+    "running": "진행 중",
+    "review": "검토",
+    "merged": "병합됨",
+    "open": "열림",
+    "failed": "실패"
+  },
+  "mention": {
+    "filesHeader": "파일",
+    "symbolsHeader": "심볼",
+    "empty": "일치 항목 없음",
+    "hint": "↑↓ 이동 · ↵ 선택 · esc 닫기"
+  },
+  "scroll": {
+    "newMessages": "새 메시지 보기"
+  },
+  "phase": {
+    "thinking": "생각 중",
+    "reading": "읽는 중",
+    "searching": "검색 중",
+    "editing": "편집 중",
+    "running": "실행 중",
+    "planning": "계획 수립 중",
+    "writing": "작성 중"
+  },
+  "cost": {
+    "label": "누적",
+    "tokens": "토큰",
+    "estimate": "예상",
+    "tokensShort": "토큰",
+    "tooltip": "이 작업에서 누적된 입력/출력 토큰과 추정 비용. opus 4.7 기준."
+  },
+  "apply": {
+    "suggested": "제안",
+    "applied": "적용됨",
+    "previewOnly": "미리보기만",
+    "applyToTree": "작업 트리에 적용",
+    "applyAndPr": "적용 후 PR",
+    "appliedNote": "파일이 작업 트리에 기록되었습니다. 되돌리려면 git을 사용하세요.",
+    "suggestedNote": "아직 파일은 변경되지 않았습니다. 적용하기 전에 검토하세요."
+  },
+  "citations": {
+    "label": "참조",
+    "more": "외 {{count}}개",
+    "noLines": "전체 파일",
+    "lines": "{{start}}-{{end}}행"
+  },
+  "checkpoint": {
+    "rewindHere": "여기까지 되돌리기",
+    "forkFromHere": "여기서 분기",
+    "menu": "체크포인트",
+    "rewindConfirm": "이 시점 이후 {{count}}개 턴을 제거합니다",
+    "rewindUndo": "되돌리기 취소",
+    "rewindUndone": "{{count}}개 턴 복원됨"
+  },
+  "hunk": {
+    "accept": "적용",
+    "reject": "건너뜀",
+    "pending": "검토 대기",
+    "summary": "{{accepted}}/{{total}} 헝크 수락",
+    "acceptAll": "모두 적용",
+    "rejectAll": "모두 건너뜀"
+  },
+  "stop": {
+    "holdToStop": "꾹 눌러 중지",
+    "released": "취소됨"
+  },
+  "comment": {
+    "addNote": "메모 남기기",
+    "askAgent": "에이전트에게 질문",
+    "placeholder": "여기에 메모 또는 질문…",
+    "submit": "남기기",
+    "cancel": "취소",
+    "header": "코멘트 {{count}}",
+    "kindNote": "메모",
+    "kindAsk": "질문"
+  },
+  "diffPreview": {
+    "label": "diff 미리보기",
+    "summary": "{{added}}+ / {{removed}}- · {{files}}개 파일",
+    "askAbout": "이 변경에 대해 묻기",
+    "openInPr": "PR로 열기"
+  },
+  "scrubber": {
+    "label": "타임라인",
+    "live": "현재",
+    "showingTurn": "{{n}}/{{total}}턴",
+    "previewingTurn": "미리보기 · {{n}}/{{total}}턴",
+    "back": "현재로",
+    "tooltip": "이 시점의 thread 미리보기 (변경 없음)",
+    "kbHint": "[ ] · ⌘.",
+    "youAsked": "사용자 요청",
+    "moreFiles": "+ {{n}}개 더",
+    "status": {
+      "user": "사용자 입력",
+      "planned": "계획됨",
+      "thinking": "사고 중",
+      "suggested": "변경 제안",
+      "applied": "적용됨",
+      "rejected": "거절됨",
+      "failed": "도구 실패",
+      "streaming": "스트리밍"
+    },
+    "inverse": {
+      "safe": "안전한 되돌리기",
+      "risky": "리뷰 필요",
+      "summary": "#{{n}}턴 변경({{files}}개 파일)을 새 operation으로 되돌리기",
+      "overlap": "{{n}}개 파일이 이후 다시 수정됨",
+      "applyClean": "역연산 추가",
+      "applyReview": "역연산 · 리뷰",
+      "applyTooltipSafe": "타임라인 끝에 새 recovery operation을 추가합니다. 기존 기록은 삭제되지 않습니다.",
+      "applyTooltipRisky": "이 턴 이후 같은 파일이 또 수정됐습니다. 적용 전에 리뷰가 필요합니다."
+    }
+  },
+  "snapshotV2": {
+    "model": "모델",
+    "phase": "단계",
+    "cost": "비용",
+    "elapsed": "경과"
+  },
+  "emptyContext": {
+    "title": "이 프로젝트에서 이어서 할 일",
+    "subtitle": "최근 대화에서 추출한 컨텍스트입니다",
+    "noContext": "최근 작업이 없습니다. 아래 추천에서 시작해 보세요."
+  },
+  "reply": {
+    "openCompose": "답글",
+    "placeholder": "답글 입력…",
+    "submit": "답글 남기기",
+    "agentLabel": "에이전트",
+    "userLabel": "나",
+    "resolve": "해결됨으로 표시",
+    "reopen": "다시 열기",
+    "resolved": "해결됨"
+  },
+  "reactions": {
+    "label": "반응",
+    "thumbsUp": "도움됨",
+    "thumbsDown": "도움 안 됨",
+    "heart": "마음에 듦",
+    "target": "정답"
+  },
+  "turnMenu": {
+    "copy": "텍스트 복사",
+    "copyMd": "마크다운 복사",
+    "share": "공유",
+    "export": "내보내기",
+    "openInNewTask": "새 태스크에 복사"
+  },
+  "palette": {
+    "title": "명령 팔레트",
+    "placeholder": "명령, 태스크, 파일 검색…",
+    "sectionActions": "액션",
+    "sectionTasks": "태스크",
+    "sectionSlash": "슬래시 명령",
+    "noResults": "결과 없음",
+    "hint": "↑↓ 이동 · ↵ 실행 · esc 닫기",
+    "openShortcut": "팔레트 열기",
+    "actions": {
+      "newTask": "새 태스크",
+      "newProject": "새 프로젝트",
+      "openPr": "PR 열기",
+      "rewindLast": "마지막 턴 되돌리기",
+      "toggleScrubber": "타임라인 토글",
+      "switchModelCapable": "모델: opus 4.7로 전환",
+      "switchModelBalanced": "모델: sonnet 4.6로 전환",
+      "switchModelFast": "모델: haiku 4.5로 전환"
+    }
+  },
+  "activityV2": {
+    "userTurn": "내 메시지",
+    "agentTurn": "에이전트 응답",
+    "diffEmitted": "diff 생성",
+    "toolEdit": "{{file}} 편집",
+    "toolRead": "{{file}} 읽음",
+    "toolRun": "명령 실행",
+    "toolSearch": "검색",
+    "planUpdated": "계획 업데이트",
+    "noActivity": "아직 활동이 없습니다"
+  },
+  "voice": {
+    "start": "음성 입력 시작",
+    "stop": "음성 입력 중지",
+    "listening": "듣는 중…",
+    "transcribing": "변환 중…",
+    "tooltip": "마이크로 말하면 자동으로 텍스트로 변환됩니다",
+    "unsupported": "이 브라우저는 음성 입력을 지원하지 않습니다"
+  },
+  "diffView": {
+    "unified": "통합",
+    "split": "좌우 분할",
+    "toggleTooltip": "diff 보기 방식 전환"
+  },
+  "lineEdit": {
+    "rewrite": "이 줄만 다시 작성",
+    "explain": "이 줄 설명",
+    "placeholder": "이 줄을 어떻게 바꿀까요?",
+    "submit": "재작성",
+    "cancel": "취소"
+  },
+  "batch": {
+    "selectMode": "다중 선택",
+    "selected": "{{count}}개 선택됨",
+    "forkBatch": "선택 항목으로 분기",
+    "rewindBatch": "선택 항목까지 되돌리기",
+    "clear": "선택 해제",
+    "hint": "shift+클릭으로 범위 선택"
+  },
+  "defaultModel": {
+    "label": "기본 모델",
+    "save": "이 프로젝트 기본값으로 저장",
+    "saved": "{{model}}이(가) 이 프로젝트 기본값으로 설정됨",
+    "cleared": "프로젝트 기본 모델 제거됨"
+  },
+  "autoadvance": {
+    "label": "자동 진행",
+    "tooltip": "계획 항목을 체크하면 다음 단계를 자동으로 시작합니다",
+    "triggered": "다음 단계 시작 중: {{next}}",
+    "noNext": "남은 단계 없음"
+  },
+  "integrations": {
+    "title": "연결된 도구",
+    "connected": "연결됨",
+    "disconnected": "끊김",
+    "addNew": "통합 추가",
+    "kind": {
+      "slack": "Slack",
+      "linear": "Linear",
+      "jira": "Jira",
+      "github": "GitHub",
+      "sentry": "Sentry",
+      "figma": "Figma"
+    }
+  },
+  "budget": {
+    "label": "예산",
+    "noBudget": "예산 미설정",
+    "ok": "정상",
+    "alert": "경고",
+    "exceeded": "초과",
+    "remaining": "${{usd}} 남음",
+    "tooltip": "이 task의 누적 비용. 임계값을 넘으면 색상이 escalate."
+  },
+  "projection": {
+    "label": "예상",
+    "tooltip": "이 task의 평균 turn 비용. 다음 turn이 평소보다 비싸면 경고.",
+    "spike": "이번 turn은 평균의 {{x}}배",
+    "normal": "평균과 비슷"
+  },
+  "planMeta": {
+    "confidence": "신뢰도 {{pct}}%",
+    "estTokens": "{{n}} 토큰 예상",
+    "estTime": "{{n}}초 예상",
+    "lowConfidence": "낮음 — 검토 권장"
+  },
+  "citationStale": {
+    "label": "stale",
+    "tooltip": "이 인용 이후 파일이 다시 수정됨. 현재 결정 근거로 쓰기 전에 확인하세요."
+  },
+  "applyV2": {
+    "inverse": "변경 되돌리기",
+    "inverseTooltip": "git 대신 이 turn의 변경을 무효화하는 새 turn을 추가합니다",
+    "inverseAdded": "되돌리기 turn 추가됨",
+    "conflictWarn": "이 변경 후 동일 파일이 다시 수정됨 — 적용 시 이전 변경이 덮어씌워질 수 있음"
+  },
+  "history": {
+    "tooltip": "↑↓로 이전 prompt 호출",
+    "empty": "이전 prompt 없음"
+  },
+  "density": {
+    "label": "밀도",
+    "compact": "컴팩트",
+    "comfortable": "편안",
+    "spacious": "여유"
+  },
+  "a11y": {
+    "highContrast": "고대비 모드",
+    "reducedMotion": "동작 줄이기",
+    "skipToComposer": "composer로 건너뛰기"
+  },
+  "drift": {
+    "label": "드리프트",
+    "stuck": "평소보다 thinking 단계가 길어요 ({{x}}배)",
+    "noisy": "도구 호출이 평소보다 {{x}}배 많아요",
+    "ok": "평소대로 진행 중"
+  },
+  "latency": {
+    "label": "지연 프로파일",
+    "tooltip": "이 턴의 phase별 시간 분배",
+    "noData": "데이터 없음",
+    "totalLabel": "총 {{ms}}ms"
+  },
+  "successRate": {
+    "label": "도구 성공률",
+    "tooltip": "이 task에서 도구별 / 모델별 성공 호출 비율",
+    "byTool": "도구별",
+    "byModel": "모델별",
+    "noData": "아직 데이터 없음",
+    "rate": "{{ok}}/{{total}}"
+  },
+  "tps": {
+    "label": "tok/s",
+    "tooltip": "초당 출력 토큰 — 스트리밍 동안 실시간"
+  },
+  "inverse": {
+    "arrowLabel": "역연산: 턴 #{{n}}을 되돌림",
+    "anchor": "역연산 대상"
+  },
+  "exportPr": {
+    "label": "PR 설명으로 내보내기",
+    "ready": "PR 설명이 클립보드에 복사됨"
+  },
+  "selfEval": {
+    "label": "신뢰도",
+    "tooltip": "에이전트의 자체 평가 신뢰도. 70% 이상이면 안전 영역.",
+    "high": "높음 ({{pct}}%)",
+    "mid": "보통 ({{pct}}%)",
+    "low": "낮음 — 검토 권장 ({{pct}}%)"
+  },
+  "latencyBaseline": {
+    "label": "기준 대비",
+    "tooltip": "이번 턴의 phase별 시간 vs 이 task 평균",
+    "faster": "{{x}}× 빠름",
+    "slower": "{{x}}× 느림",
+    "match": "평균과 일치"
+  },
+  "forecast": {
+    "label": "예상 비용",
+    "tooltip": "현재 진행 속도로 다음 턴까지 누적 예상 비용",
+    "remaining": "다음 턴까지 ~${{usd}}",
+    "perSecond": "초당 ~${{usd}}"
+  },
+  "sideBySide": {
+    "label": "병렬 비교",
+    "tooltip": "두 모델로 같은 prompt 동시 실행",
+    "leftLane": "{{model}} (좌)",
+    "rightLane": "{{model}} (우)",
+    "togglePicker": "병렬 모델 선택",
+    "off": "단일",
+    "winner": "선호"
+  },
+  "secretGuard": {
+    "blockTitle": "민감 정보 발견",
+    "blockBody": "{{count}}개의 비밀이 입력에 포함되었습니다.",
+    "warnTitle": "민감 정보 의심",
+    "redactedChip": "[REDACTED:{{kind}}]",
+    "maskNow": "마스킹 후 전송",
+    "sendAsIs": "그대로 전송",
+    "cancel": "취소",
+    "revealOnce": "1회 표시",
+    "patterns": {
+      "openai-key": "OpenAI API 키",
+      "anthropic-key": "Anthropic API 키",
+      "aws-access-key": "AWS Access Key",
+      "github-pat": "GitHub PAT",
+      "jwt": "JWT",
+      "email": "이메일",
+      "us-ssn": "주민번호 패턴",
+      "credit-card": "신용카드"
+    },
+    "exportSanitized": "{{count}}개 비밀이 제거된 후 내보냈습니다",
+    "tooltip": "GitHub Secret Scanning 규칙 + 엔트로피 검출"
+  },
+  "budgetV2": {
+    "alertBannerTitle": "예산 임계값 도달",
+    "alertBannerBody": "다음 턴 후 자동으로 {{from}} → {{to}}로 다운그레이드합니다.",
+    "alertDisable": "끄기",
+    "alertOk": "확인",
+    "softCapModalTitle": "예산 소프트 캡 도달",
+    "softCapModalBody": "이 task에서 ${{used}} / ${{cap}} 사용 중. 어떻게 진행할까요?",
+    "softCapAutoDown": "{{model}}으로 자동 다운그레이드 (예상 ${{est}})",
+    "softCapOverride": "현재 모델 유지 (cap을 ${{newCap}}로 상향)",
+    "softCapStop": "여기서 중지 (재개 전까지 비용 0)",
+    "hardCapBanner": "하드 캡 도달 — 진행 중인 turn은 완주, 다음 turn 차단",
+    "tier": {
+      "normal": "정상",
+      "alert": "주의",
+      "softCap": "소프트 캡",
+      "hardCap": "하드 캡"
+    }
+  },
+  "testMap": {
+    "linkedFailures": "연결된 실패",
+    "passedAll": "{{n}}/{{n}} 통과",
+    "rerun": "재실행",
+    "askAgent": "에이전트에게 원인 묻기",
+    "jumpToHunk": "해당 hunk로 이동",
+    "expectedGot": "예상 {{exp}} · 실제 {{got}}",
+    "stackHit": "{{file}}:{{line}}",
+    "noTests": "이 변경에 대한 테스트가 아직 없음",
+    "coverageDot": "이 라인은 실패 테스트 stack에 있음"
+  },
+  "prCi": {
+    "branchTitle": "브랜치 + PR",
+    "ahead": "ahead {{n}}",
+    "behind": "behind {{n}}",
+    "mergeable": "병합 가능",
+    "dirty": "충돌",
+    "blocked": "차단됨",
+    "prOpen": "PR #{{n}} · 열림",
+    "prDraft": "PR #{{n}} · 초안",
+    "prMerged": "PR #{{n}} · 병합됨",
+    "reviewers": "리뷰어",
+    "approved": "승인됨",
+    "pending": "대기",
+    "changesRequested": "변경 요청",
+    "checks": "CI 체크",
+    "checkQueued": "대기",
+    "checkRunning": "실행 중",
+    "checkSuccess": "성공",
+    "checkFailure": "실패",
+    "checkCancelled": "취소",
+    "conflicts": "{{n}}개 충돌",
+    "noConflicts": "충돌 없음",
+    "readyToMerge": "병합 준비됨",
+    "syncNow": "지금 동기화",
+    "openOnGitHub": "GitHub에서 열기",
+    "lastPush": "마지막 push {{ago}}"
+  },
+  "drift": {
+    "label": "드리프트",
+    "stuck": "평소보다 thinking 단계가 길어요 ({{x}}배)",
+    "noisy": "도구 호출이 평소보다 {{x}}배 많아요",
+    "ok": "평소대로 진행 중",
+    "fileClean": "변경 없음",
+    "fileShifted": "다른 라인이 변경됨 (자동 재정렬)",
+    "fileOverlap": "같은 라인이 변경됨 — 충돌 예상",
+    "fileGone": "파일이 삭제됨",
+    "useWorking": "작업 트리 우선",
+    "forceApply": "강제 적용",
+    "openMerge": "3-way 병합 보기",
+    "lastTouched": "{{ago}}에 수정",
+    "draftedAt": "{{ago}} 기준"
+  },
+  "background": {
+    "label": "백그라운드",
+    "runHere": "여기서 실행",
+    "runCloud": "백그라운드 실행",
+    "switchedToCloud": "클라우드로 전환됨",
+    "running": "실행 중",
+    "completed": "완료",
+    "notifyBrowser": "브라우저 알림",
+    "notifyEmail": "이메일",
+    "notifySilent": "조용히",
+    "tabClosable": "탭을 닫아도 계속 실행됩니다",
+    "ribbon": "{{count}}개 백그라운드 · 클라우드",
+    "completedToast": "{{title}} 완료 · +{{added}}/-{{removed}} · ${{usd}}",
+    "open": "열기"
+  },
+  "rail": {
+    "title": "프로젝트",
+    "newProject": "새 프로젝트",
+    "newTaskInProject": "이 프로젝트에 새 작업",
+    "untitled": "제목 없음",
+    "searchPlaceholder": "검색…",
+    "taskOne": "작업",
+    "taskMany": "작업",
+    "filter": {
+      "all": "전체",
+      "mine": "내 작업",
+      "archived": "보관"
+    },
+    "empty": "조건에 맞는 항목이 없습니다.",
+    "resize": "작업 목록 크기 조정",
+    "awaitingYou": "{{count}}개 검토 대기",
+    "running": "{{count}}개 진행 중"
   },
   "empty": {
     "title": "무엇을 만들어볼까요?",
@@ -153,7 +626,8 @@
     "kbNew": "새 작업",
     "kbSearch": "작업 검색",
     "kbSlash": "슬래시 명령",
-    "footer": "se-dot-field-demo · coding"
+    "footer": "se-dot-field-demo · coding",
+    "resize": "컨텍스트 패널 크기 조정"
   },
   "block": {
     "thoughtFor": "{{seconds}}초 동안 생각함",

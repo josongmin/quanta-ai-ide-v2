@@ -1,13 +1,12 @@
+// Public API for the metric entity:
+// the Verdict type, the heat-metric catalogue, and repo/folder aggregators.
 export type {
   Verdict,
-  VerdictKey,
-  VerdictTone,
   HeatMetricKey,
 } from './model';
 export {
   HEAT_METRICS,
   findMetric,
-  type HeatMetric,
 } from './lib/heat';
 export {
   computeRepoStats,

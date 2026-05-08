@@ -122,7 +122,7 @@ const NAME_POOLS: Record<string, string[]> = {
 };
 
 function pickName(folderLeaf: string, idxInFolder: number, language: 'ts' | 'tsx'): string {
-  const pool = NAME_POOLS[folderLeaf] ?? NAME_POOLS.core;
+  const pool = NAME_POOLS[folderLeaf] ?? NAME_POOLS['core'];
   const base = pool[idxInFolder % pool.length];
   // Once the pool is exhausted, append a numeric suffix to keep names unique.
   const suffix = idxInFolder >= pool.length ? `-${Math.floor(idxInFolder / pool.length) + 1}` : '';

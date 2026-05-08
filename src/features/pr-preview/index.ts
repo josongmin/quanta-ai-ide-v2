@@ -1,3 +1,2 @@
-export { default as PrPreviewBar } from './ui/PrPreviewBar';
-export { default as PrChangeList } from './ui/PrChangeList';
+export { default as PrPreviewTrigger, PrPreviewBar, PrChangeList } from './ui/PrPreviewTrigger';
 export { usePrPreview } from './model/usePrPreview';

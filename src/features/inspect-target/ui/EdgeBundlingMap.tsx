@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import type { RepoData, FileRecord, FolderRecord } from '@entities/repo';
-import { C } from '@shared/lib';
+import { C, formatNumber } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
 
 // Hierarchical Edge Bundling à la Holten 2006.
@@ -120,10 +120,8 @@ export default function EdgeBundlingMap({
   return (
     <div className="flex flex-col items-center">
       <canvas ref={canvasRef} />
-      <div className={`mt-1 text-[9px] uppercase tracking-[0.18em] ${
-        isDark ? 'text-white/40' : 'text-black/40'
-      }`}>
-        {t('deps.edgesSummary', { n: layout.edges.length.toLocaleString() })}
+      <div className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[color:var(--fg-subtle)]">
+        {t('deps.edgesSummary', { n: formatNumber(layout.edges.length) })}
       </div>
     </div>
   );

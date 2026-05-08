@@ -30,6 +30,10 @@ export type ReviewKeyboardArgs = {
   /** Focus the activity-tab review composer; the hook handles the
       tab switch when needed. */
   onFocusReviewComposer: () => void;
+  /** Submit Approve / Request-changes verdicts on the active PR. Called
+      with no args; the parent decides which review payload to send. */
+  onApprove?: () => void;
+  onRequestChanges?: () => void;
 
   /** Cheat-sheet toggle (the `?` key). */
   toggleCheatSheet: () => void;
@@ -163,6 +167,23 @@ export function useReviewKeyboard(args: ReviewKeyboardArgs): void {
         if (a.tab !== 'activity') a.setTab('activity');
         // Defer focus until after the tab swap settles.
         window.setTimeout(() => { a.onFocusReviewComposer(); }, 0);
+        return;
+      }
+
+      // Verdict shortcuts: GitHub-style "a" to approve, "x" to request
+      // changes. Avoiding "y/n" because those collide with browser
+      // confirm-dialog reflexes; "a/x" mirror the visual prominence of
+      // the buttons in the hero stack.
+      if (key === 'a') {
+        if (a.onApprove === undefined) return;
+        e.preventDefault();
+        a.onApprove();
+        return;
+      }
+      if (key === 'x') {
+        if (a.onRequestChanges === undefined) return;
+        e.preventDefault();
+        a.onRequestChanges();
         return;
       }
     }

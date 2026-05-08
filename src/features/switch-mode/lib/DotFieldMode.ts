@@ -1,4 +1,29 @@
-import * as THREE from 'three';
+import {
+  AdditiveBlending,
+  BoxGeometry,
+  BufferAttribute,
+  BufferGeometry,
+  Color,
+  DoubleSide,
+  GridHelper,
+  Line,
+  LineBasicMaterial,
+  LineSegments,
+  type Material,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera,
+  PlaneGeometry,
+  QuadraticBezierCurve3,
+  Raycaster,
+  RingGeometry,
+  Scene,
+  SphereGeometry,
+  TorusGeometry,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
+} from 'three';
 import {
   CELL_SIZE,
   GRID_COUNT,
@@ -101,33 +126,71 @@ function paletteFor(theme: 'dark' | 'light'): Palette {
   return theme === 'light' ? PALETTE_LIGHT : PALETTE_DARK;
 }
 
+// Per-face shading on the file box. The material's `color` is multiplied
+// by per-vertex colors, so a top face of (1,1,1) preserves the base hue
+// while side faces use darker multipliers to fake light/shadow when the
+// box is raised on click. While flat, only the top face is visible so the
+// shading is invisible — the dot reads as a flat tile, as before.
+//
+// BoxGeometry face order (groups): +X, -X, +Y (top), -Y (bot), +Z, -Z.
+// Each face has 4 vertices.
+const BOX_FACE_TINTS: [number, number, number][] = [
+  [0.78, 0.78, 0.78], // +X right — mid-bright
+  [0.55, 0.55, 0.55], // -X left  — shadow
+  [1.00, 1.00, 1.00], // +Y top   — full hue (flat dot uses this)
+  [0.40, 0.40, 0.40], // -Y bot   — darkest (rarely seen)
+  [0.88, 0.88, 0.88], // +Z front — brightest side
+  [0.62, 0.62, 0.62], // -Z back  — mid-dark
+];
+function applyBoxFaceShading(geo: BoxGeometry) {
+  const count = geo.attributes['position'].count; // 24 for a Box (6 faces × 4 verts)
+  const colors = new Float32Array(count * 3);
+  for (let face = 0; face < 6; face++) {
+    const [r, g, b] = BOX_FACE_TINTS[face];
+    for (let v = 0; v < 4; v++) {
+      const i = (face * 4 + v) * 3;
+      colors[i] = r;
+      colors[i + 1] = g;
+      colors[i + 2] = b;
+    }
+  }
+  geo.setAttribute('color', new BufferAttribute(colors, 3));
+}
+
 const FLAT = { x: Math.PI / 2, y: 0, dist: 350 };
 const SIDE = { x: 0.9, y: 0.4, dist: 180 };
 
 // Reusable temporaries — every animate() frame projects ~600 file boxes plus
-// folder zones. Allocating fresh THREE.Vector3 / THREE.Color each call piles
+// folder zones. Allocating fresh Vector3 / Color each call piles
 // pressure on the JS GC; we reuse these and call `.set(...)` instead.
-const _v3 = new THREE.Vector3();
-const _color = new THREE.Color();
+// _v3 is the primary projection scratch; _v3a/_v3b are extra slots for
+// helpers (updateLines, worldToScreen) that need 2-3 distinct vectors live
+// at once per frame. Invariant: never hold a reference across a yield —
+// each call site reads/writes synchronously then drops it.
+const _v3 = new Vector3();
+const _v3a = new Vector3();
+const _v3b = new Vector3();
+const _v3c = new Vector3();
+const _color = new Color();
 
 export function createDotFieldMode(): ViewMode {
-  let scene: THREE.Scene;
-  let camera: THREE.PerspectiveCamera;
-  let renderer: THREE.WebGLRenderer;
-  let raycaster: THREE.Raycaster;
-  const mouse = new THREE.Vector2();
+  let scene: Scene;
+  let camera: PerspectiveCamera;
+  let renderer: WebGLRenderer;
+  let raycaster: Raycaster;
+  const mouse = new Vector2();
 
-  let fileMeshes: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[] = [];
+  let fileMeshes: Mesh<BoxGeometry, MeshBasicMaterial>[] = [];
   let fileLabels: HTMLDivElement[] = [];
   // Heat overlay halos. One plane per file, sitting just below the box. Off
   // (opacity 0) by default; animate() raises opacity/scale per chosen metric.
-  let haloMeshes: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>[] = [];
+  let haloMeshes: Mesh<PlaneGeometry, MeshBasicMaterial>[] = [];
   // Cached per-file scores so we don't recompute every frame on the same metric.
   let cachedHeatKey: string | null = null;
   let cachedScores: Float32Array = new Float32Array(0);
-  let folderZones: { div: HTMLDivElement; xStart: number; zStart: number; line: THREE.Line }[] = [];
-  let gridHelper: THREE.GridHelper | null = null;
-  let lineObjects: THREE.Line[] = [];
+  let folderZones: { div: HTMLDivElement; xStart: number; zStart: number; line: Line }[] = [];
+  let gridHelper: GridHelper | null = null;
+  let lineObjects: Line[] = [];
   // ── Blast radius preview state ──
   // Cached so we recompute only when (seedId, repo) changes; the animate
   // loop just looks up `cachedBlast` per frame.
@@ -135,9 +198,9 @@ export function createDotFieldMode(): ViewMode {
   let cachedBlastRepo: RepoData | null = null;
   let cachedBlast: BlastResult | null = null;
   // Decorative overlays — never raycastable. Disposed in `disposeBlastVisuals`.
-  let blastSeedHalo: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> | null = null;
-  let blastHopHalos: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>[] = [];
-  let blastEdgeLines: THREE.Line[] = [];
+  let blastSeedHalo: Mesh<PlaneGeometry, MeshBasicMaterial> | null = null;
+  let blastHopHalos: Mesh<PlaneGeometry, MeshBasicMaterial>[] = [];
+  let blastEdgeLines: Line[] = [];
   const BLAST_SEED_COLOR = 0xffa657;
 
   // ── Path witness state ──
@@ -147,8 +210,8 @@ export function createDotFieldMode(): ViewMode {
   let cachedPathTo: number | null = null;
   let cachedPathRepo: RepoData | null = null;
   let cachedPath: PathWitness | null = null;
-  let pathLineSegments: THREE.LineSegments | null = null;
-  let pathWaypointHalos: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>[] = [];
+  let pathLineSegments: LineSegments | null = null;
+  let pathWaypointHalos: Mesh<PlaneGeometry, MeshBasicMaterial>[] = [];
   const PATH_LINE_COLOR = 0x39d0ff;
   const PATH_FROM_COLOR = 0x39d353;
   const PATH_TO_COLOR = 0xffa657;
@@ -158,7 +221,7 @@ export function createDotFieldMode(): ViewMode {
   let cachedRiskLens: RiskLensKey | null = null;
   let cachedRiskRepo: RepoData | null = null;
   let cachedRiskHits: RiskLensHit[] = [];
-  let riskLensHalos: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>[] = [];
+  let riskLensHalos: Mesh<PlaneGeometry, MeshBasicMaterial>[] = [];
   const RISK_LENS_COLORS: Record<RiskLensKey, number> = {
     security: 0xf85149,
     testGaps: 0xd29922,
@@ -171,7 +234,7 @@ export function createDotFieldMode(): ViewMode {
   let apiRingActive = false;
   let cachedApiRingTheme: 'dark' | 'light' | null = null;
   let cachedApiRingRepo: RepoData | null = null;
-  let apiRingMeshes: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>[] = [];
+  let apiRingMeshes: Mesh<RingGeometry, MeshBasicMaterial>[] = [];
 
   // ── PR diff state ──
   // Cached on (prSeed, repo). Layered on top of normal heat halos; uses its
@@ -180,10 +243,10 @@ export function createDotFieldMode(): ViewMode {
   let cachedPrRepo: RepoData | null = null;
   let cachedPrDiff: PRDiff | null = null;
   let prChangeHalos: {
-    mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>;
+    mesh: Mesh<PlaneGeometry, MeshBasicMaterial>;
     kind: 'added' | 'modified' | 'deleted';
   }[] = [];
-  let prAffectedHalos: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>[] = [];
+  let prAffectedHalos: Mesh<RingGeometry, MeshBasicMaterial>[] = [];
   const PR_COLORS = {
     added: 0x3fb950,
     modified: 0xd29922,
@@ -195,8 +258,8 @@ export function createDotFieldMode(): ViewMode {
   // Activated only when overlay.metric === 'cycles'. Hull lines + bezier
   // edges between cycle members; disposed in `disposeCycleVisuals`.
   let cachedCyclesRepo: RepoData | null = null;
-  let cycleHulls: THREE.Line[] = [];
-  let cycleEdges: THREE.Line[] = [];
+  let cycleHulls: Line[] = [];
+  let cycleEdges: Line[] = [];
   let cycleMembership: Uint8Array = new Uint8Array(0);
   const CYCLE_COLOR = 0xff7b72;
   const CYCLE_HULL_OPACITY = 0.55;
@@ -210,29 +273,29 @@ export function createDotFieldMode(): ViewMode {
   // are unique per glyph because BufferGeometry endpoints differ but we
   // share entry-stem/egress-stem geometry by reusing identical Vector3 pairs).
   type EntryGlyph = {
-    stem: THREE.Line;
-    tip: THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>;
+    stem: Line;
+    tip: Mesh<SphereGeometry, MeshBasicMaterial>;
   };
   type IngressGlyph = {
-    mesh: THREE.Mesh<THREE.TorusGeometry, THREE.MeshBasicMaterial>;
+    mesh: Mesh<TorusGeometry, MeshBasicMaterial>;
     protocol: IngressProtocol;
   };
   type EgressGlyph = {
-    line: THREE.Line;
+    line: Line;
     protocol: EgressProtocol;
   };
   let entryGlyphs: EntryGlyph[] = [];
   let ingressGlyphs: IngressGlyph[] = [];
   let egressGlyphs: EgressGlyph[] = [];
   // Shared resources — disposed once each in dispose().
-  let boundaryStemGeo: THREE.BufferGeometry | null = null;       // entry stem (up)
-  let boundaryEgressGeo: THREE.BufferGeometry | null = null;     // egress stem (down)
-  let boundaryTipGeo: THREE.SphereGeometry | null = null;        // entry tip
-  const boundaryIngressGeos = new Map<IngressProtocol, THREE.TorusGeometry>();
-  let boundaryStemMat: THREE.LineBasicMaterial | null = null;
-  let boundaryTipMat: THREE.MeshBasicMaterial | null = null;
-  let boundaryEgressMat: THREE.LineBasicMaterial | null = null;
-  let boundaryIngressMat: THREE.MeshBasicMaterial | null = null;
+  let boundaryStemGeo: BufferGeometry | null = null;       // entry stem (up)
+  let boundaryEgressGeo: BufferGeometry | null = null;     // egress stem (down)
+  let boundaryTipGeo: SphereGeometry | null = null;        // entry tip
+  const boundaryIngressGeos = new Map<IngressProtocol, TorusGeometry>();
+  let boundaryStemMat: LineBasicMaterial | null = null;
+  let boundaryTipMat: MeshBasicMaterial | null = null;
+  let boundaryEgressMat: LineBasicMaterial | null = null;
+  let boundaryIngressMat: MeshBasicMaterial | null = null;
   let cachedBoundaryTheme: 'dark' | 'light' | null = null;
   const INGRESS_TUBE: Record<IngressProtocol, number> = {
     http: 0.045,
@@ -246,8 +309,25 @@ export function createDotFieldMode(): ViewMode {
   let ctx: ViewModeContext | null = null;
   let lastTheme: 'dark' | 'light' | null = null;
 
-  const panOffset = new THREE.Vector3();
-  const panTarget = new THREE.Vector3();
+  // Cached mountEl bounding rect — animate() projects ~600 boxes plus
+  // folder/label DOM positions per frame, every one of which needs
+  // rect.{left,top,width,height}. getBoundingClientRect() forces a
+  // synchronous layout flush, so reading it 60×/sec was the dominant
+  // perf cost. Invariant: refresh on init, onResize, and window scroll
+  // (top/left are scroll-relative). Width/height only change on resize.
+  const cachedRect = { left: 0, top: 0, width: 1, height: 1 };
+  function refreshCachedRect() {
+    if (!ctx) return;
+    const r = ctx.mountEl.getBoundingClientRect();
+    cachedRect.left = r.left;
+    cachedRect.top = r.top;
+    cachedRect.width = r.width;
+    cachedRect.height = r.height;
+  }
+  function onScroll() { refreshCachedRect(); }
+
+  const panOffset = new Vector3();
+  const panTarget = new Vector3();
   const rotTarget = { ...FLAT };
   const rotCurrent = { ...FLAT };
   let zoomTarget = FLAT.dist;
@@ -277,20 +357,23 @@ export function createDotFieldMode(): ViewMode {
     const main = fileMeshes[selectedId];
     if (!main) return;
     const pal = paletteFor(ctx.getTheme());
-    const start = main.position.clone();
+    // Reuse pooled vectors — updateLines runs every frame while a node is
+    // selected. start/end/mid are consumed synchronously by QuadraticBezierCurve3
+    // (which copies the vectors internally), so reusing _v3a/_v3b/_v3c is safe.
+    const start = _v3a.copy(main.position);
     start.y = main.scale.y * UNIFORM_HEIGHT;
     const f = ctx.repo.files[selectedId];
     f.deps.forEach((id) => {
       const t = fileMeshes[id];
       if (!t) return;
-      const end = t.position.clone();
+      const end = _v3b.copy(t.position);
       end.y = t.scale.y * UNIFORM_HEIGHT;
-      const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+      const mid = _v3c.addVectors(start, end).multiplyScalar(0.5);
       mid.y += Math.min(start.distanceTo(end) * 0.5, 50);
-      const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const line = new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints(curve.getPoints(30)),
-        new THREE.LineBasicMaterial({ color: pal.accent, transparent: true, opacity: 0.6 }),
+      const curve = new QuadraticBezierCurve3(start, mid, end);
+      const line = new Line(
+        new BufferGeometry().setFromPoints(curve.getPoints(30)),
+        new LineBasicMaterial({ color: pal.accent, transparent: true, opacity: 0.6 }),
       );
       lineObjects.push(line);
       scene.add(line);
@@ -307,11 +390,8 @@ export function createDotFieldMode(): ViewMode {
     ctx?.onSelect(null);
   }
 
-  function getRect() {
-    return ctx!.mountEl.getBoundingClientRect();
-  }
   function eventToNDC(e: MouseEvent) {
-    const r = getRect();
+    const r = cachedRect;
     mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
     mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
   }
@@ -402,11 +482,11 @@ export function createDotFieldMode(): ViewMode {
   function onKeyDown(e: KeyboardEvent) { if (e.key === 'Escape') resetView(); }
 
   function applyThemeStatics(pal: Palette, theme: 'dark' | 'light') {
-    scene.background = new THREE.Color(pal.bg);
+    scene.background = new Color(pal.bg);
     if (gridHelper) {
-      const mat = gridHelper.material as THREE.LineBasicMaterial | THREE.LineBasicMaterial[];
+      const mat = gridHelper.material as LineBasicMaterial | LineBasicMaterial[];
       const targetOpacity = theme === 'light' ? 0.5 : 1;
-      const set = (m: THREE.LineBasicMaterial) => {
+      const set = (m: LineBasicMaterial) => {
         m.color.setHex(pal.grid);
         m.transparent = true;
         m.opacity = targetOpacity;
@@ -420,7 +500,7 @@ export function createDotFieldMode(): ViewMode {
       ? '0 1px 4px rgba(255,255,255,0.9)'
       : '0 1px 4px rgba(0,0,0,0.9)';
     folderZones.forEach((z) => {
-      (z.line.material as THREE.LineBasicMaterial).color.setHex(pal.folder);
+      (z.line.material as LineBasicMaterial).color.setHex(pal.folder);
       z.div.style.color = folderColor;
       z.div.style.textShadow = folderShadow;
     });
@@ -442,7 +522,7 @@ export function createDotFieldMode(): ViewMode {
     for (const l of blastEdgeLines) {
       scene.remove(l);
       l.geometry.dispose();
-      (l.material as THREE.Material).dispose();
+      (l.material as Material).dispose();
     }
     blastEdgeLines = [];
   }
@@ -453,15 +533,15 @@ export function createDotFieldMode(): ViewMode {
     if (!seedMesh) return;
 
     // Seed ring — bright amber, additive, sits just under the seed dot.
-    const seedGeo = new THREE.PlaneGeometry(CELL_SIZE * 2.0, CELL_SIZE * 2.0);
-    const seedMat = new THREE.MeshBasicMaterial({
+    const seedGeo = new PlaneGeometry(CELL_SIZE * 2.0, CELL_SIZE * 2.0);
+    const seedMat = new MeshBasicMaterial({
       color: BLAST_SEED_COLOR,
       transparent: true,
       opacity: 0.85,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
     });
-    const seedHalo = new THREE.Mesh(seedGeo, seedMat);
+    const seedHalo = new Mesh(seedGeo, seedMat);
     seedHalo.rotation.x = -Math.PI / 2;
     seedHalo.position.set(seedMesh.position.x, -0.015, seedMesh.position.z);
     // Decorative overlay only — never raycastable.
@@ -480,15 +560,15 @@ export function createDotFieldMode(): ViewMode {
       const t = 1 - (hop - 1) / Math.max(1, maxHop - 1); // hop 1 → 1, hop 4 → 0
       const intensity = 0.25 + 0.75 * t;
       const radius = CELL_SIZE * (1.6 - 0.25 * (hop - 1));
-      const geo = new THREE.PlaneGeometry(radius, radius);
-      const mat = new THREE.MeshBasicMaterial({
+      const geo = new PlaneGeometry(radius, radius);
+      const mat = new MeshBasicMaterial({
         color: BLAST_SEED_COLOR,
         transparent: true,
         opacity: 0.55 * intensity,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        blending: AdditiveBlending,
       });
-      const halo = new THREE.Mesh(geo, mat);
+      const halo = new Mesh(geo, mat);
       halo.rotation.x = -Math.PI / 2;
       halo.position.set(target.position.x, -0.018, target.position.z);
       halo.raycast = () => null;
@@ -500,15 +580,15 @@ export function createDotFieldMode(): ViewMode {
     for (const id of blast.direct) {
       const target = fileMeshes[id];
       if (!target) continue;
-      const a = new THREE.Vector3(seedMesh.position.x, 0.05, seedMesh.position.z);
-      const b = new THREE.Vector3(target.position.x, 0.05, target.position.z);
-      const lineGeo = new THREE.BufferGeometry().setFromPoints([a, b]);
-      const lineMat = new THREE.LineBasicMaterial({
+      const a = new Vector3(seedMesh.position.x, 0.05, seedMesh.position.z);
+      const b = new Vector3(target.position.x, 0.05, target.position.z);
+      const lineGeo = new BufferGeometry().setFromPoints([a, b]);
+      const lineMat = new LineBasicMaterial({
         color: BLAST_SEED_COLOR,
         transparent: true,
         opacity: 0.5,
       });
-      const line = new THREE.Line(lineGeo, lineMat);
+      const line = new Line(lineGeo, lineMat);
       line.raycast = () => null;
       scene.add(line);
       blastEdgeLines.push(line);
@@ -520,7 +600,7 @@ export function createDotFieldMode(): ViewMode {
     if (pathLineSegments) {
       scene.remove(pathLineSegments);
       pathLineSegments.geometry.dispose();
-      (pathLineSegments.material as THREE.Material).dispose();
+      (pathLineSegments.material as Material).dispose();
       pathLineSegments = null;
     }
     for (const h of pathWaypointHalos) {
@@ -538,22 +618,22 @@ export function createDotFieldMode(): ViewMode {
 
     // Bright cyan line segments connecting consecutive waypoints.
     if (ids.length >= 2) {
-      const points: THREE.Vector3[] = [];
+      const points: Vector3[] = [];
       for (let i = 0; i < ids.length - 1; i++) {
         const a = fileMeshes[ids[i]];
         const b = fileMeshes[ids[i + 1]];
         if (!a || !b) continue;
-        points.push(new THREE.Vector3(a.position.x, 0.06, a.position.z));
-        points.push(new THREE.Vector3(b.position.x, 0.06, b.position.z));
+        points.push(new Vector3(a.position.x, 0.06, a.position.z));
+        points.push(new Vector3(b.position.x, 0.06, b.position.z));
       }
       if (points.length >= 2) {
-        const geo = new THREE.BufferGeometry().setFromPoints(points);
-        const mat = new THREE.LineBasicMaterial({
+        const geo = new BufferGeometry().setFromPoints(points);
+        const mat = new LineBasicMaterial({
           color: PATH_LINE_COLOR,
           transparent: true,
           opacity: 0.85,
         });
-        const seg = new THREE.LineSegments(geo, mat);
+        const seg = new LineSegments(geo, mat);
         seg.raycast = () => null;
         scene.add(seg);
         pathLineSegments = seg;
@@ -572,15 +652,15 @@ export function createDotFieldMode(): ViewMode {
           ? PATH_TO_COLOR
           : PATH_LINE_COLOR;
       const radius = i === 0 || i === lastIdx ? CELL_SIZE * 1.6 : CELL_SIZE * 1.2;
-      const geo = new THREE.PlaneGeometry(radius, radius);
-      const mat = new THREE.MeshBasicMaterial({
+      const geo = new PlaneGeometry(radius, radius);
+      const mat = new MeshBasicMaterial({
         color,
         transparent: true,
         opacity: 0.8,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        blending: AdditiveBlending,
       });
-      const halo = new THREE.Mesh(geo, mat);
+      const halo = new Mesh(geo, mat);
       halo.rotation.x = -Math.PI / 2;
       halo.position.set(target.position.x, -0.012, target.position.z);
       halo.raycast = () => null;
@@ -606,17 +686,17 @@ export function createDotFieldMode(): ViewMode {
       const target = fileMeshes[hit.id];
       if (!target) continue;
       const radius = CELL_SIZE * (1.4 + hit.score * 1.2);
-      const geo = new THREE.PlaneGeometry(radius, radius);
-      const mat = new THREE.MeshBasicMaterial({
+      const geo = new PlaneGeometry(radius, radius);
+      const mat = new MeshBasicMaterial({
         color,
         transparent: true,
         // Score-driven intensity. Cap at 0.9 so the brightest hit doesn't
         // wash out the underlying dot's hue.
         opacity: 0.25 + 0.65 * hit.score,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        blending: AdditiveBlending,
       });
-      const halo = new THREE.Mesh(geo, mat);
+      const halo = new Mesh(geo, mat);
       halo.rotation.x = -Math.PI / 2;
       halo.position.set(target.position.x, -0.014, target.position.z);
       halo.raycast = () => null;
@@ -645,15 +725,15 @@ export function createDotFieldMode(): ViewMode {
       if (w <= 0.1) continue;
       const target = fileMeshes[f.id];
       if (!target) continue;
-      const geo = new THREE.RingGeometry(innerR, outerR, 48);
-      const mat = new THREE.MeshBasicMaterial({
+      const geo = new RingGeometry(innerR, outerR, 48);
+      const mat = new MeshBasicMaterial({
         color,
         transparent: true,
         opacity: 0.25 * w,
         depthWrite: false,
-        side: THREE.DoubleSide,
+        side: DoubleSide,
       });
-      const ring = new THREE.Mesh(geo, mat);
+      const ring = new Mesh(geo, mat);
       ring.rotation.x = -Math.PI / 2;
       ring.position.set(target.position.x, -0.01, target.position.z);
       ring.raycast = () => null;
@@ -683,15 +763,15 @@ export function createDotFieldMode(): ViewMode {
     for (const change of diff.changes) {
       const target = fileMeshes[change.id];
       if (!target) continue;
-      const geo = new THREE.PlaneGeometry(CELL_SIZE * 1.7, CELL_SIZE * 1.7);
-      const mat = new THREE.MeshBasicMaterial({
+      const geo = new PlaneGeometry(CELL_SIZE * 1.7, CELL_SIZE * 1.7);
+      const mat = new MeshBasicMaterial({
         color: PR_COLORS[change.kind],
         transparent: true,
         opacity: 0.7,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        blending: AdditiveBlending,
       });
-      const halo = new THREE.Mesh(geo, mat);
+      const halo = new Mesh(geo, mat);
       halo.rotation.x = -Math.PI / 2;
       halo.position.set(target.position.x, -0.013, target.position.z);
       halo.raycast = () => null;
@@ -703,15 +783,15 @@ export function createDotFieldMode(): ViewMode {
     for (const id of diff.affected) {
       const target = fileMeshes[id];
       if (!target) continue;
-      const geo = new THREE.RingGeometry(innerR, outerR, 24);
-      const mat = new THREE.MeshBasicMaterial({
+      const geo = new RingGeometry(innerR, outerR, 24);
+      const mat = new MeshBasicMaterial({
         color: PR_COLORS.affected,
         transparent: true,
         opacity: 0.5,
         depthWrite: false,
-        side: THREE.DoubleSide,
+        side: DoubleSide,
       });
-      const ring = new THREE.Mesh(geo, mat);
+      const ring = new Mesh(geo, mat);
       ring.rotation.x = -Math.PI / 2;
       ring.position.set(target.position.x, -0.011, target.position.z);
       ring.raycast = () => null;
@@ -725,13 +805,13 @@ export function createDotFieldMode(): ViewMode {
     for (const l of cycleHulls) {
       scene.remove(l);
       l.geometry.dispose();
-      (l.material as THREE.Material).dispose();
+      (l.material as Material).dispose();
     }
     cycleHulls = [];
     for (const l of cycleEdges) {
       scene.remove(l);
       l.geometry.dispose();
-      (l.material as THREE.Material).dispose();
+      (l.material as Material).dispose();
     }
     cycleEdges = [];
     cycleMembership = new Uint8Array(0);
@@ -748,21 +828,21 @@ export function createDotFieldMode(): ViewMode {
     }
 
     // Small ring for singleton self-loop cycles so they're still visible.
-    const makeRing = (cx: number, cz: number, r: number): THREE.Vector3[] => {
-      const out: THREE.Vector3[] = [];
+    const makeRing = (cx: number, cz: number, r: number): Vector3[] => {
+      const out: Vector3[] = [];
       const seg = 16;
       for (let i = 0; i < seg; i++) {
         const a = (i / seg) * Math.PI * 2;
-        out.push(new THREE.Vector3(cx + Math.cos(a) * r, 0, cz + Math.sin(a) * r));
+        out.push(new Vector3(cx + Math.cos(a) * r, 0, cz + Math.sin(a) * r));
       }
       return out;
     };
 
     // Hull line per cycle: sort points around centroid, inflate, close.
     for (const c of cycles) {
-      const points: THREE.Vector3[] = c.map((id) => {
+      const points: Vector3[] = c.map((id) => {
         const f = repo.files[id];
-        return new THREE.Vector3((f.ix + 0.5) * CELL_SIZE, 0, (f.iz + 0.5) * CELL_SIZE);
+        return new Vector3((f.ix + 0.5) * CELL_SIZE, 0, (f.iz + 0.5) * CELL_SIZE);
       });
       let cx = 0, cz = 0;
       for (const p of points) { cx += p.x; cz += p.z; }
@@ -775,14 +855,14 @@ export function createDotFieldMode(): ViewMode {
       const inflated = sorted.map((p) => {
         const dx = p.x - cx, dz = p.z - cz;
         const d = Math.hypot(dx, dz) || 1;
-        return new THREE.Vector3(p.x + (dx / d) * 1.2, 0, p.z + (dz / d) * 1.2);
+        return new Vector3(p.x + (dx / d) * 1.2, 0, p.z + (dz / d) * 1.2);
       });
       inflated.push(inflated[0]); // close
 
-      const geo = new THREE.BufferGeometry().setFromPoints(inflated);
-      const line = new THREE.Line(
+      const geo = new BufferGeometry().setFromPoints(inflated);
+      const line = new Line(
         geo,
-        new THREE.LineBasicMaterial({
+        new LineBasicMaterial({
           color: CYCLE_COLOR,
           transparent: true,
           opacity: CYCLE_HULL_OPACITY,
@@ -800,14 +880,14 @@ export function createDotFieldMode(): ViewMode {
         for (let i = 0; i < ordered.length; i++) {
           const a = repo.files[ordered[i]];
           const b = repo.files[ordered[(i + 1) % ordered.length]];
-          const start = new THREE.Vector3((a.ix + 0.5) * CELL_SIZE, 0.05, (a.iz + 0.5) * CELL_SIZE);
-          const end   = new THREE.Vector3((b.ix + 0.5) * CELL_SIZE, 0.05, (b.iz + 0.5) * CELL_SIZE);
-          const mid   = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+          const start = new Vector3((a.ix + 0.5) * CELL_SIZE, 0.05, (a.iz + 0.5) * CELL_SIZE);
+          const end   = new Vector3((b.ix + 0.5) * CELL_SIZE, 0.05, (b.iz + 0.5) * CELL_SIZE);
+          const mid   = new Vector3().addVectors(start, end).multiplyScalar(0.5);
           mid.y += Math.min(start.distanceTo(end) * 0.35, 14);
-          const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-          const edge = new THREE.Line(
-            new THREE.BufferGeometry().setFromPoints(curve.getPoints(20)),
-            new THREE.LineBasicMaterial({
+          const curve = new QuadraticBezierCurve3(start, mid, end);
+          const edge = new Line(
+            new BufferGeometry().setFromPoints(curve.getPoints(20)),
+            new LineBasicMaterial({
               color: CYCLE_COLOR,
               transparent: true,
               opacity: CYCLE_EDGE_OPACITY,
@@ -868,28 +948,28 @@ export function createDotFieldMode(): ViewMode {
     const fg = theme === 'light' ? 0x0d1117 : 0xffffff;
 
     // Shared geometries.
-    boundaryStemGeo = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 2.5, 0),
+    boundaryStemGeo = new BufferGeometry().setFromPoints([
+      new Vector3(0, 0, 0),
+      new Vector3(0, 2.5, 0),
     ]);
-    boundaryEgressGeo = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, -1.5, 0),
+    boundaryEgressGeo = new BufferGeometry().setFromPoints([
+      new Vector3(0, 0, 0),
+      new Vector3(0, -1.5, 0),
     ]);
-    boundaryTipGeo = new THREE.SphereGeometry(0.15, 8, 6);
+    boundaryTipGeo = new SphereGeometry(0.15, 8, 6);
 
     // Shared materials (one per visual class — kind/protocol differences are
     // expressed via tube radius, not color, per the visual spec).
-    boundaryStemMat = new THREE.LineBasicMaterial({
+    boundaryStemMat = new LineBasicMaterial({
       color: fg, transparent: true, opacity: 0.5,
     });
-    boundaryTipMat = new THREE.MeshBasicMaterial({
+    boundaryTipMat = new MeshBasicMaterial({
       color: fg, transparent: true, opacity: 0.55, depthWrite: false,
     });
-    boundaryEgressMat = new THREE.LineBasicMaterial({
+    boundaryEgressMat = new LineBasicMaterial({
       color: fg, transparent: true, opacity: 0.4,
     });
-    boundaryIngressMat = new THREE.MeshBasicMaterial({
+    boundaryIngressMat = new MeshBasicMaterial({
       color: fg, transparent: true, opacity: 0.45, depthWrite: false,
     });
 
@@ -898,7 +978,7 @@ export function createDotFieldMode(): ViewMode {
     for (const p of protocols) {
       boundaryIngressGeos.set(
         p,
-        new THREE.TorusGeometry(0.9, INGRESS_TUBE[p], 8, 48),
+        new TorusGeometry(0.9, INGRESS_TUBE[p], 8, 48),
       );
     }
 
@@ -908,11 +988,11 @@ export function createDotFieldMode(): ViewMode {
       const z = (f.iz + 0.5) * CELL_SIZE;
       for (const b of f.boundaries) {
         if (b.kind === 'entry') {
-          const stem = new THREE.Line(boundaryStemGeo, boundaryStemMat);
+          const stem = new Line(boundaryStemGeo, boundaryStemMat);
           stem.position.set(x, 0, z);
           stem.visible = false;
           stem.raycast = () => null;
-          const tip = new THREE.Mesh(boundaryTipGeo, boundaryTipMat);
+          const tip = new Mesh(boundaryTipGeo, boundaryTipMat);
           tip.position.set(x, 2.5, z);
           tip.visible = false;
           tip.raycast = () => null;
@@ -922,7 +1002,7 @@ export function createDotFieldMode(): ViewMode {
         } else if (b.kind === 'ingress') {
           const geo = boundaryIngressGeos.get(b.protocol);
           if (!geo) continue;
-          const mesh = new THREE.Mesh(geo, boundaryIngressMat);
+          const mesh = new Mesh(geo, boundaryIngressMat);
           mesh.rotation.x = -Math.PI / 2;  // lay flat on XZ
           mesh.position.set(x, 0.3, z);
           mesh.visible = false;
@@ -930,7 +1010,7 @@ export function createDotFieldMode(): ViewMode {
           scene.add(mesh);
           ingressGlyphs.push({ mesh, protocol: b.protocol });
         } else if (b.kind === 'egress') {
-          const line = new THREE.Line(boundaryEgressGeo, boundaryEgressMat);
+          const line = new Line(boundaryEgressGeo, boundaryEgressMat);
           line.position.set(x, 0, z);
           line.visible = false;
           line.raycast = () => null;
@@ -987,7 +1067,7 @@ export function createDotFieldMode(): ViewMode {
     const repo = ctx.repo;
     const filterActive = isFilterActive(snap.state, repo);
     const topN = snap.state.topNHighlight;
-    const rect = getRect();
+    const rect = cachedRect;
 
     // ── Heat overlay snapshot (recompute scores only when metric changes) ──
     const ov = ctx.getOverlay();
@@ -1252,9 +1332,11 @@ export function createDotFieldMode(): ViewMode {
       if (!ctx || !camera || !renderer) return null;
       const mesh = fileMeshes[fileId];
       if (!mesh) return null;
-      const rect = ctx.mountEl.getBoundingClientRect();
-      const v = new THREE.Vector3();
-      v.setFromMatrixPosition(mesh.matrixWorld);
+      // Use cached rect (refreshed in onResize / on scroll) and pooled
+      // _v3a — worldToScreen can be called many times per frame by overlay
+      // consumers, so per-call layout reads + Vector3 alloc were measurable.
+      const rect = cachedRect;
+      const v = _v3a.setFromMatrixPosition(mesh.matrixWorld);
       v.project(camera);
       // NDC space is [-1,1]. Out-of-frustum gets clamped by the caller.
       const x = (v.x * 0.5 + 0.5) * rect.width;
@@ -1269,30 +1351,31 @@ export function createDotFieldMode(): ViewMode {
       const pal = paletteFor(initialTheme);
       lastTheme = initialTheme;
 
-      const rect = c.mountEl.getBoundingClientRect();
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color(pal.bg);
-      camera = new THREE.PerspectiveCamera(35, rect.width / rect.height, 1, 6000);
+      refreshCachedRect();
+      const rect = cachedRect;
+      scene = new Scene();
+      scene.background = new Color(pal.bg);
+      camera = new PerspectiveCamera(35, rect.width / rect.height, 1, 6000);
 
-      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+      renderer = new WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setSize(rect.width, rect.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       c.mountEl.appendChild(renderer.domElement);
 
-      raycaster = new THREE.Raycaster();
+      raycaster = new Raycaster();
 
       // Oversize the grid so it fills the canvas no matter how the user pans
       // or how wide the viewport is. Cell size stays the same so spacing is
       // identical to the data area.
       const GRID_OVERSCAN = 4;
-      gridHelper = new THREE.GridHelper(
+      gridHelper = new GridHelper(
         GRID_COUNT * CELL_SIZE * GRID_OVERSCAN,
         GRID_COUNT * GRID_OVERSCAN,
         pal.grid,
         pal.grid,
       );
       gridHelper.position.y = -0.05;
-      const gm = gridHelper.material as THREE.Material;
+      const gm = gridHelper.material as Material;
       gm.transparent = true;
       gm.opacity = c.getTheme() === 'light' ? 0.5 : 1;
       scene.add(gridHelper);
@@ -1305,13 +1388,13 @@ export function createDotFieldMode(): ViewMode {
         const z0 = folder.zStart * CELL_SIZE;
         const z1 = (folder.zStart + folder.height) * CELL_SIZE;
         const pts = [
-          new THREE.Vector3(x0, 0, z0), new THREE.Vector3(x1, 0, z0),
-          new THREE.Vector3(x1, 0, z1), new THREE.Vector3(x0, 0, z1),
-          new THREE.Vector3(x0, 0, z0),
+          new Vector3(x0, 0, z0), new Vector3(x1, 0, z0),
+          new Vector3(x1, 0, z1), new Vector3(x0, 0, z1),
+          new Vector3(x0, 0, z0),
         ];
-        const line = new THREE.Line(
-          new THREE.BufferGeometry().setFromPoints(pts),
-          new THREE.LineBasicMaterial({ color: pal.folder, transparent: true, opacity: 0.5 }),
+        const line = new Line(
+          new BufferGeometry().setFromPoints(pts),
+          new LineBasicMaterial({ color: pal.folder, transparent: true, opacity: 0.5 }),
         );
         line.position.y = -0.04 + folder.depth * 0.01;
         scene.add(line);
@@ -1325,16 +1408,18 @@ export function createDotFieldMode(): ViewMode {
 
       // files + halo planes (heat overlay). Halo is a flat additive plane
       // sitting just below each box; size+alpha are driven by score in animate().
-      fileMeshes = new Array<THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>>(c.repo.files.length);
+      fileMeshes = new Array<Mesh<BoxGeometry, MeshBasicMaterial>>(c.repo.files.length);
       fileLabels = new Array<HTMLDivElement>(c.repo.files.length);
-      haloMeshes = new Array<THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>>(c.repo.files.length);
-      const haloGeo = new THREE.PlaneGeometry(CELL_SIZE * 1.4, CELL_SIZE * 1.4);
+      haloMeshes = new Array<Mesh<PlaneGeometry, MeshBasicMaterial>>(c.repo.files.length);
+      const haloGeo = new PlaneGeometry(CELL_SIZE * 1.4, CELL_SIZE * 1.4);
       for (const f of c.repo.files) {
         const isOutOfScope = f.isGenerated || f.layer === 'vendor';
         const initialColor = isOutOfScope ? pal.outOfScope : pal.status[f.status];
-        const mesh = new THREE.Mesh(
-          new THREE.BoxGeometry(CELL_SIZE * 0.88, UNIFORM_HEIGHT, CELL_SIZE * 0.88),
-          new THREE.MeshBasicMaterial({ color: initialColor, transparent: true }),
+        const boxGeo = new BoxGeometry(CELL_SIZE * 0.88, UNIFORM_HEIGHT, CELL_SIZE * 0.88);
+        applyBoxFaceShading(boxGeo);
+        const mesh = new Mesh(
+          boxGeo,
+          new MeshBasicMaterial({ color: initialColor, transparent: true, vertexColors: true }),
         );
         mesh.position.set((f.ix + 0.5) * CELL_SIZE, UNIFORM_HEIGHT / 2, (f.iz + 0.5) * CELL_SIZE);
         mesh.userData = { id: f.id };
@@ -1344,14 +1429,14 @@ export function createDotFieldMode(): ViewMode {
         c.fileLabelsEl.appendChild(label);
 
         // halo
-        const halo = new THREE.Mesh(
+        const halo = new Mesh(
           haloGeo,
-          new THREE.MeshBasicMaterial({
+          new MeshBasicMaterial({
             color: 0xffffff,
             transparent: true,
             opacity: 0,
             depthWrite: false,
-            blending: THREE.AdditiveBlending,
+            blending: AdditiveBlending,
           }),
         );
         halo.rotation.x = -Math.PI / 2;
@@ -1380,6 +1465,9 @@ export function createDotFieldMode(): ViewMode {
       window.addEventListener('contextmenu', onContextMenu);
       window.addEventListener('click', onClick);
       window.addEventListener('keydown', onKeyDown);
+      // Page scroll changes mountEl's top/left (rect is viewport-relative);
+      // passive listener so we don't block scroll perf.
+      window.addEventListener('scroll', onScroll, { passive: true });
 
       animate();
     },
@@ -1387,6 +1475,7 @@ export function createDotFieldMode(): ViewMode {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      refreshCachedRect();
     },
     dispose() {
       cancelAnimationFrame(rafId);
@@ -1397,6 +1486,7 @@ export function createDotFieldMode(): ViewMode {
       window.removeEventListener('contextmenu', onContextMenu);
       window.removeEventListener('click', onClick);
       window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('scroll', onScroll);
       fileMeshes.forEach((m) => { m.geometry.dispose(); m.material.dispose(); });
       // halos share geometry — dispose once + each material individually
       if (haloMeshes.length) haloMeshes[0].geometry.dispose();
@@ -1405,9 +1495,9 @@ export function createDotFieldMode(): ViewMode {
       folderZones.forEach((z) => {
         z.div.remove();
         z.line.geometry.dispose();
-        (z.line.material as THREE.Material).dispose();
+        (z.line.material as Material).dispose();
       });
-      lineObjects.forEach((l) => { l.geometry.dispose(); (l.material as THREE.Material).dispose(); });
+      lineObjects.forEach((l) => { l.geometry.dispose(); (l.material as Material).dispose(); });
       disposeBlastVisuals();
       cachedBlastSeed = -1;
       cachedBlastRepo = null;
@@ -1434,7 +1524,7 @@ export function createDotFieldMode(): ViewMode {
       disposeBoundaryVisuals();
       if (gridHelper) {
         gridHelper.geometry.dispose();
-        const m = gridHelper.material as THREE.Material | THREE.Material[];
+        const m = gridHelper.material as Material | Material[];
         Array.isArray(m) ? m.forEach((x) => { x.dispose(); }) : m.dispose();
       }
       renderer.dispose();

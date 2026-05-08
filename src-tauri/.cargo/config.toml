@@ -4,20 +4,32 @@
 # ─── macOS ──────────────────────────────────────────────────────────────
 # Apple Silicon — set the platform floor to macOS 11 (matches
 # `bundle.macOS.minimumSystemVersion`) so codegen can use newer instructions
-# without a runtime check. `-dead_strip` removes unreferenced symbols at
-# link time; saves ~3% on shipped Mach-O.
+# without a runtime check.
+#   -dead_strip          : drop unreferenced symbols at link time (~3% off Mach-O).
+#   -dead_strip_dylibs   : drop dylibs that no live symbol references.
+#   -bind_at_load        : resolve all dylib bindings up front (faster cold launch,
+#                          predictable startup; trivial cost since we link few dylibs).
+#   target-cpu=apple-m1  : raise the aarch64 baseline to Armv8.5 + NEON/crypto/dotprod.
+#                          Safe — this target only builds on Apple Silicon and our
+#                          minimum hardware floor is M1.
 [target.aarch64-apple-darwin]
 rustflags = [
+  "-C", "target-cpu=apple-m1",
   "-C", "link-arg=-Wl,-dead_strip",
+  "-C", "link-arg=-Wl,-dead_strip_dylibs",
+  "-C", "link-arg=-Wl,-bind_at_load",
   "-C", "link-arg=-mmacosx-version-min=11.0",
 ]
 
-# Intel Macs — same posture. Universal binaries are produced by `cargo
-# build` with `--target aarch64-apple-darwin --target x86_64-apple-darwin`
-# and `lipo`, which the Tauri release workflow already does.
+# Intel Macs — same posture, no target-cpu pin (we still want Haswell-era
+# Intels to run). Universal binaries are produced by `cargo build` with
+# `--target aarch64-apple-darwin --target x86_64-apple-darwin` and `lipo`,
+# which the Tauri release workflow already does.
 [target.x86_64-apple-darwin]
 rustflags = [
   "-C", "link-arg=-Wl,-dead_strip",
+  "-C", "link-arg=-Wl,-dead_strip_dylibs",
+  "-C", "link-arg=-Wl,-bind_at_load",
   "-C", "link-arg=-mmacosx-version-min=11.0",
 ]
 

@@ -12,10 +12,431 @@
       "mine": "Mine",
       "archived": "Archived"
     },
-    "empty": "Nothing matches."
+    "empty": "Nothing matches.",
+    "resize": "Resize task list",
+    "awaitingYou": "{{count}} awaiting you",
+    "running": "{{count}} running"
+  },
+  "checkpoint": {
+    "rewindHere": "Rewind to here",
+    "forkFromHere": "Fork from here",
+    "menu": "Checkpoint",
+    "rewindConfirm": "This removes {{count}} turns after this point",
+    "rewindUndo": "Undo rewind",
+    "rewindUndone": "Restored {{count}} turns"
+  },
+  "hunk": {
+    "accept": "Accept",
+    "reject": "Reject",
+    "pending": "Pending",
+    "summary": "{{accepted}}/{{total}} hunks accepted",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all"
+  },
+  "stop": {
+    "holdToStop": "Hold to stop",
+    "released": "Cancelled"
+  },
+  "comment": {
+    "addNote": "Add note",
+    "askAgent": "Ask agent",
+    "placeholder": "Note or question for this hunk…",
+    "submit": "Save",
+    "cancel": "Cancel",
+    "header": "Comments {{count}}",
+    "kindNote": "Note",
+    "kindAsk": "Ask"
+  },
+  "diffPreview": {
+    "label": "Diff preview",
+    "summary": "{{added}}+ / {{removed}}- · {{files}} files",
+    "askAbout": "Ask about this change",
+    "openInPr": "Open as PR"
+  },
+  "scrubber": {
+    "label": "Timeline",
+    "live": "Live",
+    "showingTurn": "Turn {{n}} of {{total}}",
+    "previewingTurn": "Preview · turn {{n}}/{{total}}",
+    "back": "Back to live",
+    "tooltip": "Preview the thread at this point",
+    "kbHint": "[ ] · ⌘.",
+    "youAsked": "You asked",
+    "moreFiles": "+ {{n}} more",
+    "status": {
+      "user": "User prompt",
+      "planned": "Planned",
+      "thinking": "Thinking",
+      "suggested": "Suggested diff",
+      "applied": "Applied",
+      "rejected": "Rejected",
+      "failed": "Tool failed",
+      "streaming": "Streaming"
+    },
+    "inverse": {
+      "safe": "Clean inverse",
+      "risky": "Needs review",
+      "summary": "Undo turn #{{n}} ({{files}} files) as a new operation",
+      "overlap": "{{n}} files were also touched later",
+      "applyClean": "Add inverse op",
+      "applyReview": "Add inverse · review",
+      "applyTooltipSafe": "Adds a new recovery operation at the head. Nothing in the timeline is removed.",
+      "applyTooltipRisky": "Some files were modified after this turn. The inverse will need a review before applying."
+    }
+  },
+  "snapshotV2": {
+    "model": "Model",
+    "phase": "Phase",
+    "cost": "Cost",
+    "elapsed": "Elapsed"
+  },
+  "emptyContext": {
+    "title": "Pick up where you left off",
+    "subtitle": "Context derived from your recent conversations",
+    "noContext": "No recent work yet. Try one of the suggestions below."
+  },
+  "reply": {
+    "openCompose": "Reply",
+    "placeholder": "Write a reply…",
+    "submit": "Reply",
+    "agentLabel": "Agent",
+    "userLabel": "You",
+    "resolve": "Mark resolved",
+    "reopen": "Reopen",
+    "resolved": "Resolved"
+  },
+  "reactions": {
+    "label": "React",
+    "thumbsUp": "Helpful",
+    "thumbsDown": "Not helpful",
+    "heart": "Loved",
+    "target": "Spot on"
+  },
+  "turnMenu": {
+    "copy": "Copy text",
+    "copyMd": "Copy as markdown",
+    "share": "Share",
+    "export": "Export",
+    "openInNewTask": "Open in new task"
+  },
+  "palette": {
+    "title": "Command palette",
+    "placeholder": "Search commands, tasks, files…",
+    "sectionActions": "Actions",
+    "sectionTasks": "Tasks",
+    "sectionSlash": "Slash commands",
+    "noResults": "No matches",
+    "hint": "↑↓ navigate · ↵ run · esc close",
+    "openShortcut": "Open palette",
+    "actions": {
+      "newTask": "New task",
+      "newProject": "New project",
+      "openPr": "Open PR",
+      "rewindLast": "Rewind last turn",
+      "toggleScrubber": "Toggle timeline",
+      "switchModelCapable": "Model: switch to opus 4.7",
+      "switchModelBalanced": "Model: switch to sonnet 4.6",
+      "switchModelFast": "Model: switch to haiku 4.5"
+    }
+  },
+  "activityV2": {
+    "userTurn": "Your message",
+    "agentTurn": "Agent reply",
+    "diffEmitted": "Diff produced",
+    "toolEdit": "Edited {{file}}",
+    "toolRead": "Read {{file}}",
+    "toolRun": "Ran command",
+    "toolSearch": "Searched",
+    "planUpdated": "Plan updated",
+    "noActivity": "No activity yet"
+  },
+  "voice": {
+    "start": "Start voice input",
+    "stop": "Stop voice input",
+    "listening": "Listening…",
+    "transcribing": "Transcribing…",
+    "tooltip": "Speak into the mic — your words land in the composer",
+    "unsupported": "Voice input is not supported in this browser"
+  },
+  "diffView": {
+    "unified": "Unified",
+    "split": "Split",
+    "toggleTooltip": "Toggle diff view mode"
+  },
+  "lineEdit": {
+    "rewrite": "Rewrite this line",
+    "explain": "Explain this line",
+    "placeholder": "How should this line change?",
+    "submit": "Rewrite",
+    "cancel": "Cancel"
+  },
+  "batch": {
+    "selectMode": "Multi-select",
+    "selected": "{{count}} selected",
+    "forkBatch": "Fork from selection",
+    "rewindBatch": "Rewind to selection",
+    "clear": "Clear selection",
+    "hint": "shift+click to range-select"
+  },
+  "defaultModel": {
+    "label": "Default model",
+    "save": "Save as default for this project",
+    "saved": "{{model}} set as project default",
+    "cleared": "Project default model cleared"
+  },
+  "autoadvance": {
+    "label": "Auto-advance",
+    "tooltip": "Tick a plan item to auto-trigger the next step",
+    "triggered": "Starting next step: {{next}}",
+    "noNext": "No remaining steps"
+  },
+  "integrations": {
+    "title": "Connected tools",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "addNew": "Add integration",
+    "kind": {
+      "slack": "Slack",
+      "linear": "Linear",
+      "jira": "Jira",
+      "github": "GitHub",
+      "sentry": "Sentry",
+      "figma": "Figma"
+    }
+  },
+  "budget": {
+    "label": "Budget",
+    "noBudget": "No budget set",
+    "ok": "OK",
+    "alert": "Alert",
+    "exceeded": "Over",
+    "remaining": "${{usd}} left",
+    "tooltip": "Cumulative cost on this task. Colour escalates past thresholds."
+  },
+  "projection": {
+    "label": "Avg",
+    "tooltip": "Mean turn cost on this task. Next turn is flagged if it spikes.",
+    "spike": "This turn was {{x}}× the average",
+    "normal": "About average"
+  },
+  "planMeta": {
+    "confidence": "Confidence {{pct}}%",
+    "estTokens": "~{{n}} tokens",
+    "estTime": "~{{n}}s",
+    "lowConfidence": "Low — review recommended"
+  },
+  "citationStale": {
+    "label": "stale",
+    "tooltip": "The cited file was modified after this citation. Verify before using as current evidence."
+  },
+  "applyV2": {
+    "inverse": "Undo this change",
+    "inverseTooltip": "Add a new inverse turn instead of using git",
+    "inverseAdded": "Inverse turn appended",
+    "conflictWarn": "Same file edited again after this change — applying may overwrite later edits"
+  },
+  "history": {
+    "tooltip": "↑↓ to recall previous prompts",
+    "empty": "No previous prompts"
+  },
+  "density": {
+    "label": "Density",
+    "compact": "Compact",
+    "comfortable": "Comfortable",
+    "spacious": "Spacious"
+  },
+  "a11y": {
+    "highContrast": "High contrast",
+    "reducedMotion": "Reduce motion",
+    "skipToComposer": "Skip to composer"
+  },
+  "drift": {
+    "label": "Drift",
+    "stuck": "Thinking longer than usual ({{x}}×)",
+    "noisy": "{{x}}× more tool calls than usual",
+    "ok": "On pace"
+  },
+  "latency": {
+    "label": "Latency profile",
+    "tooltip": "Time spent in each phase of this turn",
+    "noData": "No data",
+    "totalLabel": "Total {{ms}}ms"
+  },
+  "successRate": {
+    "label": "Tool success rate",
+    "tooltip": "Successful tool calls per tool / per model on this task",
+    "byTool": "By tool",
+    "byModel": "By model",
+    "noData": "No data yet",
+    "rate": "{{ok}}/{{total}}"
+  },
+  "tps": {
+    "label": "tok/s",
+    "tooltip": "Output tokens per second — live during streaming"
+  },
+  "inverse": {
+    "arrowLabel": "Inverse of turn #{{n}}",
+    "anchor": "Inverse target"
+  },
+  "exportPr": {
+    "label": "Export as PR description",
+    "ready": "PR description copied to clipboard"
+  },
+  "selfEval": {
+    "label": "Confidence",
+    "tooltip": "Agent's self-eval confidence. ≥70% = safe zone.",
+    "high": "High ({{pct}}%)",
+    "mid": "Mid ({{pct}}%)",
+    "low": "Low — review recommended ({{pct}}%)"
+  },
+  "latencyBaseline": {
+    "label": "vs baseline",
+    "tooltip": "This turn's per-phase time vs this task's average",
+    "faster": "{{x}}× faster",
+    "slower": "{{x}}× slower",
+    "match": "matches average"
+  },
+  "forecast": {
+    "label": "Forecast",
+    "tooltip": "Projected cumulative cost through the next turn at current pace",
+    "remaining": "+~${{usd}} to next turn",
+    "perSecond": "~${{usd}}/s"
+  },
+  "sideBySide": {
+    "label": "Side-by-side",
+    "tooltip": "Run the same prompt on two models in parallel",
+    "leftLane": "{{model}} (left)",
+    "rightLane": "{{model}} (right)",
+    "togglePicker": "Pick comparison model",
+    "off": "Single",
+    "winner": "Prefer"
+  },
+  "secretGuard": {
+    "blockTitle": "Sensitive data detected",
+    "blockBody": "{{count}} secret(s) found in your input.",
+    "warnTitle": "Possible sensitive data",
+    "redactedChip": "[REDACTED:{{kind}}]",
+    "maskNow": "Mask & send",
+    "sendAsIs": "Send as-is",
+    "cancel": "Cancel",
+    "revealOnce": "Reveal once",
+    "patterns": {
+      "openai-key": "OpenAI API key",
+      "anthropic-key": "Anthropic API key",
+      "aws-access-key": "AWS access key",
+      "github-pat": "GitHub PAT",
+      "jwt": "JWT",
+      "email": "Email",
+      "us-ssn": "US SSN pattern",
+      "credit-card": "Credit card"
+    },
+    "exportSanitized": "{{count}} secrets stripped on export",
+    "tooltip": "GitHub Secret Scanning rules + Shannon entropy"
+  },
+  "budgetV2": {
+    "alertBannerTitle": "Approaching budget",
+    "alertBannerBody": "Auto-downgrade {{from}} → {{to}} after the next turn.",
+    "alertDisable": "Disable",
+    "alertOk": "OK",
+    "softCapModalTitle": "Soft cap reached",
+    "softCapModalBody": "${{used}} of ${{cap}} on this task. Choose how to proceed.",
+    "softCapAutoDown": "Auto-downgrade to {{model}} (~${{est}})",
+    "softCapOverride": "Keep current model (raise cap to ${{newCap}})",
+    "softCapStop": "Stop here (no spend until you resume)",
+    "hardCapBanner": "Hard cap — finishing current turn, blocking next",
+    "tier": {
+      "normal": "OK",
+      "alert": "Alert",
+      "softCap": "Soft cap",
+      "hardCap": "Hard cap"
+    }
+  },
+  "testMap": {
+    "linkedFailures": "Linked failures",
+    "passedAll": "{{n}}/{{n}} passed",
+    "rerun": "Re-run",
+    "askAgent": "Ask agent why",
+    "jumpToHunk": "Jump to hunk",
+    "expectedGot": "expected {{exp}} · got {{got}}",
+    "stackHit": "{{file}}:{{line}}",
+    "noTests": "No tests for this change yet",
+    "coverageDot": "This line is in the failing test's stack"
+  },
+  "prCi": {
+    "branchTitle": "Branch + PR",
+    "ahead": "ahead {{n}}",
+    "behind": "behind {{n}}",
+    "mergeable": "Mergeable",
+    "dirty": "Conflicts",
+    "blocked": "Blocked",
+    "prOpen": "PR #{{n}} · Open",
+    "prDraft": "PR #{{n}} · Draft",
+    "prMerged": "PR #{{n}} · Merged",
+    "reviewers": "Reviewers",
+    "approved": "Approved",
+    "pending": "Pending",
+    "changesRequested": "Changes requested",
+    "checks": "CI checks",
+    "checkQueued": "Queued",
+    "checkRunning": "Running",
+    "checkSuccess": "Passed",
+    "checkFailure": "Failed",
+    "checkCancelled": "Cancelled",
+    "conflicts": "{{n}} conflicts",
+    "noConflicts": "No conflicts",
+    "readyToMerge": "Ready to merge",
+    "syncNow": "Sync now",
+    "openOnGitHub": "Open on GitHub",
+    "lastPush": "Last push {{ago}}"
+  },
+  "drift": {
+    "label": "Drift",
+    "stuck": "Thinking longer than usual ({{x}}×)",
+    "noisy": "{{x}}× more tool calls than usual",
+    "ok": "On pace",
+    "fileClean": "Working tree unchanged",
+    "fileShifted": "Other lines changed (auto-rebased)",
+    "fileOverlap": "Same lines edited — conflict expected",
+    "fileGone": "File deleted in working tree",
+    "useWorking": "Use working tree",
+    "forceApply": "Force apply",
+    "openMerge": "Open 3-way merge",
+    "lastTouched": "Touched {{ago}}",
+    "draftedAt": "Drafted {{ago}}"
+  },
+  "background": {
+    "label": "Background",
+    "runHere": "Run here",
+    "runCloud": "Run in background",
+    "switchedToCloud": "Moved to cloud",
+    "running": "Running",
+    "completed": "Done",
+    "notifyBrowser": "Browser",
+    "notifyEmail": "Email",
+    "notifySilent": "Silent",
+    "tabClosable": "Closing the tab is safe — it'll keep running",
+    "ribbon": "{{count}} backgrounded · cloud",
+    "completedToast": "{{title}} done · +{{added}}/-{{removed}} · ${{usd}}",
+    "open": "Open"
   },
   "header": {
     "openPr": "Open PR"
+  },
+  "snapshot": {
+    "title": "Working snapshot",
+    "subtitle": "What the agent has done so far",
+    "branch": "branch",
+    "diff": "diff",
+    "files": "files",
+    "touched": "Touched files",
+    "planRemaining": "{{count}} plan items left",
+    "planAllDone": "Plan complete",
+    "noPlan": "No plan yet",
+    "followups": "Next actions",
+    "openDiff": "View changes",
+    "openPr": "Open PR",
+    "continue": "Keep going",
+    "moreFiles": "+{{count}} more"
   },
   "composer": {
     "code": "Code",
@@ -33,7 +454,59 @@
     "mentionFile": "Mention file",
     "mentionSymbol": "Mention symbol",
     "web": "Web search",
-    "suggest": "Prompt suggestions"
+    "suggest": "Prompt suggestions",
+    "modelTag": {
+      "capable": "most capable",
+      "balanced": "balanced",
+      "fast": "fastest"
+    }
+  },
+  "status": {
+    "running": "Running",
+    "review": "Review",
+    "merged": "Merged",
+    "open": "Open",
+    "failed": "Failed"
+  },
+  "mention": {
+    "filesHeader": "Files",
+    "symbolsHeader": "Symbols",
+    "empty": "No matches",
+    "hint": "↑↓ move · ↵ pick · esc close"
+  },
+  "scroll": {
+    "newMessages": "Jump to latest"
+  },
+  "phase": {
+    "thinking": "Thinking",
+    "reading": "Reading",
+    "searching": "Searching",
+    "editing": "Editing",
+    "running": "Running",
+    "planning": "Planning",
+    "writing": "Writing"
+  },
+  "cost": {
+    "label": "Cumulative",
+    "tokens": "tokens",
+    "estimate": "est.",
+    "tokensShort": "tok",
+    "tooltip": "Total in/out tokens and estimated cost for this task. opus 4.7 pricing."
+  },
+  "apply": {
+    "suggested": "Suggested",
+    "applied": "Applied",
+    "previewOnly": "Preview only",
+    "applyToTree": "Apply to tree",
+    "applyAndPr": "Apply & PR",
+    "appliedNote": "Files have been written to the working tree. Use git to revert.",
+    "suggestedNote": "Files are unchanged. Review before applying."
+  },
+  "citations": {
+    "label": "Sources",
+    "more": "+{{count}} more",
+    "noLines": "whole file",
+    "lines": "L{{start}}-{{end}}"
   },
   "empty": {
     "title": "What should we build?",
@@ -153,7 +626,8 @@
     "kbNew": "New task",
     "kbSearch": "Search tasks",
     "kbSlash": "Slash commands",
-    "footer": "se-dot-field-demo · coding"
+    "footer": "se-dot-field-demo · coding",
+    "resize": "Resize context panel"
   },
   "block": {
     "thoughtFor": "Thought for {{seconds}}s",

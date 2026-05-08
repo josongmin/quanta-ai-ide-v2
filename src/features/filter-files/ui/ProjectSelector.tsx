@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { ChevronDown, Flame, ShieldAlert, Skull, FileWarning, FolderGit2, X } from 'lucide-react';
 import { useFilterFacets, useFilterActions } from '../model/FilterContext';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
+import { useClickOutside } from '@shared/lib';
 import { GlassCard } from '@shared/ui';
 import type { PresetKey } from '@entities/repo';
 
@@ -30,14 +31,7 @@ export default function ProjectSelector() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    window.addEventListener('mousedown', handler);
-    return () => { window.removeEventListener('mousedown', handler); };
-  }, [open]);
+  useClickOutside(ref, open, () => { setOpen(false); });
 
   const activePreset = PRESETS.find((p) => p.key === state.preset) ?? null;
   const projectName = ti('header.workspaceName');
@@ -48,26 +42,22 @@ export default function ProjectSelector() {
         <button
           type="button"
           onClick={() => { setOpen((v) => !v); }}
-          className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left transition-colors ${
-            isDark ? 'hover:bg-white/5' : 'hover:bg-black/5'
-          }`}
+          className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left transition-colors hover:bg-[color:var(--bg-hover)]"
         >
           {activePreset ? (
             <activePreset.icon className="w-3.5 h-3.5 shrink-0 text-[#4f9a5c]" />
           ) : (
-            <FolderGit2 className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-white/55' : 'text-black/55'}`} />
+            <FolderGit2 className="w-3.5 h-3.5 shrink-0 text-[color:var(--fg-muted)]" />
           )}
           <div className="min-w-0 flex-1">
             <div className={`text-[11px] font-bold truncate leading-tight ${
               activePreset
                 ? 'text-[#4f9a5c]'
-                : (isDark ? 'text-white/85' : 'text-black/85')
+                : 'text-[color:var(--fg-strong)]'
             }`}>
               {activePreset ? t(`preset.${activePreset.i18nKey}.label`) : projectName}
             </div>
-            <div className={`text-[9px] font-mono truncate leading-tight mt-0.5 ${
-              isDark ? 'text-white/40' : 'text-black/40'
-            }`}>
+            <div className="text-[9px] font-mono truncate leading-tight mt-0.5 text-[color:var(--fg-subtle)]">
               {activePreset ? t(`preset.${activePreset.i18nKey}.hint`) : t('selector.subtitle')}
             </div>
           </div>
@@ -76,17 +66,13 @@ export default function ProjectSelector() {
               type="button"
               aria-label={t('selector.clearPreset')}
               onClick={(e) => { e.stopPropagation(); applyPreset(null); }}
-              className={`shrink-0 p-1 rounded-md transition-colors ${
-                isDark ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/10'
-              }`}
+              className="shrink-0 p-1 rounded-md transition-colors text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-active)]"
             >
               <X className="w-3 h-3" />
             </button>
           ) : (
             <ChevronDown
-              className={`shrink-0 w-3.5 h-3.5 transition-transform ${open ? 'rotate-180' : ''} ${
-                isDark ? 'text-white/40' : 'text-black/40'
-              }`}
+              className={`shrink-0 w-3.5 h-3.5 transition-transform text-[color:var(--fg-subtle)] ${open ? 'rotate-180' : ''}`}
             />
           )}
         </button>
@@ -95,9 +81,7 @@ export default function ProjectSelector() {
       {open && (
         <div className="absolute left-0 right-0 mt-1 z-10">
           <GlassCard className="p-1.5">
-            <div className={`text-[9px] font-black uppercase tracking-[0.18em] mb-1 px-1.5 pt-0.5 ${
-              isDark ? 'text-white/40' : 'text-black/40'
-            }`}>
+            <div className="text-[9px] font-black uppercase tracking-[0.18em] mb-1 px-1.5 pt-0.5 text-[color:var(--fg-subtle)]">
               {t('section.savedQueries')}
             </div>
             <div className="space-y-0.5">
@@ -113,12 +97,12 @@ export default function ProjectSelector() {
                     className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-left transition-colors ${
                       active
                         ? 'bg-[#4f9a5c]/15'
-                        : (isDark ? 'hover:bg-white/5' : 'hover:bg-black/5')
+                        : 'hover:bg-[color:var(--bg-hover)]'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#4f9a5c]' : isDark ? 'text-white/55' : 'text-black/55'}`} />
+                    <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#4f9a5c]' : 'text-[color:var(--fg-muted)]'}`} />
                     <span className={`text-[11px] font-bold flex-1 truncate ${
-                      active ? 'text-[#4f9a5c]' : (isDark ? 'text-white/85' : 'text-black/85')
+                      active ? 'text-[#4f9a5c]' : 'text-[color:var(--fg-strong)]'
                     }`}>
                       {label}
                     </span>

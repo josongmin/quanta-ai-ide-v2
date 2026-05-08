@@ -32,8 +32,8 @@ export default function OverviewTab({ pr, repo, isDark }: Props) {
 
 function DescriptionBlock({ pr, isDark }: { pr: PullRequest; isDark: boolean }) {
   const { t } = useTranslation('review');
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-subtle)]';
   const card = isDark
     ? 'bg-white/[0.04] border-white/10'
     : 'bg-white border-black/5';
@@ -90,8 +90,8 @@ export function RiskProfileCard({
   const card = isDark
     ? 'bg-white/[0.04] border-white/10'
     : 'bg-white border-black/5';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-muted)]';
   const accent = tierAccent(profile.tier);
 
   return (
@@ -163,8 +163,9 @@ export function RiskProfileCard({
 function Stat({
   label, value, isDark,
 }: { label: string; value: string; isDark: boolean }) {
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
+  // Theme-agnostic via CSS vars; keep `isDark` lookup so the prop is read.
+  const muted = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
+  const fg = 'text-[color:var(--fg-strong)]';
   return (
     <div>
       <div className={`text-[10px] font-bold uppercase tracking-[0.18em] ${muted}`}>{label}</div>
@@ -184,9 +185,9 @@ function ReviewerSuggestionsBlock({
   const suggestions = useMemo(() => suggestReviewers(pr, repo, 3), [pr, repo]);
 
   const card = isDark ? 'bg-white/[0.04] border-white/10' : 'bg-white border-black/5';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const subtleMuted = isDark ? 'text-white/40' : 'text-black/40';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const subtleMuted = 'text-[color:var(--fg-subtle)]';
+  const fg = 'text-[color:var(--fg-strong)]';
   const trackBg = isDark ? 'bg-white/[0.06]' : 'bg-black/[0.06]';
   const btnBorder = isDark
     ? 'border-white/15 hover:border-white/30 hover:bg-white/[0.04] text-white/70'
@@ -279,7 +280,8 @@ function ReviewerSuggestionsBlock({
 }
 
 function SectionLabel({ children, isDark }: { children: React.ReactNode; isDark: boolean }) {
-  const color = isDark ? 'text-white/40' : 'text-black/40';
+  // Theme-agnostic via CSS var; keep `isDark` lookup so the prop is read.
+  const color = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
   return (
     <div className={`text-[10px] font-bold uppercase tracking-[0.18em] ${color}`}>
       {children}

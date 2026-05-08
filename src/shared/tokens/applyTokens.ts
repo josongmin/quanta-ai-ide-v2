@@ -25,8 +25,11 @@ const semanticToCssVar: Record<keyof typeof semantic.dark, string> = {
   bgElevated: '--bg-elevated',
   bgHover: '--bg-hover',
   bgActive: '--bg-active',
+  bgActiveStrong: '--bg-active-strong',
   bgSelected: '--bg-selected',
   bgScrim: '--bg-scrim',
+  bgStage: '--bg-stage',
+  bgStageUniverse: '--bg-stage-universe',
 
   // Foreground
   fgStrong: '--fg-strong',
@@ -34,6 +37,7 @@ const semanticToCssVar: Record<keyof typeof semantic.dark, string> = {
   fgMuted: '--fg-muted',
   fgSubtle: '--fg-subtle',
   fgOnAccent: '--fg-on-accent',
+  fgOnActiveStrong: '--fg-on-active-strong',
   fgLink: '--fg-link',
   fgAccent: '--fg-accent',
 
@@ -42,6 +46,7 @@ const semanticToCssVar: Record<keyof typeof semantic.dark, string> = {
   borderMuted: '--border-muted',
   borderStrong: '--border-strong',
   borderFocus: '--border-focus',
+  ringActive: '--ring-active',
 
   // Shadows
   shadowSm: '--shadow-sm',
@@ -130,7 +135,7 @@ export function applyTokens(theme: Theme): void {
   for (const key of Object.keys(map) as (keyof typeof map)[]) {
     root.style.setProperty(semanticToCssVar[key], map[key]);
   }
-  root.dataset.theme = theme;
+  root.dataset['theme'] = theme;
 
   // Component tokens — emitted once (theme-agnostic), but cheap to re-set.
   root.style.setProperty('--glass-blur', glass.blur);

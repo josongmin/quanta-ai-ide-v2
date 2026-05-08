@@ -1,3 +1,26 @@
+// Module-scoped Intl formatter singletons. Constructing Intl.* in render bodies
+// allocates an internal formatter every call; reusing one instance eliminates
+// that GC churn across the app.
+const NUMBER_FORMATTER = new Intl.NumberFormat();
+const TIMESTAMP_FORMATTER = new Intl.DateTimeFormat(undefined, {
+  month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+});
+const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
+  month: 'short', day: 'numeric',
+});
+
+export function formatNumber(n: number): string {
+  return NUMBER_FORMATTER.format(n);
+}
+
+export function formatTimestamp(d: Date | number): string {
+  return TIMESTAMP_FORMATTER.format(d);
+}
+
+export function formatDate(d: Date | number): string {
+  return DATE_FORMATTER.format(d);
+}
+
 export function round1(n: number): number {
   return Math.round(n * 10) / 10;
 }

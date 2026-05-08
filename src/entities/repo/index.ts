@@ -1,3 +1,5 @@
+// Public API for the repo entity:
+// file/folder/graph types, the synthetic repo builder, and analysis/catalog helpers.
 export type {
   StatusKey,
   Layer,
@@ -5,7 +7,6 @@ export type {
   EgressProtocol,
   Boundary,
   Confidence,
-  IndexState,
   FileRecord,
   FolderRecord,
   Range,
@@ -23,7 +24,6 @@ export {
   timeWindowHeat,
   findSimilar,
   findShortestPath,
-  riskLensScore,
   topRiskLens,
   simulateBranchDiff,
   publicApiRing,
@@ -31,7 +31,6 @@ export {
   type TimeWindow,
   type SimilarHit,
   type PathWitness,
-  type PathHopKind,
   type RiskLensKey,
   type RiskLensHit,
   type PRDiff,
@@ -45,14 +44,7 @@ export {
   proofFreshness,
   severityBand,
   aggregateRiskScore,
-  type FunctionSummaryRow,
-  type EffectKind,
-  type CostBand,
   type RiskChannelKey,
-  type RiskChannelHit,
   type RiskChannelSummary,
-  type PlannerCandidate,
   type GraphEdgeMode,
-  type GraphEdge,
-  type ProofFreshness,
 } from './lib/catalog';

@@ -51,13 +51,11 @@ export default function InlineCommentComposer({
   };
 
   const surface = isDark
-    ? 'bg-white/[0.04] border-white/10'
-    : 'bg-black/[0.03] border-black/10';
-  const textCls = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const cancelBtn = isDark
-    ? 'text-white/55 hover:bg-white/5'
-    : 'text-black/55 hover:bg-black/5';
+    ? 'bg-white/[0.04] border-[color:var(--border-default)]'
+    : 'bg-black/[0.03] border-[color:var(--border-default)]';
+  const textCls = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const cancelBtn = 'text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-hover)]';
   const submitBtn = 'bg-[#4f9a5c] text-black hover:bg-[#4f9a5c]/90';
 
   return (

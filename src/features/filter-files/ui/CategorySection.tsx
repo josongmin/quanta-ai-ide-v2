@@ -31,14 +31,12 @@ export default function CategorySection({ category }: Props) {
           <h3 className={`text-[10px] font-black uppercase tracking-[0.18em] ${
             isDark ? 'text-white/70' : 'text-black/55'
           }`}>{t(`category.${category}`)}</h3>
-          <span className={`text-[8px] tabular-nums ${isDark ? 'text-white/30' : 'text-black/30'}`}>
+          <span className="text-[8px] tabular-nums text-[color:var(--fg-subtle)]">
             {visibleFacets.length}{lockedFacets.length > 0 && <span> + {lockedFacets.length}🔒</span>}
           </span>
         </div>
         <ChevronDown
-          className={`w-3.5 h-3.5 transition-transform ${collapsed ? '-rotate-90' : ''} ${
-            isDark ? 'text-white/40' : 'text-black/40'
-          }`}
+          className={`w-3.5 h-3.5 transition-transform text-[color:var(--fg-subtle)] ${collapsed ? '-rotate-90' : ''}`}
         />
       </button>
       {!collapsed && (

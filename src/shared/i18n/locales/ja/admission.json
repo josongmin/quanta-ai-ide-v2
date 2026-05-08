@@ -53,5 +53,59 @@
   },
   "override": {
     "whyPlaceholder": "なぜ安全か？ Issueやドキュメントをリンクしてください。"
+  },
+  "confidence": {
+    "title": "通過率信頼区間",
+    "sub": "Wilson {{level}}% CI · z = {{z}}",
+    "note": "サンプルが多いほど区間は狭くなります。小N で広い区間はノイズではなく正直さです。"
+  },
+  "effect": {
+    "title": "効果量 · Cohen’s d",
+    "band": {
+      "negligible": "わずか",
+      "small": "小",
+      "medium": "中",
+      "large": "大"
+    }
+  },
+  "anomaly": {
+    "title": "異常値センチネル",
+    "sub": "30日 · EWMA α=0.3 · |z|≥2 検出",
+    "outliers": "{{n}}日中の異常値",
+    "legend": { "trend": "EWMA", "anom": "|z| ≥ 2" }
+  },
+  "calibration": {
+    "title": "ルールキャリブレーション",
+    "sub": "適合率 · 再現率 · F1 · 偽陽性率",
+    "col": { "rule": "ルール" },
+    "empty": "キャリブレーション可能な十分なサンプルを持つルールはまだありません。"
+  },
+  "counterfactual": {
+    "title": "反事実インパクト",
+    "sub": "Difference-in-differences · 95% CI",
+    "significant": "有意",
+    "notSignificant": "有意でない",
+    "treated": "処置群",
+    "control": "対照群"
+  },
+  "survival": {
+    "title": "マージ時間の生存曲線",
+    "sub": "Kaplan-Meier · Greenwood 95% CI バンド",
+    "median": "中央値",
+    "vs": "対",
+    "legend": { "treated": "ルール発火", "control": "ルール未発火" }
+  },
+  "cusum": {
+    "title": "CUSUM ドリフト検出",
+    "sub": "Tabular CUSUM · K = 0.5σ · H = 4σ",
+    "stable": "安定",
+    "noAlarm": "アラーム無し",
+    "changePoint": "変化点検出"
+  },
+  "reliability": {
+    "title": "信頼度ダイアグラム",
+    "sub": "{{n}}-bin · 期待較正誤差",
+    "over": "過信",
+    "under": "過小"
   }
 }

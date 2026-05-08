@@ -18,7 +18,7 @@ export function ConfidenceMix({
   if (total === 0) {
     return (
       <div
-        className={isDark ? 'bg-white/10 rounded-full' : 'bg-black/10 rounded-full'}
+        className="bg-[color:var(--bg-surface)] rounded-full"
         style={{ width, height }}
       />
     );

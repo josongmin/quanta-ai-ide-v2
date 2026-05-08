@@ -25,6 +25,20 @@
   "placeholder": {
     "comingSoon": "Coming soon"
   },
+  "agentFeed": {
+    "title": "Live agents",
+    "open": "Open agent feed",
+    "close": "Close",
+    "inflight": "in flight",
+    "empty": "No agent activity right now. Try opening the chat or enabling demo mode.",
+    "footer": "Activities mirror the dot-field overlay · cyan = thinking · pulse = editing",
+    "moreTargets": "more files",
+    "state": {
+      "thinking": "thinking",
+      "editing": "editing",
+      "done": "done"
+    }
+  },
   "review": {
     "empty": {
       "noMatches": "No PRs match this view.",

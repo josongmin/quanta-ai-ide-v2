@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useEffect, useMemo, useState, type ReactNode,
+  createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode,
 } from 'react';
 
 export type Tokens = {
@@ -84,11 +84,16 @@ export function TokensProvider({ children }: { children: ReactNode }) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens)); } catch { /* ignore */ }
   }, [tokens]);
 
+  const set = useCallback(<K extends keyof Tokens>(k: K, v: Tokens[K]) => {
+    setTokens((t) => ({ ...t, [k]: v }));
+  }, []);
+  const reset = useCallback(() => { setTokens(() => DEFAULTS); }, []);
+
   const value = useMemo<Ctx>(() => ({
     tokens,
-    set: (k, v) => { setTokens((t) => ({ ...t, [k]: v })); },
-    reset: () => { setTokens(DEFAULTS); },
-  }), [tokens]);
+    set,
+    reset,
+  }), [tokens, set, reset]);
 
   return <TokensCtx.Provider value={value}>{children}</TokensCtx.Provider>;
 }
@@ -98,5 +103,3 @@ export function useTokens(): Ctx {
   if (!c) throw new Error('useTokens must be inside TokensProvider');
   return c;
 }
-
-export const TOKEN_DEFAULTS = DEFAULTS;

@@ -21,16 +21,33 @@
 .glass-dark {
   background-color: rgba(255, 255, 255, var(--glass-alpha-dark));
   border-color: rgba(255, 255, 255, var(--glass-border-dark));
-  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(130%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(130%);
   border-radius: var(--radius);
 }
 .glass-light {
   background-color: rgba(255, 255, 255, var(--glass-alpha-light));
   border-color: rgba(255, 255, 255, var(--glass-border-light));
+  backdrop-filter: blur(var(--glass-blur)) saturate(130%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(130%);
+  border-radius: var(--radius);
+}
+
+/* Theme-aware glass surface — pairs the dark / light glass styles into a
+ * single utility that flips on `:root[data-theme=...]`. Lets feature code
+ * drop the `isDark ? 'glass-dark' : 'glass-light'` ternary entirely. */
+.glass-auto {
   backdrop-filter: blur(var(--glass-blur)) saturate(160%);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
   border-radius: var(--radius);
+}
+:root[data-theme="dark"] .glass-auto {
+  background-color: rgba(255, 255, 255, var(--glass-alpha-dark));
+  border-color: rgba(255, 255, 255, var(--glass-border-dark));
+}
+:root[data-theme="light"] .glass-auto {
+  background-color: rgba(255, 255, 255, var(--glass-alpha-light));
+  border-color: rgba(255, 255, 255, var(--glass-border-light));
 }
 
 html,
@@ -82,11 +99,282 @@ canvas {
   animation: coding-shimmer 1.6s linear infinite;
 }
 
+/* Breathing dot for "running" indicators. Replaces the harsher animate-pulse
+   default — slower (1.6s vs 1s) and a narrower opacity band so it reads as
+   a heartbeat rather than a 90s notification beacon. */
+@keyframes coding-breath {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.95; }
+}
+.coding-breath {
+  animation: coding-breath 1.6s ease-in-out infinite;
+}
+
+/* Slide-up + fade for the "new messages below" pill. One-shot, snappy. */
+@keyframes coding-pill-rise {
+  from { opacity: 0; transform: translate3d(-50%, 6px, 0) scale(0.96); }
+  to   { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+}
+.coding-pill-rise {
+  animation: coding-pill-rise 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Plan progress dot fill — used to stagger-fill the segment dots when a
+   plan item flips to done. Runs once per dot. */
+@keyframes coding-dot-pop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.coding-dot-pop {
+  animation: coding-dot-pop 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Diff +/- count tween. Counts up from 0 to target on first paint so
+   the user *feels* the magnitude of the change. JS picks the duration. */
+@keyframes coding-num-rise {
+  from { opacity: 0; transform: translate3d(0, 4px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.coding-num-rise {
+  animation: coding-num-rise 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* TaskRow active state subtle slide. The row glides 1px into the active
+   surface so selection feels physical without changing layout. */
+.coding-task-active {
+  transform: translate3d(1px, 0, 0);
+  transition: transform 80ms ease-out, background-color 80ms ease-out;
+}
+
+/* High-contrast mode. WCAG 2.2 1.4.6 AAA — opt-in via OS preference or
+   the in-app toggle (sets [data-coding-contrast="high"] on root). Boosts
+   text contrast and adds visible focus rings inside the coding stage
+   without touching the rest of the app. */
+@media (prefers-contrast: more) {
+  [data-coding-stage] *:focus-visible {
+    outline: 2px solid currentColor !important;
+    outline-offset: 2px !important;
+  }
+}
+[data-coding-contrast="high"] [data-coding-stage] {
+  filter: contrast(1.15);
+}
+[data-coding-contrast="high"] [data-coding-stage] *:focus-visible {
+  outline: 2px solid currentColor !important;
+  outline-offset: 2px !important;
+}
+
+/* Density modifiers. Compact halves vertical padding inside thread rows;
+   spacious doubles it. The default ("comfortable") leaves the existing
+   spacing untouched so the toggle doesn't surprise users who never
+   change it. */
+[data-coding-density="compact"]  [data-thread-density] { --thread-row-py: 0.125rem; }
+[data-coding-density="spacious"] [data-thread-density] { --thread-row-py: 0.5rem; }
+[data-thread-density] > * + * {
+  margin-top: var(--thread-row-py, 0.25rem);
+}
+
+/* Latency profile: tiny stacked bar showing per-phase wall-clock time.
+   Each segment is positioned absolutely with width = (phaseMs/total)%.
+   Inline-block with no gap so segments butt cleanly against each other. */
+.coding-latency-bar {
+  display: inline-flex;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: rgba(127, 127, 127, 0.12);
+}
+.coding-latency-bar > span {
+  display: block;
+  height: 100%;
+}
+
+/* TPS live pulse — slightly faster than coding-breath since the meter
+   itself updates ~once a second; the pulse keeps the live-ness visible
+   without distracting from the number. */
+@keyframes coding-tps-pulse {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 1; }
+}
+.coding-tps-live {
+  animation: coding-tps-pulse 900ms ease-in-out infinite;
+}
+
+/* Inverse-op SVG arrow draw-on. Stroke is a long dasharray that "writes"
+   itself in once when the arrow first paints. dasharray is set inline
+   based on the path length so any curve length looks correct. */
+@keyframes coding-inv-arrow {
+  to { stroke-dashoffset: 0; }
+}
+.coding-inv-arrow path,
+.coding-inv-arrow line {
+  animation: coding-inv-arrow 320ms ease-out both;
+}
+
+/* ─────── Secret guard underline ───────
+   Wavy amber underline on suspected secret tokens in the composer.
+   Matches the Microsoft Word grammar-error visual lineage so the
+   meaning ("there's something to look at here") reads instantly. */
+.coding-secret-underline {
+  text-decoration: underline wavy rgba(245, 158, 11, 0.85);
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1.5px;
+}
+
+/* ─────── Cost tier glow ───────
+   The header cost meter pulses softly at the alert tier. Heart-rate
+   pace (≈75 bpm = 800ms cycle) — calmer than warning lights, urgent
+   enough to draw the eye when the user wasn't watching. */
+@keyframes coding-cost-alert-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  50%      { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.18); }
+}
+.coding-cost-alert {
+  animation: coding-cost-alert-pulse 800ms ease-in-out infinite;
+  border-radius: 9999px;
+}
+@keyframes coding-cost-hard-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+  50%      { box-shadow: 0 0 0 5px rgba(244, 63, 94, 0.25); }
+}
+.coding-cost-hard {
+  animation: coding-cost-hard-pulse 600ms ease-in-out infinite;
+  border-radius: 9999px;
+}
+
+/* ─────── Test failure connector ───────
+   Faint vertical rule in the failure card → hunk gutter. Pure CSS
+   (no SVG) since both endpoints live inside the same rounded card. */
+.coding-test-link {
+  position: relative;
+}
+.coding-test-link::before {
+  content: '';
+  position: absolute;
+  left: 1.5rem;
+  top: 100%;
+  width: 1.5px;
+  height: 12px;
+  background: linear-gradient(to bottom,
+    rgba(244, 63, 94, 0.55) 0%,
+    rgba(244, 63, 94, 0)    100%);
+  pointer-events: none;
+}
+
+/* ─────── Drift hatch pattern ───────
+   Diagonal hatch overlay on hunks whose lines will conflict on apply.
+   A pattern (not a flat tint) keeps the underlying code legible while
+   signalling "this region needs attention" — same lineage as DAW
+   "clipping" warning hatches and IDE "outdated cache" overlays. */
+.coding-drift-hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(245, 158, 11, 0.18) 0px,
+    rgba(245, 158, 11, 0.18) 4px,
+    transparent             4px,
+    transparent             10px
+  );
+}
+
+/* ─────── Background ribbon ───────
+   Single-row sticky pill at the rail header signalling "N tasks are
+   running off-tab". Pulses on completion event. */
+@keyframes coding-bg-arrive {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  60%  { transform: translateY(0);    opacity: 1; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+.coding-bg-arrive {
+  animation: coding-bg-arrive 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─────── PR/CI check dots ───────
+   Tiny dot for each CI check, with a status-coloured background. The
+   running check breathes; success/failure stay solid so they don't
+   distract once settled. */
+.coding-ci-dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+.coding-ci-dot.coding-ci-dot--running {
+  animation: coding-breath 1.6s ease-in-out infinite;
+}
+
+/* Side-by-side lane separator. Subtle vertical rule between the two
+   model lanes so the user sees them as paired columns, not a stacked
+   list. The separator inherits the rail border colour from CSS vars. */
+.coding-side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+.coding-side-by-side > .coding-side-by-side-rule {
+  background: var(--border-default, rgba(127,127,127,0.18));
+}
+
+/* Skip-to-composer link — invisible until focused, then floats top-left.
+   Lets keyboard users bypass the rail/header on every page load. */
+.coding-skip-link {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 100;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--bg-elevated, #11141a);
+  color: var(--fg-strong, #fff);
+  font-size: 12px;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 100ms ease-out;
+}
+.coding-skip-link:focus {
+  transform: translateY(0);
+}
+
 /* Theme-aware hover tint — uses border-muted as a low-contrast surface
    that works on both light and dark backgrounds. */
 .hover-surface:hover {
   background-color: var(--border-muted);
   color: var(--fg-default);
+}
+
+/* ─────── Popover motion ─────── */
+@keyframes pop-in {
+  from { opacity: 0; transform: translate3d(0, -4px, 0) scale(0.98); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+.pop-in {
+  animation: pop-in 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: top right;
+}
+
+/* ─────── Settings dialog motion ─────── */
+@keyframes facet-tile-in {
+  from { opacity: 0; transform: translate3d(0, 6px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.facet-tile:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+.facet-tile:not(:disabled):active {
+  transform: translateY(0);
+}
+.facet-tile:focus-visible {
+  box-shadow: 0 0 0 2px var(--fg-strong, #000);
+}
+
+@keyframes settings-section-in {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.settings-section-in {
+  animation: settings-section-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* ─────── Admission v2 motion ─────── */
@@ -209,6 +497,22 @@ canvas {
   100% { left: 100%;  opacity: 0; }
 }
 
+/* 3D card-stack entrance — used by the rule editor / override dialog so
+ * the floating panels read as physical cards lifting toward the camera. */
+@keyframes admv2-stack-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, -120px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+.admv2-stack-in {
+  animation: admv2-stack-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* ─────── Admission v2 light-theme inversion ───────
  * The v2 surface is authored in dark mode (text-white/X, bg-white/Y).
  * Rather than thread `isDark` through 3,000 lines, we mount the whole
@@ -262,19 +566,18 @@ canvas {
 }
 
 /* ─────── Focus stack: active card swap ─────── */
+/* `transform` is intentionally omitted from the keyframes — applying
+   `transform` (even identity) creates a new containing block, which breaks
+   `backdrop-filter` on descendants by stripping their access to the painted
+   backdrop behind the panel. We animate opacity only; the subtle slide-in
+   was nice-to-have but not worth losing the frosted-glass effect on every
+   inspect panel. */
 @keyframes stack-fade-in {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 6px, 0) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .stack-fade-in {
   animation: stack-fade-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  transform-origin: top center;
 }
 
 /* ─────── Dual range slider thumbs ─────── */

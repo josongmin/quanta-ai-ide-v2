@@ -68,11 +68,6 @@ const RANGE_KEYS: RangeKey[] = [
   'editSafety', 'blastRadius',
 ];
 
-const BOOL_KEYS: BoolKey[] = [
-  'cyclicOnly', 'deadOnly', 'layerViolationOnly',
-  'strictOptOutOnly', 'hasNoTest', 'secretsOnly', 'busFactor1Only',
-];
-
 function defaultState(repo: RepoData): FilterState {
   const ranges = repo.ranges;
   // Tolerate the EMPTY_REPO sentinel below (`ranges: {}`) — module evaluation
@@ -151,7 +146,9 @@ function inSelectedFolder(file: FileRecord, selected: Set<string>): boolean {
   if (selected.has('')) return true;
   return false;
 }
-function rangeOk(v: number, r: Range): boolean { return v >= r[0] && v <= r[1]; }
+// Kept exported for external range-check callers; intentionally retained
+// even when no current call sites exist.
+export function rangeOk(v: number, r: Range): boolean { return v >= r[0] && v <= r[1]; }
 function safeRegex(p: string): RegExp | null {
   try { return new RegExp(p, 'i'); } catch { return null; }
 }
@@ -164,97 +161,275 @@ const CONF_RANK: Record<Confidence, number> = {
   exact: 3,
 };
 
-function computeDerived(repo: RepoData, state: FilterState): Derived {
-  const N = repo.files.length;
-  const m = new Uint8Array(N);
-  const ids: number[] = [];
-  const search = state.search.trim();
+// ─── Per-predicate mask cache ─────────────────────────────────────────
+// Each filter dimension (search, folders, each range, each bool, etc.)
+// is computed into a Uint8Array mask of length N and cached against its
+// narrow input deps. When only one dep changes — e.g. dragging the
+// `complexity` range slider — only that one mask is rebuilt; the other
+// ~40 stay hot. The final `matched` mask is the bitwise AND across
+// non-trivial masks. Rebound on initRepo() because `repo` is a new
+// reference and N changes.
+type MaskSlot = { deps: readonly unknown[]; mask: Uint8Array };
+type MaskCache = {
+  repo: RepoData;
+  N: number;
+  slots: Map<string, MaskSlot>;
+};
 
-  let regex: RegExp | null = null;
-  let dslPredicate: ((f: FileRecord) => boolean) | null = null;
-  let parseError: string | null = null;
+function makeMaskCache(repo: RepoData): MaskCache {
+  return { repo, N: repo.files.length, slots: new Map() };
+}
 
-  if (search.length > 0) {
-    if (state.searchMode === 'regex') {
-      regex = safeRegex(search);
-      if (!regex) parseError = 'Invalid regex';
-    } else if (state.searchMode === 'dsl') {
-      const r = parseDsl(search);
-      if (r.ok) dslPredicate = r.predicate;
-      else parseError = r.error;
-    }
+function depsEqual(a: readonly unknown[], b: readonly unknown[]): boolean {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+
+// Get-or-compute a mask slot. Returns null when the predicate is a no-op
+// (e.g. empty Set, default range) so the intersection step can skip it.
+function getMask(
+  cache: MaskCache,
+  key: string,
+  deps: readonly unknown[],
+  build: (() => Uint8Array) | null,
+): Uint8Array | null {
+  if (build === null) {
+    cache.slots.delete(key);
+    return null;
   }
-  const searchLower = state.searchMode === 'text' ? search.toLowerCase() : '';
+  const slot = cache.slots.get(key);
+  if (slot && depsEqual(slot.deps, deps)) return slot.mask;
+  const mask = build();
+  cache.slots.set(key, { deps, mask });
+  return mask;
+}
 
-  for (const f of repo.files) {
-    const mm = f.metrics;
+function computeMatched(cache: MaskCache, state: FilterState): { mask: Uint8Array; searchError: string | null } {
+  const { repo, N } = cache;
+  const files = repo.files;
 
-    if (!inSelectedFolder(f, state.selectedFolders)) continue;
-    if (search) {
+  // ─── Predicate masks ────────────────────────────────────────────────
+  // Folder mask
+  const folderMask = state.selectedFolders.size === 0
+    ? null
+    : getMask(cache, 'folders', [state.selectedFolders], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (inSelectedFolder(f, state.selectedFolders)) m[f.id] = 1;
+      return m;
+    });
+
+  // Search mask (text / regex / dsl)
+  const searchTrim = state.search.trim();
+  let searchError: string | null = null;
+  const searchMask = searchTrim.length === 0
+    ? null
+    : getMask(cache, 'search', [searchTrim, state.searchMode], () => {
+      const m = new Uint8Array(N);
       if (state.searchMode === 'regex') {
-        if (!regex) continue;
-        if (!regex.test(`${f.name} ${f.folderPath}`)) continue;
+        const rx = safeRegex(searchTrim);
+        if (!rx) { searchError = 'Invalid regex'; return m; }
+        for (const f of files) if (rx.test(`${f.name} ${f.folderPath}`)) m[f.id] = 1;
       } else if (state.searchMode === 'dsl') {
-        if (!dslPredicate) continue;
-        if (!dslPredicate(f)) continue;
+        const r = parseDsl(searchTrim);
+        if (!r.ok) { searchError = r.error; return m; }
+        const pred = r.predicate;
+        for (const f of files) if (pred(f)) m[f.id] = 1;
       } else {
-        const hay = `${f.name} ${f.folderPath}`.toLowerCase();
-        if (!hay.includes(searchLower)) continue;
+        const needle = searchTrim.toLowerCase();
+        for (const f of files) {
+          if (`${f.name} ${f.folderPath}`.toLowerCase().includes(needle)) m[f.id] = 1;
+        }
       }
+      return m;
+    });
+  // If the cached mask was reused, we lost the chance to set searchError
+  // inside the closure — re-derive it cheaply from the inputs:
+  if (searchTrim.length > 0 && searchError === null) {
+    if (state.searchMode === 'regex' && !safeRegex(searchTrim)) searchError = 'Invalid regex';
+    else if (state.searchMode === 'dsl') {
+      const r = parseDsl(searchTrim);
+      if (!r.ok) searchError = r.error;
     }
-    if (state.languages.size > 0 && !state.languages.has(f.language)) continue;
-    if (state.layers.size > 0 && !state.layers.has(f.layer)) continue;
-    if (state.owners.size > 0 && !state.owners.has(f.owner)) continue;
-
-    if (state.statuses.size > 0 && !state.statuses.has(f.status)) continue;
-    if (state.confidences.size > 0 && !state.confidences.has(mm.confidence)) continue;
-    if (state.unknownOnly && mm.unknownReasons.length === 0) continue;
-    if (state.isTest !== null && f.isTest !== state.isTest) continue;
-    if (state.isGenerated !== null && f.isGenerated !== state.isGenerated) continue;
-    if (state.isDeprecated !== null && f.isDeprecated !== state.isDeprecated) continue;
-    if (state.publicApiOnly && !mm.publicApi) continue;
-
-    if (state.cyclicOnly && !mm.cyclic) continue;
-    if (state.deadOnly && !mm.dead) continue;
-    if (state.layerViolationOnly && !mm.layerViolation) continue;
-    if (state.strictOptOutOnly && !mm.strictOptOut) continue;
-    if (state.hasNoTest && mm.hasTestFile) continue;
-    if (state.secretsOnly && !mm.secretsLikely) continue;
-    if (state.busFactor1Only && mm.authors !== 1) continue;
-
-    if (!rangeOk(mm.complexity, state.complexity)) continue;
-    if (!rangeOk(mm.cyclomatic, state.cyclomatic)) continue;
-    if (!rangeOk(mm.cognitive, state.cognitive)) continue;
-    if (!rangeOk(mm.maintainability, state.maintainability)) continue;
-    if (!rangeOk(mm.maxNesting, state.maxNesting)) continue;
-    if (!rangeOk(mm.fnCount, state.fnCount)) continue;
-    if (!rangeOk(mm.largestFnLoc, state.largestFnLoc)) continue;
-    if (!rangeOk(mm.loc, state.loc)) continue;
-    if (!rangeOk(mm.fanIn, state.fanIn)) continue;
-    if (!rangeOk(mm.fanOut, state.fanOut)) continue;
-    if (!rangeOk(mm.churn, state.churn)) continue;
-    if (!rangeOk(mm.daysSinceTouched, state.daysSinceTouched)) continue;
-    if (!rangeOk(mm.authors, state.authors)) continue;
-    if (!rangeOk(mm.recentPRs, state.recentPRs)) continue;
-    if (!rangeOk(mm.anyCount, state.anyCount)) continue;
-    if (!rangeOk(mm.tsIgnoreCount, state.tsIgnoreCount)) continue;
-    if (!rangeOk(mm.unsafeAssertions, state.unsafeAssertions)) continue;
-    if (!rangeOk(mm.lineCoverage, state.lineCoverage)) continue;
-    if (!rangeOk(mm.branchCoverage, state.branchCoverage)) continue;
-    if (!rangeOk(mm.mutationScore, state.mutationScore)) continue;
-    if (!rangeOk(mm.eslintErrors, state.eslintErrors)) continue;
-    if (!rangeOk(mm.eslintWarnings, state.eslintWarnings)) continue;
-    if (!rangeOk(mm.todoCount, state.todoCount)) continue;
-    if (!rangeOk(mm.consoleCount, state.consoleCount)) continue;
-    if (!rangeOk(mm.sastFindings, state.sastFindings)) continue;
-    if (!rangeOk(mm.bundleKB, state.bundleKB)) continue;
-    if (!rangeOk(mm.jsdocCoverage, state.jsdocCoverage)) continue;
-    if (!rangeOk(mm.editSafety, state.editSafety)) continue;
-    if (!rangeOk(mm.blastRadius, state.blastRadius)) continue;
-
-    m[f.id] = 1;
-    ids.push(f.id);
   }
+
+  const langMask = state.languages.size === 0
+    ? null
+    : getMask(cache, 'languages', [state.languages], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (state.languages.has(f.language)) m[f.id] = 1;
+      return m;
+    });
+
+  const layerMask = state.layers.size === 0
+    ? null
+    : getMask(cache, 'layers', [state.layers], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (state.layers.has(f.layer)) m[f.id] = 1;
+      return m;
+    });
+
+  const ownerMask = state.owners.size === 0
+    ? null
+    : getMask(cache, 'owners', [state.owners], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (state.owners.has(f.owner)) m[f.id] = 1;
+      return m;
+    });
+
+  const statusMask = state.statuses.size === 0
+    ? null
+    : getMask(cache, 'statuses', [state.statuses], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (state.statuses.has(f.status)) m[f.id] = 1;
+      return m;
+    });
+
+  const confMask = state.confidences.size === 0
+    ? null
+    : getMask(cache, 'confidences', [state.confidences], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (state.confidences.has(f.metrics.confidence)) m[f.id] = 1;
+      return m;
+    });
+
+  const unknownMask = !state.unknownOnly
+    ? null
+    : getMask(cache, 'unknownOnly', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.unknownReasons.length > 0) m[f.id] = 1;
+      return m;
+    });
+
+  const isTestMask = state.isTest === null
+    ? null
+    : getMask(cache, 'isTest', [state.isTest], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.isTest === state.isTest) m[f.id] = 1;
+      return m;
+    });
+
+  const isGenMask = state.isGenerated === null
+    ? null
+    : getMask(cache, 'isGenerated', [state.isGenerated], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.isGenerated === state.isGenerated) m[f.id] = 1;
+      return m;
+    });
+
+  const isDepMask = state.isDeprecated === null
+    ? null
+    : getMask(cache, 'isDeprecated', [state.isDeprecated], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.isDeprecated === state.isDeprecated) m[f.id] = 1;
+      return m;
+    });
+
+  const publicApiMask = !state.publicApiOnly
+    ? null
+    : getMask(cache, 'publicApiOnly', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.publicApi) m[f.id] = 1;
+      return m;
+    });
+
+  // Boolean predicates — each gets its own slot so a single toggle
+  // doesn't invalidate the others.
+  const boolMasks: (Uint8Array | null)[] = [
+    !state.cyclicOnly ? null : getMask(cache, 'cyclicOnly', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.cyclic) m[f.id] = 1;
+      return m;
+    }),
+    !state.deadOnly ? null : getMask(cache, 'deadOnly', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.dead) m[f.id] = 1;
+      return m;
+    }),
+    !state.layerViolationOnly ? null : getMask(cache, 'layerViolationOnly', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.layerViolation) m[f.id] = 1;
+      return m;
+    }),
+    !state.strictOptOutOnly ? null : getMask(cache, 'strictOptOutOnly', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.strictOptOut) m[f.id] = 1;
+      return m;
+    }),
+    !state.hasNoTest ? null : getMask(cache, 'hasNoTest', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (!f.metrics.hasTestFile) m[f.id] = 1;
+      return m;
+    }),
+    !state.secretsOnly ? null : getMask(cache, 'secretsOnly', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.secretsLikely) m[f.id] = 1;
+      return m;
+    }),
+    !state.busFactor1Only ? null : getMask(cache, 'busFactor1Only', [true], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) if (f.metrics.authors === 1) m[f.id] = 1;
+      return m;
+    }),
+  ];
+
+  // Range masks — one per metric. A range is a no-op if it's identical
+  // (by reference) to repo.ranges[key], which is the default tuple set
+  // by defaultState(). After setRange() it's a fresh tuple, so the
+  // reference check is safe.
+  const repoRanges = repo.ranges;
+  const rangeMasks: (Uint8Array | null)[] = RANGE_KEYS.map((key) => {
+    const r = state[key];
+    const def = repoRanges[key];
+    if (r[0] === def?.[0] && r[1] === def[1]) return null;
+    return getMask(cache, `range:${key}`, [r[0], r[1]], () => {
+      const m = new Uint8Array(N);
+      for (const f of files) {
+        const v = (f.metrics as unknown as Record<string, number>)[key];
+        if (v >= r[0] && v <= r[1]) m[f.id] = 1;
+      }
+      return m;
+    });
+  });
+
+  // ─── Intersection ───────────────────────────────────────────────────
+  const masks: Uint8Array[] = [];
+  if (folderMask) masks.push(folderMask);
+  if (searchMask) masks.push(searchMask);
+  if (langMask) masks.push(langMask);
+  if (layerMask) masks.push(layerMask);
+  if (ownerMask) masks.push(ownerMask);
+  if (statusMask) masks.push(statusMask);
+  if (confMask) masks.push(confMask);
+  if (unknownMask) masks.push(unknownMask);
+  if (isTestMask) masks.push(isTestMask);
+  if (isGenMask) masks.push(isGenMask);
+  if (isDepMask) masks.push(isDepMask);
+  if (publicApiMask) masks.push(publicApiMask);
+  for (const b of boolMasks) if (b) masks.push(b);
+  for (const r of rangeMasks) if (r) masks.push(r);
+
+  const out = new Uint8Array(N);
+  if (masks.length === 0) {
+    out.fill(1);
+  } else {
+    const first = masks[0];
+    out.set(first);
+    for (let mi = 1; mi < masks.length; mi++) {
+      const m = masks[mi];
+      for (let i = 0; i < N; i++) out[i] &= m[i];
+    }
+  }
+
+  return { mask: out, searchError };
+}
+
+function computeDerived(cache: MaskCache, state: FilterState): Derived {
+  const { repo, N } = cache;
+  const { mask: m, searchError: parseError } = computeMatched(cache, state);
+
+  const ids: number[] = [];
+  for (let i = 0; i < N; i++) if (m[i]) ids.push(i);
 
   const rk = new Int32Array(N).fill(-1);
   if (state.sort !== 'none' && ids.length > 0) {
@@ -316,15 +491,20 @@ const EMPTY_REPO: RepoData = {
 };
 
 const EMPTY_STATE = defaultState(EMPTY_REPO);
-const EMPTY_DERIVED = computeDerived(EMPTY_REPO, EMPTY_STATE);
+const EMPTY_CACHE = makeMaskCache(EMPTY_REPO);
+const EMPTY_DERIVED = computeDerived(EMPTY_CACHE, EMPTY_STATE);
 
 export const useFilterStore = create<FilterStore>()(
   subscribeWithSelector((set, get) => {
+    // Per-store mask cache. Rebound on initRepo() because masks are
+    // length-N typed arrays tied to the current repo.
+    let maskCache: MaskCache = EMPTY_CACHE;
+
     // Apply a state mutation, then recompute derived values from the new state.
     const updateState = (mutator: (s: FilterState) => FilterState): void => {
-      const { repo, state } = get();
+      const { state } = get();
       const nextState = mutator(state);
-      const derived = computeDerived(repo, nextState);
+      const derived = computeDerived(maskCache, nextState);
       set({ state: nextState, ...derived });
     };
 
@@ -334,8 +514,9 @@ export const useFilterStore = create<FilterStore>()(
       ...EMPTY_DERIVED,
 
       initRepo: (repo) => {
+        maskCache = makeMaskCache(repo);
         const state = defaultState(repo);
-        const derived = computeDerived(repo, state);
+        const derived = computeDerived(maskCache, state);
         set({ repo, state, ...derived });
       },
 
@@ -432,14 +613,14 @@ export const useFilterStore = create<FilterStore>()(
               break;
           }
         }
-        const derived = computeDerived(repo, nextState);
+        const derived = computeDerived(maskCache, nextState);
         set({ state: nextState, ...derived });
       },
 
       resetAll: () => {
         const { repo } = get();
         const state = defaultState(repo);
-        const derived = computeDerived(repo, state);
+        const derived = computeDerived(maskCache, state);
         set({ state, ...derived });
       },
     };
@@ -570,6 +751,3 @@ export function useFilterActions(): FilterActions {
     })),
   );
 }
-
-export const ALL_RANGE_KEYS = RANGE_KEYS;
-export const ALL_BOOL_KEYS = BOOL_KEYS;

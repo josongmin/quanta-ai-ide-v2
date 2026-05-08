@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useClickOutside } from '@shared/lib';
 
 // Anchored popover. Caller renders the trigger; Popover lays its `children`
 // out below (or above, when there's no room) and handles click-outside.
@@ -20,11 +21,9 @@ export function Popover({ trigger, children, align = 'end', width, role = 'menu'
   const wrapRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  useClickOutside(wrapRef, open, () => { setOpen(false); });
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
-    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
@@ -38,11 +37,9 @@ export function Popover({ trigger, children, align = 'end', width, role = 'menu'
         setOpen(false);
       }
     };
-    window.addEventListener('mousedown', onDown);
     window.addEventListener('keydown', onKey);
     document.addEventListener('focusin', onFocusIn);
     return () => {
-      window.removeEventListener('mousedown', onDown);
       window.removeEventListener('keydown', onKey);
       document.removeEventListener('focusin', onFocusIn);
     };
@@ -59,7 +56,7 @@ export function Popover({ trigger, children, align = 'end', width, role = 'menu'
         <div
           ref={panelRef}
           style={{ width }}
-          className={`absolute top-full mt-2 z-[150] ${alignClass}`}
+          className={`absolute top-full mt-2 z-[var(--z-dropdown)] ${alignClass}`}
           role={role}
         >
           {children}

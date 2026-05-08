@@ -1,42 +1,61 @@
 import type { CSSProperties, ReactNode } from 'react';
 
+type Tone = 'neutral' | 'accent';
+type Size = 'sm' | 'md';
+
 type Props = {
   children: ReactNode;
   selected?: boolean;
-  onClick?: () => void;
-  size?: 'sm' | 'md';
+  onClick: () => void;
+  tone?: Tone;
+  size?: Size;
+  disabled?: boolean;
 };
 
-export function Pill({ children, selected, onClick, size = 'md' }: Props) {
-  const padding = size === 'sm' ? 'var(--pill-padding-compact)' : 'var(--pill-padding)';
-  const fs = size === 'sm' ? 'var(--fs-2xs)' : 'var(--fs-xs)';
+// Interactive selectable. Toggleable / radio-like. For non-interactive labels
+// reach for <Badge> instead.
+export function Pill({
+  children,
+  selected = false,
+  onClick,
+  tone = 'neutral',
+  size = 'md',
+  disabled = false,
+}: Props) {
+  const fontSize = size === 'sm' ? '9px' : '10px';
 
-  const baseStyle: CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 'var(--space-1)',
-    padding,
-    borderRadius: 'var(--radius-pill)',
-    fontSize: fs,
-    fontWeight: 'var(--fw-bold)',
-    background: selected ? 'var(--fg-strong)' : 'var(--bg-surface-muted)',
-    color: selected ? 'var(--fg-on-accent)' : 'var(--fg-default)',
-    transition: 'background-color 120ms ease, color 120ms ease',
-    border: 'none',
+  // Selected always wins regardless of tone — selection is the dominant signal.
+  // Idle "accent" hints at the primary action without committing to selected look.
+  const bg = selected
+    ? 'var(--bg-active)'
+    : tone === 'accent'
+      ? 'var(--bg-surface-muted)'
+      : 'var(--bg-surface-muted)';
+  const fg = selected
+    ? 'var(--fg-strong)'
+    : tone === 'accent'
+      ? 'var(--fg-default)'
+      : 'var(--fg-muted)';
+
+  const style: CSSProperties = {
+    background: bg,
+    color: fg,
+    fontSize,
+    opacity: disabled ? 0.5 : 1,
+    cursor: disabled ? 'not-allowed' : 'pointer',
   };
 
-  if (onClick) {
-    const interactiveStyle: CSSProperties = { ...baseStyle, cursor: 'pointer' };
-    return (
-      <button
-        type="button"
-        onClick={onClick}
-        style={interactiveStyle}
-        className={selected ? '' : 'hover:[background:var(--bg-hover)]'}
-      >
-        {children}
-      </button>
-    );
-  }
-  return <span style={baseStyle}>{children}</span>;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      style={style}
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-[0.18em] transition-colors ${
+        selected || disabled ? '' : 'hover:[background:var(--bg-hover)]'
+      }`}
+    >
+      {children}
+    </button>
+  );
 }

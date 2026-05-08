@@ -2,11 +2,11 @@ import {
   Check, GitCommit, GitMerge, MessageSquare, UserPlus, X, type LucideIcon,
 } from 'lucide-react';
 import type { ConversationItem, ReviewVerdict } from '@entities/pr';
+import { formatTimestamp as formatTs } from '@shared/lib';
 import Avatar from './Avatar';
 
 type Props = {
   items: ConversationItem[];
-  isDark: boolean;
 };
 
 type EventKind = Extract<ConversationItem, { kind: 'event' }>['eventType'];
@@ -40,18 +40,16 @@ const VERDICT_ICON: Record<ReviewVerdict, LucideIcon> = {
 function formatTimestamp(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString(undefined, {
-    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-  });
+  return formatTs(d);
 }
 
 /** Vertical timeline of PR-level conversation. Three shapes:
     events get a one-liner, comments get a bubble, reviews get a verdict pill. */
-export default function ConversationLog({ items, isDark }: Props) {
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const bubbleBg = isDark ? 'bg-white/[0.04]' : 'bg-black/[0.04]';
-  const border = isDark ? 'border-white/10' : 'border-black/10';
+export default function ConversationLog({ items }: Props) {
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const bubbleBg = 'bg-[color:var(--bg-hover)]';
+  const border = 'border-[color:var(--border-default)]';
 
   if (items.length === 0) {
     return (

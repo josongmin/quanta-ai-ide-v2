@@ -1,4 +1,4 @@
-import type { RuleSource, RuleSeverity, EvidenceLevel, CostClass, RuleSignal } from '@entities/admission';
+import type { RuleSource, RuleSeverity, CostClass, RuleSignal } from '@entities/admission';
 
 // Single colour axis: severity. Red=block, amber=warn, neutral=info/pass.
 // Everything else (source, cost, evidence) is differentiated by *text*,
@@ -29,15 +29,6 @@ export const SOURCE_LABEL: Record<RuleSource, string> = {
   semgrep: 'semgrep',
   codeql:  'codeql',
   custom:  'custom',
-};
-
-// Evidence quality is a *secondary* concern — neutral by default; only
-// `unknown` gets a soft amber. Overapprox stays neutral so the surface
-// doesn't pulse warning whenever the analyzer is being honest.
-export const EVIDENCE_LABEL: Record<EvidenceLevel, string> = {
-  exact:      'exact',
-  overapprox: 'overapprox',
-  unknown:    'unknown',
 };
 
 // Cost class: text only. We use the badge component itself to communicate

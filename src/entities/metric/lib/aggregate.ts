@@ -148,15 +148,15 @@ export function computeRepoStats(repo: RepoData) {
   // ── Stack detection (Spec §1) — frameworks/build/test/manifests are
   // synthesized from the repo shape so UI can render them without needing
   // a real tsconfig. Numbers stay deterministic across reloads (PRNG seed).
-  const hasReact = byLanguage.tsx > 0 || byLanguage.jsx > 0;
-  const hasCss   = byLanguage.css > 0;
-  const hasMd    = byLanguage.md > 0;
+  const hasReact = (byLanguage['tsx'] ?? 0) > 0 || (byLanguage['jsx'] ?? 0) > 0;
+  const hasCss   = (byLanguage['css'] ?? 0) > 0;
+  const hasMd    = (byLanguage['md']  ?? 0) > 0;
   const frameworks: { name: string; tone?: 'ok' | 'warn' }[] = [];
   if (hasReact) frameworks.push({ name: 'React 19' });
   if (hasReact) frameworks.push({ name: 'Vite 5' });
   if (hasCss)   frameworks.push({ name: 'Tailwind 3' });
   // Three.js usage hint — show whenever there's any vendor folder (we have one).
-  if (byLayer.vendor > 0) frameworks.push({ name: 'three.js 0.160' });
+  if ((byLayer['vendor'] ?? 0) > 0) frameworks.push({ name: 'three.js 0.160' });
   const buildTools = ['pnpm', 'tsc', 'vite'];
   const manifests = ['package.json', 'tsconfig.json'];
   if (hasMd) manifests.push('README.md');

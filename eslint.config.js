@@ -116,6 +116,7 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
+      '@typescript-eslint/prefer-readonly': 'error',
       // strictTypeChecked enables this aggressively; under our build mode
       // (`noUncheckedIndexedAccess: false`) it fires on any defensive guard
       // for indexed access. Drop to off — `strictNullChecks` already covers

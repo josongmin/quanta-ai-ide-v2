@@ -18,7 +18,7 @@ export default function ApiRingToggle() {
         title="Show files widely consumed externally"
         className={`relative flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
           active
-            ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-black')
+            ? ('bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]')
             : (isDark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5')
         }`}
       >

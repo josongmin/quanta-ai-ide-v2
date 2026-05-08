@@ -78,7 +78,7 @@ export function Button({
 
   return (
     <button
-      type={type}
+      type={type === 'submit' ? 'submit' : 'button'}
       onClick={onClick}
       disabled={disabled}
       style={style}

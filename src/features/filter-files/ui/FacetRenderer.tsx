@@ -29,9 +29,7 @@ function LockedRow({ facet, dark }: { facet: Facet; dark: boolean }) {
     }`}>
       <Lock className="w-3 h-3" />
       <span className="text-[10px] font-bold uppercase tracking-[0.18em] truncate">{facet.label}</span>
-      <span className={`ml-auto text-[8px] px-1.5 py-0.5 rounded-md uppercase font-black ${
-        dark ? 'bg-white/10 text-white/55' : 'bg-black/10 text-black/55'
-      }`}>{facet.requiredPlan}</span>
+      <span className="ml-auto text-[8px] px-1.5 py-0.5 rounded-md uppercase font-black bg-[color:var(--bg-surface)] text-[color:var(--fg-muted)]">{facet.requiredPlan}</span>
     </div>
   );
 }
@@ -67,7 +65,7 @@ function BoolRow({ facet, dark }: { facet: BoolFacet; dark: boolean }) {
       className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border transition-colors ${
         v
           ? (dark ? 'bg-[#4f9a5c]/15 border-[#4f9a5c]/40 text-white' : 'bg-[#4f9a5c]/15 border-[#4f9a5c]/50 text-black')
-          : (dark ? 'bg-white/5 border-white/5 text-white/55 hover:bg-white/10' : 'bg-black/5 border-black/5 text-black/55 hover:bg-black/10')
+          : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'
       }`}
     >
       <span className="text-[10px] font-bold uppercase tracking-[0.18em] truncate">{facet.label}</span>
@@ -87,7 +85,7 @@ function TriToggleRow({ facet, dark }: { facet: ToggleFacet; dark: boolean }) {
         onClick={() => { f.setPublicApiOnly(!v); }}
         className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border ${
           v ? (dark ? 'bg-[#4f9a5c]/15 border-[#4f9a5c]/40 text-white' : 'bg-[#4f9a5c]/15 border-[#4f9a5c]/50 text-black')
-            : (dark ? 'bg-white/5 border-white/5 text-white/55' : 'bg-black/5 border-black/5 text-black/55')
+            : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)]'
         }`}
       >
         <span className="text-[10px] font-bold uppercase tracking-[0.18em]">{facet.label}</span>
@@ -115,7 +113,7 @@ function TriToggleRow({ facet, dark }: { facet: ToggleFacet; dark: boolean }) {
       className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border transition-colors ${
         styleOn
           ? (dark ? 'bg-white text-black border-white' : 'bg-black text-white border-black')
-          : (dark ? 'bg-white/5 border-white/5 text-white/55 hover:bg-white/10' : 'bg-black/5 border-black/5 text-black/55 hover:bg-black/10')
+          : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'
       }`}
     >
       <span className="text-[10px] font-bold uppercase tracking-[0.18em] truncate">{facet.label}</span>
@@ -141,7 +139,7 @@ function EnumRow({ facet, dark }: { facet: EnumFacet; dark: boolean }) {
   };
   return (
     <div className="mb-2">
-      <div className={`text-[9px] font-bold uppercase tracking-[0.18em] mb-1.5 ${dark ? 'text-white/40' : 'text-black/40'}`}>
+      <div className="text-[9px] font-bold uppercase tracking-[0.18em] mb-1.5 text-[color:var(--fg-subtle)]">
         {facet.label}
       </div>
       <div className="flex flex-wrap gap-1.5">
@@ -154,7 +152,7 @@ function EnumRow({ facet, dark }: { facet: EnumFacet; dark: boolean }) {
               className={`text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-1 rounded-md border transition-colors ${
                 active
                   ? (dark ? 'bg-white text-black border-white' : 'bg-black text-white border-black')
-                  : (dark ? 'bg-white/5 border-white/5 text-white/55 hover:bg-white/10' : 'bg-black/5 border-black/5 text-black/55 hover:bg-black/10')
+                  : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'
               }`}
             >
               {o}

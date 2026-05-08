@@ -1,10 +1,13 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 type Tone = 'neutral' | 'success' | 'warn' | 'danger' | 'info';
+type Size = 'sm' | 'md';
 
 type Props = {
   children: ReactNode;
   tone?: Tone;
+  mono?: boolean;
+  size?: Size;
 };
 
 const TONE: Record<Tone, { fg: string; bg: string }> = {
@@ -15,12 +18,18 @@ const TONE: Record<Tone, { fg: string; bg: string }> = {
   info:    { fg: 'var(--intent-info-fg)',    bg: 'var(--intent-info-bg)' },
 };
 
-export function Badge({ children, tone = 'neutral' }: Props) {
+// Read-only label for state, intent, or count. Non-interactive — if you need
+// click-to-toggle, reach for <Pill> instead.
+export function Badge({ children, tone = 'neutral', mono = false, size = 'md' }: Props) {
   const c = TONE[tone];
+  const fontSize = size === 'sm' ? '9px' : '10px';
+  const style: CSSProperties = { color: c.fg, background: c.bg, fontSize };
   return (
     <span
-      style={{ color: c.fg, background: c.bg }}
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
+      style={style}
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md uppercase tracking-[0.18em] ${
+        mono ? 'font-mono' : 'font-bold'
+      }`}
     >
       {children}
     </span>

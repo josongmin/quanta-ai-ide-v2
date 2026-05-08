@@ -40,13 +40,13 @@ export default function StatusFacet() {
             className={`flex items-center gap-1.5 px-2 py-1 rounded-md border text-[10px] transition-colors ${
               selected
                 ? (isDark ? 'bg-white text-black border-white' : 'bg-black text-white border-black')
-                : (isDark ? 'bg-white/5 border-white/5 text-white/70 hover:bg-white/10' : 'bg-black/5 border-black/5 text-black/70 hover:bg-black/10')
+                : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-default)] hover:bg-[color:var(--bg-active)]'
             }`}
           >
             <span className="w-1.5 h-1.5 rounded-sm shrink-0" style={{ backgroundColor: STATUS_CSS[s] }} />
             <span className="font-bold uppercase tracking-[0.18em]">{t(`status.${s}`)}</span>
             <span className={`text-[9px] tabular-nums font-mono ${
-              selected ? 'opacity-70' : isDark ? 'text-white/40' : 'text-black/40'
+              selected ? 'opacity-70' : 'text-[color:var(--fg-subtle)]'
             }`}>
               {counts.m[s]}
             </span>

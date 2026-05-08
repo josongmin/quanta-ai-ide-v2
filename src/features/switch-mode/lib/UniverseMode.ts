@@ -450,8 +450,8 @@ export function createUniverseMode(): ViewMode {
   ) {
     if (!lines) return;
     const VERTS_PER_STAR = TETRA_EDGES.length * 2;
-    const colors = lines.geometry.attributes.color as THREE.BufferAttribute;
-    const alphas = lines.geometry.attributes.alpha as THREE.BufferAttribute;
+    const colors = lines.geometry.attributes['color'] as THREE.BufferAttribute;
+    const alphas = lines.geometry.attributes['alpha'] as THREE.BufferAttribute;
     const colArr = colors.array as Float32Array;
     const alpArr = alphas.array as Float32Array;
 
@@ -497,7 +497,7 @@ export function createUniverseMode(): ViewMode {
     if (points && starTexture) {
       starTexture.dispose();
       starTexture = createStarTexture(pal.inkRgb, pal.haloAlpha);
-      points.material.uniforms.pointTexture.value = starTexture;
+      points.material.uniforms['pointTexture'].value = starTexture;
       points.material.blending = pal.blending;
       points.material.needsUpdate = true;
     }
@@ -559,8 +559,8 @@ export function createUniverseMode(): ViewMode {
 
   function applyRiskLensTint(lens: RiskLensKey, isLight: boolean) {
     if (!points) return;
-    const colors = points.geometry.attributes.color as THREE.BufferAttribute;
-    const alphas = points.geometry.attributes.alpha as THREE.BufferAttribute;
+    const colors = points.geometry.attributes['color'] as THREE.BufferAttribute;
+    const alphas = points.geometry.attributes['alpha'] as THREE.BufferAttribute;
     const colArr = colors.array as Float32Array;
     const alpArr = alphas.array as Float32Array;
     const [r, g, b] = RISK_LENS_RGB[lens];
@@ -579,8 +579,8 @@ export function createUniverseMode(): ViewMode {
 
     // Also tint the wireframe-tetrahedron stars used in light mode.
     if (lines) {
-      const lineColors = lines.geometry.attributes.color as THREE.BufferAttribute;
-      const lineAlphas = lines.geometry.attributes.alpha as THREE.BufferAttribute;
+      const lineColors = lines.geometry.attributes['color'] as THREE.BufferAttribute;
+      const lineAlphas = lines.geometry.attributes['alpha'] as THREE.BufferAttribute;
       const lcArr = lineColors.array as Float32Array;
       const laArr = lineAlphas.array as Float32Array;
       const VERTS_PER_STAR = TETRA_EDGES.length * 2;
@@ -989,9 +989,9 @@ export function createUniverseMode(): ViewMode {
 
     if (starsGroup) starsGroup.rotation.y += 0.0001;
 
-    const colors = points.geometry.attributes.color as THREE.BufferAttribute;
-    const sizes = points.geometry.attributes.size as THREE.BufferAttribute;
-    const alphas = points.geometry.attributes.alpha as THREE.BufferAttribute;
+    const colors = points.geometry.attributes['color'] as THREE.BufferAttribute;
+    const sizes = points.geometry.attributes['size'] as THREE.BufferAttribute;
+    const alphas = points.geometry.attributes['alpha'] as THREE.BufferAttribute;
     const isLight = theme === 'light';
 
     for (let id = 0; id < repo.files.length; id++) {

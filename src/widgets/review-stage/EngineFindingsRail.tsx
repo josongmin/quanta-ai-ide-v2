@@ -5,6 +5,7 @@ import type {
 } from '@entities/pr';
 import { engineFindings, engineSummary } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
+import { trimMid } from './lib/format';
 
 // Right-side rail. Surfaces the static-engine's auto-review for the active
 // PR — severity rollup at the top, scrollable list of findings underneath.
@@ -41,10 +42,10 @@ export default function EngineFindingsRail({ pr, repo, isDark }: Props) {
   const findings = useMemo(() => engineFindings(pr, repo), [pr, repo]);
   const summary  = useMemo(() => engineSummary(findings),    [findings]);
 
-  const border     = isDark ? 'border-white/5' : 'border-black/5';
-  const textMuted  = isDark ? 'text-white/55'  : 'text-black/55';
+  const border     = 'border-[color:var(--border-muted)]';
+  const textMuted  = 'text-[color:var(--fg-muted)]';
   const textFaint  = isDark ? 'text-white/30'  : 'text-black/40';
-  const headerName = isDark ? 'text-white/85'  : 'text-black/85';
+  const headerName = 'text-[color:var(--fg-strong)]';
 
   const fixCount = summary.autoFix;
 
@@ -121,14 +122,15 @@ function BatchFixButton({ count, isDark }: { count: number; isDark: boolean }) {
 }
 
 function SeverityChips({ summary, isDark }: { summary: EngineSummary; isDark: boolean }) {
-  const sep = isDark ? 'text-white/30' : 'text-black/30';
+  // Theme-agnostic via CSS var; keep `isDark` lookup so the prop is read.
+  const sep = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
   return (
     <div className="flex items-center flex-wrap gap-x-1 gap-y-1 text-[11px]">
       {SEVERITY_ORDER.map((sev, i) => (
         <span key={sev} className="inline-flex items-center gap-1">
           {i > 0 && <span className={`mx-0.5 ${sep}`}>·</span>}
           <SeverityDot severity={sev} />
-          <span className={isDark ? 'text-white/70' : 'text-black/70'}>
+          <span className="text-[color:var(--fg-default)]">
             {SEVERITY_LABEL[sev]} {summary[sev]}
           </span>
         </span>
@@ -150,10 +152,10 @@ function SeverityDot({ severity }: { severity: EngineSeverity }) {
 
 function FindingCard({ finding, isDark }: { finding: EngineFinding; isDark: boolean }) {
   const cardBg     = isDark ? 'bg-white/[0.025]'   : 'bg-black/[0.02]';
-  const cardBorder = isDark ? 'border-white/5'     : 'border-black/5';
-  const titleColor = isDark ? 'text-white/85'      : 'text-black/85';
-  const bodyColor  = isDark ? 'text-white/55'      : 'text-black/55';
-  const monoFaint  = isDark ? 'text-white/40'      : 'text-black/40';
+  const cardBorder = 'border-[color:var(--border-muted)]';
+  const titleColor = 'text-[color:var(--fg-strong)]';
+  const bodyColor  = 'text-[color:var(--fg-muted)]';
+  const monoFaint  = 'text-[color:var(--fg-subtle)]';
   const linkColor  = isDark ? 'text-[#7aa7ff]'     : 'text-[#1f5b9c]';
 
   const onJump = () => {
@@ -239,12 +241,11 @@ function SeverityPill({ severity }: { severity: EngineSeverity }) {
 // ─── Empty state ─────────────────────────────────────────────────────────
 
 function EmptyState({ isDark }: { isDark: boolean }) {
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const faint = isDark ? 'text-white/30' : 'text-black/30';
+  // Theme-agnostic via CSS vars; keep `isDark` lookup so the prop is read.
+  const muted = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
   return (
-    <div className={`flex flex-col items-center justify-center text-center px-4 py-10 rounded-lg border border-dashed ${
-      isDark ? 'border-white/10' : 'border-black/10'
-    }`}>
+    <div className="flex flex-col items-center justify-center text-center px-4 py-10 rounded-lg border border-dashed border-[color:var(--border-default)]">
       <ShieldAlert className={`w-5 h-5 mb-2 ${faint}`} />
       <div className={`text-[12px] font-bold ${muted}`}>
         Engine has no findings on this PR.
@@ -256,11 +257,4 @@ function EmptyState({ isDark }: { isDark: boolean }) {
   );
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────
-
-/** Mid-truncate so the file basename stays visible at the right. */
-function trimMid(path: string, max: number): string {
-  if (path.length <= max) return path;
-  const tail = path.slice(-(max - 1));
-  return `…${tail}`;
-}
+// ─── Helpers — see ./lib/format.ts ───────────────────────────────────────

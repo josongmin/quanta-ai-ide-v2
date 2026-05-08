@@ -157,3 +157,20 @@ export const blur = {
   lg: '22px',
   xl: '32px',
 } as const;
+
+// Z-index tiers — semantic, not magic numbers. Anything floating above the
+// page should pick the lowest tier that puts it above what it needs to.
+// Gap of 10 between tiers leaves room for in-tier nudges.
+export const zIndex = {
+  base:        '0',
+  raised:      '1',     // local stacking context (e.g. selected row marker)
+  sticky:      '50',    // sticky table headers, footers
+  chrome:      '60',    // app shell header / GNB
+  dropdown:    '100',   // popover, menu, segmented thumb
+  tooltip:     '110',   // tooltips above dropdowns
+  drawer:      '180',   // side drawers
+  modal:       '200',   // modal backdrop + dialog
+  overlay:     '300',   // fullscreen overlays (admission scrims, AI activity)
+  toast:       '400',   // transient toasts/banners above overlays
+  devtools:    '900',   // last-mile devtools layer
+} as const;

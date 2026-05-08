@@ -177,9 +177,42 @@
   "topOffenders": "ワースト項目",
   "deps": {
     "edgesSummary": "{{n}} エッジ · フォルダ階層でまとめ",
+    "layeredSummary": "層間 {{edges}} · 違反 {{violations}}",
+    "legend": { "down": "正常 / ベンダー", "up": "上方向の違反" },
+    "topOffender": "→ {{target}} ({{n}})",
+    "violationsUnit": "違反",
+    "matrixSummary": "{{n}}×{{n}} フォルダ行列 · 対角下 {{cycles}}",
     "inboundArrow": "← 受信",
     "outboundArrow": "送信 →",
-    "rootLabel": "ルート"
+    "rootLabel": "ルート",
+    "sunburstSummary": "{{n}} ファイル · 深さ {{depth}} 階層",
+    "chordSummary": "トップ {{n}} グループ · {{edges}} コード",
+    "couplingSummary": "{{buckets}} モジュール · モジュール間 import {{edges}}",
+    "coupling": {
+      "from": "送信元",
+      "to": "送信先",
+      "imports": "件数",
+      "remaining": "+ 小さなペアで {{n}} 件"
+    },
+    "slide": {
+      "bundle": { "label": "エッジバンドリング", "hint": "Holten 2006 · フォルダ別" },
+      "layered": { "label": "レイヤー準拠", "hint": "下 → 上の呼び出しは規約違反" },
+      "matrix": { "label": "DSM 行列", "hint": "フォルダ × フォルダ · 対角下が循環" },
+      "sunburst": { "label": "サンバースト", "hint": "放射ツリー · 弧 ∝ ファイル数" },
+      "chord": { "label": "強結合ランキング", "hint": "最も強く結合したモジュール対" },
+      "treemap": { "label": "ツリーマップ", "hint": "面積 ∝ LOC · WinDirStat 方式" },
+      "heatmap": { "label": "リスクヒートマップ", "hint": "複雑度 × 変更頻度 · Feathers" },
+      "cycles": { "label": "循環依存", "hint": "circular import · madge 方式" }
+    },
+    "treemapSummary": "{{n}} ファイル · LOC {{loc}} で面積比例",
+    "heatmapSummary": "{{n}} ファイル表示 · 危険領域 {{danger}} 件",
+    "heatmap": { "x": "複雑度", "y": "変更頻度", "danger": "危険領域" },
+    "cycle": {
+      "none": "循環なし",
+      "topPairs": "最も絡んでいるペア",
+      "summary": "循環内 {{n}} ファイル · {{shown}} 件表示",
+      "cleanSummary": "循環なし · 非循環アーキテクチャ"
+    }
   },
   "empty": {
     "noHotspots": "ホットスポットはありません。",
@@ -239,6 +272,67 @@
     "coverage": "カバレッジ line={{line}}% branch={{branch}}% mut={{mut}}%",
     "editSafety": "編集安全度 = {{value}} (cov × maint × (1 − blast/N))"
   },
+  "blast": {
+    "title": "影響範囲",
+    "arm": "シミュレート",
+    "disarm": "停止",
+    "idleHint": "下流 {{n}} ファイルが無効化されます。シミュレートでコスト分析。",
+    "invalidate": "無効化",
+    "testsRerun": "再実行テスト",
+    "typecheck": "型チェック",
+    "recompute": "再計算",
+    "reviewers": "レビュアー ~{{n}} 名",
+    "plan": "仮想シナリオ — 実ファイルは変更されません",
+    "severity": {
+      "high": "高影響",
+      "medium": "中程度",
+      "low": "低影響"
+    }
+  },
+  "indexState": {
+    "title": "インデックス状態",
+    "fresh": "最新",
+    "indexing": "解析中",
+    "stale": "古い",
+    "timeout": "タイムアウト",
+    "lastBuild": "最終解析",
+    "recompute": "再計算",
+    "downstream": "下流",
+    "justNow": "{{n}}秒前",
+    "minAgo": "{{n}}分前",
+    "hourAgo": "{{n}}時間前"
+  },
+  "aiCtx": {
+    "title": "AI コンテキスト",
+    "embedded": "埋め込み済み",
+    "notEmbedded": "ベクトルなし",
+    "axis": {
+      "types": "型",
+      "tests": "テスト",
+      "dispatch": "ディスパッチ",
+      "boundary": "境界"
+    },
+    "thisFile": "このファイル",
+    "oneHopCtx": "1-hop ctx",
+    "hopFiles": "{{count}} ファイル",
+    "contextOverflow": "32k トークン超過 — エージェントは要約版で作業します"
+  },
+  "refactor": {
+    "title": "リファクタアクション",
+    "summary": "{{auto}}/{{total}} 自動",
+    "empty": "自動リファクタなし — 良好な状態です。",
+    "apply": "適用",
+    "plan": "計画",
+    "confidence": "信頼 {{n}}%",
+    "blast": "影響 {{n}}",
+    "batchHint": "類似ファイルに一括適用",
+    "extract": { "title": "関数抽出" },
+    "types": { "title": "明示的な型を追加" },
+    "tsignore": { "title": "@ts-ignore 解消" },
+    "dead": { "title": "デッドコード除去", "delta": "−{{loc}} LOC" },
+    "addtest": { "title": "テスト雛形を生成", "delta": "+テスト 1" },
+    "lint": { "title": "Lint エラー自動修正" }
+  },
   "catalog": {
     "profileTitle": "ファイルアウトライン",
     "profileSub": "function_summary · コスト · 効果",
@@ -293,7 +387,8 @@
     "activate": "アクティブ化",
     "openTabsHistory": "開いているタブの履歴",
     "openTabsCount": "開いているタブ · {{count}}",
-    "closeTab": "タブを閉じる"
+    "closeTab": "タブを閉じる",
+    "resizePanel": "インスペクタパネルのサイズ変更"
   },
   "tree": {
     "repo": "リポジトリ"

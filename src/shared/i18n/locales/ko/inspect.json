@@ -177,9 +177,42 @@
   "topOffenders": "주요 위반 파일",
   "deps": {
     "edgesSummary": "엣지 {{n}}개 · 폴더 계층으로 번들",
+    "layeredSummary": "레이어 간 {{edges}}개 · 위반 {{violations}}건",
+    "legend": { "down": "정상 / 벤더", "up": "위로 향한 위반" },
+    "topOffender": "→ {{target}} ({{n}}건)",
+    "violationsUnit": "위반",
+    "matrixSummary": "{{n}}×{{n}} 폴더 행렬 · 대각선 아래 {{cycles}}",
     "inboundArrow": "← 유입",
     "outboundArrow": "유출 →",
-    "rootLabel": "루트"
+    "rootLabel": "루트",
+    "sunburstSummary": "파일 {{n}}개 · 깊이 {{depth}}레벨",
+    "chordSummary": "최상위 {{n}}개 그룹 · 코드 {{edges}}개",
+    "couplingSummary": "{{buckets}}개 모듈 · 모듈 간 import {{edges}}개",
+    "coupling": {
+      "from": "출발",
+      "to": "도착",
+      "imports": "건수",
+      "remaining": "+ 그 외 작은 쌍에 {{n}}건 더"
+    },
+    "slide": {
+      "bundle": { "label": "엣지 번들링", "hint": "Holten 2006 · 폴더 단위 묶음" },
+      "layered": { "label": "레이어 컴플라이언스", "hint": "아래 → 위 호출은 규칙 위반" },
+      "matrix": { "label": "DSM 행렬", "hint": "폴더 × 폴더 · 대각선 아래는 순환" },
+      "sunburst": { "label": "선버스트", "hint": "방사형 트리 · 호 크기 ∝ 파일 수" },
+      "chord": { "label": "강결합 랭킹", "hint": "가장 강하게 묶인 모듈 쌍 순" },
+      "treemap": { "label": "트리맵", "hint": "면적 ∝ LOC · WinDirStat 방식" },
+      "heatmap": { "label": "리스크 히트맵", "hint": "복잡도 × 변경량 · Feathers 핫스팟" },
+      "cycles": { "label": "순환 의존", "hint": "circular import · madge 방식" }
+    },
+    "treemapSummary": "파일 {{n}}개 · LOC {{loc}}로 크기 비례",
+    "heatmapSummary": "파일 {{n}}개 표시 · 위험 영역 {{danger}}개",
+    "heatmap": { "x": "복잡도", "y": "변경량", "danger": "위험 영역" },
+    "cycle": {
+      "none": "순환 없음",
+      "topPairs": "가장 엮인 페어",
+      "summary": "순환 안 파일 {{n}}개 · {{shown}}개 표시",
+      "cleanSummary": "순환 없음 · 아키텍처 비순환"
+    }
   },
   "empty": {
     "noHotspots": "핫스팟 없음.",
@@ -239,6 +272,67 @@
     "coverage": "커버리지 line={{line}}% branch={{branch}}% mut={{mut}}%",
     "editSafety": "편집 안전도 = {{value}} (cov × maint × (1 − blast/N))"
   },
+  "blast": {
+    "title": "영향 반경",
+    "arm": "시뮬레이션",
+    "disarm": "시뮬 중지",
+    "idleHint": "다운스트림 {{n}}개 파일이 무효화됩니다. 시뮬레이션을 누르면 비용 분석을 봅니다.",
+    "invalidate": "무효화",
+    "testsRerun": "재실행 테스트",
+    "typecheck": "타입체크",
+    "recompute": "재계산",
+    "reviewers": "리뷰어 ~{{n}}명",
+    "plan": "가상 시나리오 — 실제 파일은 변경되지 않습니다",
+    "severity": {
+      "high": "높은 영향",
+      "medium": "중간",
+      "low": "낮은 영향"
+    }
+  },
+  "indexState": {
+    "title": "인덱스 상태",
+    "fresh": "최신",
+    "indexing": "분석 중",
+    "stale": "오래됨",
+    "timeout": "타임아웃",
+    "lastBuild": "마지막 분석",
+    "recompute": "재계산",
+    "downstream": "다운스트림",
+    "justNow": "{{n}}초 전",
+    "minAgo": "{{n}}분 전",
+    "hourAgo": "{{n}}시간 전"
+  },
+  "aiCtx": {
+    "title": "AI 컨텍스트",
+    "embedded": "임베딩됨",
+    "notEmbedded": "벡터 없음",
+    "axis": {
+      "types": "타입",
+      "tests": "테스트",
+      "dispatch": "디스패치",
+      "boundary": "경계"
+    },
+    "thisFile": "이 파일",
+    "oneHopCtx": "1-hop 컨텍스트",
+    "hopFiles": "{{count}}개 파일",
+    "contextOverflow": "컨텍스트가 32k 토큰 초과 — 에이전트는 요약본으로 작업합니다"
+  },
+  "refactor": {
+    "title": "리팩터 액션",
+    "summary": "{{auto}}/{{total}} 자동",
+    "empty": "자동 리팩터 없음 — 이 파일은 양호합니다.",
+    "apply": "적용",
+    "plan": "계획",
+    "confidence": "신뢰도 {{n}}%",
+    "blast": "영향 {{n}}",
+    "batchHint": "유사 파일에 일괄 적용",
+    "extract": { "title": "함수 추출" },
+    "types": { "title": "명시적 타입 추가" },
+    "tsignore": { "title": "@ts-ignore 해소" },
+    "dead": { "title": "데드 코드 제거", "delta": "−{{loc}} LOC" },
+    "addtest": { "title": "테스트 스캐폴드 생성", "delta": "+테스트 파일 1" },
+    "lint": { "title": "린트 에러 자동 수정" }
+  },
   "catalog": {
     "profileTitle": "파일 아웃라인",
     "profileSub": "function_summary · 비용 · 효과",
@@ -293,7 +387,8 @@
     "activate": "활성화",
     "openTabsHistory": "탭 히스토리 열기",
     "openTabsCount": "열린 탭 · {{count}}",
-    "closeTab": "탭 닫기"
+    "closeTab": "탭 닫기",
+    "resizePanel": "인스펙터 패널 크기 조정"
   },
   "tree": {
     "repo": "리포"

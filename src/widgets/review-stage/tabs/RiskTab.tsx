@@ -84,10 +84,10 @@ function PerFileTable({
   const card = isDark
     ? 'bg-white/[0.04] border-white/10'
     : 'bg-white border-black/5';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const fg = 'text-[color:var(--fg-strong)]';
   const sep = isDark ? 'divide-white/5' : 'divide-black/5';
-  const header = isDark ? 'text-white/40' : 'text-black/40';
+  const header = 'text-[color:var(--fg-subtle)]';
 
   // First file with a real fileId — drives the "Blast preview" CTA so the
   // user lands on a meaningful seed when they switch back to Intelligence.
@@ -95,9 +95,7 @@ function PerFileTable({
 
   return (
     <section className={`rounded-xl border ${card}`}>
-      <div className={`flex items-center justify-between px-4 py-2.5 border-b ${
-        isDark ? 'border-white/5' : 'border-black/5'
-      }`}>
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[color:var(--border-muted)]">
         <div className={`text-[10px] font-bold uppercase tracking-[0.18em] ${header}`}>
           Per-file risk
         </div>

@@ -15,18 +15,12 @@ export type InspectTarget =
 export default function InspectPanel({ isDark, target }: { isDark: boolean; target: InspectTarget }) {
   const repo = useFilterRepo();
 
-  // Match FocusScanPanel's embedded fill so workspace/folder tabs feel like
-  // peer panels next to file tabs, not a different surface.
-  const cardStyle: React.CSSProperties = isDark
-    ? { backgroundColor: 'rgba(13, 17, 23, 0.92)' }
-    : { backgroundColor: 'rgba(255, 255, 255, 0.95)' };
-
+  // `glass-auto` flips dark↔light alpha+border via :root[data-theme]; text
+  // colour follows the foreground tokens, so we drop the per-mode className
+  // ternary and the inline cardStyle at the same time.
   return (
     <div
-      className={`flex flex-col h-full max-h-[calc(100vh-130px)] overflow-hidden border transition-all duration-500 shadow-xl ${
-        isDark ? 'glass-dark shadow-black/50 text-white' : 'glass-light shadow-black/10 text-black'
-      }`}
-      style={cardStyle}
+      className="flex flex-col h-full max-h-[calc(100vh-130px)] overflow-hidden border transition-all duration-500 shadow-xl glass-auto text-[color:var(--fg-default)]"
     >
       {target.kind === 'workspace'
         ? <WorkspaceBody repo={repo} isDark={isDark} />

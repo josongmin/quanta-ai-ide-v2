@@ -20,6 +20,14 @@ export const SAMPLE_PROJECTS: Project[] = [
     initial: 'A',
     accent: 'emerald',
     pinned: true,
+    defaultModel: 'claude-opus-4-7',
+    budget: { alertUsd: 1.50, softCapUsd: 3.50, hardCapUsd: 5.00 },
+    integrations: [
+      { kind: 'github', label: 'acme/monorepo',     connected: true  },
+      { kind: 'slack',  label: '#eng-reviews',      connected: true  },
+      { kind: 'linear', label: 'PLATFORM cycle',    connected: true  },
+      { kind: 'sentry', label: 'acme-prod',         connected: false },
+    ],
   },
   {
     id: 'p-quanta',
@@ -28,6 +36,12 @@ export const SAMPLE_PROJECTS: Project[] = [
     initial: 'Q',
     accent: 'violet',
     pinned: true,
+    defaultModel: 'claude-sonnet-4-6',
+    budget: { alertUsd: 0.80, softCapUsd: 1.80, hardCapUsd: 2.50 },
+    integrations: [
+      { kind: 'github', label: 'songmin/quanta-v2', connected: true  },
+      { kind: 'linear', label: 'QNT-cycle-42',      connected: true  },
+    ],
   },
   {
     id: 'p-edge',
@@ -35,6 +49,11 @@ export const SAMPLE_PROJECTS: Project[] = [
     slug: 'github.com/songmin/edge-runtime',
     initial: 'E',
     accent: 'sky',
+    defaultModel: 'claude-haiku-4-5',
+    integrations: [
+      { kind: 'github', label: 'songmin/edge-runtime', connected: true  },
+      { kind: 'sentry', label: 'edge-runtime-prod',    connected: true  },
+    ],
   },
   {
     id: 'p-pulse',
@@ -42,6 +61,11 @@ export const SAMPLE_PROJECTS: Project[] = [
     slug: 'github.com/songmin/pulse',
     initial: 'P',
     accent: 'amber',
+    integrations: [
+      { kind: 'github', label: 'songmin/pulse',     connected: true  },
+      { kind: 'figma',  label: 'pulse-design-v2',   connected: true  },
+      { kind: 'jira',   label: 'PULSE-board',       connected: false },
+    ],
   },
 ];
 
@@ -64,6 +88,25 @@ export function getSampleTasks(t: T): Task[] {
       labels: ['security', 'auth'],
       timeAgo: '12m',
       diffStats: { added: 184, removed: 92, files: 7 },
+      branchState: { ahead: 12, behind: 0, mergeable: 'clean', lastPushAtMs: Date.now() - 4 * 60 * 1000 },
+      prState: {
+        number: 847,
+        url: 'https://github.com/acme/monorepo/pull/847',
+        status: 'open',
+        reviewers: [
+          { handle: '@reviewer-a', state: 'pending' },
+          { handle: '@reviewer-b', state: 'approved' },
+        ],
+        checks: [
+          { name: 'build',  status: 'success', durationMs: 72000 },
+          { name: 'test',   status: 'success', durationMs: 124000 },
+          { name: 'e2e',    status: 'running' },
+          { name: 'lint',   status: 'failure', durationMs: 8000 },
+        ],
+        conflicts: 0,
+        baseAhead: 0,
+      },
+      execution: { surface: 'cloud', notify: 'browser', lastSyncAtMs: Date.now() - 2000 },
       thread: [
         {
           id: 'u1', role: 'user', at: t('demo.t001.t12m'),
@@ -120,7 +163,17 @@ export function getSampleTasks(t: T): Task[] {
               files: [
                 {
                   path: 'src/auth/middleware.ts', added: 42, removed: 18,
+                  // Demo drift: same file edited again 4m ago in the
+                  // working tree → overlap on hunk 0. Triggers the
+                  // hatch overlay + amber drift badge.
+                  drift: {
+                    state: 'overlap',
+                    driftedHunkIdx: [0],
+                    workingShaLastTouchedAtMs: Date.now() - 4 * 60 * 1000,
+                    conflictRanges: [[47, 53]],
+                  },
                   hunks: [{
+                    id: 'h-mw-1',
                     header: '@@ -42,18 +42,42 @@ export function withSession',
                     lines: [
                       { kind: 'ctx', text: 'export function withSession<T>(handler: T) {' },
@@ -169,6 +222,7 @@ export function getSampleTasks(t: T): Task[] {
       labels: ['copy', 'i18n'],
       timeAgo: '2m',
       diffStats: { added: 41, removed: 18, files: 2 },
+      execution: { surface: 'cloud', notify: 'browser', lastSyncAtMs: Date.now() - 1500 },
       thread: [
         {
           id: 'u1', role: 'user', at: t('demo.t002.t2m'),
@@ -207,6 +261,21 @@ export function getSampleTasks(t: T): Task[] {
             {
               kind: 'tool', tool: 'run', label: 'pnpm test webhook', detail: '1 failed', status: 'fail',
               output: '$ vitest run webhook\n\n ✗ webhook retries with jitter (timing-sensitive)\n   Expected: < 1500ms\n   Received: 1820ms\n\n 1 failed',
+              testResults: {
+                passed: 4,
+                failed: 1,
+                durationMs: 5840,
+                failures: [{
+                  name: 'webhook retries with jitter (timing-sensitive)',
+                  file: 'src/server/webhook/__tests__/retry.test.ts',
+                  message: 'expected < 1500ms · got 1820ms',
+                  stackHits: [
+                    { file: 'src/server/webhook/retry.ts', line: 42, hunkId: 'h-retry-1' },
+                    { file: 'src/server/webhook/__tests__/retry.test.ts', line: 18 },
+                  ],
+                  attributedHunkIds: ['h-retry-1'],
+                }],
+              },
             },
           ],
         },
@@ -297,3 +366,27 @@ export function getSampleTasks(t: T): Task[] {
 // follows the user's chosen locale. We deliberately do not re-export an
 // empty stub — anything still importing the old name should fail loudly
 // at build time so the migration is unmissable.
+
+// ─── Mention picker fixtures ──────────────────────────────────────────────
+// Sample data used by `MentionPicker.tsx` for the `#file` and `@symbol`
+// triggers. Production wires this to the project's actual file/symbol
+// index; the demo stays static.
+
+export const SAMPLE_MENTION_FILES: { path: string }[] = [
+  { path: 'src/auth/middleware.ts' },
+  { path: 'src/auth/withSession.ts' },
+  { path: 'src/api/users.ts' },
+  { path: 'src/api/billing.ts' },
+  { path: 'src/api/sessions.ts' },
+  { path: 'src/lib/cookies.ts' },
+  { path: 'src/lib/jwt.ts' },
+  { path: 'docs/auth.md' },
+];
+
+export const SAMPLE_MENTION_SYMBOLS: { name: string; path: string }[] = [
+  { name: 'withSession', path: 'src/auth/middleware.ts' },
+  { name: 'rotateToken', path: 'src/auth/withSession.ts' },
+  { name: 'issueCookie', path: 'src/lib/cookies.ts' },
+  { name: 'verifyJwt', path: 'src/lib/jwt.ts' },
+  { name: 'getSession', path: 'src/api/sessions.ts' },
+];

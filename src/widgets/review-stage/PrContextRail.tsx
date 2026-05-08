@@ -18,8 +18,8 @@ type Props = {
 };
 
 export default function PrContextRail({ pr, isDark }: Props) {
-  const border = isDark ? 'border-white/5' : 'border-black/5';
-  const textMuted = isDark ? 'text-white/55' : 'text-black/55';
+  const border = 'border-[color:var(--border-muted)]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
   const textFaint = isDark ? 'text-white/30' : 'text-black/40';
 
   return (
@@ -60,7 +60,8 @@ function Section({
   isDark: boolean;
   children: React.ReactNode;
 }) {
-  const color = isDark ? 'text-white/40' : 'text-black/40';
+  // Theme-agnostic via CSS var; keep `isDark` lookup so the prop is read.
+  const color = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
   return (
     <div>
       <div className={`mb-2 text-[10px] font-bold uppercase tracking-[0.18em] ${color}`}>
@@ -87,7 +88,7 @@ function ParticipantsSection({ pr, isDark }: { pr: PullRequest; isDark: boolean 
         />
       ))}
       {pr.reviewers.length === 0 && (
-        <div className={`text-[11px] ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+        <div className="text-[11px] text-[color:var(--fg-subtle)]">
           No reviewers requested.
         </div>
       )}
@@ -103,8 +104,9 @@ function ParticipantRow({
   state?: ReviewerState;
   isDark: boolean;
 }) {
-  const name = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
+  // Theme-agnostic via CSS vars; keep `isDark` lookup so the prop is read.
+  const name = isDark ? 'text-[color:var(--fg-strong)]' : 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-subtle)]';
   return (
     <div className="flex items-center gap-2">
       <Avatar login={login} size={20} />
@@ -144,7 +146,7 @@ function LinkedIssuesSection({ pr, isDark }: { pr: PullRequest; isDark: boolean 
   if (pr.linkedIssues.length === 0) {
     return (
       <Section label="Linked issues" isDark={isDark}>
-        <div className={`text-[11px] ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+        <div className="text-[11px] text-[color:var(--fg-subtle)]">
           No linked issues.
         </div>
       </Section>
@@ -174,8 +176,8 @@ function LinkedIssuesSection({ pr, isDark }: { pr: PullRequest; isDark: boolean 
 
 function BranchSection({ pr, isDark }: { pr: PullRequest; isDark: boolean }) {
   const { t } = useTranslation('review');
-  const valueColor = isDark ? 'text-white/85' : 'text-black/85';
-  const labelColor = isDark ? 'text-white/40' : 'text-black/40';
+  const valueColor = 'text-[color:var(--fg-strong)]';
+  const labelColor = 'text-[color:var(--fg-subtle)]';
   return (
     <Section label="Branch" isDark={isDark}>
       <div className={`flex items-center gap-1.5 text-[11px] font-mono ${valueColor}`}>
@@ -242,7 +244,7 @@ function MergeActionsSection({ pr, isDark }: { pr: PullRequest; isDark: boolean 
         ))}
       </div>
       {block !== null && (
-        <div className={`mt-1 text-[11px] ${isDark ? 'text-white/55' : 'text-black/55'}`}>
+        <div className="mt-1 text-[11px] text-[color:var(--fg-muted)]">
           Blocked because {block}.
         </div>
       )}

@@ -53,19 +53,29 @@ type Ctx = {
 const C = createContext<Ctx | null>(null);
 
 export function OverlayProvider({ children }: { children: ReactNode }) {
-  const [metric, setMetric] = useState<HeatMetricKey>('none');
-  const [intensity, setIntensity] = useState(0.7);
-  const [radius, setRadius] = useState(0.7);
-  const [threshold, setThreshold] = useState(0.05);
-  const [timeWindow, setTimeWindow] = useState<TimeWindow>('90d');
-  const [blastSeed, setBlastSeed] = useState<number | null>(null);
+  const [metric, setMetricState] = useState<HeatMetricKey>('none');
+  const [intensity, setIntensityState] = useState(0.7);
+  const [radius, setRadiusState] = useState(0.7);
+  const [threshold, setThresholdState] = useState(0.05);
+  const [timeWindow, setTimeWindowState] = useState<TimeWindow>('90d');
+  const [blastSeed, setBlastSeedState] = useState<number | null>(null);
   const [pathFrom, setPathFrom] = useState<number | null>(null);
   const [pathTo, setPathTo] = useState<number | null>(null);
-  const [riskLens, setRiskLens] = useState<RiskLensKey | null>(null);
-  const [apiRing, setApiRing] = useState<boolean>(false);
-  const [prSeed, setPrSeed] = useState<number | null>(null);
+  const [riskLens, setRiskLensState] = useState<RiskLensKey | null>(null);
+  const [apiRing, setApiRingState] = useState<boolean>(false);
+  const [prSeed, setPrSeedState] = useState<number | null>(null);
 
-  const clearBlast = useCallback(() => { setBlastSeed(null); }, []);
+  const setMetric = useCallback((m: HeatMetricKey) => { setMetricState(() => m); }, []);
+  const setIntensity = useCallback((n: number) => { setIntensityState(() => n); }, []);
+  const setRadius = useCallback((n: number) => { setRadiusState(() => n); }, []);
+  const setThreshold = useCallback((n: number) => { setThresholdState(() => n); }, []);
+  const setTimeWindow = useCallback((w: TimeWindow) => { setTimeWindowState(() => w); }, []);
+  const setBlastSeed = useCallback((id: number | null) => { setBlastSeedState(() => id); }, []);
+  const setRiskLens = useCallback((l: RiskLensKey | null) => { setRiskLensState(() => l); }, []);
+  const setApiRing = useCallback((v: boolean) => { setApiRingState(() => v); }, []);
+  const setPrSeed = useCallback((s: number | null) => { setPrSeedState(() => s); }, []);
+
+  const clearBlast = useCallback(() => { setBlastSeedState(null); }, []);
   const setPath = useCallback((from: number | null, to: number | null) => {
     setPathFrom(from);
     setPathTo(to);
@@ -87,10 +97,16 @@ export function OverlayProvider({ children }: { children: ReactNode }) {
     apiRing, setApiRing,
     prSeed, setPrSeed,
   }), [
-    metric, intensity, radius, threshold, timeWindow,
-    blastSeed, clearBlast,
+    metric, setMetric,
+    intensity, setIntensity,
+    radius, setRadius,
+    threshold, setThreshold,
+    timeWindow, setTimeWindow,
+    blastSeed, setBlastSeed, clearBlast,
     pathFrom, pathTo, setPath, clearPath,
-    riskLens, apiRing, prSeed,
+    riskLens, setRiskLens,
+    apiRing, setApiRing,
+    prSeed, setPrSeed,
   ]);
   return <C.Provider value={value}>{children}</C.Provider>;
 }

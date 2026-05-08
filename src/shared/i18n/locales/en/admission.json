@@ -53,5 +53,59 @@
   },
   "override": {
     "whyPlaceholder": "Why is this safe? Cross-link an issue or doc."
+  },
+  "confidence": {
+    "title": "Pass-rate confidence",
+    "sub": "Wilson {{level}}% CI · z = {{z}}",
+    "note": "Narrower band = more samples. Wide band on a small N is honest, not noisy."
+  },
+  "effect": {
+    "title": "Effect size · Cohen’s d",
+    "band": {
+      "negligible": "Negligible",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    }
+  },
+  "anomaly": {
+    "title": "Anomaly sentinel",
+    "sub": "30 d · EWMA α=0.3 · |z|≥2 flagged",
+    "outliers": "outliers in {{n}} d",
+    "legend": { "trend": "EWMA", "anom": "|z| ≥ 2" }
+  },
+  "calibration": {
+    "title": "Rule calibration",
+    "sub": "precision · recall · F1 · false-positive rate",
+    "col": { "rule": "Rule" },
+    "empty": "No rules with enough samples to calibrate yet."
+  },
+  "counterfactual": {
+    "title": "Counterfactual impact",
+    "sub": "Difference-in-differences · 95% CI",
+    "significant": "significant",
+    "notSignificant": "not significant",
+    "treated": "Treated",
+    "control": "Control"
+  },
+  "survival": {
+    "title": "Time-to-merge survival",
+    "sub": "Kaplan-Meier · Greenwood 95% CI band",
+    "median": "median",
+    "vs": "vs",
+    "legend": { "treated": "rule fired", "control": "rule skipped" }
+  },
+  "cusum": {
+    "title": "CUSUM drift detector",
+    "sub": "Tabular CUSUM · K = 0.5σ · H = 4σ",
+    "stable": "stable",
+    "noAlarm": "no alarm",
+    "changePoint": "change point detected"
+  },
+  "reliability": {
+    "title": "Reliability diagram",
+    "sub": "{{n}}-bin · expected calibration error",
+    "over": "over-confident",
+    "under": "under-confident"
   }
 }

@@ -18,7 +18,6 @@ export { Modal } from './Modal';
 export { Drawer } from './Drawer';
 export { Popover } from './Popover';
 export { useDialogA11y } from './useDialogA11y';
-export { Chip } from './Chip';
 export { Badge } from './Badge';
 export { Button } from './Button';
 export { IconButton } from './IconButton';
@@ -27,6 +26,8 @@ export { SegmentedControl } from './SegmentedControl';
 export { Pill } from './Pill';
 export { Surface } from './Surface';
 export { Row } from './Row';
+export { ResizeHandle } from './ResizeHandle';
+export { useTopRightInset, useReserveTopRightInset } from './topRightInset';
 
 // ── Data display ──
 export { Score } from './Score';

@@ -12,6 +12,24 @@ import type {
 import { EXTERNAL_RULE_MAP } from './sample';
 import { estimateSignalCost, PREVIEW_MATCH_CAP } from './cost';
 
+// Defaults for the `blast-radius-spike` graph signal when the rule omits
+// `signal.value`. The two sites measure different things and so use
+// different defaults on purpose:
+//
+//  - `BLAST_SPIKE_PER_FILE_DEFAULT` is a per-file *filter* threshold. It
+//    decides whether an individual changed file is "interesting enough"
+//    to surface as a candidate hit. We keep it low so the preview still
+//    shows context when the rule is being authored.
+//  - `BLAST_SPIKE_SUM_DEFAULT` is the rule-level *trigger* threshold,
+//    compared against the SUM of blast radius across the PR's change
+//    set. This is what actually fires the rule (per the model docs:
+//    "sum of blast across PR > value").
+//
+// Keeping them as named constants makes the asymmetry explicit so a
+// future reader doesn't try to "unify" them again.
+export const BLAST_SPIKE_PER_FILE_DEFAULT = 25;
+export const BLAST_SPIKE_SUM_DEFAULT = 100;
+
 // ─────────────────────────────────────────────────────────────────────────
 // Per-file predicate compiler. The output is a function that, given a file
 // (and optionally PR context), returns `null` when the file does not match
@@ -130,7 +148,7 @@ function compileGraph(
       // rule-level "spike" is computed at decision time across the change set.
       return (f) => {
         if (!pr.changedIds.has(f.id)) return null;
-        const threshold = signal.value ?? 25;
+        const threshold = signal.value ?? BLAST_SPIKE_PER_FILE_DEFAULT;
         if (f.metrics.blastRadius < threshold) return null;
         return {
           fileId: f.id,
@@ -299,7 +317,7 @@ export function evaluateAdmission(
 
     // Special-case: blast-radius spike compares the SUM across PR.
     if (rule.signal.kind === 'graph' && rule.signal.pattern === 'blast-radius-spike') {
-      const threshold = rule.signal.value ?? 100;
+      const threshold = rule.signal.value ?? BLAST_SPIKE_SUM_DEFAULT;
       let sum = 0;
       for (const id of ctx.changedIds) {
         const f = repo.files[id];

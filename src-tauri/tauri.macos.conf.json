@@ -6,7 +6,8 @@
         "label": "main",
         "titleBarStyle": "Overlay",
         "hiddenTitle": true,
-        "trafficLightPosition": { "x": 14, "y": 18 }
+        "trafficLightPosition": { "x": 14, "y": 18 },
+        "acceptFirstMouse": true
       }
     ]
   },

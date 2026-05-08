@@ -39,7 +39,7 @@ export default function ReviewActionBar({ pr }: Props) {
     cancel();
   };
 
-  const neutralFg = isDark ? 'text-white/70' : 'text-black/70';
+  const neutralFg = 'text-[color:var(--fg-default)]';
   const neutralBorder = isDark ? 'border-white/15' : 'border-black/15';
   const neutralHover = isDark ? 'hover:bg-white/[0.06]' : 'hover:bg-black/[0.04]';
   const surface = isDark ? 'bg-white/[0.03]' : 'bg-black/[0.02]';

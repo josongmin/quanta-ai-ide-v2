@@ -31,6 +31,29 @@ export default defineConfig({
     },
   },
   envPrefix: ['VITE_', 'TAURI_ENV_*'],
+  // Pre-bundle the heavy/widely-imported deps so dev cold start doesn't
+  // pay a per-module crawl cost on first request. Tauri-only modules are
+  // excluded — they're not used in the browser dev server.
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'three',
+      '@tanstack/react-router',
+      'zustand',
+      'zustand/middleware',
+      'lucide-react',
+      'i18next',
+      'react-i18next',
+    ],
+    exclude: [
+      '@tauri-apps/api',
+      '@tauri-apps/plugin-dialog',
+      '@tauri-apps/plugin-os',
+      '@tauri-apps/plugin-shell',
+    ],
+  },
   build: {
     // Match webview targets when bundling for Tauri; keep modern defaults
     // otherwise.

@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import type { CheckStatus, PullRequest } from '@entities/pr';
+import { formatDuration } from '../lib/format';
 
 type Props = {
   pr: PullRequest;
@@ -17,10 +18,10 @@ type Props = {
 export default function ChecksTab({ pr, isDark }: Props) {
   const { t } = useTranslation('review');
   const card = isDark ? 'bg-white/[0.04] border-white/10' : 'bg-white border-black/5';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
+  const muted = 'text-[color:var(--fg-subtle)]';
   const sep = isDark ? 'divide-white/5' : 'divide-black/5';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const header = isDark ? 'text-white/40' : 'text-black/40';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const header = 'text-[color:var(--fg-subtle)]';
 
   if (pr.checks.length === 0) {
     return (
@@ -122,14 +123,4 @@ const CHECK_META: Record<CheckStatus, { label: string; color: string; Icon: Luci
   skipped:   { label: 'Skipped',   color: '#8b949e', Icon: MinusCircle },
 };
 
-function formatDuration(ms: number | null): string {
-  if (ms === null) return '—';
-  if (ms < 1000) return `${String(ms)}ms`;
-  const s = ms / 1000;
-  if (s < 60) return `${s.toFixed(1)}s`;
-  const m = s / 60;
-  if (m < 60) return `${m.toFixed(1)}m`;
-  const h = m / 60;
-  return `${h.toFixed(1)}h`;
-}
-
+// formatDuration moved to ../lib/format.ts

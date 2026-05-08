@@ -158,11 +158,11 @@ function EngineSummaryCard({
   isDark: boolean;
 }) {
   const card = isDark ? 'bg-white/[0.04] border-white/10' : 'bg-white border-black/5';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-muted)]';
   const btn = isDark
-    ? 'bg-white/[0.06] hover:bg-white/[0.10] text-white/85 border-white/10'
-    : 'bg-black/[0.04] hover:bg-black/[0.08] text-black/85 border-black/10';
+    ? 'bg-white/[0.06] hover:bg-white/[0.10] text-[color:var(--fg-strong)] border-white/10'
+    : 'bg-black/[0.04] hover:bg-black/[0.08] text-[color:var(--fg-strong)] border-black/10';
 
   return (
     <section className={`rounded-xl border ${card} p-4`}>
@@ -210,8 +210,8 @@ function StatTile({
   isDark: boolean;
 }) {
   const card = isDark ? 'bg-white/[0.04] border-white/10' : 'bg-white border-black/5';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-subtle)]';
   const Arrow = deltaSign === 'up' ? ArrowUpRight : ArrowDownRight;
   return (
     <div className={`rounded-xl border ${card} p-3`}>
@@ -276,9 +276,9 @@ function CoverageDeltaCard({
   isDark: boolean;
 }) {
   const card = isDark ? 'bg-white/[0.04] border-white/10' : 'bg-white border-black/5';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const mono = isDark ? 'text-white/70' : 'text-black/70';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const mono = 'text-[color:var(--fg-default)]';
   return (
     <section className={`rounded-xl border ${card} p-4`}>
       <div className={`mb-2 text-[10px] font-bold uppercase tracking-[0.18em] ${muted}`}>
@@ -330,8 +330,8 @@ function FailedTestsCard({
 }) {
   const { t } = useTranslation('review');
   const card = isDark ? 'bg-white/[0.04] border-white/10' : 'bg-white border-black/5';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const mono = isDark ? 'text-white/85' : 'text-black/85';
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const mono = 'text-[color:var(--fg-strong)]';
   const total = tests.passed + tests.failed;
   return (
     <section className={`rounded-xl border ${card} p-4`}>
@@ -383,9 +383,9 @@ function UnresolvedThreadsCard({
 }) {
   const { t } = useTranslation('review');
   const card = isDark ? 'bg-white/[0.04] border-white/10' : 'bg-white border-black/5';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const mono = isDark ? 'text-white/55' : 'text-black/55';
+  const fg = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const mono = 'text-[color:var(--fg-muted)]';
   return (
     <section className={`rounded-xl border ${card} p-4`}>
       <div className={`mb-2 text-[10px] font-bold uppercase tracking-[0.18em] ${muted}`}>
@@ -402,8 +402,7 @@ function UnresolvedThreadsCard({
             {threads.map((th, i) => (
               <li
                 key={th.threadId}
-                onClick={() => { /* no-op: scroll to file integration is out of scope */ }}
-                className={`grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 py-1 px-1 rounded-md cursor-pointer ${
+                className={`grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 py-1 px-1 rounded-md ${
                   isDark ? 'hover:bg-white/[0.04]' : 'hover:bg-black/[0.03]'
                 }`}
               >

@@ -58,8 +58,8 @@ export default function FilesTab({
   const resolveThread   = useReviewStore((s) => s.resolveThread);
   const markFileViewed  = useReviewStore((s) => s.markFileViewed);
 
-  const border = isDark ? 'border-white/5' : 'border-black/5';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
+  const border = 'border-[color:var(--border-muted)]';
+  const muted = 'text-[color:var(--fg-muted)]';
 
   if (pr.files.length === 0) {
     return (
@@ -89,9 +89,7 @@ export default function FilesTab({
         <div className={`shrink-0 h-10 flex items-center justify-between px-3 border-b ${border}`}>
           <div className="flex items-center gap-2 min-w-0">
             <FileKindIcon kind={activeFile?.kind ?? 'modified'} isDark={isDark} />
-            <span className={`text-[12px] font-mono truncate ${
-              isDark ? 'text-white/85' : 'text-black/85'
-            }`}>
+            <span className="text-[12px] font-mono truncate text-[color:var(--fg-strong)]">
               {activeFile?.path ?? '—'}
             </span>
             {activeFile && (
@@ -209,7 +207,8 @@ function FolderNode({
   rootMode?: boolean;
 }) {
   const [collapsed, setCollapsed] = useState(false);
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
+  // Theme-agnostic via CSS var; keep `isDark` lookup so the prop is read.
+  const muted = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
 
   const childFolders = Array.from(node.children.values()).sort((a, b) => a.name.localeCompare(b.name));
   const sortedFiles = [...node.files].sort((a, b) => a.path.localeCompare(b.path));
@@ -273,10 +272,10 @@ function FileLeaf({
   })();
   const rowBg = active
     ? (isDark ? 'bg-white/[0.08]' : 'bg-black/[0.06]')
-    : (isDark ? 'hover:bg-white/[0.04]' : 'hover:bg-black/[0.04]');
+    : 'hover:bg-[color:var(--bg-hover)]';
   const titleColor = active
-    ? (isDark ? 'text-white' : 'text-black')
-    : (isDark ? 'text-white/70' : 'text-black/70');
+    ? 'text-[color:var(--fg-strong)]'
+    : 'text-[color:var(--fg-default)]';
 
   return (
     <div
@@ -298,9 +297,7 @@ function FileLeaf({
       <button
         type="button"
         onClick={onToggleViewed}
-        className={`shrink-0 p-0.5 rounded-md ${
-          isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70'
-        }`}
+        className="shrink-0 p-0.5 rounded-md text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]"
         title={file.viewed ? 'Mark as not viewed' : 'Mark as viewed'}
       >
         {file.viewed ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
@@ -310,7 +307,8 @@ function FileLeaf({
 }
 
 function FileKindIcon({ kind, isDark }: { kind: ChangeKind; isDark: boolean }) {
-  const tone = isDark ? 'text-white/40' : 'text-black/40';
+  // Theme-agnostic via CSS var; keep `isDark` lookup so the prop is read.
+  const tone = isDark ? 'text-[color:var(--fg-subtle)]' : 'text-[color:var(--fg-subtle)]';
   if (kind === 'added')   return <FilePlus    className="w-3 h-3 text-emerald-500 shrink-0" />;
   if (kind === 'deleted') return <FileMinus   className="w-3 h-3 text-rose-500    shrink-0" />;
   if (kind === 'renamed') return <FileSymlink className={`w-3 h-3 shrink-0 ${tone}`} />;

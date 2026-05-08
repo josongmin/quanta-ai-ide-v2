@@ -25,6 +25,20 @@
   "placeholder": {
     "comingSoon": "近日公開"
   },
+  "agentFeed": {
+    "title": "ライブエージェント",
+    "open": "エージェントフィードを開く",
+    "close": "閉じる",
+    "inflight": "稼働中",
+    "empty": "現在エージェントの活動はありません。チャットを開くかデモモードをオンにしてください。",
+    "footer": "ドットフィールドオーバーレイと同期 · シアン = 思考 · パルス = 編集",
+    "moreTargets": "件のファイル",
+    "state": {
+      "thinking": "思考中",
+      "editing": "編集中",
+      "done": "完了"
+    }
+  },
   "review": {
     "empty": {
       "noMatches": "このビューに一致する PR はありません。",

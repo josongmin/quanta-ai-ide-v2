@@ -19,7 +19,6 @@ import { FilterBar, FilterProvider } from '@features/filter-files';
 import { SearchBar } from '@features/search-dsl';
 import { ModeSwitcher, useViewMode } from '@features/switch-mode';
 import { OverlayPopover } from '@features/apply-overlay';
-import { PrPreviewBar, PrChangeList, usePrPreview } from '@features/pr-preview';
 import { useStack } from '@features/inspect-target';
 import { AppShell } from '@widgets/app-shell';
 import { Stage } from '@widgets/stage';
@@ -77,11 +76,12 @@ function FilterProviderRoot({ children }: { children: React.ReactNode }) {
 function IntelligenceRoute() {
   const { mode } = useViewMode();
   const { isDark } = useTheme();
-  // Both modes follow the active theme. Light Universe uses cyanotype
-  // Prussian blue rather than a generic light bg.
+  void isDark; // theme flip is now driven by --bg-stage* CSS vars below.
+  // Both modes follow the active theme via the semantic stage tokens.
+  // Universe-mode flips to the cyanotype Prussian blue in light theme.
   const bgClass = mode === 'universe'
-    ? (isDark ? 'bg-[#020202]' : 'bg-[#0a2545]')
-    : (isDark ? 'bg-[#0d1117]' : 'bg-[#f4f6f9]');
+    ? 'bg-[color:var(--bg-stage-universe)]'
+    : 'bg-[color:var(--bg-stage)]';
 
   return (
     <div className={`absolute inset-0 overflow-hidden font-sans select-none ${bgClass}`}>
@@ -103,21 +103,14 @@ function IntelligenceRoute() {
         <OverlayPopover />
       </div>
 
-      <PrPreviewSurface />
+      {/* Git actions (commit/push) live in the GNB itself now — see
+          AppShell. The old corner-mounted PR preview surface was removed
+          per product call: branch state belongs in chrome, not as a
+          floating panel competing with the FilterBar. */}
 
       <Suspense fallback={null}>
         <ChatAgent />
       </Suspense>
-    </div>
-  );
-}
-
-function PrPreviewSurface() {
-  const pr = usePrPreview();
-  return (
-    <div className="absolute top-4 right-4 z-30 pointer-events-auto flex flex-col items-end gap-2 max-w-[420px] w-[min(420px,calc(100vw-32px))]">
-      <PrPreviewBar />
-      {pr.active && pr.diff && <PrChangeList />}
     </div>
   );
 }
@@ -241,7 +234,7 @@ export const router = createRouter({
 // `interface` is required for declaration-merging into TanStack Router's
 // own `Register` interface; a `type` alias here triggers TS2300.
 declare module '@tanstack/react-router' {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- declaration-merging requires `interface`; see comment above.
   interface Register {
     router: typeof router;
   }

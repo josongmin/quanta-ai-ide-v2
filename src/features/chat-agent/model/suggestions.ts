@@ -20,7 +20,7 @@ export type SuggestionEffect = {
 };
 
 export function useRunSuggestion(): (key: SuggestionKey) => SuggestionEffect {
-  const { repo, setRange, toggleFolder, clearFolders, applyPreset } = useFilter();
+  const { repo, setRange, toggleFolder, clearFolders } = useFilter();
   const { setRiskLens, setBlastSeed } = useOverlay();
   const stack = useStack();
 
@@ -100,5 +100,5 @@ export function useRunSuggestion(): (key: SuggestionKey) => SuggestionEffect {
         };
       }
     }
-  }, [repo, setRange, toggleFolder, clearFolders, applyPreset, setRiskLens, setBlastSeed, stack]);
+  }, [repo, setRange, toggleFolder, clearFolders, setRiskLens, setBlastSeed, stack]);
 }

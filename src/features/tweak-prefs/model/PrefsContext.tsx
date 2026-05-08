@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode,
+  createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode,
 } from 'react';
 import type { Plan, FacetCategoryKey, FacetEntry } from '@entities/facet';
 
@@ -72,23 +72,44 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
     persist(s);
   }, [s]);
 
-  const ctx = useMemo<Ctx>(() => ({
-    ...s,
-    setPlan: (p) => { setS((cur) => ({ ...cur, plan: p })); },
-    toggleHidden: (key) => { setS((cur) => {
+  const setPlan = useCallback((p: Plan) => {
+    setS((cur) => ({ ...cur, plan: p }));
+  }, []);
+  const toggleHidden = useCallback((key: string) => {
+    setS((cur) => {
       const next = new Set(cur.hidden);
       next.has(key) ? next.delete(key) : next.add(key);
       return { ...cur, hidden: next };
-    }); },
-    toggleCategoryCollapsed: (k) => { setS((cur) => {
+    });
+  }, []);
+  const toggleCategoryCollapsed = useCallback((k: FacetCategoryKey) => {
+    setS((cur) => {
       const next = new Set(cur.collapsedCategories);
       next.has(k) ? next.delete(k) : next.add(k);
       return { ...cur, collapsedCategories: next };
-    }); },
-    isUnlocked: ({ requiredPlan }) => PLAN_RANK[s.plan] >= PLAN_RANK[requiredPlan],
-    isVisible: (entry) => PLAN_RANK[s.plan] >= PLAN_RANK[entry.requiredPlan] && !s.hidden.has(entry.key),
-    reset: () => { setS(defaults()); },
-  }), [s]);
+    });
+  }, []);
+  const reset = useCallback(() => { setS(() => defaults()); }, []);
+
+  // isUnlocked/isVisible read live state, so identities track plan+hidden.
+  const isUnlocked = useCallback(
+    ({ requiredPlan }: { requiredPlan: Plan }) => PLAN_RANK[s.plan] >= PLAN_RANK[requiredPlan],
+    [s.plan],
+  );
+  const isVisible = useCallback(
+    (entry: FacetEntry) => PLAN_RANK[s.plan] >= PLAN_RANK[entry.requiredPlan] && !s.hidden.has(entry.key),
+    [s.plan, s.hidden],
+  );
+
+  const ctx = useMemo<Ctx>(() => ({
+    ...s,
+    setPlan,
+    toggleHidden,
+    toggleCategoryCollapsed,
+    isUnlocked,
+    isVisible,
+    reset,
+  }), [s, setPlan, toggleHidden, toggleCategoryCollapsed, isUnlocked, isVisible, reset]);
 
   return <PrefsCtx.Provider value={ctx}>{children}</PrefsCtx.Provider>;
 }

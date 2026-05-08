@@ -53,11 +53,11 @@ export default function RulesBoard() {
             WebkitBackdropFilter: 'blur(22px) saturate(160%)',
           }}
         >
-          <span className={`text-[10px] font-mono ${isDark ? 'text-white/55' : 'text-black/55'}`}>
+          <span className="text-[10px] font-mono text-[color:var(--fg-muted)]">
             {rules.filter((r) => r.enabled).length} of {rules.length} active
           </span>
 
-          <div className={`mx-2 h-3 w-px ${isDark ? 'bg-white/10' : 'bg-black/10'}`} />
+          <div className="mx-2 h-3 w-px bg-[color:var(--bg-surface)]" />
 
           {(['all', 'native', 'eslint', 'semgrep', 'codeql', 'custom'] as FilterKey[]).map((k) => {
             const active = filter === k;
@@ -68,7 +68,7 @@ export default function RulesBoard() {
                 onClick={() => { setFilter(k); }}
                 className={`px-2 py-0.5 rounded-md text-[10px] font-mono transition-colors ${
                   active
-                    ? (isDark ? 'bg-white/10 text-white' : 'bg-black/10 text-black')
+                    ? 'bg-[color:var(--bg-surface)] text-[color:var(--fg-strong)]'
                     : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/55 hover:text-black/70')
                 }`}
               >
@@ -82,9 +82,7 @@ export default function RulesBoard() {
 
           <button type="button"
             onClick={() => { openEditor(null); }}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors ${
-              isDark ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90'
-            }`}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors bg-[color:var(--fg-strong)] text-[color:var(--bg-canvas)] hover:opacity-90"
           >
             <Plus className="w-3 h-3" />
             New
@@ -111,7 +109,7 @@ export default function RulesBoard() {
                   <span className="ml-2 opacity-60">{list.length}</span>
                 </span>
               </div>
-              <div className={isDark ? 'divide-y divide-white/5' : 'divide-y divide-black/5'}>
+              <div className="divide-y divide-[color:var(--border-muted)]">
                 {list.map((r) => (
                   <RuleRow
                     key={r.id}
@@ -169,7 +167,15 @@ function RuleRow({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={onOpen}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
       className={`px-6 py-2.5 cursor-pointer transition-colors flex items-center gap-3 ${
         selected
           ? (isDark ? 'bg-white/[0.05]' : 'bg-black/[0.04]')
@@ -182,14 +188,12 @@ function RuleRow({
         className={`shrink-0 relative w-7 h-3.5 rounded-full transition-colors ${
           rule.enabled
             ? (isDark ? 'bg-white/40' : 'bg-black/45')
-            : (isDark ? 'bg-white/10' : 'bg-black/10')
+            : 'bg-[color:var(--bg-surface)]'
         }`}
         aria-label={rule.enabled ? 'Disable' : 'Enable'}
       >
         <span
-          className={`absolute top-0.5 w-2.5 h-2.5 rounded-full transition-all ${
-            isDark ? 'bg-white' : 'bg-white'
-          }`}
+          className="absolute top-0.5 w-2.5 h-2.5 rounded-full transition-all bg-white"
           style={{ left: rule.enabled ? '14px' : '2px' }}
         />
       </button>
@@ -197,9 +201,7 @@ function RuleRow({
       {/* Name + signal description */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className={`text-[12px] font-bold truncate ${
-            isDark ? 'text-white/85' : 'text-black/85'
-          }`}>
+          <span className="text-[12px] font-bold truncate text-[color:var(--fg-strong)]">
             {rule.name}
           </span>
           {rule.severity !== 'info' && (
@@ -207,7 +209,7 @@ function RuleRow({
               className="text-[9px] font-mono uppercase tracking-[0.18em] px-1 py-px rounded-md shrink-0"
               style={{
                 color: sevColor,
-                backgroundColor: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                backgroundColor: 'var(--bg-hover)',
               }}
             >
               {rule.severity}
@@ -236,7 +238,7 @@ function RuleRow({
               ? { color: SEVERITY_COLOR.block }
               : isWarning
                 ? { color: SEVERITY_COLOR.warn }
-                : { color: isDark ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.85)' }
+                : { color: 'var(--fg-strong)' }
         }
         title={`${matches} files match`}
       >
@@ -249,9 +251,7 @@ function RuleRow({
       {rule.source === 'custom' && (
         <button type="button"
           onClick={(e) => { e.stopPropagation(); onDelete(); }}
-          className={`shrink-0 px-1 text-[10px] font-mono ${
-            isDark ? 'text-white/30 hover:text-white/70' : 'text-black/40 hover:text-black/70'
-          }`}
+          className="shrink-0 px-1 text-[10px] font-mono text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]"
           title="Delete rule"
         >
           ✕

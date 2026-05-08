@@ -35,14 +35,12 @@ export default function DiffView({
     return file.hunks.slice().sort((a, b) => a.newStart - b.newStart);
   }, [file.hunks]);
 
-  const headerSurface = isDark
-    ? 'bg-white/[0.04] border-white/10'
-    : 'bg-black/[0.04] border-black/10';
+  const headerSurface = 'bg-[color:var(--bg-hover)] border-[color:var(--border-default)]';
   const containerSurface = isDark
-    ? 'bg-[#0d1117] border-white/10'
-    : 'bg-white border-black/10';
-  const pathCls = isDark ? 'text-white/85' : 'text-black/85';
-  const subCls = isDark ? 'text-white/40' : 'text-black/40';
+    ? 'bg-[#0d1117] border-[color:var(--border-default)]'
+    : 'bg-white border-[color:var(--border-default)]';
+  const pathCls = 'text-[color:var(--fg-strong)]';
+  const subCls = 'text-[color:var(--fg-subtle)]';
 
   return (
     <div className={`rounded-md border overflow-hidden ${containerSurface}`}>
@@ -104,9 +102,7 @@ function ChangeKindIcon({ kind }: { kind: ChangeKind }) {
 
 function WsToggle({ on, onToggle, isDark }: { on: boolean; onToggle: () => void; isDark: boolean }) {
   const { t } = useTranslation('diff');
-  const idle = isDark
-    ? 'text-white/55 hover:bg-white/5'
-    : 'text-black/55 hover:bg-black/5';
+  const idle = 'text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-hover)]';
   const active = isDark
     ? 'bg-white/15 text-white'
     : 'bg-black/10 text-black';

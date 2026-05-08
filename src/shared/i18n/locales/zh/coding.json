@@ -12,10 +12,431 @@
       "mine": "我的",
       "archived": "已归档"
     },
-    "empty": "没有匹配的项。"
+    "empty": "没有匹配的项。",
+    "resize": "调整任务列表大小",
+    "awaitingYou": "待你审阅 {{count}} 个",
+    "running": "运行中 {{count}} 个"
+  },
+  "checkpoint": {
+    "rewindHere": "回到此处",
+    "forkFromHere": "从此处分叉",
+    "menu": "检查点",
+    "rewindConfirm": "将移除此点之后的 {{count}} 个回合",
+    "rewindUndo": "撤销回退",
+    "rewindUndone": "已恢复 {{count}} 个回合"
+  },
+  "hunk": {
+    "accept": "采纳",
+    "reject": "舍弃",
+    "pending": "待审",
+    "summary": "{{accepted}}/{{total}} 块已采纳",
+    "acceptAll": "全部采纳",
+    "rejectAll": "全部舍弃"
+  },
+  "stop": {
+    "holdToStop": "长按停止",
+    "released": "已取消"
+  },
+  "comment": {
+    "addNote": "添加备注",
+    "askAgent": "询问代理",
+    "placeholder": "对此块的备注或问题…",
+    "submit": "保存",
+    "cancel": "取消",
+    "header": "评论 {{count}}",
+    "kindNote": "备注",
+    "kindAsk": "提问"
+  },
+  "diffPreview": {
+    "label": "差异预览",
+    "summary": "{{added}}+ / {{removed}}- · {{files}} 个文件",
+    "askAbout": "就此变更提问",
+    "openInPr": "作为 PR 打开"
+  },
+  "scrubber": {
+    "label": "时间线",
+    "live": "实时",
+    "showingTurn": "第 {{n}}/{{total}} 回合",
+    "previewingTurn": "预览 · {{n}}/{{total}}",
+    "back": "回到实时",
+    "tooltip": "预览此时刻的 thread（不修改）",
+    "kbHint": "[ ] · ⌘.",
+    "youAsked": "用户输入",
+    "moreFiles": "+ {{n}} 个",
+    "status": {
+      "user": "用户",
+      "planned": "已计划",
+      "thinking": "思考中",
+      "suggested": "建议变更",
+      "applied": "已应用",
+      "rejected": "已拒绝",
+      "failed": "工具失败",
+      "streaming": "流式"
+    },
+    "inverse": {
+      "safe": "安全反向",
+      "risky": "需审查",
+      "summary": "把 #{{n}} 回合的变更（{{files}} 个文件）作为新 operation 撤销",
+      "overlap": "之后又有 {{n}} 个文件被修改",
+      "applyClean": "添加反向 op",
+      "applyReview": "反向 · 审查",
+      "applyTooltipSafe": "在时间线末尾追加新 recovery operation。历史不会被删除。",
+      "applyTooltipRisky": "此回合后同一文件再次被修改。应用前需要审查。"
+    }
+  },
+  "snapshotV2": {
+    "model": "模型",
+    "phase": "阶段",
+    "cost": "费用",
+    "elapsed": "耗时"
+  },
+  "emptyContext": {
+    "title": "继续上次的工作",
+    "subtitle": "从最近会话中提取的上下文",
+    "noContext": "暂无最近作业,从下方建议开始。"
+  },
+  "reply": {
+    "openCompose": "回复",
+    "placeholder": "输入回复…",
+    "submit": "回复",
+    "agentLabel": "代理",
+    "userLabel": "我",
+    "resolve": "标记已解决",
+    "reopen": "重新打开",
+    "resolved": "已解决"
+  },
+  "reactions": {
+    "label": "反应",
+    "thumbsUp": "有用",
+    "thumbsDown": "无用",
+    "heart": "喜欢",
+    "target": "精准"
+  },
+  "turnMenu": {
+    "copy": "复制文本",
+    "copyMd": "复制为 Markdown",
+    "share": "分享",
+    "export": "导出",
+    "openInNewTask": "在新任务中打开"
+  },
+  "palette": {
+    "title": "命令面板",
+    "placeholder": "搜索命令、任务、文件…",
+    "sectionActions": "操作",
+    "sectionTasks": "任务",
+    "sectionSlash": "斜杠命令",
+    "noResults": "无结果",
+    "hint": "↑↓ 导航 · ↵ 执行 · esc 关闭",
+    "openShortcut": "打开命令面板",
+    "actions": {
+      "newTask": "新建任务",
+      "newProject": "新建项目",
+      "openPr": "打开 PR",
+      "rewindLast": "回退最后一回合",
+      "toggleScrubber": "切换时间线",
+      "switchModelCapable": "切换模型: opus 4.7",
+      "switchModelBalanced": "切换模型: sonnet 4.6",
+      "switchModelFast": "切换模型: haiku 4.5"
+    }
+  },
+  "activityV2": {
+    "userTurn": "我的消息",
+    "agentTurn": "代理回复",
+    "diffEmitted": "生成差异",
+    "toolEdit": "编辑 {{file}}",
+    "toolRead": "读取 {{file}}",
+    "toolRun": "执行命令",
+    "toolSearch": "搜索",
+    "planUpdated": "更新方案",
+    "noActivity": "暂无活动"
+  },
+  "voice": {
+    "start": "开始语音输入",
+    "stop": "停止语音输入",
+    "listening": "正在聆听…",
+    "transcribing": "转写中…",
+    "tooltip": "对着麦克风说话,文字会自动出现在输入框",
+    "unsupported": "此浏览器不支持语音输入"
+  },
+  "diffView": {
+    "unified": "统一",
+    "split": "左右分屏",
+    "toggleTooltip": "切换差异视图"
+  },
+  "lineEdit": {
+    "rewrite": "重写此行",
+    "explain": "解释此行",
+    "placeholder": "这一行该怎么改?",
+    "submit": "重写",
+    "cancel": "取消"
+  },
+  "batch": {
+    "selectMode": "多选",
+    "selected": "已选 {{count}} 项",
+    "forkBatch": "从选中项分叉",
+    "rewindBatch": "回退到选中项",
+    "clear": "清除选择",
+    "hint": "按住 shift 点击范围选择"
+  },
+  "defaultModel": {
+    "label": "默认模型",
+    "save": "保存为本项目默认",
+    "saved": "已将 {{model}} 设为项目默认",
+    "cleared": "已清除项目默认模型"
+  },
+  "autoadvance": {
+    "label": "自动推进",
+    "tooltip": "勾选计划项后自动启动下一步",
+    "triggered": "开始下一步: {{next}}",
+    "noNext": "无剩余步骤"
+  },
+  "integrations": {
+    "title": "已连接工具",
+    "connected": "已连接",
+    "disconnected": "已断开",
+    "addNew": "添加集成",
+    "kind": {
+      "slack": "Slack",
+      "linear": "Linear",
+      "jira": "Jira",
+      "github": "GitHub",
+      "sentry": "Sentry",
+      "figma": "Figma"
+    }
+  },
+  "budget": {
+    "label": "预算",
+    "noBudget": "未设预算",
+    "ok": "正常",
+    "alert": "警告",
+    "exceeded": "已超",
+    "remaining": "剩 ${{usd}}",
+    "tooltip": "本任务累计成本。超过阈值会变色。"
+  },
+  "projection": {
+    "label": "均值",
+    "tooltip": "本任务每回合平均成本。若下一回合显著高于均值会提示。",
+    "spike": "本回合为均值 {{x}}×",
+    "normal": "接近均值"
+  },
+  "planMeta": {
+    "confidence": "置信度 {{pct}}%",
+    "estTokens": "约 {{n}} 令牌",
+    "estTime": "约 {{n}} 秒",
+    "lowConfidence": "低 — 建议复核"
+  },
+  "citationStale": {
+    "label": "stale",
+    "tooltip": "引用之后该文件又被修改。作为当前依据前请确认。"
+  },
+  "applyV2": {
+    "inverse": "撤销此变更",
+    "inverseTooltip": "添加一条反向 turn,而不是使用 git",
+    "inverseAdded": "已添加反向 turn",
+    "conflictWarn": "此变更之后同一文件又被编辑 — 应用可能覆盖后续编辑"
+  },
+  "history": {
+    "tooltip": "↑↓ 调出历史 prompt",
+    "empty": "暂无历史"
+  },
+  "density": {
+    "label": "密度",
+    "compact": "紧凑",
+    "comfortable": "适中",
+    "spacious": "宽松"
+  },
+  "a11y": {
+    "highContrast": "高对比",
+    "reducedMotion": "减少动效",
+    "skipToComposer": "跳到 composer"
+  },
+  "drift": {
+    "label": "漂移",
+    "stuck": "思考时间比平时长 ({{x}}×)",
+    "noisy": "工具调用比平时多 {{x}}×",
+    "ok": "节奏正常"
+  },
+  "latency": {
+    "label": "延迟分布",
+    "tooltip": "本回合各阶段耗时",
+    "noData": "无数据",
+    "totalLabel": "共 {{ms}}ms"
+  },
+  "successRate": {
+    "label": "工具成功率",
+    "tooltip": "本任务中按工具 / 按模型的成功调用率",
+    "byTool": "按工具",
+    "byModel": "按模型",
+    "noData": "暂无数据",
+    "rate": "{{ok}}/{{total}}"
+  },
+  "tps": {
+    "label": "tok/s",
+    "tooltip": "每秒输出令牌 — 流式期间实时"
+  },
+  "inverse": {
+    "arrowLabel": "回合 #{{n}} 的逆操作",
+    "anchor": "逆操作目标"
+  },
+  "exportPr": {
+    "label": "导出为 PR 描述",
+    "ready": "已将 PR 描述复制到剪贴板"
+  },
+  "selfEval": {
+    "label": "置信度",
+    "tooltip": "代理自评置信度。≥70% 为安全区。",
+    "high": "高 ({{pct}}%)",
+    "mid": "中 ({{pct}}%)",
+    "low": "低 — 建议复核 ({{pct}}%)"
+  },
+  "latencyBaseline": {
+    "label": "对比基准",
+    "tooltip": "本回合各阶段耗时 vs 本任务均值",
+    "faster": "快 {{x}}×",
+    "slower": "慢 {{x}}×",
+    "match": "与均值一致"
+  },
+  "forecast": {
+    "label": "预测费用",
+    "tooltip": "按当前节奏到下回合的累计预估",
+    "remaining": "至下回合 +~${{usd}}",
+    "perSecond": "每秒 ~${{usd}}"
+  },
+  "sideBySide": {
+    "label": "并行对比",
+    "tooltip": "同一提示并行跑两个模型",
+    "leftLane": "{{model}} (左)",
+    "rightLane": "{{model}} (右)",
+    "togglePicker": "选择对比模型",
+    "off": "单一",
+    "winner": "选优"
+  },
+  "secretGuard": {
+    "blockTitle": "检测到敏感信息",
+    "blockBody": "输入中包含 {{count}} 个秘密。",
+    "warnTitle": "可能的敏感信息",
+    "redactedChip": "[REDACTED:{{kind}}]",
+    "maskNow": "脱敏并发送",
+    "sendAsIs": "原样发送",
+    "cancel": "取消",
+    "revealOnce": "查看一次",
+    "patterns": {
+      "openai-key": "OpenAI API 密钥",
+      "anthropic-key": "Anthropic API 密钥",
+      "aws-access-key": "AWS Access Key",
+      "github-pat": "GitHub PAT",
+      "jwt": "JWT",
+      "email": "邮箱",
+      "us-ssn": "SSN 模式",
+      "credit-card": "信用卡"
+    },
+    "exportSanitized": "导出时已移除 {{count}} 个秘密",
+    "tooltip": "GitHub Secret Scanning 规则 + 熵检测"
+  },
+  "budgetV2": {
+    "alertBannerTitle": "接近预算阈值",
+    "alertBannerBody": "下回合后自动 {{from}} → {{to}} 降级。",
+    "alertDisable": "关闭",
+    "alertOk": "确定",
+    "softCapModalTitle": "已达软上限",
+    "softCapModalBody": "本任务 ${{used}} / ${{cap}}。请选择继续方式。",
+    "softCapAutoDown": "自动降级到 {{model}} (约 ${{est}})",
+    "softCapOverride": "保留当前模型 (上限提升至 ${{newCap}})",
+    "softCapStop": "在此停止 (恢复前不消耗)",
+    "hardCapBanner": "硬上限 — 完成当前回合,阻断下一回合",
+    "tier": {
+      "normal": "正常",
+      "alert": "注意",
+      "softCap": "软上限",
+      "hardCap": "硬上限"
+    }
+  },
+  "testMap": {
+    "linkedFailures": "关联失败",
+    "passedAll": "{{n}}/{{n}} 通过",
+    "rerun": "重跑",
+    "askAgent": "询问代理原因",
+    "jumpToHunk": "跳到 hunk",
+    "expectedGot": "期望 {{exp}} · 实际 {{got}}",
+    "stackHit": "{{file}}:{{line}}",
+    "noTests": "尚无对应测试",
+    "coverageDot": "失败测试栈中的行"
+  },
+  "prCi": {
+    "branchTitle": "分支 + PR",
+    "ahead": "ahead {{n}}",
+    "behind": "behind {{n}}",
+    "mergeable": "可合并",
+    "dirty": "冲突",
+    "blocked": "受阻",
+    "prOpen": "PR #{{n}} · 打开",
+    "prDraft": "PR #{{n}} · 草稿",
+    "prMerged": "PR #{{n}} · 已合并",
+    "reviewers": "评审者",
+    "approved": "已批准",
+    "pending": "待办",
+    "changesRequested": "请求修改",
+    "checks": "CI 检查",
+    "checkQueued": "排队",
+    "checkRunning": "运行中",
+    "checkSuccess": "通过",
+    "checkFailure": "失败",
+    "checkCancelled": "已取消",
+    "conflicts": "{{n}} 个冲突",
+    "noConflicts": "无冲突",
+    "readyToMerge": "可合并",
+    "syncNow": "立即同步",
+    "openOnGitHub": "在 GitHub 打开",
+    "lastPush": "上次 push {{ago}}"
+  },
+  "drift": {
+    "label": "漂移",
+    "stuck": "思考时间比平时长 ({{x}}×)",
+    "noisy": "工具调用比平时多 {{x}}×",
+    "ok": "节奏正常",
+    "fileClean": "工作树未变",
+    "fileShifted": "其他行变更 (自动重定位)",
+    "fileOverlap": "同一行被改 — 预计冲突",
+    "fileGone": "工作树已删",
+    "useWorking": "采用工作树",
+    "forceApply": "强制应用",
+    "openMerge": "打开三方合并",
+    "lastTouched": "{{ago}} 修改",
+    "draftedAt": "{{ago}} 起草"
+  },
+  "background": {
+    "label": "后台",
+    "runHere": "此处运行",
+    "runCloud": "后台运行",
+    "switchedToCloud": "已切换到云端",
+    "running": "运行中",
+    "completed": "完成",
+    "notifyBrowser": "浏览器",
+    "notifyEmail": "邮件",
+    "notifySilent": "静默",
+    "tabClosable": "关闭标签页也会继续运行",
+    "ribbon": "{{count}} 后台 · 云端",
+    "completedToast": "{{title}} 完成 · +{{added}}/-{{removed}} · ${{usd}}",
+    "open": "打开"
   },
   "header": {
     "openPr": "打开 PR"
+  },
+  "snapshot": {
+    "title": "工作快照",
+    "subtitle": "代理目前已完成的事项",
+    "branch": "分支",
+    "diff": "变更",
+    "files": "文件",
+    "touched": "已触及文件",
+    "planRemaining": "剩余计划 {{count}} 项",
+    "planAllDone": "计划已完成",
+    "noPlan": "暂无计划",
+    "followups": "下一步操作",
+    "openDiff": "查看变更",
+    "openPr": "创建 PR",
+    "continue": "继续",
+    "moreFiles": "另 {{count}} 项"
   },
   "composer": {
     "code": "代码",
@@ -33,7 +454,59 @@
     "mentionFile": "引用文件",
     "mentionSymbol": "引用符号",
     "web": "网络搜索",
-    "suggest": "提示建议"
+    "suggest": "提示建议",
+    "modelTag": {
+      "capable": "最强能力",
+      "balanced": "均衡",
+      "fast": "最快"
+    }
+  },
+  "status": {
+    "running": "运行中",
+    "review": "评审",
+    "merged": "已合并",
+    "open": "进行中",
+    "failed": "失败"
+  },
+  "mention": {
+    "filesHeader": "文件",
+    "symbolsHeader": "符号",
+    "empty": "无匹配",
+    "hint": "↑↓ 移动 · ↵ 选择 · esc 关闭"
+  },
+  "scroll": {
+    "newMessages": "跳到最新"
+  },
+  "phase": {
+    "thinking": "思考中",
+    "reading": "读取中",
+    "searching": "搜索中",
+    "editing": "编辑中",
+    "running": "运行中",
+    "planning": "规划中",
+    "writing": "写入中"
+  },
+  "cost": {
+    "label": "累计",
+    "tokens": "令牌",
+    "estimate": "约",
+    "tokensShort": "tok",
+    "tooltip": "本任务累计输入/输出令牌与估算费用。基于 opus 4.7。"
+  },
+  "apply": {
+    "suggested": "建议",
+    "applied": "已应用",
+    "previewOnly": "仅预览",
+    "applyToTree": "应用到工作树",
+    "applyAndPr": "应用并打开 PR",
+    "appliedNote": "文件已写入工作树,可用 git 撤销。",
+    "suggestedNote": "文件尚未改动,应用前请先审阅。"
+  },
+  "citations": {
+    "label": "引用",
+    "more": "另 {{count}} 项",
+    "noLines": "整文件",
+    "lines": "L{{start}}-{{end}}"
   },
   "empty": {
     "title": "想要做什么？",
@@ -153,7 +626,8 @@
     "kbNew": "新建任务",
     "kbSearch": "搜索任务",
     "kbSlash": "斜杠命令",
-    "footer": "se-dot-field-demo · coding"
+    "footer": "se-dot-field-demo · coding",
+    "resize": "调整上下文面板大小"
   },
   "block": {
     "thoughtFor": "思考了 {{seconds}} 秒",

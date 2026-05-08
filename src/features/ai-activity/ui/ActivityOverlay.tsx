@@ -46,9 +46,10 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
   );
 
   /* eslint-disable react-hooks/set-state-in-effect --
-   * setState here is scheduled inside requestAnimationFrame, not
-   * synchronously during the effect — the lint rule's "immediate
-   * cascading render" concern does not apply.
+   * The synchronous `setPins` on disable is guarded with a same-value bail
+   * (`prev.length === 0 ? prev : []`) so React skips the re-render. The
+   * remaining setPins calls run inside requestAnimationFrame, not the
+   * effect body, so the rule's cascading-render concern does not apply.
    */
   useEffect(() => {
     if (!enabled || !projectFn) {

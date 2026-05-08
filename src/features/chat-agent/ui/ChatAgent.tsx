@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Sparkles, ArrowUp, X, Paperclip, Hash, AtSign, Cpu, Plus, ChevronDown } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
+import { useClickOutside } from '@shared/lib';
 import { GlassCard, Pill } from '@shared/ui';
 import { useRunSuggestion, type SuggestionKey } from '../model/suggestions';
 
@@ -29,7 +30,7 @@ function newSession(titleFn: (n: number) => string): Session {
 
 export default function ChatAgent() {
   const { t } = useTranslation('chat');
-  const makeTitle = (n: number) => t('tabs.defaultTitle', { n });
+  const makeTitle = useCallback((n: number) => t('tabs.defaultTitle', { n }), [t]);
   // Open by default — the agent is the primary CTA at the bottom-center.
   const [open, setOpen] = useState(true);
   const [sessions, setSessions] = useState<Session[]>(() => [newSession(makeTitle)]);
@@ -42,6 +43,67 @@ export default function ChatAgent() {
   // warnings here).
   const pendingTimersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
   const runSuggestion = useRunSuggestion();
+
+  // User-resizable height. The widget defaults to 60vh-ish via CSS but
+  // when the user drags the top handle we switch to an explicit pixel
+  // height that survives reloads via localStorage. Dragging up grows
+  // the widget (since it's anchored to the bottom of the viewport),
+  // so deltaY is *subtracted* from the running height during drag.
+  const HEIGHT_KEY = 'chat-agent:height';
+  const HEIGHT_MIN = 240;
+  const HEIGHT_MAX_VH = 0.92;
+  const [height, setHeight] = useState<number | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const raw = window.localStorage.getItem(HEIGHT_KEY);
+    if (raw == null) return null;
+    const n = Number(raw);
+    return Number.isFinite(n) && n >= HEIGHT_MIN ? n : null;
+  });
+  const dragRef = useRef<{ startY: number; startHeight: number } | null>(null);
+  const [isResizing, setIsResizing] = useState(false);
+
+  function clampHeight(h: number): number {
+    if (typeof window === 'undefined') return Math.max(HEIGHT_MIN, h);
+    const max = Math.floor(window.innerHeight * HEIGHT_MAX_VH);
+    return Math.min(max, Math.max(HEIGHT_MIN, h));
+  }
+
+  function onResizeStart(e: React.PointerEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    const current = height ?? Math.floor(window.innerHeight * 0.6);
+    dragRef.current = { startY: e.clientY, startHeight: current };
+    setIsResizing(true);
+  }
+  function onResizeMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!dragRef.current) return;
+    // Anchored to the viewport bottom, so dragging *up* (negative dy)
+    // grows the widget. Invert the sign so the cursor and edge follow.
+    const dy = dragRef.current.startY - e.clientY;
+    setHeight(clampHeight(dragRef.current.startHeight + dy));
+  }
+  function onResizeEnd(e: React.PointerEvent<HTMLDivElement>) {
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    dragRef.current = null;
+    setIsResizing(false);
+    if (height != null) {
+      window.localStorage.setItem(HEIGHT_KEY, String(height));
+    }
+  }
+  function onResizeDoubleClick() {
+    // Reset to the CSS default (max-h-[60vh]) by clearing the override.
+    setHeight(null);
+    window.localStorage.removeItem(HEIGHT_KEY);
+  }
+  function onResizeKey(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === 'ArrowUp')   { e.preventDefault(); setHeight((h) => clampHeight((h ?? 360) + 24)); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setHeight((h) => clampHeight((h ?? 360) - 24)); }
+    if (e.key === 'Home' || e.key === 'Escape') {
+      e.preventDefault();
+      setHeight(null);
+      window.localStorage.removeItem(HEIGHT_KEY);
+    }
+  }
 
   useEffect(() => {
     const timers = pendingTimersRef.current;
@@ -79,9 +141,18 @@ export default function ChatAgent() {
     });
   }, [activeId, makeTitle]);
 
-  // ⌘K toggles, ⌘T new tab, ⌘W close tab, ⌘1..9 jump
+  // ⌘K toggles, ⌘T new tab, ⌘W close tab, Esc closes
+  // Latest-state ref keeps the keydown listener stable: the handler reads
+  // current `open`/`activeId` via the ref instead of capturing them, so we
+  // don't tear down/re-add the global listener on every tab switch.
+  const kbdStateRef = useRef({ open, activeId, addSession, closeSession });
+  useLayoutEffect(() => {
+    kbdStateRef.current = { open, activeId, addSession, closeSession };
+  });
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
+      const { open, activeId, addSession, closeSession } = kbdStateRef.current;
       const meta = e.metaKey || e.ctrlKey;
       if (meta && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -103,15 +174,63 @@ export default function ChatAgent() {
     }
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('keydown', onKey); };
-  }, [open, activeId, addSession, closeSession]);
+  }, []);
 
   useEffect(() => {
     if (open) requestAnimationFrame(() => inputRef.current?.focus());
   }, [open, activeId]);
 
+  // Auto-scroll respects user intent. If the user scrolled up to read
+  // older context, we stop following new agent messages and surface a
+  // small pill so they can opt back in.
+  const [pinnedToBottom, setPinnedToBottom] = useState(true);
+  const [hasNewBelow, setHasNewBelow] = useState(false);
+
+  /* eslint-disable react-hooks/set-state-in-effect --
+   * Both effects below mirror DOM/scroll state into React so the pill can
+   * react. The trigger is external (message growth, tab switch); the
+   * resulting state is consumed in the same render cycle by the pill JSX. */
+
   useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const el = scrollRef.current;
+    if (!el) return;
+    if (pinnedToBottom) {
+      el.scrollTop = el.scrollHeight;
+      setHasNewBelow(false);
+    } else {
+      setHasNewBelow(true);
+    }
+    // pinnedToBottom intentionally omitted; only message growth triggers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active?.msgs.length, active?.pending]);
+
+  // Reset to pinned when switching tabs.
+  useEffect(() => {
+    setPinnedToBottom(true);
+    setHasNewBelow(false);
+    requestAnimationFrame(() => {
+      const el = scrollRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    });
+  }, [activeId]);
+
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  function onScroll() {
+    const el = scrollRef.current;
+    if (!el) return;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
+    setPinnedToBottom(atBottom);
+    if (atBottom) setHasNewBelow(false);
+  }
+
+  function jumpToLatest() {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    setPinnedToBottom(true);
+    setHasNewBelow(false);
+  }
 
   function patchActive(patch: Partial<Session>) {
     setSessions((cur) => cur.map((s) => (s.id === activeId ? { ...s, ...patch } : s)));
@@ -173,6 +292,10 @@ export default function ChatAgent() {
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    // IME-safe: don't submit while a CJK composition is in flight. Without
+    // this guard, hitting Enter to commit a Korean/Japanese candidate
+    // accidentally fires send().
+    if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (active) send(active.input);
@@ -233,9 +356,18 @@ export default function ChatAgent() {
                 return (
                   <div
                     key={s.id}
+                    role="tab"
+                    aria-selected={a}
+                    tabIndex={0}
                     className="group relative flex items-center gap-2 px-3 text-[11px] font-bold cursor-pointer transition-colors whitespace-nowrap"
                     style={{ color: a ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                     onClick={() => { setActiveId(s.id); }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveId(s.id);
+                      }
+                    }}
                   >
                     <span className="max-w-[160px] truncate">{s.title}</span>
                     {s.pending && (
@@ -288,13 +420,39 @@ export default function ChatAgent() {
 
         {/* Conversation */}
         {(active.msgs.length > 0 || active.pending) && (
-          <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto scrollbar-hide px-4 py-3">
-            <div className="space-y-3">
-              {active.msgs.map((m) => (
-                <Message key={m.id} msg={m} />
-              ))}
-              {active.pending && <PendingDots />}
+          <div className="relative flex-1 min-h-0">
+            <div
+              ref={scrollRef}
+              onScroll={onScroll}
+              className="absolute inset-0 overflow-y-auto scrollbar-hide px-4 py-3"
+            >
+              <div className="space-y-3">
+                {active.msgs.map((m) => (
+                  <Message key={m.id} msg={m} />
+                ))}
+                {active.pending && <PendingDots />}
+              </div>
             </div>
+            {hasNewBelow && !pinnedToBottom && (
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-10 pointer-events-auto">
+                <button
+                  type="button"
+                  onClick={jumpToLatest}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border shadow-lg transition-colors coding-pill-rise"
+                  style={{
+                    background: 'var(--bg-elevated)',
+                    color: 'var(--fg-strong)',
+                    borderColor: 'var(--border-default)',
+                  }}
+                >
+                  <span
+                    className="w-1 h-1 rounded-full coding-breath"
+                    style={{ background: 'var(--intent-success-vivid)' }}
+                  />
+                  ↓
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -455,14 +613,7 @@ function ModelChip({
   const [model, setModel] = useState(MODELS[0]);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!open) return;
-    const onDoc = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    window.addEventListener('mousedown', onDoc);
-    return () => { window.removeEventListener('mousedown', onDoc); };
-  }, [open]);
+  useClickOutside(ref, open, () => { setOpen(false); });
 
   return (
     <div ref={ref} className="relative">

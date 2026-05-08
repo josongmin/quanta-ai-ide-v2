@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import type { Comment, LineThread } from '@entities/pr';
 import { useTranslation } from '@shared/i18n';
+import { formatTimestamp as formatTs } from '@shared/lib';
 import Avatar from './Avatar';
 
 type Props = {
@@ -16,9 +17,7 @@ function formatTimestamp(iso: string): string {
   // shouldn't crash the bubble.
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString(undefined, {
-    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-  });
+  return formatTs(d);
 }
 
 /** Stack of avatar-prefixed comment bubbles + a reply composer.
@@ -34,10 +33,10 @@ export default function CommentThread({ thread, onReply, onResolve, isDark }: Pr
     setDraft('');
   };
 
-  const border = isDark ? 'border-white/10' : 'border-black/10';
+  const border = 'border-[color:var(--border-default)]';
   const surface = isDark ? 'bg-white/[0.03]' : 'bg-black/[0.02]';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const fg = 'text-[color:var(--fg-strong)]';
 
   return (
     <div className={`relative rounded-md border ${border} ${surface} p-2 ${thread.resolved ? 'opacity-70' : ''}`}>
@@ -55,7 +54,7 @@ export default function CommentThread({ thread, onReply, onResolve, isDark }: Pr
 
       <div className="flex flex-col gap-1.5">
         {thread.comments.map((c) => (
-          <Bubble key={c.id} comment={c} isDark={isDark} />
+          <Bubble key={c.id} comment={c} />
         ))}
       </div>
 
@@ -95,10 +94,10 @@ export default function CommentThread({ thread, onReply, onResolve, isDark }: Pr
   );
 }
 
-function Bubble({ comment, isDark }: { comment: Comment; isDark: boolean }) {
-  const fg = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const bubbleBg = isDark ? 'bg-white/[0.04]' : 'bg-black/[0.04]';
+function Bubble({ comment }: { comment: Comment }) {
+  const fg = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const bubbleBg = 'bg-[color:var(--bg-hover)]';
   return (
     <div className="flex items-start gap-1.5">
       <Avatar login={comment.authorLogin} size={20} />

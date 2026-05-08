@@ -25,6 +25,20 @@
   "placeholder": {
     "comingSoon": "곧 제공"
   },
+  "agentFeed": {
+    "title": "라이브 에이전트",
+    "open": "에이전트 피드 열기",
+    "close": "닫기",
+    "inflight": "작업 중",
+    "empty": "지금 활동 중인 에이전트가 없습니다. 채팅을 열거나 데모 모드를 켜보세요.",
+    "footer": "도트필드 오버레이와 같은 소스 · 시안 = 사고 · 펄스 = 편집",
+    "moreTargets": "개 파일 더",
+    "state": {
+      "thinking": "사고 중",
+      "editing": "편집 중",
+      "done": "완료"
+    }
+  },
   "review": {
     "empty": {
       "noMatches": "조건에 맞는 PR이 없습니다.",

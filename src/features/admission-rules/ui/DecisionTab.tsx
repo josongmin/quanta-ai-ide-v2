@@ -62,7 +62,7 @@ export function DecisionTab() {
         >
           {outcome}
         </span>
-        <div className={`text-[11px] font-mono ${isDark ? 'text-white/55' : 'text-black/55'}`}>
+        <div className="text-[11px] font-mono text-[color:var(--fg-muted)]">
           PR #{effectiveSeed} · {effectiveDiff.changes.length} files · {effectiveDiff.affected.length} ripple
         </div>
         <div className="flex-1" />
@@ -71,13 +71,11 @@ export function DecisionTab() {
         <Counter dim={isDark} label="warn"  value={decision.warningCount}  color={SEVERITY_COLOR.warn} />
         <Counter dim={isDark} label="pass"  value={decision.passingCount} />
 
-        <div className={`mx-2 h-4 w-px ${isDark ? 'bg-white/10' : 'bg-black/10'}`} />
+        <div className="mx-2 h-4 w-px bg-[color:var(--bg-surface)]" />
 
         <button type="button"
           onClick={active ? regenerate : start}
-          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors ${
-            isDark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'
-          }`}
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors text-[color:var(--fg-default)] hover:bg-[color:var(--bg-hover)]"
         >
           <Shuffle className="w-3 h-3" />
           {active ? 'Regenerate' : 'Sample PR'}
@@ -87,9 +85,7 @@ export function DecisionTab() {
             type="button"
             aria-label="Stop"
             onClick={stop}
-            className={`p-1 rounded-md ${
-              isDark ? 'text-white/55 hover:bg-white/5' : 'text-black/55 hover:bg-black/5'
-            }`}
+            className="p-1 rounded-md text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-hover)]"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -104,7 +100,7 @@ export function DecisionTab() {
           style={{ borderRight: `1px solid ${tokens(isDark).border}` }}
         >
           <SectionHeader dim={isDark}>{t('section.filesInThisPr')}</SectionHeader>
-          <div className={isDark ? 'divide-y divide-white/5' : 'divide-y divide-black/5'}>
+          <div className="divide-y divide-[color:var(--border-muted)]">
             {effectiveDiff.changes.map((c) => {
               const f = repo.files[c.id];
               if (!f) return null;
@@ -120,19 +116,11 @@ export function DecisionTab() {
               return (
                 <div key={c.id} className="px-6 py-2.5">
                   <div className="flex items-center gap-2 min-w-0">
-                    <FileText className={`w-3 h-3 shrink-0 ${
-                      isDark ? 'text-white/40' : 'text-black/40'
-                    }`} />
-                    <span className={`text-[11px] font-mono truncate min-w-0 flex-1 ${
-                      isDark ? 'text-white/85' : 'text-black/85'
-                    }`}>
+                    <FileText className="w-3 h-3 shrink-0 text-[color:var(--fg-subtle)]" />
+                    <span className="text-[11px] font-mono truncate min-w-0 flex-1 text-[color:var(--fg-strong)]">
                       {f.folderPath}.{f.name}
                     </span>
-                    <span
-                      className={`text-[9px] font-mono uppercase tracking-[0.18em] shrink-0 ${
-                        isDark ? 'text-white/40' : 'text-black/40'
-                      }`}
-                    >
+                    <span className="text-[9px] font-mono uppercase tracking-[0.18em] shrink-0 text-[color:var(--fg-subtle)]">
                       {c.kind}
                     </span>
                     {accent && (
@@ -212,9 +200,7 @@ function ResultGroup({
   return (
     <section className={muted ? 'opacity-50' : ''}>
       <div
-        className={`sticky top-0 z-10 px-6 py-1.5 backdrop-blur-md flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] ${
-          dim ? 'text-white/55' : 'text-black/55'
-        }`}
+        className="sticky top-0 z-10 px-6 py-1.5 backdrop-blur-md flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[color:var(--fg-muted)]"
         style={{
           backgroundColor: dim ? 'rgba(13,17,23,0.55)' : 'rgba(255,255,255,0.55)',
           borderBottom: `1px solid ${tokens(dim).border}`,
@@ -253,14 +239,10 @@ function RuleResultRow({
         ) : (
           <span className={`w-1 h-3 shrink-0 ${dim ? 'opacity-0' : 'opacity-0'}`} />
         )}
-        <span className={`text-[11px] font-mono shrink-0 ${
-          dim ? 'text-white/40' : 'text-black/40'
-        }`}>
+        <span className="text-[11px] font-mono shrink-0 text-[color:var(--fg-subtle)]">
           {SOURCE_GLYPH[r.source]}
         </span>
-        <span className={`text-[12px] font-bold truncate min-w-0 flex-1 ${
-          dim ? 'text-white/85' : 'text-black/85'
-        }`}>
+        <span className="text-[12px] font-bold truncate min-w-0 flex-1 text-[color:var(--fg-strong)]">
           {r.ruleName}
         </span>
         {r.hits.length > 0 && (
@@ -295,25 +277,21 @@ function RuleResultRow({
                 <span className="truncate min-w-0 flex-1">
                   {f ? `${f.folderPath}.${f.name}` : `#${h.fileId}`}
                 </span>
-                <span className={`shrink-0 truncate max-w-[14rem] ${
-                  dim ? 'text-white/40' : 'text-black/40'
-                }`}>
+                <span className="shrink-0 truncate max-w-[14rem] text-[color:var(--fg-subtle)]">
                   {h.evidenceText}
                 </span>
               </li>
             );
           })}
           {r.hits.length > 4 && (
-            <li className={dim ? 'text-white/40' : 'text-black/40'}>
+            <li className="text-[color:var(--fg-subtle)]">
               … {r.hits.length - 4} more
             </li>
           )}
         </ul>
       )}
       {rule && r.status === 'pass' && (
-        <div className={`mt-0.5 text-[10px] font-mono ${
-          dim ? 'text-white/30' : 'text-black/40'
-        }`}>
+        <div className="mt-0.5 text-[10px] font-mono text-[color:var(--fg-subtle)]">
           {describeSignal(rule.signal)}
         </div>
       )}

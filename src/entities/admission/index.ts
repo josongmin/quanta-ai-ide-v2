@@ -1,3 +1,5 @@
+// Public API for the admission-rules entity:
+// rule/signal types, sample fixtures, and cost/eval helpers.
 export type {
   AdmissionRule,
   RuleSource,
@@ -23,15 +25,11 @@ export type {
   RuleEvaluation,
 } from './model';
 
-export { SAMPLE_RULES, EXTERNAL_RULE_MAP } from './lib/sample';
+export { SAMPLE_RULES } from './lib/sample';
 export {
   estimateCost,
-  estimateSignalCost,
   canPreviewInline,
-  COST_LABEL,
   COST_HINT,
-  COST_COLOR,
-  PREVIEW_MATCH_CAP,
 } from './lib/cost';
 export {
   previewRule,

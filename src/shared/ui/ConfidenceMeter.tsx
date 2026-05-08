@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from '@shared/i18n';
 import { C } from '../lib/color';
+import { formatNumber } from '../lib/format';
 
 // All numeric/boolean props — shallow equality is correct. Renders inside
 // memoized tab bodies so this mostly defends against stats object identity
@@ -36,7 +37,7 @@ export const ConfidenceMeter = memo(function ConfidenceMeter({
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{t('filesByConfidence')}</span>
-        <span className="tabular-nums">{safeTotal.toLocaleString()} total</span>
+        <span className="tabular-nums">{formatNumber(safeTotal)} total</span>
       </div>
       <div
         className="flex w-full h-2 rounded-full overflow-hidden"

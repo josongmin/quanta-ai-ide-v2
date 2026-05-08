@@ -27,12 +27,10 @@ export default function InlineThread({
   const surface = isDark
     ? 'bg-white/[0.03] border-white/10'
     : 'bg-black/[0.02] border-black/10';
-  const textCls = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
-  const sub = isDark ? 'text-white/55' : 'text-black/55';
-  const replyBtn = isDark
-    ? 'text-white/55 hover:bg-white/5'
-    : 'text-black/55 hover:bg-black/5';
+  const textCls = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const sub = 'text-[color:var(--fg-muted)]';
+  const replyBtn = 'text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-hover)]';
   const resolveActive = thread.resolved
     ? 'text-[#4f9a5c] bg-[#4f9a5c]/10'
     : replyBtn;
@@ -63,9 +61,7 @@ export default function InlineThread({
         ))}
       </ul>
 
-      <div className={`flex items-center justify-between px-2 py-1.5 border-t ${
-        isDark ? 'border-white/10' : 'border-black/10'
-      }`}>
+      <div className="flex items-center justify-between px-2 py-1.5 border-t border-[color:var(--border-default)]">
         <button
           type="button"
           onClick={() => { setReplying((v) => !v); }}

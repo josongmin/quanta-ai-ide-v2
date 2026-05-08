@@ -32,10 +32,12 @@ export function Drawer({
 
   return createPortal(
     <div
+      aria-hidden="true"
       className="fixed inset-0 z-[200] flex"
       onClick={onClose}
     >
       <div className="flex-1 bg-black/30" />
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- stops propagation so backdrop click does not dismiss; dialog focus/keyboard handled by useDialogA11y */}
       <aside
         ref={dialogRef}
         role="dialog"

@@ -10,6 +10,8 @@ mod commands;
 mod core;
 mod error;
 mod menu;
+#[cfg(target_os = "macos")]
+mod macos;
 
 pub use error::{AppError, AppResult};
 
@@ -31,6 +33,9 @@ pub fn run() {
             app.on_menu_event(|app, event| {
                 menu::handle_event(app, event.id().as_ref());
             });
+
+            #[cfg(target_os = "macos")]
+            macos::apply_optimizations(handle);
 
             Ok(())
         })

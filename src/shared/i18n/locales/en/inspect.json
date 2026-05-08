@@ -177,9 +177,42 @@
   "topOffenders": "Top offenders",
   "deps": {
     "edgesSummary": "{{n}} edges · bundled by folder hierarchy",
+    "layeredSummary": "{{edges}} cross-layer · {{violations}} violations",
+    "legend": { "down": "Down / vendor", "up": "Upward violation" },
+    "topOffender": "→ {{target}} ({{n}})",
+    "violationsUnit": "VIOL",
+    "matrixSummary": "{{n}}×{{n}} folder matrix · {{cycles}} below-diagonal",
     "inboundArrow": "← inbound",
     "outboundArrow": "outbound →",
-    "rootLabel": "root"
+    "rootLabel": "root",
+    "sunburstSummary": "{{n}} files · {{depth}} levels deep",
+    "chordSummary": "{{n}} top-level groups · {{edges}} chords",
+    "couplingSummary": "{{buckets}} modules · {{edges}} cross-module imports",
+    "coupling": {
+      "from": "From",
+      "to": "To",
+      "imports": "imp",
+      "remaining": "+ {{n}} more imports across smaller pairs"
+    },
+    "slide": {
+      "bundle": { "label": "Edge bundling", "hint": "Holten 2006 · folder-grouped" },
+      "layered": { "label": "Layer compliance", "hint": "lower → upper imports are violations" },
+      "matrix": { "label": "DSM matrix", "hint": "folder × folder · cycles below diagonal" },
+      "sunburst": { "label": "Sunburst", "hint": "radial tree · arc ∝ file count" },
+      "chord": { "label": "Top coupling", "hint": "heaviest module pairs first" },
+      "treemap": { "label": "Treemap", "hint": "squarified · area ∝ LOC" },
+      "heatmap": { "label": "Risk heatmap", "hint": "complexity × churn · Feathers hotspot" },
+      "cycles": { "label": "Cycles", "hint": "circular imports · madge-style" }
+    },
+    "treemapSummary": "{{n}} files · {{loc}} LOC sized by weight",
+    "heatmapSummary": "{{n}} files plotted · {{danger}} in danger zone",
+    "heatmap": { "x": "Complexity", "y": "Churn", "danger": "Danger zone" },
+    "cycle": {
+      "none": "No cycles detected",
+      "topPairs": "Tightest cycle pairs",
+      "summary": "{{n}} files in cycles · showing {{shown}}",
+      "cleanSummary": "No cycles · architecture is acyclic"
+    }
   },
   "empty": {
     "noHotspots": "No hotspots.",
@@ -239,6 +272,67 @@
     "coverage": "Coverage line={{line}}% branch={{branch}}% mut={{mut}}%",
     "editSafety": "Edit safety = {{value}} (cov × maint × (1 − blast/N))"
   },
+  "blast": {
+    "title": "Blast radius",
+    "arm": "Simulate",
+    "disarm": "Stop sim",
+    "idleHint": "{{n}} downstream files would invalidate. Press Simulate for the full cost breakdown.",
+    "invalidate": "Invalidate",
+    "testsRerun": "Tests rerun",
+    "typecheck": "Typecheck",
+    "recompute": "Recompute",
+    "reviewers": "~{{n}} reviewers",
+    "plan": "Hypothetical — no files were modified",
+    "severity": {
+      "high": "High impact",
+      "medium": "Moderate",
+      "low": "Low impact"
+    }
+  },
+  "indexState": {
+    "title": "Index state",
+    "fresh": "Fresh",
+    "indexing": "Indexing",
+    "stale": "Stale",
+    "timeout": "Timed out",
+    "lastBuild": "Last build",
+    "recompute": "Recompute",
+    "downstream": "Downstream",
+    "justNow": "{{n}}s ago",
+    "minAgo": "{{n}}m ago",
+    "hourAgo": "{{n}}h ago"
+  },
+  "aiCtx": {
+    "title": "AI context",
+    "embedded": "Embedded",
+    "notEmbedded": "No vector",
+    "axis": {
+      "types": "Types",
+      "tests": "Tests",
+      "dispatch": "Dispatch",
+      "boundary": "Boundary"
+    },
+    "thisFile": "This file",
+    "oneHopCtx": "1-hop ctx",
+    "hopFiles": "{{count}} files",
+    "contextOverflow": "Context exceeds 32k tokens — agent will work with a summarized view"
+  },
+  "refactor": {
+    "title": "Refactor actions",
+    "summary": "{{auto}}/{{total}} auto",
+    "empty": "No automatic refactors available — this file is in good shape.",
+    "apply": "Apply",
+    "plan": "Plan",
+    "confidence": "conf {{n}}%",
+    "blast": "blast {{n}}",
+    "batchHint": "Apply across similar files",
+    "extract": { "title": "Extract function" },
+    "types": { "title": "Add explicit types" },
+    "tsignore": { "title": "Resolve @ts-ignore" },
+    "dead": { "title": "Remove dead code", "delta": "−{{loc}} LOC" },
+    "addtest": { "title": "Generate test scaffold", "delta": "+1 test file" },
+    "lint": { "title": "Auto-fix lint errors" }
+  },
   "catalog": {
     "profileTitle": "File outline",
     "profileSub": "function_summary · cost · effects",
@@ -293,7 +387,8 @@
     "activate": "Activate",
     "openTabsHistory": "Open tabs history",
     "openTabsCount": "Open tabs · {{count}}",
-    "closeTab": "Close tab"
+    "closeTab": "Close tab",
+    "resizePanel": "Resize inspector panel"
   },
   "tree": {
     "repo": "repo"

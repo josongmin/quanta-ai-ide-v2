@@ -177,9 +177,42 @@
   "topOffenders": "问题最严重项",
   "deps": {
     "edgesSummary": "{{n}} 条边 · 按目录层级聚合",
+    "layeredSummary": "跨层 {{edges}} · 违规 {{violations}}",
+    "legend": { "down": "正常 / 厂商", "up": "向上违规" },
+    "topOffender": "→ {{target}} ({{n}})",
+    "violationsUnit": "违规",
+    "matrixSummary": "{{n}}×{{n}} 目录矩阵 · 对角线下方 {{cycles}}",
     "inboundArrow": "← 入向",
     "outboundArrow": "出向 →",
-    "rootLabel": "根"
+    "rootLabel": "根",
+    "sunburstSummary": "{{n}} 文件 · 深度 {{depth}} 层",
+    "chordSummary": "{{n}} 顶层组 · {{edges}} 条弦",
+    "couplingSummary": "{{buckets}} 模块 · 模块间 import {{edges}}",
+    "coupling": {
+      "from": "来源",
+      "to": "目标",
+      "imports": "次数",
+      "remaining": "+ 其余小对 {{n}} 次"
+    },
+    "slide": {
+      "bundle": { "label": "边捆绑", "hint": "Holten 2006 · 按目录分组" },
+      "layered": { "label": "分层合规", "hint": "下 → 上 调用即违规" },
+      "matrix": { "label": "DSM 矩阵", "hint": "目录 × 目录 · 对角线下为循环" },
+      "sunburst": { "label": "旭日图", "hint": "径向树 · 弧 ∝ 文件数" },
+      "chord": { "label": "强耦合排名", "hint": "最强耦合的模块对优先" },
+      "treemap": { "label": "树状图", "hint": "面积 ∝ LOC · WinDirStat 风格" },
+      "heatmap": { "label": "风险热图", "hint": "复杂度 × 变更频率 · Feathers" },
+      "cycles": { "label": "循环依赖", "hint": "circular import · madge 风格" }
+    },
+    "treemapSummary": "{{n}} 文件 · 按 LOC {{loc}} 比例",
+    "heatmapSummary": "已绘制 {{n}} 文件 · 危险区 {{danger}} 个",
+    "heatmap": { "x": "复杂度", "y": "变更频率", "danger": "危险区" },
+    "cycle": {
+      "none": "无循环",
+      "topPairs": "最紧密的循环对",
+      "summary": "循环内 {{n}} 文件 · 显示 {{shown}}",
+      "cleanSummary": "无循环 · 架构无环"
+    }
   },
   "empty": {
     "noHotspots": "暂无热点。",
@@ -239,6 +272,67 @@
     "coverage": "覆盖率 line={{line}}% branch={{branch}}% mut={{mut}}%",
     "editSafety": "编辑安全度 = {{value}} (cov × maint × (1 − blast/N))"
   },
+  "blast": {
+    "title": "影响半径",
+    "arm": "模拟",
+    "disarm": "停止",
+    "idleHint": "下游 {{n}} 个文件将失效。点击模拟查看成本分析。",
+    "invalidate": "失效",
+    "testsRerun": "重跑测试",
+    "typecheck": "类型检查",
+    "recompute": "重算",
+    "reviewers": "~{{n}} 位审查者",
+    "plan": "假设场景 — 未修改任何文件",
+    "severity": {
+      "high": "高影响",
+      "medium": "中等",
+      "low": "低影响"
+    }
+  },
+  "indexState": {
+    "title": "索引状态",
+    "fresh": "最新",
+    "indexing": "分析中",
+    "stale": "陈旧",
+    "timeout": "超时",
+    "lastBuild": "最近分析",
+    "recompute": "重算",
+    "downstream": "下游",
+    "justNow": "{{n}}秒前",
+    "minAgo": "{{n}}分钟前",
+    "hourAgo": "{{n}}小时前"
+  },
+  "aiCtx": {
+    "title": "AI 上下文",
+    "embedded": "已嵌入",
+    "notEmbedded": "无向量",
+    "axis": {
+      "types": "类型",
+      "tests": "测试",
+      "dispatch": "派发",
+      "boundary": "边界"
+    },
+    "thisFile": "此文件",
+    "oneHopCtx": "1-hop 上下文",
+    "hopFiles": "{{count}} 文件",
+    "contextOverflow": "上下文超过 32k tokens — Agent 将使用摘要视图"
+  },
+  "refactor": {
+    "title": "重构动作",
+    "summary": "{{auto}}/{{total}} 自动",
+    "empty": "无自动重构 — 此文件状态良好。",
+    "apply": "应用",
+    "plan": "规划",
+    "confidence": "置信 {{n}}%",
+    "blast": "影响 {{n}}",
+    "batchHint": "对相似文件批量应用",
+    "extract": { "title": "提取函数" },
+    "types": { "title": "添加显式类型" },
+    "tsignore": { "title": "解决 @ts-ignore" },
+    "dead": { "title": "移除死代码", "delta": "−{{loc}} LOC" },
+    "addtest": { "title": "生成测试脚手架", "delta": "+测试 1" },
+    "lint": { "title": "自动修复 lint 错误" }
+  },
   "catalog": {
     "profileTitle": "文件大纲",
     "profileSub": "function_summary · 成本 · 副作用",
@@ -293,7 +387,8 @@
     "activate": "激活",
     "openTabsHistory": "打开的标签历史",
     "openTabsCount": "打开的标签 · {{count}}",
-    "closeTab": "关闭标签"
+    "closeTab": "关闭标签",
+    "resizePanel": "调整检查器面板大小"
   },
   "tree": {
     "repo": "仓库"

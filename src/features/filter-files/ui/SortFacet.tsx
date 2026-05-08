@@ -50,14 +50,12 @@ export default function SortFacet() {
         {SORT_KEYS.map((k) => <option key={k} value={k}>{t(`sort.options.${k}`)}</option>)}
       </select>
       {state.sort !== 'none' && (
-        <div className={`flex items-center justify-between text-[10px] ${isDark ? 'text-white/55' : 'text-black/55'}`}>
+        <div className="flex items-center justify-between text-[10px] text-[color:var(--fg-muted)]">
           <span className="uppercase tracking-[0.18em] font-bold">{t('sort.glowTop')}</span>
           <select
             value={state.topNHighlight}
             onChange={(e) => { setTopN(+e.target.value); }}
-            className={`rounded-md px-2 py-1 text-[10px] focus:outline-none ${
-              isDark ? 'bg-white/5 border border-white/10 text-white' : 'bg-black/5 border border-black/10 text-black'
-            }`}
+            className="rounded-md px-2 py-1 text-[10px] focus:outline-none bg-[color:var(--bg-surface-muted)] border border-[color:var(--border-default)] text-[color:var(--fg-strong)]"
           >
             <option value={0}>{t('sort.off')}</option>
             <option value={5}>5</option>

@@ -25,6 +25,20 @@
   "placeholder": {
     "comingSoon": "敬请期待"
   },
+  "agentFeed": {
+    "title": "实时 Agent",
+    "open": "打开 Agent 流",
+    "close": "关闭",
+    "inflight": "进行中",
+    "empty": "当前没有 Agent 活动。请打开聊天或启用演示模式。",
+    "footer": "与点阵覆盖层同源 · 青色 = 思考 · 脉冲 = 编辑",
+    "moreTargets": "个文件",
+    "state": {
+      "thinking": "思考中",
+      "editing": "编辑中",
+      "done": "完成"
+    }
+  },
   "review": {
     "empty": {
       "noMatches": "没有匹配该视图的 PR。",

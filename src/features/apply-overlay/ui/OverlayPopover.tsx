@@ -5,6 +5,7 @@ import {
   Power,
   type LucideIcon,
 } from 'lucide-react';
+import type { TFunction } from 'i18next';
 import { useOverlay } from '../model/OverlayContext';
 import { useBoundaries } from '@features/inspect-boundaries';
 import { useTheme } from '@shared/theme';
@@ -100,7 +101,7 @@ export default function OverlayPopover() {
             aria-expanded={open}
             className={`flex items-center gap-1.5 px-2.5 h-8 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
               activeCount > 0
-                ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-black')
+                ? ('bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]')
                 : (isDark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5')
             }`}
           >
@@ -190,7 +191,7 @@ function RailRow({
   label: string;
   value: string;
   on: boolean;
-  muted?: boolean;
+  muted?: boolean | undefined;
   selected: boolean;
   onSelect: () => void;
   isDark: boolean;
@@ -218,13 +219,8 @@ function RailRow({
         muted ? 'opacity-80' : ''
       }`}
     >
-      {on && (
-        <span
-          aria-hidden
-          className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r-full"
-          style={{ background: iconColor, boxShadow: `0 0 6px ${iconColor}` }}
-        />
-      )}
+      {/* On-state carried by the tinted Icon below — no left-edge stripe
+          per project convention. */}
       <div className="flex items-center gap-2">
         <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: on ? iconColor : undefined }} />
         <div className="min-w-0 flex-1">
@@ -249,7 +245,7 @@ function HeatDetail({
   isDark, t,
 }: {
   isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
+  t: TFunction;
 }) {
   const ov = useOverlay();
   const isOn = ov.metric !== 'none';
@@ -292,7 +288,7 @@ function HeatDetail({
                   aria-pressed={active}
                   className={`relative flex-1 px-2 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
                     active
-                      ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-black')
+                      ? ('bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]')
                       : (isDark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5')
                   }`}
                 >
@@ -341,7 +337,7 @@ function RiskDetail({ isDark }: { isDark: boolean }) {
               aria-pressed={on}
               className={`relative text-left px-2.5 py-2 rounded-md transition-colors ${
                 on
-                  ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-black')
+                  ? ('bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]')
                   : (isDark ? 'hover:bg-white/5 text-white/85' : 'hover:bg-black/5 text-black/85')
               }`}
             >
@@ -404,7 +400,7 @@ function BoundariesDetail({
   isDark, t,
 }: {
   isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
+  t: TFunction;
 }) {
   const b = useBoundaries();
   return (
@@ -493,7 +489,7 @@ function ProtocolPill({
     <button type="button" onClick={onClick} aria-pressed={active}
       className={`px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[0.18em] transition-colors border ${
         active
-          ? (isDark ? 'bg-white/15 text-white border-white/20' : 'bg-black/10 text-black border-black/15')
+          ? 'bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)] border-[color:var(--border-strong)]'
           : (isDark ? 'border-white/15 text-white/55 hover:text-white/70' : 'border-black/15 text-black/40 hover:text-black/70')
       }`}
     >{label}</button>
@@ -523,7 +519,7 @@ function MetricRow({
       onClick={onClick}
       className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-left transition-colors ${
         active
-          ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-black')
+          ? ('bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]')
           : (isDark ? 'hover:bg-white/5 text-white/70' : 'hover:bg-black/5 text-black/70')
       }`}
     >

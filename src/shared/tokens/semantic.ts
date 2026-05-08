@@ -17,8 +17,11 @@ type SemanticTokens = {
   bgElevated: string;       // popover / dropdown / menu surface
   bgHover: string;          // hover state overlay
   bgActive: string;         // active / pressed state overlay
+  bgActiveStrong: string;   // pressed/selected pill in toggle groups; asymmetric (heavier on light)
   bgSelected: string;       // selected row / item
   bgScrim: string;          // modal backdrop
+  bgStage: string;          // intelligence-route page canvas (full-bleed stage bg)
+  bgStageUniverse: string;  // universe-mode stage bg (cyanotype Prussian blue in light)
 
   // Foreground
   fgStrong: string;         // headings / emphasized
@@ -26,6 +29,7 @@ type SemanticTokens = {
   fgMuted: string;
   fgSubtle: string;
   fgOnAccent: string;
+  fgOnActiveStrong: string; // text colour atop bgActiveStrong (white-on-dark / black-on-light)
   fgLink: string;           // hyperlink / link affordance
   fgAccent: string;         // primary brand accent
 
@@ -34,6 +38,7 @@ type SemanticTokens = {
   borderMuted: string;
   borderStrong: string;
   borderFocus: string;      // focus-ring color
+  ringActive: string;       // 1px ring on active chip / pressed control
 
   // Shadows (CSS strings; theme-aware)
   shadowSm: string;
@@ -75,14 +80,18 @@ export const dark: SemanticTokens = {
   bgElevated: 'rgba(255,255,255,0.06)',
   bgHover: 'rgba(255,255,255,0.04)',
   bgActive: 'rgba(255,255,255,0.08)',
+  bgActiveStrong: 'rgba(255,255,255,0.15)',
   bgSelected: 'rgba(255,255,255,0.12)',
   bgScrim: 'rgba(0,0,0,0.55)',
+  bgStage: '#0d1117',
+  bgStageUniverse: '#020202',
 
   fgStrong: 'rgba(255,255,255,0.94)',
   fgDefault: 'rgba(255,255,255,0.82)',
   fgMuted: 'rgba(255,255,255,0.52)',
   fgSubtle: 'rgba(255,255,255,0.32)',
   fgOnAccent: colors.grey[1000],
+  fgOnActiveStrong: '#ffffff',
   // Link / accent decoupled from intent green. Calm slate-blue avoids the
   // common pitfall of treating brand-green as a generic "interactive" hue,
   // which causes success / link / button to all collide visually.
@@ -94,6 +103,7 @@ export const dark: SemanticTokens = {
   borderStrong: 'rgba(255,255,255,0.14)',
   // Focus ring sits between link-blue and white — visible without screaming.
   borderFocus: 'rgba(122,167,212,0.55)',
+  ringActive: 'rgba(255,255,255,0.40)',
 
   shadowSm: '0 1px 2px rgba(0,0,0,0.4)',
   shadowMd: '0 4px 12px rgba(0,0,0,0.45)',
@@ -131,14 +141,20 @@ export const light: SemanticTokens = {
   bgElevated: '#ffffff',
   bgHover: 'rgba(0,0,0,0.04)',
   bgActive: 'rgba(0,0,0,0.08)',
+  // Asymmetric: light theme uses /10 (heavier than dark's /15 visually) so
+  // the pressed state reads at the same perceived contrast on each canvas.
+  bgActiveStrong: 'rgba(0,0,0,0.10)',
   bgSelected: 'rgba(0,0,0,0.12)',
   bgScrim: 'rgba(0,0,0,0.4)',
+  bgStage: '#f4f6f9',
+  bgStageUniverse: '#0a2545',
 
   fgStrong: 'rgba(0,0,0,0.92)',
   fgDefault: 'rgba(0,0,0,0.80)',
   fgMuted: 'rgba(0,0,0,0.55)',
   fgSubtle: 'rgba(0,0,0,0.40)',
   fgOnAccent: colors.grey[0],
+  fgOnActiveStrong: '#000000',
   // Slate-blue accent — calmer than a saturated link-blue on long sessions.
   fgLink: '#3a72b8',
   fgAccent: '#4a6075',
@@ -147,6 +163,7 @@ export const light: SemanticTokens = {
   borderMuted: 'rgba(0,0,0,0.05)',
   borderStrong: 'rgba(0,0,0,0.18)',
   borderFocus: 'rgba(58,114,184,0.55)',
+  ringActive: 'rgba(0,0,0,0.40)',
 
   shadowSm: '0 1px 2px rgba(0,0,0,0.08)',
   shadowMd: '0 4px 12px rgba(0,0,0,0.10)',
