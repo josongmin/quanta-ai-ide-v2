@@ -29,3 +29,13 @@ export { default as InvestigateLauncher } from './ui/InvestigateLauncher';
 
 export { Notebook } from './notebook';
 export { JobsProvider, useJobs, JobsTray } from './jobs';
+
+export { PlannerTrace, PlannerLauncher } from './planner-ui';
+export { SimilarIncidentCard, SimilarCodeCard, SimilarStrip } from './similarity';
+export { FollowUpStrip, buildFollowUps, type FollowUp } from './followup';
+export {
+  useFixHandoff,
+  HandoffNotice,
+  FixPipelineHandoffBanner,
+  type FixHandoffPayload,
+} from './handoff';

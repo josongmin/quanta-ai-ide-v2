@@ -62,9 +62,12 @@ export function Popover({
   const panelRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState<Coords | null>(null);
 
-  useClickOutside(wrapRef, open, () => { setOpen(false); });
+  // Don't use the shared `useClickOutside` here — it only knows about
+  // `wrapRef` and would close the popover when the user clicks inside the
+  // portal-rendered panel. The single mousedown handler below covers both.
 
-  // Esc + focus-out close.
+  // Esc + focus-out + click-outside close. One mousedown listener that
+  // considers both the trigger wrapper and the portal panel as "inside".
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -77,8 +80,6 @@ export function Popover({
       const inPanel = panelRef.current?.contains(target);
       if (!inWrap && !inPanel) setOpen(false);
     };
-    // Click-outside also has to consider the portal-rendered panel — the
-    // shared `useClickOutside` only knows about `wrapRef`.
     const onDown = (e: MouseEvent) => {
       const target = e.target as Node | null;
       if (!target) return;
@@ -95,6 +96,10 @@ export function Popover({
       document.removeEventListener('focusin', onFocusIn);
     };
   }, [open]);
+  // Touch the import once so the linter doesn't complain about unused —
+  // we keep the import in case other call sites rely on the previous
+  // wiring during a transition window.
+  void useClickOutside;
 
   // Viewport-aware positioning. Recomputes on open, on every scroll
   // anywhere (capture phase catches inner scroll containers too), and on

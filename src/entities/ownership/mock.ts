@@ -450,6 +450,12 @@ export const MOCK_STACKS: RefactorStack[] = [
       },
     },
     totalEstimatedDays: 6,
+    splitConfidence: 0.74,
+    splitConfidenceBasis: [
+      'Coupling cluster has clean adapter seam',
+      'Blast radius traces match step boundaries',
+      'No proof obligation crosses step lines',
+    ],
     proofObligations: [
       { id: 'po_1', label: 'No public API breakage', status: 'pending', detail: 'External SDK contract must remain on v1 shape until v3 release' },
       { id: 'po_2', label: 'PSP success rate ≥ baseline', status: 'pending', detail: 'Canary observation window: 24h minimum' },
@@ -577,6 +583,12 @@ export const MOCK_STACKS: RefactorStack[] = [
       },
     },
     totalEstimatedDays: 4,
+    splitConfidence: 0.86,
+    splitConfidenceBasis: [
+      'Web + mobile share no state once adapter lands',
+      'Storage interface already centralized',
+      'Property tests already cover rotation correctness',
+    ],
     proofObligations: [
       { id: 'pos_1', label: 'Session token rotation correctness', status: 'satisfied', detail: 'Property tests cover all rotation transitions' },
       { id: 'pos_2', label: 'No auth bypass on adapter swap', status: 'pending', detail: 'Security scan must pass on adapter step' },

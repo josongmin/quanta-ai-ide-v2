@@ -1,4 +1,5 @@
 import { Crown, Shield, Compass, Phone } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { ReviewerCandidate } from '../../model/types';
 import { REVIEWERS } from '../../model/phaseData';
 import { useVfx } from './tokens';
@@ -10,20 +11,9 @@ const ROLE_ICON: Record<ReviewerCandidate['role'], typeof Crown> = {
   oncall:    Phone,
 };
 
-const ROLE_LABEL: Record<ReviewerCandidate['role'], string> = {
-  codeowner: 'codeowner',
-  security:  'security',
-  domain:    'domain expert',
-  oncall:    'oncall',
-};
-
-// Phase 2 — reviewer routing. Pulls from CODEOWNERS + signals from
-// ownership graph, security membership, oncall rotation. UI surfaces
-// match score (relevance) and current load (so we don't pile on the
-// same overloaded reviewer for every fix).
-
 export function ReviewerRouting({ caseId }: { caseId: string }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const reviewers = REVIEWERS[caseId] ?? [];
 
   return (
@@ -36,16 +26,16 @@ export function ReviewerRouting({ caseId }: { caseId: string }) {
           className="text-[10px] font-black uppercase tracking-[0.18em]"
           style={{ color: t.textMuted }}
         >
-          reviewer routing
+          {tr('reviewer.title')}
         </span>
         <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
-          ranked by match × (1 − load)
+          {tr('reviewer.subtitle')}
         </span>
       </div>
 
       {reviewers.length === 0 ? (
         <div className="text-[11px]" style={{ color: t.textFaint }}>
-          no reviewer suggestion — ownership graph could not match.
+          {tr('reviewer.empty')}
         </div>
       ) : (
         <div className="space-y-1.5">
@@ -60,6 +50,7 @@ export function ReviewerRouting({ caseId }: { caseId: string }) {
 
 function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; primary: boolean }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const Icon = ROLE_ICON[reviewer.role];
   const matchPct = Math.round(reviewer.matchScore * 100);
   const loadColor = reviewer.loadPct >= 70 ? t.warn : reviewer.loadPct >= 40 ? t.info : t.ok;
@@ -85,14 +76,14 @@ function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; prima
             className="text-[8.5px] font-bold uppercase tracking-[0.14em] px-1 py-px rounded"
             style={{ background: t.badgeBg, color: t.textMuted }}
           >
-            {ROLE_LABEL[reviewer.role]}
+            {tr(`reviewer.role.${reviewer.role}`)}
           </span>
           {primary && (
             <span
               className="text-[8.5px] font-bold uppercase tracking-[0.14em] px-1 py-px rounded ml-auto"
               style={{ background: t.accent, color: t.isDark ? '#0d1117' : '#fff' }}
             >
-              suggest
+              {tr('reviewer.suggest')}
             </span>
           )}
         </div>
@@ -102,7 +93,7 @@ function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; prima
       </div>
       <div className="shrink-0 text-right">
         <div className="text-[9px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
-          match
+          {tr('reviewer.match')}
         </div>
         <div className="text-[12px] font-mono" style={{ color: t.textHi }}>
           {matchPct}%
@@ -118,7 +109,7 @@ function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; prima
             />
           </span>
           <span className="text-[8.5px] font-mono" style={{ color: t.textFaint }}>
-            {reviewer.loadPct}% load
+            {tr('reviewer.load', { pct: reviewer.loadPct })}
           </span>
         </div>
       </div>

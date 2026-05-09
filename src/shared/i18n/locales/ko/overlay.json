@@ -12,6 +12,8 @@
     "title": "오버레이",
     "heading": "시각 오버레이",
     "resetAll": "모두 끄기",
+    "painting": "그리는 중:",
+    "paintingEmpty": "꺼짐 — 항목을 선택해 활성화하세요",
     "off": "끔",
     "on": "켬",
     "enable": "켜기",
@@ -20,12 +22,28 @@
       "heat": "히트",
       "time": "시간 창",
       "timeIdle": "히트(시간) 선택 시 활성화됩니다",
+      "controls": "히트 컨트롤",
       "risk": "리스크 렌즈",
       "api": "공개 API",
       "boundaries": "경계"
     },
     "detail": {
-      "apiBody": "외부에서 폭넓게 소비되는 파일에 얇은 외곽 링을 표시해, 공개 API 표면을 한눈에 보여줍니다."
+      "apiBody": "외부에서 폭넓게 소비되는 파일에 얇은 외곽 링을 표시해, 공개 API 표면을 한눈에 보여줍니다.",
+      "apiPreview": "도트 필드에는 이렇게 표시됩니다"
+    },
+    "preview": {
+      "blast": "Blast 미리보기",
+      "path": "경로 추적",
+      "pr": "PR 미리보기"
+    }
+  },
+  "risk": {
+    "toggleHint": "렌즈를 선택해 적용하고, 다시 누르면 해제됩니다.",
+    "lens": {
+      "security":  { "label": "보안",      "hint": "SAST × 시크릿 × 취약 상태" },
+      "testGaps":  { "label": "테스트 공백", "hint": "큰 파일 × 낮은 커버리지 × 테스트 없음" },
+      "busFactor": { "label": "Bus factor", "hint": "단일 작성자 × 높은 수신 참조" },
+      "techDebt":  { "label": "기술 부채",   "hint": "복잡도 × 편집 안정성 낮음 × churn" }
     }
   },
   "boundaries": {

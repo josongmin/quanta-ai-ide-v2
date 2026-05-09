@@ -1,0 +1,252 @@
+{
+  "header": {
+    "case": "案例 · {{id}}",
+    "kind": {
+      "incident": "事故",
+      "hotspot": "热点",
+      "alert": "告警",
+      "focus": "聚焦"
+    }
+  },
+  "phase": {
+    "tab1Label": "阶段 1",
+    "tab1Sub": "静态证明 + 草稿",
+    "tab2Label": "阶段 2",
+    "tab2Sub": "动态验证 + 后置分析 + 路由",
+    "tab3Label": "阶段 3",
+    "tab3Sub": "自动合并 · 回滚 · 反馈",
+    "p2Title": "阶段 2 · 动态验证 + 后置分析 + 路由",
+    "p2Body": "运行测试/lint/类型检查/扫描流水,补丁落地后重新测量引擎状态,并把草稿路由给最快能处理的审核者。规约一致性会限制自动合并,但不会阻止草稿。",
+    "p3Title": "阶段 3 · 自动合并 · 回滚 · 反馈",
+    "p3Body": "这是策略层。调整决定能否无人合并的阈值,查看在合并前预先武装的回滚契约,观察重塑未来候选的驳回反馈流。"
+  },
+  "empty": {
+    "noCaseTitle": "未选择案例",
+    "noCaseBody": "从左侧边栏选择一个种子来查看流水线。",
+    "trustEmpty": "选择一个案例进行查看。",
+    "trustNoCandidate": "选择一个候选以查看其信任档案。"
+  },
+  "sidebar": {
+    "brand": "已验证修复",
+    "title": "流水线队列",
+    "active": "进行中 {{count}} 项 · 证据优先交付",
+    "footer": "种子 → 循环 → 证明 → 草稿",
+    "aborted": "已中止",
+    "noCandidates": "无候选",
+    "candidate_one": "{{count}} 个候选",
+    "candidate_other": "{{count}} 个候选"
+  },
+  "loop": {
+    "title": "自检循环",
+    "status": "迭代 {{iters}}/{{max}} · {{tokens}} tok · {{seconds}}秒",
+    "stopped": "停止: {{reason}}",
+    "collapse": "收起",
+    "iter": "{{count}} 次迭代",
+    "stage": {
+      "investigate": "调查",
+      "patch": "补丁",
+      "critique": "审视",
+      "validate": "验证",
+      "package": "打包",
+      "done": "完成",
+      "aborted": "中止"
+    }
+  },
+  "cost": {
+    "title": "成本遥测",
+    "llm": "LLM 令牌",
+    "validation": "验证",
+    "cycle": "周期成本",
+    "iters": "× {{count}} 次迭代",
+    "profitable": "单位盈利: 价值 ${{value}} > 2× 成本",
+    "underThreshold": "低于阈值: 价值 ${{value}} < 2× 成本"
+  },
+  "proof": {
+    "rootCause": "根本原因",
+    "seed": "种子: {{id}}",
+    "evidence": "证据引用",
+    "blastHint": "影响范围",
+    "constraints": "约束",
+    "postPatchDelta": "补丁后差异",
+    "obligations": "证明义务",
+    "noCandidate": "未选择候选",
+    "noCandidateHint": "义务按候选定义",
+    "static": "静态",
+    "dynamic": "动态",
+    "stylistic": "风格",
+    "coverage": "覆盖率",
+    "delta": {
+      "taintPaths": "{{count}} 条污点路径",
+      "moduleAtRisk": "1 个模块",
+      "modulesAtRisk": "{{count}} 个模块受影响",
+      "hotspotFading": "热点消退中",
+      "cleared": "已清除",
+      "gated": "已限流"
+    },
+    "status": {
+      "pass": "通过",
+      "fail": "失败",
+      "partial": "部分",
+      "unknown": "未知",
+      "pending": "待定"
+    }
+  },
+  "candidates": {
+    "noViableTitle": "无可行候选",
+    "noViableBody": "在产出可交付补丁前循环已中止。升级到人工检查点或补充种子证据后重试。",
+    "header": "候选修复 · 最多 3 个中的 {{count}} 个",
+    "subtitle": "选择一个生成草稿",
+    "apiBreak": "API 破坏",
+    "stat": {
+      "lines": "行数",
+      "files": "文件",
+      "blast": "影响"
+    }
+  },
+  "tier": {
+    "safeMechanical": "安全机械",
+    "guarded": "受限",
+    "humanRequired": "需要人工",
+    "explainSafe": "可一键草稿。机械补丁类,影响范围 ≤ 1,所有证明通过。",
+    "explainGuarded": "需审核者明确批准的草稿 PR。静态证明通过;动态范围有限。",
+    "explainHuman": "路由人工审核。超过交付门槛或触及公共接口。"
+  },
+  "trust": {
+    "signal": "信任信号",
+    "deliveryTier": "交付等级",
+    "weakest": "最薄弱环节",
+    "counter": "反向证据 ({{count}})",
+    "gate": "交付门控",
+    "patchConfidence": "补丁信任度",
+    "conf": "信任",
+    "confidence": {
+      "strong": "强: 证明覆盖了引擎追踪的所有路径。",
+      "sound": "稳健: 最弱义务有界且可处理。",
+      "mixed": "混合: 合并前请检查最薄弱环节。",
+      "weak": "弱: 尚未具备交付条件,考虑补充种子。"
+    },
+    "action": {
+      "running": "正在执行 {{stage}}",
+      "runValidation": "运行验证",
+      "oneClick": "一键草稿 PR",
+      "openDraft": "打开草稿 PR",
+      "routeHuman": "路由人工审核",
+      "dismiss": "驳回 + 记录原因"
+    },
+    "selectCandidate": "选择候选以查看其信任画像。",
+    "tierRule": {
+      "lines": "行数 ≤ 20",
+      "files": "文件 ≤ 2",
+      "blast": "波及范围 ≤ 1 模块",
+      "noPublicApi": "无公开 API 变更",
+      "allProofs": "全部证明通过"
+    },
+    "counterSeverity": {
+      "block": "阻断",
+      "concern": "关注",
+      "note": "备注"
+    }
+  },
+  "diff": {
+    "title": "diff 预览",
+    "expand": "展开",
+    "collapse": "收起",
+    "atLine": "@ 第 {{line}} 行"
+  },
+  "draft": {
+    "title": "草稿 PR 包",
+    "abortedBody": "循环中止 — 没有可交付包。补充种子证据重试或升级。",
+    "pendingBody": "候选通过证明义务后将自动组装包。",
+    "copy": "复制",
+    "copyTitle": "复制为 Markdown",
+    "field": {
+      "title": "标题",
+      "summary": "摘要",
+      "why": "为何选此修复",
+      "validation": "验证",
+      "unknowns": "剩余不确定项",
+      "reviewer": "审核者建议"
+    },
+    "noUnknowns": "无 — 所有证明已满足。",
+    "gateLine": "交付门控 · {{decision}}"
+  },
+  "gateDecision": {
+    "auto-submit": "自动合并",
+    "needs-review": "需审核",
+    "blocked": "已阻止"
+  },
+  "reanalysis": {
+    "title": "补丁后再分析",
+    "subtitle": "引擎重跑 · 前 → 后",
+    "empty": "无再分析数据 — 补丁未产生可重新测量的交付物。",
+    "before": "前",
+    "after": "后"
+  },
+  "reviewer": {
+    "title": "审核者路由",
+    "subtitle": "按 match × (1 − 负载) 排序",
+    "empty": "无审核者建议 — 所有权图无法匹配。",
+    "match": "匹配",
+    "load": "{{pct}}% 负载",
+    "suggest": "推荐",
+    "role": {
+      "codeowner": "代码所有者",
+      "security": "安全",
+      "domain": "领域专家",
+      "oncall": "值班"
+    }
+  },
+  "convention": {
+    "title": "规约一致性",
+    "subtitle": "仅限制自动合并 · 不阻止草稿",
+    "empty": "此候选未附加风格义务。",
+    "benchmarkedAgainst": "对标:",
+    "src": {
+      "neighboringImports": "邻近 import",
+      "siblingErrorPatterns": "同级错误模式",
+      "namingConvention": "命名规范",
+      "lintFormatRules": "lint/格式规则"
+    }
+  },
+  "policy": {
+    "title": "策略阈值",
+    "subtitle": "调整安全机械的资格条件",
+    "footer": "更改适用于未来候选 · 现有草稿在保存时重新门控"
+  },
+  "rollback": {
+    "title": "回滚包",
+    "subtitle": "随草稿生成 · 预先武装",
+    "empty": "无回滚计划 — 此案例未产生交付物。",
+    "trigger": "触发器",
+    "window": "窗口",
+    "action": "动作",
+    "owner": "所有者",
+    "armed": "已武装",
+    "armedHint": "在合并按钮启用前自动回滚钩子已布线。"
+  },
+  "dismissFeedback": {
+    "title": "驳回反馈 (近 7 日)",
+    "subtitle": "回流到候选生成",
+    "distribution": "原因分布",
+    "recent": "最近驳回",
+    "hAgo": "{{count}} 小时前",
+    "dAgo": "{{count}} 天前"
+  },
+  "dismissModal": {
+    "title": "驳回候选 · 记录原因",
+    "dismissing": "正在驳回",
+    "feedbackHint": "反馈会回流到下一轮候选生成,不要浪费这次驳回。",
+    "reasonTag": "原因标签",
+    "optionalNote": "可选备注",
+    "notePlaceholder": "怎样能让下一个候选更有用?",
+    "cancel": "取消",
+    "dismiss": "驳回",
+    "reason": {
+      "wrong-root-cause": "根因错误",
+      "too-broad-blast": "影响范围过广",
+      "breaks-convention": "违反规约",
+      "unsafe-during-rollout": "上线期间不安全",
+      "reviewer-disagrees": "审核者不同意"
+    }
+  }
+}

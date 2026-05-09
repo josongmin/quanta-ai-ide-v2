@@ -12,6 +12,8 @@
     "title": "叠加层",
     "heading": "可视叠加",
     "resetAll": "全部清除",
+    "painting": "绘制中:",
+    "paintingEmpty": "关闭 — 选择一行以启用",
     "off": "关",
     "on": "开",
     "enable": "启用",
@@ -20,12 +22,28 @@
       "heat": "热度",
       "time": "时间窗",
       "timeIdle": "选择 Hotspot (time) 后启用",
+      "controls": "热度控件",
       "risk": "风险视角",
       "api": "公共 API",
       "boundaries": "边界"
     },
     "detail": {
-      "apiBody": "在被外部广泛引用的文件外侧绘制细环,直观展示公共 API 表面。"
+      "apiBody": "在被外部广泛引用的文件外侧绘制细环,直观展示公共 API 表面。",
+      "apiPreview": "在点阵中以此样式显示"
+    },
+    "preview": {
+      "blast": "Blast 预览",
+      "path": "路径追踪",
+      "pr": "PR 预览"
+    }
+  },
+  "risk": {
+    "toggleHint": "选择视角即可应用,再次点击可清除。",
+    "lens": {
+      "security":  { "label": "安全",        "hint": "SAST × 密钥 × 易受攻击状态" },
+      "testGaps":  { "label": "测试缺口",    "hint": "大文件 × 低覆盖率 × 无测试" },
+      "busFactor": { "label": "Bus factor",  "hint": "单一作者 × 高被引用" },
+      "techDebt":  { "label": "技术债务",    "hint": "复杂度 × 编辑安全性低 × churn" }
     }
   },
   "boundaries": {

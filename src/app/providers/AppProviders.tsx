@@ -7,7 +7,7 @@ import { ViewModeProvider } from '@features/switch-mode';
 import { OverlayProvider } from '@features/apply-overlay';
 import { BoundaryProvider } from '@features/inspect-boundaries';
 import { StackProvider } from '@features/inspect-target';
-import { InvestigationProvider } from '@features/investigation';
+import { InvestigationProvider, JobsProvider } from '@features/investigation';
 
 // Outer order = outermost first. FilterProvider stays at the call site since
 // it needs a built `repo` prop.
@@ -20,6 +20,7 @@ const PROVIDERS: ComponentType<{ children: ReactNode }>[] = [
   BoundaryProvider,
   StackProvider,
   InvestigationProvider,
+  JobsProvider,
 ];
 
 export function AppProviders({ children }: { children: ReactNode }) {

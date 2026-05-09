@@ -23,8 +23,36 @@ function colorFor(c: Confidence): string {
 
 // A tiny circle conveying confidence. Lives next to evidence chrome —
 // confidence must NEVER be a left stripe (memory rule); a dot is the
-// approved signal.
-export function ConfidenceDot({ confidence, size = 6, title }: Props) {
+// approved signal. The 1px ring in surface colour keeps it readable
+// regardless of which background it lands on.
+export function ConfidenceDot({ confidence, size = 8, title }: Props) {
+  const aria = title ?? `confidence: ${confidence}`;
+
+  if (confidence === 'unknown') {
+    const glyphStyle: CSSProperties = {
+      width: size + 2,
+      height: size + 2,
+      color: 'var(--fg-subtle)',
+      fontSize: Math.max(8, size),
+      lineHeight: 1,
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      fontWeight: 700,
+    };
+    return (
+      <span
+        role="img"
+        aria-label={aria}
+        title={aria}
+        style={glyphStyle}
+      >
+        ?
+      </span>
+    );
+  }
+
   const style: CSSProperties = {
     width: size,
     height: size,
@@ -32,12 +60,13 @@ export function ConfidenceDot({ confidence, size = 6, title }: Props) {
     borderRadius: '999px',
     display: 'inline-block',
     flexShrink: 0,
+    boxShadow: '0 0 0 1px var(--bg-surface)',
   };
   return (
     <span
       role="img"
-      aria-label={title ?? `confidence: ${confidence}`}
-      title={title ?? `confidence: ${confidence}`}
+      aria-label={aria}
+      title={aria}
       style={style}
     />
   );

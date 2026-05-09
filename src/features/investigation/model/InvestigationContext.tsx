@@ -18,8 +18,8 @@ import {
   type NotebookQuestion,
   type QuestionType,
 } from '@entities/investigation';
-import { gatherContext } from '../planner/gatherContext';
-import { composeAnswer } from '../planner/answerComposer';
+import { gatherContext, rankEvidence } from '../planner/gatherContext';
+import { composeAnswer, enrichBundle } from '../planner/answerComposer';
 
 type Ctx = {
   activeTarget: InvestigationTarget | null;
@@ -129,8 +129,9 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
     gatherContext(target, qt, onPartial, controller.signal)
       .then((finalBundle) => {
         if (myRunId !== runIdRef.current) return;
-        const composed = composeAnswer(finalBundle);
-        setBundle(finalBundle);
+        const enriched = enrichBundle(finalBundle);
+        const composed = composeAnswer(enriched);
+        setBundle(enriched);
         setAnswer(composed);
         setStatus('complete');
       })
@@ -160,10 +161,25 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
 
   const setQuestionType = useCallback((qt: QuestionType) => {
     setQuestionTypeState(qt);
-    if (activeTarget) {
-      runStart(activeTarget, qt);
+    if (!activeTarget) return;
+    // If we already have a complete bundle for this target, just rerank +
+    // recompose locally — no need to re-stream the same fixture evidence.
+    // This is the same shortcut a real backend should take when the
+    // evidence pool hasn't changed: rank is cheap, gathering isn't.
+    if (bundle && bundle.target.id === activeTarget.id && status === 'complete') {
+      const ranked: ContextBundle = {
+        ...bundle,
+        questionType: qt,
+        evidence: rankEvidence(bundle.evidence, qt),
+      };
+      const enriched = enrichBundle(ranked);
+      setBundle(enriched);
+      setAnswer(composeAnswer(enriched));
+      setPickedEvidenceId(null);
+      return;
     }
-  }, [activeTarget, runStart]);
+    runStart(activeTarget, qt);
+  }, [activeTarget, bundle, status, runStart]);
 
   const clear = useCallback(() => {
     cancelInternal();

@@ -31,6 +31,32 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
     <GlassCard className="rounded-xl p-3">
       <SectionHeader title="Safe seams" badge={`${detectedCount} detected`} />
 
+      <div
+        className="mt-1 mb-2 rounded-md px-2.5 py-1.5 border flex items-center gap-2"
+        style={{
+          background: 'var(--bg-surface-muted)',
+          borderColor: 'var(--border-muted)',
+          borderStyle: 'dashed',
+        }}
+      >
+        <span
+          className="text-[8px] font-black uppercase tracking-[0.22em] px-1.5 py-0.5 rounded"
+          style={{
+            background: 'var(--bg-elevated)',
+            color: 'var(--fg-muted)',
+            border: '1px solid var(--border-muted)',
+          }}
+        >
+          Phase 3
+        </span>
+        <span
+          className="text-[10.5px] leading-snug"
+          style={{ color: 'var(--fg-muted)' }}
+        >
+          Detected seams come from import-graph + behavior-diff. Slots are reserved for future auto-detection.
+        </span>
+      </div>
+
       {seams.length === 0 ? (
         <EmptyHint text="No safe seams identified yet." />
       ) : (

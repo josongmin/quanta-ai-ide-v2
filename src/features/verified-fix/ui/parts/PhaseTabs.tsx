@@ -1,14 +1,16 @@
+import { useTranslation } from '@shared/i18n';
 import type { PhaseId } from '../../model/store';
 import { useVfx } from './tokens';
 
-const PHASES: { id: PhaseId; label: string; sub: string }[] = [
-  { id: 1, label: 'phase 1', sub: 'static proof + draft' },
-  { id: 2, label: 'phase 2', sub: 'dynamic + post-patch + routing' },
-  { id: 3, label: 'phase 3', sub: 'auto-submit · rollback · feedback' },
+const PHASES: { id: PhaseId; labelKey: string; subKey: string }[] = [
+  { id: 1, labelKey: 'phase.tab1Label', subKey: 'phase.tab1Sub' },
+  { id: 2, labelKey: 'phase.tab2Label', subKey: 'phase.tab2Sub' },
+  { id: 3, labelKey: 'phase.tab3Label', subKey: 'phase.tab3Sub' },
 ];
 
 export function PhaseTabs({ active, onChange }: { active: PhaseId; onChange: (p: PhaseId) => void }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <div
       className="rounded-lg border p-1 inline-flex"
@@ -33,10 +35,10 @@ export function PhaseTabs({ active, onChange }: { active: PhaseId; onChange: (p:
               className="text-[10px] font-black uppercase tracking-[0.16em]"
               style={{ color: on ? t.textHi : t.textMuted }}
             >
-              {p.label}
+              {tr(p.labelKey)}
             </div>
             <div className="text-[9.5px] mt-0.5" style={{ color: on ? t.textMuted : t.textFaint }}>
-              {p.sub}
+              {tr(p.subKey)}
             </div>
           </button>
         );

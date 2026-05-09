@@ -15,6 +15,7 @@ import type {
 export interface StackPlannerProps {
   stack: RefactorStack | undefined;
   people: Person[];
+  onPlanRefactor?: () => void;
 }
 
 const MERGE_STRATEGY_SHORT: Record<MergeStrategy, string> = {
@@ -195,6 +196,13 @@ function MetaCell({
 }
 
 function PlanMeta({ stack }: { stack: RefactorStack }) {
+  const confidencePct = Math.round(stack.splitConfidence * 100);
+  const confidenceColor =
+    stack.splitConfidence >= 0.7
+      ? 'var(--intent-success-fg)'
+      : stack.splitConfidence >= 0.4
+        ? 'var(--intent-warn-fg)'
+        : 'var(--intent-danger-fg)';
   return (
     <div className="flex items-stretch gap-3 flex-wrap">
       <MergeStrategyPill strategy={stack.mergeStrategy} />
@@ -213,6 +221,66 @@ function PlanMeta({ stack }: { stack: RefactorStack }) {
         value={String(stack.steps.length)}
         sublabel={stack.steps.length === 1 ? 'step' : 'steps'}
       />
+      <span
+        className="self-stretch w-px"
+        style={{ background: 'var(--border-muted)' }}
+        aria-hidden
+      />
+      <div
+        className="flex flex-col gap-0.5 min-w-0"
+        title={`Confidence in this split shape — based on: ${stack.splitConfidenceBasis.join(' · ')}`}
+      >
+        <span
+          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          style={{ color: 'var(--fg-muted)' }}
+        >
+          Split confidence
+        </span>
+        <div className="flex items-baseline gap-1">
+          <span
+            className="text-[14px] font-bold tabular-nums leading-none"
+            style={{ color: confidenceColor }}
+          >
+            {confidencePct}
+          </span>
+          <span
+            className="text-[10px] tabular-nums leading-none"
+            style={{ color: 'var(--fg-subtle)' }}
+          >
+            %
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SplitConfidenceBasis({ basis }: { basis: string[] }) {
+  if (basis.length === 0) return null;
+  return (
+    <div>
+      <div
+        className="text-[8px] font-black uppercase tracking-[0.22em] mb-1"
+        style={{ color: 'var(--fg-subtle)' }}
+      >
+        Why this confidence
+      </div>
+      <ul className="space-y-0.5">
+        {basis.map((b, i) => (
+          <li
+            key={i}
+            className="flex items-start gap-1.5 text-[11px] leading-snug"
+            style={{ color: 'var(--fg-muted)' }}
+          >
+            <span
+              className="inline-block mt-[5px] w-1 h-1 rounded-full shrink-0"
+              style={{ background: 'var(--fg-subtle)' }}
+              aria-hidden
+            />
+            <span className="flex-1 min-w-0">{b}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -529,17 +597,20 @@ function FooterButton({
   onClick,
   hint,
   disabled = false,
+  tooltip,
 }: {
   label: string;
   onClick?: () => void;
   hint?: string;
   disabled?: boolean;
+  tooltip?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
+      title={tooltip}
       className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.16em] transition-colors disabled:cursor-not-allowed"
       style={{
         background: 'transparent',
@@ -567,15 +638,18 @@ function FooterButton({
   );
 }
 
-function FooterActions() {
+function FooterActions({ onPlanRefactor }: { onPlanRefactor?: () => void }) {
   return (
     <div className="flex items-center gap-1.5 flex-wrap pt-1">
-      <FooterButton label="Reorder" hint="soon" disabled />
       <FooterButton
-        label="Plan another shape"
-        onClick={() => {
-          console.log('[StackPlanner] plan-another-shape clicked');
-        }}
+        label="Reorder"
+        hint="soon"
+        disabled
+        tooltip="Step reordering ships in Phase 2 — current order is the recommended sequence based on coupling cluster + blast radius"
+      />
+      <FooterButton
+        label="Plan with AI"
+        onClick={onPlanRefactor}
       />
       <FooterButton
         label="Export"
@@ -587,7 +661,7 @@ function FooterActions() {
   );
 }
 
-export function StackPlanner({ stack, people }: StackPlannerProps): JSX.Element {
+export function StackPlanner({ stack, people, onPlanRefactor }: StackPlannerProps): JSX.Element {
   const personIndex = useMemo(() => {
     const m = new Map<PersonId, Person>();
     for (const p of people) m.set(p.id, p);
@@ -618,6 +692,8 @@ export function StackPlanner({ stack, people }: StackPlannerProps): JSX.Element 
 
       <PlanMeta stack={stack} />
 
+      <SplitConfidenceBasis basis={stack.splitConfidenceBasis} />
+
       <MergeStrategyCard advice={stack.mergeStrategyAdvice} />
 
       <div
@@ -646,7 +722,7 @@ export function StackPlanner({ stack, people }: StackPlannerProps): JSX.Element 
         style={{ background: 'var(--border-muted)' }}
       />
 
-      <FooterActions />
+      <FooterActions onPlanRefactor={onPlanRefactor} />
     </GlassCard>
   );
 }

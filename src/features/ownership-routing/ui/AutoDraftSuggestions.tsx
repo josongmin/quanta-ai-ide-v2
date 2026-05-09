@@ -5,9 +5,16 @@ import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
 
 export interface AutoDraftSuggestionsProps {
   suggestions: AutoDraftSuggestion[];
-  onAccept?: (id: string, zoneId: string) => void;
+  onAccept?: (id: string, zoneId: string, action: AutoDraftSuggestion['proposedAction']) => void;
   onDismiss?: (id: string) => void;
 }
+
+const ACTION_RESULT_HINT: Record<AutoDraftSuggestion['proposedAction'], string> = {
+  'open-stack-plan': 'opens the AI landing plan modal',
+  'reroute-reviewer': 'updates suggested reviewer in routing card',
+  'flag-cross-team': 'flags zone in cross-team board',
+  'split-pr': 'opens split-pr planner',
+};
 
 type ActionKey = AutoDraftSuggestion['proposedAction'];
 
@@ -178,9 +185,18 @@ function SuggestionItem({
 
       <div className="flex items-end gap-3 flex-wrap">
         <ConfidenceBar value={suggestion.confidence} />
-        <div className="flex items-center gap-1.5 ml-auto">
-          <ActionButton label="Dismiss" onClick={onDismiss} primary={false} />
-          <ActionButton label="Accept" onClick={onAccept} primary />
+        <div className="flex flex-col items-end gap-1 ml-auto">
+          <span
+            className="text-[9px] font-mono lowercase"
+            style={{ color: 'var(--fg-subtle)' }}
+            title={`Accept ${ACTION_RESULT_HINT[suggestion.proposedAction]}`}
+          >
+            accept → {ACTION_RESULT_HINT[suggestion.proposedAction]}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <ActionButton label="Dismiss" onClick={onDismiss} primary={false} />
+            <ActionButton label="Accept" onClick={onAccept} primary />
+          </div>
         </div>
       </div>
     </GlassCard>
@@ -216,7 +232,7 @@ export function AutoDraftSuggestions({
             <SuggestionItem
               key={s.id}
               suggestion={s}
-              onAccept={() => onAccept?.(s.id, s.zoneId)}
+              onAccept={() => onAccept?.(s.id, s.zoneId, s.proposedAction)}
               onDismiss={() => handleDismiss(s.id)}
             />
           ))}

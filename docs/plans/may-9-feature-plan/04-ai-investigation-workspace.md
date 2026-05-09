@@ -185,7 +185,8 @@ Investigation은 ChatAgent의 **다른 모드가 아니라 다른 surface**다. 
 - `features/chat-agent`는 그대로 유지된다 — 가벼운 lookup, 자유 형식 대화, suggestion preset 4개.
 - `features/investigation`은 새로운 surface로 시작한다 — 입구가 다르다 (focus stack의 "Investigate" CTA, 또는 `/intelligence` 우상단의 별도 진입점).
 - session/thread 객체는 공유하지 않는다. investigation은 InvestigationTarget을 root로 하는 별도 store.
-- 단, 같은 token/cost meter (`features/chat-agent/model/TokensContext`)는 재사용한다 — 둘 다 같은 LLM 예산을 쓴다.
+- LLM 예산/cost meter는 `features/chat-agent/model/TokensContext`를 **재사용하지 않는다**. TokensContext는 디자인 토큰 편집 상태(또는 chat-agent 내부 토큰 사용량)에 대한 컨텍스트이고, 의미가 다르다. investigation이 이걸 import 하는 순간 "chat-agent는 안 건드린다"는 경계가 사실상 가장 강하게 묶이는 결합이 된다.
+- 대신 새 `shared/budget` (또는 `features/investigation/model/BudgetContext`) 컨텍스트를 만들어 LLM 토큰/비용 미터를 그쪽으로 옮긴다. chat-agent가 같은 미터를 쓰고 싶다면 chat-agent도 새 컨텍스트를 import 하도록 마이그레이션한다 — 단, 그 마이그레이션은 이 feature의 범위 밖이고, Phase 1에서는 investigation 내부 컨텍스트로만 시작해도 된다.
 
 이 경계가 흐려지면 ChatAgent가 다시 god component로 자란다 (현재 [src/features/chat-agent/ui/ChatAgent.tsx](src/features/chat-agent/ui/ChatAgent.tsx) 747줄). investigation은 처음부터 별도로 자란다.
 
@@ -266,24 +267,125 @@ Investigation은 ChatAgent의 **다른 모드가 아니라 다른 surface**다. 
 
 - [src/features/](src/features/) 아래 새 슬라이스 4개 생성: `investigation/{model,planner,evidence,jobs}`
 - [src/entities/](src/entities/) 아래 `investigation` entity 추가 — InvestigationTarget / ContextBundle / EvidenceItem / Hypothesis / ActionRecommendation 타입과 fixture
-- `features/chat-agent`는 손대지 않는다. 단, `TokensContext`는 export로 노출되어 있어 investigation에서도 import 해서 cost meter 공유
+- `features/chat-agent`는 손대지 않는다. `TokensContext`도 import 하지 않는다 (위 "ChatAgent와의 경계" 섹션 참조). investigation은 자체 `BudgetContext`로 시작.
 
 ### Phase 1 — Evidence schema + 단일 질문 답변
 
 #### 1.1 entity 정의 — [src/entities/investigation/](src/entities/investigation/)
 
-- `model/types.ts` — 핵심 타입
-  - `EvidenceKind = 'symbol' | 'caller' | 'callee' | 'recent_change' | 'owner' | 'taint_path' | 'test_coverage' | 'incident'`
-  - `Confidence = 'high' | 'medium' | 'low' | 'unknown'`
-  - `Staleness = 'fresh' | 'stale' | 'unknown'`
-  - `WhyPartial = 'dispatch_overapprox' | 'runtime_missing' | 'index_stale' | 'analysis_truncated' | null`
-  - `EvidenceItem = { id, kind, sourceTool, confidence, staleness, whyPartial, payload, summary }` (payload는 kind별 discriminated union)
-  - `InvestigationTarget = { kind: 'file'|'symbol'|'incident', id, label }`
-  - `ContextBundle = { id, target, evidence: EvidenceItem[], gatheredAt, status: 'gathering'|'partial'|'complete' }`
-  - `Hypothesis = { id, statement, supporting: EvidenceId[], refuting: EvidenceId[] }`
-  - `ActionRecommendation = { id, kind: 'open_focus'|'run_deep_scan'|'create_fix_task'|'assign_owner', label, payload }`
-  - `InvestigationAnswer = { conclusion, evidence: EvidenceId[3], unknowns: UnknownTag[], actions: ActionRecommendation[] }` ← unknowns는 빈 배열 금지 (린트 또는 런타임 assertion으로 강제)
-- `model/fixtures.ts` — Phase 1 demo용 mock bundle (file.id 한두 개)
+- `model/types.ts` — 핵심 타입. 아래는 **그대로 옮겨붙일 수 있는 수준**의 TypeScript로 고정한다 (FE/BE contract 혼선 방지).
+
+```ts
+// branded id types — 문자열 혼용 방지
+export type EvidenceId = string & { readonly __brand: 'EvidenceId' };
+export type HypothesisId = string & { readonly __brand: 'HypothesisId' };
+export type ActionId = string & { readonly __brand: 'ActionId' };
+export type BundleId = string & { readonly __brand: 'BundleId' };
+
+export type EvidenceKind =
+  | 'symbol'
+  | 'caller'
+  | 'callee'
+  | 'recent_change'
+  | 'owner'
+  | 'taint_path'
+  | 'test_coverage'
+  | 'incident';
+
+export type Confidence = 'high' | 'medium' | 'low' | 'unknown';
+export type Staleness = 'fresh' | 'stale' | 'unknown';
+
+// null 대신 명시 union — JSON 직렬화/타입가드 일관성
+export type WhyPartial =
+  | 'dispatch_overapprox'
+  | 'runtime_missing'
+  | 'index_stale'
+  | 'analysis_truncated'
+  | 'none';
+
+// AnswerView가 unknowns 슬롯에 표시하는 라벨
+// EvidenceItem의 whyPartial과 의미가 겹치는 부분이 있으나,
+// UnknownTag는 답변 레벨(이 답변이 못 채운 부분), whyPartial은 evidence 레벨(이 근거가 부족한 이유).
+export type UnknownTag =
+  | { code: 'runtime_missing'; label: string }
+  | { code: 'analysis_stale'; label: string }
+  | { code: 'dispatch_overapprox'; label: string }
+  | { code: 'coverage_gap'; label: string }
+  | { code: 'no_known_unknowns'; label: 'no known unknowns' }; // 슬롯 강제용 sentinel
+
+export type EvidencePayload =
+  | { kind: 'symbol'; symbol: string; file: string; line: number }
+  | { kind: 'caller'; from: string; to: string; sites: number }
+  | { kind: 'callee'; from: string; to: string }
+  | { kind: 'recent_change'; prCount: number; revertCount: number; windowDays: number }
+  | { kind: 'owner'; team: string; lastReviewDaysAgo: number }
+  | { kind: 'taint_path'; source: string; sink: string; hops: number }
+  | { kind: 'test_coverage'; linePct: number; branchPct: number; uncovered: string[] }
+  | { kind: 'incident'; incidentId: string; title: string; whenDaysAgo: number };
+
+export interface EvidenceItem {
+  id: EvidenceId;
+  kind: EvidenceKind;
+  sourceTool: string;            // e.g. 'taint_flow', 'find_references'
+  confidence: Confidence;
+  staleness: Staleness;
+  whyPartial: WhyPartial;
+  payload: EvidencePayload;      // discriminated union by .kind, must match EvidenceItem.kind
+  summary: string;               // <= 140 chars, EvidenceCard에 그대로 표시
+}
+
+export type InvestigationTargetKind = 'file' | 'symbol' | 'incident';
+export interface InvestigationTarget {
+  kind: InvestigationTargetKind;
+  id: string;
+  label: string;
+}
+
+export type BundleStatus = 'gathering' | 'partial' | 'complete';
+export interface ContextBundle {
+  id: BundleId;
+  target: InvestigationTarget;
+  evidence: EvidenceItem[];
+  gatheredAt: string;            // ISO timestamp
+  status: BundleStatus;
+}
+
+export interface Hypothesis {
+  id: HypothesisId;
+  statement: string;
+  supporting: EvidenceId[];
+  refuting: EvidenceId[];
+}
+
+export type ActionKind =
+  | 'open_focus'
+  | 'run_deep_scan'
+  | 'create_fix_task'
+  | 'assign_owner';
+
+export interface ActionRecommendation {
+  id: ActionId;
+  kind: ActionKind;
+  label: string;
+  payload: Record<string, unknown>; // kind별 narrowing은 ui에서 type guard로
+}
+
+// 답변 4슬롯. evidence는 정확히 3개 (Phase 1 정책).
+// 가변 길이가 필요해지면 별도 AnswerExtended 타입을 만들고 이 타입은 깨지 않는다.
+export type EvidenceTriple = readonly [EvidenceId, EvidenceId, EvidenceId];
+
+export interface InvestigationAnswer {
+  conclusion: string;
+  evidence: EvidenceTriple;
+  unknowns: UnknownTag[];        // length >= 1 (none이면 [{code:'no_known_unknowns', ...}])
+  actions: ActionRecommendation[]; // length >= 1
+}
+```
+
+  - `unknowns`가 비면 컴파일 타임에는 막을 수 없으므로, `composeAnswer()`에서 런타임 assertion으로 강제 + dev에서 throw / prod에서 console.error.
+  - `evidence: EvidenceTriple`은 튜플로 길이 3을 타입에 박아둔다 (이전 표기 `EvidenceId[3]`은 TS 문법으로 부정확).
+  - `EvidencePayload.kind`와 `EvidenceItem.kind`는 같은 값이어야 한다 (별도 validator로 매칭 — 타입 시스템만으로는 강제 못 함).
+- `model/fixtures.ts` — Phase 1 demo용 mock bundle (file.id 한두 개). 모든 id는 brand cast helper (`asEvidenceId(s)`) 사용.
 - `index.ts` export
 
 #### 1.2 store + planner — [src/features/investigation/model/](src/features/investigation/model/)
@@ -306,14 +408,35 @@ Investigation은 ChatAgent의 **다른 모드가 아니라 다른 surface**다. 
 
 #### 1.4 surface 진입점 — [src/features/investigation/ui/](src/features/investigation/ui/)
 
-- `InvestigatePanel.tsx` — 우측 또는 모달 surface (Phase 1은 우측 슬라이드아웃이 가장 마찰 적음). FocusScanStack 옆에 stack되거나 그것을 push하는 형태
-- `InvestigateCTA.tsx` — focus stack item 위에 "Investigate" 버튼. 클릭 → `start(target)` 호출 + InvestigatePanel 오픈
-- [src/features/inspect-target/](src/features/inspect-target/)에 CTA 슬롯 추가 (props로 주입; inspect-target 자체는 investigation을 모름)
+##### IA 결정 (Phase 1 시작 전 박아두는 부분)
+
+`/intelligence`의 우측은 이미 **FocusScanStack**이 핵심 surface다. "옆에 stack" / "교체" / "탭 공존" / "split" 중 하나를 결정하지 않으면 구현 단계에서 레이아웃 충돌이 난다. Phase 1은 다음 정책으로 시작한다:
+
+- **결정: FocusScanStack과 동일 우측 컬럼을 점유하는 push-stack 동작**. 즉 InvestigatePanel은 FocusScanStack 위에 새 stack item으로 들어가고 (FocusScanStack의 stack 관리 모델을 그대로 빌려씀), Investigate를 닫으면 직전 focus item으로 돌아온다.
+- 채택 이유:
+  - 우측 컬럼을 split하면 양쪽 다 너비가 좁아져서 evidence card가 깨진다 (evidence card는 padding + chip + summary 3줄 기준 360px 이상이 필요).
+  - 별도 모달은 focus stack과의 액션 wiring(open_focus 등)이 끊긴다.
+  - 탭 토글은 evidence와 focus를 동시에 보면서 비교하는 사용 패턴을 막는다.
+- **선택 안 함 (명시적으로 거절):**
+  - 좌측 패널 추가 — IntelligenceLayout 좌측은 FilterBar 전용 (memory rule: GlassCard 공유).
+  - 풀스크린 모달 — 조사 중에 맵을 보지 못하게 됨.
+  - FocusScanStack 교체 — focus 컨텍스트를 잃고 액션 wiring이 깨짐.
+- **공존 방식:**
+  - FocusScanStack의 stack model을 재사용하지 않고도 Investigate가 같은 컬럼을 차지할 수 있도록, 우측 컬럼에 "active surface" 개념을 IntelligenceLayout 레벨에 추가 (`'focus' | 'investigate'`). 둘 중 하나만 mount; 전환 시 unmount 비용은 fixture 단계에서 무시 가능.
+  - Investigate가 mount되어 있는 동안 FocusScanStack은 시각적으로 dim/hidden, 단 stack state는 보존 (close 시 즉시 복귀).
+
+##### 컴포넌트
+
+- `InvestigatePanel.tsx` — 위 IA 결정을 따라, IntelligenceLayout이 `activeRightSurface === 'investigate'`일 때만 mount. 자체적으로 close 버튼 → layout state를 `'focus'`로 되돌림.
+- `InvestigateCTA.tsx` — focus stack item 위에 "Investigate" 버튼. 클릭 → `start(target)` + IntelligenceLayout의 `setActiveRightSurface('investigate')`.
+- [src/features/inspect-target/](src/features/inspect-target/)에 CTA 슬롯 추가 (props로 주입; inspect-target 자체는 investigation을 모름).
 
 #### 1.5 라우팅 / providers
 
-- [src/app/providers/AppProviders.tsx](src/app/providers/AppProviders.tsx)에 `<InvestigationProvider>` 추가 (TokensProvider 안쪽)
-- `IntelligenceLayout.tsx`에 `InvestigatePanel`을 lazy import로 마운트
+- `<InvestigationProvider>`를 **AppProviders에 올리지 않는다**. 이 기능은 사실상 `/intelligence` 전용 surface이고, 전역으로 올리면 (a) 다른 라우트(`/`, `/onboarding` 등)에서도 컨텍스트가 살아 있어 상태가 새고, (b) lazy split 경계가 무너져 초기 번들에 들어가며, (c) 다른 탭으로 이동했다가 돌아왔을 때 cleanup/lifecycle이 모호해진다.
+- 대신 [src/app/router/intelligence/IntelligenceLayout.tsx](src/app/router/intelligence/IntelligenceLayout.tsx) **안쪽**에 `<InvestigationProvider>`를 마운트한다. 라우트 unmount = provider unmount = bundle/answer cleanup이 자연스럽게 일어난다.
+- BudgetContext도 동일 — 일단 IntelligenceLayout 스코프 안에 둔다. 추후 chat-agent와 공유가 필요하면 그때 `shared/budget`으로 끌어올린다 (마이그레이션은 이 feature 범위 밖).
+- `InvestigatePanel`은 IntelligenceLayout에서 lazy import로 마운트 (위 IA 결정에 따라 `activeRightSurface === 'investigate'`일 때만).
 
 #### 1.6 액션 wiring
 
@@ -332,7 +455,7 @@ Investigation은 ChatAgent의 **다른 모드가 아니라 다른 surface**다. 
 - [ ] gathering → partial → complete 상태 전이가 fixture 기반으로 시각화됨
 - [ ] 4슬롯 답변이 렌더링되고, unknowns 슬롯이 항상 채워짐
 - [ ] open_focus 액션 클릭이 실제 stack 동작과 wiring됨
-- [ ] cost meter (TokensContext) 가 fixture 호출 1회당 mock token을 소비
+- [ ] cost meter (BudgetContext, investigation 자체 컨텍스트) 가 fixture 호출 1회당 mock token을 소비
 
 ---
 
@@ -416,16 +539,16 @@ Investigation은 ChatAgent의 **다른 모드가 아니라 다른 surface**다. 
 ```
 entities/investigation
   ↑
-features/investigation/model         ← TokensContext (chat-agent에서 share)
+features/investigation/model         ← BudgetContext (investigation-local; chat-agent와 공유 안 함)
   ↑                ↑
   evidence         planner
   ↑                ↑
   ui/InvestigatePanel + Notebook + JobsTray
   ↑
-app/providers + IntelligenceLayout
+app/router/intelligence/IntelligenceLayout (← provider 마운트 위치, AppProviders 아님)
 ```
 
-ChatAgent는 이 그래프 밖이다. 둘은 TokensContext만 공유한다.
+ChatAgent는 이 그래프 밖이다. 컨텍스트도 공유하지 않는다 — 둘 다 LLM 예산을 쓴다는 의미적 공통점만 있고, 코드 의존은 없다. 추후 진짜 공유가 필요해지면 그때 `shared/budget`으로 추출.
 
 ### 손대지 않을 것
 

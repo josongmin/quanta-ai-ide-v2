@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronRight, FileCode2 } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { CandidateFix, DiffHunk } from '../../model/types';
 import { useVfx } from './tokens';
 
@@ -10,6 +11,7 @@ export function DiffExpander({
   onToggle: () => void;
 }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
 
   if (!candidate || candidate.diffPreview.length === 0) {
     return null;
@@ -33,13 +35,13 @@ export function DiffExpander({
           className="text-[10px] font-black uppercase tracking-[0.18em]"
           style={{ color: t.textMuted }}
         >
-          diff preview
+          {tr('diff.title')}
         </span>
         <span className="text-[10px] font-mono" style={{ color: t.textFaint }}>
           {candidate.diffSummary}
         </span>
         <span className="ml-auto text-[10px]" style={{ color: t.textFaint }}>
-          {expanded ? 'collapse' : 'expand'}
+          {expanded ? tr('diff.collapse') : tr('diff.expand')}
         </span>
       </button>
 
@@ -56,6 +58,7 @@ export function DiffExpander({
 
 function DiffHunkView({ hunk }: { hunk: DiffHunk }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <div
       className="rounded border overflow-hidden"
@@ -70,7 +73,7 @@ function DiffHunkView({ hunk }: { hunk: DiffHunk }) {
           {hunk.file}
         </span>
         <span className="text-[9.5px] font-mono ml-auto" style={{ color: t.textFaint }}>
-          @ line {hunk.startLine}
+          {tr('diff.atLine', { line: hunk.startLine })}
         </span>
       </div>
       <div className="font-mono text-[11px] leading-[1.55]">

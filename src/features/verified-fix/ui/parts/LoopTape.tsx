@@ -3,6 +3,7 @@ import {
   Search, Wrench, Eye, FlaskConical, Package, Check, Ban,
   ChevronDown, ChevronRight, type LucideIcon,
 } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { FixCase, LoopStage } from '../../model/types';
 import { useVfx } from './tokens';
 
@@ -16,18 +17,10 @@ const STAGE_ICON: Record<LoopStage, LucideIcon> = {
   done:        Check,
   aborted:     Ban,
 };
-const STAGE_LABEL: Record<LoopStage, string> = {
-  investigate: 'investigate',
-  patch:       'patch',
-  critique:    'critique',
-  validate:    'validate',
-  package:     'package',
-  done:        'done',
-  aborted:     'abort',
-};
 
 export function LoopTape({ fixCase }: { fixCase: FixCase }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const [expanded, setExpanded] = useState(false);
   const stages = fixCase.loop.aborted ? [...STAGE_ORDER, 'aborted' as LoopStage] : STAGE_ORDER;
   const currentIdx = stages.indexOf(fixCase.loop.currentStage);
@@ -52,7 +45,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
             className="text-[10px] font-black uppercase tracking-[0.18em]"
             style={{ color: t.textMuted }}
           >
-            self-check loop
+            {tr('loop.title')}
           </span>
           <span
             className="text-[9px] font-mono px-1.5 py-0.5 rounded"
@@ -61,7 +54,12 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
               color: overBudget ? t.warn : t.textMuted,
             }}
           >
-            iter {iters}/{max} · {totalTokens.toLocaleString()} tok · {totalSeconds.toFixed(0)}s
+            {tr('loop.status', {
+              iters,
+              max,
+              tokens: totalTokens.toLocaleString(),
+              seconds: totalSeconds.toFixed(0),
+            })}
           </span>
         </div>
         {fixCase.loop.aborted && fixCase.loop.abortReason && (
@@ -70,7 +68,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
             style={{ color: t.bad }}
             title={fixCase.loop.abortReason}
           >
-            stopped: {truncate(fixCase.loop.abortReason, 60)}
+            {tr('loop.stopped', { reason: truncate(fixCase.loop.abortReason, 60) })}
           </span>
         )}
       </div>
@@ -104,7 +102,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
                   className="text-[10px] font-bold uppercase tracking-[0.12em] truncate"
                   style={{ color: fg }}
                 >
-                  {STAGE_LABEL[stage]}
+                  {tr(`loop.stage.${stage}`)}
                 </span>
                 {isCurrent && !isAborted && (
                   <span
@@ -142,7 +140,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
               className="text-[9px] font-mono ml-2 mt-0.5 shrink-0"
               style={{ color: t.textFaint }}
             >
-              {expanded ? 'collapse' : `${iters} iter`}
+              {expanded ? tr('loop.collapse') : tr('loop.iter', { count: iters })}
             </span>
           </button>
 
@@ -173,7 +171,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
                       className="text-[9px] font-bold uppercase tracking-[0.12em] mt-0.5 shrink-0"
                       style={{ color: t.textFaint, minWidth: 64 }}
                     >
-                      {STAGE_LABEL[it.stage]}
+                      {tr(`loop.stage.${it.stage}`)}
                     </span>
                     <span className="flex-1" style={{ color: t.textBody }}>
                       {it.note}

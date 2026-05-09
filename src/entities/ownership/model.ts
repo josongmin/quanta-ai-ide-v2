@@ -110,6 +110,8 @@ export interface RefactorStack {
   totalEstimatedDays: number;
   proofObligations: ProofObligation[];
   safeSeams: SafeSeamCandidate[];
+  splitConfidence: number;
+  splitConfidenceBasis: string[];
 }
 
 // ─── Phase 2: Cross-team hotspot detection ──────────────────────────

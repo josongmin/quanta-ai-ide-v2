@@ -52,6 +52,15 @@ function summaryFor(kind: JobKind, target: InvestigationTarget): string {
   }
 }
 
+// Per-kind timing — heavier analyses tick slower, lighter ones snap. Matches
+// the rough cost ordering of the real backend ops these stand in for.
+const KIND_TIMING: Record<JobKind, { stepMs: number; progressDelta: number; queueMs: number }> = {
+  deep_scan:        { stepMs: 700,  progressDelta: 0.18, queueMs: 350 },
+  refactor_plan:    { stepMs: 600,  progressDelta: 0.20, queueMs: 250 },
+  runtime_correlate:{ stepMs: 900,  progressDelta: 0.14, queueMs: 500 },
+  whole_repo_blast: { stepMs: 1100, progressDelta: 0.12, queueMs: 700 },
+};
+
 export function JobsProvider({ children }: { children: ReactNode }) {
   const [jobs, setJobs] = useState<Job[]>(FIXTURE_JOBS);
   const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
@@ -80,7 +89,8 @@ export function JobsProvider({ children }: { children: ReactNode }) {
       if (j.status === 'cancelled' || j.status === 'completed' || j.status === 'failed') {
         return cur;
       }
-      const nextProgress = Math.min(1, j.progress + 0.2);
+      const timing = KIND_TIMING[j.kind];
+      const nextProgress = Math.min(1, j.progress + timing.progressDelta);
       const isDone = nextProgress >= 1;
       const updated: Job = isDone
         ? {
@@ -94,7 +104,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
       const next = [...cur];
       next[idx] = updated;
       if (!isDone) {
-        const t = setTimeout(() => advance(id), 600);
+        const t = setTimeout(() => advance(id), timing.stepMs);
         timersRef.current.set(id, t);
       } else {
         timersRef.current.delete(id);
@@ -115,8 +125,8 @@ export function JobsProvider({ children }: { children: ReactNode }) {
       startedAt: Date.now(),
     };
     setJobs((cur) => [job, ...cur]);
-    // Kick off after a short tick so consumers see the queued state briefly.
-    const t = setTimeout(() => advance(id), 400);
+    // Per-kind queue delay — heavier ops sit in the queue longer.
+    const t = setTimeout(() => advance(id), KIND_TIMING[kind].queueMs);
     timersRef.current.set(id, t);
     return id;
   }, [advance]);

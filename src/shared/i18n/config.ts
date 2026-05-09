@@ -8,7 +8,7 @@ export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 export const NAMESPACES = [
   'common', 'app', 'filter', 'inspect', 'chat', 'prefs', 'mode', 'overlay', 'search', 'help', 'coding',
-  'review', 'admission', 'diff', 'fix-pipeline',
+  'review', 'admission', 'diff', 'fix-pipeline', 'verified-fix',
 ] as const;
 
 const STORAGE_KEY = 'cflens.i18n.lang';

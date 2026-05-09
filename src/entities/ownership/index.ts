@@ -26,9 +26,12 @@ export {
   MOCK_ZONES,
   MOCK_STACKS,
   MOCK_CROSS_TEAM_HOTSPOTS,
+  MOCK_APPROVAL_PATHS,
+  MOCK_AUTO_DRAFTS,
   findPerson,
   findZone,
   findStack,
+  findApprovalPath,
 } from './mock';
 
 export {

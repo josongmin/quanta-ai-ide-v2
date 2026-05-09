@@ -17,7 +17,7 @@ const PRIORITY_BY_QUESTION: Record<QuestionType, EvidenceKind[]> = {
   incident_suspect: ['recent_change', 'similar_incident', 'taint_path', 'caller', 'owner'],
 };
 
-function rankEvidence(evidence: EvidenceItem[], questionType: QuestionType): EvidenceItem[] {
+export function rankEvidence(evidence: EvidenceItem[], questionType: QuestionType): EvidenceItem[] {
   const priority = PRIORITY_BY_QUESTION[questionType];
   const score = (item: EvidenceItem): number => {
     const idx = priority.indexOf(item.kind);

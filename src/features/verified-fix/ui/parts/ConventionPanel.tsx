@@ -1,14 +1,11 @@
 import { Sparkle, Check, Minus, X } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { CandidateFix } from '../../model/types';
 import { useVfx, statusColor } from './tokens';
 
-// Phase 2 — convention conformance ("does this look like our codebase?").
-// Pulls obligations with category='stylistic' to its own surface so they
-// don't get drowned by static/dynamic. Plan rule: failure here does NOT
-// reject the candidate, it gates auto-submit only.
-
 export function ConventionPanel({ candidate }: { candidate: CandidateFix }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const items = candidate.obligations.filter((o) => o.category === 'stylistic');
 
   return (
@@ -23,17 +20,17 @@ export function ConventionPanel({ candidate }: { candidate: CandidateFix }) {
             className="text-[10px] font-black uppercase tracking-[0.18em]"
             style={{ color: t.textMuted }}
           >
-            convention conformance
+            {tr('convention.title')}
           </span>
         </div>
         <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
-          gates auto-submit only · does not block draft
+          {tr('convention.subtitle')}
         </span>
       </div>
 
       {items.length === 0 ? (
         <div className="text-[11px]" style={{ color: t.textFaint }}>
-          no stylistic obligations attached to this candidate.
+          {tr('convention.empty')}
         </div>
       ) : (
         <ul className="space-y-2">
@@ -56,7 +53,7 @@ export function ConventionPanel({ candidate }: { candidate: CandidateFix }) {
                       className="text-[8.5px] font-bold uppercase tracking-[0.14em] px-1 py-px rounded"
                       style={{ background: c.bg, color: c.fg }}
                     >
-                      {c.label}
+                      {tr(`proof.status.${o.status}`)}
                     </span>
                   </div>
                   <div className="text-[10.5px] mt-0.5" style={{ color: t.textMuted }}>
@@ -69,21 +66,20 @@ export function ConventionPanel({ candidate }: { candidate: CandidateFix }) {
         </ul>
       )}
 
-      {/* Reference: convention sources we'd compare against */}
       <div
         className="mt-3 pt-3 border-t flex flex-wrap gap-1.5"
         style={{ borderColor: t.borderHair }}
       >
         <span className="text-[8.5px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
-          benchmarked against:
+          {tr('convention.benchmarkedAgainst')}
         </span>
-        {['neighboring imports', 'sibling error patterns', 'naming convention', 'lint/format rules'].map((src) => (
+        {(['neighboringImports', 'siblingErrorPatterns', 'namingConvention', 'lintFormatRules'] as const).map((src) => (
           <span
             key={src}
             className="text-[9px] font-mono px-1.5 py-0.5 rounded"
             style={{ background: t.badgeBg, color: t.textMuted }}
           >
-            {src}
+            {tr(`convention.src.${src}`)}
           </span>
         ))}
       </div>

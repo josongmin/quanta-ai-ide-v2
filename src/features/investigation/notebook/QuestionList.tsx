@@ -13,6 +13,24 @@ type Props = {
   onArchive?: (id: string) => void;
 };
 
+// Pending > partial > answered > archived; within a tier, newest first.
+// "What do I owe a response?" should be the first thing the eye finds —
+// chronological alone hides pending behind older answered work.
+const STATUS_RANK: Record<NotebookQuestionStatus, number> = {
+  pending: 0,
+  partial: 1,
+  answered: 2,
+  archived: 3,
+};
+
+function sortQuestions(qs: NotebookQuestion[]): NotebookQuestion[] {
+  return [...qs].sort((a, b) => {
+    const r = STATUS_RANK[a.status] - STATUS_RANK[b.status];
+    if (r !== 0) return r;
+    return b.askedAt - a.askedAt;
+  });
+}
+
 const STATUS_TONE: Record<NotebookQuestionStatus, { bg: string; fg: string; label: string }> = {
   pending: {
     bg: 'var(--bg-surface-muted)',
@@ -75,7 +93,8 @@ function QtBadge({ qt }: { qt: QuestionType }) {
 }
 
 export function QuestionList({ questions, selectedId, onSelect, onArchive }: Props) {
-  if (questions.length === 0) {
+  const sorted = sortQuestions(questions);
+  if (sorted.length === 0) {
     return (
       <div
         className="px-2 py-3"
@@ -87,7 +106,7 @@ export function QuestionList({ questions, selectedId, onSelect, onArchive }: Pro
   }
   return (
     <ul className="m-0 p-0 list-none flex flex-col">
-      {questions.map((q) => {
+      {sorted.map((q) => {
         const isSelected = selectedId === q.id;
         const rowStyle: CSSProperties = {
           background: isSelected ? 'var(--bg-active)' : 'transparent',

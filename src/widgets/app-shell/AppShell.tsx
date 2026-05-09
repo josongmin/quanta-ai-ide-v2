@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useMemo, useRef, useState, type ReactNode 
 import {
   Brain, GitPullRequest, Code2, Bell, ChevronDown, Palette,
   Sun, Moon, RotateCcw, ShieldCheck, Bot, Radar, Wand2, ListChecks,
+  Search,
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { useTheme } from '@shared/theme';
@@ -38,12 +39,13 @@ const ShortcutsModal = lazy(() =>
 // is purely the chrome and renders whichever route content TanStack hands
 // it via `children` (the root route's <Outlet/> output).
 
-type TabId = 'intelligence' | 'coding' | 'agents' | 'reviews' | 'admission' | 'fixes';
+type TabId = 'intelligence' | 'investigate' | 'coding' | 'agents' | 'reviews' | 'admission' | 'fixes';
 
 // `to` is typed against the registered router instance, so routes added
 // to the tree become available here automatically.
-const TAB_TO: Record<TabId, '/intelligence' | '/coding' | '/agents' | '/reviews' | '/admission' | '/fixes'> = {
+const TAB_TO: Record<TabId, '/intelligence' | '/investigate' | '/coding' | '/agents' | '/reviews' | '/admission' | '/fixes'> = {
   intelligence: '/intelligence',
+  investigate:  '/investigate',
   coding:       '/coding',
   agents:       '/agents',
   reviews:      '/reviews',
@@ -51,10 +53,11 @@ const TAB_TO: Record<TabId, '/intelligence' | '/coding' | '/agents' | '/reviews'
   fixes:        '/fixes',
 };
 
-// Order follows the product flow: discover → edit → delegate → review → gate → ship-fix.
+// Order follows the product flow: discover → investigate → edit → delegate → review → gate → ship-fix.
 // Labels are resolved via i18n at render time, so we only key by id here.
 const TABS: { id: TabId; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'intelligence', icon: Brain },
+  { id: 'investigate',  icon: Search },
   { id: 'coding',       icon: Code2 },
   { id: 'agents',       icon: Bot },
   { id: 'reviews',      icon: GitPullRequest },

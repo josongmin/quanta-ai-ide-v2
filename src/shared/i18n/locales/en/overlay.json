@@ -12,6 +12,8 @@
     "title": "Overlays",
     "heading": "Visual overlays",
     "resetAll": "Reset all",
+    "painting": "Painting:",
+    "paintingEmpty": "Off — pick a row to enable",
     "off": "Off",
     "on": "On",
     "enable": "Enable",
@@ -20,12 +22,28 @@
       "heat": "Heat",
       "time": "Time window",
       "timeIdle": "Activates with Hotspot (time)",
+      "controls": "Heat controls",
       "risk": "Risk lens",
       "api": "Public API",
       "boundaries": "Boundaries"
     },
     "detail": {
-      "apiBody": "Draws a thin outer ring around files whose external fan-in suggests they're widely consumed — your public API surface at a glance."
+      "apiBody": "Draws a thin outer ring around files whose external fan-in suggests they're widely consumed — your public API surface at a glance.",
+      "apiPreview": "Looks like this on the dot field"
+    },
+    "preview": {
+      "blast": "Blast preview",
+      "path": "Path trace",
+      "pr": "PR preview"
+    }
+  },
+  "risk": {
+    "toggleHint": "Pick a lens to apply, click again to clear.",
+    "lens": {
+      "security":  { "label": "Security",   "hint": "SAST × secrets × vulnerable status" },
+      "testGaps":  { "label": "Test gaps",  "hint": "Big files × low coverage × no test" },
+      "busFactor": { "label": "Bus factor", "hint": "Single-author × high incoming refs" },
+      "techDebt":  { "label": "Tech debt",  "hint": "Complexity × low edit-safety × churn" }
     }
   },
   "boundaries": {

@@ -59,9 +59,57 @@ function Column({
   );
 }
 
+function colorForConfidence(score: number): string {
+  if (score >= 0.8) return 'var(--intent-success-vivid)';
+  if (score >= 0.5) return 'var(--intent-warning-vivid)';
+  return 'var(--intent-danger-vivid)';
+}
+
+function ConfidenceGauge({ score }: { score: number }) {
+  const pct = Math.round(score * 100);
+  const fillColor = colorForConfidence(score);
+  const trackStyle: CSSProperties = {
+    width: 50,
+    height: 4,
+    background: 'var(--bg-active)',
+    borderRadius: 999,
+    overflow: 'hidden',
+    flexShrink: 0,
+  };
+  const fillStyle: CSSProperties = {
+    width: `${pct}%`,
+    height: '100%',
+    background: fillColor,
+    borderRadius: 999,
+    transition: 'width 200ms linear',
+  };
+  return (
+    <div className="flex items-center gap-1.5">
+      <span
+        className="font-mono"
+        style={{ color: 'var(--fg-subtle)', fontSize: 9 }}
+      >
+        Hypothesis confidence
+      </span>
+      <span style={trackStyle}>
+        <span style={fillStyle} />
+      </span>
+      <span
+        className="font-mono"
+        style={{ color: 'var(--fg-default)', fontSize: 10 }}
+      >
+        {pct}%
+      </span>
+    </div>
+  );
+}
+
 export function HypothesisBlock({ hypothesis, evidenceById }: Props) {
   return (
     <div className="flex flex-col gap-2">
+      {typeof hypothesis.confidence === 'number' ? (
+        <ConfidenceGauge score={hypothesis.confidence} />
+      ) : null}
       <div
         className="font-medium"
         style={{ color: 'var(--fg-default)', fontSize: '12px', lineHeight: 1.4 }}

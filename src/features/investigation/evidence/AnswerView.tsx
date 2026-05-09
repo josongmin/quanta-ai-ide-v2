@@ -9,6 +9,7 @@ import { EvidenceStrip } from './EvidenceStrip';
 import { UnknownTag } from './UnknownTag';
 import { ActionButton } from './ActionButton';
 import { HypothesisBlock } from './HypothesisBlock';
+import { CoverageBadge } from './CoverageBadge';
 
 type Props = {
   answer: InvestigationAnswer;
@@ -16,6 +17,7 @@ type Props = {
   onAction?: (action: ActionRecommendation) => void;
   onPickEvidence?: (id: string) => void;
   pickedEvidenceId?: string | null;
+  onResolveUnknown?: (tag: import('@entities/investigation').UnknownTag) => void;
 };
 
 function SectionHeader({ children }: { children: ReactNode }) {
@@ -42,6 +44,7 @@ export function AnswerView({
   onAction,
   onPickEvidence,
   pickedEvidenceId,
+  onResolveUnknown,
 }: Props) {
   const evidenceById = useMemo<Record<string, EvidenceItem>>(() => {
     const map: Record<string, EvidenceItem> = {};
@@ -66,6 +69,26 @@ export function AnswerView({
 
   return (
     <div className="flex flex-col">
+      {/* 0. Summary row */}
+      <div
+        className="flex items-center gap-2 mb-2 text-[10px] font-mono"
+        style={{ color: 'var(--fg-subtle)' }}
+      >
+        <span
+          style={{
+            background: 'var(--bg-surface-muted)',
+            border: '1px solid var(--border-default)',
+            borderRadius: 3,
+            padding: '2px 6px',
+            color: 'var(--fg-default)',
+          }}
+        >
+          {bundle.target.kind}: {bundle.target.label}
+        </span>
+        <CoverageBadge coverage={bundle.coverage} />
+        <span style={{ color: 'var(--fg-subtle)' }}>{bundle.questionType}</span>
+      </div>
+
       {/* 1. Strip */}
       <div className="py-3">
         <EvidenceStrip
@@ -108,11 +131,25 @@ export function AnswerView({
             (none reported)
           </div>
         ) : (
-          <div className="flex flex-wrap gap-1.5">
-            {answer.unknowns.map((u) => (
-              <UnknownTag key={u.id} tag={u} />
-            ))}
-          </div>
+          <>
+            <div className="flex flex-wrap gap-1.5">
+              {answer.unknowns.map((u) => (
+                <UnknownTag
+                  key={u.id}
+                  tag={u}
+                  {...(onResolveUnknown ? { onClick: onResolveUnknown } : {})}
+                />
+              ))}
+            </div>
+            {onResolveUnknown ? (
+              <div
+                className="mt-1.5"
+                style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
+              >
+                Click any unknown to ask a follow-up.
+              </div>
+            ) : null}
+          </>
         )}
       </div>
 

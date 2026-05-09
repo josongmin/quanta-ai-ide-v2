@@ -1,0 +1,259 @@
+{
+  "header": {
+    "case": "case · {{id}}",
+    "kind": {
+      "incident": "incident",
+      "hotspot": "hotspot",
+      "alert": "alert",
+      "focus": "focus"
+    }
+  },
+  "phase": {
+    "tab1Label": "phase 1",
+    "tab1Sub": "static proof + draft",
+    "tab2Label": "phase 2",
+    "tab2Sub": "dynamic + post-patch + routing",
+    "tab3Label": "phase 3",
+    "tab3Sub": "auto-submit · rollback · feedback",
+    "p2Title": "phase 2 · dynamic + post-patch + routing",
+    "p2Body": "run the test/lint/typecheck/scan rails, re-measure the engine state after the patch lands, and route the draft to the reviewer who can move fastest. convention conformance gates auto-submit but does not block the draft.",
+    "p3Title": "phase 3 · auto-submit · rollback · feedback",
+    "p3Body": "this is the policy layer. tune the thresholds that decide who ships without a human, see the rollback contract that arms before merge, and watch the dismiss feedback stream that reshapes future candidates."
+  },
+  "empty": {
+    "noCaseTitle": "no case selected",
+    "noCaseBody": "pick a seed from the left sidebar to inspect the pipeline.",
+    "trustEmpty": "pick a case to inspect.",
+    "trustNoCandidate": "select a candidate to inspect its trust profile."
+  },
+  "sidebar": {
+    "brand": "verified fix",
+    "title": "pipeline queue",
+    "active": "{{count}} active · proof-first delivery",
+    "footer": "seed → loop → proof → draft",
+    "aborted": "aborted",
+    "noCandidates": "no candidates",
+    "candidate_one": "{{count}} candidate",
+    "candidate_other": "{{count}} candidates"
+  },
+  "loop": {
+    "title": "self-check loop",
+    "status": "iter {{iters}}/{{max}} · {{tokens}} tok · {{seconds}}s",
+    "stopped": "stopped: {{reason}}",
+    "collapse": "collapse",
+    "iter": "{{count}} iter",
+    "stage": {
+      "investigate": "investigate",
+      "patch": "patch",
+      "critique": "critique",
+      "validate": "validate",
+      "package": "package",
+      "done": "done",
+      "aborted": "abort"
+    }
+  },
+  "cost": {
+    "title": "cost telemetry",
+    "llm": "llm tokens",
+    "validation": "validation",
+    "cycle": "cycle cost",
+    "iters": "× {{count}} iter",
+    "profitable": "unit-profitable: value ${{value}} > 2× cost",
+    "underThreshold": "under threshold: value ${{value}} < 2× cost"
+  },
+  "proof": {
+    "rootCause": "root cause",
+    "seed": "seed: {{id}}",
+    "evidence": "evidence refs",
+    "blastHint": "blast hint",
+    "constraints": "constraints",
+    "postPatchDelta": "post-patch delta",
+    "obligations": "proof obligations",
+    "noCandidate": "no candidate selected",
+    "noCandidateHint": "obligations are defined per-candidate",
+    "static": "static",
+    "dynamic": "dynamic",
+    "stylistic": "stylistic",
+    "coverage": "coverage",
+    "delta": {
+      "taintPaths": "{{count}} taint paths",
+      "moduleAtRisk": "1 module",
+      "modulesAtRisk": "{{count}} modules at risk",
+      "hotspotFading": "hotspot fading",
+      "cleared": "cleared",
+      "gated": "gated"
+    },
+    "status": {
+      "pass": "pass",
+      "fail": "fail",
+      "partial": "partial",
+      "unknown": "unknown",
+      "pending": "pending"
+    }
+  },
+  "candidates": {
+    "noViableTitle": "no viable candidates",
+    "noViableBody": "loop aborted before producing a deliverable patch. escalate to human checkpoint or enrich the seed and retry.",
+    "header": "candidate fixes · {{count}} of 3 max",
+    "subtitle": "choose one to draft",
+    "apiBreak": "api break",
+    "stat": {
+      "lines": "lines",
+      "files": "files",
+      "blast": "blast"
+    }
+  },
+  "tier": {
+    "safeMechanical": "safe mechanical",
+    "guarded": "guarded",
+    "humanRequired": "human required",
+    "explainSafe": "eligible for one-click draft. mechanical patch class, blast ≤ 1, all proofs pass.",
+    "explainGuarded": "draft PR with explicit reviewer approve. proofs static-pass; dynamic bounded.",
+    "explainHuman": "route to manual review. exceeds delivery-gate thresholds or touches public surface.",
+    "rule": {
+      "lines": "lines ≤ 20",
+      "files": "files ≤ 2",
+      "blast": "blast ≤ 1 module",
+      "noApiBreak": "no public API break",
+      "allPass": "all proofs pass"
+    }
+  },
+  "trust": {
+    "signal": "trust signal",
+    "deliveryTier": "delivery tier",
+    "weakest": "weakest link",
+    "counter": "counter-evidence ({{count}})",
+    "gate": "delivery gate",
+    "patchConfidence": "patch confidence",
+    "conf": "conf",
+    "confidence": {
+      "strong": "strong: proofs cover all paths the engine traced.",
+      "sound": "sound: weakest obligation is bounded and addressable.",
+      "mixed": "mixed: review the weakest link before merging.",
+      "weak": "weak: not delivery-ready. consider seed enrichment."
+    },
+    "action": {
+      "running": "running {{stage}}",
+      "runValidation": "run validation",
+      "oneClick": "one-click draft pr",
+      "openDraft": "open draft pr",
+      "routeHuman": "route to human review",
+      "dismiss": "dismiss + log reason"
+    },
+    "selectCandidate": "select a candidate to inspect its trust profile.",
+    "tierRule": {
+      "lines": "lines ≤ 20",
+      "files": "files ≤ 2",
+      "blast": "blast ≤ 1 module",
+      "noPublicApi": "no public API break",
+      "allProofs": "all proofs pass"
+    },
+    "counterSeverity": {
+      "block": "block",
+      "concern": "concern",
+      "note": "note"
+    }
+  },
+  "diff": {
+    "title": "diff preview",
+    "expand": "expand",
+    "collapse": "collapse",
+    "atLine": "@ line {{line}}"
+  },
+  "draft": {
+    "title": "draft pr package",
+    "abortedBody": "loop aborted — no deliverable package. enrich seed evidence and retry, or escalate.",
+    "pendingBody": "package will assemble once a candidate clears its proof obligations.",
+    "copy": "copy",
+    "copyTitle": "copy as markdown",
+    "field": {
+      "title": "title",
+      "summary": "summary",
+      "why": "why this fix",
+      "validation": "validation",
+      "unknowns": "remaining unknowns",
+      "reviewer": "reviewer suggestion"
+    },
+    "noUnknowns": "none — all proofs satisfied.",
+    "gateLine": "delivery gate · {{decision}}"
+  },
+  "gateDecision": {
+    "auto-submit": "auto submit",
+    "needs-review": "needs review",
+    "blocked": "blocked"
+  },
+  "reanalysis": {
+    "title": "post-patch re-analysis",
+    "subtitle": "engine re-run · before → after",
+    "empty": "re-analysis is empty — patch did not produce a deliverable to re-measure.",
+    "before": "before",
+    "after": "after"
+  },
+  "reviewer": {
+    "title": "reviewer routing",
+    "subtitle": "ranked by match × (1 − load)",
+    "empty": "no reviewer suggestion — ownership graph could not match.",
+    "match": "match",
+    "load": "{{pct}}% load",
+    "suggest": "suggest",
+    "role": {
+      "codeowner": "codeowner",
+      "security": "security",
+      "domain": "domain expert",
+      "oncall": "oncall"
+    }
+  },
+  "convention": {
+    "title": "convention conformance",
+    "subtitle": "gates auto-submit only · does not block draft",
+    "empty": "no stylistic obligations attached to this candidate.",
+    "benchmarkedAgainst": "benchmarked against:",
+    "src": {
+      "neighboringImports": "neighboring imports",
+      "siblingErrorPatterns": "sibling error patterns",
+      "namingConvention": "naming convention",
+      "lintFormatRules": "lint/format rules"
+    }
+  },
+  "policy": {
+    "title": "policy thresholds",
+    "subtitle": "tune what qualifies for safe-mechanical",
+    "footer": "changes apply to future candidates · existing drafts re-gate on save"
+  },
+  "rollback": {
+    "title": "rollback package",
+    "subtitle": "generated alongside draft · pre-armed",
+    "empty": "no rollback plan — this case did not produce a deliverable.",
+    "trigger": "trigger",
+    "window": "window",
+    "action": "action",
+    "owner": "owner",
+    "armed": "armed",
+    "armedHint": "auto-revert hook is wired before the merge button is enabled."
+  },
+  "dismissFeedback": {
+    "title": "dismissed feedback (last 7d)",
+    "subtitle": "fed back into candidate generation",
+    "distribution": "reason distribution",
+    "recent": "recent dismissals",
+    "hAgo": "{{count}}h ago",
+    "dAgo": "{{count}}d ago"
+  },
+  "dismissModal": {
+    "title": "dismiss candidate · log reason",
+    "dismissing": "dismissing",
+    "feedbackHint": "feedback feeds the next candidate generation. don't waste the dismiss.",
+    "reasonTag": "reason tag",
+    "optionalNote": "optional note",
+    "notePlaceholder": "what would make the next candidate more useful?",
+    "cancel": "cancel",
+    "dismiss": "dismiss",
+    "reason": {
+      "wrong-root-cause": "wrong-root-cause",
+      "too-broad-blast": "too-broad-blast",
+      "breaks-convention": "breaks-convention",
+      "unsafe-during-rollout": "unsafe-during-rollout",
+      "reviewer-disagrees": "reviewer-disagrees"
+    }
+  }
+}

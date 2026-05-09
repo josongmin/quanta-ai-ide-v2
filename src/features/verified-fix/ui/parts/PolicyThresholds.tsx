@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { PolicyThreshold } from '../../model/types';
 import { POLICY_THRESHOLDS } from '../../model/phaseData';
 import { useVfx } from './tokens';
@@ -9,6 +10,7 @@ import { useVfx } from './tokens';
 
 export function PolicyThresholds() {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const [vals, setVals] = useState<Record<string, number>>(() =>
     Object.fromEntries(POLICY_THRESHOLDS.map((p) => [p.id, p.value])),
   );
@@ -25,11 +27,11 @@ export function PolicyThresholds() {
             className="text-[10px] font-black uppercase tracking-[0.18em]"
             style={{ color: t.textMuted }}
           >
-            policy thresholds
+            {tr('policy.title')}
           </span>
         </div>
         <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
-          tune what qualifies for safe-mechanical
+          {tr('policy.subtitle')}
         </span>
       </div>
 
@@ -48,7 +50,7 @@ export function PolicyThresholds() {
         className="mt-3 pt-3 border-t text-[9.5px] font-mono"
         style={{ borderColor: t.borderHair, color: t.textFaint }}
       >
-        changes apply to future candidates · existing drafts re-gate on save
+        {tr('policy.footer')}
       </div>
     </div>
   );

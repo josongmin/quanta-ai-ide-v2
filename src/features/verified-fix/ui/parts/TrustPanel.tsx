@@ -1,7 +1,8 @@
 import { AlertTriangle, Trash2, Sparkles, Send, ShieldCheck, FlaskConical, Loader2 } from 'lucide-react';
-import type { CandidateFix, CounterEvidence, FixCase } from '../../model/types';
+import { useTranslation } from '@shared/i18n';
+import type { CandidateFix, CounterEvidence, DeliveryTier, FixCase } from '../../model/types';
 import { useVerifiedFixStore } from '../../model/store';
-import { useVfx, tierColor, tierLabel } from './tokens';
+import { useVfx, tierColor } from './tokens';
 
 export function TrustPanel({
   candidate, fixCase, onDismiss,
@@ -11,6 +12,7 @@ export function TrustPanel({
   onDismiss: (candidateId: string) => void;
 }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const draft = fixCase.draft;
   // Validation is the user-triggered action that produces the draft
   // package. Without exposing the trigger here, picking a different
@@ -28,10 +30,10 @@ export function TrustPanel({
         style={{ background: t.sidebar, backdropFilter: t.sidebarBlur, borderColor: t.border }}
       >
         <div className="text-[10px] font-black uppercase tracking-[0.18em] mb-2" style={{ color: t.textMuted }}>
-          trust signal
+          {tr('trust.signal')}
         </div>
         <div className="text-[11px]" style={{ color: t.textFaint }}>
-          select a candidate to inspect its trust profile.
+          {tr('trust.selectCandidate')}
         </div>
       </aside>
     );
@@ -54,7 +56,7 @@ export function TrustPanel({
             className="text-[10px] font-black uppercase tracking-[0.18em] mb-2"
             style={{ color: t.textMuted }}
           >
-            trust signal
+            {tr('trust.signal')}
           </div>
 
           {/* confidence dial */}
@@ -67,17 +69,17 @@ export function TrustPanel({
             <div className="mt-3 pt-3 border-t" style={{ borderColor: t.borderSoft }}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-[9px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
-                  delivery tier
+                  {tr('trust.deliveryTier')}
                 </span>
                 <span
                   className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
                   style={{ background: tc.bg, color: tc.fg }}
                 >
-                  {tierLabel(candidate.tier)}
+                  {tr(tierKey(candidate.tier))}
                 </span>
               </div>
               <div className="text-[10.5px] mb-2" style={{ color: t.textMuted }}>
-                {tierExplain(candidate.tier)}
+                {tr(tierExplainKey(candidate.tier))}
               </div>
               <TierRuleChecklist candidate={candidate} />
             </div>
@@ -91,7 +93,7 @@ export function TrustPanel({
               className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
               style={{ color: t.textFaint }}
             >
-              weakest link
+              {tr('trust.weakest')}
             </div>
             <div
               className="rounded-lg border-l-0 border p-3"
@@ -126,7 +128,7 @@ export function TrustPanel({
               className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
               style={{ color: t.textFaint }}
             >
-              counter-evidence ({counter.length})
+              {tr('trust.counter', { count: counter.length })}
             </div>
             <div className="space-y-1.5">
               {counter.map((c) => (
@@ -143,7 +145,7 @@ export function TrustPanel({
               className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
               style={{ color: t.textFaint }}
             >
-              delivery gate
+              {tr('trust.gate')}
             </div>
             <DeliveryGate gateDecision={draft.gateDecision} gateReason={draft.gateReason} />
           </div>
@@ -170,7 +172,9 @@ export function TrustPanel({
               {validating
                 ? <Loader2 className="w-3 h-3 animate-spin" />
                 : <FlaskConical className="w-3 h-3" />}
-              {validating ? `running ${stage}` : 'run validation'}
+              {validating
+                ? tr('trust.action.running', { stage: tr(`loop.stage.${stage}`) })
+                : tr('trust.action.runValidation')}
             </button>
           )}
           {draft?.gateDecision === 'auto-submit' && (
@@ -180,7 +184,7 @@ export function TrustPanel({
               style={{ background: t.ok, color: t.isDark ? '#0d1117' : '#fff' }}
             >
               <Sparkles className="w-3 h-3" />
-              one-click draft pr
+              {tr('trust.action.oneClick')}
             </button>
           )}
           {draft?.gateDecision === 'needs-review' && (
@@ -190,7 +194,7 @@ export function TrustPanel({
               style={{ borderColor: t.info + '60', color: t.info, background: t.infoSoft }}
             >
               <Send className="w-3 h-3" />
-              open draft pr
+              {tr('trust.action.openDraft')}
             </button>
           )}
           {draft?.gateDecision === 'blocked' && (
@@ -200,7 +204,7 @@ export function TrustPanel({
               style={{ borderColor: t.warn + '60', color: t.warn, background: t.warnSoft }}
             >
               <ShieldCheck className="w-3 h-3" />
-              route to human review
+              {tr('trust.action.routeHuman')}
             </button>
           )}
           <button
@@ -210,7 +214,7 @@ export function TrustPanel({
             style={{ borderColor: t.border, color: t.textMuted, background: 'transparent' }}
           >
             <Trash2 className="w-3 h-3" />
-            dismiss + log reason
+            {tr('trust.action.dismiss')}
           </button>
         </div>
       </div>
@@ -220,6 +224,7 @@ export function TrustPanel({
 
 function CounterEvidenceRow({ item }: { item: CounterEvidence }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const sevColor =
     item.severity === 'block'   ? t.bad
     : item.severity === 'concern' ? t.warn
@@ -238,7 +243,7 @@ function CounterEvidenceRow({ item }: { item: CounterEvidence }) {
           className="text-[8.5px] font-bold uppercase tracking-[0.14em] px-1 py-px rounded font-mono"
           style={{ background: sevBg, color: sevColor }}
         >
-          {item.severity}
+          {tr(`trust.counterSeverity.${item.severity}`)}
         </span>
         <span className="text-[10.5px] font-semibold" style={{ color: t.textHi }}>
           {item.label}
@@ -253,6 +258,7 @@ function CounterEvidenceRow({ item }: { item: CounterEvidence }) {
 
 function ConfidenceDial({ value }: { value: number }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const pct = Math.round(value * 100);
   const arc = 2 * Math.PI * 22;
   const dashed = (value * arc).toFixed(2);
@@ -272,16 +278,16 @@ function ConfidenceDial({ value }: { value: number }) {
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-[16px] font-black font-mono" style={{ color }}>{pct}</span>
           <span className="text-[8px] font-bold uppercase tracking-[0.12em]" style={{ color: t.textFaint }}>
-            conf
+            {tr('trust.conf')}
           </span>
         </div>
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
-          patch confidence
+          {tr('trust.patchConfidence')}
         </div>
         <div className="text-[10.5px] mt-0.5 leading-snug" style={{ color: t.textBody }}>
-          {confidenceLabel(value)}
+          {tr(confidenceKey(value))}
         </div>
       </div>
     </div>
@@ -290,6 +296,7 @@ function ConfidenceDial({ value }: { value: number }) {
 
 function DeliveryGate({ gateDecision, gateReason }: { gateDecision: string; gateReason: string }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const color =
     gateDecision === 'auto-submit'  ? t.ok
     : gateDecision === 'needs-review' ? t.info
@@ -305,7 +312,7 @@ function DeliveryGate({ gateDecision, gateReason }: { gateDecision: string; gate
           className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
           style={{ background: bg, color }}
         >
-          {gateDecision.replace('-', ' ')}
+          {tr(`gateDecision.${gateDecision}`)}
         </span>
       </div>
       <div className="text-[10.5px] leading-snug" style={{ color: t.textMuted }}>
@@ -320,16 +327,17 @@ function DeliveryGate({ gateDecision, gateReason }: { gateDecision: string; gate
 // of trusting an opaque label. Plan doc demands this be measurable.
 function TierRuleChecklist({ candidate }: { candidate: CandidateFix }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const allPass = candidate.obligations.every((o) => o.status === 'pass');
   const partial = candidate.obligations.some((o) => o.status === 'partial');
   const failing = candidate.obligations.some((o) => o.status === 'fail');
 
   const checks: { label: string; pass: boolean }[] = [
-    { label: 'lines ≤ 20',         pass: candidate.changedLines <= 20 },
-    { label: 'files ≤ 2',          pass: candidate.changedFiles <= 2 },
-    { label: 'blast ≤ 1 module',   pass: candidate.blastModules <= 1 },
-    { label: 'no public API break', pass: !candidate.publicApiChange },
-    { label: 'all proofs pass',    pass: allPass && !partial && !failing },
+    { label: tr('trust.tierRule.lines'),       pass: candidate.changedLines <= 20 },
+    { label: tr('trust.tierRule.files'),       pass: candidate.changedFiles <= 2 },
+    { label: tr('trust.tierRule.blast'),       pass: candidate.blastModules <= 1 },
+    { label: tr('trust.tierRule.noPublicApi'), pass: !candidate.publicApiChange },
+    { label: tr('trust.tierRule.allProofs'),   pass: allPass && !partial && !failing },
   ];
   return (
     <ul className="space-y-0.5">
@@ -347,20 +355,25 @@ function TierRuleChecklist({ candidate }: { candidate: CandidateFix }) {
   );
 }
 
-function tierExplain(tier: CandidateFix['tier']): string {
+function tierKey(tier: DeliveryTier): string {
   switch (tier) {
-    case 'safe-mechanical':
-      return 'eligible for one-click draft. mechanical patch class, blast ≤ 1, all proofs pass.';
-    case 'guarded':
-      return 'draft PR with explicit reviewer approve. proofs static-pass; dynamic bounded.';
-    case 'human-required':
-      return 'route to manual review. exceeds delivery-gate thresholds or touches public surface.';
+    case 'safe-mechanical': return 'tier.safeMechanical';
+    case 'guarded':         return 'tier.guarded';
+    case 'human-required':  return 'tier.humanRequired';
   }
 }
 
-function confidenceLabel(v: number): string {
-  if (v >= 0.9) return 'strong: proofs cover all paths the engine traced.';
-  if (v >= 0.75) return 'sound: weakest obligation is bounded and addressable.';
-  if (v >= 0.5)  return 'mixed: review the weakest link before merging.';
-  return 'weak: not delivery-ready. consider seed enrichment.';
+function tierExplainKey(tier: DeliveryTier): string {
+  switch (tier) {
+    case 'safe-mechanical': return 'tier.explainSafe';
+    case 'guarded':         return 'tier.explainGuarded';
+    case 'human-required':  return 'tier.explainHuman';
+  }
+}
+
+function confidenceKey(v: number): string {
+  if (v >= 0.9)  return 'trust.confidence.strong';
+  if (v >= 0.75) return 'trust.confidence.sound';
+  if (v >= 0.5)  return 'trust.confidence.mixed';
+  return 'trust.confidence.weak';
 }

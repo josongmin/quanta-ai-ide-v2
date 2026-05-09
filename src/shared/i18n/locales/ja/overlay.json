@@ -12,6 +12,8 @@
     "title": "オーバーレイ",
     "heading": "ビジュアルオーバーレイ",
     "resetAll": "すべて解除",
+    "painting": "描画中:",
+    "paintingEmpty": "オフ — 行を選択して有効化",
     "off": "オフ",
     "on": "オン",
     "enable": "有効化",
@@ -20,12 +22,28 @@
       "heat": "ヒート",
       "time": "時間範囲",
       "timeIdle": "Hotspot (time) 選択時に有効化",
+      "controls": "ヒート コントロール",
       "risk": "リスクレンズ",
       "api": "公開 API",
       "boundaries": "境界"
     },
     "detail": {
-      "apiBody": "外部に広く参照されているファイルへ細いアウターリングを描画し、公開 API の輪郭を一目で示します。"
+      "apiBody": "外部に広く参照されているファイルへ細いアウターリングを描画し、公開 API の輪郭を一目で示します。",
+      "apiPreview": "ドットフィールドではこのように表示されます"
+    },
+    "preview": {
+      "blast": "Blast プレビュー",
+      "path": "パストレース",
+      "pr": "PR プレビュー"
+    }
+  },
+  "risk": {
+    "toggleHint": "レンズを選んで適用、もう一度押すと解除します。",
+    "lens": {
+      "security":  { "label": "セキュリティ", "hint": "SAST × シークレット × 脆弱性ステータス" },
+      "testGaps":  { "label": "テスト不足",   "hint": "大きいファイル × 低カバレッジ × テストなし" },
+      "busFactor": { "label": "Bus factor",   "hint": "単独著者 × 高い被参照" },
+      "techDebt":  { "label": "技術的負債",   "hint": "複雑度 × 低い編集安全性 × churn" }
     }
   },
   "boundaries": {

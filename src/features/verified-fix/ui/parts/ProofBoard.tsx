@@ -1,4 +1,5 @@
 import { FileWarning, GitFork, ArrowDown, ArrowUp } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { CandidateFix, FixCase, ProofObligation, Seed } from '../../model/types';
 import { useVfx, statusColor } from './tokens';
 
@@ -10,6 +11,7 @@ export function ProofBoard({
   candidate: CandidateFix | undefined;
 }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
 
   const obligations = candidate?.obligations ?? [];
   const grouped = {
@@ -30,13 +32,13 @@ export function ProofBoard({
             className="text-[10px] font-black uppercase tracking-[0.18em]"
             style={{ color: t.textMuted }}
           >
-            root cause
+            {tr('proof.rootCause')}
           </span>
           <span
             className="text-[9px] font-mono px-1.5 py-0.5 rounded"
             style={{ background: t.badgeBg, color: t.textMuted }}
           >
-            seed: {seed.id.replace('seed-', '')}
+            {tr('proof.seed', { id: seed.id.replace('seed-', '') })}
           </span>
         </div>
         <p
@@ -52,7 +54,7 @@ export function ProofBoard({
               className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
               style={{ color: t.textFaint }}
             >
-              evidence refs
+              {tr('proof.evidence')}
             </div>
             <ul className="space-y-1">
               {seed.evidenceRefs.map((e, i) => (
@@ -89,7 +91,7 @@ export function ProofBoard({
               className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5 flex items-center gap-1"
               style={{ color: t.textFaint }}
             >
-              <GitFork className="w-2.5 h-2.5" /> blast hint
+              <GitFork className="w-2.5 h-2.5" /> {tr('proof.blastHint')}
             </div>
             <div className="flex flex-wrap gap-1 mb-2">
               {seed.blastHint.map((b) => (
@@ -108,7 +110,7 @@ export function ProofBoard({
                   className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5 flex items-center gap-1"
                   style={{ color: t.textFaint }}
                 >
-                  <FileWarning className="w-2.5 h-2.5" /> constraints
+                  <FileWarning className="w-2.5 h-2.5" /> {tr('proof.constraints')}
                 </div>
                 <ul className="space-y-0.5">
                   {seed.constraints.map((c, i) => (
@@ -129,11 +131,29 @@ export function ProofBoard({
             style={{ borderColor: t.borderSoft }}
           >
             <span className="text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: t.textFaint }}>
-              post-patch delta
+              {tr('proof.postPatchDelta')}
             </span>
-            <DeltaPill from={`${seed.evidenceRefs.filter((e) => e.kind === 'taint-path').length} taint paths`} to="0" trend="down" />
-            <DeltaPill from={seed.blastHint.length > 1 ? `${seed.blastHint.length} modules at risk` : '1 module'} to={`${candidate.blastModules}`} trend={candidate.blastModules <= 1 ? 'down' : 'up'} />
-            <DeltaPill from="hotspot fading" to={candidate.tier === 'safe-mechanical' ? 'cleared' : 'gated'} trend="down" />
+            <DeltaPill
+              from={tr('proof.delta.taintPaths', {
+                count: seed.evidenceRefs.filter((e) => e.kind === 'taint-path').length,
+              })}
+              to="0"
+              trend="down"
+            />
+            <DeltaPill
+              from={
+                seed.blastHint.length > 1
+                  ? tr('proof.delta.modulesAtRisk', { count: seed.blastHint.length })
+                  : tr('proof.delta.moduleAtRisk')
+              }
+              to={`${candidate.blastModules}`}
+              trend={candidate.blastModules <= 1 ? 'down' : 'up'}
+            />
+            <DeltaPill
+              from={tr('proof.delta.hotspotFading')}
+              to={candidate.tier === 'safe-mechanical' ? tr('proof.delta.cleared') : tr('proof.delta.gated')}
+              trend="down"
+            />
           </div>
         )}
       </div>
@@ -148,7 +168,7 @@ export function ProofBoard({
             className="text-[10px] font-black uppercase tracking-[0.18em]"
             style={{ color: t.textMuted }}
           >
-            proof obligations
+            {tr('proof.obligations')}
           </span>
           {candidate && <CoverageRing obligations={obligations} />}
         </div>
@@ -158,16 +178,16 @@ export function ProofBoard({
             className="text-[11px] py-6 text-center"
             style={{ color: t.textFaint }}
           >
-            no candidate selected
-            <div className="text-[10px] mt-1">obligations are defined per-candidate</div>
+            {tr('proof.noCandidate')}
+            <div className="text-[10px] mt-1">{tr('proof.noCandidateHint')}</div>
           </div>
         )}
 
         {candidate && (
           <div className="space-y-2.5">
-            <ObligationGroup label="static"    items={grouped.static} />
-            <ObligationGroup label="dynamic"   items={grouped.dynamic} />
-            <ObligationGroup label="stylistic" items={grouped.stylistic} />
+            <ObligationGroup label={tr('proof.static')}    items={grouped.static} />
+            <ObligationGroup label={tr('proof.dynamic')}   items={grouped.dynamic} />
+            <ObligationGroup label={tr('proof.stylistic')} items={grouped.stylistic} />
           </div>
         )}
       </div>
@@ -195,6 +215,7 @@ function DeltaPill({ from, to, trend }: { from: string; to: string; trend: 'down
 
 function ObligationGroup({ label, items }: { label: string; items: ProofObligation[] }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   if (items.length === 0) return null;
   return (
     <div>
@@ -223,7 +244,7 @@ function ObligationGroup({ label, items }: { label: string; items: ProofObligati
                   minWidth: 50,
                 }}
               >
-                {c.label}
+                {tr(`proof.status.${o.status}`)}
               </span>
               <span style={{ color: t.textBody }} className="flex-1">
                 {o.label}
@@ -241,18 +262,18 @@ function ObligationGroup({ label, items }: { label: string; items: ProofObligati
 
 function CoverageRing({ obligations }: { obligations: ProofObligation[] }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const total = obligations.length;
   const pass = obligations.filter((o) => o.status === 'pass').length;
   const partial = obligations.filter((o) => o.status === 'partial').length;
   const fail = obligations.filter((o) => o.status === 'fail').length;
-  // proof coverage = pass + 0.5 * partial / total
   const coverage = total === 0 ? 0 : (pass + 0.5 * partial) / total;
   const ringColor = fail > 0 ? t.bad : partial > 0 ? t.warn : t.ok;
   const pct = Math.round(coverage * 100);
   return (
     <div className="flex items-center gap-2">
       <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
-        coverage
+        {tr('proof.coverage')}
       </span>
       <div className="relative w-7 h-7">
         <svg viewBox="0 0 28 28" className="w-7 h-7 -rotate-90">

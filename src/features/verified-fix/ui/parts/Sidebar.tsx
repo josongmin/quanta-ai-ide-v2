@@ -1,4 +1,5 @@
 import { AlertOctagon, Activity, Bell, Crosshair, type LucideIcon } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { FixCase, Seed, SeedKind } from '../../model/types';
 import { useVfx } from './tokens';
 
@@ -18,6 +19,7 @@ export function Sidebar({
   onSelect: (caseId: string) => void;
 }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <aside
       className="shrink-0 w-[280px] h-full flex flex-col border-r"
@@ -36,16 +38,16 @@ export function Sidebar({
           className="text-[10px] font-black uppercase tracking-[0.18em]"
           style={{ color: t.textMuted }}
         >
-          verified fix
+          {tr('sidebar.brand')}
         </div>
         <div
           className="text-[12px] font-semibold mt-0.5"
           style={{ color: t.textHi }}
         >
-          pipeline queue
+          {tr('sidebar.title')}
         </div>
         <div className="text-[10px] mt-2" style={{ color: t.textFaint }}>
-          {cases.length} active · proof-first delivery
+          {tr('sidebar.active', { count: cases.length })}
         </div>
       </div>
 
@@ -76,7 +78,7 @@ export function Sidebar({
                   className="text-[10px] font-bold uppercase tracking-[0.14em]"
                   style={{ color: t.textMuted }}
                 >
-                  {seed.kind}
+                  {tr(`header.kind.${seed.kind}`)}
                 </span>
                 <span className="ml-auto text-[9px] font-mono" style={{ color: t.textFaint }}>
                   {seed.age}
@@ -96,10 +98,12 @@ export function Sidebar({
                     color: aborted ? t.bad : stage === 'done' ? t.ok : t.textMuted,
                   }}
                 >
-                  {aborted ? 'aborted' : stage}
+                  {aborted ? tr('sidebar.aborted') : tr(`loop.stage.${stage}`)}
                 </span>
                 <span className="text-[9px]" style={{ color: t.textFaint }}>
-                  {candCount === 0 ? 'no candidates' : `${candCount} candidate${candCount === 1 ? '' : 's'}`}
+                  {candCount === 0
+                    ? tr('sidebar.noCandidates')
+                    : tr('sidebar.candidate', { count: candCount })}
                 </span>
               </div>
             </button>
@@ -111,7 +115,7 @@ export function Sidebar({
         className="px-4 py-2.5 border-t text-[9px] font-mono"
         style={{ borderColor: t.borderSoft, color: t.textFaint }}
       >
-        seed → loop → proof → draft
+        {tr('sidebar.footer')}
       </div>
     </aside>
   );

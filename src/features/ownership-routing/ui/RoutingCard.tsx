@@ -256,8 +256,9 @@ function ConfidenceHeader({ value }: { value: number }) {
         <div
           className="mt-1 text-[9px] font-black uppercase tracking-[0.18em]"
           style={{ color: 'var(--fg-muted)' }}
+          title="Confidence in the recommended primary owner — combined signal across the 4 ownership layers"
         >
-          Routing confidence
+          Owner confidence
         </div>
       </div>
       <div className="flex-1 flex flex-col justify-center min-w-0">
@@ -370,15 +371,64 @@ function OwnerSplit({
   );
 }
 
+function StalePrimaryBanner({
+  primary,
+  escalation,
+}: {
+  primary: Person;
+  escalation: Person | undefined;
+}) {
+  return (
+    <div
+      className="rounded-lg px-3 py-2 border"
+      style={{
+        background: 'rgb(from var(--intent-warn-vivid) r g b / 0.10)',
+        borderColor: 'rgb(from var(--intent-warn-vivid) r g b / 0.32)',
+      }}
+    >
+      <div className="flex items-center gap-2 mb-0.5">
+        <span
+          className="inline-block w-1.5 h-1.5 rounded-full"
+          style={{ background: 'var(--intent-warn-vivid)' }}
+        />
+        <span
+          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          style={{ color: 'var(--intent-warn-fg)' }}
+        >
+          Primary unavailable
+        </span>
+      </div>
+      <div className="text-[11px] leading-snug" style={{ color: 'var(--fg-default)' }}>
+        <span className="font-semibold">{primary.name}</span>
+        <span style={{ color: 'var(--fg-muted)' }}>
+          {' '}· last active {primary.lastActiveDays}d ago
+        </span>
+        {escalation && (
+          <>
+            <span style={{ color: 'var(--fg-muted)' }}> · routing to </span>
+            <span className="font-semibold">{escalation.name}</span>
+            <span style={{ color: 'var(--fg-muted)' }}> ({escalation.team})</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function RoleColumn({
   label,
   person,
+  dimmed,
 }: {
   label: string;
   person: Person | undefined | null;
+  dimmed?: boolean;
 }) {
   return (
-    <div className="min-w-0 flex flex-col gap-1.5">
+    <div
+      className="min-w-0 flex flex-col gap-1.5"
+      style={{ opacity: dimmed ? 0.55 : 1 }}
+    >
       <div
         className="text-[9px] font-black uppercase tracking-[0.18em]"
         style={{ color: 'var(--fg-subtle)' }}
@@ -415,16 +465,24 @@ function RoleColumn({
 }
 
 function RationaleBars({ rationale }: { rationale: ReviewerRationale }) {
+  const dominantKey = RATIONALE_FIELDS.reduce((acc, f) =>
+    rationale[f.key] > rationale[acc.key] ? f : acc,
+  ).key;
+  const dominantValue = rationale[dominantKey];
+  const dominantStrong = dominantValue >= 0.55;
   return (
     <div className="space-y-1.5">
       {RATIONALE_FIELDS.map(({ key, label }) => {
         const v = rationale[key];
         const pct = Math.round(v * 100);
+        const isDominant = key === dominantKey && dominantStrong;
         return (
           <div
             key={key}
-            className="flex items-center gap-2 text-[11px]"
-            style={{ color: 'var(--fg-default)' }}
+            className={`flex items-center gap-2 text-[11px] ${isDominant ? 'font-bold' : ''}`}
+            style={{
+              color: isDominant ? 'var(--fg-strong)' : 'var(--fg-default)',
+            }}
           >
             <span
               className="w-[120px] shrink-0 truncate"
@@ -452,6 +510,19 @@ function RationaleBars({ rationale }: { rationale: ReviewerRationale }) {
             >
               {pct}%
             </span>
+            {isDominant && (
+              <span
+                className="text-[8px] font-black uppercase tracking-[0.18em] px-1 py-0.5 rounded shrink-0"
+                style={{
+                  background: 'var(--bg-surface-muted)',
+                  color: 'var(--fg-muted)',
+                  border: '1px solid var(--border-muted)',
+                }}
+                title="Tiebreaker — strongest signal in this rationale"
+              >
+                top
+              </span>
+            )}
           </div>
         );
       })}
@@ -584,6 +655,27 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
     <GlassCard className="px-3.5 py-3 space-y-3.5">
       <SectionHeader title="Smart Routing" badge={badge.toUpperCase()} />
 
+      {primary && !primary.active && (
+        <StalePrimaryBanner
+          primary={primary}
+          escalation={escalation ?? backup ?? reviewer}
+        />
+      )}
+
+      <OwnerSplit implementer={implementer} approver={approver} />
+
+      <div className="grid grid-cols-4 gap-3">
+        <RoleColumn label="Primary" person={primary} dimmed={primary && !primary.active} />
+        <RoleColumn label="Backup" person={backup} />
+        <RoleColumn label="Reviewer" person={reviewer} />
+        <RoleColumn label="Escalation" person={escalation} />
+      </div>
+
+      <div
+        className="h-px w-full"
+        style={{ background: 'var(--border-muted)' }}
+      />
+
       <ImpactNarrativeStrip narrative={zone.impactNarrative} />
 
       <ConfidenceHeader value={zone.routingConfidence} />
@@ -592,20 +684,6 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
         className="h-px w-full"
         style={{ background: 'var(--border-muted)' }}
       />
-
-      <OwnerSplit implementer={implementer} approver={approver} />
-
-      <div
-        className="h-px w-full"
-        style={{ background: 'var(--border-muted)' }}
-      />
-
-      <div className="grid grid-cols-4 gap-3">
-        <RoleColumn label="Primary" person={primary} />
-        <RoleColumn label="Backup" person={backup} />
-        <RoleColumn label="Reviewer" person={reviewer} />
-        <RoleColumn label="Escalation" person={escalation} />
-      </div>
 
       <Section
         title="Why this reviewer?"

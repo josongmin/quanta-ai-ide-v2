@@ -4,6 +4,8 @@ import {
   FIXTURE_HYPOTHESES,
   FIXTURE_UNKNOWNS,
   assertAnswerSlots,
+  computeBundleCoverage,
+  computeHypothesisConfidence,
   type ActionRecommendation,
   type Confidence,
   type ContextBundle,
@@ -70,7 +72,19 @@ export function composeAnswer(bundle: ContextBundle): InvestigationAnswer {
   const fixtureActions = FIXTURE_ACTIONS[targetId] ?? [];
   const actions = fixtureActions.length > 0 ? fixtureActions : defaultActions(targetId);
 
-  const hypothesis: Hypothesis | undefined = FIXTURE_HYPOTHESES[targetId];
+  const fixtureHypothesis: Hypothesis | undefined = FIXTURE_HYPOTHESES[targetId];
+
+  let hypothesis: Hypothesis | undefined;
+  if (fixtureHypothesis) {
+    const evidenceById: Record<string, EvidenceItem> = {};
+    for (const ev of bundle.evidence) {
+      evidenceById[ev.id] = ev;
+    }
+    hypothesis = {
+      ...fixtureHypothesis,
+      confidence: computeHypothesisConfidence(fixtureHypothesis, evidenceById),
+    };
+  }
 
   const answer: InvestigationAnswer = {
     conclusion,
@@ -86,4 +100,10 @@ export function composeAnswer(bundle: ContextBundle): InvestigationAnswer {
 
   assertAnswerSlots(answer);
   return answer;
+}
+
+// TODO: real backend should populate `coverage` from analysis tool reports;
+// this fixture-time helper just derives it from per-evidence flags.
+export function enrichBundle(bundle: ContextBundle): ContextBundle {
+  return { ...bundle, coverage: computeBundleCoverage(bundle.evidence) };
 }

@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowUp, Minus } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { ReanalysisDelta } from '../../model/types';
 import { REANALYSIS } from '../../model/phaseData';
 import { useVfx } from './tokens';
@@ -9,6 +10,7 @@ import { useVfx } from './tokens';
 
 export function PostPatchReanalysis({ caseId }: { caseId: string }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const deltas: ReanalysisDelta[] = REANALYSIS[caseId] ?? [];
 
   if (deltas.length === 0) {
@@ -19,7 +21,7 @@ export function PostPatchReanalysis({ caseId }: { caseId: string }) {
       >
         <Header />
         <div className="text-[11px] mt-2" style={{ color: t.textFaint }}>
-          re-analysis is empty — patch did not produce a deliverable to re-measure.
+          {tr('reanalysis.empty')}
         </div>
       </div>
     );
@@ -45,16 +47,17 @@ export function PostPatchReanalysis({ caseId }: { caseId: string }) {
 
 function Header() {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <div className="flex items-center justify-between">
       <span
         className="text-[10px] font-black uppercase tracking-[0.18em]"
         style={{ color: t.textMuted }}
       >
-        post-patch re-analysis
+        {tr('reanalysis.title')}
       </span>
       <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
-        engine re-run · before → after
+        {tr('reanalysis.subtitle')}
       </span>
     </div>
   );
@@ -62,6 +65,7 @@ function Header() {
 
 function DeltaBar({ delta, max }: { delta: ReanalysisDelta; max: number }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const isLowerBetter = delta.metric !== 'unknown zone' || true; // all metrics: lower = better
   const trend = delta.after < delta.before ? 'down' : delta.after > delta.before ? 'up' : 'flat';
   const good = isLowerBetter ? trend === 'down' : trend === 'up';
@@ -100,10 +104,10 @@ function DeltaBar({ delta, max }: { delta: ReanalysisDelta; max: number }) {
       </div>
       <div className="flex justify-between mt-0.5">
         <span className="text-[8.5px] font-mono" style={{ color: t.textFaint }}>
-          before
+          {tr('reanalysis.before')}
         </span>
         <span className="text-[8.5px] font-mono" style={{ color: t.textFaint }}>
-          after
+          {tr('reanalysis.after')}
         </span>
       </div>
     </div>

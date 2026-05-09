@@ -1,4 +1,5 @@
 import { Undo2, Activity, Clock, User } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import { ROLLBACK } from '../../model/phaseData';
 import { useVfx } from './tokens';
 
@@ -8,6 +9,7 @@ import { useVfx } from './tokens';
 
 export function RollbackPlan({ caseId }: { caseId: string }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const plan = ROLLBACK[caseId];
 
   if (!plan) return null;
@@ -26,24 +28,24 @@ export function RollbackPlan({ caseId }: { caseId: string }) {
             className="text-[10px] font-black uppercase tracking-[0.18em]"
             style={{ color: t.textMuted }}
           >
-            rollback package
+            {tr('rollback.title')}
           </span>
         </div>
         <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
-          generated alongside draft · pre-armed
+          {tr('rollback.subtitle')}
         </span>
       </div>
 
       {noPlan ? (
         <div className="text-[11px]" style={{ color: t.textFaint }}>
-          no rollback plan — this case did not produce a deliverable.
+          {tr('rollback.empty')}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-2.5">
-          <Field icon={Activity} label="trigger" value={plan.trigger} mono />
-          <Field icon={Clock}    label="window"  value={plan.window} />
-          <Field icon={Undo2}    label="action"  value={plan.action} mono />
-          <Field icon={User}     label="owner"   value={plan.owner} mono />
+          <Field icon={Activity} label={tr('rollback.trigger')} value={plan.trigger} mono />
+          <Field icon={Clock}    label={tr('rollback.window')}  value={plan.window} />
+          <Field icon={Undo2}    label={tr('rollback.action')}  value={plan.action} mono />
+          <Field icon={User}     label={tr('rollback.owner')}   value={plan.owner} mono />
         </div>
       )}
 
@@ -56,10 +58,10 @@ export function RollbackPlan({ caseId }: { caseId: string }) {
             className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
             style={{ background: t.okSoft, color: t.ok }}
           >
-            armed
+            {tr('rollback.armed')}
           </span>
           <span className="text-[10px]" style={{ color: t.textMuted }}>
-            auto-revert hook is wired before the merge button is enabled.
+            {tr('rollback.armedHint')}
           </span>
         </div>
       )}

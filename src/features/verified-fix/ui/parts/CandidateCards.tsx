@@ -1,6 +1,13 @@
 import { Check, X, FileText, GitBranch, ShieldAlert, type LucideIcon } from 'lucide-react';
-import type { CandidateFix } from '../../model/types';
-import { useVfx, tierColor, tierLabel } from './tokens';
+import { useTranslation } from '@shared/i18n';
+import type { CandidateFix, DeliveryTier } from '../../model/types';
+import { useVfx, tierColor } from './tokens';
+
+const TIER_KEY: Record<DeliveryTier, string> = {
+  'safe-mechanical': 'tier.safeMechanical',
+  'guarded':         'tier.guarded',
+  'human-required':  'tier.humanRequired',
+};
 
 export function CandidateCards({
   candidates, selectedId, dismissedIds, onSelect,
@@ -11,6 +18,7 @@ export function CandidateCards({
   onSelect: (id: string) => void;
 }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const visible = candidates.filter((c) => !dismissedIds.includes(c.id));
 
   if (visible.length === 0) {
@@ -20,11 +28,10 @@ export function CandidateCards({
         style={{ background: t.cardBacking, borderColor: t.border, color: t.textFaint }}
       >
         <div className="text-[11px] font-bold uppercase tracking-[0.16em]">
-          no viable candidates
+          {tr('candidates.noViableTitle')}
         </div>
         <div className="text-[10.5px] mt-1.5" style={{ color: t.textMuted }}>
-          loop aborted before producing a deliverable patch.
-          escalate to human checkpoint or enrich the seed and retry.
+          {tr('candidates.noViableBody')}
         </div>
       </div>
     );
@@ -37,10 +44,10 @@ export function CandidateCards({
           className="text-[10px] font-black uppercase tracking-[0.18em]"
           style={{ color: t.textMuted }}
         >
-          candidate fixes · {visible.length} of 3 max
+          {tr('candidates.header', { count: visible.length })}
         </span>
         <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
-          choose one to draft
+          {tr('candidates.subtitle')}
         </span>
       </div>
       <div className={`grid gap-3 ${visible.length === 1 ? 'grid-cols-1' : visible.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
@@ -67,14 +74,14 @@ export function CandidateCards({
                     className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
                     style={{ background: tc.bg, color: tc.fg }}
                   >
-                    {tierLabel(c.tier)}
+                    {tr(TIER_KEY[c.tier])}
                   </span>
                   {c.publicApiChange && (
                     <span
                       className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded inline-flex items-center gap-1"
                       style={{ background: t.warnSoft, color: t.warn }}
                     >
-                      <ShieldAlert className="w-2.5 h-2.5" /> api break
+                      <ShieldAlert className="w-2.5 h-2.5" /> {tr('candidates.apiBreak')}
                     </span>
                   )}
                   <span className="ml-auto text-[10px] font-mono" style={{ color: t.textFaint }}>
@@ -97,9 +104,9 @@ export function CandidateCards({
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 mb-2.5">
-                  <Stat icon={FileText}  label="lines" value={c.changedLines} />
-                  <Stat icon={FileText}  label="files" value={c.changedFiles} />
-                  <Stat icon={GitBranch} label="blast" value={c.blastModules} />
+                  <Stat icon={FileText}  label={tr('candidates.stat.lines')} value={c.changedLines} />
+                  <Stat icon={FileText}  label={tr('candidates.stat.files')} value={c.changedFiles} />
+                  <Stat icon={GitBranch} label={tr('candidates.stat.blast')} value={c.blastModules} />
                 </div>
 
                 <div className="space-y-1">

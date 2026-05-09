@@ -157,7 +157,7 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
     <GlassCard className="p-3 rounded-xl">
       <SectionHeader title="Approval path" badge={badge} />
 
-      <div className="flex items-baseline gap-3 mb-3">
+      <div className="flex items-stretch gap-3 mb-3">
         <div className="flex items-baseline gap-0.5">
           <span
             className="text-[26px] font-black leading-none tabular-nums tracking-tight font-mono"
@@ -173,17 +173,40 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
           </span>
         </div>
         <span
-          className="text-[10px] font-bold tabular-nums"
+          className="text-[10px] font-bold tabular-nums self-center"
           style={{ color: 'var(--fg-default)' }}
         >
           {approvers} approver{approvers === 1 ? '' : 's'}
         </span>
-        <span
-          className="text-[10px] italic ml-auto"
-          style={{ color: 'var(--fg-subtle)' }}
+        <div
+          className="ml-auto self-center px-2 py-1 rounded-md border flex items-center gap-1.5"
+          style={
+            path.parallelizable
+              ? {
+                  background: 'rgb(from var(--intent-success-vivid) r g b / 0.10)',
+                  borderColor: 'rgb(from var(--intent-success-vivid) r g b / 0.32)',
+                  color: 'var(--intent-success-fg)',
+                }
+              : {
+                  background: 'rgb(from var(--intent-warn-vivid) r g b / 0.10)',
+                  borderColor: 'rgb(from var(--intent-warn-vivid) r g b / 0.32)',
+                  color: 'var(--intent-warn-fg)',
+                }
+          }
         >
-          {path.parallelizable ? 'can run in parallel' : 'must run in order'}
-        </span>
+          <span
+            className="inline-block w-1.5 h-1.5 rounded-full"
+            style={{
+              background: path.parallelizable
+                ? 'var(--intent-success-vivid)'
+                : 'var(--intent-warn-vivid)',
+            }}
+            aria-hidden
+          />
+          <span className="text-[9px] font-black uppercase tracking-[0.18em]">
+            {path.parallelizable ? 'parallel · any order' : 'serial · must run in order'}
+          </span>
+        </div>
       </div>
 
       <div className="flex flex-col">

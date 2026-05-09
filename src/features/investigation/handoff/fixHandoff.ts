@@ -28,3 +28,32 @@ export function consumePendingHandoff(): FixHandoffPayload | null {
 export function peekPendingHandoff(): FixHandoffPayload | null {
   return pendingHandoff;
 }
+
+// Phase 4: breadcrumb survives navigation (the consume slot above is one-shot).
+export type FixHandoffBreadcrumb = {
+  target: InvestigationTarget;
+  conclusion: string;
+  evidenceCount: number;
+  hypothesisStatement?: string;
+  triggeredAt: number;
+};
+
+let lastBreadcrumb: FixHandoffBreadcrumb | null = null;
+
+export function recordHandoffBreadcrumb(payload: FixHandoffPayload): void {
+  lastBreadcrumb = {
+    target: payload.target,
+    conclusion: payload.conclusion,
+    evidenceCount: payload.evidence.length,
+    ...(payload.hypothesis ? { hypothesisStatement: payload.hypothesis.statement } : {}),
+    triggeredAt: payload.triggeredAt,
+  };
+}
+
+export function readHandoffBreadcrumb(): FixHandoffBreadcrumb | null {
+  return lastBreadcrumb;
+}
+
+export function clearHandoffBreadcrumb(): void {
+  lastBreadcrumb = null;
+}

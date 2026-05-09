@@ -1,0 +1,252 @@
+{
+  "header": {
+    "case": "케이스 · {{id}}",
+    "kind": {
+      "incident": "인시던트",
+      "hotspot": "핫스팟",
+      "alert": "알림",
+      "focus": "포커스"
+    }
+  },
+  "phase": {
+    "tab1Label": "1단계",
+    "tab1Sub": "정적 증명 + 드래프트",
+    "tab2Label": "2단계",
+    "tab2Sub": "동적 검증 + 사후 분석 + 라우팅",
+    "tab3Label": "3단계",
+    "tab3Sub": "자동 머지 · 롤백 · 피드백",
+    "p2Title": "2단계 · 동적 검증 + 사후 분석 + 라우팅",
+    "p2Body": "테스트·린트·타입체크·스캔 레일을 돌리고, 패치 적용 후 엔진 상태를 다시 측정해, 가장 빨리 처리할 수 있는 리뷰어에게 드래프트를 라우팅합니다. 컨벤션 적합성은 자동 머지를 게이팅하지만 드래프트 생성을 막지는 않습니다.",
+    "p3Title": "3단계 · 자동 머지 · 롤백 · 피드백",
+    "p3Body": "정책 레이어입니다. 사람 없이 머지될 조건을 결정하는 임계값을 조정하고, 머지 전에 사전 무장되는 롤백 계약을 확인하며, 미래 후보를 재구성하는 거절 피드백 스트림을 살펴보세요."
+  },
+  "empty": {
+    "noCaseTitle": "선택된 케이스 없음",
+    "noCaseBody": "왼쪽 사이드바에서 시드를 골라 파이프라인을 살펴보세요.",
+    "trustEmpty": "케이스를 선택하세요.",
+    "trustNoCandidate": "후보를 선택해 신뢰 프로파일을 확인하세요."
+  },
+  "sidebar": {
+    "brand": "검증된 픽스",
+    "title": "파이프라인 큐",
+    "active": "{{count}}건 진행 중 · 증거 우선 전달",
+    "footer": "시드 → 루프 → 증명 → 드래프트",
+    "aborted": "중단됨",
+    "noCandidates": "후보 없음",
+    "candidate_one": "후보 {{count}}개",
+    "candidate_other": "후보 {{count}}개"
+  },
+  "loop": {
+    "title": "셀프체크 루프",
+    "status": "반복 {{iters}}/{{max}} · {{tokens}} 토큰 · {{seconds}}초",
+    "stopped": "중단: {{reason}}",
+    "collapse": "접기",
+    "iter": "반복 {{count}}회",
+    "stage": {
+      "investigate": "조사",
+      "patch": "패치",
+      "critique": "검토",
+      "validate": "검증",
+      "package": "패키징",
+      "done": "완료",
+      "aborted": "중단"
+    }
+  },
+  "cost": {
+    "title": "비용 텔레메트리",
+    "llm": "LLM 토큰",
+    "validation": "검증",
+    "cycle": "사이클 비용",
+    "iters": "× {{count}}회 반복",
+    "profitable": "수익 발생: 가치 ${{value}} > 2× 비용",
+    "underThreshold": "임계 미달: 가치 ${{value}} < 2× 비용"
+  },
+  "proof": {
+    "rootCause": "근본 원인",
+    "seed": "시드: {{id}}",
+    "evidence": "증거 참조",
+    "blastHint": "영향 범위",
+    "constraints": "제약 조건",
+    "postPatchDelta": "패치 후 변화",
+    "obligations": "증명 의무",
+    "noCandidate": "선택된 후보 없음",
+    "noCandidateHint": "의무는 후보별로 정의됩니다",
+    "static": "정적",
+    "dynamic": "동적",
+    "stylistic": "스타일",
+    "coverage": "커버리지",
+    "delta": {
+      "taintPaths": "테인트 경로 {{count}}개",
+      "moduleAtRisk": "모듈 1개",
+      "modulesAtRisk": "위험 모듈 {{count}}개",
+      "hotspotFading": "핫스팟 감소 중",
+      "cleared": "해소됨",
+      "gated": "게이팅됨"
+    },
+    "status": {
+      "pass": "통과",
+      "fail": "실패",
+      "partial": "부분",
+      "unknown": "미상",
+      "pending": "대기"
+    }
+  },
+  "candidates": {
+    "noViableTitle": "유효한 후보 없음",
+    "noViableBody": "전달 가능한 패치가 나오기 전에 루프가 중단되었습니다. 휴먼 체크포인트로 에스컬레이션하거나 시드를 보강해 다시 시도하세요.",
+    "header": "후보 픽스 · 최대 3개 중 {{count}}개",
+    "subtitle": "드래프트할 항목을 선택하세요",
+    "apiBreak": "API 변경",
+    "stat": {
+      "lines": "라인",
+      "files": "파일",
+      "blast": "영향"
+    }
+  },
+  "tier": {
+    "safeMechanical": "안전 자동",
+    "guarded": "주의",
+    "humanRequired": "사람 필요",
+    "explainSafe": "원클릭 드래프트 가능. 기계적 패치 클래스, 영향 범위 ≤ 1, 모든 증명 통과.",
+    "explainGuarded": "리뷰어 명시적 승인 후 드래프트 PR. 정적 증명 통과, 동적 범위 제한적.",
+    "explainHuman": "수동 리뷰 라우팅. 전달 게이트 임계를 초과하거나 공개 인터페이스를 건드림."
+  },
+  "trust": {
+    "signal": "신뢰 신호",
+    "selectCandidate": "후보를 선택해 신뢰 프로파일을 확인하세요.",
+    "deliveryTier": "전달 등급",
+    "weakest": "가장 약한 고리",
+    "counter": "반대 증거 ({{count}})",
+    "gate": "전달 게이트",
+    "patchConfidence": "패치 신뢰도",
+    "conf": "신뢰",
+    "tierRule": {
+      "lines": "라인 ≤ 20",
+      "files": "파일 ≤ 2",
+      "blast": "영향 범위 ≤ 1 모듈",
+      "noPublicApi": "공개 API 변경 없음",
+      "allProofs": "모든 증명 통과"
+    },
+    "counterSeverity": {
+      "block": "차단",
+      "concern": "우려",
+      "note": "참고"
+    },
+    "confidence": {
+      "strong": "강함: 엔진이 추적한 모든 경로를 증명이 커버합니다.",
+      "sound": "견고: 가장 약한 의무도 한정적이고 처리 가능합니다.",
+      "mixed": "혼재: 머지 전에 약한 고리를 검토하세요.",
+      "weak": "약함: 전달 준비 미완. 시드 보강을 검토하세요."
+    },
+    "action": {
+      "running": "{{stage}} 실행 중",
+      "runValidation": "검증 실행",
+      "oneClick": "원클릭 드래프트 PR",
+      "openDraft": "드래프트 PR 열기",
+      "routeHuman": "수동 리뷰로 라우팅",
+      "dismiss": "거절 + 사유 기록"
+    }
+  },
+  "diff": {
+    "title": "diff 미리보기",
+    "expand": "펼치기",
+    "collapse": "접기",
+    "atLine": "@ {{line}}행"
+  },
+  "draft": {
+    "title": "드래프트 PR 패키지",
+    "abortedBody": "루프 중단 — 전달 가능한 패키지 없음. 시드 증거를 보강해 재시도하거나 에스컬레이션하세요.",
+    "pendingBody": "후보가 증명 의무를 통과하면 패키지가 조립됩니다.",
+    "copy": "복사",
+    "copyTitle": "마크다운으로 복사",
+    "field": {
+      "title": "제목",
+      "summary": "요약",
+      "why": "이 픽스를 선택한 이유",
+      "validation": "검증",
+      "unknowns": "남은 불확실성",
+      "reviewer": "리뷰어 추천"
+    },
+    "noUnknowns": "없음 — 모든 증명 충족.",
+    "gateLine": "전달 게이트 · {{decision}}"
+  },
+  "gateDecision": {
+    "auto-submit": "자동 머지",
+    "needs-review": "리뷰 필요",
+    "blocked": "차단됨"
+  },
+  "reanalysis": {
+    "title": "패치 후 재분석",
+    "subtitle": "엔진 재실행 · 이전 → 이후",
+    "empty": "재분석 데이터 없음 — 패치가 측정 가능한 결과물을 생성하지 않았습니다.",
+    "before": "이전",
+    "after": "이후"
+  },
+  "reviewer": {
+    "title": "리뷰어 라우팅",
+    "subtitle": "match × (1 − 부하) 순으로 정렬",
+    "empty": "리뷰어 추천 없음 — 오너십 그래프에서 매칭할 수 없습니다.",
+    "match": "매치",
+    "load": "{{pct}}% 부하",
+    "suggest": "추천",
+    "role": {
+      "codeowner": "코드 오너",
+      "security": "보안",
+      "domain": "도메인 전문가",
+      "oncall": "온콜"
+    }
+  },
+  "convention": {
+    "title": "컨벤션 적합성",
+    "subtitle": "자동 머지만 게이팅 · 드래프트는 차단하지 않음",
+    "empty": "이 후보에는 스타일 의무가 없습니다.",
+    "benchmarkedAgainst": "비교 기준:",
+    "src": {
+      "neighboringImports": "주변 import",
+      "siblingErrorPatterns": "형제 에러 패턴",
+      "namingConvention": "네이밍 컨벤션",
+      "lintFormatRules": "린트/포맷 규칙"
+    }
+  },
+  "policy": {
+    "title": "정책 임계값",
+    "subtitle": "안전 자동 자격 조건 조정",
+    "footer": "변경 사항은 미래 후보에 적용 · 기존 드래프트는 저장 시 재게이팅"
+  },
+  "rollback": {
+    "title": "롤백 패키지",
+    "subtitle": "드래프트와 함께 생성 · 사전 무장",
+    "empty": "롤백 플랜 없음 — 이 케이스는 전달물이 없습니다.",
+    "trigger": "트리거",
+    "window": "윈도우",
+    "action": "액션",
+    "owner": "오너",
+    "armed": "무장됨",
+    "armedHint": "머지 버튼이 활성화되기 전에 자동 되돌리기 훅이 연결됩니다."
+  },
+  "dismissFeedback": {
+    "title": "거절 피드백 (최근 7일)",
+    "subtitle": "후보 생성에 다시 반영됨",
+    "distribution": "사유 분포",
+    "recent": "최근 거절",
+    "hAgo": "{{count}}시간 전",
+    "dAgo": "{{count}}일 전"
+  },
+  "dismissModal": {
+    "title": "후보 거절 · 사유 기록",
+    "dismissing": "거절 대상",
+    "feedbackHint": "피드백은 다음 후보 생성에 반영됩니다. 거절을 헛되이 하지 마세요.",
+    "reasonTag": "사유 태그",
+    "optionalNote": "선택 메모",
+    "notePlaceholder": "다음 후보를 더 유용하게 만들려면 무엇이 필요한가요?",
+    "cancel": "취소",
+    "dismiss": "거절",
+    "reason": {
+      "wrong-root-cause": "잘못된 근본 원인",
+      "too-broad-blast": "과도한 영향 범위",
+      "breaks-convention": "컨벤션 위반",
+      "unsafe-during-rollout": "롤아웃 중 위험",
+      "reviewer-disagrees": "리뷰어 불일치"
+    }
+  }
+}

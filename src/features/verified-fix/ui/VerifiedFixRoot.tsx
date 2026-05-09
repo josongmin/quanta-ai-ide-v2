@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTheme } from '@shared/theme';
+import { useTranslation } from '@shared/i18n';
 import { useVerifiedFixStore } from '../model/store';
 import type { FixCase, Seed } from '../model/types';
 import { AmbientLayer } from './parts/AmbientLayer';
@@ -110,10 +111,7 @@ export default function VerifiedFixRoot() {
               {/* Phase 2 — dynamic validation, post-patch re-analysis, routing. */}
               {phase === 2 && (
                 <>
-                  <PhaseIntro
-                    title="phase 2 · dynamic + post-patch + routing"
-                    body="run the test/lint/typecheck/scan rails, re-measure the engine state after the patch lands, and route the draft to the reviewer who can move fastest. convention conformance gates auto-submit but does not block the draft."
-                  />
+                  <PhaseIntro titleKey="phase.p2Title" bodyKey="phase.p2Body" />
                   <PostPatchReanalysis caseId={fixCase.id} />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <ReviewerRouting caseId={fixCase.id} />
@@ -128,10 +126,7 @@ export default function VerifiedFixRoot() {
               {/* Phase 3 — auto-submit policy, rollback, feedback loop. */}
               {phase === 3 && (
                 <>
-                  <PhaseIntro
-                    title="phase 3 · auto-submit · rollback · feedback"
-                    body="this is the policy layer. tune the thresholds that decide who ships without a human, see the rollback contract that arms before merge, and watch the dismiss feedback stream that reshapes future candidates."
-                  />
+                  <PhaseIntro titleKey="phase.p3Title" bodyKey="phase.p3Body" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <PolicyThresholds />
                     <RollbackPlan caseId={fixCase.id} />
@@ -174,27 +169,29 @@ export default function VerifiedFixRoot() {
 function Header({ fixCase, seed }: { fixCase: FixCase; seed: Seed }) {
   const { isDark } = useTheme();
   const t = vfxTokens(isDark);
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <div className="flex items-center gap-3">
       <span
         className="text-[10px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded font-mono"
         style={{ background: t.badgeBg, color: t.textMuted }}
       >
-        {seed.kind}
+        {tr(`header.kind.${seed.kind}`)}
       </span>
       <h1 className="text-[15px] font-bold" style={{ color: t.textHi }}>
         {seed.title}
       </h1>
       <span className="ml-auto text-[10px] font-mono" style={{ color: t.textFaint }}>
-        case · {fixCase.id}
+        {tr('header.case', { id: fixCase.id })}
       </span>
     </div>
   );
 }
 
-function PhaseIntro({ title, body }: { title: string; body: string }) {
+function PhaseIntro({ titleKey, bodyKey }: { titleKey: string; bodyKey: string }) {
   const { isDark } = useTheme();
   const t = vfxTokens(isDark);
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <div
       className="rounded-lg border px-4 py-2.5"
@@ -204,10 +201,10 @@ function PhaseIntro({ title, body }: { title: string; body: string }) {
         className="text-[10px] font-black uppercase tracking-[0.18em]"
         style={{ color: t.textMuted }}
       >
-        {title}
+        {tr(titleKey)}
       </div>
       <div className="text-[11px] mt-0.5 leading-snug" style={{ color: t.textBody }}>
-        {body}
+        {tr(bodyKey)}
       </div>
     </div>
   );
@@ -216,14 +213,15 @@ function PhaseIntro({ title, body }: { title: string; body: string }) {
 function EmptyState() {
   const { isDark } = useTheme();
   const t = vfxTokens(isDark);
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <div className="flex items-center justify-center h-[60vh]">
       <div className="text-center">
         <div className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
-          no case selected
+          {tr('empty.noCaseTitle')}
         </div>
         <div className="text-[11px] mt-1" style={{ color: t.textFaint }}>
-          pick a seed from the left sidebar to inspect the pipeline.
+          {tr('empty.noCaseBody')}
         </div>
       </div>
     </div>
@@ -233,16 +231,17 @@ function EmptyState() {
 function TrustPanelEmpty() {
   const { isDark } = useTheme();
   const t = vfxTokens(isDark);
+  const { t: tr } = useTranslation('verified-fix');
   return (
     <aside
       className="shrink-0 w-[320px] h-full overflow-auto border-l p-4"
       style={{ background: t.sidebar, backdropFilter: t.sidebarBlur, borderColor: t.border }}
     >
       <div className="text-[10px] font-black uppercase tracking-[0.18em] mb-2" style={{ color: t.textMuted }}>
-        trust signal
+        {tr('trust.signal')}
       </div>
       <div className="text-[11px]" style={{ color: t.textFaint }}>
-        pick a case to inspect.
+        {tr('empty.trustEmpty')}
       </div>
     </aside>
   );

@@ -12,3 +12,4 @@ export { HypothesisBlock } from './HypothesisBlock';
 export { ActionButton } from './ActionButton';
 export { AnswerView } from './AnswerView';
 export { GatheringIndicator } from './GatheringIndicator';
+export { CoverageBadge } from './CoverageBadge';

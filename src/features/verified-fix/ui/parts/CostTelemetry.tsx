@@ -1,4 +1,5 @@
 import { Coins, Timer, TrendingUp } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { FixCase } from '../../model/types';
 import { useVfx } from './tokens';
 
@@ -8,13 +9,13 @@ import { useVfx } from './tokens';
 
 export function CostTelemetry({ fixCase }: { fixCase: FixCase }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const tokens = fixCase.loop.iterations.reduce((a, b) => a + b.costTokens, 0);
   const validateSec = fixCase.loop.iterations.reduce((a, b) => a + b.validationSeconds, 0);
   const llmDollars = (tokens / 1_000_000) * 18;        // assume $18/MTok
   const ciDollars  = (validateSec / 60) * 0.32;        // assume $0.32/min CI
   const cycleCost  = llmDollars + ciDollars;
 
-  // demo "value" — what an accepted patch is worth (rough heuristic).
   const value = fixCase.draft?.gateDecision === 'auto-submit' ? 320
     : fixCase.draft?.gateDecision === 'needs-review' ? 180
     : 0;
@@ -29,12 +30,12 @@ export function CostTelemetry({ fixCase }: { fixCase: FixCase }) {
         className="text-[10px] font-black uppercase tracking-[0.18em] shrink-0"
         style={{ color: t.textMuted }}
       >
-        cost telemetry
+        {tr('cost.title')}
       </span>
 
-      <Cell icon={Coins} label="llm tokens" value={`${(tokens / 1000).toFixed(1)}k`} sub={`$${llmDollars.toFixed(2)}`} />
-      <Cell icon={Timer} label="validation" value={`${validateSec.toFixed(0)}s`} sub={`$${ciDollars.toFixed(2)}`} />
-      <Cell icon={Coins} label="cycle cost" value={`$${cycleCost.toFixed(2)}`} sub={`× ${fixCase.loop.iterations.length} iter`} />
+      <Cell icon={Coins} label={tr('cost.llm')}        value={`${(tokens / 1000).toFixed(1)}k`}    sub={`$${llmDollars.toFixed(2)}`} />
+      <Cell icon={Timer} label={tr('cost.validation')} value={`${validateSec.toFixed(0)}s`}        sub={`$${ciDollars.toFixed(2)}`} />
+      <Cell icon={Coins} label={tr('cost.cycle')}      value={`$${cycleCost.toFixed(2)}`}          sub={tr('cost.iters', { count: fixCase.loop.iterations.length })} />
 
       <div className="ml-auto flex items-center gap-2">
         <TrendingUp className="w-3 h-3" style={{ color: profitable ? t.ok : t.warn }} />
@@ -42,7 +43,9 @@ export function CostTelemetry({ fixCase }: { fixCase: FixCase }) {
           className="text-[10px] font-mono"
           style={{ color: profitable ? t.ok : t.warn }}
         >
-          {profitable ? `unit-profitable: value $${String(value)} > 2× cost` : `under threshold: value $${String(value)} < 2× cost`}
+          {profitable
+            ? tr('cost.profitable', { value: String(value) })
+            : tr('cost.underThreshold', { value: String(value) })}
         </span>
       </div>
     </div>

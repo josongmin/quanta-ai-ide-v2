@@ -1,4 +1,5 @@
 import { GitPullRequest, Users, HelpCircle, Sparkles, Send, ShieldCheck, Copy } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { FixCase } from '../../model/types';
 import { useVfx } from './tokens';
 
@@ -7,6 +8,7 @@ import { useVfx } from './tokens';
 
 export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
   const t = useVfx();
+  const { t: tr } = useTranslation('verified-fix');
   const draft = fixCase.draft;
 
   if (!draft) {
@@ -21,13 +23,11 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
             className="text-[10px] font-black uppercase tracking-[0.18em]"
             style={{ color: t.textMuted }}
           >
-            draft pr package
+            {tr('draft.title')}
           </span>
         </div>
         <div className="text-[11px]" style={{ color: t.textFaint }}>
-          {fixCase.loop.aborted
-            ? 'loop aborted — no deliverable package. enrich seed evidence and retry, or escalate.'
-            : 'package will assemble once a candidate clears its proof obligations.'}
+          {fixCase.loop.aborted ? tr('draft.abortedBody') : tr('draft.pendingBody')}
         </div>
       </div>
     );
@@ -46,9 +46,9 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
     : draft.gateDecision === 'needs-review' ? Send
     : ShieldCheck;
   const actionLabel =
-    draft.gateDecision === 'auto-submit'  ? 'one-click draft pr'
-    : draft.gateDecision === 'needs-review' ? 'open draft pr'
-    : 'route to human review';
+    draft.gateDecision === 'auto-submit'  ? tr('trust.action.oneClick')
+    : draft.gateDecision === 'needs-review' ? tr('trust.action.openDraft')
+    : tr('trust.action.routeHuman');
 
   return (
     <div
@@ -65,28 +65,28 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
           className="text-[10px] font-black uppercase tracking-[0.18em]"
           style={{ color: t.textMuted }}
         >
-          draft pr package
+          {tr('draft.title')}
         </span>
         <span
           className="text-[9px] font-mono px-1.5 py-0.5 rounded ml-1"
           style={{ background: gateBg, color: gateColor }}
         >
-          {draft.gateDecision.replace('-', ' ')}
+          {tr(`gateDecision.${draft.gateDecision}`)}
         </span>
         <button
           type="button"
           className="ml-auto inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded transition-colors"
           style={{ background: 'transparent', color: t.textMuted, border: `1px solid ${t.borderSoft}` }}
-          title="copy as markdown"
+          title={tr('draft.copyTitle')}
         >
-          <Copy className="w-2.5 h-2.5" /> copy
+          <Copy className="w-2.5 h-2.5" /> {tr('draft.copy')}
         </button>
       </div>
 
       <div className="px-4 py-3.5 space-y-3.5">
         {/* title */}
         <div>
-          <Label>title</Label>
+          <Label>{tr('draft.field.title')}</Label>
           <div
             className="text-[12.5px] font-mono mt-0.5 leading-snug"
             style={{ color: t.textHi }}
@@ -97,7 +97,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
 
         {/* summary */}
         <div>
-          <Label>summary</Label>
+          <Label>{tr('draft.field.summary')}</Label>
           <div
             className="text-[11.5px] leading-relaxed mt-0.5"
             style={{ color: t.textBody }}
@@ -108,7 +108,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
 
         {/* why this fix */}
         <div>
-          <Label>why this fix</Label>
+          <Label>{tr('draft.field.why')}</Label>
           <div
             className="text-[11px] leading-relaxed mt-0.5"
             style={{ color: t.textBody }}
@@ -119,7 +119,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
 
         {/* validation */}
         <div>
-          <Label>validation</Label>
+          <Label>{tr('draft.field.validation')}</Label>
           <div
             className="text-[11px] leading-relaxed mt-0.5 font-mono"
             style={{ color: t.textBody }}
@@ -132,11 +132,11 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>
-              <HelpCircle className="w-2.5 h-2.5 inline -mt-px" /> remaining unknowns
+              <HelpCircle className="w-2.5 h-2.5 inline -mt-px" /> {tr('draft.field.unknowns')}
             </Label>
             {draft.remainingUnknowns.length === 0 ? (
               <div className="text-[10.5px] mt-1" style={{ color: t.textFaint }}>
-                none — all proofs satisfied.
+                {tr('draft.noUnknowns')}
               </div>
             ) : (
               <ul className="mt-1 space-y-0.5">
@@ -150,7 +150,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
           </div>
           <div>
             <Label>
-              <Users className="w-2.5 h-2.5 inline -mt-px" /> reviewer suggestion
+              <Users className="w-2.5 h-2.5 inline -mt-px" /> {tr('draft.field.reviewer')}
             </Label>
             <div className="text-[10.5px] mt-1 leading-snug" style={{ color: t.textBody }}>
               {draft.reviewerSuggestion}
@@ -167,7 +167,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
             className="text-[9px] font-bold uppercase tracking-[0.14em] mb-0.5"
             style={{ color: gateColor }}
           >
-            delivery gate · {draft.gateDecision.replace('-', ' ')}
+            {tr('draft.gateLine', { decision: tr(`gateDecision.${draft.gateDecision}`) })}
           </div>
           <div className="text-[10.5px] leading-snug" style={{ color: t.textBody }}>
             {draft.gateReason}

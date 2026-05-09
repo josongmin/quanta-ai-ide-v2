@@ -28,6 +28,10 @@ const InvestigateLauncher = lazy(() =>
   import('@features/investigation').then((m) => ({ default: m.InvestigateLauncher })),
 );
 
+const JobsTray = lazy(() =>
+  import('@features/investigation').then((m) => ({ default: m.JobsTray })),
+);
+
 export default function IntelligenceLayout() {
   const { mode } = useViewMode();
   const { isDark } = useTheme();
@@ -93,6 +97,7 @@ export default function IntelligenceLayout() {
       <Suspense fallback={null}>
         <InvestigateLauncher />
         <InvestigatePanel />
+        <JobsTray />
       </Suspense>
     </div>
   );

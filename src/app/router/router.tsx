@@ -37,6 +37,15 @@ const VerifiedFixRoot = lazy(() =>
 const FixPipelineStage = lazy(() =>
   import('@widgets/fix-pipeline-stage').then((m) => ({ default: m.FixPipelineStage })),
 );
+const FixPipelineHandoffBanner = lazy(() =>
+  import('@features/investigation').then((m) => ({ default: m.FixPipelineHandoffBanner })),
+);
+const HandoffBreadcrumb = lazy(() =>
+  import('@features/investigation/handoff').then((m) => ({ default: m.HandoffBreadcrumb })),
+);
+const InvestigateStage = lazy(() =>
+  import('@widgets/investigate-stage').then((m) => ({ default: m.InvestigateStage })),
+);
 
 // ─────────────────────────────────────────────────────────────────────────
 // Root route — owns the chrome (header, tabs, modals) via AppShell. The
@@ -153,6 +162,20 @@ const fixPipelineRoute = createRoute({
     return (
       <Suspense fallback={null}>
         <FixPipelineStage />
+        <FixPipelineHandoffBanner />
+        <HandoffBreadcrumb />
+      </Suspense>
+    );
+  },
+});
+
+const investigateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/investigate',
+  component: function InvestigateRouteComponent() {
+    return (
+      <Suspense fallback={null}>
+        <InvestigateStage />
       </Suspense>
     );
   },
@@ -195,6 +218,7 @@ const routeTree = rootRoute.addChildren([
   admissionRoute,
   fixesRoute,
   fixPipelineRoute,
+  investigateRoute,
   catchAllRoute,
 ]);
 

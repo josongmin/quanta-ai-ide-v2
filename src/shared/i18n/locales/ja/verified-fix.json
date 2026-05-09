@@ -1,0 +1,252 @@
+{
+  "header": {
+    "case": "ケース · {{id}}",
+    "kind": {
+      "incident": "インシデント",
+      "hotspot": "ホットスポット",
+      "alert": "アラート",
+      "focus": "フォーカス"
+    }
+  },
+  "phase": {
+    "tab1Label": "フェーズ 1",
+    "tab1Sub": "静的証明 + ドラフト",
+    "tab2Label": "フェーズ 2",
+    "tab2Sub": "動的検証 + 事後分析 + ルーティング",
+    "tab3Label": "フェーズ 3",
+    "tab3Sub": "自動マージ · ロールバック · フィードバック",
+    "p2Title": "フェーズ 2 · 動的検証 + 事後分析 + ルーティング",
+    "p2Body": "テスト/lint/型チェック/スキャンを実行し、パッチ適用後にエンジンの状態を再測定して、最も早く対応できるレビュアーへドラフトをルーティングします。コンベンション適合性は自動マージをゲートしますが、ドラフト作成は妨げません。",
+    "p3Title": "フェーズ 3 · 自動マージ · ロールバック · フィードバック",
+    "p3Body": "ポリシーレイヤーです。人を介さずに出荷できる条件のしきい値を調整し、マージ前に事前装填されるロールバック契約を確認し、未来の候補を再形成する却下フィードバックの流れを観察します。"
+  },
+  "empty": {
+    "noCaseTitle": "ケースが選択されていません",
+    "noCaseBody": "左サイドバーからシードを選んでパイプラインを確認してください。",
+    "trustEmpty": "ケースを選択してください。",
+    "trustNoCandidate": "候補を選んで信頼プロファイルを確認してください。"
+  },
+  "sidebar": {
+    "brand": "検証済みフィックス",
+    "title": "パイプライン キュー",
+    "active": "{{count}} 件進行中 · 証拠優先デリバリー",
+    "footer": "シード → ループ → 証明 → ドラフト",
+    "aborted": "中止",
+    "noCandidates": "候補なし",
+    "candidate_one": "候補 {{count}} 件",
+    "candidate_other": "候補 {{count}} 件"
+  },
+  "loop": {
+    "title": "セルフチェックループ",
+    "status": "反復 {{iters}}/{{max}} · {{tokens}} tok · {{seconds}}秒",
+    "stopped": "停止: {{reason}}",
+    "collapse": "折りたたむ",
+    "iter": "{{count}} 回反復",
+    "stage": {
+      "investigate": "調査",
+      "patch": "パッチ",
+      "critique": "レビュー",
+      "validate": "検証",
+      "package": "パッケージ",
+      "done": "完了",
+      "aborted": "中止"
+    }
+  },
+  "cost": {
+    "title": "コストテレメトリ",
+    "llm": "LLM トークン",
+    "validation": "検証",
+    "cycle": "サイクルコスト",
+    "iters": "× {{count}} 回反復",
+    "profitable": "採算ライン: 価値 ${{value}} > 2× コスト",
+    "underThreshold": "しきい値未満: 価値 ${{value}} < 2× コスト"
+  },
+  "proof": {
+    "rootCause": "根本原因",
+    "seed": "シード: {{id}}",
+    "evidence": "証拠参照",
+    "blastHint": "影響範囲",
+    "constraints": "制約",
+    "postPatchDelta": "パッチ適用後の変化",
+    "obligations": "証明義務",
+    "noCandidate": "候補が選択されていません",
+    "noCandidateHint": "義務は候補ごとに定義されます",
+    "static": "静的",
+    "dynamic": "動的",
+    "stylistic": "スタイル",
+    "coverage": "カバレッジ",
+    "delta": {
+      "taintPaths": "テイント経路 {{count}} 本",
+      "moduleAtRisk": "1 モジュール",
+      "modulesAtRisk": "リスク {{count}} モジュール",
+      "hotspotFading": "ホットスポット減少中",
+      "cleared": "解消",
+      "gated": "ゲート"
+    },
+    "status": {
+      "pass": "合格",
+      "fail": "不合格",
+      "partial": "部分",
+      "unknown": "不明",
+      "pending": "保留"
+    }
+  },
+  "candidates": {
+    "noViableTitle": "有効な候補なし",
+    "noViableBody": "デリバリー可能なパッチが生成される前にループが中止されました。ヒューマンチェックポイントへエスカレーションするか、シードを補強して再試行してください。",
+    "header": "候補フィックス · 最大3件中 {{count}} 件",
+    "subtitle": "ドラフトする候補を選択",
+    "apiBreak": "API 破壊",
+    "stat": {
+      "lines": "行",
+      "files": "ファイル",
+      "blast": "影響"
+    }
+  },
+  "tier": {
+    "safeMechanical": "安全機械",
+    "guarded": "要注意",
+    "humanRequired": "人手必要",
+    "explainSafe": "ワンクリックドラフト対象。機械的パッチクラス、影響範囲 ≤ 1、すべての証明が合格。",
+    "explainGuarded": "レビュアー明示承認後のドラフト PR。静的証明は合格、動的範囲は限定的。",
+    "explainHuman": "手動レビューへルーティング。デリバリーゲートのしきい値を超過、または公開 API に影響。"
+  },
+  "trust": {
+    "signal": "信頼シグナル",
+    "deliveryTier": "デリバリー階層",
+    "weakest": "最も弱い箇所",
+    "counter": "反証 ({{count}})",
+    "gate": "デリバリーゲート",
+    "patchConfidence": "パッチ信頼度",
+    "conf": "信頼",
+    "confidence": {
+      "strong": "強: エンジンが追跡したすべての経路を証明がカバー。",
+      "sound": "堅実: 最弱の義務も限定的かつ対処可能。",
+      "mixed": "混合: マージ前に最弱箇所を確認してください。",
+      "weak": "弱: デリバリー未準備。シード補強を検討。"
+    },
+    "action": {
+      "running": "{{stage}} 実行中",
+      "runValidation": "検証を実行",
+      "oneClick": "ワンクリック ドラフト PR",
+      "openDraft": "ドラフト PR を開く",
+      "routeHuman": "手動レビューへルーティング",
+      "dismiss": "却下 + 理由を記録"
+    },
+    "selectCandidate": "信頼プロファイルを確認するには候補を選択してください。",
+    "tierRule": {
+      "lines": "行数 ≤ 20",
+      "files": "ファイル ≤ 2",
+      "blast": "影響範囲 ≤ 1 モジュール",
+      "noPublicApi": "公開 API 変更なし",
+      "allProofs": "全証明合格"
+    },
+    "counterSeverity": {
+      "block": "ブロック",
+      "concern": "懸念",
+      "note": "メモ"
+    }
+  },
+  "diff": {
+    "title": "diff プレビュー",
+    "expand": "展開",
+    "collapse": "折りたたむ",
+    "atLine": "@ {{line}} 行目"
+  },
+  "draft": {
+    "title": "ドラフト PR パッケージ",
+    "abortedBody": "ループ中止 — デリバリーパッケージなし。シード証拠を補強して再試行するかエスカレーション。",
+    "pendingBody": "候補が証明義務を通過するとパッケージが組み立てられます。",
+    "copy": "コピー",
+    "copyTitle": "Markdown としてコピー",
+    "field": {
+      "title": "タイトル",
+      "summary": "概要",
+      "why": "このフィックスの理由",
+      "validation": "検証",
+      "unknowns": "残る不確実性",
+      "reviewer": "レビュアー推薦"
+    },
+    "noUnknowns": "なし — すべての証明を満たしました。",
+    "gateLine": "デリバリーゲート · {{decision}}"
+  },
+  "gateDecision": {
+    "auto-submit": "自動マージ",
+    "needs-review": "レビュー要",
+    "blocked": "ブロック"
+  },
+  "reanalysis": {
+    "title": "パッチ後再分析",
+    "subtitle": "エンジン再実行 · 前 → 後",
+    "empty": "再分析データなし — 再測定可能なデリバリー成果物がありません。",
+    "before": "前",
+    "after": "後"
+  },
+  "reviewer": {
+    "title": "レビュアー ルーティング",
+    "subtitle": "match × (1 − 負荷) でランキング",
+    "empty": "レビュアー候補なし — オーナーシップグラフが一致しません。",
+    "match": "マッチ",
+    "load": "負荷 {{pct}}%",
+    "suggest": "推奨",
+    "role": {
+      "codeowner": "コードオーナー",
+      "security": "セキュリティ",
+      "domain": "ドメインエキスパート",
+      "oncall": "オンコール"
+    }
+  },
+  "convention": {
+    "title": "コンベンション適合性",
+    "subtitle": "自動マージのみゲート · ドラフトは妨げない",
+    "empty": "この候補にはスタイル義務がありません。",
+    "benchmarkedAgainst": "ベンチマーク対象:",
+    "src": {
+      "neighboringImports": "近隣 import",
+      "siblingErrorPatterns": "兄弟エラーパターン",
+      "namingConvention": "命名規則",
+      "lintFormatRules": "lint/フォーマット規則"
+    }
+  },
+  "policy": {
+    "title": "ポリシーしきい値",
+    "subtitle": "安全機械の資格条件を調整",
+    "footer": "変更は将来の候補に適用 · 既存ドラフトは保存時に再ゲート"
+  },
+  "rollback": {
+    "title": "ロールバック パッケージ",
+    "subtitle": "ドラフトと共に生成 · 事前装填",
+    "empty": "ロールバック計画なし — このケースには成果物がありません。",
+    "trigger": "トリガー",
+    "window": "ウィンドウ",
+    "action": "アクション",
+    "owner": "オーナー",
+    "armed": "装填済",
+    "armedHint": "マージボタンが有効になる前に自動戻しフックが配線されます。"
+  },
+  "dismissFeedback": {
+    "title": "却下フィードバック (直近7日)",
+    "subtitle": "候補生成へ再投入",
+    "distribution": "理由分布",
+    "recent": "最近の却下",
+    "hAgo": "{{count}}時間前",
+    "dAgo": "{{count}}日前"
+  },
+  "dismissModal": {
+    "title": "候補を却下 · 理由を記録",
+    "dismissing": "却下対象",
+    "feedbackHint": "フィードバックは次の候補生成に反映されます。却下を無駄にしないでください。",
+    "reasonTag": "理由タグ",
+    "optionalNote": "任意メモ",
+    "notePlaceholder": "次の候補をより有用にするには何が必要ですか?",
+    "cancel": "キャンセル",
+    "dismiss": "却下",
+    "reason": {
+      "wrong-root-cause": "誤った根本原因",
+      "too-broad-blast": "影響範囲が広すぎ",
+      "breaks-convention": "コンベンション違反",
+      "unsafe-during-rollout": "ロールアウト中に危険",
+      "reviewer-disagrees": "レビュアー不同意"
+    }
+  }
+}

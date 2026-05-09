@@ -59,6 +59,36 @@ function StatusDot({ status }: { status: Status }): JSX.Element {
   );
 }
 
+function PhasePreviewBanner({ phase, text }: { phase: string; text: string }) {
+  return (
+    <div
+      className="mt-1 mb-2 rounded-md px-2.5 py-1.5 border flex items-center gap-2"
+      style={{
+        background: 'var(--bg-surface-muted)',
+        borderColor: 'var(--border-muted)',
+        borderStyle: 'dashed',
+      }}
+    >
+      <span
+        className="text-[8px] font-black uppercase tracking-[0.22em] px-1.5 py-0.5 rounded"
+        style={{
+          background: 'var(--bg-elevated)',
+          color: 'var(--fg-muted)',
+          border: '1px solid var(--border-muted)',
+        }}
+      >
+        Phase {phase}
+      </span>
+      <span
+        className="text-[10.5px] leading-snug"
+        style={{ color: 'var(--fg-muted)' }}
+      >
+        {text}
+      </span>
+    </div>
+  );
+}
+
 export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Element {
   const { obligations } = props;
   const total = obligations.length;
@@ -70,6 +100,11 @@ export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Elem
   return (
     <GlassCard className="rounded-xl p-3">
       <SectionHeader title="Proof obligations" badge={`${satisfiedCount}/${total}`} />
+
+      <PhasePreviewBanner
+        phase="3"
+        text="Proof obligations are derived from your codebase — slots below are reserved for future auto-detection."
+      />
 
       {total === 0 ? (
         <EmptyHint text="No proof obligations recorded for this stack." />
