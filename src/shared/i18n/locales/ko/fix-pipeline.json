@@ -32,6 +32,7 @@
     "header": "Proof obligations",
     "static": "정적",
     "dynamic": "동적",
+    "policy": "정책",
     "stylistic": "스타일",
     "human": "사람",
     "runValidation": "검증 실행",
@@ -78,6 +79,83 @@
     "unverified": "검증 안 됨",
     "proposer": "제안자: 시스템",
     "approver": "승인자: 대기"
+  },
+  "cost": {
+    "header": "Cost telemetry",
+    "cycles": "cycles",
+    "cumulative": "누적 비용",
+    "tokens": "tok in / out",
+    "ci": "CI",
+    "thisCandidate": "이 candidate"
+  },
+  "loop": {
+    "header": "Bounded loop",
+    "idle": "검증 대기 — 0 iter",
+    "running": "iteration 진행 중",
+    "terminated": "종료 사유"
+  },
+  "reanalysis": {
+    "header": "Post-patch 재분석",
+    "predicted": "예측",
+    "ran": "실행됨",
+    "taintPaths": "taint 경로",
+    "blastModules": "blast 모듈",
+    "hotspot": "hotspot 점수"
+  },
+  "permissions": {
+    "header": "권한 모드",
+    "graduated": "graduated",
+    "gated": "gated",
+    "gatedHint": "성공 {{done}} / {{total}} 회 — 이후 자동 제출 가능",
+    "graduatedHint": "충분한 성공 이력 — 자동 제출 권한 활성"
+  },
+  "conflicts": {
+    "header": "Open PR 충돌"
+  },
+  "freshness": {
+    "fresh": "index fresh",
+    "stale": "index stale",
+    "indexedAgo": "indexed {{age}} ago"
+  },
+  "critique": {
+    "header": "Self-critique 이력",
+    "iteration": "iter {{n}}",
+    "failed": "실패 요약",
+    "adjusted": "다음 iter 조정"
+  },
+  "routing": {
+    "header": "Reviewer routing",
+    "primary": "Primary",
+    "fallbacks": "Fallback chain",
+    "load": {
+      "low": "load 낮음",
+      "medium": "load 보통",
+      "high": "load 높음"
+    }
+  },
+  "rollback": {
+    "header": "Rollback 패키지",
+    "commit": "Revert commit",
+    "steps": "단계"
+  },
+  "submit": {
+    "header": "제출",
+    "auto": "원클릭 자동 제출",
+    "manual": "Draft PR 제출",
+    "blocked": "제출 차단",
+    "submitting": "제출 중…",
+    "proposerLine": "제안자: {{by}} · 승인 책임 명시됨",
+    "status": {
+      "auto-submitted": "auto-submitted",
+      "manually-submitted": "manually submitted",
+      "submission-blocked": "blocked",
+      "submitting": "submitting",
+      "unsubmitted": "unsubmitted"
+    }
+  },
+  "partial": {
+    "header": "부분 수락",
+    "residual": "잔여 — taint {{taint}} · blast {{blast}} · hot {{hot}}"
   },
   "empty": "왼쪽 레일에서 시드를 선택해 시작."
 }

@@ -30,6 +30,8 @@ const VALIDATE_MS = 1500;
 const initialCases = Object.fromEntries(FIX_CASES.map((c) => [c.id, c]));
 const initialSeeds = Object.fromEntries(SEEDS.map((s) => [s.id, s]));
 
+export type PhaseId = 1 | 2 | 3;
+
 type State = {
   cases: Record<string, FixCase>;
   seeds: Record<string, Seed>;
@@ -38,6 +40,7 @@ type State = {
   // without a separate notification surface.
   activeCaseId: string | null;
   diffExpanded: boolean;
+  phase: PhaseId;
 
   seed: (seed: Seed, candidates: CandidateFix[]) => string;
   selectCandidate: (caseId: string, candidateId: string) => void;
@@ -45,6 +48,7 @@ type State = {
   startValidation: (caseId: string) => void;
   setActive: (caseId: string | null) => void;
   toggleDiff: () => void;
+  setPhase: (phase: PhaseId) => void;
   reset: () => void;
 };
 
@@ -53,6 +57,7 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
   seeds: initialSeeds,
   activeCaseId: FIX_CASES[0]?.id ?? null,
   diffExpanded: false,
+  phase: 1,
 
   seed: (seed, candidates) => {
     const caseId = `case-${seed.id}`;
@@ -97,6 +102,8 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
   setActive: (id) => { set({ activeCaseId: id, diffExpanded: false }); },
 
   toggleDiff: () => { set((s) => ({ diffExpanded: !s.diffExpanded })); },
+
+  setPhase: (phase) => { set({ phase }); },
 
   dismissCandidate: (caseId, candidateId) => {
     set((s) => {

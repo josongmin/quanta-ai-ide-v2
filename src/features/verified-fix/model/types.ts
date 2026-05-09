@@ -141,3 +141,47 @@ export interface FixCase {
   validations: ValidationRun[];
   draft: DraftPRPackage | null;
 }
+
+// ─── Phase 2 surfaces ───────────────────────────────────────────────────
+
+export interface ReanalysisDelta {
+  metric: 'taint paths' | 'blast modules' | 'hotspot score' | 'policy hits' | 'unknown zone';
+  before: number;
+  after: number;
+  unit?: string;
+}
+
+export interface ReviewerCandidate {
+  handle: string;
+  role: 'codeowner' | 'domain' | 'security' | 'oncall';
+  loadPct: number;        // 0..100 — current PR queue load
+  matchScore: number;     // 0..1 — relevance to this fix
+  rationale: string;
+}
+
+// ─── Phase 3 surfaces ───────────────────────────────────────────────────
+
+export interface PolicyThreshold {
+  id: string;
+  label: string;
+  value: number;
+  unit: string;
+  min: number;
+  max: number;
+  description: string;
+}
+
+export interface RollbackPlan {
+  trigger: string;     // "p99 latency >  +5%", "error rate > baseline + 2σ", etc.
+  window: string;      // "first 30 min", "next 24h"
+  action: string;      // "auto-revert PR-N + reopen incident"
+  owner: string;
+}
+
+export interface DismissedRecord {
+  candidateId: string;
+  candidateTitle: string;
+  reasonTag: string;
+  note: string;
+  at: number;
+}

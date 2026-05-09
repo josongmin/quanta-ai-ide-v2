@@ -9,12 +9,13 @@ type Props = {
   onRunValidation: () => void;
 };
 
-const CATEGORY_ORDER: ObligationCategory[] = ['static', 'dynamic', 'stylistic', 'human'];
+const CATEGORY_ORDER: ObligationCategory[] = ['static', 'dynamic', 'policy', 'stylistic', 'human'];
 
 export function ProofPanel({ validation, t, validationStatus, onRunValidation }: Props) {
   const grouped: Record<ObligationCategory, ProofObligation[]> = {
     static: [],
     dynamic: [],
+    policy: [],
     stylistic: [],
     human: [],
   };

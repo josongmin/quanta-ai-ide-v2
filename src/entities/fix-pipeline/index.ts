@@ -31,6 +31,13 @@ export type {
   OpenPrConflict,
   PermissionLedger,
   ReanalysisSnapshot,
+  ReviewerSuggestion,
+  ReviewerRef,
+  CritiqueIteration,
+  SubmissionStatus,
+  SubmissionRecord,
+  RollbackPackage,
+  PartialAcceptance,
 } from './model';
 
 export { SAMPLE_SEEDS } from './lib/sample';

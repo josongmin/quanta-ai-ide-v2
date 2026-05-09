@@ -12,16 +12,87 @@ import { validateSeed } from '@entities/fix-pipeline';
 
 export type GenerateError = { kind: 'seed-rejected'; reason: string };
 
-export function generateCandidates(seed: FixSeed): FixCandidate[] | GenerateError {
+// Dismiss-feedback loop. Reasons accumulate from the user's prior
+// dismissals on this seed and shape the *next* generation: a "too-broad"
+// dismissal nudges the recommendation toward a smaller patch; "risky"
+// nudges away from public-API or security touches; etc. Without this
+// hook the dismiss button is just an audit log.
+export function generateCandidates(
+  seed: FixSeed,
+  priorDismissals: CandidateDismissal[] = [],
+): FixCandidate[] | GenerateError {
   const err = validateSeed(seed);
   if (err) {
     return { kind: 'seed-rejected', reason: `evidence 부족: ${err.kind}` };
   }
   const built = MOCK_BY_SEED[seed.id];
-  if (built) return built;
-  // Generic fallback: a single conservative rename-style fix. Lets new
-  // demo seeds added later still produce *something* without code changes.
-  return [genericRecommended(seed)];
+  const base = built ?? [genericRecommended(seed)];
+  return applyDismissFeedback(base, priorDismissals);
+}
+
+// Re-rank / re-tag candidates based on accumulated dismissals. The MVP
+// implementation is intentionally simple: the highest-priority reason
+// wins, and we re-flag `isRecommended` accordingly. A real impl plugs
+// this into the generator's prompt as a constraint.
+function applyDismissFeedback(
+  base: FixCandidate[],
+  dismissals: CandidateDismissal[],
+): FixCandidate[] {
+  if (dismissals.length === 0) return base;
+  const dismissedIds = new Set(dismissals.map((d) => d.candidateId));
+  const reasons = new Set(dismissals.map((d) => d.reason));
+
+  // Score each surviving candidate; recommend the top-scored one.
+  const scored = base.map((c) => {
+    if (dismissedIds.has(c.id)) return { c, score: -Infinity };
+    let score = c.isRecommended ? 1 : 0;
+    if (reasons.has('too-broad')) {
+      // Smaller patches preferred.
+      score += 5 - Math.min(5, c.metrics.linesChanged / 10);
+    }
+    if (reasons.has('risky')) {
+      // Penalise public-API / security touches.
+      if (c.metrics.publicApiChanged) score -= 3;
+      if (c.metrics.securityPathTouched) score -= 1;
+    }
+    if (reasons.has('breaks-style')) {
+      // Patches that touch fewer files less likely to introduce style drift.
+      score += 2 - Math.min(2, c.metrics.filesChanged);
+    }
+    if (reasons.has('wrong-root-cause')) {
+      // No reliable signal at the candidate level — stay neutral but
+      // surface that the seed itself may need re-validation.
+      score -= 0.5;
+    }
+    return { c, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  const winner = scored.find((s) => s.score > -Infinity);
+  if (!winner) return base;
+
+  return base.map((c) => {
+    if (dismissedIds.has(c.id)) return c;
+    if (c.id === winner.c.id) {
+      const wasRecommended = c.isRecommended;
+      return wasRecommended
+        ? c
+        : {
+            ...c,
+            isRecommended: true,
+            rejectedReason: undefined,
+            rationale: `${c.rationale} (이전 dismissal 사유 반영해 재추천.)`,
+          };
+    }
+    if (c.isRecommended) {
+      return {
+        ...c,
+        isRecommended: false,
+        rejectedReason: c.rejectedReason ?? '이전 dismissal로 재추천 우선순위 하락.',
+      };
+    }
+    return c;
+  });
 }
 
 function genericRecommended(seed: FixSeed): FixCandidate {
@@ -121,6 +192,106 @@ const MOCK_BY_SEED: Record<string, FixCandidate[]> = {
       rejectedReason: 'public endpoint 제거는 API 변경 — caller 영향 큼. 보안 패치보다 비용이 높음.',
     },
   ],
+  'seed-incident-101': [
+    {
+      id: 'seed-incident-101::cand-defensive-parse',
+      seedId: 'seed-incident-101',
+      title: 'parseCart에 v1 호환 fallback 추가',
+      rationale: 'strict parse 실패 시 v1 스키마로 한 번 더 시도. 502 즉시 차단, 후속 PR에서 정식 마이그레이션.',
+      diff: [
+        {
+          file: 'src/checkout/cart.ts',
+          before:
+            'export function parseCart(payload: unknown) {\n  return CartSchema.parse(payload);\n}',
+          after:
+            'export function parseCart(payload: unknown) {\n  const v2 = CartSchema.safeParse(payload);\n  if (v2.success) return v2.data;\n  const v1 = LegacyCartSchema.safeParse(payload);\n  if (v1.success) return upgradeV1(v1.data);\n  throw new Error("cart payload 형식 오류");\n}',
+        },
+      ],
+      metrics: {
+        linesChanged: 7,
+        filesChanged: 1,
+        modulesAffected: 1,
+        publicApiChanged: false,
+        securityPathTouched: false,
+      },
+      isRecommended: true,
+    },
+    {
+      id: 'seed-incident-101::cand-route-catch',
+      seedId: 'seed-incident-101',
+      title: 'route 핸들러에 try/catch 추가',
+      rationale: '5xx → 400 변환만으로 spike 종료. 근본 원인은 안 건드림.',
+      diff: [
+        {
+          file: 'src/checkout/route.ts',
+          before: 'const cart = parseCart(req.body);',
+          after:
+            'let cart;\ntry { cart = parseCart(req.body); }\ncatch { return res.status(400).json({ err: "invalid cart" }); }',
+        },
+      ],
+      metrics: {
+        linesChanged: 3,
+        filesChanged: 1,
+        modulesAffected: 1,
+        publicApiChanged: false,
+        securityPathTouched: false,
+      },
+      isRecommended: false,
+      rejectedReason: '에러를 가리는 패치 — legacy 스키마 진입 자체를 못 막음. incident는 잡혀도 데이터 손실 발생.',
+    },
+  ],
+  'seed-hotspot-201': [
+    {
+      id: 'seed-hotspot-201::cand-extract-refresh',
+      seedId: 'seed-hotspot-201',
+      title: 'refreshToken을 별도 파일로 분리',
+      rationale: 'session.ts churn의 60%가 refreshToken 관련. 파일 분리로 두 함수의 진화 속도 분리.',
+      diff: [
+        {
+          file: 'src/auth/session.ts',
+          before:
+            'export function refreshToken(...) { /* 80 lines */ }\nexport function getSessionUser(...) { /* 40 lines */ }',
+          after:
+            'export { refreshToken } from "./refreshToken";\nexport function getSessionUser(...) { /* 40 lines */ }',
+        },
+        {
+          file: 'src/auth/refreshToken.ts',
+          before: '// (new file)',
+          after: 'export function refreshToken(...) { /* 80 lines, moved from session.ts */ }',
+        },
+      ],
+      metrics: {
+        linesChanged: 12,
+        filesChanged: 2,
+        modulesAffected: 2,
+        publicApiChanged: false,
+        securityPathTouched: true,
+      },
+      isRecommended: true,
+    },
+    {
+      id: 'seed-hotspot-201::cand-tests',
+      seedId: 'seed-hotspot-201',
+      title: 'session.ts에 회귀 테스트 강화',
+      rationale: '구조는 그대로 두고 churn 빈도를 회귀 테스트로 흡수. 분리 비용 회피.',
+      diff: [
+        {
+          file: 'src/auth/__tests__/session.spec.ts',
+          before: '// 9 cases',
+          after: '// 9 + 12 cases · refresh boundary, expiry races',
+        },
+      ],
+      metrics: {
+        linesChanged: 60,
+        filesChanged: 1,
+        modulesAffected: 1,
+        publicApiChanged: false,
+        securityPathTouched: false,
+      },
+      isRecommended: false,
+      rejectedReason: '테스트는 churn을 줄이지 않음 — 두 함수 entwined 구조가 본질적 비용.',
+    },
+  ],
   'seed-sarif-002': [
     {
       id: 'seed-sarif-002::cand-keyfilter',
@@ -172,10 +343,14 @@ const MOCK_BY_SEED: Record<string, FixCandidate[]> = {
 
 // Synthesises the loading delay so the demo shows "생성 중..." UX without
 // a real backend. Caller awaits this then receives the candidates.
-export function simulateGenerate(seed: FixSeed, delayMs = 900): Promise<FixCandidate[] | GenerateError> {
+export function simulateGenerate(
+  seed: FixSeed,
+  priorDismissals: CandidateDismissal[] = [],
+  delayMs = 900,
+): Promise<FixCandidate[] | GenerateError> {
   return new Promise((resolve) => {
     window.setTimeout(() => {
-      resolve(generateCandidates(seed));
+      resolve(generateCandidates(seed, priorDismissals));
     }, delayMs);
   });
 }

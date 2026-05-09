@@ -32,6 +32,7 @@
     "header": "Proof obligations",
     "static": "Static",
     "dynamic": "Dynamic",
+    "policy": "Policy",
     "stylistic": "Stylistic",
     "human": "Human",
     "runValidation": "Run validation",
@@ -78,6 +79,83 @@
     "unverified": "Not verified",
     "proposer": "Proposer: System",
     "approver": "Approver: pending"
+  },
+  "cost": {
+    "header": "Cost telemetry",
+    "cycles": "cycles",
+    "cumulative": "Cumulative",
+    "tokens": "tok in / out",
+    "ci": "CI",
+    "thisCandidate": "This candidate"
+  },
+  "loop": {
+    "header": "Bounded loop",
+    "idle": "awaiting validation — 0 iter",
+    "running": "iteration in progress",
+    "terminated": "Terminated"
+  },
+  "reanalysis": {
+    "header": "Post-patch re-analysis",
+    "predicted": "predicted",
+    "ran": "ran",
+    "taintPaths": "taint paths",
+    "blastModules": "blast modules",
+    "hotspot": "hotspot score"
+  },
+  "permissions": {
+    "header": "Permission mode",
+    "graduated": "graduated",
+    "gated": "gated",
+    "gatedHint": "{{done}} / {{total}} successful runs — auto-submit unlocks after",
+    "graduatedHint": "Enough successful runs — auto-submit eligible"
+  },
+  "conflicts": {
+    "header": "Open PR conflicts"
+  },
+  "freshness": {
+    "fresh": "index fresh",
+    "stale": "index stale",
+    "indexedAgo": "indexed {{age}} ago"
+  },
+  "critique": {
+    "header": "Self-critique history",
+    "iteration": "iter {{n}}",
+    "failed": "Failure",
+    "adjusted": "Adjustment"
+  },
+  "routing": {
+    "header": "Reviewer routing",
+    "primary": "Primary",
+    "fallbacks": "Fallback chain",
+    "load": {
+      "low": "low load",
+      "medium": "medium load",
+      "high": "high load"
+    }
+  },
+  "rollback": {
+    "header": "Rollback package",
+    "commit": "Revert commit",
+    "steps": "Steps"
+  },
+  "submit": {
+    "header": "Submit",
+    "auto": "One-click auto-submit",
+    "manual": "Submit draft PR",
+    "blocked": "Submission blocked",
+    "submitting": "Submitting…",
+    "proposerLine": "Proposer: {{by}} · responsibility recorded",
+    "status": {
+      "auto-submitted": "auto-submitted",
+      "manually-submitted": "manually submitted",
+      "submission-blocked": "blocked",
+      "submitting": "submitting",
+      "unsubmitted": "unsubmitted"
+    }
+  },
+  "partial": {
+    "header": "Partial accept",
+    "residual": "residual — taint {{taint}} · blast {{blast}} · hot {{hot}}"
   },
   "empty": "Pick a seed from the rail to start the pipeline."
 }

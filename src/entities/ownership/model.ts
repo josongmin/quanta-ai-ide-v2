@@ -86,6 +86,20 @@ export interface MergeStrategyAdvice {
   alternative?: { strategy: MergeStrategy; reason: string };
 }
 
+export interface ProofObligation {
+  id: string;
+  label: string;
+  status: 'satisfied' | 'pending' | 'unknown' | 'placeholder';
+  detail?: string;
+}
+
+export interface SafeSeamCandidate {
+  id: string;
+  module: string;
+  reason: string;
+  status: 'detected' | 'placeholder';
+}
+
 export interface RefactorStack {
   id: string;
   zoneId: string;
@@ -94,4 +108,46 @@ export interface RefactorStack {
   mergeStrategy: MergeStrategy;
   mergeStrategyAdvice: MergeStrategyAdvice;
   totalEstimatedDays: number;
+  proofObligations: ProofObligation[];
+  safeSeams: SafeSeamCandidate[];
+}
+
+// ─── Phase 2: Cross-team hotspot detection ──────────────────────────
+
+export interface CrossTeamHotspot {
+  id: string;
+  zoneId: string;
+  label: string;
+  teams: string[];
+  reason: string;
+  severity: 'low' | 'medium' | 'high';
+  weeklyCommits: number;
+}
+
+// ─── Phase 3: Approval path ─────────────────────────────────────────
+
+export interface ApprovalStep {
+  personId: PersonId;
+  role: string;
+  reason: string;
+  required: boolean;
+}
+
+export interface ApprovalPath {
+  zoneId: string;
+  steps: ApprovalStep[];
+  estimatedDurationHours: number;
+  parallelizable: boolean;
+}
+
+// ─── Phase 3: Auto-draft suggestion (no user trigger) ───────────────
+
+export interface AutoDraftSuggestion {
+  id: string;
+  zoneId: string;
+  hook: string;
+  why: string;
+  proposedAction: 'open-stack-plan' | 'reroute-reviewer' | 'flag-cross-team' | 'split-pr';
+  confidence: number;
+  detectedAt: string;
 }

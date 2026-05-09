@@ -1,4 +1,7 @@
 import type {
+  ApprovalPath,
+  AutoDraftSuggestion,
+  CrossTeamHotspot,
   Person,
   PersonId,
   OwnershipZone,
@@ -447,6 +450,18 @@ export const MOCK_STACKS: RefactorStack[] = [
       },
     },
     totalEstimatedDays: 6,
+    proofObligations: [
+      { id: 'po_1', label: 'No public API breakage', status: 'pending', detail: 'External SDK contract must remain on v1 shape until v3 release' },
+      { id: 'po_2', label: 'PSP success rate ≥ baseline', status: 'pending', detail: 'Canary observation window: 24h minimum' },
+      { id: 'po_3', label: 'PCI scope unchanged', status: 'satisfied', detail: 'Verified via security review (2026-05-02)' },
+      { id: 'po_4', label: 'No new taint paths', status: 'unknown', detail: 'Run taint_flow analysis after migration step' },
+      { id: 'po_5', label: 'Refund flow regression coverage', status: 'placeholder' },
+    ],
+    safeSeams: [
+      { id: 'ss_1', module: 'src/payments/checkout/psp-adapter.ts', reason: 'Pure module · no side-effects · single import boundary', status: 'detected' },
+      { id: 'ss_2', module: 'src/payments/checkout/types.ts', reason: 'Type-only changes can be co-located with adapter', status: 'detected' },
+      { id: 'ss_3', module: 'src/payments/checkout/router.ts', reason: 'Heavy callsite — split per-route may be safer than monolithic switch', status: 'placeholder' },
+    ],
     steps: [
       {
         id: 'st_1',
@@ -562,6 +577,16 @@ export const MOCK_STACKS: RefactorStack[] = [
       },
     },
     totalEstimatedDays: 4,
+    proofObligations: [
+      { id: 'pos_1', label: 'Session token rotation correctness', status: 'satisfied', detail: 'Property tests cover all rotation transitions' },
+      { id: 'pos_2', label: 'No auth bypass on adapter swap', status: 'pending', detail: 'Security scan must pass on adapter step' },
+      { id: 'pos_3', label: 'Mobile parity with web', status: 'pending' },
+      { id: 'pos_4', label: 'No new PII surface', status: 'satisfied' },
+    ],
+    safeSeams: [
+      { id: 'sss_1', module: 'src/auth/session/storage.ts', reason: 'Interface-first refactor seam', status: 'detected' },
+      { id: 'sss_2', module: 'src/auth/session/rotating-adapter.ts', reason: 'Adapter pattern isolates legacy store', status: 'detected' },
+    ],
     steps: [
       {
         id: 'st_a1',
@@ -648,3 +673,106 @@ export function findZone(id: string): OwnershipZone | undefined {
 export function findStack(zoneId: string): RefactorStack | undefined {
   return MOCK_STACKS.find((s) => s.zoneId === zoneId);
 }
+
+// ─── Phase 2: Cross-team Hotspot Detection ──────────────────────────
+
+export const MOCK_CROSS_TEAM_HOTSPOTS: CrossTeamHotspot[] = [
+  {
+    id: 'cth_1',
+    zoneId: 'z_billing_invoice',
+    label: 'src/billing/invoice/',
+    teams: ['payments', 'security', 'platform'],
+    reason: 'PSP-side numbering and tax-id PII serialization touched in same file. 3 teams approving sequentially.',
+    severity: 'high',
+    weeklyCommits: 7,
+  },
+  {
+    id: 'cth_2',
+    zoneId: 'z_payments_checkout',
+    label: 'src/payments/checkout/',
+    teams: ['payments', 'platform'],
+    reason: 'PSP router shares retry policy with platform rate-limiter — coupling drifts on every change.',
+    severity: 'medium',
+    weeklyCommits: 4,
+  },
+  {
+    id: 'cth_3',
+    zoneId: 'z_auth_session',
+    label: 'src/auth/session/',
+    teams: ['security', 'platform'],
+    reason: 'Stable cross-team area with healthy approver / implementer split.',
+    severity: 'low',
+    weeklyCommits: 2,
+  },
+];
+
+// ─── Phase 3: Approval paths ────────────────────────────────────────
+
+export const MOCK_APPROVAL_PATHS: ApprovalPath[] = [
+  {
+    zoneId: 'z_billing_invoice',
+    estimatedDurationHours: 14,
+    parallelizable: false,
+    steps: [
+      { personId: 'p_minseo', role: 'Implementation', reason: 'Implements the PSP-side change', required: true },
+      { personId: 'p_jihoon', role: 'Code owner', reason: 'CODEOWNERS for src/billing/**', required: true },
+      { personId: 'p_haerin', role: 'Security review', reason: 'PII / tax-id field touched', required: true },
+      { personId: 'p_yuna', role: 'Platform escalation', reason: 'Cross-team ambiguity tiebreaker', required: false },
+    ],
+  },
+  {
+    zoneId: 'z_payments_checkout',
+    estimatedDurationHours: 8,
+    parallelizable: true,
+    steps: [
+      { personId: 'p_minseo', role: 'Implementation', reason: 'Implementer (payments backup)', required: true },
+      { personId: 'p_jihoon', role: 'Approver', reason: 'Primary owner + recent incident resolver', required: true },
+      { personId: 'p_yuna', role: 'Platform reviewer', reason: 'Adapter step touches platform PSP boundary', required: true },
+    ],
+  },
+  {
+    zoneId: 'z_auth_session',
+    estimatedDurationHours: 6,
+    parallelizable: true,
+    steps: [
+      { personId: 'p_haerin', role: 'Implementation', reason: 'Owner + expertise', required: true },
+      { personId: 'p_yuna', role: 'Approver', reason: 'Recent reviewer · cross-team familiarity', required: true },
+    ],
+  },
+];
+
+export function findApprovalPath(zoneId: string): ApprovalPath | undefined {
+  return MOCK_APPROVAL_PATHS.find((p) => p.zoneId === zoneId);
+}
+
+// ─── Phase 3: Auto-draft suggestions (no user trigger) ──────────────
+
+export const MOCK_AUTO_DRAFTS: AutoDraftSuggestion[] = [
+  {
+    id: 'ad_1',
+    zoneId: 'z_billing_invoice',
+    hook: 'Cross-team change detected — 3 approvers needed',
+    why: 'Single PR mixes payments + security + platform concerns. Splitting into adapter + tax-field PR cuts review time by ~60%.',
+    proposedAction: 'split-pr',
+    confidence: 0.81,
+    detectedAt: '2026-05-09T08:14:00Z',
+  },
+  {
+    id: 'ad_2',
+    zoneId: 'z_infra_ratelimit',
+    hook: 'Stale primary owner — rerouting to backup',
+    why: 'Eunji Han last active 167 days ago. Daniel Cho is the natural fallback (paged 2 incidents in this area while primary was OOO).',
+    proposedAction: 'reroute-reviewer',
+    confidence: 0.74,
+    detectedAt: '2026-05-09T07:42:00Z',
+  },
+  {
+    id: 'ad_3',
+    zoneId: 'z_payments_checkout',
+    hook: 'Refactor opportunity — 5-step stack ready',
+    why: 'PSP token migration has clean adapter seam. Stack plan available with land-bottom-up sequencing.',
+    proposedAction: 'open-stack-plan',
+    confidence: 0.69,
+    detectedAt: '2026-05-09T06:18:00Z',
+  },
+];

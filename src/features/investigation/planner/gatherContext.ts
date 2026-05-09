@@ -9,10 +9,12 @@ import {
 
 // TODO(backend): replace with real engine call to lexical/semantic/hybrid search + taint_flow + change_impact
 
+// Phase 2: tightened priority lists so each questionType visibly produces a
+// different evidence ordering. Anything not in the list ranks after.
 const PRIORITY_BY_QUESTION: Record<QuestionType, EvidenceKind[]> = {
-  why_risky: ['taint_path', 'owner', 'recent_change', 'docs_mismatch', 'similar_incident'],
+  why_risky: ['taint_path', 'owner', 'recent_change', 'caller', 'docs_mismatch', 'test_coverage'],
   blast_of_change: ['caller', 'callee', 'recent_change', 'test_coverage', 'similar_code'],
-  incident_suspect: ['recent_change', 'similar_incident', 'taint_path', 'incident', 'caller'],
+  incident_suspect: ['recent_change', 'similar_incident', 'taint_path', 'caller', 'owner'],
 };
 
 function rankEvidence(evidence: EvidenceItem[], questionType: QuestionType): EvidenceItem[] {

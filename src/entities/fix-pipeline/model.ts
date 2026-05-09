@@ -219,10 +219,88 @@ export type PipelineSnapshot = {
   // re-analysis panel can show "before -> after" honestly. MVP keeps it
   // simple: just two snapshots keyed by candidate id.
   reanalysisByCandidate: Record<string, ReanalysisSnapshot>;
+  reviewersByCandidate: Record<string, ReviewerSuggestion>;
+  rollbackByCandidate: Record<string, RollbackPackage>;
+  submissions: Record<string, SubmissionRecord>;
+  critiqueHistory: CritiqueIteration[];
+  partialAcceptByCandidate: Record<string, PartialAcceptance>;
 };
 
 export type ReanalysisSnapshot = {
   before: { taintPaths: number; blastModules: number; hotspotScore: number };
   after: { taintPaths: number; blastModules: number; hotspotScore: number };
   ranAt: string | null;
+};
+
+// Reviewer routing — owner suggestion + escalation chain. The spec
+// classifies "reviewer suggestion" as a Phase 2 product surface. We keep
+// the shape minimal: who to ping primarily, and a fallback chain for
+// out-of-office / escalation.
+export type ReviewerSuggestion = {
+  primary: ReviewerRef;
+  fallbacks: ReviewerRef[];
+  rationale: string;
+};
+
+export type ReviewerRef = {
+  handle: string;        // "@platform-team" or "@hyejin"
+  role: 'owner' | 'security' | 'platform' | 'fallback';
+  load: 'low' | 'medium' | 'high';  // current open-review load
+};
+
+// Self-critique iteration — Phase 3 self-healing loop. Each iteration
+// records what was wrong with the *previous* candidate and what the new
+// candidate adjusted in response. The MVP's "re-patch" is a synthesised
+// edit; what matters is that the audit trail is honest.
+export type CritiqueIteration = {
+  iteration: number;
+  candidateIdBefore: string;
+  candidateIdAfter: string;
+  failureSummary: string;     // what made the previous iteration fail
+  adjustment: string;         // what changed in the new candidate
+  at: string;
+};
+
+// Submission lifecycle — Phase 2's "guarded one-click draft PR" plus
+// Phase 3's "policy-aware auto submit". A candidate moves through these
+// states; only `auto-submitted` and `manually-submitted` are terminal
+// success states.
+export type SubmissionStatus =
+  | 'unsubmitted'
+  | 'submitting'
+  | 'manually-submitted'
+  | 'auto-submitted'
+  | 'submission-blocked';
+
+export type SubmissionRecord = {
+  candidateId: string;
+  status: SubmissionStatus;
+  prNumber: number | null;     // assigned on submit
+  submittedAt: string | null;
+  submittedBy: 'system' | 'user' | null;
+  blockerReason: string | null;
+};
+
+// Rollback package — Phase 3 explicit, but pulled into Phase 2 per the
+// self-criticism: auto-submit and rollback must ship as a pair, never
+// independently. A merged "verified" patch that can't be reverted is
+// worse than no auto-submit at all.
+export type RollbackPackage = {
+  candidateId: string;
+  revertCommitMessage: string;
+  affectedFiles: string[];
+  // Steps in plain text — UI can render as a checklist or copy-paste.
+  steps: string[];
+};
+
+// Partial-accept — Phase 3 diff-aware re-planning. User accepts only a
+// subset of the diff hunks; the system recomputes the residual radius
+// and proposes the next slice. Demo records the accepted hunk indices
+// per candidate.
+export type PartialAcceptance = {
+  candidateId: string;
+  acceptedHunkIndices: number[];
+  // Recomputed snapshot after partial accept. before = pre-accept,
+  // after = residual (still un-applied).
+  residual: ReanalysisSnapshot;
 };

@@ -2,7 +2,11 @@ import type {
   ActionRecommendation,
   EvidenceItem,
   Hypothesis,
+  InvestigationAnswer,
   InvestigationTarget,
+  Job,
+  NotebookEntry,
+  NotebookQuestion,
   UnknownTag,
 } from './types';
 
@@ -737,3 +741,276 @@ export const FIXTURE_HYPOTHESES: Record<string, Hypothesis> = {
     refuting: ['ev-incident:INC-2467-3'],
   },
 };
+
+// Phase 2: Notebook + Jobs --------------------------------------------------
+
+// Build a synthesized answer for an "answered" notebook question so each
+// pre-seeded fixture entry renders meaningfully on first paint.
+function synthAnswer(targetId: string): InvestigationAnswer {
+  const evidenceIds = (FIXTURE_EVIDENCE[targetId] ?? []).slice(0, 3).map((e) => e.id);
+  const unknowns = FIXTURE_UNKNOWNS[targetId] ?? [];
+  const actions = FIXTURE_ACTIONS[targetId] ?? [];
+  return {
+    conclusion: FIXTURE_CONCLUSIONS[targetId] ?? `Investigation surfaced multiple signals on ${targetId}.`,
+    evidenceIds: evidenceIds.length > 0 ? evidenceIds : [`ev-${targetId}-placeholder`],
+    unknowns: unknowns.length > 0 ? unknowns : [
+      {
+        id: `unk-${targetId}-fallback`,
+        kind: 'no_recent_data',
+        label: 'No recent unknowns recorded',
+        reason: 'Synthesized notebook answer.',
+      },
+    ],
+    actions: actions.length > 0 ? actions : [
+      {
+        id: `act-${targetId}-fallback`,
+        kind: 'open_focus',
+        label: 'Open in Focus',
+        enabled: true,
+      },
+    ],
+    hypothesis: FIXTURE_HYPOTHESES[targetId],
+  };
+}
+
+const NOW = Date.now();
+const MIN = 60_000;
+
+export const FIXTURE_NOTEBOOK_QUESTIONS: Record<string, NotebookQuestion[]> = {
+  'file:auth/session.ts': [
+    {
+      id: 'nbq-file:auth/session.ts-1',
+      text: 'Why is this still flagged after the May 3 hotfix?',
+      questionType: 'why_risky',
+      status: 'answered',
+      askedAt: NOW - 90 * MIN,
+      answer: synthAnswer('file:auth/session.ts'),
+      bundleId: 'fx-bundle-file:auth/session.ts',
+    },
+    {
+      id: 'nbq-file:auth/session.ts-2',
+      text: 'Which call sites still treat validateToken() as throwing?',
+      questionType: 'blast_of_change',
+      status: 'pending',
+      askedAt: NOW - 30 * MIN,
+    },
+    {
+      id: 'nbq-file:auth/session.ts-3',
+      text: 'Is the refresh-token branch covered by any production telemetry?',
+      questionType: 'why_risky',
+      status: 'partial',
+      askedAt: NOW - 12 * MIN,
+    },
+  ],
+  'file:payments/charge.ts': [
+    {
+      id: 'nbq-file:payments/charge.ts-1',
+      text: 'Does the dispatch over-approx affect the blast radius estimate?',
+      questionType: 'blast_of_change',
+      status: 'answered',
+      askedAt: NOW - 120 * MIN,
+      answer: synthAnswer('file:payments/charge.ts'),
+      bundleId: 'fx-bundle-file:payments/charge.ts',
+    },
+    {
+      id: 'nbq-file:payments/charge.ts-2',
+      text: 'Was this incident actually caused by the same root cause as INC-2218?',
+      questionType: 'incident_suspect',
+      status: 'pending',
+      askedAt: NOW - 8 * MIN,
+    },
+    {
+      id: 'nbq-file:payments/charge.ts-3',
+      text: 'Old retry-budget audit from Feb',
+      questionType: 'why_risky',
+      status: 'archived',
+      askedAt: NOW - 6000 * MIN,
+    },
+  ],
+  'file:worker/queue-consumer.ts': [
+    {
+      id: 'nbq-file:worker/queue-consumer.ts-1',
+      text: 'Which tests would have caught the concurrency-limit raise?',
+      questionType: 'blast_of_change',
+      status: 'answered',
+      askedAt: NOW - 200 * MIN,
+      answer: synthAnswer('file:worker/queue-consumer.ts'),
+      bundleId: 'fx-bundle-file:worker/queue-consumer.ts',
+    },
+    {
+      id: 'nbq-file:worker/queue-consumer.ts-2',
+      text: 'Are the 4 handlers sharing the retry budget independently observable?',
+      questionType: 'why_risky',
+      status: 'pending',
+      askedAt: NOW - 40 * MIN,
+    },
+  ],
+  'symbol:validateToken': [
+    {
+      id: 'nbq-symbol:validateToken-1',
+      text: 'Which tests would have caught the legacyAdapter regression?',
+      questionType: 'blast_of_change',
+      status: 'answered',
+      askedAt: NOW - 50 * MIN,
+      answer: synthAnswer('symbol:validateToken'),
+      bundleId: 'fx-bundle-symbol:validateToken',
+    },
+    {
+      id: 'nbq-symbol:validateToken-2',
+      text: 'Has the JSDoc drift been tracked in any open ticket?',
+      questionType: 'why_risky',
+      status: 'pending',
+      askedAt: NOW - 18 * MIN,
+    },
+  ],
+  'symbol:legacyAdapter': [
+    {
+      id: 'nbq-symbol:legacyAdapter-1',
+      text: 'Why is this still considered live without an owner?',
+      questionType: 'why_risky',
+      status: 'answered',
+      askedAt: NOW - 240 * MIN,
+      answer: synthAnswer('symbol:legacyAdapter'),
+      bundleId: 'fx-bundle-symbol:legacyAdapter',
+    },
+    {
+      id: 'nbq-symbol:legacyAdapter-2',
+      text: 'Resolve unknown: Reference index stale',
+      questionType: 'blast_of_change',
+      status: 'pending',
+      askedAt: NOW - 22 * MIN,
+    },
+  ],
+  'incident:INC-2412': [
+    {
+      id: 'nbq-incident:INC-2412-1',
+      text: 'Was this incident actually caused by the same root cause as INC-2218?',
+      questionType: 'incident_suspect',
+      status: 'answered',
+      askedAt: NOW - 360 * MIN,
+      answer: synthAnswer('incident:INC-2412'),
+      bundleId: 'fx-bundle-incident:INC-2412',
+    },
+    {
+      id: 'nbq-incident:INC-2412-2',
+      text: 'Which downstream services lost throughput during the storm?',
+      questionType: 'blast_of_change',
+      status: 'partial',
+      askedAt: NOW - 60 * MIN,
+    },
+  ],
+  'incident:INC-2467': [
+    {
+      id: 'nbq-incident:INC-2467-1',
+      text: 'Why is this still flagged after the May 3 hotfix?',
+      questionType: 'incident_suspect',
+      status: 'answered',
+      askedAt: NOW - 100 * MIN,
+      answer: synthAnswer('incident:INC-2467'),
+      bundleId: 'fx-bundle-incident:INC-2467',
+    },
+    {
+      id: 'nbq-incident:INC-2467-2',
+      text: 'Are there any other endpoints affected by the contract drift?',
+      questionType: 'blast_of_change',
+      status: 'pending',
+      askedAt: NOW - 5 * MIN,
+    },
+  ],
+};
+
+export const FIXTURE_NOTEBOOKS: NotebookEntry[] = [
+  {
+    id: 'nb-file:auth/session.ts',
+    target: FIXTURE_TARGETS[0]!,
+    questions: FIXTURE_NOTEBOOK_QUESTIONS['file:auth/session.ts'] ?? [],
+    pinned: true,
+    createdAt: NOW - 200 * MIN,
+  },
+  {
+    id: 'nb-file:payments/charge.ts',
+    target: FIXTURE_TARGETS[1]!,
+    questions: FIXTURE_NOTEBOOK_QUESTIONS['file:payments/charge.ts'] ?? [],
+    pinned: false,
+    createdAt: NOW - 180 * MIN,
+  },
+  {
+    id: 'nb-file:worker/queue-consumer.ts',
+    target: FIXTURE_TARGETS[2]!,
+    questions: FIXTURE_NOTEBOOK_QUESTIONS['file:worker/queue-consumer.ts'] ?? [],
+    pinned: false,
+    createdAt: NOW - 220 * MIN,
+  },
+];
+
+export const FIXTURE_JOBS: Job[] = [
+  {
+    id: 'job-1',
+    kind: 'deep_scan',
+    label: 'Deep scan: payments/charge.ts (3-hop)',
+    target: FIXTURE_TARGETS[1]!,
+    status: 'queued',
+    progress: 0,
+    startedAt: NOW - 1 * MIN,
+  },
+  {
+    id: 'job-2',
+    kind: 'whole_repo_blast',
+    label: 'Whole-repo blast: validateToken()',
+    target: FIXTURE_TARGETS[3]!,
+    status: 'running',
+    progress: 0.3,
+    startedAt: NOW - 4 * MIN,
+  },
+  {
+    id: 'job-3',
+    kind: 'runtime_correlate',
+    label: 'Runtime correlate: INC-2467 token rotation',
+    target: FIXTURE_TARGETS[6]!,
+    status: 'running',
+    progress: 0.7,
+    startedAt: NOW - 9 * MIN,
+  },
+  {
+    id: 'job-4',
+    kind: 'deep_scan',
+    label: 'Deep scan: auth/session.ts (4-hop)',
+    target: FIXTURE_TARGETS[0]!,
+    status: 'partial',
+    progress: 0.55,
+    startedAt: NOW - 14 * MIN,
+  },
+  {
+    id: 'job-5',
+    kind: 'refactor_plan',
+    label: 'Refactor plan: hooks/',
+    target: FIXTURE_TARGETS[2]!,
+    status: 'stale',
+    progress: 0.4,
+    startedAt: NOW - 240 * MIN,
+  },
+  {
+    id: 'job-6',
+    kind: 'whole_repo_blast',
+    label: 'Whole-repo blast: legacyAdapter()',
+    target: FIXTURE_TARGETS[4]!,
+    status: 'completed',
+    progress: 1,
+    startedAt: NOW - 30 * MIN,
+    finishedAt: NOW - 6 * MIN,
+    result: {
+      summary: '8 callers confirmed; 2 dispatch sites remain unresolved without runtime data.',
+      evidenceIds: ['ev-symbol:legacyAdapter-2', 'ev-symbol:legacyAdapter-3'],
+    },
+  },
+  {
+    id: 'job-7',
+    kind: 'refactor_plan',
+    label: 'Refactor plan: payments/legacy/',
+    target: FIXTURE_TARGETS[4]!,
+    status: 'cancelled',
+    progress: 0.2,
+    startedAt: NOW - 50 * MIN,
+    finishedAt: NOW - 45 * MIN,
+  },
+];

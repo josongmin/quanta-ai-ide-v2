@@ -1,4 +1,9 @@
-import type { DeliveryDecision, FixCandidate, ValidationResult } from '@entities/fix-pipeline';
+import type {
+  DeliveryDecision,
+  FixCandidate,
+  PermissionLedger,
+  ValidationResult,
+} from '@entities/fix-pipeline';
 
 // Quantitative tier thresholds, lifted directly from the feature plan.
 // Kept as a single object so they can move to a policy-bundle later
@@ -31,19 +36,30 @@ function isMechanicalKind(title: string): boolean {
 export function decideTier(
   candidate: FixCandidate,
   validation: ValidationResult,
+  permissions?: PermissionLedger,
 ): DeliveryDecision {
   const reasons: string[] = [];
   const blockers: string[] = [];
 
   // Hard blockers first — these collapse to human-required regardless of
   // diff size. Order matches the spec: security path, public API,
-  // unknown-zone, dynamic unreachable, failed obligations.
+  // policy/secret violation, unknown-zone, dynamic unreachable, failed
+  // obligations.
 
   if (candidate.metrics.securityPathTouched) {
     blockers.push('security path 영향');
   }
   if (candidate.metrics.publicApiChanged) {
     blockers.push('public API 변경 — migration 필요');
+  }
+  // Policy obligations are non-negotiable — secret leak, compliance
+  // violation, etc. A single failing policy obligation forces human
+  // review even if everything else is clean.
+  const policyFailures = validation.obligations.filter(
+    (ob) => ob.category === 'policy' && (ob.status === 'fail' || ob.status === 'unknown'),
+  );
+  if (policyFailures.length > 0) {
+    blockers.push(`policy 위반 ${policyFailures.length.toString()}건`);
   }
   if (validation.failed > 0) {
     blockers.push(`${validation.failed.toString()}개 obligation 실패`);
@@ -55,6 +71,15 @@ export function decideTier(
   // dynamic-failure-as-pass is the exact bug we refuse to ship.
   if (validation.dynamicUnreachable) {
     blockers.push('dynamic validation 실행 불가 — human checkpoint 강제');
+  }
+
+  // Gradual-permission mode — first N successful runs are forcibly held
+  // at human-required regardless of how clean the static proof is. The
+  // first false positive otherwise kills the feature.
+  if (permissions && !permissions.graduated) {
+    blockers.push(
+      `점진적 권한 부여 모드 (${permissions.successfulRuns.toString()}/${permissions.graduationThreshold.toString()})`,
+    );
   }
 
   if (blockers.length > 0) {

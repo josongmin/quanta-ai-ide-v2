@@ -11,6 +11,14 @@ import { TrustPanel } from './parts/TrustPanel';
 import { DiffExpander } from './parts/DiffExpander';
 import { DraftPackageCard } from './parts/DraftPackageCard';
 import { DismissModal } from './parts/DismissModal';
+import { PhaseTabs } from './parts/PhaseTabs';
+import { CostTelemetry } from './parts/CostTelemetry';
+import { PostPatchReanalysis } from './parts/PostPatchReanalysis';
+import { ReviewerRouting } from './parts/ReviewerRouting';
+import { ConventionPanel } from './parts/ConventionPanel';
+import { PolicyThresholds } from './parts/PolicyThresholds';
+import { RollbackPlan } from './parts/RollbackPlan';
+import { DismissFeedback } from './parts/DismissFeedback';
 import { vfxTokens } from './parts/tokens';
 
 // Verified Fix Pipeline — proof-first surface.
@@ -39,6 +47,9 @@ export default function VerifiedFixRoot() {
   const dismissCandidate = useVerifiedFixStore((s) => s.dismissCandidate);
   const diffExpanded     = useVerifiedFixStore((s) => s.diffExpanded);
   const toggleDiff       = useVerifiedFixStore((s) => s.toggleDiff);
+
+  const phase    = useVerifiedFixStore((s) => s.phase);
+  const setPhase = useVerifiedFixStore((s) => s.setPhase);
 
   const cases = Object.values(casesMap);
   const fixCase: FixCase | undefined = activeId ? casesMap[activeId] : undefined;
@@ -70,21 +81,64 @@ export default function VerifiedFixRoot() {
         <div className="px-6 py-5 space-y-4 max-w-[1280px] mx-auto">
           {fixCase && seed ? (
             <>
-              <Header fixCase={fixCase} seed={seed} />
-              <LoopTape fixCase={fixCase} />
-              <ProofBoard fixCase={fixCase} seed={seed} candidate={candidate} />
-              <CandidateCards
-                candidates={fixCase.candidates}
-                selectedId={fixCase.selectedCandidateId}
-                dismissedIds={fixCase.dismissedCandidateIds}
-                onSelect={(id) => { selectCandidate(fixCase.id, id); }}
-              />
-              <DiffExpander
-                candidate={candidate}
-                expanded={diffExpanded}
-                onToggle={toggleDiff}
-              />
-              <DraftPackageCard fixCase={fixCase} />
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <Header fixCase={fixCase} seed={seed} />
+                <PhaseTabs active={phase} onChange={setPhase} />
+              </div>
+
+              {/* Phase 1 — always visible (the proof-first surface itself). */}
+              {phase === 1 && (
+                <>
+                  <CostTelemetry fixCase={fixCase} />
+                  <LoopTape fixCase={fixCase} />
+                  <ProofBoard fixCase={fixCase} seed={seed} candidate={candidate} />
+                  <CandidateCards
+                    candidates={fixCase.candidates}
+                    selectedId={fixCase.selectedCandidateId}
+                    dismissedIds={fixCase.dismissedCandidateIds}
+                    onSelect={(id) => { selectCandidate(fixCase.id, id); }}
+                  />
+                  <DiffExpander
+                    candidate={candidate}
+                    expanded={diffExpanded}
+                    onToggle={toggleDiff}
+                  />
+                  <DraftPackageCard fixCase={fixCase} />
+                </>
+              )}
+
+              {/* Phase 2 — dynamic validation, post-patch re-analysis, routing. */}
+              {phase === 2 && (
+                <>
+                  <PhaseIntro
+                    title="phase 2 · dynamic + post-patch + routing"
+                    body="run the test/lint/typecheck/scan rails, re-measure the engine state after the patch lands, and route the draft to the reviewer who can move fastest. convention conformance gates auto-submit but does not block the draft."
+                  />
+                  <PostPatchReanalysis caseId={fixCase.id} />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <ReviewerRouting caseId={fixCase.id} />
+                    {candidate && <ConventionPanel candidate={candidate} />}
+                  </div>
+                  {/* keep proof + draft visible so you don't lose context */}
+                  <ProofBoard fixCase={fixCase} seed={seed} candidate={candidate} />
+                  <DraftPackageCard fixCase={fixCase} />
+                </>
+              )}
+
+              {/* Phase 3 — auto-submit policy, rollback, feedback loop. */}
+              {phase === 3 && (
+                <>
+                  <PhaseIntro
+                    title="phase 3 · auto-submit · rollback · feedback"
+                    body="this is the policy layer. tune the thresholds that decide who ships without a human, see the rollback contract that arms before merge, and watch the dismiss feedback stream that reshapes future candidates."
+                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <PolicyThresholds />
+                    <RollbackPlan caseId={fixCase.id} />
+                  </div>
+                  <DismissFeedback />
+                </>
+              )}
             </>
           ) : (
             <EmptyState />
@@ -134,6 +188,27 @@ function Header({ fixCase, seed }: { fixCase: FixCase; seed: Seed }) {
       <span className="ml-auto text-[10px] font-mono" style={{ color: t.textFaint }}>
         case · {fixCase.id}
       </span>
+    </div>
+  );
+}
+
+function PhaseIntro({ title, body }: { title: string; body: string }) {
+  const { isDark } = useTheme();
+  const t = vfxTokens(isDark);
+  return (
+    <div
+      className="rounded-lg border px-4 py-2.5"
+      style={{ background: t.inset, borderColor: t.borderSoft }}
+    >
+      <div
+        className="text-[10px] font-black uppercase tracking-[0.18em]"
+        style={{ color: t.textMuted }}
+      >
+        {title}
+      </div>
+      <div className="text-[11px] mt-0.5 leading-snug" style={{ color: t.textBody }}>
+        {body}
+      </div>
     </div>
   );
 }

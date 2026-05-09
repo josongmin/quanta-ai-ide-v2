@@ -114,3 +114,41 @@ export function assertAnswerSlots(answer: InvestigationAnswer): void {
   if (answer.unknowns.length === 0) throw new Error('investigation: unknowns slot must not be empty (use no_recent_data tag if truly nothing)');
   if (answer.actions.length === 0) throw new Error('investigation: at least one action required');
 }
+
+// Phase 2: Notebook + Jobs ----------------------------------------
+
+export type NotebookQuestionStatus = 'pending' | 'answered' | 'partial' | 'archived';
+
+export type NotebookQuestion = {
+  id: string;
+  text: string;
+  questionType: QuestionType;
+  status: NotebookQuestionStatus;
+  askedAt: number;
+  // When answered, points to a snapshot of the answer + bundle id
+  answer?: InvestigationAnswer;
+  bundleId?: string;
+};
+
+export type NotebookEntry = {
+  id: string;
+  target: InvestigationTarget;
+  questions: NotebookQuestion[];
+  pinned: boolean;
+  createdAt: number;
+};
+
+export type JobKind = 'deep_scan' | 'whole_repo_blast' | 'runtime_correlate' | 'refactor_plan';
+export type JobStatus = 'queued' | 'running' | 'partial' | 'stale' | 'completed' | 'cancelled' | 'failed';
+
+export type Job = {
+  id: string;
+  kind: JobKind;
+  label: string;
+  target: InvestigationTarget;
+  status: JobStatus;
+  progress: number; // 0..1
+  startedAt: number;
+  finishedAt?: number;
+  result?: { summary: string; evidenceIds?: string[] };
+};

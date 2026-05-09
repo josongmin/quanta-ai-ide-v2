@@ -43,4 +43,36 @@ export const SAMPLE_SEEDS: FixSeed[] = [
       forbidden: ['shared/util/deepMerge.ts의 export signature'],
     },
   },
+  {
+    id: 'seed-incident-101',
+    kind: 'incident',
+    symptom: 'P1 incident · 2026-05-09 02:14 · Checkout 5xx spike — JSON parse fails on legacy carts',
+    evidenceRefs: [
+      { kind: 'stack-frame', label: 'parseCart at src/checkout/cart.ts:42' },
+      { kind: 'stack-frame', label: 'POST /api/v2/checkout (route.ts:88)' },
+      { kind: 'file', label: 'src/checkout/cart.ts:42' },
+    ],
+    suspectedRootCause: 'cart payload에 v1 스키마(legacy) 섞임. parseCart가 strict로 throw — 호출자가 catch 안 하고 502.',
+    blastHint: ['checkout', 'cart', 'order'],
+    constraints: {
+      publicApi: false,
+      securityPath: false,
+    },
+  },
+  {
+    id: 'seed-hotspot-201',
+    kind: 'hotspot',
+    symptom: 'Hotspot · src/auth/session.ts — 14 changes in 30d, 3 reverts, churn score 78',
+    evidenceRefs: [
+      { kind: 'file', label: 'src/auth/session.ts' },
+      { kind: 'symbol', label: 'auth/session#refreshToken' },
+      { kind: 'symbol', label: 'auth/session#getSessionUser' },
+    ],
+    suspectedRootCause: 'refreshToken과 getSessionUser가 동일 파일에서 entwined. 분리 시 churn 절반으로 감소 예상.',
+    blastHint: ['auth', 'auth/middleware', 'api/v2'],
+    constraints: {
+      publicApi: false,
+      securityPath: true,
+    },
+  },
 ];
