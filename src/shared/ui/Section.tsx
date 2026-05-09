@@ -1,13 +1,11 @@
 import type { ReactNode } from 'react';
+import { GlassCard } from './GlassCard';
 
 // Titled section block — eyebrow label + optional subtitle, sitting above
-// a softly-tinted card body. The body fill is what gives each section a
-// visible boundary in the panel; the header sits *outside* the card so the
-// label still reads as a grouping eyebrow rather than a chrome bar.
-//
-// Tokens only — no `isDark` branching. Body uses a translucent surface tint
-// that sits between the panel's glass face and the elevated chips inside,
-// so sections read as their own surface without competing with the panel.
+// a GlassCard body. Same shared GlassCard the FilterBar uses, so a section
+// inside InspectPanel/FocusScanPanel reads as the same surface as a
+// FilterBar facet card. Header sits *outside* the card so the label still
+// reads as a grouping eyebrow rather than a chrome bar.
 export function Section({
   title, subtitle, children,
   isDark: _isDark,
@@ -35,15 +33,9 @@ export function Section({
           </div>
         )}
       </div>
-      <div
-        className="rounded-lg border px-3 py-2.5 space-y-1"
-        style={{
-          background: 'var(--bg-surface-muted)',
-          borderColor: 'var(--border-muted)',
-        }}
-      >
+      <GlassCard tone="inner" className="px-3 py-2.5 space-y-1">
         {children}
-      </div>
+      </GlassCard>
     </div>
   );
 }

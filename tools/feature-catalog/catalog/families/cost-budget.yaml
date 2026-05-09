@@ -1,0 +1,135 @@
+# Cost & Budget — cumulative spend with 3-tier enforcement.
+
+- id: cost-meter
+  label: Cumulative cost meter (tokens + USD)
+  tier: progressive
+  description: >-
+    Header-level rollup. Sums in/out tokens across every agent turn, prices
+    each by the turn's recorded model against the static `MODEL_PRICING`
+    map, and renders the total as `tok · ~$X.XX`.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::MODEL_PRICING
+    locales:
+      - "coding:cost.tooltip"
+  pattern:
+    source: AWS Cost Explorer header
+    rationale: >-
+      Spend should live in the user's peripheral vision, not behind a
+      dashboard tab. The header position is borrowed from cloud consoles.
+  sota:
+    cursor: partial
+    claude_code: partial
+    continue_ide: true
+  added_in: "2026-03-12"
+  flags: ["obs"]
+
+- id: cost-projection
+  label: Per-turn average projection
+  tier: leading
+  description: >-
+    Running mean of cost-per-turn surfaces alongside the cumulative number
+    so the user can sanity-check whether the next turn will fit the budget.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::cost
+  pattern:
+    source: SRE error-budget rate
+    rationale: >-
+      Rate matters more than total when deciding whether to keep going.
+      Same reason cars show fuel economy alongside fuel level.
+  sota: {}
+  added_in: "2026-03-12"
+  related: ["cost-meter"]
+
+- id: cost-forecast
+  label: Streaming-time next-turn forecast
+  tier: leading
+  description: >-
+    While a turn streams, the meter appends "+~$X.XX to next turn" projecting
+    the running average forward. Lets the user decide *during* the stream
+    whether to stop instead of after.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::cost
+    locales:
+      - "coding:forecast.remaining"
+  pattern:
+    source: SRE error-budget burn rate
+    rationale: >-
+      The decision-relevant question is "should I stop *now*", not "what
+      did I spend yesterday". Inline forecast brings the answer to the
+      decision moment.
+  sota: {}
+  added_in: "2026-04-22"
+  flags: ["obs"]
+  related: ["cost-projection"]
+
+- id: budget-three-tier
+  label: 3-tier budget (alert / soft-cap / hard-cap)
+  tier: leading
+  description: >-
+    `CostBudget.{alertUsd, softCapUsd, hardCapUsd}` per project. Crossing
+    `alertUsd` flips the meter amber and pulses at heart-rate (~75 bpm).
+    Crossing `softCapUsd` blocks the next submit and pops a 3-choice modal.
+    Crossing `hardCapUsd` lets the in-flight turn finish (so we don't waste
+    paid-for tokens) but blocks any further submission.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::CostBudget
+      - src/widgets/coding-stage/CodingStage.tsx::onSubmitComposer
+    locales:
+      - "coding:budgetV2.softCapModalTitle"
+      - "coding:budgetV2.hardCapBanner"
+  pattern:
+    source: AWS Budgets + Kubernetes ResourceQuota
+    rationale: >-
+      Cosmetic alerts get tuned out. Cap enforcement at submit time is the
+      cheapest moment to interrupt — token spend hasn't started, but the
+      user's intent is still in their head so they can make a real choice.
+  sota: {}
+  added_in: "2026-05-05"
+  flags: ["obs", "security"]
+
+- id: budget-soft-cap-modal
+  label: Soft-cap modal (auto-downgrade / override / stop)
+  tier: leading
+  description: >-
+    On soft-cap crossing the user sees three big actions, ordered by
+    safety. Auto-downgrade picks the next-cheaper model and re-submits
+    automatically. Override raises the cap on this task only. Stop is the
+    no-op safe choice.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::BudgetSoftCapModal
+    locales:
+      - "coding:budgetV2.softCapAutoDown"
+  pattern:
+    source: ATM overdraft warning
+    rationale: >-
+      Three options, *each labelled with consequence*, beats a single
+      yes/no. ATMs got this right in the 1990s; cloud consoles still
+      mostly haven't.
+  sota: {}
+  added_in: "2026-05-05"
+  related: ["budget-three-tier"]
+
+- id: budget-pulse-animation
+  label: Heart-rate pulse on alert tier
+  tier: leading
+  description: >-
+    `coding-cost-alert` pulses the cost chip at 800ms (≈75 bpm).
+    `coding-cost-hard` pulses at 600ms once we cross softCap. Borrows the
+    heart-rate metaphor so the eye reads it as "this is alive and asking
+    for your attention" rather than "alarm, alarm".
+  evidence:
+    symbols:
+      - src/index.css
+  pattern:
+    source: Apple Watch breathing app + heart-rate pulse
+    rationale: >-
+      75 bpm is calm-attentive, not frantic. The user notices but doesn't
+      panic. Strobing reds get tuned out within 30 seconds.
+  sota: {}
+  added_in: "2026-05-05"
+  related: ["budget-three-tier"]

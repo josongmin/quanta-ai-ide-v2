@@ -3,7 +3,8 @@
     "title": "코딩 에이전트",
     "openTitle": "코딩 에이전트 열기 (⌘K)",
     "openAria": "코딩 에이전트 열기",
-    "closeAria": "코딩 에이전트 닫기"
+    "closeAria": "코딩 에이전트 닫기",
+    "resize": "패널 높이 조정 — 끌어 늘리기, 더블클릭으로 초기화"
   },
   "tabs": {
     "newTitle": "새 채팅 (⌘T)",

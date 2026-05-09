@@ -1,0 +1,89 @@
+# Plan workflow — agent-authored plans + interactive editing.
+
+- id: plan-block
+  label: Agent-authored plan blocks
+  tier: parity
+  description: >-
+    `PlanBlock` is a structured list of `PlanItem` steps with status
+    (pending / done / skipped / failed). Renders as a checkbox list
+    that updates in place as the agent works through the plan.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::PlanBlock
+      - src/widgets/coding-stage/parts/types.ts::PlanItem
+    locales:
+      - "coding:plan.title"
+  pattern:
+    source: Devin "plan" panel / GitHub Issues task lists
+    rationale: >-
+      Surfacing the plan up-front lets the user redirect *before* the
+      agent burns 5 minutes on a wrong approach.
+  sota:
+    devin: true
+    claude_code: partial
+  added_in: "2026-03-25"
+
+- id: plan-edit-inline
+  label: User-editable plan steps
+  tier: leading
+  status: planned
+  description: >-
+    Each plan step has a hover `Edit` action — the user can rewrite,
+    reorder (↑↓ buttons), or delete steps before approving. Approving
+    locks the plan and starts execution.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::PlanEditor
+    locales:
+      - "coding:plan.edit"
+  pattern:
+    source: Notion checklist / Asana task ordering
+    rationale: >-
+      A plan you can't edit is just a status update. Editability turns
+      the plan into a contract negotiated between user and agent.
+  sota:
+    devin: partial
+  added_in: "2026-04-08"
+  related: ["plan-block"]
+
+- id: plan-progress-meter
+  label: Plan progress meter (steps done / total)
+  tier: parity
+  status: planned
+  description: >-
+    Header shows `n/m steps` with a thin progress bar. ETA is computed
+    from `phaseDurationsMs` averaged across completed steps.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::PlanProgress
+  pattern:
+    source: GitHub Actions progress / npm install spinner
+    rationale: >-
+      A progress meter answers "should I get coffee" without forcing
+      the user to read the live log.
+  sota: {}
+  added_in: "2026-04-08"
+  related: ["plan-block"]
+
+- id: plan-skip-with-reason
+  label: Skip step with logged reason
+  tier: leading
+  status: planned
+  description: >-
+    Skipping a step opens a tiny prompt asking *why* (one-liner). The
+    reason rides along in the audit log so reviewers later understand
+    deviations from the original plan.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::PlanEditor
+    locales:
+      - "coding:plan.skipReason"
+  pattern:
+    source: Postmortem deviation log / SOP variance reports
+    rationale: >-
+      Deviations without reasons turn into mystery in code review. The
+      30-second cost of typing a reason saves the 30-minute cost of
+      figuring it out later.
+  sota: {}
+  added_in: "2026-04-15"
+  related: ["plan-edit-inline"]

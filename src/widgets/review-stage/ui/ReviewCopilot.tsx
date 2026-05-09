@@ -41,17 +41,16 @@ export function CopilotTake({ pr, repo }: { pr: PullRequest; repo: RepoData }) {
   const take = useMemo(() => buildOneLineTake(pr, repo), [pr, repo]);
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono"
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono min-w-0 max-w-full"
       style={{
         background: 'linear-gradient(90deg, rgba(149,131,184,0.10), rgba(122,167,212,0.10))',
         border: '1px solid rgba(149,131,184,0.35)',
-        color: 'rgba(255,255,255,0.78)',
-        maxWidth: 480,
+        color: 'var(--fg-default)',
       }}
       title={take.long}
     >
       <Sparkles className="w-2.5 h-2.5 shrink-0" style={{ color: '#b8a4dc' }} />
-      <span className="truncate">{take.short}</span>
+      <span className="truncate min-w-0">{take.short}</span>
     </span>
   );
 }
@@ -62,37 +61,30 @@ function buildOneLineTake(
   const findings = engineFindings(pr, repo);
   const summary = engineSummary(findings);
   const risk = computePrRisk(pr, repo);
-  const symbols = symbolChanges(pr);
   const mismatch = intentMismatch(pr);
-  const ps = prSummary(pr, repo, symbols);
+  const ps = prSummary(pr, repo, symbolChanges(pr));
 
-  // Lead with the most decision-relevant signal. Order matters:
-  // blockers → conflicts → high-severity → risky surface → green.
-  const parts: string[] = [];
+  // Single-clause take. The decision bar already carries the verdict
+  // word + critical-signal cluster, and the "where to look" hint is
+  // redundant with RiskScene / ReviewerExpectations downstream — so we
+  // keep only the lead clause here. Full narrative still ships via
+  // `title`/long for hover.
+  let short: string;
   if (summary.blocker > 0) {
-    parts.push(`${String(summary.blocker)} blocker${summary.blocker === 1 ? '' : 's'} — don't merge yet`);
+    short = `${String(summary.blocker)} blocker${summary.blocker === 1 ? '' : 's'} — don't merge yet`;
   } else if (pr.hasConflicts) {
-    parts.push('merge conflicts — resolve before review');
+    short = 'merge conflicts — resolve before review';
   } else if (summary.high > 0) {
-    parts.push(`${String(summary.high)} high-severity finding${summary.high === 1 ? '' : 's'} — read carefully`);
+    short = `${String(summary.high)} high-severity finding${summary.high === 1 ? '' : 's'} — read carefully`;
   } else if (risk.tier === 'critical') {
-    parts.push(`high blast radius (${String(risk.blastSum)}) — verify dependents`);
+    short = `high blast radius (${String(risk.blastSum)}) — verify dependents`;
   } else if (mismatch.detected) {
-    parts.push('description and changed files disagree');
+    short = 'description and changed files disagree';
   } else {
-    parts.push('low-risk profile — quick read');
-  }
-  // Tail with one specific where-to-look hint.
-  if (risk.publicApiCount > 0) {
-    parts.push(`${String(risk.publicApiCount)} public-API surface${risk.publicApiCount === 1 ? '' : 's'} touched`);
-  } else if (symbols.length > 0) {
-    parts.push(`${String(symbols.length)} symbol${symbols.length === 1 ? '' : 's'} changed`);
+    short = 'low-risk profile — quick read';
   }
 
-  return {
-    short: parts.join(' · '),
-    long: ps.narrative,
-  };
+  return { short, long: ps.narrative };
 }
 
 // ── Slot 2: Inspection path ──────────────────────────────────────────────
@@ -105,14 +97,28 @@ type InspectionStep = {
   signal: 'blocker' | 'high' | 'public-api' | 'hot' | 'incident' | 'symbol';
 };
 
+/** Weights for the inspection-path ranker. 0..1 each. */
+export type InspectionWeights = {
+  severity: number;
+  surface:  number;
+  hotness:  number;
+};
+
+const DEFAULT_WEIGHTS: InspectionWeights = {
+  severity: 0.7,
+  surface:  0.5,
+  hotness:  0.3,
+};
+
 export function InspectionPath({
-  pr, repo, onJumpToFile,
+  pr, repo, onJumpToFile, weights = DEFAULT_WEIGHTS,
 }: {
   pr: PullRequest;
   repo: RepoData;
   onJumpToFile: (path: string) => void;
+  weights?: InspectionWeights;
 }) {
-  const steps = useMemo<InspectionStep[]>(() => buildPath(pr, repo), [pr, repo]);
+  const steps = useMemo<InspectionStep[]>(() => buildPath(pr, repo, weights), [pr, repo, weights]);
   const [expanded, setExpanded] = useState(true);
   if (steps.length === 0) return null;
 
@@ -182,9 +188,15 @@ export function InspectionPath({
   );
 }
 
-function buildPath(pr: PullRequest, repo: RepoData): InspectionStep[] {
+function buildPath(pr: PullRequest, repo: RepoData, weights: InspectionWeights): InspectionStep[] {
   const findings = engineFindings(pr, repo);
-  // Score each touched file. Rank descending — top files first.
+  // Each axis is multiplied by its weight (0..1). Default weights
+  // were calibrated to match the previous fixed scoring (severity
+  // dominates), so weights={1,1,1} doesn't drift from the original
+  // ordering on a typical PR.
+  const wSev  = weights.severity;
+  const wSurf = weights.surface;
+  const wHot  = weights.hotness;
   type Scored = {
     path: string;
     score: number;
@@ -196,7 +208,7 @@ function buildPath(pr: PullRequest, repo: RepoData): InspectionStep[] {
     if (f.fileId === null) {
       scored.push({
         path: f.path,
-        score: f.added + f.removed,
+        score: (f.added + f.removed) * wHot,
         reasons: ['outside the indexed source — read by hand'],
         signal: 'symbol',
       });
@@ -212,37 +224,53 @@ function buildPath(pr: PullRequest, repo: RepoData): InspectionStep[] {
     const total = f.added + f.removed;
     const isHot = f.hunks.length >= 3 && total >= 40;
 
-    let score = 0;
+    // Compose score = severity-component + surface-component + hot-component.
+    // Each component carries its own scale so the weights stay [0..1].
+    let sevScore = 0;
+    let surfScore = 0;
+    let hotScore = 0;
     const reasons: string[] = [];
     let signal: InspectionStep['signal'] = 'symbol';
 
     if (blocker !== undefined) {
-      score += 10000;
+      sevScore = 10000;
       reasons.push(blocker.title);
       signal = 'blocker';
     } else if (high !== undefined) {
-      score += 5000;
+      sevScore = 5000;
       reasons.push(high.title);
       signal = 'high';
-    } else if (isPublicApi) {
-      score += 2000;
-      reasons.push(`Public API surface · ${String(blast)} dependents`);
-      signal = 'public-api';
-    } else if (isHot) {
-      score += 1000;
-      reasons.push(`${String(f.hunks.length)} hunks across ${String(total)} LOC — scan for hidden regressions`);
-      signal = 'hot';
-    } else if (file.metrics.recentPRs >= 5 && file.metrics.churn > 0.5) {
-      score += 500;
-      reasons.push(`Hot file: ${String(file.metrics.recentPRs)} PRs in 90d, high churn`);
-      signal = 'incident';
+    }
+    if (isPublicApi) {
+      surfScore = 2000 + blast * 50;
+      if (signal === 'symbol') {
+        reasons.push(`Public API surface · ${String(blast)} dependents`);
+        signal = 'public-api';
+      }
     } else {
-      score += total;
+      surfScore = blast * 5;
+    }
+    if (isHot) {
+      hotScore = 1000;
+      if (signal === 'symbol') {
+        reasons.push(`${String(f.hunks.length)} hunks across ${String(total)} LOC — scan for hidden regressions`);
+        signal = 'hot';
+      }
+    } else if (file.metrics.recentPRs >= 5 && file.metrics.churn > 0.5) {
+      hotScore = 500 + file.metrics.recentPRs * 20;
+      if (signal === 'symbol') {
+        reasons.push(`Hot file: ${String(file.metrics.recentPRs)} PRs in 90d, high churn`);
+        signal = 'incident';
+      }
+    } else {
+      hotScore = total;
+    }
+    if (reasons.length === 0) {
       const sym = f.path.split('/').pop() ?? f.path;
       reasons.push(`${String(total)} LOC delta on ${sym}`);
-      signal = 'symbol';
     }
-    score += blast * 5;
+
+    const score = sevScore * wSev + surfScore * wSurf + hotScore * wHot;
     scored.push({ path: f.path, score, reasons, signal });
   }
   scored.sort((a, b) => b.score - a.score);
@@ -298,7 +326,7 @@ export function ProvenanceBadge({ kind }: { kind: 'ai' | 'static' }) {
   return (
     <span
       className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.14em] text-white/55"
-      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }}
+      style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-strong)' }}
       title="Deterministic static analysis"
     >
       static

@@ -36,6 +36,7 @@ export type Verdict = {
 export type HeatMetricKey =
   | 'none'
   | 'hotspot'
+  | 'hotspot-v2'
   | 'time-hotspot'
   | 'complexity'
   | 'blast'

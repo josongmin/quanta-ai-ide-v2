@@ -1360,6 +1360,14 @@ export function createDotFieldMode(): ViewMode {
       renderer = new WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setSize(rect.width, rect.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // WebGL canvases ship with a default white clear colour and are
+      // briefly visible *before* the first render() call lands a real
+      // frame. Match the scene background here so the first paint after
+      // mount is dark (or light) instead of flashing white.
+      // pal.bg is a hex *number* (e.g. 0x0d1117); setClearColor takes
+      // numbers but CSS background needs a string, so format it here.
+      renderer.setClearColor(pal.bg, 1);
+      renderer.domElement.style.background = `#${pal.bg.toString(16).padStart(6, '0')}`;
       c.mountEl.appendChild(renderer.domElement);
 
       raycaster = new Raycaster();

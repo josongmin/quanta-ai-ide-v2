@@ -28,13 +28,14 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Search, FileCode, Code2, ShieldAlert, CornerDownLeft,
+  Search, FileCode, Code2, ShieldAlert, CornerDownLeft, Pin,
 } from 'lucide-react';
 import { engineFindings, type EngineFinding, type EngineSeverity, type PullRequest } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
 import { Modal } from '@shared/ui';
 import { useShortcut } from '@shared/lib';
 import { symbolChanges, type SymbolChange } from '../lib/sota';
+import { loadPins, togglePr as togglePrPin, isPrPinned } from '../lib/pinStore';
 
 type Item =
   | { kind: 'file';    path: string; subtitle: string }
@@ -74,6 +75,11 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
   const [open, setOpen] = useState(false);
   const [queryState, setQueryState] = useState<{ openId: number; q: string }>({ openId: 0, q: '' });
   const [cursorState, setCursorState] = useState<{ openId: number; c: number }>({ openId: 0, c: 0 });
+  // Pin state for the active PR — palette exposes a header-level pin
+  // toggle so a reviewer can pin/unpin without going back to the queue.
+  const [pinMap, setPinMap] = useState(() => loadPins());
+  const isPinned = isPrPinned(pinMap, pr.number);
+  const togglePin = (): void => { setPinMap((prev) => togglePrPin(prev, pr.number)); };
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -85,6 +91,11 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
   // useShortcut hook guards against typing-target collisions for
   // single-key shortcuts; a Cmd-modified one always fires).
   useShortcut({ key: 'k', ctrl: true, ignoreInputs: false }, openPalette);
+  // Cmd-Shift-P — toggle pin on the active PR. Power-user binding,
+  // wired even when the palette is closed so it works as a global
+  // shortcut. Pinning is an idempotent action so even if a stray
+  // press fires, the worst case is one toggle.
+  useShortcut({ key: 'p', ctrl: true, shift: true, ignoreInputs: false }, togglePin);
 
   // Render-time normalisation: if the palette opened since these were
   // last written, treat them as their reset values (empty / 0). The
@@ -223,8 +234,8 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
       <div
         className="flex flex-col"
         style={{
-          background: '#0d1117',
-          color: 'rgba(255,255,255,0.85)',
+          background: 'var(--bg-elevated)',
+          color: 'var(--fg-default)',
         }}
       >
         <div className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.08]">
@@ -244,6 +255,22 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
           <span className="shrink-0 text-[10px] font-mono text-white/30">
             {visible.length} {visible.length === 1 ? 'result' : 'results'}
           </span>
+          <button
+            type="button"
+            onClick={togglePin}
+            aria-pressed={isPinned}
+            title={isPinned ? `#${String(pr.number)} 핀 해제 (⌘⇧P)` : `#${String(pr.number)} 핀 고정 (⌘⇧P)`}
+            className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded transition-colors hover:bg-white/[0.04]"
+            style={{
+              color: isPinned ? '#c2b3e0' : 'var(--fg-muted)',
+            }}
+          >
+            <Pin
+              className="w-3 h-3"
+              strokeWidth={2}
+              style={isPinned ? { fill: '#c2b3e0' } : undefined}
+            />
+          </button>
         </div>
 
         <div
@@ -283,6 +310,10 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
           <span className="inline-flex items-center gap-1.5">
             <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">⇥</kbd>
             cycle class
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">⌘⇧P</kbd>
+            pin
           </span>
           <span className="ml-auto inline-flex items-center gap-1.5">
             <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">esc</kbd>

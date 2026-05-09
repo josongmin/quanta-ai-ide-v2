@@ -1,0 +1,83 @@
+{
+  "title": "Fix Pipeline",
+  "subtitle": "Proof-carrying AI fix loop",
+  "seedRail": {
+    "header": "Fix seeds",
+    "candidatesHeader": "Candidates",
+    "noSeed": "Pick a seed to start",
+    "generating": "Generating candidate…",
+    "rejected": "Seed rejected",
+    "rejectedHint": "evidence_refs missing — generator refused",
+    "recommended": "recommended",
+    "rejectedTag": "rejected",
+    "dismissed": "dismissed"
+  },
+  "rootCause": {
+    "header": "Root cause",
+    "rationale": "Rationale",
+    "evidence": "Evidence",
+    "constraints": "Constraints",
+    "constraintPublic": "public API",
+    "constraintSecurity": "security path"
+  },
+  "diff": {
+    "header": "Patch",
+    "subtitle": "shown last on purpose — proof first"
+  },
+  "rejected": {
+    "header": "Why other candidates lost",
+    "empty": "No rejected alternatives."
+  },
+  "proof": {
+    "header": "Proof obligations",
+    "static": "Static",
+    "dynamic": "Dynamic",
+    "stylistic": "Stylistic",
+    "human": "Human",
+    "runValidation": "Run validation",
+    "running": "Running…",
+    "ranOnce": "Validation run",
+    "status": {
+      "pass": "pass",
+      "fail": "fail",
+      "unknown": "unknown",
+      "pending": "pending"
+    }
+  },
+  "gate": {
+    "header": "Delivery gate",
+    "tier": {
+      "safe-mechanical": "safe mechanical",
+      "guarded": "guarded",
+      "human-required": "human required"
+    },
+    "reasons": "Why this tier",
+    "blockers": "Blocking promotion"
+  },
+  "trust": {
+    "header": "Trust signal",
+    "weakest": "Weakest obligation",
+    "level": "Confidence",
+    "score": "Score",
+    "dismiss": "Dismiss candidate",
+    "dismissReason": {
+      "wrong-root-cause": "wrong root cause",
+      "too-broad": "too broad",
+      "breaks-style": "breaks style",
+      "risky": "risky",
+      "other": "other"
+    },
+    "dismissed": "Dismissed",
+    "dismissedAt": "at"
+  },
+  "pr": {
+    "header": "Draft PR package",
+    "summary": "Summary",
+    "why": "Why this fix",
+    "validated": "Validated",
+    "unverified": "Not verified",
+    "proposer": "Proposer: System",
+    "approver": "Approver: pending"
+  },
+  "empty": "Pick a seed from the rail to start the pipeline."
+}

@@ -1,0 +1,114 @@
+# Task Management — sidebar, switching, background.
+
+- id: task-sidebar
+  label: Multi-task sidebar with quick switch
+  tier: parity
+  description: >-
+    Left rail lists every task with title, last-active timestamp, and
+    a status glyph (running / idle / failed / done). Click switches the
+    main thread; ⌘K opens a fuzzy task switcher.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/TaskRail.tsx::TaskRail
+      - src/widgets/coding-stage/parts/CommandPalette.tsx::CommandPalette
+    locales:
+      - "coding:tasks.empty"
+  pattern:
+    source: VS Code activity bar / Linear inbox
+    rationale: >-
+      Multi-task is the killer feature — but only if switching is
+      sub-second and stateful. Sidebar + ⌘K covers both the visual
+      and the keyboard-power-user paths.
+  sota:
+    cursor: partial
+    claude_code: true
+    devin: true
+  added_in: "2026-03-05"
+
+- id: background-tasks
+  label: Background streaming with notification badge
+  tier: leading
+  description: >-
+    Switching tasks while one is mid-stream keeps that task running in
+    the background. The sidebar entry surfaces a cloud chip + ribbon
+    while streaming; on completion a badge counter appears until the
+    user opens the task.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/TaskRail.tsx::TaskRail
+    locales:
+      - "coding:background.ribbon"
+    locales:
+      - "coding:tasks.bgComplete"
+  pattern:
+    source: macOS app dock badges / Slack unread
+    rationale: >-
+      Sequential tasks waste the agent's "wait time". Background streams
+      let the user kick off three things, deal with two, and come back
+      to find the third done.
+  sota:
+    devin: true
+    cursor: false
+  added_in: "2026-04-15"
+  flags: ["obs"]
+  related: ["task-sidebar"]
+
+- id: task-rename-inline
+  label: Inline task rename (auto-suggested from first prompt)
+  tier: parity
+  status: planned
+  description: >-
+    New tasks default to "Task N" but auto-suggest a 5-word title
+    extracted from the first prompt. Sidebar entry is double-clickable
+    to rename inline; Enter commits, Esc cancels.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::suggestTaskTitle
+  pattern:
+    source: Linear ticket auto-title / ChatGPT thread name
+    rationale: >-
+      Auto-titling solves the 90% case so the user only intervenes on
+      the 10% where the suggestion is wrong.
+  sota:
+    cursor: true
+    claude_code: true
+  added_in: "2026-03-15"
+
+- id: per-task-budget
+  label: Per-task budget independent of project budget
+  tier: leading
+  description: >-
+    `task.budget` overlays project-level `CostBudget` for one-off
+    expensive runs. Sidebar entry shows a slim budget bar coloured by
+    fraction-spent; hover for the absolute number.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::CostBudget
+  pattern:
+    source: AWS account-level vs service-level budgets
+    rationale: >-
+      One unusually expensive task shouldn't steal the whole month's
+      budget alarm. Per-task scope keeps the alarm where the action is.
+  sota: {}
+  added_in: "2026-05-05"
+  related: ["budget-three-tier"]
+
+- id: task-archive
+  label: Archive completed tasks (with restore)
+  tier: parity
+  status: planned
+  description: >-
+    Completed tasks fade from the sidebar after 7 idle days but stay
+    in an Archive section accessible from the sidebar footer. Restore
+    moves them back to the active list. (Spec only — implementation
+    pending.)
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::archivedTasks
+  pattern:
+    source: Gmail Archive / Linear "completed"
+    rationale: >-
+      Hard delete loses the audit trail; never archiving creates a
+      thousand-item sidebar. 7-day idle is the conventional cutoff.
+  sota: {}
+  added_in: "2026-04-22"

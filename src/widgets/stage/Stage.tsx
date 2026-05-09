@@ -5,8 +5,7 @@ import { useFilterStore } from '@features/filter-files';
 import { useViewMode, createMode } from '@features/switch-mode';
 import { useOverlay } from '@features/apply-overlay';
 import { useBoundaries } from '@features/inspect-boundaries';
-import { useStack, FocusScanStack } from '@features/inspect-target';
-import { ActivityOverlay, ActivityDemo } from '@features/ai-activity';
+import { useStack } from '@features/inspect-target';
 import type { OverlaySnapshot, ViewMode } from '@entities/viz-mode';
 import type { FileRecord } from '@entities/repo';
 
@@ -25,9 +24,10 @@ export default function Stage() {
   const fileLabelsRef = useRef<HTMLDivElement>(null);
 
   const [tooltip, setTooltip] = useState<Tooltip>({ open: false, x: 0, y: 0, file: null });
-  // The mode is exposed to React state so overlays (AI activity rings,
-  // future tools) can call mode.worldToScreen each animation frame.
-  const [activeMode, setActiveMode] = useState<ViewMode | null>(null);
+  // Mode instance was previously exposed to React state for the AI
+  // activity overlay (now removed). Kept as a no-op setter ref so the
+  // mode-init effect's call sites stay structurally identical.
+  const setActiveMode: (m: ViewMode | null) => void = () => { /* overlay disabled */ };
 
   const themeRef = useRef<'dark' | 'light'>(isDark ? 'dark' : 'light');
   const stackRef = useRef(stack);
@@ -160,22 +160,34 @@ export default function Stage() {
   }, [mode, repo]);
 
   return (
-    <div className="absolute inset-0">
-      <div ref={mountRef} className="absolute inset-0" />
+    <div className="absolute inset-0" style={{ background: 'var(--bg-stage)' }}>
+      {/* mountRef carries its own theme-coloured fill so the brief window
+          between Stage mounting and DotFieldMode.init() appending the
+          WebGL canvas never exposes a transparent (and thus possibly
+          white) frame underneath. */}
+      <div
+        ref={mountRef}
+        className="absolute inset-0"
+        style={{ background: 'var(--bg-stage)' }}
+      />
       <div ref={labelsRef} className="absolute inset-0 pointer-events-none" />
       <div ref={fileLabelsRef} className="absolute inset-0 pointer-events-none" />
 
-      {/* AI activity overlay — only meaningful for modes that expose
-          worldToScreen (currently dot-field). Sits above the canvas, below
-          tooltip + focus stack. Demo simulator runs unconditionally and is
-          gated by the prefs `enabled` flag inside the store. */}
-      <ActivityDemo />
-      {activeMode && <ActivityOverlay mode={activeMode} />}
+      {/* AI activity overlay disabled — was bleeding through the
+          FilterBar / InspectPanel as ghost toasts ("REVIEWING …",
+          dashed scan zones, drifting purple dots). Re-enable by
+          restoring <ActivityDemo /> + <ActivityOverlay /> below. */}
 
       {tooltip.open && tooltip.file && (
         <FileTooltip x={tooltip.x} y={tooltip.y} file={tooltip.file} isDark={isDark} />
       )}
-      <FocusScanStack isDark={isDark} />
+      {/* FocusScanStack used to live here, but as a child of Stage its
+          GlassCards lost backdrop-filter refraction — Stage root paints an
+          opaque `--bg-stage` fill that becomes the nearest backdrop, so the
+          dots painted on the WebGL canvas (Stage's first child) never reach
+          the panel's backdrop. The stack is now mounted at the router level
+          as a sibling of Stage, the same way FilterBar / overlay buttons are.
+          See router.tsx. */}
     </div>
   );
 }

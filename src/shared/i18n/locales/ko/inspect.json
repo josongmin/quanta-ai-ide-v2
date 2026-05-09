@@ -333,6 +333,40 @@
     "addtest": { "title": "테스트 스캐폴드 생성", "delta": "+테스트 파일 1" },
     "lint": { "title": "린트 에러 자동 수정" }
   },
+  "timeMachine": {
+    "title": "심볼 타임머신",
+    "trendUp": "점점 복잡해짐",
+    "trendDown": "점점 단순해짐",
+    "trendFlat": "안정적",
+    "recent": "최근 커밋",
+    "bisect": {
+      "title": "복잡도 급증",
+      "open": "PR 열기"
+    }
+  },
+  "semanticConflict": {
+    "title": "의미적 충돌",
+    "clear": "안전",
+    "summary": "후보 {{n}}건",
+    "cleanHint": "같은 콜그래프 영역을 만지는 열린 PR이 없습니다. 머지 안전합니다.",
+    "note": "콜그래프 기반 예측 — 단순 git diff로는 잡히지 않습니다.",
+    "severity": { "high": "높음", "medium": "중간", "low": "낮음" }
+  },
+  "safeRename": {
+    "title": "안전 리네임 신뢰도",
+    "compositeNote": "{{total}}개 콜사이트 중 {{unsafe}}개 검토 필요",
+    "verdict": {
+      "exact": "EXACT",
+      "overapprox": "OVERAPPROX",
+      "unknown": "검토 필요"
+    },
+    "cta": {
+      "exact": "리팩터 엔진이 모든 콜사이트를 자동 처리합니다",
+      "overapprox": "위험 콜사이트는 diff 미리보기로 확인하세요",
+      "unknown": "수동 검토 필요 — 자동 리네임 비활성"
+    },
+    "btn": { "rename": "리네임", "preview": "미리보기" }
+  },
   "catalog": {
     "profileTitle": "파일 아웃라인",
     "profileSub": "function_summary · 비용 · 효과",
@@ -380,6 +414,24 @@
     "actionRename": "이름 변경",
     "actionExtract": "추출",
     "actionAddTest": "테스트 추가"
+  },
+  "hotspot": {
+    "title": "핫스팟",
+    "topPercent": "상위 {{pct}}",
+    "signal": {
+      "changePressure": "변경",
+      "structuralFriction": "구조",
+      "healthDeficit": "건강도",
+      "couplingPressure": "결합도",
+      "criticalityProxy": "임계도"
+    },
+    "narrative": {
+      "changePressure": "상위 {{percentile}}% — 최근 변경이 가장 큰 비중을 차지합니다.",
+      "structuralFriction": "상위 {{percentile}}% — 구조적 복잡도가 가장 큰 신호입니다.",
+      "healthDeficit": "상위 {{percentile}}% — 커버리지·린트 부채가 점수의 대부분을 차지합니다.",
+      "couplingPressure": "상위 {{percentile}}% — fan-in/out 폭이 결합 압력의 주원인입니다.",
+      "criticalityProxy": "상위 {{percentile}}% — 공개 API 표면과 blast radius가 점수를 끌어올렸습니다."
+    }
   },
   "stack_axis": {
     "openTabs": "탭 열기",

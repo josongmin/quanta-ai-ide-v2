@@ -1,0 +1,138 @@
+# PR review surface — diff viewer, threads, action bar.
+
+- id: diff-view
+  label: DiffView (unified / split toggle)
+  tier: parity
+  description: >-
+    `DiffView` is the host for diff rendering. Mode toggle switches
+    between unified and split via `ModeToggle`. Renders one
+    `DiffHunk` per hunk.
+  evidence:
+    symbols:
+      - src/features/diff-view/ui/DiffView.tsx
+      - src/features/diff-view/ui/DiffHunk.tsx
+      - src/features/diff-view/ui/ModeToggle.tsx
+      - src/features/diff-view/ui/DiffHunk.tsx::DiffMode
+  pattern:
+    source: GitHub PR diff viewer / Gerrit
+    rationale: >-
+      Unified is denser for small diffs; split is clearer for large
+      ones. Toggle covers both without picking a default that's
+      wrong half the time.
+  sota:
+    cursor: true
+    cody: true
+  added_in: "2026-03-25"
+
+- id: inline-thread
+  label: Inline review thread (per-line conversation)
+  tier: leading
+  description: >-
+    `InlineThread` renders a comment thread inline in the diff at the
+    line it was anchored to. Replies stack under the original; resolve
+    collapses the thread to a single chip.
+  evidence:
+    symbols:
+      - src/features/diff-view/ui/InlineThread.tsx
+      - src/features/review-pr/ui/CommentThread.tsx
+  pattern:
+    source: GitHub line-comment threads / Gerrit replies
+    rationale: >-
+      Threaded discussion at the line it's about is the universal
+      review primitive. Anything else loses context.
+  sota:
+    cody: partial
+  added_in: "2026-03-28"
+
+- id: inline-comment-composer
+  label: Inline comment composer
+  tier: parity
+  description: >-
+    Click `+` on a diff line to open `InlineCommentComposer` directly
+    in the gutter. Cmd+Enter submits; Esc cancels and restores focus.
+  evidence:
+    symbols:
+      - src/features/diff-view/ui/InlineCommentComposer.tsx
+  pattern:
+    source: GitHub PR review composer
+    rationale: >-
+      Composer-at-the-line beats composer-in-a-modal for review
+      flow — the eye doesn't have to leave the changed code.
+  sota: {}
+  added_in: "2026-03-28"
+  flags: ["a11y"]
+
+- id: review-action-bar
+  label: Review action bar (approve / request-changes / comment)
+  tier: parity
+  description: >-
+    Sticky bottom bar with the three GitHub-canonical review actions.
+    Approve / Request changes both require a non-empty top-level
+    comment for traceability.
+  evidence:
+    symbols:
+      - src/features/review-pr/ui/ReviewActionBar.tsx
+  pattern:
+    source: GitHub PR review summary
+    rationale: >-
+      The three-action pattern is the lingua franca of PR review.
+      Forcing a comment on Approve / Request changes prevents the
+      drive-by-approve antipattern.
+  sota: {}
+  added_in: "2026-03-28"
+
+- id: conversation-log
+  label: ConversationLog (timeline of review events)
+  tier: leading
+  description: >-
+    Chronological mix of comments, reviews, status checks, force-pushes.
+    Each event is one row; clicking expands the row to the full body
+    inline.
+  evidence:
+    symbols:
+      - src/features/review-pr/ui/ConversationLog.tsx
+  pattern:
+    source: GitHub PR conversation tab / Linear activity log
+    rationale: >-
+      Mixing comments with status events answers "what happened on
+      this PR" in one scroll — separating them forces tab-switching.
+  sota: {}
+  added_in: "2026-04-01"
+
+- id: avatar-component
+  label: Avatar (login → display)
+  tier: table-stakes
+  description: >-
+    Tiny `Avatar` component that takes a login + size and renders the
+    GitHub avatar with a fallback to initials. Used everywhere a
+    person is referenced.
+  evidence:
+    symbols:
+      - src/features/review-pr/ui/Avatar.tsx
+  pattern:
+    source: GitHub user avatars / Gravatar
+    rationale: >-
+      One-component standard so login → display never drifts. Fallback
+      to initials prevents broken images on a flaky network.
+  sota: {}
+  added_in: "2026-03-25"
+
+- id: pr-preview-trigger
+  label: PR preview trigger (open the bar)
+  tier: parity
+  description: >-
+    Header button that opens the `PrPreviewBar` — the sticky bottom
+    bar showing the active branch's PR diff summary, checks, and
+    conflicts.
+  evidence:
+    symbols:
+      - src/features/pr-preview/index.ts
+  pattern:
+    source: VS Code GitHub Pull Requests extension
+    rationale: >-
+      A persistent bar lets the dev keep an eye on PR state while
+      coding, instead of context-switching to the browser.
+  sota:
+    cursor: false
+    claude_code: false
+  added_in: "2026-04-15"

@@ -7,20 +7,21 @@
 // contained — it owns its tab state, its stats memo, and its tab-specific
 // renderers — and InspectPanel becomes a thin dispatcher.
 
-import { memo, useMemo, useState } from 'react';
-import { Activity, Boxes, LayoutGrid, Network, ShieldAlert } from 'lucide-react';
+import { memo, useMemo, useState, type ReactNode } from 'react';
+import { Activity, Boxes, LayoutGrid, Network, ShieldAlert, Users } from 'lucide-react';
 import { useFilterRepo } from '@features/filter-files';
 import type { RepoData } from '@entities/repo';
 import { C, type Tone, languageHue, pct } from '@shared/lib';
 import { computeRepoStats, type Verdict } from '@entities/metric';
-import EdgeBundlingMap from './EdgeBundlingMap';
+import DepsCarousel from './DepsCarousel';
 import {
-  BarRow, ConfidenceMeter, EmptyHint, FileRow,
-  PanelFooter as Footer, Score, Section, StackedRatioBar, Stat, TabBar,
+  BarRow, ConfidenceMeter, EmptyHint, FileRow, GlassCard,
+  Score, StackedRatioBar, Stat,
 } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
+import { OwnershipPanel } from '@features/ownership-routing';
 
-type WorkspaceTab = 'overview' | 'activity' | 'risk' | 'deps';
+type WorkspaceTab = 'overview' | 'activity' | 'risk' | 'deps' | 'ownership';
 
 // `isDark` is still threaded down to shared/ui primitives (TabBar, Section,
 // Stat, FileRow, etc.) which are owned by a parallel migration. Once those
@@ -59,68 +60,167 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
       ],
     },
     { id: 'deps', label: t('tab.deps'), icon: Network },
+    { id: 'ownership', label: 'Ownership', icon: Users },
   ];
 
+  // The outer InspectPanel shell is the top card. Header / badges / tab strip
+  // are flush with that shell — same shape as FocusScanPanel — so a workspace
+  // selection and a file selection read as the same chrome.
   return (
     <>
-      <header
-        className="shrink-0 px-5 pt-4 pb-3 border-b"
-        style={{ borderColor: 'var(--border-default)' }}
-      >
-        <div
-          className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em]"
-          style={{ color: 'var(--fg-subtle)' }}
-        >
-          <Boxes className="w-3 h-3" /> {t('header.workspace')}
+      <div className="-mx-2 px-5 pt-4 pb-0">
+        <div className="flex items-start gap-2 min-w-0">
+          <div className="min-w-0 flex-1">
+            <div
+              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em]"
+              style={{ color: 'var(--fg-subtle)' }}
+            >
+              <Boxes className="w-3 h-3" /> {t('header.workspace')}
+            </div>
+            <h2 className="font-black text-[13px] truncate tracking-tight mt-1">
+              {t('header.workspaceName')}
+            </h2>
+            <p
+              className="text-[10px] font-mono truncate mt-0.5"
+              style={{ color: 'var(--fg-subtle)' }}
+            >
+              {stats.files.toLocaleString()} {t('focus.filesUnit')} · {stats.totalLoc.toLocaleString()} {t('stat.loc')}
+            </p>
+          </div>
         </div>
-        <h2 className="font-black text-[17px] tracking-tight mt-1 leading-none">{t('header.workspaceName')}</h2>
-        <div
-          className="flex items-center gap-1.5 text-[10px] font-mono mt-1.5"
-          style={{ color: 'var(--fg-muted)' }}
-        >
+        <div className="flex items-center gap-1.5 mt-2.5 mb-3 flex-wrap">
           <span
-            className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wide"
+            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
-          >{t('header.main')}</span>
-          <span className="opacity-40">·</span>
-          {/* "fresh" is *index state*, not severity — using the green from
-              the severity palette here would make every green dot on the
-              page mean three different things. A subtle pulse + neutral
-              text says "alive" without competing for color attention. */}
-          <span className="inline-flex items-center gap-1">
+          >
+            {t('header.main')}
+          </span>
+          <span
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
+            style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
+          >
             <span
               className="w-1.5 h-1.5 rounded-full animate-pulse"
               style={{ background: 'var(--fg-default)' }}
             />
-            <span style={{ color: 'var(--fg-muted)' }}>{t('header.fresh')}</span>
+            {t('header.fresh')}
           </span>
-          <span className="opacity-40">·</span>
-          <span className="tabular-nums">{stats.files.toLocaleString()} {t('focus.filesUnit')}</span>
-          <span className="opacity-40">·</span>
-          <span className="tabular-nums">{stats.totalLoc.toLocaleString()} {t('stat.loc')}</span>
         </div>
-      </header>
+        <nav
+          className="-mx-5 overflow-x-auto scrollbar-hide border-t"
+          style={{ borderColor: 'var(--border-default)' }}
+        >
+          <div className="flex items-stretch gap-3 px-4 min-w-max">
+            {tabs.map(({ id, label, icon: Icon, badges }) => {
+              const active = tab === id;
+              return (
+                <button
+                  type="button"
+                  key={id}
+                  onClick={() => { setTab(id); }}
+                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] whitespace-nowrap transition-colors"
+                  style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
+                >
+                  <Icon className="w-3 h-3 shrink-0" />
+                  <span>{label}</span>
+                  {badges && badges.length > 0 && (
+                    <span className="ml-0.5 inline-flex items-center gap-0.5">
+                      {badges.map((b, i) => {
+                        const c = b.tone === 'critical' ? C.critical : b.tone === 'warn' ? C.warning : C.ok;
+                        return (
+                          <span
+                            key={i}
+                            className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-black tabular-nums"
+                            style={{ background: `${c}22`, color: c }}
+                          >
+                            {b.n}
+                          </span>
+                        );
+                      })}
+                    </span>
+                  )}
+                  {active && (
+                    <span
+                      className="absolute left-0 right-0 -bottom-px h-[1.5px]"
+                      style={{ background: 'var(--fg-strong)' }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      </div>
 
-      <TabBar tabs={tabs} active={tab} onChange={setTab} isDark={isDark} />
-
-      <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 scrollbar-hide text-[11px]">
+      <div className="text-[11px]">
         {tab === 'overview' && <OverviewTab stats={stats} isDark={isDark} />}
         {tab === 'activity' && <ActivityTab stats={stats} isDark={isDark} />}
         {tab === 'risk' && <RiskTab stats={stats} isDark={isDark} />}
         {tab === 'deps' && <DepsTab stats={stats} isDark={isDark} />}
+        {tab === 'ownership' && <OwnershipPanel />}
       </div>
 
-      <Footer text={tabFooter(tab, t)} />
+      <GlassCard
+        tone="inner"
+        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[0.18em]"
+        style={{ color: 'var(--fg-subtle)' }}
+      >
+        {tabFooter(tab, t)}
+      </GlassCard>
+
+      <div className="h-2" aria-hidden />
     </>
+  );
+}
+
+// Subcard used by the inspect panel's tab body — mirrors the FocusScanPanel
+// box style (IndexStateBox / AiContextBox / BlastRadiusBox): a flat
+// `rounded-xl border` block on `bg-surface-muted`, with the eyebrow label
+// living *inside* the card rather than floating above it. Keeps the visual
+// grouping the user wanted while matching the file-panel chrome.
+function SubCard({
+  title, subtitle, children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className="rounded-xl border px-3 py-2.5"
+      style={{
+        background: 'var(--bg-surface-muted)',
+        borderColor: 'var(--border-default)',
+      }}
+    >
+      <div className="flex items-baseline gap-2">
+        <div
+          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          style={{ color: 'var(--fg-subtle)' }}
+        >
+          {title}
+        </div>
+        {subtitle && (
+          <div
+            className="text-[9px] font-mono truncate"
+            style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
+          >
+            {subtitle}
+          </div>
+        )}
+      </div>
+      <div className="mt-2 space-y-1">{children}</div>
+    </div>
   );
 }
 
 function tabFooter(tab: WorkspaceTab, t: (k: string) => string): string {
   switch (tab) {
-    case 'overview': return t('footer.workspaceOverview');
-    case 'activity': return t('footer.activity');
-    case 'risk':     return t('footer.risk');
-    case 'deps':     return t('footer.deps');
+    case 'overview':  return t('footer.workspaceOverview');
+    case 'activity':  return t('footer.activity');
+    case 'risk':      return t('footer.risk');
+    case 'deps':      return t('footer.deps');
+    case 'ownership': return 'Routing · stack · reviewer suggestions (mock data)';
   }
 }
 
@@ -138,12 +238,12 @@ const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats: Return
   const langEntries = Object.entries(stats.byLanguage).sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       {/* Spec §10 — single-line "ship light". Reads first; everything else
           below is "drilling into the reason for the verdict". */}
       <VerdictStrip verdict={stats.verdict} />
 
-      <Section title={t('section.seHealth')}>
+      <SubCard title={t('section.seHealth')}>
         <Score label={t('stat.maintainability')} value={stats.maintainability} isDark={isDark} hero
                trend={stats.maintTrend} />
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-1">
@@ -165,16 +265,16 @@ const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats: Return
             }))}
           />
         )}
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.dependencies')}>
-        {/* Hierarchical edge bundling (Holten 2006) — files arranged on a
-            ring grouped by folder; edges curve through shared ancestors so
-            same-folder calls cluster, cross-folder calls dive deep. */}
-        <EdgeBundlingMap repo={repo} isDark={isDark} size={260} />
-      </Section>
+      <SubCard title={t('section.dependencies')}>
+        {/* Eight-view carousel: edge bundling, layer view, DSM matrix,
+            sunburst, top-coupling chord, treemap, risk heatmap, cycles.
+            Each slide answers a different question about the same graph. */}
+        <DepsCarousel repo={repo} isDark={isDark} size={260} />
+      </SubCard>
 
-      <Section title={t('section.aiEfficiency')}>
+      <SubCard title={t('section.aiEfficiency')}>
         <Score label={t('stat.editSafety')} value={stats.avgEditSafety} isDark={isDark} hero diverging />
 
         {/* Histogram replaces "two stat boxes" — same data, but as a
@@ -199,9 +299,9 @@ const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats: Return
           stale={stats.confidence.stale}
           total={stats.files}
         />
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.stack')}>
+      <SubCard title={t('section.stack')}>
         {langEntries.length <= 1 ? (
           <div className="flex flex-wrap gap-1.5">
             {langEntries.map(([lang, n]) => (
@@ -286,7 +386,7 @@ const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats: Return
             </span>
           </div>
         )}
-      </Section>
+      </SubCard>
     </div>
   );
 });
@@ -500,8 +600,8 @@ const ActivityTab = memo(function ActivityTab({ stats, isDark }: { stats: Return
   const activePct = pct(stats.activeRecent, stats.files);
   const stalePct = pct(stats.staleFiles, stats.files);
   return (
-    <div className="space-y-5">
-      <Section title={t('section.pulse')}>
+    <div className="space-y-4">
+      <SubCard title={t('section.pulse')}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <Stat label={t('stat.lastTouch')} value={t('stat.lastTouchAgo', { days: stats.minDaysSince })} isDark={isDark} />
           <Stat label={t('stat.prs30d')} value={stats.totalRecentPRs} isDark={isDark} />
@@ -519,9 +619,9 @@ const ActivityTab = memo(function ActivityTab({ stats, isDark }: { stats: Return
           <Stat label={t('stat.staleFiles')} sublabel={t('stat.staleFilesSub')} value={stats.staleFiles} suffix={`${stalePct}%`}
                 isDark={isDark} tone={stalePct > 40 ? 'warn' : 'neutral'} />
         </div>
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.recentHotspots')} subtitle={t('subtitle.highChurnComplexity')}>
+      <SubCard title={t('section.recentHotspots')} subtitle={t('subtitle.highChurnComplexity')}>
         {stats.churnHotspots.length === 0 ? (
           <EmptyHint text={t('empty.noHotspots')} />
         ) : (
@@ -541,9 +641,9 @@ const ActivityTab = memo(function ActivityTab({ stats, isDark }: { stats: Return
             ))}
           </div>
         )}
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.topOwners')}>
+      <SubCard title={t('section.topOwners')}>
         <div className="space-y-1">
           {stats.topOwners.map((o) => (
             <BarRow
@@ -556,7 +656,7 @@ const ActivityTab = memo(function ActivityTab({ stats, isDark }: { stats: Return
             />
           ))}
         </div>
-      </Section>
+      </SubCard>
     </div>
   );
 });
@@ -569,8 +669,8 @@ const RiskTab = memo(function RiskTab({ stats, isDark }: { stats: ReturnType<typ
   const { t } = useTranslation('inspect');
   const totalRisk = stats.vulnerable + stats.cyclic + stats.layerViolations;
   return (
-    <div className="space-y-5">
-      <Section title={t('section.structuralDefects')} subtitle={t('subtitle.blockSafeAutomation')}>
+    <div className="space-y-4">
+      <SubCard title={t('section.structuralDefects')} subtitle={t('subtitle.blockSafeAutomation')}>
         <div className="space-y-1">
           <Stat label={t('stat.vulnerableFiles')} value={stats.vulnerable} isDark={isDark}
                 tone={stats.vulnerable > 0 ? 'critical' : 'neutral'} />
@@ -587,9 +687,9 @@ const RiskTab = memo(function RiskTab({ stats, isDark }: { stats: ReturnType<typ
             {t('empty.noStructuralDefects')}
           </div>
         )}
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.qualityDebt')} subtitle={t('subtitle.thresholdMisses')}>
+      <SubCard title={t('section.qualityDebt')} subtitle={t('subtitle.thresholdMisses')}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <Stat label={t('stat.hotspots')} value={stats.hotspots} isDark={isDark}
                 tone={stats.hotspots > 10 ? 'warn' : 'neutral'} />
@@ -600,9 +700,9 @@ const RiskTab = memo(function RiskTab({ stats, isDark }: { stats: ReturnType<typ
           <Stat label={t('stat.staleIndex')} value={stats.staleIndex} isDark={isDark}
                 tone={stats.staleIndex > 0 ? 'warn' : 'neutral'} />
         </div>
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.lowestEditSafety')} subtitle={t('subtitle.worst5StartHere')}>
+      <SubCard title={t('section.lowestEditSafety')} subtitle={t('subtitle.worst5StartHere')}>
         {stats.riskFiles.length === 0 ? (
           <EmptyHint text={t('empty.noRiskyFiles')} />
         ) : (
@@ -622,7 +722,7 @@ const RiskTab = memo(function RiskTab({ stats, isDark }: { stats: ReturnType<typ
             ))}
           </div>
         )}
-      </Section>
+      </SubCard>
     </div>
   );
 });
@@ -639,8 +739,8 @@ const DepsTab = memo(function DepsTab({ stats, isDark }: { stats: ReturnType<typ
   const { t } = useTranslation('inspect');
   const layerMax = Math.max(1, ...Object.values(stats.byLayer));
   return (
-    <div className="space-y-5">
-      <Section title={t('section.topology')}>
+    <div className="space-y-4">
+      <SubCard title={t('section.topology')}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <Stat label={t('stat.edges')} sublabel={t('stat.edgesSub')} value={stats.edges.toLocaleString()} isDark={isDark} />
           <Stat label={t('stat.avgFanOut')} value={stats.avgFanOut} isDark={isDark} />
@@ -659,9 +759,9 @@ const DepsTab = memo(function DepsTab({ stats, isDark }: { stats: ReturnType<typ
           <Stat label={t('stat.deadCode')} value={stats.dead} isDark={isDark}
                 tone={stats.dead > 5 ? 'warn' : 'neutral'} />
         </div>
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.layers')}>
+      <SubCard title={t('section.layers')}>
         <div className="space-y-1">
           {Object.entries(stats.byLayer)
             .sort((a, b) => b[1] - a[1])
@@ -669,7 +769,7 @@ const DepsTab = memo(function DepsTab({ stats, isDark }: { stats: ReturnType<typ
               <BarRow key={layer} label={layer} value={n} max={layerMax} isDark={isDark} />
             ))}
         </div>
-      </Section>
+      </SubCard>
     </div>
   );
 });

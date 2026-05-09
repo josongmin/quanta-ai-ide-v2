@@ -80,7 +80,10 @@ export function Empty({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Badge — small chip used by the panel header for status/confidence/safety.
+// Badge — pill chip used by the panel header for status/confidence/safety.
+// Outlined pill (rounded-full + 1px border + solid text colour, no fill) so
+// the chips read as labels against the panel surface rather than as filled
+// alerts. The colour itself encodes the kind/severity.
 export function Badge({
   children, kind, conf, safety,
 }: {
@@ -89,35 +92,28 @@ export function Badge({
   conf?: Confidence;
   safety?: number;
 }) {
-  let style: React.CSSProperties = {};
+  let color = 'var(--fg-muted)';
   if (kind === 'confidence' && conf) {
-    style = conf === 'exact'
-      ? { background: 'rgb(from var(--intent-success-fg) r g b / 0.20)', color: 'var(--intent-success-fg)' }
-      : conf === 'overapprox'
-      ? { background: 'rgb(from var(--intent-warn-vivid) r g b / 0.20)', color: 'var(--intent-warn-vivid)' }
-      : conf === 'unknown'
-      ? { background: 'rgb(from var(--intent-danger-vivid) r g b / 0.20)', color: 'var(--intent-danger-vivid)' }
-      : { background: 'var(--bg-elevated)', color: 'var(--fg-muted)' };
+    color =
+      conf === 'exact'      ? 'var(--intent-success-fg)'   :
+      conf === 'overapprox' ? 'var(--intent-warn-vivid)'   :
+      conf === 'unknown'    ? 'var(--intent-danger-vivid)' :
+                              'var(--fg-muted)';
   } else if (kind === 'safety' && safety !== undefined) {
-    style = safety >= 70
-      ? { background: 'rgb(from var(--intent-success-fg) r g b / 0.20)', color: 'var(--intent-success-fg)' }
-      : safety >= 40
-      ? { background: 'rgb(from var(--intent-warn-vivid) r g b / 0.20)', color: 'var(--intent-warn-vivid)' }
-      : { background: 'rgb(from var(--intent-danger-vivid) r g b / 0.20)', color: 'var(--intent-danger-vivid)' };
+    color =
+      safety >= 70 ? 'var(--intent-success-fg)'   :
+      safety >= 40 ? 'var(--intent-warn-vivid)'   :
+                     'var(--intent-danger-vivid)';
   } else if (kind === 'SECURITY_ALERT') {
-    style = { background: 'rgb(from var(--intent-danger-vivid) r g b / 0.20)', color: 'var(--intent-danger-vivid)' };
-  } else if (kind === 'NEW') {
-    style = { background: 'rgb(from var(--intent-success-vivid) r g b / 0.25)', color: 'var(--intent-success-vivid)' };
-  } else if (kind === 'MODIFIED') {
-    style = { background: 'rgb(from var(--intent-success-vivid) r g b / 0.15)', color: 'var(--intent-success-vivid)' };
-  } else {
-    style = { background: 'var(--bg-elevated)', color: 'var(--fg-muted)' };
+    color = 'var(--intent-danger-vivid)';
+  } else if (kind === 'NEW' || kind === 'MODIFIED') {
+    color = 'var(--intent-success-vivid)';
   }
 
   return (
     <span
-      className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
-      style={style}
+      className="inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.18em]"
+      style={{ color, borderColor: 'currentColor' }}
     >
       {children}
     </span>

@@ -138,10 +138,10 @@ export default function HunkNavigator({ file }: Props) {
     <div
       className="sticky top-10 z-10 mt-3 flex items-center gap-3 px-3 py-2 rounded-md"
       style={{
-        background: 'rgba(13,17,23,0.92)',
+        background: 'var(--bg-overlay)',
         backdropFilter: 'blur(6px) saturate(140%)',
         WebkitBackdropFilter: 'blur(6px) saturate(140%)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        border: '1px solid var(--border-default)',
       }}
     >
       <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">

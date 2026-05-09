@@ -72,7 +72,7 @@ export default function AdmissionV2() {
   const retro = useMemo(
     () => RETRO_SEEDS.map((s) => {
       const d = simulateBranchDiff(repo, s);
-      return { seed: s, decision: evaluateAdmission(rules, repo, d) };
+      return { seed: s, diff: d, decision: evaluateAdmission(rules, repo, d) };
     }),
     [rules, repo],
   );

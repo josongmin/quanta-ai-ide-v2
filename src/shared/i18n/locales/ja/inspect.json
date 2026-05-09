@@ -333,6 +333,40 @@
     "addtest": { "title": "テスト雛形を生成", "delta": "+テスト 1" },
     "lint": { "title": "Lint エラー自動修正" }
   },
+  "timeMachine": {
+    "title": "シンボルタイムマシン",
+    "trendUp": "複雑化中",
+    "trendDown": "整理中",
+    "trendFlat": "安定",
+    "recent": "最近のコミット",
+    "bisect": {
+      "title": "複雑度ジャンプ",
+      "open": "PR を開く"
+    }
+  },
+  "semanticConflict": {
+    "title": "意味的コンフリクト",
+    "clear": "クリア",
+    "summary": "候補 {{n}} 件",
+    "cleanHint": "同じコールグラフ領域に触れているオープン PR はありません。マージ安全。",
+    "note": "コールグラフ予測 — 単純な git diff では検出できません。",
+    "severity": { "high": "高", "medium": "中", "low": "低" }
+  },
+  "safeRename": {
+    "title": "安全リネーム信頼度",
+    "compositeNote": "{{total}} 件中 {{unsafe}} 件のコールサイトはレビュー必要",
+    "verdict": {
+      "exact": "EXACT",
+      "overapprox": "OVERAPPROX",
+      "unknown": "レビュー必要"
+    },
+    "cta": {
+      "exact": "リファクタエンジンが全コールサイトを処理します",
+      "overapprox": "危険なコールサイトは差分プレビューで確認推奨",
+      "unknown": "手動レビュー必要 — 自動リネーム無効"
+    },
+    "btn": { "rename": "リネーム", "preview": "プレビュー" }
+  },
   "catalog": {
     "profileTitle": "ファイルアウトライン",
     "profileSub": "function_summary · コスト · 効果",
@@ -380,6 +414,24 @@
     "actionRename": "リネーム",
     "actionExtract": "抽出",
     "actionAddTest": "テスト追加"
+  },
+  "hotspot": {
+    "title": "ホットスポット",
+    "topPercent": "上位 {{pct}}",
+    "signal": {
+      "changePressure": "変更",
+      "structuralFriction": "構造",
+      "healthDeficit": "健全性",
+      "couplingPressure": "結合度",
+      "criticalityProxy": "重要度"
+    },
+    "narrative": {
+      "changePressure": "上位 {{percentile}}% — 最近の変更が主要因です。",
+      "structuralFriction": "上位 {{percentile}}% — 構造的複雑さが最大の信号です。",
+      "healthDeficit": "上位 {{percentile}}% — カバレッジ・lint負債が大部分を占めます。",
+      "couplingPressure": "上位 {{percentile}}% — fan-in/outの広さが結合圧力の主因です。",
+      "criticalityProxy": "上位 {{percentile}}% — 公開APIとblast radiusがスコアを押し上げています。"
+    }
   },
   "stack_axis": {
     "openTabs": "開いているタブ",

@@ -1,0 +1,191 @@
+# Trust & Observability — UI for trust calibration.
+
+- id: citations
+  label: Per-turn citations
+  tier: progressive
+  description: >-
+    Each `AgentTurn` carries a `citations[]` array — `{ path, lines, note }` —
+    rendered as compact chips under the turn header. Hover reveals full
+    path + author note. Click jumps to the file (planned).
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::Citation
+      - src/widgets/coding-stage/CodingStage.tsx::CitationStrip
+  pattern:
+    source: Cody / Phind source attribution
+    rationale: >-
+      Trust calibration baseline — the agent shows its work so the user
+      can verify, not just believe.
+  sota:
+    cody: true
+    cursor: false
+  added_in: "2026-04-05"
+  flags: ["trust"]
+
+- id: citation-staleness
+  label: Citation staleness detection
+  tier: leading
+  description: >-
+    `annotatedThread` walks every turn after each citation; if a later turn
+    edits the cited file, the citation gains `staleAfterTurn` and renders
+    with an amber `[stale]` chip + line-through on the file basename.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::annotatedThread
+  pattern:
+    source: Cache invalidation marker (HTTP `Vary` / GraphQL fragments)
+    rationale: >-
+      A citation is a snapshot, not a live link. Marking it stale closes
+      the trust loop — the agent reasoned with the *old* file, not what's
+      on disk now.
+  sota: {}
+  added_in: "2026-04-22"
+  flags: ["trust"]
+  related: ["citations"]
+
+- id: per-turn-confidence
+  label: Self-eval confidence chip
+  tier: leading
+  description: >-
+    `AgentTurn.confidence` (0..1). Header chip with three tones: ≥85% high
+    (subtle emerald), 60–85% mid (neutral), <60% low (amber + "review me").
+    Optional `confidenceRationale` lands in the tooltip.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::AgentTurn
+  pattern:
+    source: Anthropic extended-thinking calibration
+    rationale: >-
+      Anthropic's published calibration: correct answers cluster at ~0.7,
+      wrong at ~0.55. 0.6 is the practical decision line.
+  sota: {}
+  added_in: "2026-04-25"
+  flags: ["trust"]
+
+- id: phase-label
+  label: Phase label during streaming
+  tier: parity
+  description: >-
+    `AgentTurn.phase` enum (thinking / reading / searching / editing /
+    running / planning / writing) drives a small chip in the streaming
+    state pill so the user can see *what* the agent is doing, not just
+    *that* it's doing something.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::AgentPhase
+  pattern:
+    source: Devin "doing X" footer
+    rationale: >-
+      Specific phase labels reduce the perceived wait time vs a generic
+      spinner — the user knows which step is slow, not just that
+      *something* is.
+  sota:
+    devin: true
+    claude_code: partial
+  added_in: "2026-04-05"
+  flags: ["obs"]
+
+- id: tps-live
+  label: TPS live meter (tok/s during streaming)
+  tier: leading
+  description: >-
+    Estimates tokens-per-second from blocks-emitted-so-far against a
+    hand-tuned token-per-block table, ticking once a second. Renders as
+    a chip beside the phase label; the icon pulses at the same cadence
+    as the meter so the meaning ("this is live") reads instantly.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::TpsLiveMeter
+    locales:
+      - "coding:tps.tooltip"
+  pattern:
+    source: Whisper UI live-tokens / Granola stream meter
+    rationale: >-
+      tok/s is the only single number that captures both throughput and
+      whether the model is hitting its cache. Power users watch it; novice
+      users ignore it harmlessly.
+  sota: {}
+  added_in: "2026-04-25"
+  flags: ["obs"]
+
+- id: latency-profile
+  label: Latency profile (per-phase stacked bar)
+  tier: leading
+  description: >-
+    Once a turn finishes, `phaseDurationsMs` renders as a 6px stacked bar
+    coloured by phase. Hover any segment for `<phase> · <ms>ms (<pct>%)`.
+    Total ms shown to the right.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::LatencyBar
+  pattern:
+    source: Chrome DevTools waterfall / Linkerd latency dashboard
+    rationale: >-
+      A stacked bar makes "where did the time go" answerable in one
+      glance — especially the read-vs-think-vs-edit ratio.
+  sota: {}
+  added_in: "2026-04-25"
+  flags: ["obs"]
+  related: ["phase-label", "latency-baseline"]
+
+- id: latency-baseline
+  label: Latency baseline comparison (vs task average)
+  tier: leading
+  description: >-
+    For each turn with phase data, the `LatencyBar` compares this turn's
+    weighted total against the task's running average. ±15% prints "match",
+    faster prints emerald `0.7× faster`, slower prints amber `2.3× slower`.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::LatencyBar
+    locales:
+      - "coding:latencyBaseline.faster"
+  pattern:
+    source: SRE p50/p99 alert thresholds
+    rationale: >-
+      Absolute ms doesn't mean much without a baseline. The 15% / 50%
+      thresholds are lifted from Google's SRE handbook.
+  sota: {}
+  added_in: "2026-05-05"
+  related: ["latency-profile"]
+
+- id: drift-detection
+  label: Anomaly drift detector (stuck / noisy)
+  tier: leading
+  description: >-
+    Compares the latest agent turn's thinking-ratio and tool-call count
+    against the running mean across earlier turns. ≥2× either triggers
+    `stuck` (amber) or `noisy` (amber). Surfaces in ContextRail.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::ContextRail
+    locales:
+      - "coding:drift.stuck"
+  pattern:
+    source: SRE 3-sigma alerts adapted for small-N
+    rationale: >-
+      2× isn't statistically rigorous, but with 3–10 turns of baseline
+      it's the right balance between sensitivity and false-positives.
+  sota: {}
+  added_in: "2026-05-01"
+  flags: ["obs"]
+
+- id: tool-success-rate
+  label: Per-tool / per-model success rate
+  tier: leading
+  description: >-
+    `useMemo` walks the active task's thread, counts tool blocks by
+    `status === 'ok'` divided by total. Bucketed by tool kind and by
+    the originating turn's model. ContextRail panel renders as horizontal
+    bars with tones at 80% / 50% thresholds.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::SuccessRatePanel
+  pattern:
+    source: Agent-eval literature (METR / OpenAI evals)
+    rationale: >-
+      80% is the published "trust me" line, 50% the "review every output"
+      line. <50% is a "drop this tool" signal.
+  sota: {}
+  added_in: "2026-05-05"
+  flags: ["obs"]

@@ -1,0 +1,119 @@
+# Recovery & Time-travel — non-destructive undo + scrubber.
+
+- id: inverse-op-recovery
+  label: Inverse-op append (non-destructive rewind)
+  tier: leading
+  description: >-
+    `applyInverseOf(turn)` synthesizes a compensating `AgentTurn` —
+    edits become reverse-edits, runs become noted "skipped", citations
+    are dropped — and appends it instead of dropping future turns.
+    The full audit trail survives.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::applyInverseOf
+    locales:
+      - "coding:recovery.inverseLabel"
+  pattern:
+    source: Database WAL / event sourcing
+    rationale: >-
+      Destructive rewind hides history; inverse-op preserves it. Same
+      reason production databases never `DELETE` — they append a tombstone
+      so the audit log is intact.
+  sota: {}
+  added_in: "2026-04-25"
+  flags: ["trust"]
+
+- id: timeline-scrubber
+  label: Timeline scrubber (turn-level time travel)
+  tier: leading
+  description: >-
+    Horizontal scrubber under the thread renders one tick per turn,
+    coloured by phase. Click a tick to "preview" — the thread renders
+    up to that turn with later turns dimmed. Click again or press Esc
+    to exit preview. Keyboard ←→ steps, Home/End jumps to ends.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::TimelineScrubber
+    locales:
+      - "coding:scrubber.preview"
+  pattern:
+    source: Figma version history / Final Cut timeline
+    rationale: >-
+      A strip is the spatial-memory-friendly form of a list. The eye
+      learns "the bug came in around the third dark-blue tick" in a
+      way it never does from a vertical list.
+  sota: {}
+  added_in: "2026-04-28"
+  flags: ["a11y"]
+  related: ["inverse-op-recovery"]
+
+- id: turn-menu-recover
+  label: Per-turn menu (rewind / branch / copy)
+  tier: parity
+  description: >-
+    Each `AgentTurn` header carries a context menu (right-click or `⋯`):
+    Copy text, Copy as Markdown, Share, Export, Export as PR, Open in
+    new task. Menu is keyboard-navigable, Esc closes, focus restores.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/TurnContextMenu.tsx::TurnContextMenu
+      - src/widgets/coding-stage/parts/TurnContextMenu.tsx::TurnContextMenuItem
+  pattern:
+    source: GitHub commit dropdown
+    rationale: >-
+      Per-turn affordances belong on the turn, not in a global toolbar
+      — the user has already pointed at the relevant unit.
+  sota:
+    cursor: partial
+    claude_code: false
+  added_in: "2026-04-22"
+  flags: ["a11y"]
+  related: ["inverse-op-recovery"]
+
+- id: branch-from-turn
+  label: Branch from turn (fork the task)
+  tier: leading
+  status: planned
+  description: >-
+    "Branch from here" clones the task up to the chosen turn into a new
+    sibling task. The new task carries `parentTaskId` + `branchedFromTurn`
+    so the relationship survives reload. Sidebar renders branched tasks
+    with a small fork glyph next to the title.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::branchFromTurn
+    locales:
+      - "coding:branch.label"
+  pattern:
+    source: Git branching / Linear sub-issues
+    rationale: >-
+      Forking lets the user explore an alternative without losing the
+      original thread. Required for serious refactor work where one wrong
+      turn would otherwise burn the whole task.
+  sota: {}
+  added_in: "2026-04-28"
+  related: ["turn-menu-recover"]
+
+- id: working-tree-drift
+  label: Working-tree drift markers (clean / shifted / overlap / gone)
+  tier: leading
+  description: >-
+    `FileDrift` carries the 3-way-merge result between the recorded
+    edit and the on-disk file. Each hunk gets a status: clean (still
+    applies), shifted (applies at new line numbers), overlap (conflicting
+    edit in the way), gone (file removed). The diff panel renders an icon
+    per status so the user sees drift before clicking apply.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::FileDrift
+    locales:
+      - "coding:drift.shifted"
+  pattern:
+    source: RCS / git 3-way merge
+    rationale: >-
+      "Will this still apply?" is the first question the user has after
+      lunch break. Answering it inline beats letting them find out at
+      apply-time.
+  sota: {}
+  added_in: "2026-05-01"
+  flags: ["trust"]

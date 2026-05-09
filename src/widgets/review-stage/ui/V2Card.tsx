@@ -14,8 +14,8 @@ export default function V2Card({
     <div
       className={`relative overflow-hidden rounded-2xl ${className}`}
       style={{
-        backgroundColor: 'rgba(13, 17, 23, 0.78)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        backgroundColor: 'var(--bg-overlay)',
+        border: '1px solid var(--border-default)',
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
         ...style,

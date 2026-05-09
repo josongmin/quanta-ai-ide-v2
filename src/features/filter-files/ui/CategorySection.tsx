@@ -22,7 +22,7 @@ export default function CategorySection({ category }: Props) {
   if (visibleFacets.length === 0 && lockedFacets.length === 0) return null;
 
   return (
-    <GlassCard className="px-3 py-2.5">
+    <GlassCard className="px-3 py-2.5" style={{ boxShadow: 'none' }}>
       <button type="button"
         onClick={() => { prefs.toggleCategoryCollapsed(category); }}
         className="w-full flex items-center justify-between mb-1.5 group"

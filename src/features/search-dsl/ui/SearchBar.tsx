@@ -25,7 +25,11 @@ const NUMERIC_KEYS = new Set([
 ]);
 const STRING_KEYS = new Set(['status','layer','lang','owner','name','path']);
 
-export default function SearchBar() {
+export default function SearchBar({
+  maxWidth = 'calc(100vw - 820px)',
+}: {
+  maxWidth?: number | string;
+} = {}) {
   const { isDark } = useTheme();
   const { t } = useTranslation('search');
   // Narrow selectors. Action setters in zustand are reference-stable, so
@@ -73,7 +77,10 @@ export default function SearchBar() {
   const showOverlay = searchMode === 'dsl' && search.length > 0 && !hasError;
 
   return (
-    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-[640px] max-w-[calc(100vw-820px)] min-w-[420px]">
+    <div
+      className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-[640px] min-w-[420px]"
+      style={{ maxWidth }}
+    >
       <GlassCard className="overflow-hidden">
         {/* Main row */}
         <div className="flex items-stretch">

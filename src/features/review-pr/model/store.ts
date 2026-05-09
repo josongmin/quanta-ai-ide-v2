@@ -240,16 +240,6 @@ export const useReviewStore = create<ReviewState>()((set) => ({
   },
 }));
 
-/** Look up a single PR by number. Stable reference until the PR mutates. */
-export function usePr(n: number | null | undefined): PullRequest | null {
-  return useReviewStore(
-    useShallow((s) => {
-      if (n === null || n === undefined) return null;
-      return s.prs.find((p) => p.number === n) ?? null;
-    }),
-  );
-}
-
 /** Return the currently selected PR (or null). */
 export function useActivePr(): PullRequest | null {
   return useReviewStore(

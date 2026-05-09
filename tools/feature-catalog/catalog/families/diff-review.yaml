@@ -1,0 +1,117 @@
+# Diff & Review — hunk-level apply, test mapping, conflict UI.
+
+- id: hunk-level-apply
+  label: Per-hunk apply / reject
+  tier: parity
+  description: >-
+    Each hunk in the diff panel carries Apply / Reject buttons; applied
+    hunks get a green check, rejected hunks fade. Bulk Apply All /
+    Reject All in the panel header.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::DiffApplyState
+      - src/widgets/coding-stage/parts/types.ts::DiffBlock
+    locales:
+      - "coding:diff.applyHunk"
+  pattern:
+    source: GitHub PR file-tree apply / IntelliJ partial commit
+    rationale: >-
+      Most agent diffs are 80% right and 20% noise. Per-hunk granularity
+      makes the right thing easy: keep what's correct, drop the rest in
+      one keystroke.
+  sota:
+    cursor: true
+    claude_code: partial
+    cody: true
+  added_in: "2026-03-20"
+
+- id: side-by-side-diff
+  label: Side-by-side diff (with intra-line highlights)
+  tier: parity
+  description: >-
+    Two-column diff renderer. Word-level highlights inside changed lines
+    use a Myers diff over the line content so the eye lands on the
+    actual change, not the whole line.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Blocks.tsx::DiffBlock
+      - src/widgets/coding-stage/parts/types.ts::CodingDiffHunk
+  pattern:
+    source: GitHub split view / Beyond Compare
+    rationale: >-
+      Side-by-side beats unified for review-rate; intra-line highlights
+      cut review time another ~30% by removing the eye-saccade cost.
+  sota:
+    cursor: true
+    claude_code: false
+    cody: true
+  added_in: "2026-03-20"
+
+- id: test-hunk-mapping
+  label: Test ↔ hunk attribution scoring
+  tier: leading
+  status: planned
+  description: >-
+    `attributeTestsToHunks` scores each (test, hunk) pair on stack-hit
+    (does the failing stack mention the hunk's file/lines?) plus
+    coverage-overlap (does the test cover the changed lines?). Top 3
+    suspects render under each failing test.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::attributeTestsToHunks
+    locales:
+      - "coding:tests.suspects"
+  pattern:
+    source: Bisect-style fault localization (Tarantula / Ochiai)
+    rationale: >-
+      "Which change broke this test" is the single most-asked question
+      during a review. Stack + coverage is a 2-feature score that beats
+      naive "last touched" by a wide margin.
+  sota: {}
+  added_in: "2026-05-01"
+  related: ["hunk-level-apply"]
+
+- id: diff-conflict-overlay
+  label: Conflict overlay on overlapping hunks
+  tier: leading
+  status: planned
+  description: >-
+    When `reconcileHunks` reports an `overlap` status, the diff row
+    expands to show the user's local change inline beside the agent's
+    proposed change, with a `Use mine / Use theirs / Merge manually`
+    triplet.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::ConflictOverlay
+    locales:
+      - "coding:conflict.useMine"
+  pattern:
+    source: VS Code merge editor / git mergetool
+    rationale: >-
+      Showing both sides + the three actions inline beats kicking the
+      user out to a separate merge tool. Modal merging is where review
+      flow goes to die.
+  sota: {}
+  added_in: "2026-05-05"
+  related: ["working-tree-drift"]
+
+- id: review-comments-inline
+  label: Inline review comments per hunk
+  tier: leading
+  description: >-
+    Each hunk carries an optional `comments` array (`HunkComment`).
+    Click the `+` in the hunk gutter to attach a note; notes survive
+    reload and travel with the hunk if it shifts. Notes render in the
+    PR description as `> file:line — note`.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::HunkComment
+  pattern:
+    source: GitHub line comments / Gerrit drafts
+    rationale: >-
+      Letting the user annotate during review captures the reasoning
+      while it's fresh. Most reviews lose this context between accept
+      and PR-write.
+  sota: {}
+  added_in: "2026-05-05"
+  related: ["hunk-level-apply"]

@@ -8,6 +8,9 @@ import { IndexStateBox } from './IndexStateBox';
 import { AiContextBox } from './AiContextBox';
 import { RefactorActionsBox } from './RefactorActionsBox';
 import { BlastRadiusBox } from './BlastRadiusBox';
+import { SymbolTimeMachine } from './SymbolTimeMachine';
+import { SemanticConflictCard } from './SemanticConflictCard';
+import { SafeRenameCard } from './SafeRenameCard';
 
 // ─── PROFILE: file outline + health + refactor verdict ────────────────
 //
@@ -76,6 +79,14 @@ export function ProfileTab({ file }: { file: FileRecord }) {
           and blast radius. Replaces the prior advisory-only block as the
           primary "what can we do here?" surface. */}
       <RefactorActionsBox file={file} />
+
+      {/* SOTA++ trio — git × graph × AST fusion that no static-analysis
+          dashboard does. Order matters: rename safety leads (the most
+          common action), then time-travel to understand what got us
+          here, then the conflict radar before merging. */}
+      <SafeRenameCard file={file} />
+      <SymbolTimeMachine file={file} />
+      <SemanticConflictCard file={file} />
 
       {/* Legacy verdict block — kept (collapsed) for the qualitative
           take that complements the action list. */}

@@ -1,0 +1,87 @@
+# PR & CI — handoff to GitHub flow.
+
+- id: pr-description-export
+  label: Export thread as PR description (Markdown)
+  tier: parity
+  description: >-
+    `turnToPrDescription` walks the active task's thread and emits a
+    structured Markdown summary: bullet of changes, citations grouped
+    by file, test results, cost. One click copies to clipboard.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::turnToPrDescription
+    locales:
+      - "coding:export.prTitle"
+  pattern:
+    source: Conventional Commits / GitHub PR template
+    rationale: >-
+      The hardest part of a PR is the description. Pre-filling from the
+      agent thread closes the loop between "what I asked for" and "what
+      I'm asking the reviewer for".
+  sota:
+    cursor: false
+    claude_code: false
+    devin: partial
+  added_in: "2026-04-12"
+
+- id: pr-checks-inline
+  label: PR checks status inline
+  tier: leading
+  description: >-
+    Once a PR is open, the task header shows live CI status — green/red
+    dots per check, click for the failing log. Polls the `gh` CLI every
+    30s; cancels polling when the PR is merged or closed.
+  evidence:
+    symbols:
+      - src/features/pr-preview/index.ts
+    locales:
+      - "coding:pr.checksStatus"
+  pattern:
+    source: GitHub PR checks UI
+    rationale: >-
+      Watching the CI tab is dead time. Surfacing checks inline lets the
+      user jump back to coding the moment red turns green.
+  sota: {}
+  added_in: "2026-05-05"
+  flags: ["obs"]
+
+- id: branch-name-suggest
+  label: Auto branch-name suggestion from task title
+  tier: parity
+  status: planned
+  description: >-
+    Branch name field defaults to a kebab-cased version of the task
+    title, prefixed with the user's preferred convention (`feat/`,
+    `fix/`, `chore/` — picked up from recent branch history).
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::suggestBranchName
+  pattern:
+    source: Linear branch-name copy / git-flow conventions
+    rationale: >-
+      Naming branches is a small but daily friction. Inferring from the
+      task title and the team's existing pattern removes a decision.
+  sota: {}
+  added_in: "2026-04-22"
+
+- id: ci-failure-attribution
+  label: CI failure → suspect-hunk routing
+  tier: leading
+  status: planned
+  description: >-
+    On a red check, the `attributeTestsToHunks` pipeline runs against
+    the failing test names and routes the user back to the most likely
+    hunk. The hunk row pulses amber until acknowledged.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::attributeTestsToHunks
+    locales:
+      - "coding:ci.suspectHunk"
+  pattern:
+    source: Sentry suspect-commit / spec-hint
+    rationale: >-
+      "Why did CI fail" deserves a one-click answer, not a 5-tab dig
+      through logs.
+  sota: {}
+  added_in: "2026-05-05"
+  related: ["test-hunk-mapping"]

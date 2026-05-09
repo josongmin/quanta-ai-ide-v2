@@ -1,0 +1,136 @@
+# Filter & search — narrow the workspace.
+
+- id: filter-bar
+  label: FilterBar (faceted filter host)
+  tier: parity
+  description: >-
+    `FilterBar` is the top of the filter feature — composes preset,
+    range, and metric facets, plus a folder-tree opener. Keyboard
+    navigable; Esc collapses any open facet.
+  evidence:
+    symbols:
+      - src/features/filter-files/ui/FilterBar.tsx
+      - src/features/filter-files/ui/FilterBar.tsx::FilterBarProps
+  pattern:
+    source: Linear filter chips / Notion property filters
+    rationale: >-
+      Faceted filtering is the dense alternative to nested menus —
+      each facet shows current value + lets you change it in one tap.
+  sota: {}
+  added_in: "2026-03-12"
+
+- id: preset-facet
+  label: PresetFacet (saved filter presets)
+  tier: parity
+  description: >-
+    Dropdown of saved filter presets — "my open PRs", "high-risk
+    files", "untested code paths". Selecting a preset replaces the
+    active facet stack atomically.
+  evidence:
+    symbols:
+      - src/features/filter-files/ui/PresetFacet.tsx
+  pattern:
+    source: Linear views / GitHub Issues filters
+    rationale: >-
+      The 80/20 of filtering: most users hit the same 3-5 queries
+      every week. A preset turns those into one tap.
+  sota: {}
+  added_in: "2026-03-15"
+
+- id: range-facet
+  label: RangeFacet (numeric range filter)
+  tier: parity
+  description: >-
+    Two-handle slider for numeric facets — LOC, churn, age-in-days.
+    Live-updates the result count as the user drags.
+  evidence:
+    symbols:
+      - src/features/filter-files/ui/RangeFacet.tsx
+      - src/features/filter-files/ui/MetricRangeSlider.tsx
+  pattern:
+    source: Airbnb price slider / Steam refine sliders
+    rationale: >-
+      Numeric ranges are the one filter type that truly needs a
+      slider — discrete-input is a lie because the user doesn't
+      know the distribution.
+  sota: {}
+  added_in: "2026-03-15"
+
+- id: folder-tree-nav
+  label: FolderTree (workspace navigator)
+  tier: parity
+  description: >-
+    Imperative-handle-exposing folder tree. `FolderTreeHandle` lets
+    consumers expand to a path, scroll-to-file, or trigger filter
+    changes.
+  evidence:
+    symbols:
+      - src/features/filter-files/ui/FolderTree.tsx::FolderTreeHandle
+      - src/features/filter-files/ui/FolderTree.tsx::FolderTreeProps
+  pattern:
+    source: VS Code explorer / IntelliJ project view
+    rationale: >-
+      Imperative handle is the right primitive for tree control —
+      consumers need to drive the tree from elsewhere (e.g. clicking
+      a file in a search result).
+  sota: {}
+  added_in: "2026-03-15"
+
+- id: facet-renderer
+  label: FacetRenderer (declarative facet host)
+  tier: parity
+  description: >-
+    Single component that picks the right facet type (preset / range /
+    metric / category) from the facet's declared shape. New facet
+    types register here; consumers stay generic.
+  evidence:
+    symbols:
+      - src/features/filter-files/ui/FacetRenderer.tsx
+      - src/features/filter-files/ui/CategorySection.tsx
+  pattern:
+    source: react-jsonschema-form / Material-UI generics
+    rationale: >-
+      Schema-driven rendering keeps the facet list extensible —
+      adding "boolean" or "date-range" is one component, not a
+      branching switch on the consumer side.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: search-dsl-bar
+  label: Search DSL bar (typed search syntax)
+  tier: leading
+  description: >-
+    Top search bar parses a small DSL — `is:open path:src/ author:me
+    age:<7d` — into structured query terms. Tokens render as removable
+    chips; raw text stays as fallback fuzzy search.
+  evidence:
+    symbols:
+      - src/features/search-dsl/ui/SearchBar.tsx
+  pattern:
+    source: GitHub search syntax / JIRA JQL
+    rationale: >-
+      Typed-DSL beats hidden checkboxes for power users; chip
+      rendering keeps it accessible to non-power-users who can
+      still see what's filtering.
+  sota:
+    cody: partial
+  added_in: "2026-04-01"
+
+- id: project-selector
+  label: Project selector (filter scope)
+  tier: parity
+  description: >-
+    Multi-select dropdown that scopes every other filter to a chosen
+    project set. Persists via FilterContext so the choice survives
+    navigation.
+  evidence:
+    symbols:
+      - src/features/filter-files/ui/ProjectSelector.tsx
+      - src/features/filter-files/model/FilterContext.tsx
+  pattern:
+    source: GitHub repo scope selector / Linear team picker
+    rationale: >-
+      Multi-project workspaces need scope-first filtering — you
+      filter projects, then filter inside the chosen subset.
+  sota: {}
+  added_in: "2026-03-22"

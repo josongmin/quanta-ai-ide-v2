@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "feature-catalog"
+version = "0.1.0"
+description = "Source-of-truth catalog for the /coding workspace's feature inventory"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.6",
+  "pyyaml>=6.0",
+  "rich>=13.7",
+  "typer>=0.12",
+]
+
+[project.scripts]
+fcat = "feature_catalog.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/feature_catalog"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "B", "UP", "SIM", "RUF"]

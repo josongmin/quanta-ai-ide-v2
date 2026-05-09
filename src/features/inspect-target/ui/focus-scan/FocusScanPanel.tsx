@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ScrollText, Sparkles, Network, FileSearch, ShieldAlert } from 'lucide-react';
 import { useFilterRepo } from '@features/filter-files';
 import type { FileRecord } from '@entities/repo';
+import { INTELLIGENCE_LAYOUT } from '@app/router/intelligence/panelLayout';
 import { GlassCard, Portal } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import { Badge } from './shared';
@@ -50,18 +51,11 @@ export default function FocusScanPanel({
     return ins;
   }, [repo, file.id]);
 
-  // `overflow: hidden` on the GlassCard root kills `backdrop-filter` in
-  // Chromium (the element becomes its own paint container with no backdrop
-  // to read). Keep the clip on an inner wrapper instead — see InspectPanel.
-  const card = (
-    <GlassCard
-      className={`flex flex-col h-full ${embedded ? '' : 'max-h-[calc(100vh-130px)]'}`}
-    >
-     <div className="flex flex-col h-full overflow-hidden" style={{ borderRadius: 'inherit' }}>
-      <header
-        className="shrink-0 px-5 pt-4 pb-3 border-b"
-        style={{ borderColor: 'var(--border-default)' }}
-      >
+  // The outer shell is the top card. Keep the file title/meta/tab strip flush
+  // with that shell, then render the deeper sections as nested cards below.
+  const stack = (
+    <>
+      <div className="-mx-2 px-5 pt-4 pb-0">
         <div className="flex items-start gap-2 min-w-0">
           <div className="min-w-0 flex-1">
             <h2 className="font-black text-[13px] truncate tracking-tight">{file.name}</h2>
@@ -86,7 +80,7 @@ export default function FocusScanPanel({
             <Sparkles className="w-3 h-3" />
           </button>
         </div>
-        <div className="flex items-center gap-1.5 mt-2.5 flex-wrap">
+        <div className="flex items-center gap-1.5 mt-2.5 mb-3 flex-wrap">
           <Badge kind={file.status}>{tc(`status.${file.status}`).toUpperCase()}</Badge>
           <Badge kind="confidence" conf={file.metrics.confidence}>
             {file.metrics.confidence.toUpperCase()}
@@ -95,66 +89,88 @@ export default function FocusScanPanel({
             {t('focus.safetyLabel')} {file.metrics.editSafety}
           </Badge>
         </div>
-      </header>
+        <nav
+          className="-mx-5 overflow-x-auto scrollbar-hide border-t"
+          style={{ borderColor: 'var(--border-default)' }}
+        >
+          <div className="flex items-stretch gap-3 px-4 min-w-max">
+            {TABS.map(({ id, labelKey, icon: Icon }) => {
+              const active = tab === id;
+              return (
+                <button type="button"
+                  key={id}
+                  onClick={() => { setTab(id); }}
+                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] whitespace-nowrap transition-colors"
+                  style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
+                >
+                  <Icon className="w-3 h-3 shrink-0" />
+                  <span>{t(labelKey)}</span>
+                  {active && (
+                    <span
+                      className="absolute left-0 right-0 -bottom-px h-[1.5px]"
+                      style={{ background: 'var(--fg-strong)' }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      </div>
 
-      {/* Similar files drawer — opens from the Sparkles header button */}
       {similarOpen && (
-        <SimilarDrawer file={file} onClose={() => { setSimilarOpen(false); }} />
+        <GlassCard tone="inner" className="px-3 py-2">
+          <SimilarDrawer file={file} onClose={() => { setSimilarOpen(false); }} />
+        </GlassCard>
       )}
 
-      {/* Tabs — 4 pillars */}
-      <nav
-        className="shrink-0 overflow-x-auto scrollbar-hide border-b"
-        style={{ borderColor: 'var(--border-default)' }}
-      >
-        <div className="flex items-stretch gap-3 px-4 min-w-max">
-          {TABS.map(({ id, labelKey, icon: Icon }) => {
-            const active = tab === id;
-            return (
-              <button type="button"
-                key={id}
-                onClick={() => { setTab(id); }}
-                className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] whitespace-nowrap transition-colors"
-                style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
-              >
-                <Icon className="w-3 h-3 shrink-0" />
-                <span>{t(labelKey)}</span>
-                {active && (
-                  <span
-                    className="absolute left-0 right-0 -bottom-px h-[1.5px]"
-                    style={{ background: 'var(--fg-strong)' }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </nav>
-
-      <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 scrollbar-hide text-[11px]">
+      <div className="text-[11px]">
         {tab === 'profile' && <ProfileTab file={file} />}
         {tab === 'graph'   && <GraphTab   file={file} reverseDeps={reverseDeps} />}
         {tab === 'risk'    && <RiskTab    file={file} />}
         {tab === 'proof'   && <ProofTab   file={file} />}
       </div>
 
-      <footer
-        className="shrink-0 px-5 py-2.5 border-t text-[9px] font-mono uppercase tracking-[0.18em]"
-        style={{ borderColor: 'var(--border-default)', color: 'var(--fg-subtle)', opacity: 0.7 }}
+      <GlassCard
+        tone="inner"
+        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[0.18em]"
+        style={{ color: 'var(--fg-subtle)' }}
       >
         {t('footer.focusScan', { state: file.metrics.indexState })}
-      </footer>
-     </div>
-    </GlassCard>
+      </GlassCard>
+
+      <div className="h-2" aria-hidden />
+    </>
   );
 
-  if (embedded) return card;
+  if (embedded) {
+    return (
+      <aside className="w-full h-full min-h-0 z-30 flex flex-col shrink-0">
+        <GlassCard className="flex-1 h-full min-h-0 px-3 py-2">
+          <div className="h-full min-h-0 overflow-y-auto scrollbar-hide space-y-2">
+            {stack}
+          </div>
+        </GlassCard>
+      </aside>
+    );
+  }
 
   return (
     <Portal>
-      <div className="fixed top-[68px] right-4 z-30 w-[360px] max-h-[calc(100vh-84px)] pointer-events-auto">
-        {card}
-      </div>
+      <aside
+        className="fixed z-30 w-[360px] flex flex-col pointer-events-auto"
+        style={{
+          top: `calc(var(--header-height) + ${INTELLIGENCE_LAYOUT.topInset}px)`,
+          right: INTELLIGENCE_LAYOUT.sideInset,
+          bottom: INTELLIGENCE_LAYOUT.bottomInset,
+        }}
+      >
+        <GlassCard className="flex-1 h-full min-h-0 px-3 py-2">
+          <div className="h-full min-h-0 overflow-y-auto scrollbar-hide space-y-2">
+            {stack}
+          </div>
+        </GlassCard>
+      </aside>
     </Portal>
   );
 }

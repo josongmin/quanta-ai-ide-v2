@@ -32,11 +32,21 @@ export function StackProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<StackItem[]>([{ kind: 'workspace' }]);
   const [activeKey, setActiveKey] = useState<string | null>('workspace');
 
+  // Replace-mode: clicking anywhere (canvas dot, folder tree row, etc.)
+  // *replaces* the currently-open file/folder rather than pushing a new
+  // tab. The workspace summary tab stays anchored as the resting state
+  // so the right rail is never empty. The list is therefore at most two
+  // entries: [workspace, currentFocus].
   const open = useCallback((item: StackItem) => {
     const key = stackKey(item);
     setItems((cur) => {
+      // Already-active item — no-op so we don't churn the rendered key.
       if (cur.some((x) => stackKey(x) === key)) return cur;
-      return [...cur, item];
+      // Workspace click → just activate the workspace, no extra entry.
+      if (item.kind === 'workspace') return cur;
+      // file / folder click → drop the prior file/folder, append the new one.
+      const without = cur.filter((x) => x.kind === 'workspace');
+      return [...without, item];
     });
     setActiveKey(key);
   }, []);

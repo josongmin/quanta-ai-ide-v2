@@ -5,19 +5,12 @@ export type {
   RuleSource,
   RuleSeverity,
   CostClass,
-  EvidenceLevel,
   MetricField,
   CompareOp,
-  MetricSignal,
   GraphPattern,
-  GraphSignal,
   TaintSource,
   TaintSink,
-  TaintSignal,
-  DslSignal,
-  ExternalSignal,
   RuleSignal,
-  RuleScope,
   RuleOverride,
   RuleMatch,
   RulePreview,
@@ -26,14 +19,9 @@ export type {
 } from './model';
 
 export { SAMPLE_RULES } from './lib/sample';
-export {
-  estimateCost,
-  canPreviewInline,
-  COST_HINT,
-} from './lib/cost';
+export { estimateCost } from './lib/cost';
 export {
   previewRule,
   evaluateAdmission,
-  retroactiveImpact,
   type RetroResult,
 } from './lib/evaluate';

@@ -333,6 +333,40 @@
     "addtest": { "title": "Generate test scaffold", "delta": "+1 test file" },
     "lint": { "title": "Auto-fix lint errors" }
   },
+  "timeMachine": {
+    "title": "Symbol time machine",
+    "trendUp": "getting hairier",
+    "trendDown": "getting cleaner",
+    "trendFlat": "stable",
+    "recent": "Recent commits",
+    "bisect": {
+      "title": "Complexity jump",
+      "open": "Open PR"
+    }
+  },
+  "semanticConflict": {
+    "title": "Semantic conflict",
+    "clear": "Clear",
+    "summary": "{{n}} candidates",
+    "cleanHint": "No open PRs touch the same call-graph neighborhood. Safe to merge.",
+    "note": "Predicted from the call graph — git diff alone wouldn’t flag these.",
+    "severity": { "high": "High", "medium": "Medium", "low": "Low" }
+  },
+  "safeRename": {
+    "title": "Safe-rename confidence",
+    "compositeNote": "{{unsafe}}/{{total}} callsites need review",
+    "verdict": {
+      "exact": "EXACT",
+      "overapprox": "OVERAPPROX",
+      "unknown": "NEEDS REVIEW"
+    },
+    "cta": {
+      "exact": "Refactor engine will handle every callsite",
+      "overapprox": "Diff preview recommended for risky callsites",
+      "unknown": "Manual review required — auto-rename disabled"
+    },
+    "btn": { "rename": "Rename", "preview": "Preview" }
+  },
   "catalog": {
     "profileTitle": "File outline",
     "profileSub": "function_summary · cost · effects",
@@ -380,6 +414,24 @@
     "actionRename": "Rename",
     "actionExtract": "Extract",
     "actionAddTest": "Add test"
+  },
+  "hotspot": {
+    "title": "Hotspot",
+    "topPercent": "top {{pct}}",
+    "signal": {
+      "changePressure": "change",
+      "structuralFriction": "structure",
+      "healthDeficit": "health",
+      "couplingPressure": "coupling",
+      "criticalityProxy": "criticality"
+    },
+    "narrative": {
+      "changePressure": "Top {{percentile}}% — heavy recent change is the dominant driver here.",
+      "structuralFriction": "Top {{percentile}}% — structural complexity is the loudest signal in this file.",
+      "healthDeficit": "Top {{percentile}}% — low coverage and lint debt account for most of the score.",
+      "couplingPressure": "Top {{percentile}}% — wide fan-in/out makes this a coupling pressure point.",
+      "criticalityProxy": "Top {{percentile}}% — public surface and blast radius dominate the score."
+    }
   },
   "stack_axis": {
     "openTabs": "Open tabs",

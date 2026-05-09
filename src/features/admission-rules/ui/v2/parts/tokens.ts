@@ -56,16 +56,19 @@ export function v2Tokens(isDark: boolean) {
   }
   return {
     isDark: false,
-    page:         '#f4f6f9',
-    sidebar:      'rgba(255, 255, 255, 0.80)',
-    sidebarBlur:  'blur(24px) saturate(160%)',
-    cardBacking:  'rgba(255, 255, 255, 0.82)',
+    // Light language follows the /coding page: page = `#f7f8fa`, side
+    // panels = solid `#ffffff`. Sidebar drops the alpha-on-page recipe
+    // so it reads as a clean white rail rather than a tinted glass.
+    page:         '#f7f8fa',
+    sidebar:      '#ffffff',
+    sidebarBlur:  'none',
+    cardBacking:  '#ffffff',
     inset:        'rgba(0, 0, 0, 0.04)',
     hoverSubtle:  'rgba(0, 0, 0, 0.03)',
     hoverActive:  'rgba(0, 0, 0, 0.06)',
-    border:       'rgba(0, 0, 0, 0.10)',
-    borderSoft:   'rgba(0, 0, 0, 0.07)',
-    borderHair:   'rgba(0, 0, 0, 0.05)',
+    border:       'rgba(0, 0, 0, 0.08)',
+    borderSoft:   'rgba(0, 0, 0, 0.06)',
+    borderHair:   'rgba(0, 0, 0, 0.04)',
     textHi:       'rgba(0, 0, 0, 0.95)',
     textBody:     'rgba(0, 0, 0, 0.85)',
     textMuted:    'rgba(0, 0, 0, 0.55)',

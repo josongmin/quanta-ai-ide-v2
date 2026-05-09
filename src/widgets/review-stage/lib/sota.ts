@@ -407,37 +407,6 @@ export function bumpCumulative(prNumber: number, deltaMs: number): void {
   writeMap(m);
 }
 
-// ─── Unresolved thread aggregation ───────────────────────────────────────
-
-export type ThreadStats = {
-  open: number;
-  resolved: number;
-  /** Threads that have at least one comment from a reviewer (needs author reply). */
-  needsAuthor: number;
-};
-
-/**
- * Aggregate per-PR thread stats. Used by the right rail's "Resolve all"
- * batch action and the section header counter.
- */
-export function threadStats(pr: PullRequest): ThreadStats {
-  let open = 0;
-  let resolved = 0;
-  let needsAuthor = 0;
-  for (const t of pr.threads) {
-    if (t.resolved) {
-      resolved += 1;
-    } else {
-      open += 1;
-      const lastComment = t.comments[t.comments.length - 1];
-      if (lastComment !== undefined && lastComment.authorLogin !== pr.author) {
-        needsAuthor += 1;
-      }
-    }
-  }
-  return { open, resolved, needsAuthor };
-}
-
 // ─── Files-with-tests ratio ──────────────────────────────────────────────
 
 /**

@@ -14,7 +14,7 @@ import {
 import { SOURCE_GLYPH, usesHint, describeSignal } from '../../sourceStyle';
 import { SEVERITY_COLOR, useV2, type V2Theme } from './tokens';
 import { V2Card, SectionTitle, Stat } from './primitives';
-import { statusRank } from './retrospective';
+import { statusRank, RETRO_SEEDS } from './retrospective';
 import { ConfidenceBand } from './ConfidenceBand';
 import { EffectSizeBar } from './EffectSizeBar';
 import { AnomalySentinel } from './AnomalySentinel';
@@ -39,7 +39,7 @@ export function HealthPage({
   onRegenerate: () => void;
   rules: AdmissionRule[];
   previews: Map<string, ReturnType<typeof previewRule>>;
-  retro: { seed: number; decision: ReturnType<typeof evaluateAdmission> }[];
+  retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
 }) {
   return (
     <div className="relative min-h-full p-6 pt-10 flex flex-col gap-6">
@@ -97,7 +97,7 @@ export function HealthPage({
 function ScienceStrip({
   retro, rules,
 }: {
-  retro: { seed: number; decision: ReturnType<typeof evaluateAdmission> }[];
+  retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
   rules: AdmissionRule[];
 }) {
   const stats = useMemo(() => {
@@ -880,12 +880,24 @@ function RuleInspector({
   const sevColor = rule.severity === 'block' ? SEVERITY_COLOR.block
     : rule.severity === 'warn' ? SEVERITY_COLOR.warn : 'rgba(255,255,255,0.55)';
   const fired = evalResult && (evalResult.status === 'block' || evalResult.status === 'warn');
+  const dotColor = rule.enabled ? sevColor : 'rgba(255,255,255,0.25)';
   return (
-    <div className="flex items-start gap-4 admv2-rise">
-      <div
-        className="w-1 self-stretch rounded-full"
-        style={{ background: rule.enabled ? sevColor : 'rgba(255,255,255,0.12)' }}
-      />
+    <div className="flex items-start gap-3 admv2-rise">
+      <span className="relative shrink-0 mt-1 inline-flex items-center justify-center w-3 h-3">
+        {rule.enabled && rule.severity !== 'info' && (
+          <span
+            className="absolute inset-0 rounded-full"
+            style={{ background: sevColor, opacity: 0.18, filter: 'blur(2px)' }}
+          />
+        )}
+        <span
+          className="relative w-2 h-2 rounded-full"
+          style={{
+            background: dotColor,
+            boxShadow: rule.enabled && rule.severity === 'block' ? `0 0 0 2px ${sevColor}33` : 'none',
+          }}
+        />
+      </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[10px] font-mono text-white/40">
@@ -975,9 +987,11 @@ function FilterChips({
 function LiveFeed({
   retro,
 }: {
-  retro: { seed: number; decision: ReturnType<typeof evaluateAdmission> }[];
+  retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
 }) {
   const { t: tA } = useTranslation('admission');
+  // Newest first — synthetic stream reads top-down.
+  const ordered = useMemo(() => [...retro].reverse(), [retro]);
   return (
     <V2Card className="p-4 relative overflow-hidden">
       <div className="flex items-center gap-2 mb-3">
@@ -987,9 +1001,9 @@ function LiveFeed({
           live
         </span>
       </div>
-      <div className="space-y-2 overflow-y-auto pr-1" style={{ maxHeight: 540 }}>
-        {retro.slice(0, 12).map((r, i) => (
-          <FeedRow key={r.seed} index={i} seed={r.seed} decision={r.decision} />
+      <div className="space-y-1.5 overflow-y-auto pr-1" style={{ maxHeight: 540 }}>
+        {ordered.slice(0, 12).map((r, i) => (
+          <FeedRow key={r.seed} index={i} seed={r.seed} diff={r.diff} decision={r.decision} />
         ))}
       </div>
       <div className="mt-3 pt-3 border-t border-white/5 text-[10px] font-mono text-white/40 leading-relaxed">
@@ -1000,16 +1014,33 @@ function LiveFeed({
 }
 
 function FeedRow({
-  seed, decision, index,
+  seed, diff, decision, index,
 }: {
   seed: number;
+  diff: PRDiff;
   decision: ReturnType<typeof evaluateAdmission>;
   index: number;
 }) {
   const accent = decision.outcome === 'block' ? SEVERITY_COLOR.block
     : decision.outcome === 'warn' ? SEVERITY_COLOR.warn
     : '#5fa86c';
+
   const fired = decision.ruleResults.filter((r) => r.status === 'block' || r.status === 'warn');
+  const topRule = fired.length > 0 ? fired[0]!.ruleName : null;
+
+  // Real metrics for the row: counts come from the actual PR diff and
+  // decision rather than placeholder copy, so each row shows the same
+  // shape an engineer would see in a real review feed.
+  const filesChanged = diff.changes.length;
+  const rippleCount = diff.affected.length;
+  // Deterministic relative time per seed — newer seeds = more recent.
+  const ageMin = (RETRO_SEEDS[RETRO_SEEDS.length - 1]! - seed) * 47 + index * 3;
+  const ageLabel = ageMin < 60
+    ? `${ageMin}m`
+    : ageMin < 1440
+      ? `${Math.floor(ageMin / 60)}h`
+      : `${Math.floor(ageMin / 1440)}d`;
+
   return (
     <div
       className="px-3 py-2 rounded-lg flex items-center gap-3 group transition-all hover:bg-white/[0.04] hover:translate-x-0.5"
@@ -1018,13 +1049,28 @@ function FeedRow({
         animationDelay: `${index * 35}ms`,
       }}
     >
-      <span
-        className="w-1 self-stretch rounded-full shrink-0"
-        style={{
-          background: accent,
-          boxShadow: decision.outcome === 'block' ? `0 0 6px ${accent}` : 'none',
-        }}
-      />
+      {/* Status dot — replaces the old left strip. The outer ring is a
+          soft halo (only visible for block/warn) so the severity reads at
+          a glance without the heavy bar the user disliked. */}
+      <span className="relative shrink-0 inline-flex items-center justify-center w-3 h-3">
+        {decision.outcome !== 'allow' && (
+          <span
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: accent,
+              opacity: 0.18,
+              filter: 'blur(2px)',
+            }}
+          />
+        )}
+        <span
+          className="relative w-1.5 h-1.5 rounded-full"
+          style={{
+            background: accent,
+            boxShadow: decision.outcome === 'block' ? `0 0 0 2px ${accent}33` : 'none',
+          }}
+        />
+      </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-mono text-white/85">#{seed}</span>
@@ -1034,18 +1080,28 @@ function FeedRow({
           >
             {decision.outcome}
           </span>
-          {fired.length > 0 && (
-            <span className="ml-auto text-[9px] font-mono text-white/40">
-              {fired.length} fired
-            </span>
-          )}
+          <span className="ml-auto text-[9px] font-mono text-white/35 tabular-nums">
+            {ageLabel} ago
+          </span>
         </div>
-        <div className="mt-0.5 text-[10px] font-mono text-white/40 truncate">
-          {fired.length === 0
-            ? 'clean'
-            : fired.slice(0, 2).map((r) => r.ruleName).join(' · ')
-              + (fired.length > 2 ? ` +${fired.length - 2}` : '')}
+        <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono text-white/55 truncate">
+          <span className="tabular-nums shrink-0">
+            {filesChanged} files
+          </span>
+          <span className="text-white/25">·</span>
+          <span className="tabular-nums shrink-0">
+            {rippleCount} ripple
+          </span>
+          <span className="text-white/25">·</span>
+          <span className="tabular-nums shrink-0" style={{ color: fired.length > 0 ? accent : 'rgba(255,255,255,0.35)' }}>
+            {fired.length} fired
+          </span>
         </div>
+        {topRule && (
+          <div className="mt-0.5 text-[10px] font-mono text-white/35 truncate">
+            {topRule}{fired.length > 1 ? ` +${fired.length - 1}` : ''}
+          </div>
+        )}
       </div>
       <ArrowUpRight className="w-3 h-3 text-white/30 group-hover:text-white/85 group-hover:rotate-12 shrink-0 transition-all" />
     </div>
@@ -1188,7 +1244,7 @@ function DecisionRibbon({
 function Retroactive({
   retro,
 }: {
-  retro: { seed: number; decision: ReturnType<typeof evaluateAdmission> }[];
+  retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
 }) {
   const { t: tA } = useTranslation('admission');
   const [hover, setHover] = useState<number | null>(null);

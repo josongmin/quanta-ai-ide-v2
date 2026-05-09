@@ -1204,6 +1204,8 @@ export function createUniverseMode(): ViewMode {
       renderer.setSize(rect.width, rect.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.setClearColor(pal.bg, 1);
+      renderer.domElement.style.background = `#${pal.bg.toString(16).padStart(6, '0')}`;
       c.mountEl.appendChild(renderer.domElement);
 
       raycaster = new THREE.Raycaster();

@@ -12,6 +12,7 @@ import {
   tracking,
   duration,
   easing,
+  zIndex,
 } from './primitives';
 import { semantic, type Theme } from './semantic';
 import { glass, card, chip, panel, header, tab, dropdown, pill } from './components';
@@ -23,6 +24,7 @@ const semanticToCssVar: Record<keyof typeof semantic.dark, string> = {
   bgSurfaceMuted: '--bg-surface-muted',
   bgOverlay: '--bg-overlay',
   bgElevated: '--bg-elevated',
+  bgPanelStrong: '--bg-panel-strong',
   bgHover: '--bg-hover',
   bgActive: '--bg-active',
   bgActiveStrong: '--bg-active-strong',
@@ -121,6 +123,15 @@ function emitPrimitivesOnce(root: HTMLElement): void {
   for (const [k, v] of Object.entries(easing)) {
     root.style.setProperty(`--ease-${sanitizeKey(k)}`, v);
   }
+  // Z-index tiers — components reference these as `var(--z-modal)` etc.
+  // Without this loop the variable resolves to empty and Tailwind's
+  // `z-[var(--z-modal)]` collapses to `z-index: ;` — i.e. auto. That
+  // bug surfaced as the FacetSettings modal sitting behind the chat
+  // composer and the floating prompt chips. Emitting them once at
+  // mount fixes the entire stacking hierarchy in one place.
+  for (const [k, v] of Object.entries(zIndex)) {
+    root.style.setProperty(`--z-${sanitizeKey(k)}`, v);
+  }
 }
 
 export function applyTokens(theme: Theme): void {
@@ -136,6 +147,20 @@ export function applyTokens(theme: Theme): void {
     root.style.setProperty(semanticToCssVar[key], map[key]);
   }
   root.dataset['theme'] = theme;
+  root.style.background = map.bgCanvas;
+  root.style.backgroundColor = map.bgCanvas;
+  root.style.colorScheme = theme;
+
+  if (document.body) {
+    document.body.style.background = map.bgCanvas;
+    document.body.style.backgroundColor = map.bgCanvas;
+    document.body.style.colorScheme = theme;
+  }
+  const appRoot = document.getElementById('root');
+  if (appRoot) {
+    appRoot.style.background = map.bgCanvas;
+    appRoot.style.backgroundColor = map.bgCanvas;
+  }
 
   // Component tokens — emitted once (theme-agnostic), but cheap to re-set.
   root.style.setProperty('--glass-blur', glass.blur);

@@ -1,0 +1,77 @@
+# Industry SOTA snapshot — competitor matrix metadata.
+#
+# Used by `fcat coverage` to render the "us vs them" table. Values
+# in each feature's `sota:` block are typed against the keys here.
+
+snapshot_date: "2026-05-08"
+
+competitors:
+  - key: cursor
+    label: Cursor
+    url: https://cursor.com
+    notes: >-
+      Editor-anchored agent IDE. Strongest on inline completion + tab
+      acceptance. Weaker on observability, recovery, cost enforcement.
+
+  - key: claude_code
+    label: Claude Code
+    url: https://claude.ai/code
+    notes: >-
+      CLI/terminal-anchored. Strong tool-use + plan workflow. Limited
+      visual review surface; no scrubber, no per-turn confidence.
+
+  - key: devin
+    label: Devin (Cognition)
+    url: https://devin.ai
+    notes: >-
+      Background-task pioneer. Strong plan UI + multi-task. Weak on
+      hunk-level review and per-turn cost attribution.
+
+  - key: openhands
+    label: OpenHands (All Hands AI)
+    url: https://github.com/All-Hands-AI/OpenHands
+    notes: >-
+      Open-source agent platform. Strong sandboxing, weaker review UX.
+
+  - key: cody
+    label: Cody (Sourcegraph)
+    url: https://sourcegraph.com/cody
+    notes: >-
+      Strongest on code-graph context + citation attribution. Weaker
+      on agentic workflows.
+
+  - key: continue_ide
+    label: Continue
+    url: https://continue.dev
+    notes: >-
+      Open-source IDE extension. Strong on local model + cost meter.
+      Limited multi-task / background.
+
+  - key: windsurf
+    label: Windsurf (Codeium)
+    url: https://codeium.com/windsurf
+    notes: >-
+      "Cascade" agent flow. Strong file-tree awareness, weak on
+      observability.
+
+  - key: copilot_ws
+    label: GitHub Copilot Workspace
+    url: https://githubnext.com/projects/copilot-workspace
+    notes: >-
+      PR-anchored agent flow. Strong on issue → PR loop, weak on
+      everything outside that loop.
+
+# Tier-to-bucket mapping for `fcat coverage` rendering.
+tier_buckets:
+  leading:
+    label: "We lead"
+    color: "emerald"
+  parity:
+    label: "At parity"
+    color: "neutral"
+  progressive:
+    label: "Progressive enhancement"
+    color: "sky"
+  table-stakes:
+    label: "Table stakes"
+    color: "zinc"

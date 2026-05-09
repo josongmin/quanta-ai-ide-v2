@@ -28,7 +28,11 @@ function newSession(titleFn: (n: number) => string): Session {
   return { id: n, title: titleFn(n), msgs: [], input: '', pending: false };
 }
 
-export default function ChatAgent() {
+export default function ChatAgent({
+  maxWidth = 'calc(100vw - 820px)',
+}: {
+  maxWidth?: number | string;
+} = {}) {
   const { t } = useTranslation('chat');
   const makeTitle = useCallback((n: number) => t('tabs.defaultTitle', { n }), [t]);
   // Open by default — the agent is the primary CTA at the bottom-center.
@@ -322,8 +326,13 @@ export default function ChatAgent() {
 
   if (!active) return null;
 
+  const hasConversation = active.msgs.length > 0 || active.pending;
+
   return (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-[560px] max-w-[calc(100vw-820px)] min-w-[420px]">
+    <div
+      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-[560px] min-w-[420px]"
+      style={{ maxWidth }}
+    >
       {/* Suggestions float above the chat box, only on a fresh session */}
       {active.msgs.length === 0 && (
         <div className="mb-3 pointer-events-auto">
@@ -333,15 +342,50 @@ export default function ChatAgent() {
           />
         </div>
       )}
-      <GlassCard className="overflow-hidden flex flex-col max-h-[60vh]">
+      <GlassCard
+        className={`overflow-hidden flex flex-col relative ${
+          hasConversation && height == null ? 'max-h-[60vh]' : ''
+        }`}
+        style={hasConversation && height != null ? { height } : undefined}
+      >
+        {/* Vertical resize grip pinned to the very top of the card.
+            Dragging up grows the widget (it's anchored to the viewport
+            bottom). Double-click resets to the CSS default; ArrowUp/Down
+            nudge ±24px; Home/Esc reset. Pattern: macOS Finder column
+            separator + VS Code panel grip.
+            Only shown when there's a conversation — empty state hugs
+            content and has nothing to resize. */}
+        {hasConversation && <div
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label={t('agent.resize', { defaultValue: 'Resize chat panel' })}
+          tabIndex={0}
+          onPointerDown={onResizeStart}
+          onPointerMove={onResizeMove}
+          onPointerUp={onResizeEnd}
+          onPointerCancel={onResizeEnd}
+          onDoubleClick={onResizeDoubleClick}
+          onKeyDown={onResizeKey}
+          className={`absolute top-0 left-0 right-0 h-2 -mt-1 z-20 cursor-ns-resize flex items-center justify-center group ${
+            isResizing ? '' : ''
+          }`}
+        >
+          <span
+            className={`block w-8 h-[3px] rounded-full transition-all ${
+              isResizing
+                ? 'bg-[color:var(--fg-default)] opacity-80 w-12'
+                : 'bg-[color:var(--fg-subtle)] opacity-30 group-hover:opacity-70 group-focus-visible:opacity-90'
+            }`}
+          />
+        </div>}
         {/* Header — p0 brand on the left, tab strip inline, close on the right */}
         <header
           className="shrink-0 flex items-stretch border-b"
-          style={{ height: 48, borderColor: 'var(--border-default)' }}
+          style={{ height: 32, borderColor: 'var(--border-default)' }}
         >
-          <div className="shrink-0 flex items-center pl-4 pr-4">
+          <div className="shrink-0 flex items-center pl-3 pr-3">
             <span
-              className="font-mono font-black tracking-tight text-[13px] leading-none"
+              className="font-mono font-black tracking-tight text-[12px] leading-none"
               style={{ color: 'var(--fg-strong)' }}
             >
               p0
@@ -359,7 +403,7 @@ export default function ChatAgent() {
                     role="tab"
                     aria-selected={a}
                     tabIndex={0}
-                    className="group relative flex items-center gap-2 px-3 text-[11px] font-bold cursor-pointer transition-colors whitespace-nowrap"
+                    className="group relative flex items-center gap-1.5 px-2.5 text-[11px] font-bold cursor-pointer transition-colors whitespace-nowrap"
                     style={{ color: a ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                     onClick={() => { setActiveId(s.id); }}
                     onKeyDown={(e) => {
@@ -398,22 +442,22 @@ export default function ChatAgent() {
                 onClick={addSession}
                 title={t('tabs.newTitle')}
                 aria-label={t('tabs.newAria')}
-                className="shrink-0 px-3 flex items-center justify-center transition-colors hover-surface"
+                className="shrink-0 px-2.5 flex items-center justify-center transition-colors hover-surface"
                 style={{ color: 'var(--fg-subtle)' }}
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-3 h-3" />
               </button>
             </div>
           </div>
 
-          <div className="shrink-0 flex items-center pr-2">
+          <div className="shrink-0 flex items-center pr-1.5">
             <button type="button"
               onClick={() => { setOpen(false); }}
               aria-label={t('agent.closeAria')}
-              className="p-1.5 rounded-md transition-colors hover-surface"
+              className="p-1 rounded-md transition-colors hover-surface"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         </header>

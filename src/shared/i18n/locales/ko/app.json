@@ -4,7 +4,9 @@
     "coding": "코딩",
     "agents": "에이전트",
     "reviews": "리뷰",
-    "admission": "어드미션"
+    "admission": "어드미션",
+    "fix-pipeline": "Fix",
+    "fixes": "픽스"
   },
   "action": {
     "resetFilters": "필터 초기화",
@@ -12,6 +14,32 @@
     "designTokens": "디자인 토큰",
     "notifications": "알림",
     "aiActivity": "AI 활동"
+  },
+  "git": {
+    "panelAria": "Git 작업",
+    "trigger": {
+      "clean": "워킹 트리 깨끗",
+      "dirty": "변경 {{count}}건 대기 중",
+      "ahead": "푸시할 커밋 {{count}}개"
+    },
+    "aheadTitle": "푸시되지 않은 로컬 커밋",
+    "empty": {
+      "clean": "변경 없음",
+      "changes": "{{count}}건 변경"
+    },
+    "commit": {
+      "subjectLabel": "제목",
+      "subjectPlaceholder": "한 줄 요약…",
+      "bodyPlaceholder": "선택 — 무엇을, 왜",
+      "action": "커밋"
+    },
+    "push": {
+      "action": "푸시"
+    },
+    "toast": {
+      "committed": "커밋 생성됨",
+      "pushed": "origin에 푸시됨"
+    }
   },
   "tooltip": {
     "loc": "LOC",

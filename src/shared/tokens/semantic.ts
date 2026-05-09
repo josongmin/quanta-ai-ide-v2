@@ -15,6 +15,7 @@ type SemanticTokens = {
   bgSurfaceMuted: string;
   bgOverlay: string;
   bgElevated: string;       // popover / dropdown / menu surface
+  bgPanelStrong: string;    // dense data panels that need a near-opaque face on top of the canvas (InspectPanel / FocusScanPanel)
   bgHover: string;          // hover state overlay
   bgActive: string;         // active / pressed state overlay
   bgActiveStrong: string;   // pressed/selected pill in toggle groups; asymmetric (heavier on light)
@@ -78,6 +79,7 @@ export const dark: SemanticTokens = {
   bgSurfaceMuted: 'rgba(255,255,255,0.03)',
   bgOverlay: 'rgba(13, 17, 23, 0.82)',
   bgElevated: 'rgba(255,255,255,0.06)',
+  bgPanelStrong: 'rgba(13, 17, 23, 0.92)',
   bgHover: 'rgba(255,255,255,0.04)',
   bgActive: 'rgba(255,255,255,0.08)',
   bgActiveStrong: 'rgba(255,255,255,0.15)',
@@ -139,6 +141,7 @@ export const light: SemanticTokens = {
   bgSurfaceMuted: 'rgba(0,0,0,0.03)',
   bgOverlay: 'rgba(255, 255, 255, 0.85)',
   bgElevated: '#ffffff',
+  bgPanelStrong: 'rgba(255, 255, 255, 0.95)',
   bgHover: 'rgba(0,0,0,0.04)',
   bgActive: 'rgba(0,0,0,0.08)',
   // Asymmetric: light theme uses /10 (heavier than dark's /15 visually) so

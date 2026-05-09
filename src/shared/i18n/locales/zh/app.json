@@ -4,7 +4,8 @@
     "coding": "编码",
     "agents": "智能体",
     "reviews": "评审",
-    "admission": "准入"
+    "admission": "准入",
+    "fix-pipeline": "Fix"
   },
   "action": {
     "resetFilters": "重置筛选",
@@ -12,6 +13,32 @@
     "designTokens": "设计令牌",
     "notifications": "通知",
     "aiActivity": "AI 活动"
+  },
+  "git": {
+    "panelAria": "Git 操作",
+    "trigger": {
+      "clean": "工作区干净",
+      "dirty": "{{count}} 项待提交变更",
+      "ahead": "{{count}} 个待推送提交"
+    },
+    "aheadTitle": "尚未推送的本地提交",
+    "empty": {
+      "clean": "无变更",
+      "changes": "{{count}} 项变更"
+    },
+    "commit": {
+      "subjectLabel": "标题",
+      "subjectPlaceholder": "简短摘要…",
+      "bodyPlaceholder": "可选 — 是什么、为什么",
+      "action": "提交"
+    },
+    "push": {
+      "action": "推送"
+    },
+    "toast": {
+      "committed": "已创建提交",
+      "pushed": "已推送到 origin"
+    }
   },
   "tooltip": {
     "loc": "LOC",

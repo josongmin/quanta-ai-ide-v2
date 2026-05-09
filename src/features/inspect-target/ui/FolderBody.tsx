@@ -5,14 +5,14 @@
 // than repo-wide topology. Self-contained: owns its tab state, its memoized
 // stats, and its tab renderers.
 
-import { memo, useMemo, useState } from 'react';
+import { memo, useMemo, useState, type ReactNode } from 'react';
 import { Activity, Folder, GitBranch, LayoutGrid, Network, ShieldAlert } from 'lucide-react';
 import type { FolderRecord, RepoData } from '@entities/repo';
-import { type Tone, languageHue, pct } from '@shared/lib';
+import { C, type Tone, languageHue, pct } from '@shared/lib';
 import { computeFolderStats } from '@entities/metric';
 import {
-  BarRow, ConfidenceMeter, EmptyHint, FileRow,
-  PanelFooter as Footer, Score, Section, StackedRatioBar, Stat, TabBar,
+  BarRow, ConfidenceMeter, EmptyHint, FileRow, GlassCard,
+  Score, StackedRatioBar, Stat,
 } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 
@@ -59,38 +59,108 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
     { id: 'deps', label: t('tab.deps'), icon: Network },
   ];
 
+  // The outer InspectPanel shell is the top card. Header / chips / tab strip
+  // are flush with that shell — same shape as FocusScanPanel — so workspace,
+  // folder, and file selections all read as the same chrome.
+  const folderPath = folder.parts.length === 0 ? '/' : '/' + folder.parts.join('/');
   return (
     <>
-      <header className={`shrink-0 px-5 pt-4 pb-3 border-b ${isDark ? 'border-white/10' : 'border-black/10'}`}>
-        <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em] ${
-          isDark ? 'text-white/40' : 'text-black/40'
-        }`}>
-          <Folder className="w-3 h-3" /> {t('header.folder')}
+      <div className="-mx-2 px-5 pt-4 pb-0">
+        <div className="flex items-start gap-2 min-w-0">
+          <div className="min-w-0 flex-1">
+            <div
+              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em]"
+              style={{ color: 'var(--fg-subtle)' }}
+            >
+              <Folder className="w-3 h-3" /> {t('header.folder')}
+            </div>
+            <h2 className="font-black text-[13px] truncate tracking-tight mt-1">
+              {folder.name || t('tree.repo')}
+            </h2>
+            <p
+              className="text-[10px] font-mono truncate mt-0.5"
+              style={{ color: 'var(--fg-subtle)' }}
+            >
+              {folderPath}
+            </p>
+          </div>
         </div>
-        <h2 className="font-black text-[17px] tracking-tight mt-1 leading-none truncate">
-          {folder.name || t('tree.repo')}
-        </h2>
-        <div className={`flex items-center gap-1.5 text-[10px] font-mono mt-1.5 ${isDark ? 'text-white/55' : 'text-black/55'}`}>
-          <span className={`truncate ${isDark ? 'text-white/55' : 'text-black/55'}`}>
-            {folder.parts.length === 0 ? '/' : '/' + folder.parts.join('/')}
+        <div className="flex items-center gap-1.5 mt-2.5 mb-3 flex-wrap">
+          <span
+            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em] tabular-nums"
+            style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
+          >
+            {stats.totalFiles.toLocaleString()} {t('focus.filesUnit')}
           </span>
-          <span className="opacity-40">·</span>
-          <span className="tabular-nums shrink-0">{stats.totalFiles.toLocaleString()} {t('focus.filesUnit')}</span>
-          <span className="opacity-40">·</span>
-          <span className="tabular-nums shrink-0">{stats.totalLoc.toLocaleString()} {t('stat.loc')}</span>
+          <span
+            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em] tabular-nums"
+            style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
+          >
+            {stats.totalLoc.toLocaleString()} {t('stat.loc')}
+          </span>
         </div>
-      </header>
+        <nav
+          className="-mx-5 overflow-x-auto scrollbar-hide border-t"
+          style={{ borderColor: 'var(--border-default)' }}
+        >
+          <div className="flex items-stretch gap-3 px-4 min-w-max">
+            {tabs.map(({ id, label, icon: Icon, badges }) => {
+              const active = tab === id;
+              return (
+                <button
+                  type="button"
+                  key={id}
+                  onClick={() => { setTab(id); }}
+                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] whitespace-nowrap transition-colors"
+                  style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
+                >
+                  <Icon className="w-3 h-3 shrink-0" />
+                  <span>{label}</span>
+                  {badges && badges.length > 0 && (
+                    <span className="ml-0.5 inline-flex items-center gap-0.5">
+                      {badges.map((b, i) => {
+                        const c = b.tone === 'critical' ? C.critical : b.tone === 'warn' ? C.warning : C.ok;
+                        return (
+                          <span
+                            key={i}
+                            className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-black tabular-nums"
+                            style={{ background: `${c}22`, color: c }}
+                          >
+                            {b.n}
+                          </span>
+                        );
+                      })}
+                    </span>
+                  )}
+                  {active && (
+                    <span
+                      className="absolute left-0 right-0 -bottom-px h-[1.5px]"
+                      style={{ background: 'var(--fg-strong)' }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      </div>
 
-      <TabBar tabs={tabs} active={tab} onChange={setTab} isDark={isDark} />
-
-      <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 scrollbar-hide text-[11px]">
+      <div className="text-[11px]">
         {tab === 'overview' && <FolderOverviewTab stats={stats} folder={folder} isDark={isDark} />}
         {tab === 'activity' && <FolderActivityTab stats={stats} isDark={isDark} />}
         {tab === 'risk' && <FolderRiskTab stats={stats} isDark={isDark} />}
         {tab === 'deps' && <FolderDepsTab stats={stats} isDark={isDark} />}
       </div>
 
-      <Footer text={folderTabFooter(tab, stats.totalFiles, t)} />
+      <GlassCard
+        tone="inner"
+        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[0.18em]"
+        style={{ color: 'var(--fg-subtle)' }}
+      >
+        {folderTabFooter(tab, stats.totalFiles, t)}
+      </GlassCard>
+
+      <div className="h-2" aria-hidden />
     </>
   );
 }
@@ -98,6 +168,46 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
 // Memoized for the same reason as WorkspaceBody: stable primitive/store
 // props mean we can short-circuit re-renders triggered by sibling state.
 export default memo(FolderBody);
+
+// Subcard mirrors the FocusScanPanel box style — `rounded-xl border` block on
+// `bg-surface-muted` with the eyebrow living *inside* the card. Keeps the
+// visual grouping while matching file-panel chrome across all three inspect
+// modes (workspace / folder / file).
+function SubCard({
+  title, subtitle, children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className="rounded-xl border px-3 py-2.5"
+      style={{
+        background: 'var(--bg-surface-muted)',
+        borderColor: 'var(--border-default)',
+      }}
+    >
+      <div className="flex items-baseline gap-2">
+        <div
+          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          style={{ color: 'var(--fg-subtle)' }}
+        >
+          {title}
+        </div>
+        {subtitle && (
+          <div
+            className="text-[9px] font-mono truncate"
+            style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
+          >
+            {subtitle}
+          </div>
+        )}
+      </div>
+      <div className="mt-2 space-y-1">{children}</div>
+    </div>
+  );
+}
 
 function folderTabFooter(tab: FolderTab, files: number, t: (k: string, opts?: Record<string, unknown>) => string): string {
   switch (tab) {
@@ -124,17 +234,17 @@ const FolderOverviewTab = memo(function FolderOverviewTab({
   const langEntries = Object.entries(stats.byLanguage).sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="space-y-5">
-      <Section title={t('section.contents')}>
+    <div className="space-y-4">
+      <SubCard title={t('section.contents')}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <Stat label={t('stat.directFiles')} value={stats.directFiles} isDark={isDark} />
           <Stat label={t('stat.recursive')} value={stats.totalFiles} isDark={isDark} />
           <Stat label={t('stat.subfolders')} value={folder.childPaths.length} isDark={isDark} />
           <Stat label={t('stat.totalLoc')} value={stats.totalLoc.toLocaleString()} isDark={isDark} />
         </div>
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.seHealth')}>
+      <SubCard title={t('section.seHealth')}>
         <Score label={t('stat.maintainability')} value={stats.maintainability} isDark={isDark} hero />
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-1">
           <Stat label={t('stat.avgComplexity')} value={stats.avgComplexity} isDark={isDark}
@@ -146,9 +256,9 @@ const FolderOverviewTab = memo(function FolderOverviewTab({
           <Stat label={t('stat.vulnerable')} value={stats.vulnerable} isDark={isDark}
                 tone={stats.vulnerable > 0 ? 'critical' : 'neutral'} />
         </div>
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.aiEfficiency')}>
+      <SubCard title={t('section.aiEfficiency')}>
         <Score label={t('stat.editSafety')} value={stats.avgEditSafety} isDark={isDark} hero diverging />
         <ConfidenceMeter
           isDark={isDark}
@@ -166,10 +276,10 @@ const FolderOverviewTab = memo(function FolderOverviewTab({
           <Stat label={t('stat.humanOnly')} value={stats.humanOnly} suffix={`${humanOnlyPct}%`}
                 isDark={isDark} tone={humanOnlyPct > 25 ? 'warn' : 'neutral'} />
         </div>
-      </Section>
+      </SubCard>
 
       {langEntries.length > 0 && (
-        <Section title={t('section.stack')}>
+        <SubCard title={t('section.stack')}>
           {langEntries.length <= 1 ? (
             <div className="flex flex-wrap gap-1.5">
               {langEntries.map(([lang, n]) => (
@@ -208,7 +318,7 @@ const FolderOverviewTab = memo(function FolderOverviewTab({
               </div>
             </>
           )}
-        </Section>
+        </SubCard>
       )}
     </div>
   );
@@ -224,8 +334,8 @@ const FolderActivityTab = memo(function FolderActivityTab({
   const activePct = pct(stats.activeRecent, stats.totalFiles);
   const stalePct = pct(stats.staleFiles, stats.totalFiles);
   return (
-    <div className="space-y-5">
-      <Section title={t('section.pulse')}>
+    <div className="space-y-4">
+      <SubCard title={t('section.pulse')}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <Stat label={t('stat.lastTouch')} value={t('stat.lastTouchAgo', { days: stats.minDaysSince })} isDark={isDark} />
           <Stat label={t('stat.prs30d')} value={stats.totalRecentPRs} isDark={isDark} />
@@ -240,9 +350,9 @@ const FolderActivityTab = memo(function FolderActivityTab({
           <Stat label={t('stat.staleFiles')} sublabel={t('stat.staleFilesSub')} value={stats.staleFiles} suffix={`${stalePct}%`}
                 isDark={isDark} tone={stalePct > 40 ? 'warn' : 'neutral'} />
         </div>
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.recentHotspots')} subtitle={t('subtitle.highChurnComplexity')}>
+      <SubCard title={t('section.recentHotspots')} subtitle={t('subtitle.highChurnComplexity')}>
         {stats.churnHotspots.length === 0 ? (
           <EmptyHint text={t('empty.noHotspots')} />
         ) : (
@@ -262,9 +372,9 @@ const FolderActivityTab = memo(function FolderActivityTab({
             ))}
           </div>
         )}
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.owners')}>
+      <SubCard title={t('section.owners')}>
         <div className="space-y-1">
           {stats.owners.map((o) => (
             <BarRow
@@ -277,7 +387,7 @@ const FolderActivityTab = memo(function FolderActivityTab({
             />
           ))}
         </div>
-      </Section>
+      </SubCard>
     </div>
   );
 });
@@ -291,8 +401,8 @@ const FolderRiskTab = memo(function FolderRiskTab({
   const { t } = useTranslation('inspect');
   const totalRisk = stats.vulnerable + stats.cyclic + stats.layerViolations;
   return (
-    <div className="space-y-5">
-      <Section title={t('section.structuralDefects')} subtitle={t('subtitle.blockSafeAutomation')}>
+    <div className="space-y-4">
+      <SubCard title={t('section.structuralDefects')} subtitle={t('subtitle.blockSafeAutomation')}>
         <div className="space-y-1">
           <Stat label={t('stat.vulnerableFiles')} value={stats.vulnerable} isDark={isDark}
                 tone={stats.vulnerable > 0 ? 'critical' : 'neutral'} />
@@ -306,9 +416,9 @@ const FolderRiskTab = memo(function FolderRiskTab({
             {t('empty.noStructuralDefects')}
           </div>
         )}
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.qualityDebt')} subtitle={t('subtitle.thresholdMisses')}>
+      <SubCard title={t('section.qualityDebt')} subtitle={t('subtitle.thresholdMisses')}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <Stat label={t('stat.hotspots')} value={stats.hotspots} isDark={isDark}
                 tone={stats.hotspots > 10 ? 'warn' : 'neutral'} />
@@ -319,9 +429,9 @@ const FolderRiskTab = memo(function FolderRiskTab({
           <Stat label={t('stat.untested')} value={stats.untested} isDark={isDark}
                 tone={pct(stats.untested, stats.totalFiles) > 30 ? 'warn' : 'neutral'} />
         </div>
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.lowestEditSafety')} subtitle={t('subtitle.worst5StartHere')}>
+      <SubCard title={t('section.lowestEditSafety')} subtitle={t('subtitle.worst5StartHere')}>
         {stats.riskFiles.length === 0 ? (
           <EmptyHint text={t('empty.noRiskyFiles')} />
         ) : (
@@ -341,7 +451,7 @@ const FolderRiskTab = memo(function FolderRiskTab({
             ))}
           </div>
         )}
-      </Section>
+      </SubCard>
     </div>
   );
 });
@@ -359,8 +469,8 @@ const FolderDepsTab = memo(function FolderDepsTab({
   // < 1 means it's a hub that everyone imports from.
   const totalEdges = stats.inboundEdges + stats.outboundEdges;
   return (
-    <div className="space-y-5">
-      <Section title={t('section.coupling')}>
+    <div className="space-y-4">
+      <SubCard title={t('section.coupling')}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <Stat label={t('stat.inboundLabel')} sublabel={t('stat.inboundSub')} value={stats.inboundEdges} isDark={isDark} />
           <Stat label={t('stat.outboundLabel')} sublabel={t('stat.outboundSub')} value={stats.outboundEdges} isDark={isDark} />
@@ -396,9 +506,9 @@ const FolderDepsTab = memo(function FolderDepsTab({
             </div>
           </div>
         )}
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.outbound')} subtitle={t('subtitle.topFoldersDependsOn')}>
+      <SubCard title={t('section.outbound')} subtitle={t('subtitle.topFoldersDependsOn')}>
         {stats.depFolders.length === 0 ? (
           <EmptyHint text={t('empty.noOutbound')} />
         ) : (
@@ -408,9 +518,9 @@ const FolderDepsTab = memo(function FolderDepsTab({
             ))}
           </div>
         )}
-      </Section>
+      </SubCard>
 
-      <Section title={t('section.inbound')} subtitle={t('subtitle.topFoldersDependents')}>
+      <SubCard title={t('section.inbound')} subtitle={t('subtitle.topFoldersDependents')}>
         {stats.inboundFolders.length === 0 ? (
           <EmptyHint text={t('empty.noInbound')} />
         ) : (
@@ -420,10 +530,10 @@ const FolderDepsTab = memo(function FolderDepsTab({
             ))}
           </div>
         )}
-      </Section>
+      </SubCard>
 
       {Object.keys(stats.byLayer).length > 0 && (
-        <Section title={t('section.layers')}>
+        <SubCard title={t('section.layers')}>
           <div className="space-y-1">
             {Object.entries(stats.byLayer)
               .sort((a, b) => b[1] - a[1])
@@ -431,7 +541,7 @@ const FolderDepsTab = memo(function FolderDepsTab({
                 <BarRow key={layer} label={layer} value={n} max={layerMax} isDark={isDark} />
               ))}
           </div>
-        </Section>
+        </SubCard>
       )}
     </div>
   );

@@ -4,7 +4,9 @@
     "coding": "コーディング",
     "agents": "エージェント",
     "reviews": "レビュー",
-    "admission": "アドミッション"
+    "admission": "アドミッション",
+    "fix-pipeline": "Fix",
+    "fixes": "フィックス"
   },
   "action": {
     "resetFilters": "フィルタをリセット",
@@ -12,6 +14,32 @@
     "designTokens": "デザイントークン",
     "notifications": "通知",
     "aiActivity": "AI 活動"
+  },
+  "git": {
+    "panelAria": "Git 操作",
+    "trigger": {
+      "clean": "作業ツリーはクリーン",
+      "dirty": "保留中の変更 {{count}} 件",
+      "ahead": "プッシュ待ちのコミット {{count}} 件"
+    },
+    "aheadTitle": "未プッシュのローカルコミット",
+    "empty": {
+      "clean": "変更なし",
+      "changes": "変更 {{count}} 件"
+    },
+    "commit": {
+      "subjectLabel": "件名",
+      "subjectPlaceholder": "短い概要…",
+      "bodyPlaceholder": "任意 — 何を、なぜ",
+      "action": "コミット"
+    },
+    "push": {
+      "action": "プッシュ"
+    },
+    "toast": {
+      "committed": "コミットを作成しました",
+      "pushed": "origin にプッシュしました"
+    }
   },
   "tooltip": {
     "loc": "LOC",

@@ -5,6 +5,7 @@ import {
   Trash2, X as XIcon,
 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
+import type { PRDiff } from '@entities/repo';
 import { useFilterStore } from '@features/filter-files';
 import {
   estimateCost,
@@ -29,7 +30,7 @@ export function RulesPage({
 }: {
   rules: AdmissionRule[];
   previews: Map<string, ReturnType<typeof previewRule>>;
-  retro: { seed: number; decision: ReturnType<typeof evaluateAdmission> }[];
+  retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
 }) {
   const repo = useFilterStore((s) => s.repo);
   const [section, setSection] = useState<'list' | 'packs' | 'audit' | 'io'>('list');
@@ -109,7 +110,7 @@ function RuleListSection({
 }: {
   rules: AdmissionRule[];
   previews: Map<string, ReturnType<typeof previewRule>>;
-  retro: { seed: number; decision: ReturnType<typeof evaluateAdmission> }[];
+  retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
   repo: ReturnType<typeof useFilterStore.getState>['repo'];
 }) {
   const { t: tA } = useTranslation('admission');

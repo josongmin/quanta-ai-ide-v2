@@ -1,0 +1,56 @@
+name: Feature catalog
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/feature-catalog/**'
+      - 'src/**'
+      - '.github/workflows/catalog.yml'
+  pull_request:
+    paths:
+      - 'tools/feature-catalog/**'
+      - 'src/**'
+      - '.github/workflows/catalog.yml'
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/feature-catalog
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+          cache-dependency-path: tools/feature-catalog/requirements.txt
+
+      - name: Install package
+        run: pip install -e . pytest
+
+      - name: Validate (schema + cross-refs)
+        run: python -m feature_catalog validate
+
+      - name: Audit (catalog ↔ source)
+        run: python -m feature_catalog audit
+
+      - name: Pytest
+        run: python -m pytest tests/ -q
+
+      # Render snapshots into the workspace and fail if they're stale.
+      # Keeps CATALOG.md / COVERAGE.md committed copies honest.
+      - name: Render snapshots
+        run: |
+          python -m feature_catalog render --format md       > CATALOG.md
+          python -m feature_catalog render --format coverage > COVERAGE.md
+
+      - name: Diff committed snapshots
+        run: |
+          if ! git diff --exit-code -- CATALOG.md COVERAGE.md; then
+            echo "::error::CATALOG.md or COVERAGE.md is out of date — run 'pnpm catalog:render' and commit."
+            exit 1
+          fi

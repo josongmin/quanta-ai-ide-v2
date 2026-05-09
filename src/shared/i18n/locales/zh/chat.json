@@ -3,7 +3,8 @@
     "title": "编码智能体",
     "openTitle": "打开编码智能体 (⌘K)",
     "openAria": "打开编码智能体",
-    "closeAria": "关闭编码智能体"
+    "closeAria": "关闭编码智能体",
+    "resize": "调整面板高度 — 拖动放大,双击重置"
   },
   "tabs": {
     "newTitle": "新建对话 (⌘T)",

@@ -15,7 +15,10 @@ export function V2Card({
 }) {
   const t = useV2();
   return (
-    <GlassCard className={`relative overflow-hidden ${className}`} style={style}>
+    <GlassCard
+      className={`relative overflow-hidden ${className}`}
+      style={{ boxShadow: 'none', ...style }}
+    >
       {/* Inner backing — opaque page-tinted fill so the surface reads as
           a solid card on top of the aurora. Light mode flips polarity. */}
       <div
@@ -36,9 +39,13 @@ export function V2Card({
 export function NavGroup({
   label, children,
 }: { label: string; children: React.ReactNode }) {
+  const t = useV2();
   return (
     <div className="mb-3 last:mb-0">
-      <div className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
+      <div
+        className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-[0.18em]"
+        style={{ color: t.textSubtle }}
+      >
         {label}
       </div>
       <div className="flex flex-col">
@@ -51,7 +58,7 @@ export function NavGroup({
 export function NavItem({
   icon: Icon, label, shortcut, badge, active, onClick,
 }: {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   label: string;
   shortcut?: string;
   badge?: { text: string; color?: string };
@@ -84,14 +91,12 @@ export function NavItem({
         />
       )}
       <Icon
-        className={`w-3.5 h-3.5 shrink-0 ${
-          active ? 'text-white/85' : 'text-white/55 group-hover:text-white/70'
-        }`}
+        className="w-3.5 h-3.5 shrink-0"
+        style={{ color: active ? t.textBody : t.textMuted }}
       />
       <span
-        className={`flex-1 text-[12px] font-medium truncate ${
-          active ? 'text-white' : 'text-white/70 group-hover:text-white/85'
-        }`}
+        className="flex-1 text-[12px] font-medium truncate"
+        style={{ color: active ? t.textHi : t.textMuted }}
       >
         {label}
       </span>
@@ -107,9 +112,8 @@ export function NavItem({
         </span>
       ) : shortcut ? (
         <span
-          className={`shrink-0 text-[10px] font-mono ${
-            active ? 'text-white/40' : 'text-white/30 group-hover:text-white/40'
-          }`}
+          className="shrink-0 text-[10px] font-mono"
+          style={{ color: active ? t.textSubtle : t.textFaint }}
         >
           {shortcut}
         </span>

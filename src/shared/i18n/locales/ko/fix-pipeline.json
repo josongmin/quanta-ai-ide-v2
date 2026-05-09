@@ -1,0 +1,83 @@
+{
+  "title": "Fix Pipeline",
+  "subtitle": "근거가 있는 AI 수정 루프",
+  "seedRail": {
+    "header": "수정 시드",
+    "candidatesHeader": "후보",
+    "noSeed": "시드를 선택해 시작",
+    "generating": "후보 생성 중…",
+    "rejected": "시드 거부됨",
+    "rejectedHint": "evidence_refs 누락 — 생성기 거부",
+    "recommended": "추천",
+    "rejectedTag": "탈락",
+    "dismissed": "기각됨"
+  },
+  "rootCause": {
+    "header": "근본 원인",
+    "rationale": "이유",
+    "evidence": "근거",
+    "constraints": "제약",
+    "constraintPublic": "public API",
+    "constraintSecurity": "security path"
+  },
+  "diff": {
+    "header": "패치",
+    "subtitle": "근거 먼저 — 패치는 마지막"
+  },
+  "rejected": {
+    "header": "탈락 후보 사유",
+    "empty": "탈락 후보 없음."
+  },
+  "proof": {
+    "header": "Proof obligations",
+    "static": "정적",
+    "dynamic": "동적",
+    "stylistic": "스타일",
+    "human": "사람",
+    "runValidation": "검증 실행",
+    "running": "실행 중…",
+    "ranOnce": "검증 1회 실행됨",
+    "status": {
+      "pass": "통과",
+      "fail": "실패",
+      "unknown": "불명",
+      "pending": "대기"
+    }
+  },
+  "gate": {
+    "header": "Delivery gate",
+    "tier": {
+      "safe-mechanical": "safe mechanical",
+      "guarded": "guarded",
+      "human-required": "human required"
+    },
+    "reasons": "이 티어인 이유",
+    "blockers": "승격 차단 요인"
+  },
+  "trust": {
+    "header": "Trust signal",
+    "weakest": "가장 약한 obligation",
+    "level": "Confidence",
+    "score": "점수",
+    "dismiss": "후보 기각",
+    "dismissReason": {
+      "wrong-root-cause": "근본 원인 틀림",
+      "too-broad": "범위 과도",
+      "breaks-style": "스타일 위배",
+      "risky": "위험",
+      "other": "기타"
+    },
+    "dismissed": "기각됨",
+    "dismissedAt": "시각"
+  },
+  "pr": {
+    "header": "Draft PR 패키지",
+    "summary": "요약",
+    "why": "이 수정 이유",
+    "validated": "검증됨",
+    "unverified": "검증 안 됨",
+    "proposer": "제안자: 시스템",
+    "approver": "승인자: 대기"
+  },
+  "empty": "왼쪽 레일에서 시드를 선택해 시작."
+}

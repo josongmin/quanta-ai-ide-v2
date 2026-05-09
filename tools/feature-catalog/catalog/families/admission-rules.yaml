@@ -1,0 +1,223 @@
+# Admission rules — statistical guards on agent-authored changes.
+
+- id: admission-workspace
+  label: Admission workspace (top-level)
+  tier: parity
+  description: >-
+    `AdmissionWorkspace` is the host for the rule lifecycle UI —
+    Overview / Decision / History / RulesBoard / RuleEditor tabs.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/AdmissionWorkspace.tsx
+      - src/features/admission-rules/ui/AdmissionRoot.tsx
+  pattern:
+    source: Feature-flag platforms (LaunchDarkly / GrowthBook)
+    rationale: >-
+      Admission rules are flags-but-statistical. The same workspace
+      shape (rule list / decision history / overview) is the right
+      mental model.
+  sota: {}
+  added_in: "2026-03-12"
+
+- id: rule-editor
+  label: RuleEditor (declarative predicate editor)
+  tier: parity
+  description: >-
+    Condition-builder surface for the per-rule predicate. Group / AND /
+    OR / NOT scaffolding with one input per leaf clause.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/RuleEditor.tsx
+  pattern:
+    source: Notion filter builder / Sentry alert rules
+    rationale: >-
+      Pasting in YAML scares non-engineers. A nested-predicate widget
+      is the standard way to keep declarative power without raw
+      syntax.
+  sota: {}
+  added_in: "2026-03-12"
+
+- id: rules-board
+  label: RulesBoard (kanban-style rule lifecycle)
+  tier: leading
+  description: >-
+    Three columns — proposed / shadow / live — with rule cards
+    moving between them as approvers act. Drop targets enforce
+    valid transitions.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/RulesBoard.tsx
+  pattern:
+    source: Kanban / Jira workflow
+    rationale: >-
+      Rules go through a known lifecycle (propose → shadow → live).
+      Kanban makes the lifecycle the primary navigation, not a
+      buried status field.
+  sota: {}
+  added_in: "2026-03-15"
+
+- id: confidence-mix
+  label: ConfidenceMix (rule confidence breakdown)
+  tier: leading
+  description: >-
+    Stacked bar of rule confidence by decision class — accept /
+    revise / reject — so a reviewer can see whether the model is
+    confident-correct or confident-wrong.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/ConfidenceMix.tsx
+  pattern:
+    source: Calibration histogram (Brier score viz)
+    rationale: >-
+      Aggregate confidence hides the dynamics. Confidence-by-class
+      reveals when high-confidence is just confident-wrong.
+  sota: {}
+  added_in: "2026-03-25"
+
+- id: cusum-drift-card
+  label: CUSUM drift card (rule performance drift)
+  tier: leading
+  description: >-
+    Per-rule CUSUM (cumulative-sum control chart) of accept-rate.
+    A sustained run above/below the centerline signals real drift,
+    not noise.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/v2/parts/CusumDriftCard.tsx
+      - src/features/admission-rules/ui/v2/parts/statsKit.ts
+  pattern:
+    source: Page 1954 CUSUM / SPC charts
+    rationale: >-
+      CUSUM detects small persistent shifts that Shewhart charts miss.
+      Designed for exactly this "is the rule still working?" question.
+  sota: {}
+  added_in: "2026-04-15"
+  flags: ["obs"]
+
+- id: reliability-diagram
+  label: Reliability diagram (rule calibration plot)
+  tier: leading
+  description: >-
+    Predicted-confidence × empirical-accept-rate scatter, with the
+    diagonal as perfect calibration. Bands shade ±15% drift.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/v2/parts/ReliabilityDiagramCard.tsx
+  pattern:
+    source: DeGroot/Fienberg 1983 reliability diagram
+    rationale: >-
+      The standard probabilistic-classifier calibration plot. If the
+      curve doesn't hug the diagonal, the rule's "70%" doesn't
+      actually mean 70%.
+  sota: {}
+  added_in: "2026-04-22"
+
+- id: survival-curve
+  label: Survival curve (rule TTL)
+  tier: leading
+  description: >-
+    Kaplan-Meier-style survival curve for rule accept-rate over time.
+    Shows the TTL of a rule's effectiveness — when does it decay?
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/v2/parts/SurvivalCurveCard.tsx
+  pattern:
+    source: Kaplan-Meier survival analysis
+    rationale: >-
+      Originally for clinical trials, K-M is the right primitive
+      for "given this rule was effective on day 0, what's the
+      probability it's still effective on day N".
+  sota: {}
+  added_in: "2026-04-25"
+
+- id: counterfactual-impact
+  label: Counterfactual impact card
+  tier: leading
+  description: >-
+    "What would have happened if this rule weren't live?" shows
+    the agent decisions that flipped because of the rule, sized
+    by potential blast radius.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/v2/parts/CounterfactualImpactCard.tsx
+  pattern:
+    source: Counterfactual reasoning in causal inference
+    rationale: >-
+      The only honest answer to "did this rule matter" is "what
+      would have happened without it". Counterfactual framing
+      makes the answer concrete.
+  sota: {}
+  added_in: "2026-04-25"
+
+- id: anomaly-sentinel
+  label: AnomalySentinel (z-score outlier surfacing)
+  tier: leading
+  description: >-
+    Tracks the per-rule accept-rate's z-score against its 14-day
+    rolling baseline. |z| > 2 flips the sentinel amber, |z| > 3 red.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/v2/parts/AnomalySentinel.tsx
+  pattern:
+    source: SRE 3-sigma alerts / Z-score outlier detection
+    rationale: >-
+      14-day rolling z-score is the SRE-standard "is this point
+      weird vs the recent baseline" test. Cheap, explainable,
+      hard to game.
+  sota: {}
+  added_in: "2026-05-01"
+  flags: ["obs"]
+
+- id: effect-size-bar
+  label: Effect-size bar (Cohen's d / log-odds)
+  tier: leading
+  description: >-
+    Reports the rule's effect on the underlying decision distribution
+    as a Cohen's d (continuous) or log-odds (binary), with 95% CI
+    error bars.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/v2/parts/EffectSizeBar.tsx
+  pattern:
+    source: Cohen 1988 effect-size / Cumming "the new statistics"
+    rationale: >-
+      P-values say "is there an effect"; effect size says "is the
+      effect big enough to matter". Both belong in any honest
+      stat-driven UI.
+  sota: {}
+  added_in: "2026-05-01"
+
+- id: confidence-band
+  label: ConfidenceBand (CI ribbon overlay)
+  tier: parity
+  description: >-
+    Shaded ±95% confidence ribbon around any time-series chart in the
+    admission v2 surface (CUSUM, survival, reliability).
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/v2/parts/ConfidenceBand.tsx
+  pattern:
+    source: ggplot2 geom_ribbon / Pyplot fill_between
+    rationale: >-
+      Showing the band is the cheapest honesty signal — the eye
+      stops over-interpreting a single noisy line.
+  sota: {}
+  added_in: "2026-04-22"
+
+- id: cost-badge
+  label: CostBadge (per-rule cost overlay)
+  tier: parity
+  description: >-
+    Tiny chip on each rule card showing rolling cost ($/day) so
+    expensive rules surface for review without opening the row.
+  evidence:
+    symbols:
+      - src/features/admission-rules/ui/CostBadge.tsx
+  pattern:
+    source: AWS cost-by-tag chips
+    rationale: >-
+      Cost should live next to the rule that incurs it — same
+      reason container costs live next to the container, not in
+      a separate dashboard.
+  sota: {}
+  added_in: "2026-03-15"

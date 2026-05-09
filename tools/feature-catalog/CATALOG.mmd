@@ -1,0 +1,162 @@
+mindmap
+  root((/coding feature catalog))
+    Composer
+      🟢 IME-safe input (Korean / Japanese / Chinese)
+      🟢 `#` file mention picker
+      🟢 `@` symbol mention picker
+      🟢 ChatAgent vertical resize
+      🟢 Slash commands
+      🟢 Model picker with turn-level recording
+      🔵 Per-project default model + saved override
+      🔵 Prompt history (↑↓ shell-style)
+      🔵 Stop button heat (neutral → amber → rose)
+      🔵 Press-and-hold stop with progress ring
+      🔵 Voice input + interim ghost text
+    Secret & PII Guard
+      🔵 Mask-and-send modal
+      🔵 Pattern + entropy secret scan
+      🔵 Deterministic placeholder replacement
+      🔵 3-tier severity (critical / warn / info)
+    Cost & Budget
+      🔵 Heart-rate pulse on alert tier
+      🔵 Soft-cap modal (auto-downgrade / override / stop)
+      🔵 3-tier budget (alert / soft-cap / hard-cap)
+      🔵 Streaming-time next-turn forecast
+      🟡 Cumulative cost meter (tokens + USD)
+      🔵 Per-turn average projection
+    Trust & Observability
+      🔵 Citation staleness detection
+      🟡 Per-turn citations
+      🔵 Anomaly drift detector (stuck / noisy)
+      🔵 Latency baseline comparison (vs task average)
+      🔵 Latency profile (per-phase stacked bar)
+      🔵 Self-eval confidence chip
+      🟢 Phase label during streaming
+      🔵 Per-tool / per-model success rate
+      🔵 TPS live meter (tok/s during streaming)
+    Recovery & Time-travel
+      🔵 Branch from turn (fork the task)
+      🔵 Inverse-op append (non-destructive rewind)
+      🔵 Timeline scrubber (turn-level time travel)
+      🟢 Per-turn menu (rewind / branch / copy)
+      🔵 Working-tree drift markers (clean / shifted / overlap / gone)
+    Diff & Review
+      🔵 Conflict overlay on overlapping hunks
+      🟢 Per-hunk apply / reject
+      🔵 Inline review comments per hunk
+      🟢 Side-by-side diff (with intra-line highlights)
+      🔵 Test ↔ hunk attribution scoring
+    Task & Project Management
+      🔵 Background streaming with notification badge
+      🔵 Per-task budget independent of project budget
+      🟢 Archive completed tasks (with restore)
+      🟢 Inline task rename (auto-suggested from first prompt)
+      🟢 Multi-task sidebar with quick switch
+    PR / CI / Branch
+      🟢 Auto branch-name suggestion from task title
+      🔵 CI failure → suspect-hunk routing
+      🔵 PR checks status inline
+      🟢 Export thread as PR description (Markdown)
+    Plan & Workflow
+      🟢 Agent-authored plan blocks
+      🔵 User-editable plan steps
+      🟢 Plan progress meter (steps done / total)
+      🔵 Skip step with logged reason
+    A11y & Micro-UX
+      🔵 Density toggle (comfortable / compact)
+      🟢 Keyboard shortcut overlay (?)
+      🔵 i18n key parity audit (ko/en/ja/zh)
+      🔵 `prefers-contrast` aware tokens
+      🟢 `prefers-reduced-motion` aware
+      🟢 Skip-to-composer link
+    UX System
+      🔵 Blueprint surface utility (mode-aware bg)
+      🟢 Button tone system (primary / secondary / ghost / danger)
+      ⚪ useClickOutside (popover / menu dismiss)
+      🔵 ConfidenceMeter (calibrated 0..1 bar)
+      🟢 Seeded RNG (deterministic demo data)
+      🔵 useDialogA11y (focus trap + restore)
+      🟢 Layered overlay primitives (Drawer / Popover / Modal)
+      🟢 GlassCard component (mode-aware glass)
+      🟢 ResizeHandle (Fitts-correct rail/panel grip)
+      🟢 Section component (titled, collapsible region)
+      🟢 useShortcut (keyboard registry hook)
+      🟢 StackedRatioBar (segmented proportions)
+      🔵 Token primitives (semantic, not literal)
+    Command Palette & Reactions
+      🟢 ⌘K command palette
+      🔵 Live snapshot card (post-task summary)
+      🟢 Caret-anchored mention detection
+      🔵 Drag-reorder tasks within project
+      🟢 TaskRail width resize
+      🔵 Per-turn reactions (👍 👎 ❤️ 🎯)
+      🔵 Turn status / cost / risk classification helpers
+    Inspect & Visualize
+      🔵 ChordDiagram (module ↔ module flows)
+      🔵 CycleGraph (find import cycles)
+      🟢 DependencyMatrix (DSM)
+      🔵 DepsCarousel (dependency story strip)
+      🔵 EdgeBundlingMap (hierarchical edge bundling)
+      🔵 FocusScanStack (multi-pane focus view)
+      🟢 Inspect panel (multi-tab visualizer host)
+      🔵 LayeredBoxDiagram (architecture layers)
+      🔵 RiskHeatmap (file × risk-axis)
+      🟢 SunburstHierarchy (radial folder hierarchy)
+      🔵 SymbolTimeMachine (per-symbol git history)
+      🟢 Treemap (rectangular folder hierarchy)
+    Admission Rules & Calibration
+      🟢 Admission workspace (top-level)
+      🔵 AnomalySentinel (z-score outlier surfacing)
+      🟢 ConfidenceBand (CI ribbon overlay)
+      🔵 ConfidenceMix (rule confidence breakdown)
+      🟢 CostBadge (per-rule cost overlay)
+      🔵 Counterfactual impact card
+      🔵 CUSUM drift card (rule performance drift)
+      🔵 Effect-size bar (Cohen's d / log-odds)
+      🔵 Reliability diagram (rule calibration plot)
+      🟢 RuleEditor (declarative predicate editor)
+      🔵 RulesBoard (kanban-style rule lifecycle)
+      🔵 Survival curve (rule TTL)
+    Filter & Search
+      🟢 FacetRenderer (declarative facet host)
+      🟢 FilterBar (faceted filter host)
+      🟢 FolderTree (workspace navigator)
+      🟢 PresetFacet (saved filter presets)
+      🟢 Project selector (filter scope)
+      🟢 RangeFacet (numeric range filter)
+      🔵 Search DSL bar (typed search syntax)
+    PR Review surface
+      ⚪ Avatar (login → display)
+      🔵 ConversationLog (timeline of review events)
+      🟢 DiffView (unified / split toggle)
+      🟢 Inline comment composer
+      🔵 Inline review thread (per-line conversation)
+      🟢 PR preview trigger (open the bar)
+      🟢 Review action bar (approve / request-changes / comment)
+    Mode switching & Activity
+      🔵 ActivityControlPanel (operation throttle / kill)
+      🔵 AI activity overlay (mode-scoped status)
+      🟢 ActivityTray (recent operations log)
+      🔵 DotField mode (data-density view)
+      🔵 Lazy mode registry
+      🔵 Universe mode (3D dependency space)
+      🟢 ViewModeContext (mode-aware components)
+    App shell & Cross-cutting context
+      🟢 AppShell (chrome host)
+      🔵 EngineFindingsRail (CI / scanner findings)
+      🟢 GitActionsMenu (branch-scoped quick actions)
+      🔵 HeatOverlayPicker (heat-metric chooser)
+      🔵 OverlayContext (heat / risk / time overlay state)
+      🟢 PrContextRail (PR-level context)
+      🔵 PrTicketRail (PR list scoped to me / team)
+      🟢 PrefsContext (cross-feature preferences)
+      🔵 RiskLensSwitcher (risk-axis cycler)
+      🟢 SettingsPanel (top-level prefs UI)
+      🟢 ShortcutsModal (?-triggered cheat sheet)
+      🟢 Stage (top-level page host)
+      🟢 TimeWindowPicker (rolling window)
+    Chat agent (bottom-anchored)
+      🔵 ChatAgent vertical resize (top-grip handle)
+      🔵 ChatAgent (bottom-pinned conversational widget)
+      🔵 Proactive suggestions (low-safety / unknown-flag / refactor / blast-radius)
+      🔵 TokensPanel (live cost + tokens drawer)

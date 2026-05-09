@@ -96,7 +96,7 @@ export function TaskRail({
     return order.filter((p) => filteredTasks.some((task) => task.projectId === p.id));
   }, [projects, filteredTasks, query, filter]);
 
-  const panel = isDark ? 'bg-[#0a0c0f]' : 'bg-white';
+  const panel = isDark ? 'bg-[#11161e]' : 'bg-white';
   const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
   const textFaint = isDark ? 'text-white/30' : 'text-black/40';
   const textMuted = isDark ? 'text-white/40' : 'text-black/55';
@@ -346,7 +346,7 @@ function ProjectGroup({
 
       {!collapsed && (
         <div
-          className="ml-[14px] pl-1 border-l flex flex-col gap-px"
+          className="ml-[10px] pl-0.5 border-l flex flex-col gap-px"
           style={{ borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
         >
           {tasks.length === 0 ? (
@@ -452,7 +452,7 @@ function TaskRow({
         }}
         onDragEnd={onDragEnd}
         onClick={onClick}
-        className={`group/row relative w-full text-left rounded-md pl-2.5 pr-2 py-1.5 transition-colors ${hoverBg} ${
+        className={`group/row relative w-full text-left rounded-md pl-1.5 pr-1.5 py-1.5 transition-colors ${hoverBg} ${
           active ? 'coding-task-active' : ''
         } ${isDragging ? 'opacity-50' : ''}`}
         style={{

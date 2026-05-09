@@ -1,0 +1,126 @@
+# Accessibility & micro-UX — keyboard, contrast, motion, locale.
+
+- id: skip-to-composer
+  label: Skip-to-composer link
+  tier: parity
+  status: planned
+  description: >-
+    First Tab focusable on the page is a "Skip to composer" link that
+    jumps focus to the textarea. Standard for any page with a long
+    scrollable content region preceding the input.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::SkipLink
+    locales:
+      - "coding:a11y.skipToComposer"
+  pattern:
+    source: WCAG 2.4.1 Bypass Blocks
+    rationale: >-
+      Keyboard-only users otherwise tab through every turn before
+      reaching the composer. AAA-required.
+  sota: {}
+  added_in: "2026-04-12"
+  flags: ["a11y"]
+
+- id: prefers-contrast-aware
+  label: "`prefers-contrast` aware tokens"
+  tier: leading
+  description: >-
+    All semantic tokens carry a `more` variant that swaps background
+    luminance and bumps text contrast to ≥ 7:1. CSS picks via
+    `@media (prefers-contrast: more)`.
+  evidence:
+    symbols:
+      - src/shared/tokens/applyTokens.ts
+      - src/index.css
+  pattern:
+    source: WCAG 2.2 AAA contrast / macOS Increase Contrast
+    rationale: >-
+      Low-vision users get a real high-contrast theme without a manual
+      toggle. The OS already knows.
+  sota: {}
+  added_in: "2026-04-25"
+  flags: ["a11y"]
+
+- id: prefers-reduced-motion
+  label: "`prefers-reduced-motion` aware"
+  tier: parity
+  description: >-
+    All transitions, pulses, and animations gate on a media query —
+    motion-sensitive users get instant state changes instead of fades
+    and slides.
+  evidence:
+    symbols:
+      - src/index.css
+  pattern:
+    source: WCAG 2.3.3 Animation from Interactions
+    rationale: >-
+      Vestibular disorders make decorative motion actively painful.
+      Honouring the OS pref is the bare minimum.
+  sota:
+    cursor: false
+    claude_code: partial
+  added_in: "2026-04-25"
+  flags: ["a11y"]
+
+- id: density-toggle
+  label: Density toggle (comfortable / compact)
+  tier: leading
+  description: >-
+    Settings exposes a density toggle that swaps the spacing scale
+    by ratio. Persists in localStorage; affects the whole shell.
+  evidence:
+    symbols:
+      - src/features/tweak-prefs/model/PrefsContext.tsx
+    locales:
+      - "coding:density.compact"
+  pattern:
+    source: Gmail density / Slack compact mode
+    rationale: >-
+      Power users want more rows per viewport; novices want air. Two
+      modes covers the ~95% case without an arbitrary slider.
+  sota: {}
+  added_in: "2026-04-12"
+  flags: ["a11y"]
+
+- id: locale-sync-audit
+  label: i18n key parity audit (ko/en/ja/zh)
+  tier: leading
+  description: >-
+    `scripts/i18n-audit.mjs` walks every namespace under `locales/`
+    and fails the build if any locale is missing a key from the source
+    locale. CI gate.
+  evidence:
+    symbols:
+      - src/shared/i18n/locales/en/coding.json
+  pattern:
+    source: i18next-parser / Lokalise QA
+    rationale: >-
+      Missing keys silently fall back to English mid-sentence — a
+      worse UX than just shipping English. Build-time gate prevents
+      it ever shipping.
+  sota: {}
+  added_in: "2026-03-20"
+  flags: ["i18n"]
+
+- id: keyboard-shortcut-overlay
+  label: Keyboard shortcut overlay (?)
+  tier: parity
+  status: planned
+  description: >-
+    Pressing `?` outside of an input pops a modal listing every
+    keyboard shortcut grouped by area. Esc closes; focus restores
+    to the trigger.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::ShortcutOverlay
+    locales:
+      - "coding:shortcuts.title"
+  pattern:
+    source: GitHub `?` shortcut help / Linear command palette
+    rationale: >-
+      Discoverability of shortcuts is a known weak spot of every IDE.
+      The `?` convention is universally understood since Gmail 2008.
+  sota: {}
+  added_in: "2026-04-12"
+  flags: ["a11y"]

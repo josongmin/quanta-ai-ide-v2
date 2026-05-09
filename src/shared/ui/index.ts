@@ -10,7 +10,7 @@
 export { GlassCard, SectionHeader } from './GlassCard';
 export { Section } from './Section';
 export { PanelFooter } from './PanelFooter';
-export { TabBar } from './TabBar';
+export { TabBar, type TabSpec } from './TabBar';
 
 // ── Primitives ──
 export { Portal } from './Portal';
@@ -18,16 +18,11 @@ export { Modal } from './Modal';
 export { Drawer } from './Drawer';
 export { Popover } from './Popover';
 export { useDialogA11y } from './useDialogA11y';
-export { Badge } from './Badge';
-export { Button } from './Button';
 export { IconButton } from './IconButton';
 export { Switch } from './Switch';
 export { SegmentedControl } from './SegmentedControl';
 export { Pill } from './Pill';
-export { Surface } from './Surface';
-export { Row } from './Row';
 export { ResizeHandle } from './ResizeHandle';
-export { useTopRightInset, useReserveTopRightInset } from './topRightInset';
 
 // ── Data display ──
 export { Score } from './Score';

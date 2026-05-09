@@ -333,6 +333,40 @@
     "addtest": { "title": "生成测试脚手架", "delta": "+测试 1" },
     "lint": { "title": "自动修复 lint 错误" }
   },
+  "timeMachine": {
+    "title": "符号时光机",
+    "trendUp": "复杂度上升",
+    "trendDown": "复杂度下降",
+    "trendFlat": "稳定",
+    "recent": "最近提交",
+    "bisect": {
+      "title": "复杂度跃升",
+      "open": "打开 PR"
+    }
+  },
+  "semanticConflict": {
+    "title": "语义冲突",
+    "clear": "无冲突",
+    "summary": "{{n}} 个候选",
+    "cleanHint": "没有触及相同调用图邻域的打开 PR。可以安全合并。",
+    "note": "基于调用图预测 — 单纯 git diff 无法检测。",
+    "severity": { "high": "高", "medium": "中", "low": "低" }
+  },
+  "safeRename": {
+    "title": "安全重命名置信度",
+    "compositeNote": "{{total}} 个调用点中 {{unsafe}} 个需审查",
+    "verdict": {
+      "exact": "EXACT",
+      "overapprox": "OVERAPPROX",
+      "unknown": "需审查"
+    },
+    "cta": {
+      "exact": "重构引擎会处理全部调用点",
+      "overapprox": "对风险调用点建议先看差异预览",
+      "unknown": "需手动审查 — 自动重命名已禁用"
+    },
+    "btn": { "rename": "重命名", "preview": "预览" }
+  },
   "catalog": {
     "profileTitle": "文件大纲",
     "profileSub": "function_summary · 成本 · 副作用",
@@ -380,6 +414,24 @@
     "actionRename": "重命名",
     "actionExtract": "抽取",
     "actionAddTest": "新增测试"
+  },
+  "hotspot": {
+    "title": "热点",
+    "topPercent": "前 {{pct}}",
+    "signal": {
+      "changePressure": "变更",
+      "structuralFriction": "结构",
+      "healthDeficit": "健康度",
+      "couplingPressure": "耦合",
+      "criticalityProxy": "关键度"
+    },
+    "narrative": {
+      "changePressure": "前 {{percentile}}% — 近期变更是主要驱动因素。",
+      "structuralFriction": "前 {{percentile}}% — 结构复杂度是最强信号。",
+      "healthDeficit": "前 {{percentile}}% — 覆盖率与 lint 债务占大部分。",
+      "couplingPressure": "前 {{percentile}}% — fan-in/out 宽度是耦合压力主因。",
+      "criticalityProxy": "前 {{percentile}}% — 公共 API 表面与 blast radius 拉高了分数。"
+    }
   },
   "stack_axis": {
     "openTabs": "打开的标签",

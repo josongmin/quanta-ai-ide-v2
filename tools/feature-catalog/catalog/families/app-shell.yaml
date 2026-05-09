@@ -1,0 +1,243 @@
+# App shell, providers, review-stage rails, GitActions menu.
+
+- id: app-shell
+  label: AppShell (chrome host)
+  tier: parity
+  description: >-
+    Top-level layout — title bar, navigation, mode-switcher slot,
+    chat-agent slot. Wraps every page and owns the keyboard
+    shortcut registry.
+  evidence:
+    symbols:
+      - src/widgets/app-shell/AppShell.tsx
+  pattern:
+    source: VS Code shell / Linear app shell
+    rationale: >-
+      A single `AppShell` lets every page share the same chrome
+      without re-implementing the title bar / nav / chat-agent
+      mounting points.
+  sota: {}
+  added_in: "2026-01-15"
+
+- id: stage-host
+  label: Stage (top-level page host)
+  tier: parity
+  description: >-
+    `Stage` is the central content host beneath `AppShell`. Routes
+    feature pages and provides the safe-area insets used by the
+    chat-agent overlay.
+  evidence:
+    symbols:
+      - src/widgets/stage/Stage.tsx
+  pattern:
+    source: SwiftUI NavigationStack
+    rationale: >-
+      Separating shell (chrome) from stage (content) keeps page
+      transitions cheap — only the stage re-renders on nav.
+  sota: {}
+  added_in: "2026-01-15"
+
+- id: git-actions-menu
+  label: GitActionsMenu (branch-scoped quick actions)
+  tier: parity
+  description: >-
+    Branch-anchored menu surfacing Pull / Push / Sync / Rebase /
+    Discard with confirmation gates on the destructive entries.
+  evidence:
+    symbols:
+      - src/widgets/app-shell/GitActionsMenu.tsx
+  pattern:
+    source: GitHub Desktop branch menu
+    rationale: >-
+      Branch-scoped grouping keeps "is this safe?" answerable —
+      destructive actions are clearly under the active branch's name.
+  sota: {}
+  added_in: "2026-04-01"
+
+- id: prefs-context
+  label: PrefsContext (cross-feature preferences)
+  tier: parity
+  description: >-
+    React context for user preferences (density, locale, theme,
+    motion). One provider serves the whole app and persists to
+    localStorage on each change.
+  evidence:
+    symbols:
+      - src/features/tweak-prefs/model/PrefsContext.tsx::PrefsProvider
+      - src/features/tweak-prefs/model/PrefsContext.tsx::usePrefs
+      - src/features/tweak-prefs/model/PrefsContext.tsx::PrefsState
+  pattern:
+    source: React Context + localStorage
+    rationale: >-
+      Prefs are read-many / write-rarely — exactly what context is
+      shaped for. localStorage persistence keeps the UI responsive
+      without a network round-trip.
+  sota: {}
+  added_in: "2026-03-12"
+
+- id: settings-panel
+  label: SettingsPanel (top-level prefs UI)
+  tier: parity
+  description: >-
+    Density, theme, motion, locale, model-defaults — all live in
+    `SettingsPanel`. Compact mode for embedding inside other
+    surfaces.
+  evidence:
+    symbols:
+      - src/features/tweak-prefs/ui/SettingsPanel.tsx
+  pattern:
+    source: macOS System Settings sections
+    rationale: >-
+      A single settings surface beats per-feature settings — users
+      look in one place, not seven.
+  sota: {}
+  added_in: "2026-03-12"
+
+- id: shortcuts-modal
+  label: ShortcutsModal (?-triggered cheat sheet)
+  tier: parity
+  description: >-
+    Modal listing every keyboard shortcut grouped by feature.
+    Triggered by `?` outside an input.
+  evidence:
+    symbols:
+      - src/features/help-shortcuts/ui/ShortcutsModal.tsx
+  pattern:
+    source: GitHub `?` shortcut help
+    rationale: >-
+      The `?`-cheat-sheet is the universal "I forgot the keystroke"
+      surface. Cheap to add, high frequency of saves.
+  sota: {}
+  added_in: "2026-04-12"
+  flags: ["a11y"]
+
+- id: overlay-context
+  label: OverlayContext (heat / risk / time overlay state)
+  tier: leading
+  description: >-
+    Provider for the overlay popover's three axes — heat metric,
+    risk lens, time window. One context, three pickers, every
+    visualization reads from here.
+  evidence:
+    symbols:
+      - src/features/apply-overlay/model/OverlayContext.tsx::OverlayProvider
+      - src/features/apply-overlay/model/OverlayContext.tsx::useOverlay
+  pattern:
+    source: VS Code workbench layout state
+    rationale: >-
+      Cross-feature overlay state belongs in context, not in each
+      visualization. One provider keeps every viz coherent.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: heat-overlay-picker
+  label: HeatOverlayPicker (heat-metric chooser)
+  tier: leading
+  description: >-
+    Picker exposing the heat-metric axes — churn, complexity,
+    blast radius, coverage gap, recent edits, cost, latency. Active
+    metric drives the colour ramp on every viz.
+  evidence:
+    symbols:
+      - src/features/apply-overlay/ui/HeatOverlayPicker.tsx
+  pattern:
+    source: Chrome DevTools "Rendering" pane / Datadog metric picker
+    rationale: >-
+      One picker × N visualizations beats per-viz pickers — the
+      user picks "what to colour by" once, every chart updates.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: risk-lens-switcher
+  label: RiskLensSwitcher (risk-axis cycler)
+  tier: leading
+  description: >-
+    One-tap cycler through risk lenses (no-coverage, high-blast,
+    recent-failures, churn-spike). The "what would hurt most if it
+    breaks" lens.
+  evidence:
+    symbols:
+      - src/features/apply-overlay/ui/RiskLensSwitcher.tsx
+  pattern:
+    source: Photography lens cycle (50mm / 35mm / 85mm)
+    rationale: >-
+      Risk has many definitions; lens framing lets the user try
+      each cheaply. One-tap cycle beats nested menus.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: time-window-picker
+  label: TimeWindowPicker (rolling window)
+  tier: parity
+  description: >-
+    Picker for the time window applied to every metric — 24h, 7d,
+    30d, 90d, all-time. Affects churn, recent-failures, cost
+    aggregation.
+  evidence:
+    symbols:
+      - src/features/apply-overlay/ui/TimeWindowPicker.tsx
+  pattern:
+    source: Datadog/Grafana time-range picker
+    rationale: >-
+      Time scale is a global concern — the picker belongs at the
+      shell level, not duplicated in each viz.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: pr-ticket-rail
+  label: PrTicketRail (PR list scoped to me / team)
+  tier: leading
+  description: >-
+    Resizable rail listing PRs in scope (`mine-to-review` / `my-prs`
+    / `team`) sortable by risk / updated / size. Persists width,
+    scope, and sort key.
+  evidence:
+    symbols:
+      - src/widgets/review-stage/PrTicketRail.tsx
+      - src/widgets/review-stage/PrTicketRail.tsx::PrScope
+      - src/widgets/review-stage/PrTicketRail.tsx::PrSortKey
+      - src/widgets/review-stage/PrTicketRail.tsx::PR_RAIL_MIN_WIDTH
+  pattern:
+    source: GitHub Pulls inbox / Linear inbox
+    rationale: >-
+      The right-rail-of-tickets shape is the lingua franca of work
+      queues. Scope + sort cover the 95% of "what should I review
+      next" decisions.
+  sota: {}
+  added_in: "2026-04-15"
+
+- id: engine-findings-rail
+  label: EngineFindingsRail (CI / scanner findings)
+  tier: leading
+  description: >-
+    Right-side rail in review stage showing findings from CI,
+    semgrep, lint, type, test runs — grouped by severity, click to
+    jump to the offending hunk.
+  evidence:
+    symbols:
+      - src/widgets/review-stage/EngineFindingsRail.tsx
+  pattern:
+    source: GitHub PR checks / Sourcegraph code intel
+    rationale: >-
+      Findings are the structured complement to comments — collapsing
+      them into one rail next to the diff puts the answer where
+      the question is.
+  sota: {}
+  added_in: "2026-04-15"
+
+- id: pr-context-rail
+  label: PrContextRail (PR-level context)
+  tier: parity
+  description: >-
+    Left rail in review stage showing PR-level metadata — author,
+    branch, base, linked issues, reviewers, status checks summary.
+  evidence:
+    symbols:
+      - src/widgets/review-stage/PrContextRail.tsx
+  pattern:
+    source: GitHub PR sidebar
+    rationale: >-
+      Per-PR context belongs in a persistent rail, not in a
+      collapsing header — it's referenced constantly during review.
+  sota: {}
+  added_in: "2026-04-08"

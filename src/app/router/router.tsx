@@ -15,20 +15,13 @@ import {
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { buildRepo } from '@entities/repo';
-import { FilterBar, FilterProvider } from '@features/filter-files';
-import { SearchBar } from '@features/search-dsl';
-import { ModeSwitcher, useViewMode } from '@features/switch-mode';
-import { OverlayPopover } from '@features/apply-overlay';
-import { useStack } from '@features/inspect-target';
+import { FilterProvider } from '@features/filter-files';
 import { AppShell } from '@widgets/app-shell';
-import { Stage } from '@widgets/stage';
 import { ErrorBoundary } from '@app/providers';
+import { IntelligenceLayout } from './intelligence';
 
 // Lazy stages — same boundaries we had before so route splits keep
 // matching `viz-modes` / `coding-stage` / `review-stage` chunks.
-const ChatAgent = lazy(() =>
-  import('@features/chat-agent').then((m) => ({ default: m.ChatAgent })),
-);
 const CodingStage = lazy(() =>
   import('@widgets/coding-stage').then((m) => ({ default: m.CodingStage })),
 );
@@ -37,6 +30,12 @@ const ReviewStage = lazy(() =>
 );
 const AdmissionRoot = lazy(() =>
   import('@features/admission-rules').then((m) => ({ default: m.AdmissionRoot })),
+);
+const VerifiedFixRoot = lazy(() =>
+  import('@features/verified-fix').then((m) => ({ default: m.VerifiedFixRoot })),
+);
+const FixPipelineStage = lazy(() =>
+  import('@widgets/fix-pipeline-stage').then((m) => ({ default: m.FixPipelineStage })),
 );
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -74,59 +73,7 @@ function FilterProviderRoot({ children }: { children: React.ReactNode }) {
 // ─────────────────────────────────────────────────────────────────────────
 
 function IntelligenceRoute() {
-  const { mode } = useViewMode();
-  const { isDark } = useTheme();
-  void isDark; // theme flip is now driven by --bg-stage* CSS vars below.
-  // Both modes follow the active theme via the semantic stage tokens.
-  // Universe-mode flips to the cyanotype Prussian blue in light theme.
-  const bgClass = mode === 'universe'
-    ? 'bg-[color:var(--bg-stage-universe)]'
-    : 'bg-[color:var(--bg-stage)]';
-
-  return (
-    <div className={`absolute inset-0 overflow-hidden font-sans select-none ${bgClass}`}>
-      {/* Stage owns the WebGL context — by far the most likely source of a
-          runtime fault (driver hiccups, OOM, lost context). Isolated so a
-          single crash doesn't blank the chrome around it. */}
-      <ErrorBoundary label="Stage">
-        <Stage />
-      </ErrorBoundary>
-
-      <div className="absolute top-4 left-4 bottom-4 z-40 pointer-events-auto flex">
-        <FilterBarHost />
-      </div>
-
-      <SearchBar />
-
-      <div className="absolute top-4 left-[316px] z-30 pointer-events-auto flex items-start gap-2 flex-wrap max-w-[calc(100vw-340px)]">
-        <ModeSwitcher />
-        <OverlayPopover />
-      </div>
-
-      {/* Git actions (commit/push) live in the GNB itself now — see
-          AppShell. The old corner-mounted PR preview surface was removed
-          per product call: branch state belongs in chrome, not as a
-          floating panel competing with the FilterBar. */}
-
-      <Suspense fallback={null}>
-        <ChatAgent />
-      </Suspense>
-    </div>
-  );
-}
-
-// Tiny adapter that bridges filter-files → inspect-target without making
-// FilterBar import the inspect-target slice. The router is a natural
-// integration seam: it already imports both slices.
-function FilterBarHost() {
-  const { open, activeKey } = useStack();
-  return (
-    <FilterBar
-      onOpenFolder={(path) => { open({ kind: 'folder', path }); }}
-      onOpenFile={(id) => { open({ kind: 'file', id }); }}
-      activeKey={activeKey}
-    />
-  );
+  return <IntelligenceLayout />;
 }
 
 // Index ('/') redirects to '/intelligence' so deep-linking is consistent —
@@ -187,6 +134,30 @@ const admissionRoute = createRoute({
   },
 });
 
+const fixesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/fixes',
+  component: function FixesRouteComponent() {
+    return (
+      <Suspense fallback={null}>
+        <VerifiedFixRoot />
+      </Suspense>
+    );
+  },
+});
+
+const fixPipelineRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/fix-pipeline',
+  component: function FixPipelineRouteComponent() {
+    return (
+      <Suspense fallback={null}>
+        <FixPipelineStage />
+      </Suspense>
+    );
+  },
+});
+
 // 404 — anything else lands back on intelligence. Cheaper than a real
 // not-found page for an internal app and keeps copy-pasted bad URLs from
 // looking broken.
@@ -222,6 +193,8 @@ const routeTree = rootRoute.addChildren([
   agentsRoute,
   reviewsRoute,
   admissionRoute,
+  fixesRoute,
+  fixPipelineRoute,
   catchAllRoute,
 ]);
 

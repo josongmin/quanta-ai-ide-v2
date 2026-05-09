@@ -1,0 +1,148 @@
+# Family metadata. Order here drives `fcat list` and rendered output.
+# Each family corresponds to a file in `families/<id>.yaml`.
+
+families:
+  - id: composer
+    label: Composer
+    order: 10
+    rationale: >-
+      The input surface — text, voice, slash, mention, model picker, history,
+      stop. Every prompt the user sends passes through this funnel.
+
+  - id: secret-guard
+    label: Secret & PII Guard
+    order: 20
+    rationale: >-
+      Composer-time DLP. Scans drafts for high-entropy tokens before they
+      leave the device, blocks critical matches, and redacts on PR export.
+
+  - id: cost-budget
+    label: Cost & Budget
+    order: 30
+    rationale: >-
+      Cumulative spend tracking, per-turn forecast, and 3-tier enforcement
+      (alert / soft-cap / hard-cap) with auto-downgrade fallback.
+
+  - id: trust-observability
+    label: Trust & Observability
+    order: 40
+    rationale: >-
+      Calibration UI for "should the user trust this output". Citations,
+      staleness, self-eval confidence, latency profile, drift detection,
+      tool/model success rate.
+
+  - id: recovery-time-travel
+    label: Recovery & Time-travel
+    order: 50
+    rationale: >-
+      Non-destructive history navigation. Inverse-op recovery (instead of
+      destructive rewind), branch-from-here forks, batch checkpoint
+      operations, scrubber preview.
+
+  - id: diff-review
+    label: Diff & Review
+    order: 60
+    rationale: >-
+      Hunk-level accept/reject, threaded review comments, side-by-side toggle,
+      working-tree drift detection, test ↔ hunk failure mapping, inline
+      line edit, inline-AI-rewrite affordances.
+
+  - id: task-management
+    label: Task & Project Management
+    order: 70
+    rationale: >-
+      The left rail — multi-task fleet view. Concurrent streams, drag-drop
+      reorder, status shape encoding, background-task ribbon, MCP integrations.
+
+  - id: pr-ci
+    label: PR / CI / Branch
+    order: 80
+    rationale: >-
+      GitHub-side state synced into the IDE. Branch ahead/behind/mergeable,
+      PR status, reviewers, CI checks.
+
+  - id: plan-workflow
+    label: Plan & Workflow
+    order: 90
+    rationale: >-
+      Plan blocks with checkable items, confidence + cost estimates per
+      step, auto-advance, /diff preview, snapshot card.
+
+  - id: a11y-microux
+    label: A11y & Micro-UX
+    order: 100
+    rationale: >-
+      Accessibility (high-contrast, density toggle, skip-link,
+      reduced-motion) plus the science-backed micro-animations
+      (heart-rate pulses, DAW hatch, MS-Word wavy underline).
+
+  - id: ux-system
+    label: UX System
+    order: 110
+    rationale: >-
+      Cross-cutting affordances — command palette, context menu,
+      reactions, snapshot card, prompt history, resizable widget.
+
+  - id: command-palette
+    label: Command Palette & Reactions
+    order: 120
+    rationale: >-
+      ⌘K palette + ⋯ context menu + reactions + LiveSnapshotCard +
+      drag-reorder. The cross-feature affordances that bind the
+      thread together.
+
+  - id: inspect-target
+    label: Inspect & Visualize
+    order: 130
+    rationale: >-
+      Dependency / risk visualizations: ChordDiagram, CycleGraph,
+      DependencyMatrix, EdgeBundlingMap, SunburstHierarchy, Treemap,
+      RiskHeatmap, LayeredBoxDiagram, FocusScanStack with safe-rename
+      and symbol time-machine.
+
+  - id: admission-rules
+    label: Admission Rules & Calibration
+    order: 140
+    rationale: >-
+      Statistical guard for letting agent-authored changes through —
+      calibration curves, CUSUM drift, survival curves, counterfactual
+      impact. The "how much do we trust this rule" surface.
+
+  - id: filter-search
+    label: Filter & Search
+    order: 150
+    rationale: >-
+      Faceted filtering (preset / range / metric), folder tree
+      navigator, search-DSL bar. The way users narrow the workspace
+      to what they care about.
+
+  - id: review-pr
+    label: PR Review surface
+    order: 160
+    rationale: >-
+      DiffView with unified/split toggle, inline comment threads,
+      reply/resolve, action bar, conversation log, PR preview bar
+      and change list.
+
+  - id: switch-mode
+    label: Mode switching & Activity
+    order: 170
+    rationale: >-
+      DotField vs Universe view modes, AI activity overlay /
+      tray / feed, and the lazy mode registry that swaps the
+      whole app surface.
+
+  - id: app-shell
+    label: App shell & Cross-cutting context
+    order: 180
+    rationale: >-
+      Top-level Stage host, AppShell, GitActionsMenu, OverlayContext
+      and PrefsContext providers, and the review-stage rails.
+
+  - id: chat-agent
+    label: Chat agent (bottom-anchored)
+    order: 190
+    rationale: >-
+      The bottom-pinned ChatAgent widget — proactive suggestions,
+      tokens panel, vertical resize. Lives at app level, not
+      coding-stage level.

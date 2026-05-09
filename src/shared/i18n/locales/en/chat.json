@@ -3,7 +3,8 @@
     "title": "Coding agent",
     "openTitle": "Open coding agent (⌘K)",
     "openAria": "Open coding agent",
-    "closeAria": "Close coding agent"
+    "closeAria": "Close coding agent",
+    "resize": "Resize chat panel — drag to grow, double-click to reset"
   },
   "tabs": {
     "newTitle": "New chat (⌘T)",

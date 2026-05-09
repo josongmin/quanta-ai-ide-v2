@@ -1,0 +1,257 @@
+# UX system — design tokens, surfaces, mode-aware components.
+
+- id: blueprint-surface
+  label: Blueprint surface utility (mode-aware bg)
+  tier: leading
+  description: >-
+    `blueprintSurface(mode, depth)` returns the right glass / solid /
+    outlined background for the active universe mode. Single source of
+    truth for surface treatments — no `bg-zinc-900/50` literals scattered
+    across components.
+  evidence:
+    symbols:
+      - src/shared/lib/blueprint-surface.ts
+  pattern:
+    source: Material Design surface elevation / Apple HIG materials
+    rationale: >-
+      Centralising surface logic keeps mode-switching coherent. Each
+      depth gets one definition, not a different definition in every
+      component.
+  sota: {}
+  added_in: "2026-03-25"
+
+- id: token-primitives
+  label: Token primitives (semantic, not literal)
+  tier: leading
+  description: >-
+    All colours route through `--surface-base`, `--text-primary`,
+    `--accent-emphasis` etc. — never raw hex. Mode and contrast
+    overrides resolve at the CSS variable layer.
+  evidence:
+    symbols:
+      - src/shared/tokens/primitives.ts
+      - src/shared/tokens/applyTokens.ts
+  pattern:
+    source: Style Dictionary / Tailwind theme()
+    rationale: >-
+      Semantic tokens make dark-mode and contrast-mode swaps a
+      single-line change. Literal hex makes them an N-component refactor.
+  sota:
+    cursor: partial
+  added_in: "2026-03-12"
+
+- id: glass-card
+  label: GlassCard component (mode-aware glass)
+  tier: parity
+  description: >-
+    `<GlassCard>` wraps the blueprint surface + a thin border + the
+    standard inner radius. Used for every floating panel — overlay
+    popover, modal bodies, the timeline panel — so the visual language
+    stays consistent.
+  evidence:
+    symbols:
+      - src/shared/ui/GlassCard.tsx
+  pattern:
+    source: Apple frosted-glass materials / Linear panels
+    rationale: >-
+      A single component for "thing-floating-over-content" prevents the
+      drift where every new panel reinvents its border-radius and shadow.
+  sota: {}
+  added_in: "2026-03-15"
+
+- id: section-component
+  label: Section component (titled, collapsible region)
+  tier: parity
+  description: >-
+    `<Section title=...>` standardises the titled block — title row,
+    optional collapse, consistent vertical rhythm. Used in settings,
+    rules board, inspect panels.
+  evidence:
+    symbols:
+      - src/shared/ui/Section.tsx
+  pattern:
+    source: macOS System Settings sections
+    rationale: >-
+      Settings and inspector panels are 90% titled blocks. Centralising
+      the pattern keeps spacing and type uniform.
+  sota: {}
+  added_in: "2026-03-15"
+
+- id: drawer-popover-modal-stack
+  label: Layered overlay primitives (Drawer / Popover / Modal)
+  tier: parity
+  description: >-
+    Three overlay primitives with disjoint use cases — Modal for blocking
+    decisions, Drawer for side-anchored long content, Popover for
+    transient hover-attached info. Each owns its own focus-trap +
+    Esc-handling.
+  evidence:
+    symbols:
+      - src/shared/ui/Modal.tsx
+      - src/shared/ui/Drawer.tsx
+      - src/shared/ui/Popover.tsx
+  pattern:
+    source: WAI-ARIA dialog / Radix UI primitives
+    rationale: >-
+      Three disjoint primitives prevent the common anti-pattern of
+      "Modal-pretending-to-be-Drawer". Each is the right shape for
+      its job.
+  sota: {}
+  added_in: "2026-03-12"
+  flags: ["a11y"]
+
+- id: confidence-meter
+  label: ConfidenceMeter (calibrated 0..1 bar)
+  tier: leading
+  description: >-
+    Reusable 0..1 bar with three colour zones — ≥0.85 emerald,
+    0.6–0.85 neutral, <0.6 amber. Used by per-turn confidence chip,
+    rule reliability cards, and admission overview.
+  evidence:
+    symbols:
+      - src/shared/ui/ConfidenceMeter.tsx
+  pattern:
+    source: Anthropic extended-thinking calibration thresholds
+    rationale: >-
+      Three zones is the minimum that captures "trust this", "review
+      this", "drop this". One reusable component keeps the thresholds
+      consistent across every confidence-bearing surface.
+  sota: {}
+  added_in: "2026-04-25"
+  related: ["per-turn-confidence"]
+
+- id: stacked-ratio-bar
+  label: StackedRatioBar (segmented proportions)
+  tier: parity
+  description: >-
+    Horizontal bar split into N coloured segments. Used for
+    accept/revise/reject mixes, latency-by-phase, success-rate
+    breakdowns. Hover any segment for percentage + label.
+  evidence:
+    symbols:
+      - src/shared/ui/StackedRatioBar.tsx
+      - src/shared/ui/BarRow.tsx
+  pattern:
+    source: D3 stacked bar / Datadog "request mix" widget
+    rationale: >-
+      A stacked bar is the densest way to compare 3-5 proportions
+      at a glance. One component prevents drift between latency
+      bar / confidence mix / success rate.
+  sota: {}
+  added_in: "2026-04-25"
+
+- id: resize-handle
+  label: ResizeHandle (Fitts-correct rail/panel grip)
+  tier: parity
+  description: >-
+    Reusable resize grip — 3px visual rule with 8px hit zone, drag
+    to resize, double-click to reset, keyboard ←→/↑↓ to nudge.
+    Used by TaskRail, ChatAgent, Composer, PrTicketRail.
+  evidence:
+    symbols:
+      - src/shared/ui/ResizeHandle.tsx
+  pattern:
+    source: macOS Finder column separator + Fitts' law
+    rationale: >-
+      Centralising the grip pattern keeps every resizable surface
+      using the same Fitts ratio + keyboard semantics — no re-learn
+      cost.
+  sota: {}
+  added_in: "2026-04-12"
+  flags: ["a11y"]
+
+- id: dialog-a11y-hook
+  label: useDialogA11y (focus trap + restore)
+  tier: leading
+  description: >-
+    Single hook that owns dialog accessibility — focus trap, focus
+    restore on close, Esc-to-close, aria-modal wiring. Modal /
+    Drawer / Popover all consume it.
+  evidence:
+    symbols:
+      - src/shared/ui/useDialogA11y.ts
+  pattern:
+    source: WAI-ARIA dialog pattern
+    rationale: >-
+      Dialog a11y is hard and one-shot easy to forget. Centralising
+      it in one hook means every overlay primitive is correct by
+      construction.
+  sota: {}
+  added_in: "2026-03-15"
+  flags: ["a11y"]
+  related: ["drawer-popover-modal-stack"]
+
+- id: deterministic-rng
+  label: Seeded RNG (deterministic demo data)
+  tier: parity
+  description: >-
+    `makeRng(seed)` wraps a deterministic LCG so demo fixtures are
+    reproducible across reloads. Used by SAMPLE_PROJECTS, sample
+    tasks, and timeline jitter.
+  evidence:
+    symbols:
+      - src/shared/lib/rng.ts::makeRng
+  pattern:
+    source: numpy.random.default_rng / mulberry32
+    rationale: >-
+      Demo data needs to look organic but stay byte-stable for
+      screenshot diffs and PR review. Seeded RNG is the cheap fix.
+  sota: {}
+  added_in: "2026-03-12"
+
+- id: shortcut-registry
+  label: useShortcut (keyboard registry hook)
+  tier: parity
+  description: >-
+    Component-scoped keyboard shortcut registration. Each `Shortcut`
+    declares keys + scope (input vs global) so the input-aware
+    handlers don't fire while typing.
+  evidence:
+    symbols:
+      - src/shared/lib/useShortcut.ts::useShortcut
+      - src/shared/lib/useShortcut.ts::Shortcut
+  pattern:
+    source: react-hotkeys / VS Code keybinding scopes
+    rationale: >-
+      Component-scoped hooks beat global registries for unmount
+      cleanup. Scope-aware filtering prevents the classic
+      "shortcut fires while user is typing" bug.
+  sota: {}
+  added_in: "2026-03-15"
+  flags: ["a11y"]
+
+- id: click-outside-hook
+  label: useClickOutside (popover / menu dismiss)
+  tier: table-stakes
+  description: >-
+    Hook that calls a handler when a pointerdown lands outside the
+    referenced element. Powers menu dismissal, popover close, and
+    mention-picker collapse.
+  evidence:
+    symbols:
+      - src/shared/lib/useClickOutside.ts::useClickOutside
+  pattern:
+    source: react-onclickoutside / DOM pointerdown convention
+    rationale: >-
+      pointerdown beats click for popover dismissal — fires before
+      focus shifts so the next click lands on the right target.
+  sota: {}
+  added_in: "2026-03-12"
+
+- id: button-tone-system
+  label: Button tone system (primary / secondary / ghost / danger)
+  tier: parity
+  description: >-
+    `<Button tone>` covers four tones with consistent hover / focus /
+    active states. Disabled state respects contrast minimums; danger
+    tone is reserved for irreversible actions.
+  evidence:
+    symbols:
+      - src/shared/ui/Button.tsx
+  pattern:
+    source: Material 3 button hierarchy / shadcn/ui
+    rationale: >-
+      Four tones is the right resolution — fewer is ambiguous, more
+      becomes a guessing game for the implementer.
+  sota: {}
+  added_in: "2026-03-12"

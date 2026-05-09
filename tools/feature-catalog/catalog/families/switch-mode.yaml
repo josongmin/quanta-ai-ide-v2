@@ -1,0 +1,138 @@
+# Mode switching — DotField vs Universe + AI activity surface.
+
+- id: mode-registry
+  label: Lazy mode registry
+  tier: leading
+  description: >-
+    `createMode(id)` lazy-imports the mode bundle on first switch —
+    DotField and Universe each load only when the user picks them.
+    Keeps the initial bundle thin while supporting multiple
+    full-app surfaces.
+  evidence:
+    symbols:
+      - src/features/switch-mode/lib/registry.ts::createMode
+      - src/features/switch-mode/lib/DotFieldMode.ts::createDotFieldMode
+      - src/features/switch-mode/lib/UniverseMode.ts::createUniverseMode
+  pattern:
+    source: React.lazy / dynamic import
+    rationale: >-
+      Mode-level code-splitting is the only way to ship two visually
+      heavy surfaces (Three.js Universe, dot-field shader) without
+      doubling the initial bundle.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: dotfield-mode
+  label: DotField mode (data-density view)
+  tier: leading
+  description: >-
+    Particle-grid view of the workspace where every dot is a file
+    coloured by churn / risk / coverage. The "what is the system
+    doing right now" surface.
+  evidence:
+    symbols:
+      - src/features/switch-mode/lib/DotFieldMode.ts
+  pattern:
+    source: Bret Victor "Up and Down the Ladder of Abstraction"
+    rationale: >-
+      A single high-density visual answers "what's hot today" without
+      committing to a rigid chart type. Particles are the most
+      flexible unit of "one thing".
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: universe-mode
+  label: Universe mode (3D dependency space)
+  tier: leading
+  description: >-
+    Three.js scene placing modules as nodes in a force-directed 3D
+    layout. Camera-controllable; selecting a node opens the inspect
+    panel scoped to that module.
+  evidence:
+    symbols:
+      - src/features/switch-mode/lib/UniverseMode.ts
+  pattern:
+    source: Gephi 3D layouts / Code City
+    rationale: >-
+      3D is overkill for most viz tasks but right for very large
+      module graphs — depth disambiguates clusters that 2D crowds
+      together.
+  sota: {}
+  added_in: "2026-03-25"
+
+- id: view-mode-context
+  label: ViewModeContext (mode-aware components)
+  tier: parity
+  description: >-
+    Context provider that exposes the active `ViewMode` so deep
+    components can swap surface treatment, particle colour, or
+    micro-animation without prop-drilling.
+  evidence:
+    symbols:
+      - src/features/switch-mode/model/ViewModeContext.tsx
+  pattern:
+    source: React Context (theme-style)
+    rationale: >-
+      Mode is the right shape for context — global, rarely changes,
+      read by many leaves. Prop-drilling would be N hundred locations.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: ai-activity-overlay
+  label: AI activity overlay (mode-scoped status)
+  tier: leading
+  description: >-
+    `ActivityOverlay` floats over the active mode showing in-flight
+    agent operations (calls, tools, streams). Position adapts per mode
+    — bottom-right in DotField, head-up display in Universe.
+  evidence:
+    symbols:
+      - src/features/ai-activity/ui/ActivityOverlay.tsx
+  pattern:
+    source: Linear sync indicator / VS Code status bar
+    rationale: >-
+      Agent ops happen out of focus; an overlay keeps users aware
+      without forcing a context switch. Mode-adaptive positioning
+      respects the host visual.
+  sota: {}
+  added_in: "2026-04-08"
+  flags: ["obs"]
+
+- id: ai-activity-tray
+  label: ActivityTray (recent operations log)
+  tier: parity
+  description: >-
+    A bottom-edge tray that expands to show the last N agent
+    operations with timestamps, durations, and statuses. Click any
+    row to open the `AgentFeedPanel` filtered to that operation.
+  evidence:
+    symbols:
+      - src/features/ai-activity/ui/ActivityTray.tsx
+      - src/features/ai-activity/ui/AgentFeedPanel.tsx
+  pattern:
+    source: Vercel deploys panel / GitHub Actions runs
+    rationale: >-
+      A tray is the right space-cheap home for "last N events" —
+      no permanent screen real estate, but one click to see context.
+  sota: {}
+  added_in: "2026-04-15"
+  flags: ["obs"]
+
+- id: ai-activity-control
+  label: ActivityControlPanel (operation throttle / kill)
+  tier: leading
+  description: >-
+    Modal exposing per-operation controls: pause stream, switch
+    model on the fly, abort. Mirrors what a power user would do at
+    the API level but inline.
+  evidence:
+    symbols:
+      - src/features/ai-activity/ui/ActivityControlPanel.tsx
+  pattern:
+    source: htop / Activity Monitor process controls
+    rationale: >-
+      Long-running ops need a control surface beyond start/stop.
+      Mid-stream model switch is the most-asked feature; surfacing
+      it next to abort makes both discoverable.
+  sota: {}
+  added_in: "2026-04-22"

@@ -1,4 +1,5 @@
 import type { FileRecord, RepoData } from '@entities/repo';
+import { computeHotspots, HOTSPOT_VISIBLE_PERCENTILE } from '@entities/hotspot';
 import type { HeatMetricKey } from '../model';
 
 // "Heat overlay" — Spec §1 (rough risk) + §5 (Engineering Health) + §10
@@ -34,6 +35,14 @@ export const HEAT_METRICS: HeatMetric[] = [
   {
     key: 'hotspot', label: 'Hotspot', hint: 'High churn × high complexity (Michael Feathers)', hue: WARM_HUE,
     score: (f) => Math.sqrt(clamp01(f.metrics.churn) * clamp01(f.metrics.complexity / 50)),
+  },
+  {
+    key: 'hotspot-v2', label: 'Hotspot v2', hint: 'Top 10% — change × structure × health × coupling × criticality', hue: WARM_HUE,
+    score: (f, repo) => {
+      const entry = computeHotspots(repo).get(f.id);
+      if (!entry) return 0;
+      return entry.percentile >= HOTSPOT_VISIBLE_PERCENTILE ? entry.score : 0;
+    },
   },
   {
     // Score is computed by the renderer from `overlay.timeWindow` because

@@ -1,5 +1,5 @@
 import {
-  createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode,
+  createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode,
 } from 'react';
 
 import { applyTokens } from '../tokens';
@@ -39,8 +39,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Push the active theme onto :root so every CSS variable consumer
   // (Tailwind arbitrary values, raw `var(...)` lookups) updates atomically.
-  useEffect(() => {
+  //
+  // useLayoutEffect (not useEffect) so the tokens land on :root *before*
+  // the first paint after a state change — otherwise a fresh mount with
+  // no tokens yet would paint a single frame against unset variables and
+  // flash white where children expect `var(--bg-canvas)` to be dark.
+  useLayoutEffect(() => {
     applyTokens(theme);
+  }, [theme]);
+
+  // Persistence is non-visual; keep it in useEffect so we don't block paint.
+  useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, theme);
     } catch {

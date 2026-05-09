@@ -38,7 +38,7 @@ export default function ProjectSelector() {
 
   return (
     <div ref={ref} className="relative">
-      <GlassCard className="p-1">
+      <GlassCard className="p-1" style={{ boxShadow: 'none' }}>
         <button
           type="button"
           onClick={() => { setOpen((v) => !v); }}

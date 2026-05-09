@@ -534,6 +534,15 @@ const INCIDENT_BANK: IncidentMatch[] = [
   { id: 'INC-388', title: 'schema migration order regression',    date: '2024-12', similarity: 0 },
 ];
 
+// Per-file incident correlations — returns ids of past incidents whose
+// blast overlapped the touched file. The data behind this used to live
+// in a separate fixture; the Map shape is preserved so `ReviewDetailScenes`
+// can keep its `prodByPath.get(path) ?? null` contract while the source
+// is rebuilt. Empty Map = "no overlap surfaced" which the UI hides.
+export function prodCorrelations(_pr: PullRequest, _repo: RepoData): Map<string, string[]> {
+  return new Map<string, string[]>();
+}
+
 export function incidentMatches(pr: PullRequest, repo: RepoData): IncidentMatch[] {
   // Score each incident by overlap with PR file metrics — a tiny synthetic
   // model so the screenshot section has signal without a real history.

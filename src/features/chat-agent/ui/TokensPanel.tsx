@@ -1,16 +1,26 @@
+import { Fragment } from 'react';
 import { X, RotateCcw } from 'lucide-react';
-import { Drawer } from '@shared/ui';
+import { Modal } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
-import { useTokens, type Tokens } from '../model/TokensContext';
+import type { SemanticTokens } from '@shared/tokens';
+import { useTokens, type GlobalTokenSections, type Tokens } from '../model/TokensContext';
 
 export default function TokensPanel({ onClose }: { onClose: () => void }) {
-  const { tokens, set, reset } = useTokens();
+  const {
+    tokens, setSemantic, setGlobal, replace, reset,
+  } = useTokens();
   const { t } = useTranslation('chat');
   const tCommon = useTranslation('common').t;
 
   return (
-    <Drawer open onClose={onClose} width={360} ariaLabel={t('tokens.title')}>
-      <div className="h-full flex flex-col">
+    <Modal
+      open
+      onClose={onClose}
+      width="min(1180px, calc(100vw - 40px))"
+      maxWidth="calc(100vw - 32px)"
+      ariaLabel={t('tokens.title')}
+    >
+      <div className="flex max-h-[calc(100vh-64px)] flex-col">
         <header
           className="shrink-0 flex items-center justify-between px-4 py-3 border-b"
           style={{ borderColor: 'var(--border-default)' }}
@@ -48,38 +58,45 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-5 scrollbar-hide">
-          <Group title={t('tokens.groups.color')}>
-            <ColorRow label={t('tokens.labels.accent')}   value={tokens.accent}    onChange={(v) => { set('accent', v); }} />
-            <ColorRow label={t('tokens.labels.bgDark')}   value={tokens.bgDark}    onChange={(v) => { set('bgDark', v); }} />
-            <ColorRow label={t('tokens.labels.bgLight')}  value={tokens.bgLight}   onChange={(v) => { set('bgLight', v); }} />
-          </Group>
+        <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide">
+          <div className="space-y-3">
+            <SectionTitle title="Theme tokens" />
+            {SEMANTIC_GROUPS.map((group) => (
+              <ThemeTokenMatrix
+                key={group.title}
+                title={group.title}
+                keys={group.keys}
+                dark={tokens.semantic.dark}
+                light={tokens.semantic.light}
+                onDarkChange={(key, value) => { setSemantic('dark', key, value); }}
+                onLightChange={(key, value) => { setSemantic('light', key, value); }}
+              />
+            ))}
+          </div>
 
-          <Group title={t('tokens.groups.glass')}>
-            <RangeRow label={t('tokens.labels.alphaDark')}   value={tokens.glassAlphaDark}        min={0}  max={0.3}  step={0.005} onChange={(v) => { set('glassAlphaDark', v); }} fmt={f3} />
-            <RangeRow label={t('tokens.labels.alphaLight')}  value={tokens.glassAlphaLight}       min={0}  max={1}    step={0.01}  onChange={(v) => { set('glassAlphaLight', v); }} fmt={f3} />
-            <RangeRow label={t('tokens.labels.borderDark')}  value={tokens.glassBorderAlphaDark}  min={0}  max={0.5}  step={0.01}  onChange={(v) => { set('glassBorderAlphaDark', v); }} fmt={f3} />
-            <RangeRow label={t('tokens.labels.borderLight')} value={tokens.glassBorderAlphaLight} min={0}  max={1}    step={0.01}  onChange={(v) => { set('glassBorderAlphaLight', v); }} fmt={f3} />
-            <RangeRow label={t('tokens.labels.blur')}        value={tokens.glassBlur}             min={0}  max={48}   step={1}     onChange={(v) => { set('glassBlur', v); }} fmt={(v) => `${v}px`} />
-          </Group>
+          <div className="space-y-3">
+            <SectionTitle title="Component tokens" />
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+              {GLOBAL_GROUPS.map((group) => (
+                <GlobalTokenGroup
+                  key={group.section}
+                  section={group.section}
+                  title={group.title}
+                  values={tokens.global[group.section]}
+                  onChange={(key, value) => { setGlobal(group.section, key, value); }}
+                />
+              ))}
+            </div>
+          </div>
 
-          <Group title={t('tokens.groups.shape')}>
-            <RangeRow label={t('tokens.labels.radiusLg')} value={tokens.radius}   min={0} max={48} step={1} onChange={(v) => { set('radius', v); }} fmt={(v) => `${v}px`} />
-            <RangeRow label={t('tokens.labels.radiusSm')} value={tokens.radiusSm} min={0} max={24} step={1} onChange={(v) => { set('radiusSm', v); }} fmt={(v) => `${v}px`} />
-          </Group>
-
-          <Group title={t('tokens.groups.type')}>
-            <RangeRow label={t('tokens.labels.fontScale')} value={tokens.fontScale} min={0.85} max={1.2} step={0.01} onChange={(v) => { set('fontScale', v); }} fmt={(v) => v.toFixed(2)} />
-            <RangeRow label={t('tokens.labels.cardPad')}   value={tokens.cardPad}   min={4} max={32} step={1} onChange={(v) => { set('cardPad', v); }} fmt={(v) => `${v}px`} />
-            <RangeRow label={t('tokens.labels.gapY')}      value={tokens.gapY}      min={0} max={32} step={1} onChange={(v) => { set('gapY', v); }} fmt={(v) => `${v}px`} />
-          </Group>
-
-          <Group title={t('tokens.groups.presets')}>
-            <div className="grid grid-cols-2 gap-2">
-              {PRESETS.map((p) => (
-                <button type="button"
-                  key={p.id}
-                  onClick={() => { Object.entries(p.values).forEach(([k, v]) => { set(k as keyof Tokens, v as never); }); }}
+          <div className="space-y-3">
+            <SectionTitle title={t('tokens.groups.presets')} />
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+              {PRESETS.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => { replace((current) => preset.apply(current)); }}
                   className="text-left p-2 rounded-lg border text-[11px] font-bold hover-surface"
                   style={{
                     background: 'var(--bg-surface-muted)',
@@ -87,117 +104,306 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
                     color: 'var(--fg-default)',
                   }}
                 >
-                  {t(`tokens.presets.${p.id}`)}
+                  {t(`tokens.presets.${preset.id}`)}
                 </button>
               ))}
             </div>
-          </Group>
+          </div>
         </div>
       </div>
-    </Drawer>
+    </Modal>
   );
 }
 
-function f3(v: number) { return v.toFixed(3); }
-
-function Group({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-2">
-      <div
-        className="text-[9px] font-black uppercase tracking-[0.18em]"
-        style={{ color: 'var(--fg-subtle)' }}
-      >
-        {title}
-      </div>
-      {children}
-    </div>
-  );
-}
-
-function ColorRow({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+function SectionTitle({ title }: { title: string }) {
   return (
     <div
-      className="flex items-center gap-3 p-2 rounded-lg border"
-      style={{
-        background: 'var(--bg-surface-muted)',
-        borderColor: 'var(--border-muted)',
-      }}
+      className="text-[10px] font-black uppercase tracking-[0.18em]"
+      style={{ color: 'var(--fg-subtle)' }}
     >
-      <input
-        type="color"
-        value={value}
-        onChange={(e) => { onChange(e.target.value); }}
-        className="w-7 h-7 rounded-md cursor-pointer bg-transparent shrink-0"
-      />
-      <span
-        className="text-[11px] font-bold flex-1"
-        style={{ color: 'var(--fg-default)' }}
-      >
-        {label}
-      </span>
-      <code
-        className="text-[10px] font-mono"
-        style={{ color: 'var(--fg-subtle)' }}
-      >
-        {value}
-      </code>
+      {title}
     </div>
   );
 }
 
-function RangeRow({
-  label, value, min, max, step, onChange, fmt,
+function ThemeTokenMatrix({
+  title,
+  keys,
+  dark,
+  light,
+  onDarkChange,
+  onLightChange,
 }: {
-  label: string; value: number; min: number; max: number; step: number;
-  onChange: (v: number) => void;
-  fmt: (v: number) => string;
+  title: string;
+  keys: readonly (keyof SemanticTokens)[];
+  dark: SemanticTokens;
+  light: SemanticTokens;
+  onDarkChange: (key: keyof SemanticTokens, value: string) => void;
+  onLightChange: (key: keyof SemanticTokens, value: string) => void;
 }) {
   return (
     <div
-      className="p-2 rounded-lg border"
+      className="rounded-xl border p-3 space-y-2"
       style={{
         background: 'var(--bg-surface-muted)',
         borderColor: 'var(--border-muted)',
       }}
     >
-      <div className="flex justify-between items-center mb-1">
-        <span className="text-[11px] font-bold" style={{ color: 'var(--fg-default)' }}>{label}</span>
-        <span className="text-[10px] font-mono tabular-nums" style={{ color: 'var(--fg-muted)' }}>{fmt(value)}</span>
+      <div
+        className="text-[9px] font-black uppercase tracking-[0.18em]"
+        style={{ color: 'var(--fg-muted)' }}
+      >
+        {title}
       </div>
-      <input
-        type="range"
-        min={min} max={max} step={step}
-        value={value}
-        onChange={(e) => { onChange(+e.target.value); }}
-        className="w-full accent-[#4f9a5c]"
-      />
+
+      <div className="grid grid-cols-[120px_minmax(0,1fr)_minmax(0,1fr)] gap-2 items-start">
+        <div />
+        <ColumnHeader title="Dark" />
+        <ColumnHeader title="Light" />
+
+        {keys.map((key) => (
+          <Fragment key={String(key)}>
+            <div
+              className="text-[10px] font-mono pt-2"
+              style={{ color: 'var(--fg-muted)' }}
+            >
+              {humanizeKey(String(key))}
+            </div>
+            <TokenField value={dark[key]} onChange={(value) => { onDarkChange(key, value); }} />
+            <TokenField value={light[key]} onChange={(value) => { onLightChange(key, value); }} />
+          </Fragment>
+        ))}
+      </div>
     </div>
   );
 }
 
-const PRESETS: { id: string; values: Partial<Tokens> }[] = [
-  {
-    id: 'default',
-    values: { radius: 24, radiusSm: 12, glassBlur: 22, glassAlphaDark: 0.04, fontScale: 1, cardPad: 16, accent: '#4f9a5c' },
-  },
+function ColumnHeader({ title }: { title: string }) {
+  return (
+    <div
+      className="rounded-lg border px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-center"
+      style={{
+        background: 'var(--bg-surface)',
+        borderColor: 'var(--border-muted)',
+        color: 'var(--fg-default)',
+      }}
+    >
+      {title}
+    </div>
+  );
+}
+
+function GlobalTokenGroup<S extends keyof GlobalTokenSections>({
+  section,
+  title,
+  values,
+  onChange,
+}: {
+  section: S;
+  title: string;
+  values: GlobalTokenSections[S];
+  onChange: <K extends keyof GlobalTokenSections[S]>(key: K, value: GlobalTokenSections[S][K]) => void;
+}) {
+  const entries = Object.entries(values) as [keyof GlobalTokenSections[S], GlobalTokenSections[S][keyof GlobalTokenSections[S]]][];
+  return (
+    <div
+      className="rounded-xl border p-3 space-y-2"
+      style={{
+        background: 'var(--bg-surface-muted)',
+        borderColor: 'var(--border-muted)',
+      }}
+    >
+      <div
+        className="text-[9px] font-black uppercase tracking-[0.18em]"
+        style={{ color: 'var(--fg-muted)' }}
+      >
+        {title}
+      </div>
+
+      {entries.map(([key, value]) => (
+        <div key={`${String(section)}-${String(key)}`} className="space-y-1.5">
+          <div className="text-[10px] font-mono" style={{ color: 'var(--fg-muted)' }}>
+            {humanizeKey(String(key))}
+          </div>
+          <TokenField
+            value={value}
+            onChange={(next) => {
+              onChange(key, (typeof value === 'number' ? Number(next) : next) as GlobalTokenSections[S][typeof key]);
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TokenField({
+  value,
+  onChange,
+}: {
+  value: string | number;
+  onChange: (next: string) => void;
+}) {
+  const text = typeof value === 'number' ? String(value) : value;
+  const hex = isHexColor(text);
+  const colorPreview = isCssColor(text);
+
+  return (
+    <div
+      className="rounded-lg border p-2"
+      style={{
+        background: 'var(--bg-surface)',
+        borderColor: 'var(--border-muted)',
+      }}
+    >
+      <div className="flex items-center gap-2">
+        {hex && (
+          <input
+            type="color"
+            value={text}
+            onChange={(e) => { onChange(e.target.value); }}
+            className="w-7 h-7 rounded-md cursor-pointer bg-transparent shrink-0"
+          />
+        )}
+        {!hex && colorPreview && (
+          <span
+            className="w-4 h-4 rounded-md border shrink-0"
+            style={{
+              background: text,
+              borderColor: 'var(--border-default)',
+            }}
+            aria-hidden
+          />
+        )}
+        <input
+          type={typeof value === 'number' ? 'number' : 'text'}
+          value={text}
+          step={typeof value === 'number' ? '0.01' : undefined}
+          onChange={(e) => { onChange(e.target.value); }}
+          className="w-full rounded-md border px-2 py-1.5 text-[11px] font-mono bg-transparent outline-none"
+          style={{
+            borderColor: 'var(--border-muted)',
+            color: 'var(--fg-default)',
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function humanizeKey(key: string): string {
+  return key
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/^./, (char) => char.toUpperCase());
+}
+
+function isHexColor(value: string): boolean {
+  return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(value.trim());
+}
+
+function isCssColor(value: string): boolean {
+  const v = value.trim().toLowerCase();
+  return isHexColor(v) || v.startsWith('rgb(') || v.startsWith('rgba(') || v.startsWith('hsl(') || v.startsWith('hsla(');
+}
+
+const SEMANTIC_GROUPS: { title: string; keys: readonly (keyof SemanticTokens)[] }[] = [
+  { title: 'Surface', keys: ['bgCanvas', 'bgSurface', 'bgSurfaceMuted', 'bgOverlay', 'bgElevated', 'bgPanelStrong', 'bgHover', 'bgActive', 'bgActiveStrong', 'bgSelected', 'bgScrim', 'bgStage', 'bgStageUniverse'] },
+  { title: 'Foreground', keys: ['fgStrong', 'fgDefault', 'fgMuted', 'fgSubtle', 'fgOnAccent', 'fgOnActiveStrong', 'fgLink', 'fgAccent'] },
+  { title: 'Border', keys: ['borderDefault', 'borderMuted', 'borderStrong', 'borderFocus', 'ringActive'] },
+  { title: 'Shadow', keys: ['shadowSm', 'shadowMd', 'shadowLg'] },
+  { title: 'Intent', keys: ['intentSuccessFg', 'intentSuccessBg', 'intentSuccessVivid', 'intentWarnFg', 'intentWarnBg', 'intentWarnVivid', 'intentDangerFg', 'intentDangerBg', 'intentDangerVivid', 'intentInfoFg', 'intentInfoBg', 'intentNeutralFg', 'intentNeutralBg'] },
+  { title: 'Identity', keys: ['identityStable', 'identityModified', 'identityVulnerable', 'identityOutOfScope'] },
+  { title: 'Intensity', keys: ['intensityWarm', 'intensityCool', 'intensityNeutral'] },
+];
+
+const GLOBAL_GROUPS: { section: keyof GlobalTokenSections; title: string }[] = [
+  { section: 'glass', title: 'Glass' },
+  { section: 'card', title: 'Card' },
+  { section: 'chip', title: 'Chip' },
+  { section: 'pill', title: 'Pill' },
+  { section: 'panel', title: 'Panel' },
+  { section: 'header', title: 'Header' },
+  { section: 'tab', title: 'Tab' },
+  { section: 'dropdown', title: 'Dropdown' },
+  { section: 'tooltip', title: 'Tooltip' },
+  { section: 'focus', title: 'Focus' },
+];
+
+const PRESETS: { id: string; apply: (current: Tokens) => Tokens }[] = [
   {
     id: 'sharper',
-    values: { radius: 8, radiusSm: 4, glassBlur: 8, glassAlphaDark: 0.06 },
+    apply: (current) => ({
+      ...current,
+      global: {
+        ...current.global,
+        glass: { ...current.global.glass, radius: '16px', blur: '8px', fillAlphaDark: 0.06 },
+        card: { ...current.global.card, radius: '8px', radiusInner: '4px' },
+        dropdown: { ...current.global.dropdown, radius: '12px' },
+      },
+    }),
   },
   {
     id: 'softer',
-    values: { radius: 32, radiusSm: 18, glassBlur: 30, glassAlphaDark: 0.06 },
+    apply: (current) => ({
+      ...current,
+      global: {
+        ...current.global,
+        glass: { ...current.global.glass, radius: '32px', blur: '30px', fillAlphaDark: 0.06 },
+        card: { ...current.global.card, radius: '32px', radiusInner: '18px' },
+        dropdown: { ...current.global.dropdown, radius: '24px' },
+      },
+    }),
   },
   {
     id: 'compact',
-    values: { fontScale: 0.9, cardPad: 10, gapY: 8 },
+    apply: (current) => ({
+      ...current,
+      global: {
+        ...current.global,
+        card: { ...current.global.card, padding: '10px', paddingCompact: '8px', gap: '8px' },
+        panel: { ...current.global.panel, inset: '10px' },
+        header: { ...current.global.header, paddingX: '10px' },
+      },
+    }),
   },
   {
     id: 'cozy',
-    values: { fontScale: 1.05, cardPad: 20, gapY: 18 },
+    apply: (current) => ({
+      ...current,
+      global: {
+        ...current.global,
+        card: { ...current.global.card, padding: '20px', paddingCompact: '16px', gap: '18px' },
+        panel: { ...current.global.panel, inset: '20px' },
+        header: { ...current.global.header, paddingX: '20px' },
+      },
+    }),
   },
   {
     id: 'cyberpunk',
-    values: { accent: '#ff7afc', glassAlphaDark: 0.06, glassBlur: 30, radius: 6 },
+    apply: (current) => ({
+      ...current,
+      semantic: {
+        dark: {
+          ...current.semantic.dark,
+          fgLink: '#ff7afc',
+          fgAccent: '#ff7afc',
+          borderFocus: 'rgba(255,122,252,0.55)',
+          intentInfoFg: '#ff7afc',
+        },
+        light: {
+          ...current.semantic.light,
+          fgLink: '#b100ff',
+          fgAccent: '#b100ff',
+          borderFocus: 'rgba(177,0,255,0.45)',
+          intentInfoFg: '#b100ff',
+        },
+      },
+      global: {
+        ...current.global,
+        glass: { ...current.global.glass, blur: '30px', radius: '6px', fillAlphaDark: 0.06 },
+        card: { ...current.global.card, radius: '6px', radiusInner: '4px' },
+        dropdown: { ...current.global.dropdown, radius: '10px' },
+      },
+    }),
   },
 ];

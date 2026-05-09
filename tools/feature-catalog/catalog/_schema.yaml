@@ -1,0 +1,38 @@
+# Feature schema — mirror of `src/feature_catalog/models.py`.
+#
+# This file is documentation; Pydantic is the runtime authority. Keep them
+# in lock-step: when you add a field here, add it to `models.py` too.
+
+Feature:
+  id:           str  # kebab-case, globally unique. e.g. "voice-interim"
+  label:        str  # one-line UI-ready name. e.g. "Voice input + interim ghost text"
+  family:       str  # references _families.yaml. set automatically by loader from filename
+  tier:         enum[leading|parity|progressive|table-stakes]
+  description:  str  # 1-3 sentences. user-facing, no marketing fluff
+  evidence:
+    symbols:    list[str]  # "src/widgets/.../File.tsx::FunctionName" or just "src/.../File.tsx"
+    tests:      list[str]  # optional; paths to relevant *.test.ts(x)
+    locales:    list[str]  # optional; i18n keys this feature reads, e.g. "coding:budgetV2.softCapModalTitle"
+  pattern:
+    source:     str  # where the design pattern comes from. e.g. "AWS Budget", "MS Word grammar wavy"
+    rationale:  str  # one sentence on *why* this pattern fits
+  sota:
+    cursor:        bool | enum[partial|absent]
+    claude_code:   bool | enum[partial|absent]
+    devin:         bool | enum[partial|absent]
+    openhands:     bool | enum[partial|absent]
+    cody:          bool | enum[partial|absent]
+    continue_ide:  bool | enum[partial|absent]
+    windsurf:      bool | enum[partial|absent]
+    copilot_ws:    bool | enum[partial|absent]
+  added_in:    str  # version or date. e.g. "2026-05-08" or "v1.0"
+  status:      enum[shipped|wip|planned]  # default shipped
+  flags:       list[str]  # optional. tags like "a11y", "security", "obs", "trust"
+  related:     list[str]  # optional. ids of related features (cross-link)
+  notes:       str | null  # free-form, optional
+
+Family:
+  id:          str  # kebab-case, matches filename in families/
+  label:       str  # human label
+  order:       int  # display order in list/render
+  rationale:   str  # one paragraph on what this family covers

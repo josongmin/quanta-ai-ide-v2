@@ -1,0 +1,150 @@
+# Command palette, context menu, reactions, snapshot card.
+
+- id: command-palette
+  label: ⌘K command palette
+  tier: parity
+  description: >-
+    `CommandPalette` opens on ⌘K (capture-phase so it wins over the
+    chat-agent's ⌘K). Fuzzy-search across `PaletteAction[]` — new
+    task, switch model, jump to project, open shortcuts — with
+    keyboard nav, hint chips, and a deterministic insertion point.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/CommandPalette.tsx::CommandPalette
+      - src/widgets/coding-stage/parts/CommandPalette.tsx::PaletteAction
+    locales:
+      - "coding:palette.actions.newTask"
+  pattern:
+    source: VS Code command palette / Linear ⌘K
+    rationale: >-
+      Power-user keyboard surface. Capture-phase listener prevents
+      shadowing by lower components — the palette always wins for ⌘K.
+  sota:
+    cursor: true
+    claude_code: true
+    devin: partial
+  added_in: "2026-04-08"
+
+- id: turn-reactions
+  label: Per-turn reactions (👍 👎 ❤️ 🎯)
+  tier: leading
+  description: >-
+    Each agent turn carries an optional `reactions` map. Toggling sets
+    one key true; toggling the same key clears it. Mutual exclusion
+    enforced when switching reactions. Used downstream for RLHF-style
+    quality signal aggregation.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/types.ts::ReactionKind
+  pattern:
+    source: Slack message reactions / RLHF preference labels
+    rationale: >-
+      One-tap quality signal that survives the conversation. Cheaper
+      than typing feedback, more granular than 👍/👎.
+  sota: {}
+  added_in: "2026-04-15"
+
+- id: live-snapshot-card
+  label: Live snapshot card (post-task summary)
+  tier: leading
+  description: >-
+    `LiveSnapshotCard` renders a one-glance summary of the active task's
+    state: cost, turns, last action, "Continue" CTA. Sized to read
+    without scrolling. Shows even when the thread has scrolled away.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/LiveSnapshotCard.tsx::LiveSnapshotCard
+  pattern:
+    source: GitHub PR summary card / Linear issue header
+    rationale: >-
+      Long agent threads make "where am I" expensive. A persistent
+      snapshot keeps the answer in peripheral vision.
+  sota: {}
+  added_in: "2026-04-25"
+
+- id: task-drag-reorder
+  label: Drag-reorder tasks within project
+  tier: leading
+  description: >-
+    `TaskRail` rows are HTML5-draggable. Dragging within the same
+    project shows an "insert here" indicator on dragOver and reorders
+    on drop. Cross-project drag is intentionally blocked — ordering is
+    a per-project concern.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/TaskRail.tsx::TaskRail
+  pattern:
+    source: Trello card drag / Linear sub-issue reorder
+    rationale: >-
+      Manual ordering is the cheapest priority signal. Confining drag
+      to within-project keeps the gesture's effect predictable.
+  sota: {}
+  added_in: "2026-04-12"
+
+- id: task-rail-resize
+  label: TaskRail width resize
+  tier: parity
+  description: >-
+    The left task rail has a draggable separator on its right edge.
+    `TASK_RAIL_MIN_WIDTH` / `TASK_RAIL_MAX_WIDTH` clamp the range;
+    width persists in localStorage.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/TaskRail.tsx::TASK_RAIL_DEFAULT_WIDTH
+      - src/widgets/coding-stage/parts/TaskRail.tsx::TASK_RAIL_MIN_WIDTH
+  pattern:
+    source: VS Code activity bar resize
+    rationale: >-
+      Density is personal — a wide rail helps long titles, a narrow
+      one helps the central content area.
+  sota:
+    cursor: true
+    claude_code: false
+  added_in: "2026-04-12"
+  flags: ["a11y"]
+
+- id: turn-status-classification
+  label: Turn status / cost / risk classification helpers
+  tier: leading
+  description: >-
+    `timelineMeta.ts` exposes `turnMeta`, `approxCost`, and
+    `classifyInverse` — the pure functions the scrubber and turn-menu
+    use to pick colours, render cost chips, and decide whether a
+    rewind is `safe / risky / noop`.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/timelineMeta.ts::turnMeta
+      - src/widgets/coding-stage/parts/timelineMeta.ts::approxCost
+      - src/widgets/coding-stage/parts/timelineMeta.ts::classifyInverse
+  pattern:
+    source: Functional core / imperative shell
+    rationale: >-
+      Centralising the per-turn judgement in pure functions lets every
+      surface (scrubber, menu, header chip) agree on the colour and
+      cost without duplicating logic.
+  sota: {}
+  added_in: "2026-04-22"
+
+- id: mention-caret-detection
+  label: Caret-anchored mention detection
+  tier: parity
+  description: >-
+    `findMentionAtCaret` scans the textarea backwards from the caret
+    looking for a `#` or `@` trigger un-broken by whitespace. Returns
+    `{ trigger, query, start, end }` so the picker can replace exactly
+    the active mention without disturbing the rest of the draft.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/MentionPicker.tsx::findMentionAtCaret
+      - src/widgets/coding-stage/parts/MentionPicker.tsx::MentionTrigger
+  pattern:
+    source: Slack / GitHub @mention parser
+    rationale: >-
+      Caret-anchored detection beats whole-textarea regex — it doesn't
+      false-positive on prior mentions and lets the picker stay open
+      across edits.
+  sota:
+    cursor: true
+    cody: true
+  added_in: "2026-02-01"
+  related: ["composer-mention-file", "composer-mention-symbol"]

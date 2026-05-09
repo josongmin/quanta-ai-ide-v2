@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-theme="dark">
+<html lang="en" dir="ltr" data-theme="dark" style="background:#0a0d12">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,8 +9,15 @@
       name="description"
       content="Codeflow Lens is an interactive 2.5D / Universe visualizer that turns a codebase into a navigable city of files, dependencies, and hotspots."
     />
+    <!-- theme-color and color-scheme are stamped synchronously by the
+         no-flash script below based on the persisted theme. The defaults
+         here are the dark values so the very first byte parsed reflects
+         the dominant UI surface; the script then narrows color-scheme to
+         the *single* active theme, which lets Chrome paint-hold the
+         right background colour during navigation instead of flashing
+         the browser's default white canvas. -->
     <meta name="theme-color" content="#0a0d12" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="dark" />
 
     <!-- Open Graph -->
     <meta property="og:title" content="Codeflow Lens — Codebase Intelligence Demo" />
@@ -41,20 +48,90 @@
          and stamps `data-theme` synchronously so the CSS below picks the
          correct background before paint. -->
     <script>
+      // Runs *before* the body parses, so every paint after this point —
+      // including Chrome's pre-React navigation paint-hold — uses the
+      // active theme's colours.
+      //
+      // Three signals get stamped here:
+      //   1. data-theme on <html>           → matches React's later state
+      //   2. inline html.style.background   → beats any stylesheet on specificity
+      //   3. color-scheme + theme-color     → narrows to a SINGLE theme so
+      //                                       Chrome's intrinsic page bg flips
+      //                                       from default white to the dark/
+      //                                       light surface during navigation
       try {
         var t = localStorage.getItem('app:theme');
         if (t !== 'dark' && t !== 'light') t = 'dark';
-        document.documentElement.dataset.theme = t;
+        var html = document.documentElement;
+        html.dataset.theme = t;
+        var bg = t === 'light' ? '#f4f6f9' : '#0a0d12';
+        html.style.background = bg;
+        html.style.backgroundColor = bg;
+        html.style.colorScheme = t;
+        var prepaint = document.createElement('style');
+        prepaint.id = 'prepaint-theme';
+        prepaint.textContent =
+          'html,body,#root{' +
+          'background:' + bg + ' !important;' +
+          'background-color:' + bg + ' !important;' +
+          '}' +
+          'html,body{color-scheme:' + t + ';}' +
+          'body{margin:0;min-height:100vh;}' +
+          '#root{min-height:100vh;}';
+        document.head.appendChild(prepaint);
+        var tc = document.querySelector('meta[name="theme-color"]');
+        if (tc) tc.setAttribute('content', bg);
+        var cs = document.querySelector('meta[name="color-scheme"]');
+        if (cs) cs.setAttribute('content', t);
       } catch (e) { /* localStorage may be blocked — fall back to default attr */ }
     </script>
     <style>
-      :root { color-scheme: dark light; }
-      html, body { background: #0a0d12; }
-      html[data-theme="light"], html[data-theme="light"] body { background: #f4f6f9; }
+      /* Pre-React fallbacks. These are shadowed by applyTokens() once
+         React mounts, but during the brief window before that — and on
+         any frame React paints against unset variables — they keep
+         every surface that reads `var(--bg-canvas)` / `var(--bg-stage)`
+         from collapsing to the browser's default white. */
+      :root {
+        --bg-canvas: #0a0d12;
+        --bg-stage: #0d1117;
+        --bg-stage-universe: #020202;
+        --bg-surface: #0d1117;
+        --bg-overlay: #0a0d12;
+      }
+      html[data-theme="light"] {
+        --bg-canvas: #f4f6f9;
+        --bg-stage: #f4f6f9;
+        --bg-stage-universe: #0a2545;
+        --bg-surface: #ffffff;
+        --bg-overlay: #ffffff;
+      }
+      html, body, #root {
+        background: var(--bg-canvas);
+        background-color: var(--bg-canvas);
+      }
+      /* Pre-React #root must already be the dark canvas size+colour so
+         the browser's navigation paint-hold has something dark to hold,
+         not the white default. */
+      body { margin: 0; min-height: 100vh; }
+      #root { width: 100%; height: 100%; min-height: 100vh; }
     </style>
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="margin:0;min-height:100vh;background:#0a0d12;background-color:#0a0d12;color-scheme:dark;">
+    <div id="root" style="min-height:100vh;background:#0a0d12;background-color:#0a0d12;"></div>
+    <script>
+      try {
+        var html = document.documentElement;
+        var bg = html.dataset.theme === 'light' ? '#f4f6f9' : '#0a0d12';
+        document.body.style.background = bg;
+        document.body.style.backgroundColor = bg;
+        document.body.style.colorScheme = html.dataset.theme === 'light' ? 'light' : 'dark';
+        var root = document.getElementById('root');
+        if (root) {
+          root.style.background = bg;
+          root.style.backgroundColor = bg;
+        }
+      } catch (e) { /* ignore */ }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

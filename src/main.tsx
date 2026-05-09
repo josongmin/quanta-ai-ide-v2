@@ -2,6 +2,21 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './app/App';
 import './index.css';
+import { applyTokens } from '@shared/tokens';
+
+// Stamp the active theme's CSS variables onto :root *before* React mounts
+// so the very first React render reads correct `var(--bg-canvas)` etc.
+// and never paints a frame against unset variables (which can fall back to
+// the browser's default white). Mirror the no-flash logic in index.html:
+// localStorage wins, then fall back to dark.
+(() => {
+  try {
+    const t = localStorage.getItem('app:theme');
+    applyTokens(t === 'light' ? 'light' : 'dark');
+  } catch {
+    applyTokens('dark');
+  }
+})();
 
 // i18n setup runs on import — must precede the first render so the very
 // first `useTranslation()` call sees a configured instance.

@@ -1,0 +1,251 @@
+# Composer family — the input surface.
+#
+# Add new entries to the *bottom*, not in the middle, so reviewers
+# can spot what's new in a diff. Sort is alphabetical at render time.
+
+- id: composer-ime-safe
+  label: IME-safe input (Korean / Japanese / Chinese)
+  tier: parity
+  description: >-
+    Enter while a CJK composition is in flight no longer submits the draft.
+    Composer guards on `e.nativeEvent.isComposing` plus a mirrored
+    `composing` state from compositionstart/end events.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Composer.tsx::onKeyDown
+      - src/features/chat-agent/ui/ChatAgent.tsx::onKeyDown
+    locales: []
+  pattern:
+    source: Web platform `compositionstart`/`compositionend` events
+    rationale: >-
+      The only correct primitive for IME guards. Polling `e.key === 'Process'`
+      misses Safari; checking IME on input event misses early Chromium.
+  sota:
+    cursor: true
+    claude_code: true
+    devin: true
+  added_in: "2026-01-15"
+  flags: ["a11y", "i18n"]
+
+- id: composer-slash-commands
+  label: Slash commands
+  tier: parity
+  description: >-
+    `/plan`, `/diff <ref>`, `/test`, `/fix`, `/explain`, `/review`, `/clean`.
+    Pops a list above the composer when input starts with `/`. ↑↓ navigate,
+    Tab/Enter pick, Esc clears.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Composer.tsx::SLASH_COMMANDS
+    locales: []
+  pattern:
+    source: Slack / Linear command bar
+    rationale: >-
+      Discoverable autocomplete with no extra UI surface. The `/` prefix
+      is universally understood as "command".
+  sota:
+    cursor: true
+    claude_code: true
+    devin: partial
+    cody: true
+  added_in: "2026-02-01"
+
+- id: composer-mention-file
+  label: "`#` file mention picker"
+  tier: parity
+  description: >-
+    Type `#` to open a fuzzy-matched file picker. Substring beats subsequence
+    beats nothing. Captures keyboard nav while open and inserts the picked
+    path inline.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/MentionPicker.tsx::MentionPicker
+      - src/widgets/coding-stage/parts/MentionPicker.tsx::findMentionAtCaret
+  pattern:
+    source: GitHub PR `@`-mention picker
+    rationale: >-
+      Single-keystroke trigger + caret-anchored popover. Familiar from
+      every code-review tool since 2014.
+  sota:
+    cursor: true
+    claude_code: true
+    cody: true
+  added_in: "2026-02-01"
+
+- id: composer-mention-symbol
+  label: "`@` symbol mention picker"
+  tier: parity
+  description: >-
+    Same UX as `#`-file but scoped to symbol names (functions, classes,
+    types). Shares the picker component; only the candidate set differs.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/MentionPicker.tsx::MentionPicker
+  pattern:
+    source: Cursor `@symbol`
+    rationale: >-
+      Lets the user nail a specific function without typing the path.
+      Critical when the same name lives in multiple files.
+  sota:
+    cursor: true
+    cody: true
+  added_in: "2026-02-01"
+  related: ["composer-mention-file"]
+
+- id: voice-interim
+  label: Voice input + interim ghost text
+  tier: leading
+  description: >-
+    Web Speech API with `continuous: true, interimResults: true`. Final
+    transcripts commit to the draft; interim renders as italic ghost
+    overlay above the textarea so the user can correct mid-sentence
+    without waiting for the pause.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Composer.tsx::VoiceBtn
+    locales:
+      - "coding:voice.start"
+      - "coding:voice.listening"
+  pattern:
+    source: Whisper UI / Granola
+    rationale: >-
+      Showing partial recognition before commit reduces perceived latency
+      and lets the user notice misrecognitions immediately.
+  sota:
+    cursor: false
+    claude_code: false
+  added_in: "2026-04-20"
+  flags: ["a11y"]
+
+- id: model-picker-turn-level
+  label: Model picker with turn-level recording
+  tier: parity
+  description: >-
+    Composer model state lifts to the parent so every `AgentTurn` records
+    `turn.model`. Critical for cost attribution and side-by-side comparison.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Composer.tsx::COMPOSER_MODELS
+      - src/widgets/coding-stage/CodingStage.tsx::setModel
+  pattern:
+    source: Cursor model dropdown
+    rationale: >-
+      Model choice is meta-data on the answer, not on the user — must
+      survive task switches and follow the turn forever.
+  sota:
+    cursor: true
+    claude_code: true
+    continue_ide: true
+  added_in: "2026-03-05"
+
+- id: per-project-default-model
+  label: Per-project default model + saved override
+  tier: leading
+  description: >-
+    Each project carries a `defaultModel`. On task switch the lifted model
+    state mirrors that default *unless* the user has set a per-project
+    override in localStorage. The model dropdown footer surfaces a "Save
+    as project default" action.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/CodingStage.tsx::saveProjectDefaultModel
+    locales:
+      - "coding:defaultModel.save"
+  pattern:
+    source: VS Code workspace settings
+    rationale: >-
+      Heavyweight monorepos default to opus; tweak repos default to haiku.
+      Memorising that mapping is the team's job, not the user's.
+  sota:
+    cursor: partial
+  added_in: "2026-04-12"
+  related: ["model-picker-turn-level"]
+
+- id: prompt-history
+  label: Prompt history (↑↓ shell-style)
+  tier: leading
+  description: >-
+    Per-task localStorage of the last 50 prompts, dupe-suppressed. ↑ on the
+    first line of an empty/clean composer recalls the previous prompt; ↓
+    walks back forward and finally restores the saved draft. Typing exits
+    history.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Composer.tsx::recallHistory
+    locales:
+      - "coding:history.tooltip"
+  pattern:
+    source: bash / zsh / Python REPL
+    rationale: >-
+      Shell-style recall is the universal expectation for any text input
+      that submits on Enter. Most chat UIs ignore this, leaving power
+      users to copy-paste from scrollback.
+  sota: {}
+  added_in: "2026-04-12"
+
+- id: stop-press-and-hold
+  label: Press-and-hold stop with progress ring
+  tier: leading
+  description: >-
+    During the first 5 seconds Stop is a normal click. After 5s the heat
+    escalates to amber, after 15s rose; both heat tiers require a 400ms
+    hold. A circular SVG progress ring fills as the user holds, releasing
+    early aborts. Keyboard activation (Enter/Space) always triggers an
+    immediate stop for accessibility.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Composer.tsx::PressHoldStop
+    locales:
+      - "coding:stop.holdToStop"
+  pattern:
+    source: Vercel "press to cancel" deploy
+    rationale: >-
+      Killing a 5-minute agent run by accident is expensive (lost tokens
+      + lost context). Hold-to-confirm raises the bar exactly when the
+      stakes are high, never when the user just kicked off.
+  sota: {}
+  added_in: "2026-04-15"
+  related: ["stop-heat"]
+
+- id: stop-heat
+  label: Stop button heat (neutral → amber → rose)
+  tier: leading
+  description: >-
+    The Stop button changes tone with elapsed stream time. 0–5s neutral,
+    5–15s amber, 15s+ rose. Resets every time streaming starts.
+  evidence:
+    symbols:
+      - src/widgets/coding-stage/parts/Composer.tsx::PressHoldStop
+  pattern:
+    source: Car dashboard warning escalation
+    rationale: >-
+      Reds get tuned out if they're constant. Escalating tone reserves
+      "danger" colour for cases where the user actually has skin in the
+      game.
+  sota: {}
+  added_in: "2026-04-15"
+  related: ["stop-press-and-hold"]
+
+- id: composer-resize
+  label: ChatAgent vertical resize
+  tier: parity
+  description: >-
+    Top-edge grip handle on the bottom-anchored ChatAgent widget.
+    Drag to grow (deltaY inverted because we're anchored to viewport
+    bottom), double-click to reset, Home/Esc to reset, ↑↓ to nudge ±24px.
+    Persists in localStorage `chat-agent:height`.
+  evidence:
+    symbols:
+      - src/features/chat-agent/ui/ChatAgent.tsx::onResizeStart
+    locales:
+      - "chat:agent.resize"
+  pattern:
+    source: macOS Finder column separator + VS Code panel grip
+    rationale: >-
+      A 3px visual rule with an 8px hit zone — the Fitts-law-correct
+      width for a target you'll grab with intent.
+  sota:
+    cursor: true
+    claude_code: false
+  added_in: "2026-05-08"
+  flags: ["a11y"]

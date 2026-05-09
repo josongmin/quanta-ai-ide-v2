@@ -63,7 +63,7 @@ export function Sidebar({
     <aside
       className="shrink-0 w-[224px] flex flex-col relative z-10"
       style={{
-        borderRight: `1px solid ${t.borderSoft}`,
+        borderRight: `1px solid ${t.border}`,
         // Glass chrome — same recipe as the AppShell GNB so the top
         // header and the rail read as one continuous L-shape. Strong
         // blur kills any grid bleed-through behind the surface.
@@ -74,8 +74,10 @@ export function Sidebar({
     >
       {/* Workspace switcher — top dense row, mirrors Linear's project picker */}
       <button type="button"
-        className="group flex items-center gap-2 px-3 h-12 border-b transition-colors hover:bg-white/[0.025]"
+        className="group flex items-center gap-2 px-3 h-12 border-b transition-colors"
         style={{ borderColor: t.borderSoft }}
+        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = t.hoverSubtle; }}
+        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ''; }}
       >
         <div
           className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
@@ -87,14 +89,20 @@ export function Sidebar({
           <ShieldCheck className="w-3 h-3" style={{ color: t.accent }} />
         </div>
         <div className="min-w-0 flex-1 text-left">
-          <div className="text-[12px] font-semibold text-white/85 leading-tight truncate">
+          <div
+            className="text-[12px] font-semibold leading-tight truncate"
+            style={{ color: t.textBody }}
+          >
             Admission
           </div>
-          <div className="text-[10px] text-white/40 leading-tight truncate">
+          <div
+            className="text-[10px] leading-tight truncate"
+            style={{ color: t.textSubtle }}
+          >
             acme-monorepo
           </div>
         </div>
-        <svg width="10" height="10" viewBox="0 0 10 10" className="text-white/40 shrink-0">
+        <svg width="10" height="10" viewBox="0 0 10 10" className="shrink-0" style={{ color: t.textSubtle }}>
           <path d="M3 4 L5 6 L7 4" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M3 6 L5 4 L7 6" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
         </svg>
@@ -123,7 +131,7 @@ export function Sidebar({
         <NavGroup label="Status">
           <div className="px-3 py-1.5">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] text-white/55">{tr('admission.sidebar.verdict')}</span>
+              <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.verdict')}</span>
               <div className="flex items-center gap-1.5">
                 <span
                   className="w-1.5 h-1.5 rounded-full"
@@ -138,17 +146,17 @@ export function Sidebar({
               </div>
             </div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] text-white/55">{tr('admission.sidebar.activeRules')}</span>
-              <span className="text-[11px] font-mono text-white/85 tabular-nums">
+              <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.activeRules')}</span>
+              <span className="text-[11px] font-mono tabular-nums" style={{ color: t.textBody }}>
                 {enabled}
-                <span className="text-white/30"> / {rules.length}</span>
+                <span style={{ color: t.textFaint }}> / {rules.length}</span>
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[11px] text-white/55">{tr('admission.sidebar.engine')}</span>
+              <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.engine')}</span>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#5fa86c]" />
-                <span className="text-[11px] text-white/55">{tr('admission.sidebar.engineReady')}</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: t.ok }} />
+                <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.engineReady')}</span>
               </div>
             </div>
           </div>
@@ -160,11 +168,11 @@ export function Sidebar({
         className="shrink-0 px-3 h-9 flex items-center gap-2 border-t"
         style={{ borderColor: t.borderSoft }}
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#5fa86c]" />
-        <span className="text-[11px] text-white/55 flex-1 min-w-0 truncate">
+        <span className="w-1.5 h-1.5 rounded-full" style={{ background: t.ok }} />
+        <span className="text-[11px] flex-1 min-w-0 truncate" style={{ color: t.textMuted }}>
           {tr('admission.sidebar.syncedJustNow')}
         </span>
-        <span className="text-[10px] font-mono text-white/30">v2</span>
+        <span className="text-[10px] font-mono" style={{ color: t.textFaint }}>v2</span>
       </div>
     </aside>
   );

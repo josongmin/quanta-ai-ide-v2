@@ -1,0 +1,130 @@
+import { useMemo } from 'react';
+import {
+  Activity, Bot, ChevronRight, FileCode, MessageSquare, ShieldAlert, type LucideIcon,
+} from 'lucide-react';
+import {
+  computePrRisk, engineFindings, engineSummary, summariseChecks, summariseConversation,
+  type EngineSeverity,
+  type PullRequest,
+  type RiskTier,
+} from '@entities/pr';
+import type { RepoData } from '@entities/repo';
+import AttentionRailMini from './AttentionRailMini';
+import {
+  BranchSection,
+  MergeActionsSection,
+  ParticipantsSection,
+  ReviewRailSection,
+} from './ReviewContextSections';
+import type { ReviewTabKey } from '../ReviewStage';
+
+export function ContextRail({
+  pr,
+  repo,
+  onJump,
+  severityColors,
+  tierColors,
+  sectionIds,
+  sectionLabels,
+}: {
+  pr: PullRequest;
+  repo: RepoData;
+  onJump: (t: ReviewTabKey) => void;
+  severityColors: Record<EngineSeverity, string>;
+  tierColors: Record<RiskTier, string>;
+  sectionIds: Record<ReviewTabKey, string>;
+  sectionLabels: Record<string, string>;
+}) {
+  const findings = useMemo(() => engineFindings(pr, repo), [pr, repo]);
+  const summary = useMemo(() => engineSummary(findings), [findings]);
+  const ci = useMemo(() => summariseChecks(pr.checks), [pr.checks]);
+  const threads = useMemo(() => summariseConversation(pr), [pr]);
+
+  const jumps: { key: ReviewTabKey; label: string; count: number; tone: string; Icon: LucideIcon }[] = [
+    {
+      key: 'insights',
+      label: 'Findings',
+      count: findings.length,
+      tone: summary.blocker > 0 ? severityColors.blocker : summary.high > 0 ? severityColors.high : '#8b949e',
+      Icon: Bot,
+    },
+    {
+      key: 'risk',
+      label: 'Risk profile',
+      count: 0,
+      tone: tierColors[computePrRisk(pr, repo).tier],
+      Icon: ShieldAlert,
+    },
+    { key: 'files', label: 'Files', count: pr.files.length, tone: '#8b949e', Icon: FileCode },
+    {
+      key: 'checks',
+      label: 'CI checks',
+      count: ci.required.failed,
+      tone: ci.required.failed > 0 ? severityColors.blocker : '#8b949e',
+      Icon: Activity,
+    },
+    {
+      key: 'activity',
+      label: 'Threads',
+      count: threads.length,
+      tone: threads.length > 0 ? severityColors.medium : '#8b949e',
+      Icon: MessageSquare,
+    },
+  ];
+
+  return (
+    <>
+      <div className="shrink-0 h-11 flex items-center px-4 border-b border-white/[0.06]">
+        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+          PR context
+        </span>
+        <span className="ml-auto text-[10px] font-mono text-white/40">#{pr.number}</span>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-auto p-4 space-y-5">
+        <ReviewRailSection label="Jump to">
+          <div className="grid grid-cols-1 gap-1">
+            {jumps.map((j) => (
+              <button
+                key={j.key}
+                type="button"
+                onClick={() => { onJump(j.key); }}
+                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-white/[0.04] transition-colors text-left"
+              >
+                <j.Icon className="w-3.5 h-3.5 shrink-0" style={{ color: j.tone }} />
+                <span className="flex-1 text-[12px] text-white/70">{j.label}</span>
+                {j.count > 0 && (
+                  <span
+                    className="text-[10px] font-mono tabular-nums px-1.5 rounded-full"
+                    style={{ background: `${j.tone}22`, color: j.tone }}
+                  >
+                    {j.count}
+                  </span>
+                )}
+                <ChevronRight className="w-3 h-3 text-white/30" />
+              </button>
+            ))}
+          </div>
+        </ReviewRailSection>
+
+        <AttentionRailMini
+          prNumber={pr.number}
+          sectionIds={Object.values(sectionIds)}
+          labels={sectionLabels}
+          onJump={(id) => {
+            const tab = (Object.entries(sectionIds).find(([, v]) => v === id)?.[0] ?? null) as ReviewTabKey | null;
+            if (tab !== null) onJump(tab);
+          }}
+        />
+
+        <ParticipantsSection pr={pr} blockerColor={severityColors.blocker} />
+        <BranchSection pr={pr} blockerColor={severityColors.blocker} />
+        <MergeActionsSection pr={pr} />
+      </div>
+
+      <div className="shrink-0 px-4 py-3 border-t border-white/[0.06] text-[10px] font-mono text-white/30">
+        @{pr.author} · #{pr.number}
+      </div>
+    </>
+  );
+}

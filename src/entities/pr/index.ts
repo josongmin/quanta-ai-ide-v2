@@ -14,6 +14,7 @@ export {
 export {
   suggestReviewers,
   coverageDeltas,
+  prodCorrelations,
   failedTestsRow,
   summariseConversation,
   engineFindings,

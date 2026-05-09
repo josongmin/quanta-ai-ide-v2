@@ -1,0 +1,91 @@
+# Bottom-anchored ChatAgent widget — proactive, app-wide.
+
+- id: chat-agent-widget
+  label: ChatAgent (bottom-pinned conversational widget)
+  tier: leading
+  description: >-
+    App-level chat surface anchored to the viewport bottom. Lives
+    independently of the active page so the conversation persists
+    across navigation. Carries the model picker, vertical resize,
+    voice input, and slash commands.
+  evidence:
+    symbols:
+      - src/features/chat-agent/ui/ChatAgent.tsx
+  pattern:
+    source: Intercom messenger / Slack thread launcher
+    rationale: >-
+      App-level chat outlives page navigation, which matters for
+      multi-step agent flows that span features (inspect → review
+      → coding).
+  sota:
+    cursor: false
+    claude_code: false
+  added_in: "2026-04-12"
+
+- id: tokens-panel
+  label: TokensPanel (live cost + tokens drawer)
+  tier: leading
+  description: >-
+    Slide-up drawer from the chat-agent showing live in/out token
+    counts, cost, and breakdown by model. Closeable; reopen from
+    the chat-agent footer.
+  evidence:
+    symbols:
+      - src/features/chat-agent/ui/TokensPanel.tsx
+      - src/features/chat-agent/model/TokensContext.tsx
+  pattern:
+    source: Browser DevTools "Network" panel
+    rationale: >-
+      Tokens are the chat-agent's network primitive. A drawer keeps
+      the data accessible without consuming permanent screen space.
+  sota:
+    continue_ide: true
+  added_in: "2026-04-15"
+  flags: ["obs"]
+
+- id: proactive-suggestions
+  label: Proactive suggestions (low-safety / unknown-flag / refactor / blast-radius)
+  tier: leading
+  description: >-
+    `useRunSuggestion(key)` runs a typed suggestion against the
+    current context. Four built-in keys cover the most common
+    proactive nudges — flagging low-safety actions, unknown feature
+    flags, refactor opportunities, and blast-radius warnings.
+  evidence:
+    symbols:
+      - src/features/chat-agent/model/suggestions.ts::useRunSuggestion
+      - src/features/chat-agent/model/suggestions.ts::SuggestionKey
+      - src/features/chat-agent/model/suggestions.ts::SuggestionEffect
+  pattern:
+    source: Intercom Operator / GitHub Copilot inline hints
+    rationale: >-
+      Typed suggestion keys keep the surface composable —
+      registering a new proactive nudge is one entry, not a fork
+      of the chat agent.
+  sota:
+    cursor: partial
+  added_in: "2026-04-22"
+
+- id: chat-agent-resize
+  label: ChatAgent vertical resize (top-grip handle)
+  tier: leading
+  description: >-
+    3px visual rule with an 8px hit zone on the chat-agent's top
+    edge. Drag to grow, double-click / Esc / Home to reset, ↑↓ to
+    nudge ±24px. Persists in localStorage `chat-agent:height`.
+  evidence:
+    symbols:
+      - src/features/chat-agent/ui/ChatAgent.tsx
+    locales:
+      - "chat:agent.resize"
+  pattern:
+    source: macOS Finder column separator + Fitts' law
+    rationale: >-
+      8px hit zone for a 3px visual rule is the Fitts-law-correct
+      ratio — visible enough to find, big enough to grab.
+  sota:
+    cursor: true
+    claude_code: false
+  added_in: "2026-05-08"
+  flags: ["a11y"]
+  related: ["composer-resize"]

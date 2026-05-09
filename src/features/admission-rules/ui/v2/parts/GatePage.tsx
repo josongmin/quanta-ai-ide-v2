@@ -81,13 +81,22 @@ export function GatePage({
               const stripeColor = worst?.status === 'block' ? SEVERITY_COLOR.block
                 : worst?.status === 'warn' ? SEVERITY_COLOR.warn : null;
               return (
-                <div key={c.id} className="px-5 py-2.5 flex items-start gap-2">
-                  {stripeColor && (
+                <div key={c.id} className="px-5 py-2.5 flex items-start gap-2.5">
+                  <span className="relative shrink-0 mt-1 inline-flex items-center justify-center w-3 h-3">
+                    {stripeColor && (
+                      <span
+                        className="absolute inset-0 rounded-full"
+                        style={{ background: stripeColor, opacity: 0.2, filter: 'blur(2px)' }}
+                      />
+                    )}
                     <span
-                      className="w-1 self-stretch rounded-full"
-                      style={{ background: stripeColor, boxShadow: `0 0 6px ${stripeColor}` }}
+                      className="relative w-1.5 h-1.5 rounded-full"
+                      style={{
+                        background: stripeColor ?? 'rgba(255,255,255,0.35)',
+                        boxShadow: stripeColor && worst?.status === 'block' ? `0 0 0 2px ${stripeColor}33` : 'none',
+                      }}
                     />
-                  )}
+                  </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-[11px] font-mono text-white/85 truncate">
@@ -143,10 +152,19 @@ export function GatePage({
                 return (
                   <V2Card key={r.ruleId} className="p-5">
                     <div className="flex items-start gap-3">
-                      <span
-                        className="w-1 self-stretch rounded-full"
-                        style={{ background: sevColor, boxShadow: `0 0 6px ${sevColor}` }}
-                      />
+                      <span className="relative shrink-0 mt-1 inline-flex items-center justify-center w-3 h-3">
+                        <span
+                          className="absolute inset-0 rounded-full"
+                          style={{ background: sevColor, opacity: 0.2, filter: 'blur(2px)' }}
+                        />
+                        <span
+                          className="relative w-2 h-2 rounded-full"
+                          style={{
+                            background: sevColor,
+                            boxShadow: r.status === 'block' ? `0 0 0 2px ${sevColor}33` : 'none',
+                          }}
+                        />
+                      </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-[10px] font-mono text-white/40">

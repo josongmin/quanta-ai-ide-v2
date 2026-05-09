@@ -1,0 +1,220 @@
+# Dependency & risk visualizations under /inspect.
+
+- id: inspect-panel
+  label: Inspect panel (multi-tab visualizer host)
+  tier: parity
+  description: >-
+    `InspectPanel` is the right-side host for the inspect-target feature.
+    Hosts a tab strip and lazy-loads the chosen visualization
+    (chord, cycle, matrix, edge-bundling, sunburst, treemap, layered,
+    risk heatmap).
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/InspectPanel.tsx
+  pattern:
+    source: VS Code panels / IntelliJ tool windows
+    rationale: >-
+      A single host with lazy tabs keeps the surface composable —
+      adding a new viz is one tab, not a parallel panel.
+  sota: {}
+  added_in: "2026-03-15"
+
+- id: chord-diagram
+  label: ChordDiagram (module ↔ module flows)
+  tier: leading
+  description: >-
+    Circular layout with chord ribbons sized by import-edge weight.
+    Hover a chord to dim non-incident chords; click to pin.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/ChordDiagram.tsx
+  pattern:
+    source: D3 chord diagrams / Sankey
+    rationale: >-
+      Chord layout is the densest 2D representation of a directed
+      module graph that still keeps individual edges legible.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: cycle-graph
+  label: CycleGraph (find import cycles)
+  tier: leading
+  description: >-
+    Renders strongly-connected components in the import graph. Each
+    SCC > 1 highlights as a cycle the user should break.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/CycleGraph.tsx
+  pattern:
+    source: Tarjan SCC / madge --circular
+    rationale: >-
+      Cycles are the #1 cause of build-time pathology. Surfacing them
+      visually beats waiting for the bundler to complain.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: dependency-matrix
+  label: DependencyMatrix (DSM)
+  tier: parity
+  description: >-
+    Square matrix of modules × modules with cell shading by
+    dependency density. Reveals layering — a near-triangular matrix
+    means clean layering, off-triangle entries are leaks.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/DependencyMatrix.tsx
+  pattern:
+    source: Lattix DSM / IntelliJ DSM view
+    rationale: >-
+      DSMs are the architectural-debt-detection standard. Off-triangle
+      entries are the literal definition of a layering violation.
+  sota: {}
+  added_in: "2026-03-22"
+
+- id: edge-bundling-map
+  label: EdgeBundlingMap (hierarchical edge bundling)
+  tier: leading
+  description: >-
+    Hierarchical edge bundling around a circular dendrogram. Module
+    structure on the rim, dependency edges bundled through the centre.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/EdgeBundlingMap.tsx
+  pattern:
+    source: Holten 2006 hierarchical edge bundling
+    rationale: >-
+      The canonical technique for visualizing many edges in a hierarchy
+      without the hairball. Holten's 2006 paper is the source.
+  sota: {}
+  added_in: "2026-03-25"
+
+- id: risk-heatmap
+  label: RiskHeatmap (file × risk-axis)
+  tier: leading
+  description: >-
+    Two-dimensional heatmap: rows are files, columns are risk axes
+    (churn, complexity, blast radius, coverage gap). Shaded by score.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/RiskHeatmap.tsx
+  pattern:
+    source: SonarQube hotspots view / Code Climate
+    rationale: >-
+      Single-axis lists rank by one risk; a heatmap reveals the
+      *combination* — high-churn-AND-high-complexity is far worse
+      than either alone.
+  sota: {}
+  added_in: "2026-04-01"
+
+- id: sunburst-hierarchy
+  label: SunburstHierarchy (radial folder hierarchy)
+  tier: parity
+  description: >-
+    Radial hierarchy with concentric rings = depth, arc width = LOC.
+    Click a slice to zoom in.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/SunburstHierarchy.tsx
+  pattern:
+    source: D3 sunburst / WizMap
+    rationale: >-
+      Sunburst is the radial Treemap — same area-encoded data, different
+      space-filling. Better for hierarchies where each ring is
+      semantically meaningful (folder depth).
+  sota: {}
+  added_in: "2026-03-25"
+
+- id: treemap
+  label: Treemap (rectangular folder hierarchy)
+  tier: parity
+  description: >-
+    Squarified treemap with area = LOC and shading by churn. Click
+    to drill in.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/Treemap.tsx
+  pattern:
+    source: Bruls et al. 2000 squarified treemap
+    rationale: >-
+      Squarified beats Shneiderman slice-and-dice for aspect-ratio
+      sanity — readable at any size. Standard since 2000.
+  sota: {}
+  added_in: "2026-03-25"
+
+- id: layered-box-diagram
+  label: LayeredBoxDiagram (architecture layers)
+  tier: leading
+  description: >-
+    Renders the project's architecture-layer rules as stacked boxes
+    with allowed-import arrows. Violations highlight in amber.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/LayeredBoxDiagram.tsx
+  pattern:
+    source: ArchUnit / Structurizr C4 model
+    rationale: >-
+      Layer rules are easy to declare and easy to forget. Visualising
+      them next to the actual import graph closes the gap.
+  sota: {}
+  added_in: "2026-04-01"
+
+- id: deps-carousel
+  label: DepsCarousel (dependency story strip)
+  tier: leading
+  description: >-
+    Horizontal strip of "story slides" walking the user through a
+    file's outbound and inbound dependencies one at a time. ←→ to
+    page; each slide focuses on one neighbour.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/DepsCarousel.tsx
+  pattern:
+    source: Instagram stories / Granola scroll cards
+    rationale: >-
+      A graph dump overwhelms; a paged story trades density for
+      direction. One neighbour at a time matches how the eye actually
+      reasons about dependencies.
+  sota: {}
+  added_in: "2026-04-08"
+
+- id: focus-scan-stack
+  label: FocusScanStack (multi-pane focus view)
+  tier: leading
+  description: >-
+    Stacks AI-context, blast-radius, index-state, refactor-actions,
+    safe-rename, semantic-conflict, similar-symbols, and the
+    SymbolTimeMachine into a single scroll surface — the agent-IDE
+    answer to "what does this symbol touch?"
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/FocusScanStack.tsx
+      - src/features/inspect-target/ui/focus-scan/SafeRenameCard.tsx
+      - src/features/inspect-target/ui/focus-scan/SemanticConflictCard.tsx
+      - src/features/inspect-target/ui/focus-scan/SymbolTimeMachine.tsx
+  pattern:
+    source: Sourcegraph code intel + JetBrains "Find Usages"
+    rationale: >-
+      "Find Usages" + safe-rename + history are typically three menus.
+      Stacking them puts the answer one scroll away.
+  sota:
+    cody: partial
+  added_in: "2026-04-08"
+
+- id: symbol-time-machine
+  label: SymbolTimeMachine (per-symbol git history)
+  tier: leading
+  description: >-
+    Walks the per-symbol commit history (not file history) — useful
+    when a symbol moved between files. Renders as a vertical timeline
+    with diff snippets.
+  evidence:
+    symbols:
+      - src/features/inspect-target/ui/focus-scan/SymbolTimeMachine.tsx
+      - src/features/inspect-target/ui/focus-scan/symbolHistory.ts
+  pattern:
+    source: git log -L:fn:file / JetBrains "Show History for Selection"
+    rationale: >-
+      File-level history loses the trail when a symbol moves; symbol
+      history follows the AST node across renames and moves.
+  sota: {}
+  added_in: "2026-04-15"

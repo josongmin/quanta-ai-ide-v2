@@ -25,18 +25,15 @@ export default function FilterBar({ onOpenFolder, onOpenFile, activeKey }: Filte
   const treeRef = useRef<FolderTreeHandle>(null);
 
   return (
-    <aside className="w-[296px] h-full min-h-0 z-30 flex flex-col shrink-0">
-      <div className="flex-1 overflow-y-auto pb-4 space-y-2 scrollbar-hide">
-        {/* Project selector — shows the workspace name by default; the
-            dropdown carries the saved-query presets (Hotspots / Vulnerable
-            Hubs / Stale / Long Files). When a preset is active the chip
-            label flips to the preset name so the active lens is always
-            visible. */}
+    <aside className="w-full h-full min-h-0 z-30 flex flex-col shrink-0">
+      {/* Scroll rail owns its own vertical breathing room so the panel can
+          stay flush to the viewport while content still has top/bottom pad. */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide space-y-2 py-3">
         <ProjectSelector />
 
         {/* Files card. The header carries IDE-style tree controls (expand
             all / collapse all). */}
-        <GlassCard className="px-3 py-2.5">
+        <GlassCard className="px-3 py-2.5" style={{ boxShadow: 'none' }}>
           <div className="flex items-center justify-between gap-2 mb-1.5 px-0.5">
             <h3 className={`text-[10px] font-black uppercase tracking-[0.18em] ${isDark ? 'text-white/70' : 'text-black/55'}`}>
               {t('section.files')}
@@ -57,7 +54,7 @@ export default function FilterBar({ onOpenFolder, onOpenFile, activeKey }: Filte
           </div>
         </GlassCard>
 
-        <GlassCard className="px-3 py-2.5">
+        <GlassCard className="px-3 py-2.5" style={{ boxShadow: 'none' }}>
           <SectionHeader title={t('section.status')} />
           <StatusFacet />
         </GlassCard>
@@ -66,7 +63,7 @@ export default function FilterBar({ onOpenFolder, onOpenFile, activeKey }: Filte
           <CategorySection key={c.key} category={c.key} />
         ))}
 
-        <GlassCard className="px-3 py-2.5">
+        <GlassCard className="px-3 py-2.5" style={{ boxShadow: 'none' }}>
           <SectionHeader title={t('section.sortAndHighlight')} />
           <SortFacet />
         </GlassCard>

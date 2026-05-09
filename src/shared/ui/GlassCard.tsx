@@ -1,18 +1,29 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import { useTheme } from '../theme/ThemeContext';
 
 export function GlassCard({
-  children, className = '', style,
-}: { children: ReactNode; className?: string; style?: React.CSSProperties }) {
-  // `glass-auto` is the theme-aware glass surface — its alpha + border
-  // flip on `:root[data-theme=...]` so we no longer need an `isDark`
-  // ternary to pick between `glass-dark` and `glass-light`.
+  children, className = '', style, tone = 'default',
+}: { children: ReactNode; className?: string; style?: CSSProperties; tone?: 'default' | 'inner' }) {
+  // The `glass-dark` / `glass-light` CSS classes carry the theme-specific
+  // blur + alpha — keep that classed selection. Text colour, border and
+  // shadow now flow through semantic tokens so they auto-flip.
+  const { isDark } = useTheme();
+  const toneStyle: CSSProperties = tone === 'inner'
+    ? {
+        ['--glass-alpha-dark' as string]: '0.01',
+        ['--glass-alpha-light' as string]: '0.46',
+        ['--glass-border-dark' as string]: '0.045',
+        ['--glass-border-light' as string]: '0.14',
+      }
+    : {};
   return (
     <div
-      className={`border transition-colors duration-300 glass-auto ${className}`}
+      className={`border transition-colors duration-300 ${isDark ? 'glass-dark' : 'glass-light'} ${className}`}
       style={{
+        ...toneStyle,
         color: 'var(--fg-default)',
         borderColor: 'var(--border-default)',
-        boxShadow: 'var(--shadow-lg)',
+        boxShadow: tone === 'inner' ? 'none' : 'var(--shadow-lg)',
         ...style,
       }}
     >

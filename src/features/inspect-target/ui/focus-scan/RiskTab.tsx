@@ -9,6 +9,7 @@ import {
 import { C } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
 import { Empty, MiniStat, Note, Section, SectionHeader } from './shared';
+import { HotspotSummaryCard } from './HotspotSummaryCard';
 
 // ─── RISK: blast + risk channels (taint/race/typestate/vuln/layer) ─────
 //
@@ -53,6 +54,8 @@ export function RiskTab({ file }: { file: FileRecord }) {
 
   return (
     <div className="space-y-4">
+      <HotspotSummaryCard file={file} />
+
       {/* Blast ring + risk-channel grid side by side. */}
       <div className="grid grid-cols-[auto_1fr] gap-3 items-start">
         <div className="flex flex-col items-center">

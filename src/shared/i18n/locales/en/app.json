@@ -4,7 +4,9 @@
     "coding": "Coding",
     "agents": "Agents",
     "reviews": "Reviews",
-    "admission": "Admission"
+    "admission": "Admission",
+    "fix-pipeline": "Fix",
+    "fixes": "Fixes"
   },
   "action": {
     "resetFilters": "Reset filters",
@@ -12,6 +14,32 @@
     "designTokens": "Design tokens",
     "notifications": "Notifications",
     "aiActivity": "AI activity"
+  },
+  "git": {
+    "panelAria": "Git actions",
+    "trigger": {
+      "clean": "Working tree clean",
+      "dirty": "{{count}} pending changes",
+      "ahead": "{{count}} commits to push"
+    },
+    "aheadTitle": "Local commits not yet pushed",
+    "empty": {
+      "clean": "no changes",
+      "changes": "{{count}} changes"
+    },
+    "commit": {
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Short summary…",
+      "bodyPlaceholder": "Optional body — what + why",
+      "action": "Commit"
+    },
+    "push": {
+      "action": "Push"
+    },
+    "toast": {
+      "committed": "Commit created",
+      "pushed": "Pushed to origin"
+    }
   },
   "tooltip": {
     "loc": "LOC",

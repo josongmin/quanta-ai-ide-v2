@@ -1,0 +1,174 @@
+import { useState } from 'react';
+import { useTheme } from '@shared/theme';
+import { useVerifiedFixStore } from '../model/store';
+import type { FixCase, Seed } from '../model/types';
+import { AmbientLayer } from './parts/AmbientLayer';
+import { Sidebar } from './parts/Sidebar';
+import { LoopTape } from './parts/LoopTape';
+import { ProofBoard } from './parts/ProofBoard';
+import { CandidateCards } from './parts/CandidateCards';
+import { TrustPanel } from './parts/TrustPanel';
+import { DiffExpander } from './parts/DiffExpander';
+import { DraftPackageCard } from './parts/DraftPackageCard';
+import { DismissModal } from './parts/DismissModal';
+import { vfxTokens } from './parts/tokens';
+
+// Verified Fix Pipeline — proof-first surface.
+//
+// Layout:
+//
+//   ┌── SIDEBAR ──┬── MAIN (scrollable) ─────────────────────┬── TRUST ──┐
+//   │  seed list  │  LoopTape (iteration progress)           │  conf     │
+//   │  by kind    │  ProofBoard (root cause | obligations)   │  weakest  │
+//   │             │  CandidateCards (1–3, tier-tagged)       │  counter  │
+//   │             │  DiffExpander (collapsed)                │  gate     │
+//   └─────────────┴───────────────────────────────────────────┴───────────┘
+//
+// Diff is intentionally *not* the first thing on screen — root cause +
+// proofs come first per the plan's UX rule.
+
+export default function VerifiedFixRoot() {
+  const { isDark } = useTheme();
+  const t = vfxTokens(isDark);
+
+  const casesMap = useVerifiedFixStore((s) => s.cases);
+  const seeds    = useVerifiedFixStore((s) => s.seeds);
+  const activeId = useVerifiedFixStore((s) => s.activeCaseId);
+  const setActive        = useVerifiedFixStore((s) => s.setActive);
+  const selectCandidate  = useVerifiedFixStore((s) => s.selectCandidate);
+  const dismissCandidate = useVerifiedFixStore((s) => s.dismissCandidate);
+  const diffExpanded     = useVerifiedFixStore((s) => s.diffExpanded);
+  const toggleDiff       = useVerifiedFixStore((s) => s.toggleDiff);
+
+  const cases = Object.values(casesMap);
+  const fixCase: FixCase | undefined = activeId ? casesMap[activeId] : undefined;
+  const seed:    Seed    | undefined = fixCase ? seeds[fixCase.seedId] : undefined;
+  const candidate = fixCase?.selectedCandidateId
+    ? fixCase.candidates.find((c) => c.id === fixCase.selectedCandidateId)
+    : undefined;
+
+  const [dismissTarget, setDismissTarget] = useState<string | null>(null);
+  const dismissCandidateObj = dismissTarget && fixCase
+    ? fixCase.candidates.find((c) => c.id === dismissTarget) ?? null
+    : null;
+
+  return (
+    <div
+      className="absolute inset-0 overflow-hidden flex"
+      style={{ background: t.page, color: t.textBody }}
+    >
+      <AmbientLayer />
+
+      <Sidebar
+        cases={cases}
+        seeds={seeds}
+        activeCaseId={activeId}
+        onSelect={setActive}
+      />
+
+      <main className="flex-1 min-w-0 relative overflow-auto">
+        <div className="px-6 py-5 space-y-4 max-w-[1280px] mx-auto">
+          {fixCase && seed ? (
+            <>
+              <Header fixCase={fixCase} seed={seed} />
+              <LoopTape fixCase={fixCase} />
+              <ProofBoard fixCase={fixCase} seed={seed} candidate={candidate} />
+              <CandidateCards
+                candidates={fixCase.candidates}
+                selectedId={fixCase.selectedCandidateId}
+                dismissedIds={fixCase.dismissedCandidateIds}
+                onSelect={(id) => { selectCandidate(fixCase.id, id); }}
+              />
+              <DiffExpander
+                candidate={candidate}
+                expanded={diffExpanded}
+                onToggle={toggleDiff}
+              />
+              <DraftPackageCard fixCase={fixCase} />
+            </>
+          ) : (
+            <EmptyState />
+          )}
+        </div>
+      </main>
+
+      {fixCase ? (
+        <TrustPanel
+          candidate={candidate}
+          fixCase={fixCase}
+          onDismiss={(cid) => { setDismissTarget(cid); }}
+        />
+      ) : (
+        <TrustPanelEmpty />
+      )}
+
+      <DismissModal
+        candidate={dismissCandidateObj}
+        open={dismissTarget !== null}
+        onCancel={() => { setDismissTarget(null); }}
+        onConfirm={(_reason, _note) => {
+          if (fixCase && dismissTarget) {
+            dismissCandidate(fixCase.id, dismissTarget);
+          }
+          setDismissTarget(null);
+        }}
+      />
+    </div>
+  );
+}
+
+function Header({ fixCase, seed }: { fixCase: FixCase; seed: Seed }) {
+  const { isDark } = useTheme();
+  const t = vfxTokens(isDark);
+  return (
+    <div className="flex items-center gap-3">
+      <span
+        className="text-[10px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded font-mono"
+        style={{ background: t.badgeBg, color: t.textMuted }}
+      >
+        {seed.kind}
+      </span>
+      <h1 className="text-[15px] font-bold" style={{ color: t.textHi }}>
+        {seed.title}
+      </h1>
+      <span className="ml-auto text-[10px] font-mono" style={{ color: t.textFaint }}>
+        case · {fixCase.id}
+      </span>
+    </div>
+  );
+}
+
+function EmptyState() {
+  const { isDark } = useTheme();
+  const t = vfxTokens(isDark);
+  return (
+    <div className="flex items-center justify-center h-[60vh]">
+      <div className="text-center">
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
+          no case selected
+        </div>
+        <div className="text-[11px] mt-1" style={{ color: t.textFaint }}>
+          pick a seed from the left sidebar to inspect the pipeline.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TrustPanelEmpty() {
+  const { isDark } = useTheme();
+  const t = vfxTokens(isDark);
+  return (
+    <aside
+      className="shrink-0 w-[320px] h-full overflow-auto border-l p-4"
+      style={{ background: t.sidebar, backdropFilter: t.sidebarBlur, borderColor: t.border }}
+    >
+      <div className="text-[10px] font-black uppercase tracking-[0.18em] mb-2" style={{ color: t.textMuted }}>
+        trust signal
+      </div>
+      <div className="text-[11px]" style={{ color: t.textFaint }}>
+        pick a case to inspect.
+      </div>
+    </aside>
+  );
+}
