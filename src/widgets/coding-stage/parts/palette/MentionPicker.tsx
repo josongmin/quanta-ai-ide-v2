@@ -92,10 +92,10 @@ export function MentionPicker({
       className={`absolute bottom-[calc(100%+8px)] left-0 right-0 rounded-xl border shadow-2xl overflow-hidden ${
         isDark ? 'border-white/[0.10] bg-[#0f1218]/95' : 'border-black/[0.10] bg-white/95'
       }`}
-      style={{
+      style={isDark ? {
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-      }}
+      } : undefined}
       role="listbox"
       aria-label={headerLabel}
     >

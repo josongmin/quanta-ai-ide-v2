@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { TAX_IDS, type TaxId } from './data';
 
 // Tax IDs section. Sits inside the page-level Section primitive so this
@@ -55,14 +56,15 @@ export function TaxSection() {
 function TaxRow({
   tax, top, onVerify, onRemove,
 }: { tax: TaxId; top: boolean; onVerify: () => void; onRemove: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="group flex items-center gap-4 h-11 px-2 -mx-2 rounded-md transition-colors"
       style={{
         borderTop: top ? 'none' : '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <CountryGlyph code={tax.country} />
       <span

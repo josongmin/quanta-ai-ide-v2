@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Plus, MoreHorizontal, Copy, RotateCcw, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { DeveloperShell } from '../parts/DeveloperShell';
 
 type App = {
@@ -69,15 +70,16 @@ export default function OAuthAppsPage() {
 }
 
 function AppRow({ app, last }: { app: App; last: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="grid items-center px-4 h-14 transition-colors"
       style={{
         gridTemplateColumns: '1.4fr 1.2fr 1.4fr 0.8fr 0.8fr 0.4fr',
         borderBottom: last ? 'none' : '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <div

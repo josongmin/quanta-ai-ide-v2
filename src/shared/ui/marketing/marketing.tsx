@@ -259,8 +259,36 @@ export function SectionHead({
 export function LiftCard({
   children, className = '', featured = false, style,
 }: { children: ReactNode; className?: string; featured?: boolean; style?: CSSProperties }) {
+  // Hover effect attached via ref+addEventListener so it stays purely
+  // presentational — no JSX-level mouse interactions on a static <div>.
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const baseShadow = featured
+      ? '0 12px 40px -16px color-mix(in srgb, var(--brand-vivid) 40%, transparent)'
+      : '0 1px 0 0 color-mix(in srgb, var(--fg-strong) 4%, transparent)';
+    const hoverShadow = featured
+      ? '0 18px 50px -16px color-mix(in srgb, var(--brand-vivid) 50%, transparent)'
+      : '0 8px 24px -10px color-mix(in srgb, var(--fg-strong) 18%, transparent)';
+    const onEnter = () => {
+      el.style.transform = 'translateY(-2px)';
+      el.style.boxShadow = hoverShadow;
+    };
+    const onLeave = () => {
+      el.style.transform = 'translateY(0)';
+      el.style.boxShadow = baseShadow;
+    };
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mouseleave', onLeave);
+    };
+  }, [featured]);
   return (
     <div
+      ref={ref}
       className={`flex flex-col rounded-xl transition-all duration-200 ${className}`}
       style={{
         background: 'var(--bg-canvas)',
@@ -271,18 +299,6 @@ export function LiftCard({
           ? '0 12px 40px -16px color-mix(in srgb, var(--brand-vivid) 40%, transparent)'
           : '0 1px 0 0 color-mix(in srgb, var(--fg-strong) 4%, transparent)',
         ...style,
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = featured
-          ? '0 18px 50px -16px color-mix(in srgb, var(--brand-vivid) 50%, transparent)'
-          : '0 8px 24px -10px color-mix(in srgb, var(--fg-strong) 18%, transparent)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = featured
-          ? '0 12px 40px -16px color-mix(in srgb, var(--brand-vivid) 40%, transparent)'
-          : '0 1px 0 0 color-mix(in srgb, var(--fg-strong) 4%, transparent)';
       }}
     >
       {children}

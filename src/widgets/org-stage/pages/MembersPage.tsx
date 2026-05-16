@@ -350,7 +350,12 @@ function RowMenu({
   // Outside-click closer: render a fixed dismiss layer behind the menu.
   return (
     <>
-      <div className="fixed inset-0 z-30" onClick={onClose} />
+      <button
+        type="button"
+        aria-label="Close menu"
+        className="fixed inset-0 z-30 bg-transparent border-0 p-0 cursor-default"
+        onClick={onClose}
+      />
       <div
         className="absolute right-0 top-full mt-1 z-40 min-w-[180px] py-1 rounded-md"
         style={{
@@ -588,8 +593,10 @@ function InviteModal({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      <div
-        className="fixed inset-0 z-40"
+      <button
+        type="button"
+        aria-label="Close dialog"
+        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
         style={{ background: 'rgba(0,0,0,0.45)' }}
         onClick={onClose}
       />
@@ -755,8 +762,10 @@ function ConfirmRemove({
 }: { member: Member; onCancel: () => void; onConfirm: () => void }) {
   return (
     <>
-      <div
-        className="fixed inset-0 z-40"
+      <button
+        type="button"
+        aria-label="Close dialog"
+        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
         style={{ background: 'rgba(0,0,0,0.45)' }}
         onClick={onCancel}
       />

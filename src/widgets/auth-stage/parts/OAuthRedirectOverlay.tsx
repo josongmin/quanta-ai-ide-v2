@@ -31,8 +31,8 @@ export function OAuthRedirectOverlay({ provider, onCancel, onComplete }: Props) 
     <div
       className="absolute inset-0 z-50 flex items-center justify-center p-6"
       style={{
-        background: isDark ? 'rgba(10,13,18,0.92)' : 'rgba(255,255,255,0.94)',
-        backdropFilter: 'blur(8px)',
+        background: isDark ? 'rgba(10,13,18,0.92)' : 'rgba(255,255,255,1)',
+        ...(isDark ? { backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' } : {}),
       }}
     >
       <div className="w-full max-w-[400px] flex flex-col items-center gap-6 onb-step-in">

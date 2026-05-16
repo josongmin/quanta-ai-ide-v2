@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Cookie, Eye, Megaphone, Map, CheckCircle2, Sparkles, Code2,
   ShieldCheck, Accessibility as AccessIcon, Rocket, Zap, ChevronRight,
 } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { PublicShell , Eyebrow, HeadlineGradient, SectionHead, SeamDivider } from '@shared/ui/marketing';
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -349,16 +350,7 @@ export function RoadmapPage() {
                 </div>
                 <div className="flex flex-col gap-2 p-3">
                   {items.map((it, i) => (
-                    <div
-                      key={i}
-                      className="rounded-lg p-3 flex flex-col gap-2 transition-colors"
-                      style={{
-                        background: 'var(--bg-surface-muted)',
-                        border: '1px solid var(--border-default)',
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = `color-mix(in srgb, ${tone} 60%, var(--border-default))`; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; }}
-                    >
+                    <RoadmapItemCard key={i} tone={tone}>
                       <div className="flex items-start justify-between gap-2">
                         <span className="text-[12px] font-semibold leading-snug" style={{ color: 'var(--fg-strong)' }}>
                           {it.title}
@@ -387,7 +379,7 @@ export function RoadmapPage() {
                           {it.votes}
                         </span>
                       </div>
-                    </div>
+                    </RoadmapItemCard>
                   ))}
                 </div>
               </div>
@@ -396,5 +388,28 @@ export function RoadmapPage() {
         </div>
       </div>
     </PublicShell>
+  );
+}
+
+function RoadmapItemCard({
+  tone, children,
+}: { tone: string; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(
+    ref,
+    { borderColor: `color-mix(in srgb, ${tone} 60%, var(--border-default))` },
+    { borderColor: 'var(--border-default)' },
+  );
+  return (
+    <div
+      ref={ref}
+      className="rounded-lg p-3 flex flex-col gap-2 transition-colors"
+      style={{
+        background: 'var(--bg-surface-muted)',
+        border: '1px solid var(--border-default)',
+      }}
+    >
+      {children}
+    </div>
   );
 }

@@ -103,8 +103,8 @@ export function CodeEditorModal() {
             style={{
               width: 240,
               borderColor: 'var(--border-muted)',
-              background: isDark ? 'rgba(0,0,0,0.14)' : 'rgba(255,255,255,0.40)',
-              backdropFilter: 'blur(6px)',
+              background: isDark ? 'rgba(0,0,0,0.14)' : 'rgba(255,255,255,1)',
+              ...(isDark ? { backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' } : {}),
             }}
           >
             <FileExplorerSidebar
@@ -118,8 +118,8 @@ export function CodeEditorModal() {
             className="flex-1 min-w-0 rounded-lg border overflow-hidden"
             style={{
               borderColor: 'var(--border-muted)',
-              background: isDark ? 'rgba(0,0,0,0.18)' : 'rgba(255,255,255,0.55)',
-              backdropFilter: 'blur(6px)',
+              background: isDark ? 'rgba(0,0,0,0.18)' : 'rgba(255,255,255,1)',
+              ...(isDark ? { backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' } : {}),
             }}
           >
             <CodeEditor

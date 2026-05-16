@@ -1,5 +1,7 @@
 import { useParams } from '@tanstack/react-router';
+import { useRef } from 'react';
 import { Bot, Plus, Key, RotateCcw, MoreHorizontal, Power } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 
 type SA = {
@@ -87,16 +89,17 @@ function Tile({ label, value, tone }: { label: string; value: number; tone: 'def
 }
 
 function Row({ sa, last }: { sa: SA; last: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="grid items-center px-4 h-14 transition-colors"
       style={{
         gridTemplateColumns: '2fr 1.6fr 0.7fr 0.7fr 1fr 0.7fr 0.4fr',
         borderBottom: last ? 'none' : '1px solid var(--border-muted)',
         opacity: sa.active ? 1 : 0.55,
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <div

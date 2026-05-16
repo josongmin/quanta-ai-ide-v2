@@ -3,6 +3,7 @@ import {
   Pin as PinIcon, FileCode, AtSign, MessageSquare, X, Plus, Search,
 } from 'lucide-react';
 import { useClickOutside } from '@shared/lib';
+import { useTheme } from '@shared/theme';
 import { SAMPLE_MENTION_FILES, SAMPLE_MENTION_SYMBOLS } from './data';
 import type { Pin } from './types';
 
@@ -47,6 +48,7 @@ export function PinDrawer({
   const drawerRef = useRef<HTMLDivElement>(null);
   const [mode, setMode] = useState<PickerMode>(null);
   const [query, setQuery] = useState('');
+  const { isDark } = useTheme();
 
   useClickOutside(drawerRef, open, onClose);
 
@@ -86,10 +88,10 @@ export function PinDrawer({
     <div
       ref={drawerRef}
       className={`absolute right-3 top-[calc(100%+6px)] z-40 w-[320px] max-w-[320px] rounded-xl border shadow-2xl overflow-hidden ${surface}`}
-      style={{
+      style={isDark ? {
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-      }}
+      } : undefined}
       role="dialog"
       aria-label={t('pins.header')}
     >

@@ -3,9 +3,12 @@ import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { useFilterStore } from '@features/filter-files';
 import { useViewMode, createMode } from '@features/switch-mode';
-import { useOverlay } from '@features/apply-overlay';
-import { useBoundaries } from '@features/inspect-boundaries';
-import { useStack } from '@features/inspect-target';
+// Deep-import the hooks rather than the slice barrels — those re-export
+// heavy UI (OverlayPopover, FocusScanStack) that would otherwise ride into
+// the initial chunk through this stage.
+import { useOverlay } from '@features/apply-overlay/model/OverlayContext';
+import { useBoundaries } from '@features/inspect-boundaries/model/BoundaryContext';
+import { useStack } from '@features/inspect-target/model/StackContext';
 import type { OverlaySnapshot, ViewMode } from '@entities/viz-mode';
 import type { FileRecord } from '@entities/repo';
 
@@ -196,10 +199,10 @@ function FileTooltip({ x, y, file, isDark }: { x: number; y: number; file: FileR
   const { t } = useTranslation('app');
   return (
     <div
-      className={`fixed z-[100] pointer-events-none text-[11px] px-3 py-2.5 rounded-xl border shadow-2xl backdrop-blur-2xl ${
+      className={`fixed z-[100] pointer-events-none text-[11px] px-3 py-2.5 rounded-xl border shadow-2xl ${
         isDark
-          ? 'bg-black/70 border-white/10 text-white/85'
-          : 'bg-white/85 border-black/10 text-black/85'
+          ? 'bg-black/70 border-white/10 text-white/85 backdrop-blur-2xl'
+          : 'bg-white border-black/10 text-black/85'
       }`}
       style={{ left: x, top: y }}
     >

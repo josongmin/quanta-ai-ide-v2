@@ -16,7 +16,6 @@ export function SecretChallengeModal({
   onSendAsIs: () => void;
   onCancel: () => void;
 }) {
-  void isDark;
   // Esc cancels; Enter triggers mask-and-send (the safe default).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -37,10 +36,10 @@ export function SecretChallengeModal({
   return (
     <div
       className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-30 rounded-xl border shadow-2xl overflow-hidden coding-pill-rise"
-      style={{
+      style={isDark ? {
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-      }}
+      } : undefined}
     >
       <div className={`border ${tone} rounded-xl ${surface}`}>
         <div className={`px-4 py-3`}>

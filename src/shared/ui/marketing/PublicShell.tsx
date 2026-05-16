@@ -45,9 +45,10 @@ export function PublicShell({ active, width = 'wide', children }: Props) {
 }
 
 function TopNav({ active }: { active?: Props['active'] }) {
+  const { isDark } = useTheme();
   return (
     <header
-      className="sticky top-0 z-10 backdrop-blur"
+      className={`sticky top-0 z-10 ${isDark ? 'backdrop-blur' : ''}`}
       style={{
         background: 'color-mix(in srgb, var(--bg-canvas) 78%, transparent)',
         borderBottom: '1px solid var(--border-muted)',

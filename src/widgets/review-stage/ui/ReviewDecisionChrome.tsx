@@ -45,6 +45,7 @@ export function DecisionHeadsUp({
   allPrs: PullRequest[];
   severityColors: SeverityColors;
 }) {
+  const { isDark } = useTheme();
   const risk = useMemo(() => computePrRisk(pr, repo), [pr, repo]);
   const findings = useMemo(() => engineFindings(pr, repo), [pr, repo]);
   const summary = useMemo(() => engineSummary(findings), [findings]);
@@ -98,8 +99,10 @@ export function DecisionHeadsUp({
       className="sticky top-0 z-20 flex items-center gap-3 px-6 h-11 border-b"
       style={{
         background: 'var(--bg-overlay)',
-        backdropFilter: 'blur(12px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(12px) saturate(160%)',
+        ...(isDark ? {
+          backdropFilter: 'blur(12px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(12px) saturate(160%)',
+        } : {}),
         borderColor: `${accent}24`,
         boxShadow: `inset 0 -1px 0 0 ${accent}10`,
       }}

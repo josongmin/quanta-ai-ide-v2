@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   MessageSquare, Lightbulb, Bug, ThumbsUp, Send, ChevronUp,
 } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { PublicShell , Eyebrow, HeadlineGradient } from '@shared/ui/marketing';
 
 type Kind = 'idea' | 'bug' | 'praise';
@@ -148,14 +149,15 @@ function FeedRow({
 }) {
   const [v, setV] = useState(post.votes);
   const [voted, setVoted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="flex items-center gap-4 p-4 transition-colors"
       style={{
         borderBottom: last ? 'none' : '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <button
         type="button"

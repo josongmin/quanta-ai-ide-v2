@@ -96,7 +96,7 @@ export default function IssueCodeOverlay({
   onNodeClick,
 }: Props) {
   return (
-    <div className="rounded-2xl px-3 py-3 backdrop-blur bg-white/40 dark:bg-white/[0.04] ring-1 ring-inset ring-black/5 dark:ring-white/5 flex flex-col gap-3">
+    <div className="rounded-2xl px-3 py-3 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5 flex flex-col gap-3">
       <Section
         title="Stack hits"
         caption="direct evidence"

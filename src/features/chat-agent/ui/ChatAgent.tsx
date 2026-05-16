@@ -685,12 +685,10 @@ function ModelChip({
 
       {open && (
         <div
-          className="absolute bottom-full left-0 mb-1 w-[180px] rounded-lg border shadow-2xl"
+          className="absolute bottom-full left-0 mb-1 w-[180px] rounded-lg border shadow-2xl chat-agent-model-pop"
           style={{
             borderColor: 'var(--border-default)',
             background: 'var(--bg-overlay)',
-            backdropFilter: 'blur(22px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(22px) saturate(160%)',
           }}
         >
           {MODELS.map((m) => {

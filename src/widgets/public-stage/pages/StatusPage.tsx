@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   CheckCircle2, AlertTriangle, Mail, Rss, Server, Globe, Bot,
   Webhook, ShieldCheck, KeyRound, Cloud, Database, ChevronDown, Activity,
 } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { PublicShell , HeroBackdrop, Eyebrow, SectionHead, SeamDivider } from '@shared/ui/marketing';
 
 type Status = 'operational' | 'degraded' | 'outage';
@@ -352,16 +353,17 @@ function ServiceRow({ service, idx }: { service: Service; idx: number }) {
   );
   const uptime = (history.filter((d) => d === 'operational').length / history.length) * 100;
 
+  const rowRef = useRef<HTMLDivElement>(null);
+  useHoverStyle(rowRef, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={rowRef}
       className="grid items-center px-5 py-4 transition-colors"
       style={{
         gridTemplateColumns: '220px 1fr 90px 110px',
         gap: 16,
         borderTop: idx === 0 ? 'none' : '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <div

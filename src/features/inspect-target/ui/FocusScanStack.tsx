@@ -362,9 +362,11 @@ function HistoryButton({
             isDark ? 'border-white/10' : 'border-black/10'
           }`}
           style={{
-            background: isDark ? 'rgba(13,17,23,0.96)' : 'rgba(255,255,255,0.96)',
-            backdropFilter: 'blur(22px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+            background: isDark ? 'rgba(13,17,23,0.96)' : 'rgba(255,255,255,1)',
+            ...(isDark ? {
+              backdropFilter: 'blur(22px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+            } : {}),
           }}
         >
           <div className={`px-3 py-2 text-[9px] font-black uppercase tracking-[0.18em] border-b ${

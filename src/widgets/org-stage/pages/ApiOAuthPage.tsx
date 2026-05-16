@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   KeySquare, Plus, Copy, Trash2, Check, X, ShieldAlert, Boxes,
   Globe, AlertTriangle,
 } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 import { Button } from '@shared/ui/forms';
 
@@ -290,17 +291,7 @@ function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OAuthApp)
         <span />
       </div>
       {apps.map((a) => (
-        <div
-          key={a.id}
-          className="grid items-center px-3 h-14 text-[12px] transition-colors"
-          style={{
-            gridTemplateColumns: '1fr 200px 90px 80px 32px',
-            gap: 12,
-            borderTop: '1px solid var(--border-muted)',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-        >
+        <AppRow key={a.id}>
           <div className="flex items-center gap-3 min-w-0">
             <div
               className="w-8 h-8 rounded-md flex items-center justify-center text-[11px] font-black shrink-0"
@@ -346,8 +337,26 @@ function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OAuthApp)
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
-        </div>
+        </AppRow>
       ))}
+    </div>
+  );
+}
+
+function AppRow({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
+  return (
+    <div
+      ref={ref}
+      className="grid items-center px-3 h-14 text-[12px] transition-colors"
+      style={{
+        gridTemplateColumns: '1fr 200px 90px 80px 32px',
+        gap: 12,
+        borderTop: '1px solid var(--border-muted)',
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -370,7 +379,13 @@ function CreatePatModal({
 
   return (
     <>
-      <div className="fixed inset-0 z-40" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onCancel} />
+      <button
+        type="button"
+        aria-label="Close dialog"
+        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
+        style={{ background: 'rgba(0,0,0,0.45)' }}
+        onClick={onCancel}
+      />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] max-h-[80vh] flex flex-col rounded-lg overflow-hidden"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
@@ -505,7 +520,13 @@ function ConfirmDelete({
 }: { name: string; kind: 'pat' | 'app'; onCancel: () => void; onConfirm: () => void }) {
   return (
     <>
-      <div className="fixed inset-0 z-40" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onCancel} />
+      <button
+        type="button"
+        aria-label="Close dialog"
+        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
+        style={{ background: 'rgba(0,0,0,0.45)' }}
+        onClick={onCancel}
+      />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[420px] rounded-lg overflow-hidden"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}

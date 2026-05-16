@@ -31,8 +31,9 @@
   background-color: rgba(255, 255, 255, var(--glass-alpha-light));
   border-color: rgba(255, 255, 255, var(--glass-border-light));
   border-width: var(--glass-border-width, 1px);
-  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  /* No backdrop-filter in light: policy says light = solid white, no glass
+     effect. Blur is GPU-expensive and produces nothing visible against a
+     near-opaque fill — keeping it on would just burn frames. */
   border-radius: var(--radius);
   box-shadow: var(--glass-shadow, var(--shadow-lg));
 }
@@ -366,10 +367,22 @@ canvas {
   color: var(--fg-default);
   background: var(--bg-overlay);
   border: 1px solid var(--border-default);
-  backdrop-filter: blur(10px);
   padding: 4px 10px;
   border-radius: 9999px;
   white-space: nowrap;
+}
+/* Dark-only blur: light --bg-overlay sits at ~0.85-0.92 alpha (nearly
+   opaque) so the blur produces almost no visible refraction in light, but
+   the GPU cost is real — scope it to dark where the dot-field shows
+   through. */
+html[data-theme="dark"] .universe-folder-pill {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+/* ChatAgent model popover — dark-only blur (light theme is solid). */
+html[data-theme="dark"] .chat-agent-model-pop {
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
 }
 .universe-folder-stem {
   display: block;

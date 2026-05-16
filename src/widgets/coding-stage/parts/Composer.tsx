@@ -454,10 +454,10 @@ export function Composer({
           className={`absolute bottom-[calc(100%+8px)] left-0 right-0 rounded-xl border shadow-2xl overflow-hidden ${
             isDark ? 'border-white/[0.10] bg-[#0f1218]/95' : 'border-black/[0.10] bg-white/95'
           }`}
-          style={{
+          style={isDark ? {
             backdropFilter: 'blur(22px) saturate(160%)',
             WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-          }}
+          } : undefined}
         >
           <div className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] ${
             isDark ? 'text-white/40 bg-white/[0.02]' : 'text-black/40 bg-black/[0.02]'
@@ -618,9 +618,11 @@ export function Composer({
                 <div
                   className="absolute bottom-full left-0 mb-1 w-[210px] rounded-lg border shadow-2xl overflow-hidden border-[color:var(--border-default)]"
                   style={{
-                    background: isDark ? 'rgba(15,18,24,0.96)' : 'rgba(255,255,255,0.98)',
-                    backdropFilter: 'blur(22px) saturate(160%)',
-                    WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+                    background: isDark ? 'rgba(15,18,24,0.96)' : 'rgba(255,255,255,1)',
+                    ...(isDark ? {
+                      backdropFilter: 'blur(22px) saturate(160%)',
+                      WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+                    } : {}),
                   }}
                 >
                   {COMPOSER_MODELS.map((m) => {
@@ -904,10 +906,10 @@ function SecretChallengeModal({
   return (
     <div
       className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-30 rounded-xl border shadow-2xl overflow-hidden coding-pill-rise"
-      style={{
+      style={isDark ? {
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-      }}
+      } : undefined}
     >
       <div style={toneStyle} className={`border rounded-xl ${surface}`}>
         <div className={`px-4 py-3`}>

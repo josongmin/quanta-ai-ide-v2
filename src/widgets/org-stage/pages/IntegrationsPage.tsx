@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Search, Check, ExternalLink, Settings2, X, Link2, AlertCircle } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 import { Button, Toggle } from '@shared/ui/forms';
 
@@ -186,15 +187,20 @@ export default function IntegrationsPage() {
 function IntegrationCard({
   item, onInstall, onConfigure,
 }: { item: Integration; onInstall: () => void; onConfigure: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(
+    ref,
+    { borderColor: 'var(--border-default)' },
+    { borderColor: 'var(--border-muted)' },
+  );
   return (
     <div
+      ref={ref}
       className="p-4 rounded-md flex flex-col gap-3 transition-colors"
       style={{
         background: 'var(--bg-canvas)',
         border: '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-muted)'; }}
     >
       <div className="flex items-start gap-3">
         <div
@@ -271,7 +277,13 @@ function ConfigDrawer({
 }: { item: Integration; onClose: () => void; onUninstall: () => void }) {
   return (
     <>
-      <div className="fixed inset-0 z-40" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onClose} />
+      <button
+        type="button"
+        aria-label="Close drawer"
+        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
+        style={{ background: 'rgba(0,0,0,0.45)' }}
+        onClick={onClose}
+      />
       <aside
         className="fixed right-0 top-0 bottom-0 z-50 w-[440px] flex flex-col"
         style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
@@ -339,14 +351,14 @@ function ConfigDrawer({
 
           <div className="flex flex-col gap-2">
             <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>Documentation</span>
-            <a
-              href="#"
-              className="inline-flex items-center gap-1.5 text-[12px] font-medium"
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 text-[12px] font-medium bg-transparent border-0 p-0 cursor-pointer self-start"
               style={{ color: 'var(--fg-link)' }}
             >
               Open {item.name} docs
               <ExternalLink className="w-3 h-3" />
-            </a>
+            </button>
           </div>
         </div>
 

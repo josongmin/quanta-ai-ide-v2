@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Plus } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import type { PaymentMethod } from './data';
 
 type Props = { methods: PaymentMethod[] };
@@ -50,14 +51,15 @@ export function PaymentList({ methods }: Props) {
 function PaymentRow({
   method, top, onMakeDefault,
 }: { method: PaymentMethod; top: boolean; onMakeDefault: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="group flex items-center gap-4 h-11 px-2 -mx-2 rounded-md transition-colors"
       style={{
         borderTop: top ? 'none' : '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <BrandGlyph brand={method.brand} />
       <span

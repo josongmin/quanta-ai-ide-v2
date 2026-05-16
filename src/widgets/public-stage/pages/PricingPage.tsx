@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import {
   Check, Minus, ChevronDown, Sparkles, ArrowRight,
   Zap, ShieldCheck, Users, Bot, Database, Globe, BarChart3,
 } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { PublicShell ,
   HeroBackdrop, Eyebrow, HeadlineGradient, CountUp, LogoMarquee,
   SectionHead, LiftCard, SeamDivider,
@@ -437,17 +438,7 @@ function FeatureMatrix() {
           {g.rows.map((r, ri) => {
             const Icon = r.icon;
             return (
-              <div
-                key={r.id}
-                className="grid items-center px-4 sm:px-6 h-12 text-[12px] transition-colors"
-                style={{
-                  gridTemplateColumns: '1.6fr repeat(4, 1fr)',
-                  gap: 12,
-                  borderTop: ri === 0 ? 'none' : '1px solid var(--border-muted)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-              >
+              <FeatureRow key={r.id} isFirst={ri === 0}>
                 <span className="flex items-center gap-2.5" style={{ color: 'var(--fg-default)' }}>
                   <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
                   {r.label}
@@ -463,11 +454,29 @@ function FeatureMatrix() {
                     )}
                   </span>
                 ))}
-              </div>
+              </FeatureRow>
             );
           })}
         </div>
       ))}
+    </div>
+  );
+}
+
+function FeatureRow({ isFirst, children }: { isFirst: boolean; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
+  return (
+    <div
+      ref={ref}
+      className="grid items-center px-4 sm:px-6 h-12 text-[12px] transition-colors"
+      style={{
+        gridTemplateColumns: '1.6fr repeat(4, 1fr)',
+        gap: 12,
+        borderTop: isFirst ? 'none' : '1px solid var(--border-muted)',
+      }}
+    >
+      {children}
     </div>
   );
 }

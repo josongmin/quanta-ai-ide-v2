@@ -124,7 +124,7 @@ export default function SuspectRankingCard({ ranking, onSelect }: Props) {
   const suspects = ranking.suspects.slice(0, 3);
   if (suspects.length === 0) {
     return (
-      <div className="rounded-2xl px-4 py-4 backdrop-blur bg-white/40 dark:bg-white/[0.04] ring-1 ring-inset ring-black/5 dark:ring-white/5">
+      <div className="rounded-2xl px-4 py-4 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5">
         <div className="text-[11px] text-zinc-600 dark:text-zinc-400">
           No suspects ranked above the inference threshold for {ranking.incidentId}.
         </div>
@@ -133,7 +133,7 @@ export default function SuspectRankingCard({ ranking, onSelect }: Props) {
   }
 
   return (
-    <div className="rounded-2xl px-3 py-3 backdrop-blur bg-white/40 dark:bg-white/[0.04] ring-1 ring-inset ring-black/5 dark:ring-white/5">
+    <div className="rounded-2xl px-3 py-3 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5">
       <div className="flex items-center gap-2 px-1 mb-2">
         <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-700 dark:text-zinc-300">
           Suspect ranking

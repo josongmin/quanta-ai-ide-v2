@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Search, ArrowUpRight, Lock } from 'lucide-react';
 import { useTheme } from '@shared/theme';
@@ -156,17 +156,25 @@ export default function CatalogStage() {
 function CatalogCell({ entry, isDark }: { entry: CatalogEntry; isDark: boolean }) {
   const live = entry.status === 'live';
   const pageBg = isDark ? 'var(--bg-canvas)' : '#ffffff';
+  const innerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    const onEnter = () => { if (live) el.style.background = 'var(--bg-hover)'; };
+    const onLeave = () => { if (live) el.style.background = pageBg; };
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mouseleave', onLeave);
+    };
+  }, [live, pageBg]);
 
   const inner = (
     <div
+      ref={innerRef}
       className="group flex flex-col gap-2 p-4 h-full transition-colors"
       style={{ background: pageBg }}
-      onMouseEnter={(e) => {
-        if (live) e.currentTarget.style.background = 'var(--bg-hover)';
-      }}
-      onMouseLeave={(e) => {
-        if (live) e.currentTarget.style.background = pageBg;
-      }}
     >
       <div className="flex items-start justify-between gap-2">
         <span

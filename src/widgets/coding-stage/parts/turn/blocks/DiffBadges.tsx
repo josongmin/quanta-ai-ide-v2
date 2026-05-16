@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { CodingFileChange } from '../types';
+import type { CodingFileChange } from '../../types';
+
+type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 
 // Working-tree drift badge. State-coloured chip that surfaces what kind
 // of drift was detected and how to resolve it. Colour mapping follows
@@ -10,13 +12,25 @@ export function DriftBadge({
 }: {
   drift: NonNullable<CodingFileChange['drift']>;
   isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
+  t: TranslateFn;
 }) {
   void isDark;
-  const tone =
-    drift.state === 'overlap' ? ('bg-[var(--intent-warn-bg)] text-[var(--intent-warn-fg)] border-[var(--intent-warn-fg)]')
-    : drift.state === 'gone'  ? ('bg-[var(--intent-danger-bg)] text-[var(--intent-danger-fg)] border-[var(--intent-danger-fg)]')
-    :                            ('bg-sky-400/10 text-[var(--fg-link)] border-sky-400/30');
+  const toneStyle: React.CSSProperties =
+    drift.state === 'overlap' ? {
+        background: 'var(--intent-warn-bg)',
+        color: 'var(--intent-warn-fg)',
+        borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
+      }
+    : drift.state === 'gone'  ? {
+        background: 'var(--intent-danger-bg)',
+        color: 'var(--intent-danger-fg)',
+        borderColor: 'color-mix(in srgb, var(--intent-danger-vivid) 30%, transparent)',
+      }
+    : {
+        background: 'var(--intent-info-bg)',
+        color: 'var(--fg-link)',
+        borderColor: 'color-mix(in srgb, var(--intent-info-fg) 30%, transparent)',
+      };
   const glyph =
     drift.state === 'overlap' ? '⚠'
     : drift.state === 'gone'  ? '✕'
@@ -25,18 +39,26 @@ export function DriftBadge({
     drift.state === 'overlap' ? t('drift.fileOverlap')
     : drift.state === 'gone'  ? t('drift.fileGone')
     : t('drift.fileShifted');
-  const [now, setNow] = useState<number>(() => Date.now());
+  // Format relative time for tooltip. We compute against `now` carried
+  // in state so render is pure (the lint rule rejects Date.now in
+  // render); the timestamp ticks in an effect once a minute.
+  const [now, setNow] = useState<number>(0);
+  /* eslint-disable react-hooks/set-state-in-effect --
+   * Mirroring the wall clock into render state. Documented pattern. */
   useEffect(() => {
+    setNow(Date.now());
     const id = window.setInterval(() => { setNow(Date.now()); }, 60_000);
     return () => { window.clearInterval(id); };
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
   const ms = drift.workingShaLastTouchedAtMs;
   const ago = ms != null && now > 0
     ? `${Math.max(1, Math.round((now - ms) / 60_000))}m`
     : '';
   return (
     <span
-      className={`shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border ${tone}`}
+      style={toneStyle}
+      className="shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border"
       title={ago ? `${label} · ${t('drift.lastTouched', { ago })}` : label}
     >
       <span aria-hidden>{glyph}</span>
@@ -47,23 +69,26 @@ export function DriftBadge({
 
 // Tiny visual bar showing add/remove ratio. Caps at 5 segments total.
 export function DiffBar({ added, removed, isDark }: { added: number; removed: number; isDark: boolean }) {
-  void isDark;
   const total = added + removed;
   if (total === 0) return null;
   const segs = 5;
   const a = Math.round((added / total) * segs);
   const d = segs - a;
-  const idle = 'bg-[var(--bg-active-strong)]';
+  const idle = isDark ? 'bg-white/[0.10]' : 'bg-black/[0.08]';
   return (
     <div className="flex items-center gap-px ml-1">
       {Array.from({ length: a }).map((_, i) => (
-        <span key={`a${i}`} className="w-1 h-1.5 rounded-sm" style={{ background: 'var(--intent-success-vivid)' }} />
+        <span
+          key={`a${i}`}
+          style={{ background: 'color-mix(in srgb, var(--intent-success-vivid) 80%, transparent)' }}
+          className="w-1 h-1.5 rounded-sm"
+        />
       ))}
       {Array.from({ length: d }).map((_, i) => (
         <span
           key={`d${i}`}
+          style={i < removed ? { background: 'color-mix(in srgb, var(--intent-danger-vivid) 70%, transparent)' } : undefined}
           className={`w-1 h-1.5 rounded-sm ${i < removed ? '' : idle}`}
-          style={i < removed ? { background: 'var(--intent-danger-vivid)' } : undefined}
         />
       ))}
     </div>

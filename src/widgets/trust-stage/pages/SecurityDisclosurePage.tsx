@@ -187,15 +187,15 @@ export default function SecurityDisclosurePage() {
             <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{h.year} · {h.finds} finds</span>
           </span>
         ))}
-        <a
-          href="#"
-          className="ml-auto text-[11px] font-semibold inline-flex items-center gap-1"
+        <button
+          type="button"
+          className="ml-auto text-[11px] font-semibold inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer"
           style={{ color: 'var(--fg-link)' }}
         >
           <ScrollText className="w-3 h-3" />
           Full list
           <ArrowUpRight className="w-3 h-3" />
-        </a>
+        </button>
       </div>
     </PublicShell>
   );

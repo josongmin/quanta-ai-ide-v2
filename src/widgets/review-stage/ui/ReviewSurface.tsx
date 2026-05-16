@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
+import { useTheme } from '@shared/theme';
 
 export function V2Card({
   className = '',
@@ -10,14 +11,17 @@ export function V2Card({
   children: ReactNode;
   style?: CSSProperties;
 }) {
+  const { isDark } = useTheme();
   return (
     <div
       className={`relative overflow-hidden rounded-2xl ${className}`}
       style={{
         backgroundColor: 'var(--bg-overlay)',
         border: '1px solid var(--border-default)',
-        backdropFilter: 'blur(22px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+        ...(isDark ? {
+          backdropFilter: 'blur(22px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+        } : {}),
         ...style,
       }}
     >

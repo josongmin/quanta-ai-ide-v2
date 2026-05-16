@@ -117,7 +117,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         // The whole header is a drag handle; interactive children opt out via
         // `data-tauri-drag-region="false"` (Tauri honours the closest ancestor).
         data-tauri-drag-region
-        className="shrink-0 h-12 flex items-stretch border-b backdrop-blur-xl select-none"
+        className={`shrink-0 h-12 flex items-stretch border-b select-none ${isDark ? 'backdrop-blur-xl' : ''}`}
         style={{
           borderColor: 'var(--border-muted)',
           background: 'var(--bg-overlay)',

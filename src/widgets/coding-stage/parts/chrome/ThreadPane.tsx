@@ -245,7 +245,7 @@ export function ThreadPane({
 
       <div
         id="coding-composer"
-        className={`shrink-0 border-t ${border} ${isDark ? 'bg-[#0b0d10]/85' : 'bg-white/70'} backdrop-blur ${
+        className={`shrink-0 border-t ${border} ${isDark ? 'bg-[#0b0d10]/85 backdrop-blur' : 'bg-white'} ${
           isScrubbed ? 'opacity-60 pointer-events-none' : ''
         }`}
       >

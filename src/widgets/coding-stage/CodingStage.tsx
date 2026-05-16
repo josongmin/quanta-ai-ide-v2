@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { TaskRail } from './parts/chrome/TaskRail';
@@ -25,6 +25,10 @@ import {
   useVerifiedFixStore,
 } from '@features/verified-fix';
 import type { EngineFinding } from '@entities/pr';
+
+// Stable empty array so the `promptHistory[id] ?? []` fallback doesn't
+// allocate a fresh array reference on every render.
+const EMPTY_PROMPT_HISTORY: string[] = [];
 
 // Top-level coding workspace. Three columns:
 //   - Left rail: project-grouped task threads
@@ -83,7 +87,7 @@ export default function CodingStage() {
       return raw != null ? JSON.parse(raw) as Record<string, string[]> : {};
     } catch { return {}; }
   });
-  function pushPromptHistory(taskId: string, prompt: string) {
+  const pushPromptHistory = useCallback((taskId: string, prompt: string) => {
     setPromptHistory((cur) => {
       const list = cur[taskId] ?? [];
       if (list[list.length - 1] === prompt) return cur;
@@ -92,7 +96,7 @@ export default function CodingStage() {
       try { window.localStorage.setItem('coding:prompt-history', JSON.stringify(merged)); } catch { /* fine */ }
       return merged;
     });
-  }
+  }, []);
 
   // Time-travel scrubber preview state. null = live; otherwise the
   // index of the turn the user has scrubbed back to. Composer locks
@@ -152,18 +156,18 @@ export default function CodingStage() {
 
   // Save the active model as a per-project default. Clicked from the
   // Composer's model dropdown footer.
-  function saveProjectDefaultModel(projectId: string, next: ComposerModelId) {
+  const saveProjectDefaultModel = useCallback((projectId: string, next: ComposerModelId) => {
     window.localStorage.setItem(`coding:project-default-model:${projectId}`, next);
     setProjects((cur) => cur.map((p) =>
       p.id === projectId ? { ...p, defaultModel: next } : p,
     ));
-  }
+  }, []);
 
   // Recovery-engine: append a synthetic agent turn that *describes* the
   // inverse of the targeted turn. History is preserved (audit trail),
   // working state is what the user actually wanted. Replaces the old
   // destructive `rewindTo`.
-  function applyInverseOf(taskId: string, turnId: string) {
+  const applyInverseOf = useCallback((taskId: string, turnId: string) => {
     // If a stream is in flight for this task, stop it first — appending
     // an inverse while the targeted turn is still mid-stream would race.
     // streamRef is keyed by turnId; iterate to find any entry that
@@ -196,15 +200,15 @@ export default function CodingStage() {
       };
       return { ...task, thread: [...task.thread, inverseTurn], timeAgo: 'now' };
     }));
-  }
+  }, []);
 
   // Fork creates a new task seeded with the thread up through `turnId`.
-  function forkFrom(taskId: string, turnId: string) {
+  const forkFrom = useCallback((taskId: string, turnId: string) => {
     const src = tasks.find((task) => task.id === taskId);
     if (src == null) return;
     const idx = src.thread.findIndex((tn) => tn.id === turnId);
     if (idx < 0) return;
-     
+
     const id = `t-${Date.now().toString(36)}`;
     const fork: Task = {
       ...src, id,
@@ -215,11 +219,11 @@ export default function CodingStage() {
     };
     setTasks((cur) => [fork, ...cur]);
     setActiveId(id);
-  }
+  }, [tasks]);
 
   // Toggle a reaction on a specific agent turn. Reactions live on the
   // turn so they persist across task switches.
-  function toggleReaction(taskId: string, turnId: string, kind: ReactionKind) {
+  const toggleReaction = useCallback((taskId: string, turnId: string, kind: ReactionKind) => {
     setTasks((cur) => cur.map((task) => {
       if (task.id !== taskId) return task;
       return {
@@ -236,7 +240,7 @@ export default function CodingStage() {
         }),
       };
     }));
-  }
+  }, []);
 
   // Annotate citations with `staleAfterTurn` so the renderer can flag
   // citations whose file has been touched by a *later* turn.
@@ -333,7 +337,7 @@ export default function CodingStage() {
 
   // Compose new turn into the active thread. If the thread is empty we
   // also flip the task title so the rail shows something useful.
-  function appendTurns(taskId: string, ...turns: Turn[]) {
+  const appendTurns = useCallback((taskId: string, ...turns: Turn[]) => {
     setTasks((cur) => cur.map((task) => {
       if (task.id !== taskId) return task;
       const titled = task.thread.length === 0 && turns[0]?.role === 'user'
@@ -347,7 +351,7 @@ export default function CodingStage() {
         status: 'running',
       };
     }));
-  }
+  }, []);
 
   // Build a synthetic EngineFinding from the agent's diff block and
   // funnel it through the same fixtures pipeline the demo seeds use.
@@ -357,7 +361,7 @@ export default function CodingStage() {
   // edit-safety (post-critique success), large/api → public-surface
   // (human checkpoint). That way a long agent run *feels* like a
   // human-checkpoint candidate without us hard-coding it.
-  function seedVerifiedFixFromDiff(taskId: string, diff: DiffBlock) {
+  const seedVerifiedFixFromDiff = useCallback((taskId: string, diff: DiffBlock) => {
     const totalChanged = diff.added + diff.removed;
     const firstFile = diff.files[0];
     if (firstFile === undefined) return;
@@ -384,9 +388,9 @@ export default function CodingStage() {
     const seed = seedFromFinding(finding);
     const candidates = candidatesFromFinding(seed, finding);
     seedVerifiedFix(seed, candidates);
-  }
+  }, [seedVerifiedFix]);
 
-  function patchTurn(taskId: string, turnId: string, patch: Partial<AgentTurn>) {
+  const patchTurn = useCallback((taskId: string, turnId: string, patch: Partial<AgentTurn>) => {
     setTasks((cur) => cur.map((task) => {
       if (task.id !== taskId) return task;
       return {
@@ -396,7 +400,7 @@ export default function CodingStage() {
         ),
       };
     }));
-  }
+  }, []);
 
   // Synthesised streaming. Drops blocks into the agent turn over time so
   // the demo "looks alive" without a real model. Cancellable via the stop
@@ -405,7 +409,7 @@ export default function CodingStage() {
   // prior turn is still streaming) coexist without clobbering each other.
   const streamRef = useRef<Map<string, { taskId: string; timer: number }>>(new Map());
 
-  function stopStream() {
+  const stopStream = useCallback(() => {
     if (!active) return;
     for (const [turnId, entry] of streamRef.current) {
       if (entry.taskId !== active.id) continue;
@@ -413,9 +417,9 @@ export default function CodingStage() {
       patchTurn(entry.taskId, turnId, { streaming: false });
       streamRef.current.delete(turnId);
     }
-  }
+  }, [active, patchTurn]);
 
-  function runSyntheticAgent(taskId: string, turnId: string, blocks: AgentBlock[]) {
+  const runSyntheticAgent = useCallback((taskId: string, turnId: string, blocks: AgentBlock[]) => {
     let i = 0;
     const tick = () => {
       if (i >= blocks.length) {
@@ -454,9 +458,26 @@ export default function CodingStage() {
       streamRef.current.set(turnId, { taskId, timer });
     };
     tick();
+  }, [patchTurn, seedVerifiedFixFromDiff]);
+
+  // Synthetic agent response — extracted so single-model and
+  // side-by-side paths share the same block sequence.
+  function buildSyntheticResponse(trimmed: string): AgentBlock[] {
+    return [
+      { kind: 'thinking', durationMs: 1600, text: '입력을 분석하고 변경 범위를 추정합니다.' },
+      { kind: 'text', text: `요청 접수: \`${trimmed.slice(0, 80)}${trimmed.length > 80 ? '…' : ''}\`. 컨텍스트를 모으는 중입니다.` },
+      { kind: 'tool', tool: 'search', label: `rg "${pickKeyword(trimmed)}"`, detail: '8 results · 5 files', status: 'ok' },
+      { kind: 'tool', tool: 'read', label: 'src/index.ts', detail: 'L1-80', status: 'ok' },
+      { kind: 'plan', title: 'change plan', items: [
+        { id: 'p1', text: '변경 영향 범위 식별', done: true },
+        { id: 'p2', text: '핵심 시그니처 보존하며 구현 교체', done: false },
+        { id: 'p3', text: '단위 테스트 추가 + 회귀 검증', done: false },
+      ] },
+      { kind: 'text', text: '계획대로 진행하겠습니다. 다음 메시지에서 변경 사항을 적용합니다.' },
+    ];
   }
 
-  function onSubmitComposer() {
+  const onSubmitComposer = useCallback(() => {
     const trimmed = draft.trim();
     if (!trimmed || !active) return;
 
@@ -484,9 +505,6 @@ export default function CodingStage() {
       return;
     }
 
-     
-    /* eslint-disable react-hooks/purity --
-     * Event-handler turn ids; not render-time computation. */
     const userId = `u-${Date.now()}`;
     const userTurn: UserTurn = {
       id: userId, role: 'user', text: trimmed, at: 'now',
@@ -532,29 +550,14 @@ export default function CodingStage() {
     requestAnimationFrame(() => {
       runSyntheticAgent(active.id, primaryId, synthetic);
     });
-    /* eslint-enable react-hooks/purity */
-  }
+  }, [
+    draft, active, activeProject, softCapOverridden, cost.usd, model,
+    sideBySideModel, appendTurns, pushPromptHistory, runSyntheticAgent,
+  ]);
 
-  // Synthetic agent response — extracted so single-model and
-  // side-by-side paths share the same block sequence.
-  function buildSyntheticResponse(trimmed: string): AgentBlock[] {
-    return [
-      { kind: 'thinking', durationMs: 1600, text: '입력을 분석하고 변경 범위를 추정합니다.' },
-      { kind: 'text', text: `요청 접수: \`${trimmed.slice(0, 80)}${trimmed.length > 80 ? '…' : ''}\`. 컨텍스트를 모으는 중입니다.` },
-      { kind: 'tool', tool: 'search', label: `rg "${pickKeyword(trimmed)}"`, detail: '8 results · 5 files', status: 'ok' },
-      { kind: 'tool', tool: 'read', label: 'src/index.ts', detail: 'L1-80', status: 'ok' },
-      { kind: 'plan', title: 'change plan', items: [
-        { id: 'p1', text: '변경 영향 범위 식별', done: true },
-        { id: 'p2', text: '핵심 시그니처 보존하며 구현 교체', done: false },
-        { id: 'p3', text: '단위 테스트 추가 + 회귀 검증', done: false },
-      ] },
-      { kind: 'text', text: '계획대로 진행하겠습니다. 다음 메시지에서 변경 사항을 적용합니다.' },
-    ];
-  }
-
-  function startNewTask(projectId?: string) {
+  const startNewTask = useCallback((projectId?: string) => {
     const target = projectId ?? active?.projectId ?? projects[0].id;
-     
+
     const id = `t-${Date.now().toString(36)}`;
     const task: Task = {
       id, projectId: target,
@@ -569,14 +572,14 @@ export default function CodingStage() {
     setTasks((cur) => [task, ...cur]);
     setActiveId(id);
     setDraft('');
-  }
+  }, [active?.projectId, projects, t]);
 
   // Demo: "create project" prepends a new project with rotated accent
   // colour. No persistence; a real impl would prompt for repo URL.
-  function startNewProject() {
+  const startNewProject = useCallback(() => {
     const accents = ['emerald', 'sky', 'violet', 'amber', 'rose', 'cyan'] as const;
     const accent = accents[projects.length % accents.length];
-     
+
     const id = `p-${Date.now().toString(36)}`;
     const project: Project = {
       id,
@@ -587,7 +590,7 @@ export default function CodingStage() {
     };
     setProjects((cur) => [project, ...cur]);
     startNewTask(id);
-  }
+  }, [projects.length, startNewTask]);
 
   // ⌘N → new task in current project
   useEffect(() => {
@@ -600,28 +603,56 @@ export default function CodingStage() {
     }
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('keydown', onKey); };
-    // closes over `active?.projectId` and several setters; including
-    // `startNewTask` would re-bind the global keydown listener on every
-    // render. The narrow dep is intentional — re-bind only when the
-    // active project changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active?.projectId]);
+  }, [startNewTask]);
 
-  if (!active || !activeProject) return null;
+  // Stable handler wrappers — referenced by JSX props so heavy children
+  // (TaskRail / ThreadPane / ContextRail / CommandPalette) don't see a
+  // fresh closure each render. Wrappers that need a live `active` read
+  // it from the latest value rather than a stale closure capture.
+  const activeId_ = active?.id;
+  const activeProjectId_ = active?.projectId;
+  const handleSaveProjectDefaultModel = useCallback(() => {
+    if (activeProjectId_ != null) saveProjectDefaultModel(activeProjectId_, model);
+  }, [activeProjectId_, model, saveProjectDefaultModel]);
+  const handleApplyInverse = useCallback((turnId: string) => {
+    if (activeId_ != null) applyInverseOf(activeId_, turnId);
+  }, [activeId_, applyInverseOf]);
+  const handleFork = useCallback((turnId: string) => {
+    if (activeId_ != null) forkFrom(activeId_, turnId);
+  }, [activeId_, forkFrom]);
+  const handleReact = useCallback((turnId: string, kind: ReactionKind) => {
+    if (activeId_ != null) toggleReaction(activeId_, turnId, kind);
+  }, [activeId_, toggleReaction]);
+  const handleOpenTurnMenu = useCallback((x: number, y: number, turn: Turn) => {
+    setTurnMenu({ x, y, turn });
+  }, []);
+  const handlePaletteClose = useCallback(() => { setPaletteOpen(false); }, []);
+  const handleJumpTask = useCallback((id: string) => { setActiveId(id); }, []);
+  const handleInsertSlash = useCallback((cmd: string) => { setDraft(`${cmd} `); }, []);
+  const handleTaskRailWidthChange = useCallback(() => { /* width control wiring pending */ }, []);
+  const handleTurnMenuClose = useCallback(() => { setTurnMenu(null); }, []);
+  const handleBudgetStop = useCallback(() => { setBudgetChallenge(null); }, []);
+  const handleBudgetAutoDowngrade = useCallback(() => {
+    if (budgetChallenge == null) return;
+    setModel(budgetChallenge.downgrade);
+    setBudgetChallenge(null);
+    requestAnimationFrame(() => { onSubmitComposer(); });
+  }, [budgetChallenge, onSubmitComposer]);
+  const handleBudgetOverride = useCallback(() => {
+    if (activeId_ == null) return;
+    setSoftCapOverridden((cur) => ({ ...cur, [activeId_]: true }));
+    setBudgetChallenge(null);
+    requestAnimationFrame(() => { onSubmitComposer(); });
+  }, [activeId_, onSubmitComposer]);
 
-  // Match the Intelligence DotField canvas background (#0d1117) so the
-  // coding workspace reads as the same blueprint surface, not a separate
-  // black sheet. Light mode keeps the cool off-white pair.
-  const surface = isDark ? 'bg-[#0d1117]' : 'bg-[#f7f8fa]';
-
-  // Build palette actions on every render. Closures capture the current
-  // active/model so "rewind last" / "switch model" always operate on
-  // fresh state.
-   
-  const paletteActionList: PaletteAction[] = [
+  // Build palette actions. Memoized so a re-render caused by an
+  // unrelated state change doesn't rebuild the action array and force
+  // CommandPalette to diff a fresh prop reference.
+  const paletteActionList = useMemo<PaletteAction[]>(() => [
     { id: 'newTask',    label: t('palette.actions.newTask'),    hint: '⌘N', onRun: () => { startNewTask(); } },
     { id: 'newProject', label: t('palette.actions.newProject'), onRun: startNewProject },
     { id: 'rewindLast', label: t('palette.actions.rewindLast'), onRun: () => {
+      if (active == null) return;
       for (let i = active.thread.length - 1; i >= 0; i--) {
         const tn = active.thread[i];
         if (tn.role === 'agent') { applyInverseOf(active.id, tn.id); return; }
@@ -630,7 +661,25 @@ export default function CodingStage() {
     { id: 'modelOpus',   label: t('palette.actions.switchModelCapable'),  keywords: ['opus'],   onRun: () => { setModel('claude-opus-4-7'); } },
     { id: 'modelSonnet', label: t('palette.actions.switchModelBalanced'), keywords: ['sonnet'], onRun: () => { setModel('claude-sonnet-4-6'); } },
     { id: 'modelHaiku',  label: t('palette.actions.switchModelFast'),     keywords: ['haiku'],  onRun: () => { setModel('claude-haiku-4-5'); } },
-  ];
+  ], [t, startNewTask, startNewProject, active, applyInverseOf]);
+
+  // Turn-menu items: only built when the menu is open, but the builder
+  // gets fresh closures anyway — fine because TurnContextMenu only
+  // mounts in that conditional branch.
+  const handleTurnMenuCopy = useCallback((text: string) => {
+    void navigator.clipboard?.writeText(text);
+  }, []);
+  const handleTurnMenuOpenInNew = useCallback((text: string) => {
+    if (activeProjectId_ != null) startNewTask(activeProjectId_);
+    setDraft(text);
+  }, [activeProjectId_, startNewTask]);
+
+  if (!active || !activeProject) return null;
+
+  // Match the Intelligence DotField canvas background (#0d1117) so the
+  // coding workspace reads as the same blueprint surface, not a separate
+  // black sheet. Light mode keeps the cool off-white pair.
+  const surface = isDark ? 'bg-[#0d1117]' : 'bg-[#f7f8fa]';
 
   return (
     <div
@@ -649,7 +698,7 @@ export default function CodingStage() {
         isDark={isDark}
         t={t}
         width={284}
-        onWidthChange={() => { /* width control wiring pending */ }}
+        onWidthChange={handleTaskRailWidthChange}
       />
 
       <ThreadPane
@@ -666,16 +715,16 @@ export default function CodingStage() {
         t={t}
         model={model}
         onModelChange={setModel}
-        onSaveProjectDefaultModel={() => { saveProjectDefaultModel(active.projectId, model); }}
-        promptHistory={promptHistory[active.id] ?? []}
+        onSaveProjectDefaultModel={handleSaveProjectDefaultModel}
+        promptHistory={promptHistory[active.id] ?? EMPTY_PROMPT_HISTORY}
         visibleThread={visibleThread}
         scrubHead={scrubHead}
         onScrub={setScrubHead}
         isScrubbed={isScrubbed}
-        onApplyInverse={(turnId) => { applyInverseOf(active.id, turnId); }}
-        onFork={(turnId) => { forkFrom(active.id, turnId); }}
-        onReact={(turnId, kind) => { toggleReaction(active.id, turnId, kind); }}
-        onOpenTurnMenu={(x, y, turn) => { setTurnMenu({ x, y, turn }); }}
+        onApplyInverse={handleApplyInverse}
+        onFork={handleFork}
+        onReact={handleReact}
+        onOpenTurnMenu={handleOpenTurnMenu}
         cost={cost}
       />
 
@@ -693,11 +742,11 @@ export default function CodingStage() {
 
       <CommandPalette
         open={paletteOpen}
-        onClose={() => { setPaletteOpen(false); }}
+        onClose={handlePaletteClose}
         actions={paletteActionList}
         tasks={tasks}
-        onJumpTask={(id) => { setActiveId(id); }}
-        onInsertSlash={(cmd) => { setDraft(`${cmd} `); }}
+        onJumpTask={handleJumpTask}
+        onInsertSlash={handleInsertSlash}
         isDark={isDark}
         t={t}
       />
@@ -710,19 +759,9 @@ export default function CodingStage() {
           downgrade={budgetChallenge.downgrade}
           isDark={isDark}
           t={t}
-          onAutoDowngrade={() => {
-            setModel(budgetChallenge.downgrade);
-            setBudgetChallenge(null);
-            // Defer one frame so the model state lands before the
-            // synthetic stream picks it up.
-            requestAnimationFrame(() => { onSubmitComposer(); });
-          }}
-          onOverride={() => {
-            setSoftCapOverridden((cur) => ({ ...cur, [active.id]: true }));
-            setBudgetChallenge(null);
-            requestAnimationFrame(() => { onSubmitComposer(); });
-          }}
-          onStop={() => { setBudgetChallenge(null); }}
+          onAutoDowngrade={handleBudgetAutoDowngrade}
+          onOverride={handleBudgetOverride}
+          onStop={handleBudgetStop}
         />
       )}
       {turnMenu && (
@@ -730,10 +769,10 @@ export default function CodingStage() {
           x={turnMenu.x}
           y={turnMenu.y}
           isDark={isDark}
-          onClose={() => { setTurnMenu(null); }}
+          onClose={handleTurnMenuClose}
           items={buildTurnMenuItems(turnMenu.turn, t, {
-            onCopy: (text) => { void navigator.clipboard?.writeText(text); },
-            onOpenInNew: (text) => { startNewTask(active.projectId); setDraft(text); },
+            onCopy: handleTurnMenuCopy,
+            onOpenInNew: handleTurnMenuOpenInNew,
           })}
         />
       )}

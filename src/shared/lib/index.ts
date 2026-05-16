@@ -7,6 +7,7 @@ export { round1, pct, languageHue, formatNumber } from './format';
 export { makeRng } from './rng';
 export { useShortcut, type Shortcut } from './useShortcut';
 export { useClickOutside } from './useClickOutside';
+export { useHoverStyle } from './useHoverStyle';
 export { shallowEqual } from './shallowEqual';
 export { useScrollRestoration } from './useScrollRestoration';
 export {

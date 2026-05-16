@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Apple, Terminal, Copy, Check, ArrowUpRight } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { DeveloperShell } from '../parts/DeveloperShell';
 
@@ -117,31 +118,37 @@ export default function CliPage() {
         }}
       >
         {COMMANDS.map((c, i) => (
-          <div
-            key={c.cmd}
-            className="flex items-center gap-4 p-4 transition-colors"
-            style={{
-              borderBottom: i === COMMANDS.length - 1 ? 'none' : '1px solid var(--border-muted)',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-          >
-            <code
-              className="text-[12px] font-mono shrink-0 px-2 py-1 rounded"
-              style={{
-                background: 'var(--bg-surface-muted)',
-                color: 'var(--fg-strong)',
-                minWidth: 280,
-              }}
-            >
-              <span style={{ color: 'var(--fg-subtle)' }}>$ </span>
-              {c.cmd}
-            </code>
-            <span className="text-[12px] flex-1" style={{ color: 'var(--fg-muted)' }}>{c.blurb}</span>
-          </div>
+          <CommandRow key={c.cmd} cmd={c.cmd} blurb={c.blurb} isLast={i === COMMANDS.length - 1} />
         ))}
       </div>
     </DeveloperShell>
+  );
+}
+
+function CommandRow({ cmd, blurb, isLast }: { cmd: string; blurb: string; isLast: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
+  return (
+    <div
+      ref={ref}
+      className="flex items-center gap-4 p-4 transition-colors"
+      style={{
+        borderBottom: isLast ? 'none' : '1px solid var(--border-muted)',
+      }}
+    >
+      <code
+        className="text-[12px] font-mono shrink-0 px-2 py-1 rounded"
+        style={{
+          background: 'var(--bg-surface-muted)',
+          color: 'var(--fg-strong)',
+          minWidth: 280,
+        }}
+      >
+        <span style={{ color: 'var(--fg-subtle)' }}>$ </span>
+        {cmd}
+      </code>
+      <span className="text-[12px] flex-1" style={{ color: 'var(--fg-muted)' }}>{blurb}</span>
+    </div>
   );
 }
 

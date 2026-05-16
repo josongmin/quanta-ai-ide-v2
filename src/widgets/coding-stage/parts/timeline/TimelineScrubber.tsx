@@ -99,7 +99,7 @@ export function TimelineScrubber({
   const muted = isDark ? 'text-white/45' : 'text-black/50';
   const faint = isDark ? 'text-white/30' : 'text-black/40';
   const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const bg = isDark ? 'bg-[#0b0d10]/85' : 'bg-white/80';
+  const bg = isDark ? 'bg-[#0b0d10]/85 backdrop-blur' : 'bg-white';
   const trackBg = isDark ? 'bg-white/[0.05]' : 'bg-black/[0.05]';
   const fillBg = isDark ? 'bg-white/35' : 'bg-black/45';
 
@@ -107,7 +107,7 @@ export function TimelineScrubber({
   const canInverse = !!inverse && inverse.risk !== 'noop' && targetMeta?.role === 'agent';
 
   return (
-    <div className={`flex flex-col gap-1 px-3 py-1.5 border-t ${border} ${bg} backdrop-blur`}>
+    <div className={`flex flex-col gap-1 px-3 py-1.5 border-t ${border} ${bg}`}>
       <div className="flex items-center gap-2">
         <span className={`shrink-0 text-[9px] font-bold uppercase tracking-[0.18em] ${faint}`}>
           {t('scrubber.label')}

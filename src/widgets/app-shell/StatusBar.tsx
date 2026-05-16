@@ -413,9 +413,15 @@ export default function StatusBar() {
           70%  { box-shadow: 0 0 0 4px transparent; opacity: 0.55; }
           100% { box-shadow: 0 0 0 0 transparent; opacity: 1; }
         }
+        /* Dark-only blur: light theme uses near-opaque --bg-overlay, so the
+           blur produces nothing visible but still burns GPU each frame. */
+        html[data-theme="dark"] footer[aria-label="Workspace status"] {
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+        }
       `}</style>
       <footer
-        className="shrink-0 flex items-stretch backdrop-blur-xl select-none overflow-hidden"
+        className="shrink-0 flex items-stretch select-none overflow-hidden"
         style={barStyle}
         data-tauri-drag-region
         role="contentinfo"

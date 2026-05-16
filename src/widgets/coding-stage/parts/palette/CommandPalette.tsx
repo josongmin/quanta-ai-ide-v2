@@ -150,10 +150,10 @@ export function CommandPalette({
         className={`relative w-full max-w-[600px] rounded-xl border shadow-2xl overflow-hidden ${
           isDark ? 'bg-[#11141a]/95 border-white/[0.10]' : 'bg-white/95 border-black/[0.10]'
         }`}
-        style={{
+        style={isDark ? {
           backdropFilter: 'blur(22px) saturate(160%)',
           WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-        }}
+        } : undefined}
       >
         <div className={`flex items-center gap-2 px-3 py-2.5 border-b ${
           isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'

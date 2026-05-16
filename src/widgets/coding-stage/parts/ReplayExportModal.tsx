@@ -94,6 +94,7 @@ export default function ReplayExportModal({
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClose(); } }}
     >
       <div className={`absolute inset-0 bg-[var(--bg-scrim)] backdrop-blur-sm`} />
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events -- stops backdrop click-through; outer wrapper handles keyboard. */}
       <div
         className={`relative w-full max-w-[560px] rounded-xl border shadow-2xl ${surface} coding-pill-rise`}
         onClick={(e) => { e.stopPropagation(); }}

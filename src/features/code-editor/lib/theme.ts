@@ -50,7 +50,9 @@ const baseTheme = (isDark: boolean) =>
         border: '1px solid var(--border-default)',
         borderRadius: '8px',
         boxShadow: 'var(--shadow-lg)',
-        backdropFilter: 'blur(10px)',
+        // Dark-only blur — light --bg-surface is opaque so blur produces
+        // no visible refraction. Light mode policy: no backdrop-filter.
+        ...(isDark ? { backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' } : {}),
       },
       '.cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected]': {
         background: isDark ? 'rgba(120,170,255,0.18)' : 'rgba(60,120,220,0.14)',

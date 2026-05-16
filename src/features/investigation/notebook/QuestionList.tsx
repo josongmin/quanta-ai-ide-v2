@@ -119,8 +119,11 @@ export function QuestionList({ questions, selectedId, onSelect, onArchive }: Pro
         return (
           <li key={q.id} style={rowStyle}>
             <div
+              role={onSelect ? 'button' : undefined}
+              tabIndex={onSelect ? 0 : undefined}
               className="flex items-start gap-2 px-2 py-2"
               onClick={onSelect ? () => { onSelect(q.id); } : undefined}
+              onKeyDown={onSelect ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(q.id); } } : undefined}
             >
               <div className="flex flex-col items-start gap-1 pt-0.5">
                 <StatusPill status={q.status} />

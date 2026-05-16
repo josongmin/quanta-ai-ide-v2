@@ -71,11 +71,11 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
       className={`fixed z-[60] min-w-[200px] py-1 rounded-md border shadow-2xl ${
         isDark ? 'bg-[#11141a] border-white/[0.10]' : 'bg-white border-black/[0.10]'
       }`}
-      style={{
+      style={isDark ? {
         left, top,
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-      }}
+      } : { left, top }}
     >
       {items.map((item) => {
         const Icon = ICON_FOR[item.id];

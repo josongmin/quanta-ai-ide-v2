@@ -34,6 +34,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import type { FileDiff } from '@entities/pr';
+import { useTheme } from '@shared/theme';
 
 type Props = {
   /** The currently active file in the FilesScene. Null → no chip rendered. */
@@ -50,6 +51,7 @@ type HunkSummary = {
 };
 
 export default function HunkNavigator({ file }: Props) {
+  const { isDark } = useTheme();
   // Hooks first (Rules of Hooks). Cursor is keyed-by-path so changing
   // file resets it implicitly — derived state, no setState-in-effect.
   // We track the path the cursor belongs to alongside the cursor itself.
@@ -139,8 +141,10 @@ export default function HunkNavigator({ file }: Props) {
       className="sticky top-10 z-10 mt-3 flex items-center gap-3 px-3 py-2 rounded-md"
       style={{
         background: 'var(--bg-overlay)',
-        backdropFilter: 'blur(6px) saturate(140%)',
-        WebkitBackdropFilter: 'blur(6px) saturate(140%)',
+        ...(isDark ? {
+          backdropFilter: 'blur(6px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(6px) saturate(140%)',
+        } : {}),
         border: '1px solid var(--border-default)',
       }}
     >

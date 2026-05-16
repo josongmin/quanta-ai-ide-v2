@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import { Sparkles, Check, Zap } from 'lucide-react';
-import { useTranslation, formatNumber } from '@shared/i18n';
-import type { PlanBlock } from '../types';
+import { memo, useState } from 'react';
+import { Check, Sparkles, Zap } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
+import type { PlanBlock } from '../../types';
 
-export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boolean }) {
-  void isDark;
+function PlanBlockViewImpl({ block, isDark }: { block: PlanBlock; isDark: boolean }) {
   const { t } = useTranslation('coding');
   // Local-only checkbox state. Real impl would dispatch to the agent
   // and the agent would echo it back as a plan-block patch. We mirror
@@ -22,22 +21,30 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
 
   const doneCount = block.items.filter((it) => done[it.id]).length;
   const total = block.items.length;
-  const card = 'bg-gradient-to-b from-white/[0.04] to-white/[0.015] border-[var(--border-default)]';
-  const labelColor = 'text-[var(--fg-strong)]';
-  const sub = 'text-[var(--fg-muted)]';
-  const checkOff = 'border-[var(--border-strong)] hover:border-[var(--fg-muted)]';
-  const checkOn = 'bg-[var(--intent-success-vivid)] border-[var(--intent-success-vivid)]';
-  const dotIdle = 'bg-[var(--bg-active-strong)]';
-  const dotOn   = 'bg-[var(--intent-success-vivid)]';
+  const card = isDark
+    ? 'bg-gradient-to-b from-white/[0.04] to-white/[0.015] border-white/[0.08]'
+    : 'bg-gradient-to-b from-black/[0.025] to-transparent border-black/[0.08]';
+  const labelColor = isDark ? 'text-white/85' : 'text-black/85';
+  const sub = isDark ? 'text-white/40' : 'text-black/55';
+  const checkOff = isDark ? 'border-white/15 hover:border-white/40' : 'border-black/15 hover:border-black/40';
+  const checkOnStyle: React.CSSProperties = {
+    background: 'var(--intent-success-vivid)',
+    borderColor: 'var(--intent-success-vivid)',
+  };
+  const dotIdle = isDark ? 'bg-white/[0.10]' : 'bg-black/[0.10]';
+  const dotOnStyle: React.CSSProperties = { background: 'var(--intent-success-vivid)' };
 
   function toggle(id: string) {
     const wasDone = done[id];
     const nextDone = !wasDone;
     setDone((cur) => ({ ...cur, [id]: nextDone }));
     if (autoAdvance && nextDone) {
+      // Find the next not-yet-done item *after* this one.
       const idx = block.items.findIndex((it) => it.id === id);
       const next = block.items.slice(idx + 1).find((it) => !done[it.id] && it.id !== id);
       if (next != null) {
+        // Dispatch on window so CodingStage (the only listener) can
+        // pick it up without us threading a callback through Blocks.
         window.dispatchEvent(new CustomEvent('coding:plan-advance', {
           detail: { nextText: next.text, planTitle: block.title },
         }));
@@ -57,10 +64,14 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
           onClick={() => { setAutoAdvance((v) => !v); }}
           aria-pressed={autoAdvance}
           title={t('autoadvance.tooltip')}
+          style={autoAdvance ? {
+            background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)',
+            color: 'var(--intent-success-fg)',
+          } : undefined}
           className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
             autoAdvance
-              ? ('bg-[var(--intent-success-bg)] text-[var(--intent-success-fg)]')
-              : ('text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:[background:var(--bg-hover)]')
+              ? ''
+              : (isDark ? 'text-white/40 hover:text-white/70 hover:bg-white/[0.04]' : 'text-black/40 hover:text-black/70 hover:bg-black/[0.04]')
           }`}
         >
           <Zap className="w-2.5 h-2.5" />
@@ -71,8 +82,8 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
             {block.items.map((item, idx) => (
               <span
                 key={item.id}
-                className={`block w-2 h-2 rounded-full ${done[item.id] ? `${dotOn} coding-dot-pop` : dotIdle}`}
-                style={done[item.id] ? { animationDelay: `${idx * 60}ms` } : undefined}
+                className={`block w-2 h-2 rounded-full ${done[item.id] ? 'coding-dot-pop' : dotIdle}`}
+                style={done[item.id] ? { ...dotOnStyle, animationDelay: `${idx * 60}ms` } : undefined}
               />
             ))}
           </div>
@@ -82,18 +93,27 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
       <ol className="space-y-1.5">
         {block.items.map((item, i) => {
           const pct = item.confidence != null ? Math.round(item.confidence * 100) : null;
+          // Confidence tone: <60% reads as low (amber), 60–85% mid
+          // (neutral), >85% high (subtle emerald). Threshold picked
+          // from Anthropic's published self-eval calibration: their
+          // models cluster around 0.7 when answering correctly and
+          // 0.55 when wrong, so 0.6 is the practical decision line.
+          const confidenceStyle: React.CSSProperties | undefined = pct == null ? undefined
+            : pct >= 85 ? { color: 'color-mix(in srgb, var(--intent-success-fg) 85%, transparent)' }
+            : pct >= 60 ? undefined
+            : { color: 'color-mix(in srgb, var(--intent-warn-fg) 85%, transparent)' };
           const confidenceTone = pct == null ? null
-            : pct >= 85 ? ('text-[var(--intent-success-fg)]')
-            : pct >= 60 ? sub
-            : ('text-[var(--intent-warn-fg)]');
+            : pct >= 60 && pct < 85 ? sub
+            : '';
           return (
             <li key={item.id} className="flex items-start gap-2">
               <button
                 type="button"
                 onClick={() => { toggle(item.id); }}
                 aria-pressed={done[item.id]}
+                style={done[item.id] ? checkOnStyle : undefined}
                 className={`mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-[5px] border shrink-0 transition-colors cursor-pointer ${
-                  done[item.id] ? checkOn : checkOff
+                  done[item.id] ? '' : checkOff
                 }`}
               >
                 {done[item.id] && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
@@ -101,7 +121,7 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
               <div className="flex-1 min-w-0">
                 <span className={`text-[12px] leading-relaxed ${
                   done[item.id]
-                    ? ('text-[var(--fg-muted)] line-through')
+                    ? (isDark ? 'text-white/40 line-through' : 'text-black/40 line-through')
                     : labelColor
                 }`}>
                   <span className={`mr-1.5 font-mono text-[11px] ${sub}`}>{i + 1}.</span>
@@ -111,6 +131,7 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
                   <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono">
                     {pct != null && (
                       <span
+                        style={confidenceStyle}
                         className={confidenceTone ?? sub}
                         title={pct < 60 ? t('planMeta.lowConfidence') : t('planMeta.confidence', { pct })}
                       >
@@ -118,7 +139,7 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
                       </span>
                     )}
                     {item.estTokens != null && (
-                      <span className={sub}>{t('planMeta.estTokens', { n: formatNumber(item.estTokens) })}</span>
+                      <span className={sub}>{t('planMeta.estTokens', { n: item.estTokens.toLocaleString() })}</span>
                     )}
                     {item.estSeconds != null && (
                       <span className={sub}>{t('planMeta.estTime', { n: item.estSeconds })}</span>
@@ -133,3 +154,5 @@ export function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boo
     </div>
   );
 }
+
+export const PlanBlockView = memo(PlanBlockViewImpl);

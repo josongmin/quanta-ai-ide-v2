@@ -40,7 +40,6 @@ import { buildCommands } from '../lib/buildCommands';
 function paletteSkin(isDark: boolean) {
   return {
     backdrop:        isDark ? 'rgba(0,0,0,0.55)' : 'rgba(15,18,26,0.32)',
-    backdropBlur:    isDark ? 'blur(6px)'        : 'blur(8px)',
     panelBg:         isDark ? 'rgba(20,24,32,0.92)' : 'rgba(255,255,255,0.97)',
     panelBorder:     isDark ? 'rgba(255,255,255,0.10)' : 'rgba(15,18,26,0.10)',
     panelShadow:     isDark
@@ -197,8 +196,9 @@ export default function ControlPalette({ onOpenHelp, onOpenTokens, onOpenActivit
 
   return createPortal(
     <div
+      role="presentation"
       className="fixed inset-0 z-[var(--z-modal,9999)] flex items-start justify-center pt-[15vh] px-4 popover-backdrop-in"
-      style={{ background: skin.backdrop, backdropFilter: skin.backdropBlur }}
+      style={{ background: skin.backdrop }}
       onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
     >
       <div
@@ -209,7 +209,10 @@ export default function ControlPalette({ onOpenHelp, onOpenTokens, onOpenActivit
         style={{
           background: skin.panelBg,
           border: `1px solid ${skin.panelBorder}`,
-          backdropFilter: 'blur(20px) saturate(180%)',
+          ...(isDark ? {
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          } : {}),
           boxShadow: skin.panelShadow,
         }}
       >
@@ -370,8 +373,10 @@ function CommandRow({
       role="option"
       aria-selected={active}
       data-cursor={flatIndex}
+      tabIndex={-1}
       onMouseEnter={onHover}
       onClick={onRun}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRun(); } }}
       className="flex items-center gap-2.5 mx-1.5 px-2.5 h-9 rounded-md cursor-pointer transition-colors"
       style={{
         background: active ? skin.rowActiveBg : 'transparent',

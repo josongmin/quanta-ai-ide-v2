@@ -1,28 +1,77 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": [
-    ".claude/**",
-    "src-tauri/**",
-    "dist/**",
-    "scripts/**"
-  ],
+
+  // Note on tsconfig: the repo's tsconfig.json is references-only (no
+  // `paths`), so Knip's auto tsconfig lookup yields nothing. We re-declare
+  // the alias map below under "paths" so `@app/*`, `@widgets/*`,
+  // `@features/*`, `@entities/*`, `@shared/*` resolve. Pass
+  // `--tsConfig tsconfig.app.json` on the CLI to additionally pick up
+  // tsconfig compiler options if that ever matters for resolution.
+
+  // Explicit entries.
+  //
+  // Knip auto-detects most config-style entries (vite.config.ts,
+  // vitest.config.ts, eslint.config.js, tailwind.config.js, src/main.tsx)
+  // via its built-in plugins, so we do NOT list them here — knip flagged
+  // them as "redundant entry pattern" hints.
+  //
+  // What we DO need:
+  //   1. The hand-written TanStack route tree.
+  //   2. The workspace-tabs registry (lazy-imports many widget roots that
+  //      aren't reachable from the router tree directly).
+  //   3. Every barrel that the router or registry pulls via
+  //      `lazy(() => import('@…'))`. Knip already resolves these dynamic
+  //      imports in v6, but listing them here is a belt-and-suspenders so
+  //      that future refactors (e.g. moving the lazy chain behind an
+  //      indirection) don't cause sudden cascades of "unused" reports.
   "entry": [
-    "src/main.tsx",
     "src/app/App.tsx",
     "src/app/router/router.tsx",
     "src/app/router/workspaceTabsRegistry.tsx",
     "src/app/providers/AppProviders.tsx",
-    "vite.config.ts",
-    "vitest.config.ts",
-    "eslint.config.js",
-    "tailwind.config.js"
+
+    // Lazy route stages (router.tsx)
+    "src/app/router/intelligence/index.ts",
+    "src/widgets/coding-stage/index.ts",
+    "src/widgets/review-stage/index.ts",
+    "src/widgets/fix-pipeline-stage/index.ts",
+    "src/widgets/investigate-stage/index.ts",
+    "src/features/admission-rules/index.ts",
+    "src/features/verified-fix/index.ts",
+    "src/features/investigation/index.ts",
+    "src/features/investigation/handoff/index.ts",
+
+    // Lazy tab roots (workspaceTabsRegistry.tsx) — also surface widgets
+    // that are NOT in the router tree but are reachable via the tab picker.
+    "src/widgets/agent-fleet-stage/index.ts",
+    "src/widgets/catalog/index.ts",
+    "src/widgets/me-stage/index.ts"
   ],
+
+  // What we consider source. Test files (`*.test.ts`, `__tests__/**`) are
+  // promoted to entries automatically by Knip's vitest plugin.
   "project": [
     "src/**/*.{ts,tsx}"
   ],
+
+  // Path-alias mirror of tsconfig.app.json. Knip reads tsConfig.paths
+  // automatically, but listing them here makes the mapping visible at the
+  // top level and protects against tsconfig refactors.
+  "paths": {
+    "@app/*":      ["src/app/*"],
+    "@widgets/*":  ["src/widgets/*"],
+    "@features/*": ["src/features/*"],
+    "@entities/*": ["src/entities/*"],
+    "@shared/*":   ["src/shared/*"]
+  },
+
+  // Tauri shell plugin is wired through tauri.conf.json, not TS source.
   "ignoreDependencies": [
     "@tauri-apps/plugin-shell"
   ],
+
+  // python3 / semgrep are invoked from package.json scripts but live
+  // outside the JS toolchain.
   "ignoreBinaries": [
     "python3",
     "semgrep"

@@ -1,6 +1,7 @@
 import { useParams } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Mail, Plus, Copy, RotateCcw, X, Clock, Check } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 
 type InviteStatus = 'pending' | 'accepted' | 'expired';
@@ -147,15 +148,16 @@ function Tile({ label, value, tone }: { label: string; value: number; tone: 'def
 
 function Row({ inv, last }: { inv: Invite; last: boolean }) {
   const m = STATUS_META[inv.status];
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="grid items-center px-4 h-12 transition-colors"
       style={{
         gridTemplateColumns: '2fr 0.8fr 1fr 1fr 0.8fr 0.6fr 0.8fr',
         borderBottom: last ? 'none' : '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <div className="flex items-center gap-2 min-w-0">
         <Mail className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Check } from 'lucide-react';
 import { useTheme } from '@shared/theme';
 import type { Plan, PlanId } from './data';
@@ -34,18 +35,26 @@ function PlanCell({
   plan, cycle, current, pageBg, onSelect,
 }: { plan: Plan; cycle: 'monthly' | 'annual'; current: boolean; pageBg: string; onSelect: () => void }) {
   const price = cycle === 'annual' ? plan.annual : plan.monthly;
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onEnter = () => { if (!current) el.style.background = 'var(--bg-hover)'; };
+    const onLeave = () => { if (!current) el.style.background = pageBg; };
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mouseleave', onLeave);
+    };
+  }, [current, pageBg]);
   return (
     <div
+      ref={ref}
       className="flex flex-col gap-4 p-5 transition-colors relative"
       style={{
         background: pageBg,
         boxShadow: current ? 'inset 0 0 0 1px var(--brand-fg)' : undefined,
-      }}
-      onMouseEnter={(e) => {
-        if (!current) e.currentTarget.style.background = 'var(--bg-hover)';
-      }}
-      onMouseLeave={(e) => {
-        if (!current) e.currentTarget.style.background = pageBg;
       }}
     >
       <div className="flex items-center justify-between">

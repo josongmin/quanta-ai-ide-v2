@@ -138,14 +138,15 @@ export function CommandPalette({
       {/* Backdrop — click anywhere outside to close. */}
       <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-black/20'} backdrop-blur-sm`} />
 
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- stops backdrop click-through; outer wrapper is the keyboard target. */}
       <div
         className={`relative w-full max-w-[600px] rounded-xl border shadow-2xl overflow-hidden ${
           isDark ? 'bg-[#11141a]/95 border-white/[0.10]' : 'bg-white/95 border-black/[0.10]'
         }`}
-        style={{
+        style={isDark ? {
           backdropFilter: 'blur(22px) saturate(160%)',
           WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-        }}
+        } : undefined}
         onClick={(e) => { e.stopPropagation(); }}
       >
         <div className={`flex items-center gap-2 px-3 py-2.5 border-b ${

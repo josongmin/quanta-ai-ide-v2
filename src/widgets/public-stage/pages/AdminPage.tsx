@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   Search, MoreHorizontal, AlertTriangle, ShieldAlert,
   Database, Download, RefreshCw, Terminal, ExternalLink,
   Activity, CheckCircle2, XCircle, Clock, Play,
 } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { AdminShell } from '../parts/AdminShell';
 import { Button, Toggle } from '@shared/ui/forms';
 import { formatNumber } from '@shared/i18n';
@@ -293,16 +294,17 @@ function OrgsTable() {
 
 function OrgRow({ org }: { org: Org }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="grid items-center px-3 h-12 text-[12px] transition-colors"
       style={{
         gridTemplateColumns: '1.6fr 90px 80px 110px 110px 32px',
         gap: 12,
         borderTop: '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <div
@@ -451,8 +453,11 @@ function UsersTable({ users }: { users: AdminUser[] }) {
 }
 
 function UserRow({ user }: { user: AdminUser }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="grid items-center px-3 h-11 text-[12px] transition-colors"
       style={{
         gridTemplateColumns: '1.4fr 1.4fr 110px 110px 100px 110px',
@@ -460,8 +465,6 @@ function UserRow({ user }: { user: AdminUser }) {
         borderTop: '1px solid var(--border-muted)',
         opacity: user.status === 'suspended' ? 0.6 : 1,
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>
         {user.name}
@@ -544,16 +547,17 @@ function JobsTable() {
 
 function JobRow({ job }: { job: Job }) {
   const isFailed = job.state === 'failed';
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
     <div
+      ref={ref}
       className="grid items-center px-3 h-11 text-[12px] transition-colors"
       style={{
         gridTemplateColumns: '160px 1.2fr 110px 90px 70px 80px 130px',
         gap: 12,
         borderTop: '1px solid var(--border-muted)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <span className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-default)' }}>
         {job.id}
@@ -626,17 +630,7 @@ function FlagsList({
       style={{ border: '1px solid var(--border-muted)' }}
     >
       {flags.map((f, i) => (
-        <div
-          key={f.id}
-          className="grid items-center px-3 py-3 text-[12px] transition-colors"
-          style={{
-            gridTemplateColumns: '1.6fr 130px 100px 80px',
-            gap: 16,
-            borderTop: i === 0 ? 'none' : '1px solid var(--border-muted)',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-        >
+        <FlagRow key={f.id} isFirst={i === 0}>
           <div className="flex flex-col min-w-0 gap-0.5">
             <div className="flex items-center gap-2">
               <span className="font-mono text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
@@ -683,8 +677,26 @@ function FlagsList({
             Edit cohort
             <ExternalLink className="w-3 h-3" />
           </button>
-        </div>
+        </FlagRow>
       ))}
+    </div>
+  );
+}
+
+function FlagRow({ isFirst, children }: { isFirst: boolean; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
+  return (
+    <div
+      ref={ref}
+      className="grid items-center px-3 py-3 text-[12px] transition-colors"
+      style={{
+        gridTemplateColumns: '1.6fr 130px 100px 80px',
+        gap: 16,
+        borderTop: isFirst ? 'none' : '1px solid var(--border-muted)',
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -732,16 +744,7 @@ function DataToolsGrid() {
       {tools.map((t) => {
         const Icon = t.icon;
         return (
-          <div
-            key={t.id}
-            className="flex flex-col gap-3 p-4 rounded-md"
-            style={{
-              background: 'var(--bg-canvas)',
-              border: '1px solid var(--border-default)',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-canvas)'; }}
-          >
+          <DataToolCard key={t.id}>
             <div className="flex items-start gap-3">
               <div
                 className="w-9 h-9 rounded-md flex items-center justify-center shrink-0"
@@ -765,9 +768,30 @@ function DataToolsGrid() {
             <div className="flex justify-end">
               <Button leading={<Database className="w-3 h-3" />}>Open</Button>
             </div>
-          </div>
+          </DataToolCard>
         );
       })}
+    </div>
+  );
+}
+
+function DataToolCard({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(
+    ref,
+    { background: 'var(--bg-hover)' },
+    { background: 'var(--bg-canvas)' },
+  );
+  return (
+    <div
+      ref={ref}
+      className="flex flex-col gap-3 p-4 rounded-md"
+      style={{
+        background: 'var(--bg-canvas)',
+        border: '1px solid var(--border-default)',
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -809,7 +833,12 @@ function RowMenu({
 }: { onClose: () => void; children: React.ReactNode }) {
   return (
     <>
-      <div className="fixed inset-0 z-30" onClick={onClose} />
+      <button
+        type="button"
+        aria-label="Close menu"
+        className="fixed inset-0 z-30 bg-transparent border-0 p-0 cursor-default"
+        onClick={onClose}
+      />
       <div
         className="absolute right-0 top-full mt-1 z-40 min-w-[160px] py-1 rounded-md"
         style={{

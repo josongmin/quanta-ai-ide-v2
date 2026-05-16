@@ -1,8 +1,10 @@
 import { useParams } from '@tanstack/react-router';
+import { useRef, type ReactNode } from 'react';
 import {
   TrendingUp, TrendingDown, Users, Bot, Database, Webhook, Sparkles,
   AlertTriangle, Download, BarChart3, Activity,
 } from 'lucide-react';
+import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 import { formatNumber } from '@shared/i18n';
 
@@ -174,16 +176,7 @@ export default function UsagePage() {
           return BREAKDOWN.map((b, i) => {
             const pct = (b.runs / total) * 100;
             return (
-              <div
-                key={b.ws}
-                className="grid items-center px-4 h-12 transition-colors"
-                style={{
-                  gridTemplateColumns: '1.4fr 0.8fr 0.8fr 0.8fr 1.4fr',
-                  borderBottom: i === BREAKDOWN.length - 1 ? 'none' : '1px solid var(--border-muted)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-              >
+              <BreakdownRow key={b.ws} isLast={i === BREAKDOWN.length - 1}>
                 <code className="text-[12px] font-mono font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {b.ws}
                 </code>
@@ -207,12 +200,29 @@ export default function UsagePage() {
                     {pct.toFixed(0)}%
                   </span>
                 </div>
-              </div>
+              </BreakdownRow>
             );
           });
         })()}
       </div>
     </OrgShell>
+  );
+}
+
+function BreakdownRow({ isLast, children }: { isLast: boolean; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
+  return (
+    <div
+      ref={ref}
+      className="grid items-center px-4 h-12 transition-colors"
+      style={{
+        gridTemplateColumns: '1.4fr 0.8fr 0.8fr 0.8fr 1.4fr',
+        borderBottom: isLast ? 'none' : '1px solid var(--border-muted)',
+      }}
+    >
+      {children}
+    </div>
   );
 }
 

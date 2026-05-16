@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { MessageSquare, HelpCircle, Plus, Sparkles } from 'lucide-react';
-import type { HunkComment } from '../types';
+import { HelpCircle, MessageSquare, Plus, Sparkles } from 'lucide-react';
+import type { HunkComment } from '../../types';
+
+type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 
 // Inline review thread under a hunk. Renders existing comments as small
 // stacked bubbles; the [+ Note] / [+ Ask] affordance opens a compact
@@ -17,15 +19,15 @@ export function HunkCommentThread({
   onReply: (parentId: string, text: string) => void;
   onToggleResolve: (commentId: string) => void;
   isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
+  t: TranslateFn;
 }) {
   void hunkKey;
   const [text, setText] = useState('');
   const [kind, setKind] = useState<'note' | 'ask'>('note');
-  const muted = 'text-[var(--fg-muted)]';
-  const faint = 'text-[var(--fg-subtle)]';
-  const border = 'border-[var(--border-default)]';
-  const surface = 'bg-[var(--bg-surface-muted)]';
+  const muted = isDark ? 'text-white/55' : 'text-black/55';
+  const faint = isDark ? 'text-white/35' : 'text-black/40';
+  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
+  const surface = isDark ? 'bg-white/[0.02]' : 'bg-black/[0.015]';
 
   const hasAny = comments.length > 0 || composing;
   if (!hasAny) {
@@ -67,14 +69,16 @@ export function HunkCommentThread({
       )}
       {composing ? (
         <div className={`px-2 pb-2 ${comments.length === 0 ? 'pt-2' : ''}`}>
-          <div className={`rounded-md border ${border} bg-[var(--bg-surface)] overflow-hidden`}>
+          <div className={`rounded-md border ${border} ${isDark ? 'bg-[#11141a]' : 'bg-white'} overflow-hidden`}>
             <textarea
               autoFocus
               value={text}
               onChange={(e) => { setText(e.target.value); }}
               placeholder={t('comment.placeholder')}
               rows={2}
-              className={`w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)]`}
+              className={`w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed ${
+                isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
+              }`}
               spellCheck={false}
               onKeyDown={(e) => {
                 if (e.nativeEvent.isComposing) return;
@@ -93,8 +97,8 @@ export function HunkCommentThread({
                   aria-pressed={kind === 'note'}
                   className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
                     kind === 'note'
-                      ? ('bg-[var(--bg-elevated)] text-[var(--fg-strong)]')
-                      : ('text-[var(--fg-muted)] hover:text-[var(--fg-default)]')
+                      ? (isDark ? 'bg-white/[0.08] text-white/85' : 'bg-black/[0.06] text-black/85')
+                      : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70')
                   }`}
                 >
                   <MessageSquare className="w-2.5 h-2.5" />
@@ -104,10 +108,13 @@ export function HunkCommentThread({
                   type="button"
                   onClick={() => { setKind('ask'); }}
                   aria-pressed={kind === 'ask'}
+                  style={kind === 'ask'
+                    ? { background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)', color: 'var(--intent-warn-fg)' }
+                    : undefined}
                   className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
                     kind === 'ask'
-                      ? ('bg-[var(--intent-warn-bg)] text-[var(--intent-warn-fg)]')
-                      : ('text-[var(--fg-muted)] hover:text-[var(--fg-default)]')
+                      ? ''
+                      : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70')
                   }`}
                 >
                   <HelpCircle className="w-2.5 h-2.5" />
@@ -128,8 +135,8 @@ export function HunkCommentThread({
                   disabled={!text.trim()}
                   className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
                     text.trim()
-                      ? ('bg-[var(--bg-canvas)] text-black hover:opacity-90')
-                      : ('bg-[var(--bg-active)] text-[var(--fg-subtle)] cursor-not-allowed')
+                      ? (isDark ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90')
+                      : (isDark ? 'bg-white/[0.05] text-white/30 cursor-not-allowed' : 'bg-black/[0.04] text-black/30 cursor-not-allowed')
                   }`}
                 >
                   {t('comment.submit')}
@@ -158,31 +165,35 @@ export function HunkCommentThread({
 // Single comment node — handles its own reply composer + resolve toggle.
 // Recursive: replies render as a nested CommentNode tree (one level deep
 // in practice, since real review threads rarely go deeper).
-export function CommentNode({
+function CommentNode({
   comment, onReply, onToggleResolve, isDark, t, depth = 0,
 }: {
   comment: HunkComment;
   onReply: (text: string) => void;
   onToggleResolve: () => void;
   isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
+  t: TranslateFn;
   depth?: number;
 }) {
-  void isDark;
   const [replying, setReplying] = useState(false);
   const [replyText, setReplyText] = useState('');
-  const muted = 'text-[var(--fg-muted)]';
-  const faint = 'text-[var(--fg-subtle)]';
-  const border = 'border-[var(--border-default)]';
+  const muted = isDark ? 'text-white/55' : 'text-black/55';
+  const faint = isDark ? 'text-white/35' : 'text-black/40';
+  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
   const isAgent = comment.author === 'agent';
   const cardBg = comment.resolved
-    ? ('bg-[var(--bg-surface-muted)] opacity-60')
-    : ('bg-[var(--bg-elevated)]');
+    ? (isDark ? 'bg-white/[0.015] opacity-60' : 'bg-black/[0.01] opacity-60')
+    : (isDark ? 'bg-white/[0.025]' : 'bg-white');
+  // Avatar tone: agent is the same neutral as everywhere else; "ask"
+  // user comments get amber to nudge the eye toward unanswered questions.
+  const avatarStyle: React.CSSProperties | undefined = !isAgent && comment.kind === 'ask'
+    ? { background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)', color: 'var(--intent-warn-fg)' }
+    : undefined;
   const avatarTone = isAgent
-    ? ('bg-[var(--bg-elevated)] text-[var(--fg-default)]')
+    ? (isDark ? 'bg-white/[0.08] text-white/70' : 'bg-black/[0.06] text-black/70')
     : comment.kind === 'ask'
-      ? ('bg-[var(--intent-warn-bg)] text-[var(--intent-warn-fg)]')
-      : ('bg-[var(--bg-active)] text-[var(--fg-muted)]');
+      ? ''
+      : (isDark ? 'bg-white/[0.05] text-white/55' : 'bg-black/[0.04] text-black/55');
   const Icon = isAgent ? Sparkles : comment.kind === 'ask' ? HelpCircle : MessageSquare;
 
   return (
@@ -191,6 +202,7 @@ export function CommentNode({
         className={`flex items-start gap-2 px-2 py-1.5 rounded-md text-[11px] leading-relaxed border ${border} ${cardBg}`}
       >
         <span
+          style={avatarStyle}
           className={`shrink-0 mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-md ${avatarTone}`}
           title={
             isAgent ? t('reply.agentLabel')
@@ -207,12 +219,15 @@ export function CommentNode({
             </span>
             <span className={`text-[9px] font-mono ${faint}`}>{comment.at}</span>
             {comment.resolved && (
-              <span className={`text-[9px] font-mono px-1.5 py-px rounded bg-[var(--intent-success-bg)] text-[var(--intent-success-fg)]`}>
+              <span
+                style={{ background: 'var(--intent-success-bg)', color: 'var(--intent-success-fg)' }}
+                className="text-[9px] font-mono px-1.5 py-px rounded"
+              >
                 {t('reply.resolved')}
               </span>
             )}
           </div>
-          <div className={`whitespace-pre-wrap break-words text-[var(--fg-strong)]`}>
+          <div className={`whitespace-pre-wrap break-words ${isDark ? 'text-white/80' : 'text-black/80'}`}>
             {comment.text}
           </div>
           <div className="mt-1 flex items-center gap-1.5">
@@ -240,14 +255,16 @@ export function CommentNode({
 
       {replying && (
         <div className="mt-1 ml-6">
-          <div className={`rounded-md border ${border} bg-[var(--bg-surface)] overflow-hidden`}>
+          <div className={`rounded-md border ${border} ${isDark ? 'bg-[#11141a]' : 'bg-white'} overflow-hidden`}>
             <textarea
               autoFocus
               value={replyText}
               onChange={(e) => { setReplyText(e.target.value); }}
               placeholder={t('reply.placeholder')}
               rows={2}
-              className={`w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)]`}
+              className={`w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed ${
+                isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
+              }`}
               spellCheck={false}
               onKeyDown={(e) => {
                 if (e.nativeEvent.isComposing) return;
@@ -272,8 +289,8 @@ export function CommentNode({
                 disabled={!replyText.trim()}
                 className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
                   replyText.trim()
-                    ? ('bg-[var(--bg-canvas)] text-black hover:opacity-90')
-                    : ('bg-[var(--bg-active)] text-[var(--fg-subtle)] cursor-not-allowed')
+                    ? (isDark ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90')
+                    : (isDark ? 'bg-white/[0.05] text-white/30 cursor-not-allowed' : 'bg-black/[0.04] text-black/30 cursor-not-allowed')
                 }`}
               >
                 {t('reply.submit')}

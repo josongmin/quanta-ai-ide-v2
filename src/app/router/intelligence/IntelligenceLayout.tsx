@@ -2,8 +2,6 @@ import { Suspense, lazy } from 'react';
 import { ErrorBoundary } from '@app/providers';
 import { useTheme } from '@shared/theme';
 import { SearchBar } from '@features/search-dsl';
-import { OverlayPopover } from '@features/apply-overlay';
-import { FocusScanStack } from '@features/inspect-target';
 import { ModeSwitcher, useViewMode } from '@features/switch-mode';
 import { Stage } from '@widgets/stage';
 import FilterBarHost from './FilterBarHost';
@@ -30,6 +28,18 @@ const InvestigateLauncher = lazy(() =>
 
 const JobsTray = lazy(() =>
   import('@features/investigation').then((m) => ({ default: m.JobsTray })),
+);
+
+// OverlayPopover (~880 lines) and FocusScanStack (drag-down inspect panels;
+// pulls WorkspaceBody/FolderBody/Treemap/etc.) are landing-page-resident but
+// not painted on first frame — popover is closed and stack is empty until
+// the user interacts. Lazy-loaded so they leave the initial chunk.
+const OverlayPopover = lazy(() =>
+  import('@features/apply-overlay').then((m) => ({ default: m.OverlayPopover })),
+);
+
+const FocusScanStack = lazy(() =>
+  import('@features/inspect-target').then((m) => ({ default: m.FocusScanStack })),
 );
 
 export default function IntelligenceLayout() {
@@ -78,17 +88,21 @@ export default function IntelligenceLayout() {
         }}
       >
         <ModeSwitcher />
-        <OverlayPopover />
+        <Suspense fallback={null}>
+          <OverlayPopover />
+        </Suspense>
       </div>
 
-      <FocusScanStack
-        isDark={isDark}
-        width={rightPanelWidth}
-        minWidth={RIGHT_PANEL.min}
-        maxWidth={RIGHT_PANEL.max}
-        defaultWidth={RIGHT_PANEL.defaultWidth}
-        onWidthChange={setRightPanelWidth}
-      />
+      <Suspense fallback={null}>
+        <FocusScanStack
+          isDark={isDark}
+          width={rightPanelWidth}
+          minWidth={RIGHT_PANEL.min}
+          maxWidth={RIGHT_PANEL.max}
+          defaultWidth={RIGHT_PANEL.defaultWidth}
+          onWidthChange={setRightPanelWidth}
+        />
+      </Suspense>
 
       <Suspense fallback={null}>
         <ChatAgent maxWidth={centerMaxWidth} />

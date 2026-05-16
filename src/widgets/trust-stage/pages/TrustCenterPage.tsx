@@ -1,8 +1,10 @@
+import { useRef, type CSSProperties, type ReactNode } from 'react';
 import {
   ShieldCheck, Lock, FileText, Globe, KeyRound, Activity, Eye, Download,
   CheckCircle2, ArrowUpRight, Cpu, Server, ScrollText,
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { useHoverStyle } from '@shared/lib';
 import { PublicShell , HeroBackdrop, Eyebrow, HeadlineGradient, SectionHead, SeamDivider } from '@shared/ui/marketing';
 
 const CERTS = [
@@ -91,15 +93,15 @@ export default function TrustCenterPage() {
         />
         <div className="grid grid-cols-3 gap-3 mb-16">
           {POLICIES.map((p) => (
-            <div
+            <HoverCard
               key={p.title}
               className="rounded-xl p-5 flex flex-col gap-3 transition-colors"
               style={{
                 background: 'var(--bg-canvas)',
                 border: '1px solid var(--border-default)',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-canvas)'; }}
+              hover={{ background: 'var(--bg-hover)' }}
+              rest={{ background: 'var(--bg-canvas)' }}
             >
               <div className="flex items-start justify-between">
                 <div
@@ -122,7 +124,7 @@ export default function TrustCenterPage() {
                 {p.title}
               </h3>
               <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{p.blurb}</p>
-            </div>
+            </HoverCard>
           ))}
         </div>
 
@@ -193,14 +195,14 @@ export default function TrustCenterPage() {
           }}
         >
           {DOCS.map((d, i) => (
-            <div
+            <HoverCard
               key={d.id}
               className="flex items-center gap-4 p-4 transition-colors"
               style={{
                 borderBottom: i === DOCS.length - 1 ? 'none' : '1px solid var(--border-muted)',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+              hover={{ background: 'var(--bg-hover)' }}
+              rest={{ background: 'transparent' }}
             >
               <div
                 className="w-9 h-9 rounded-md flex items-center justify-center shrink-0"
@@ -231,7 +233,7 @@ export default function TrustCenterPage() {
                   ? <ArrowUpRight className="w-3 h-3" />
                   : <Download className="w-3 h-3" />}
               </button>
-            </div>
+            </HoverCard>
           ))}
         </div>
 

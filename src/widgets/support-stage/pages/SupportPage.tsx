@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   MessageCircle, BookOpen, Mail, Inbox, Search, Send, Paperclip,
   CheckCircle2, Clock, AlertTriangle, ChevronRight,
@@ -346,13 +346,37 @@ function ChannelCard({
     );
   }
   return (
-    <div
-      className={commonClassName}
-      style={commonStyle}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-    >
+    <ChannelCardDiv className={commonClassName} style={commonStyle}>
       {inner}
+    </ChannelCardDiv>
+  );
+}
+
+function ChannelCardDiv({
+  className, style, children,
+}: { className: string; style: React.CSSProperties; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onEnter = () => {
+      el.style.transform = 'translateY(-2px)';
+      el.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--brand-vivid) 22%, transparent)';
+    };
+    const onLeave = () => {
+      el.style.transform = 'translateY(0)';
+      el.style.boxShadow = 'none';
+    };
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mouseleave', onLeave);
+    };
+  }, []);
+  return (
+    <div ref={ref} className={className} style={style}>
+      {children}
     </div>
   );
 }

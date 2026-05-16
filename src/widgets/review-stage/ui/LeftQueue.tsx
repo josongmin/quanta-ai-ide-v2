@@ -35,7 +35,7 @@
 // Layout: vertical column, header → scope → group list → footer hint.
 // ─────────────────────────────────────────────────────────────────────────
 
-import { useEffect, useMemo, useState, type DragEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
 import {
   AlertTriangle, Check, ChevronDown, ChevronRight, Cloud, Filter, GitMerge,
   GripVertical, Inbox, ListFilter, Loader2, MessageSquare, Pin, Plus,
@@ -280,29 +280,52 @@ export default function LeftQueue({
     });
   }, [prs, scope, query, viewerLogin, activeView, repo]);
 
+  // Per-PR annotation cache. The heavy work (computePrRisk, engineSummary,
+  // summariseChecks, computeNeedsReReview) is keyed on PR object identity
+  // and invalidated only when repo or viewerLogin change. Pin toggles,
+  // collapse toggles, query edits, and drag state never re-run the
+  // computations — only the cheap group/sort step downstream re-runs.
+  const annCacheRef = useRef<{
+    repo: RepoData | null;
+    viewerLogin: string;
+    map: WeakMap<PullRequest, Annotated>;
+  }>({ repo: null, viewerLogin: '', map: new WeakMap() });
+  if (
+    annCacheRef.current.repo !== repo
+    || annCacheRef.current.viewerLogin !== viewerLogin
+  ) {
+    annCacheRef.current = { repo, viewerLogin, map: new WeakMap() };
+  }
+  const annotate = (p: PullRequest): Annotated => {
+    const cached = annCacheRef.current.map.get(p);
+    if (cached !== undefined) return cached;
+    const myState = p.reviewers.find((r) => r.login === viewerLogin)?.state ?? null;
+    const engine = engineSummary(engineFindings(p, repo));
+    const ci = summariseChecks(p.checks);
+    const needsReReview = computeNeedsReReview(p, viewerLogin);
+    const ann: Annotated = {
+      pr: p,
+      risk: computePrRisk(p, repo),
+      engine,
+      ci,
+      myState,
+      needsReReview,
+      approvedCount: p.reviewers.filter((r) => r.state === 'approved').length,
+      reviewerCount: p.reviewers.length,
+      tier: triageTier(p, myState, engine, ci, needsReReview),
+    };
+    annCacheRef.current.map.set(p, ann);
+    return ann;
+  };
+
   // Risk-annotated + grouped by repo. Within each group, *pinned*
   // PRs float to the top (ordinal-sorted), then risk tier → updatedAt.
-  // We pre-compute the *decision-relevant* signals here (engine summary,
-  // CI rollup, viewer review state) so each row can render a triage
-  // glance without re-deriving them on every paint.
+  // Per-PR signals come from the cache above; this memo only does the
+  // O(N) bucket + O(N log N) sort work.
   const groups = useMemo(() => {
     const byRepo = new Map<string, Annotated[]>();
     for (const p of filtered) {
-      const myState = p.reviewers.find((r) => r.login === viewerLogin)?.state ?? null;
-      const engine = engineSummary(engineFindings(p, repo));
-      const ci = summariseChecks(p.checks);
-      const needsReReview = computeNeedsReReview(p, viewerLogin);
-      const ann: Annotated = {
-        pr: p,
-        risk: computePrRisk(p, repo),
-        engine,
-        ci,
-        myState,
-        needsReReview,
-        approvedCount: p.reviewers.filter((r) => r.state === 'approved').length,
-        reviewerCount: p.reviewers.length,
-        tier: triageTier(p, myState, engine, ci, needsReReview),
-      };
+      const ann = annotate(p);
       const arr = byRepo.get(p.repo) ?? [];
       arr.push(ann);
       byRepo.set(p.repo, arr);
@@ -345,10 +368,14 @@ export default function LeftQueue({
       return a.repo.localeCompare(b.repo);
     });
     return list;
+    // annotate is a stable closure over a ref-backed cache; its inputs
+    // (repo, viewerLogin) are already in deps via cache invalidation.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtered, repo, pinMap, viewerLogin]);
 
   // Counters for the project header — open / attention / critical
-  // across the visible (non-archived) prs.
+  // across the visible (non-archived) prs. Reuses the per-PR annotation
+  // cache so we don't re-run computePrRisk / summariseChecks twice.
   const projectCounts = useMemo(() => {
     let open = 0;
     let attention = 0;
@@ -357,14 +384,17 @@ export default function LeftQueue({
     for (const p of prs) {
       if (p.status === 'closed' || p.status === 'merged') continue;
       open += 1;
-      const r = computePrRisk(p, repo);
-      if (r.tier === 'attention') attention += 1;
-      else if (r.tier === 'critical') critical += 1;
-      const ci = summariseChecks(p.checks);
-      if (ci.required.pending > 0) backgrounded += 1;
+      const ann = annotate(p);
+      if (ann.risk.tier === 'attention') attention += 1;
+      else if (ann.risk.tier === 'critical') critical += 1;
+      if (ann.ci.required.pending > 0) backgrounded += 1;
     }
     return { open, attention, critical, backgrounded };
-  }, [prs, repo]);
+    // annotate is a stable closure over a ref-backed cache; it
+    // intentionally isn't in deps. Cache invalidation is keyed on
+    // repo + viewerLogin checked at the top of the render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prs, repo, viewerLogin]);
 
   const totalShown = filtered.length;
   const togglePinPr = (n: number): void => {

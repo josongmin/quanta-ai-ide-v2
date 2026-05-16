@@ -48,8 +48,8 @@ function ActivityCard({
   const fill = isDark ? 'rgba(13,17,23,0.88)' : 'rgba(255,255,255,0.94)';
   return (
     <div
-      className={`px-2.5 py-2 rounded-lg backdrop-blur-md border shadow-lg ${
-        isDark ? 'border-white/10 text-white/85' : 'border-black/10 text-black/85'
+      className={`px-2.5 py-2 rounded-lg border shadow-lg ${
+        isDark ? 'border-white/10 text-white/85 backdrop-blur-md' : 'border-black/10 text-black/85'
       }`}
       style={{ background: fill, borderLeftWidth: 3, borderLeftColor: hue }}
     >

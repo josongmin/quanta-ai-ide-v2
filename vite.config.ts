@@ -74,7 +74,7 @@ export default defineConfig({
     modulePreload: {
       polyfill: true,
       resolveDependencies: (_filename, deps) =>
-        deps.filter((d) => !/vendor-three|viz-modes|chat-agent/.test(d)),
+        deps.filter((d) => !/vendor-three|viz-modes|chat-agent|admission-|coding-|review-/.test(d)),
     },
     rollupOptions: {
       output: {
@@ -112,6 +112,46 @@ export default defineConfig({
           // resolves to a single shared chunk rather than four tiny ones).
           if (/src\/features\/switch-mode\/lib\/.*Mode\.ts$/.test(id)) {
             return 'viz-modes';
+          }
+          // The admission-rules v2 god-pages (HealthPage 1355 lines, RulesPage 815,
+          // GatePage) were rolled into a single ~62 KB-gz admission chunk that
+          // tripped the per-chunk budget. Splitting them keeps the slice itself
+          // lazy at the route boundary, and each sub-page only ships when the
+          // user clicks its sidebar entry.
+          if (/src\/features\/admission-rules\/ui\/v2\/parts\/HealthPage/.test(id)) {
+            return 'admission-health';
+          }
+          if (/src\/features\/admission-rules\/ui\/v2\/parts\/RulesPage/.test(id)) {
+            return 'admission-rules-page';
+          }
+          if (/src\/features\/admission-rules\/ui\/v2\/parts\/GatePage/.test(id)) {
+            return 'admission-gate';
+          }
+          // Coding stage's heavy turn-renderer parts (Blocks/Composer + their
+          // turn subcomponents) push the coding-stage chunk above the 50 KB-gz
+          // per-chunk budget. Pull the Composer (1k+ lines) and the
+          // turn/blocks tree into their own chunks; ThreadPane resolves them
+          // through the same boundary so the runtime cost is one extra fetch
+          // on first /coding visit and free thereafter.
+          if (/src\/widgets\/coding-stage\/parts\/Composer/.test(id)) {
+            return 'coding-composer';
+          }
+          if (/src\/widgets\/coding-stage\/parts\/turn\//.test(id)) {
+            return 'coding-turn';
+          }
+          // Review stage's god-files (LeftQueue 1364 lines, ReviewCoreScenes
+          // 835, ReviewDecisionChrome 604) collapse into one ~64 KB-gz chunk.
+          // Each is reachable from the lazy /reviews route, so splitting them
+          // costs one extra round-trip on first review but keeps any single
+          // chunk under the per-chunk budget.
+          if (/src\/widgets\/review-stage\/ui\/LeftQueue/.test(id)) {
+            return 'review-queue';
+          }
+          if (/src\/widgets\/review-stage\/ui\/ReviewCoreScenes/.test(id)) {
+            return 'review-scenes';
+          }
+          if (/src\/widgets\/review-stage\/ui\/ReviewDecisionChrome/.test(id)) {
+            return 'review-decision';
           }
           return undefined;
         },
