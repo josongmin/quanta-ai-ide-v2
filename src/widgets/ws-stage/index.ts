@@ -1,0 +1,12 @@
+export { default as WsGeneralPage }      from './pages/GeneralPage';
+export { default as WsSourcePage }       from './pages/SourcePage';
+export { default as WsOwnershipPage }    from './pages/OwnershipPage';
+export { default as WsAdmissionPage }    from './pages/AdmissionPage';
+export { default as WsReviewPage }       from './pages/ReviewPage';
+export { default as WsFixPipelinePage }  from './pages/FixPipelinePage';
+export { default as WsAgentsPage }       from './pages/AgentsPage';
+export { default as WsSecretsPage }      from './pages/SecretsPage';
+export { default as WsEnvironmentsPage } from './pages/EnvironmentsPage';
+export { default as WsWebhooksPage }     from './pages/WebhooksPage';
+export { default as WsLabelsPage }       from './pages/LabelsPage';
+export { default as WsDangerPage }       from './pages/DangerPage';

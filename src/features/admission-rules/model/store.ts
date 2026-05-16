@@ -66,6 +66,39 @@ export type OverrideEntry = {
   actor: string;       // login
   reason: string;
   severity: RuleSeverity;
+  expiresAt?: number;
+};
+
+// Suppression audit — temporary mute of a fired rule for a specific PR/file
+// path. Distinct from override (which is one-shot) — has an expiry.
+export type SuppressionEntry = {
+  id: string;
+  at: number;
+  prSeed: number;
+  ruleId: string;
+  ruleName: string;
+  fileId: number;
+  filePath: string;
+  actor: string;
+  reason: string;
+  severity: RuleSeverity;
+  expiresAt: number;
+};
+
+// Lifecycle — rules walk experimental → enforced → deprecated as they
+// prove out (or get retired). Stored per-rule in `lifecycle`.
+export type RuleLifecycle = 'experimental' | 'enforced' | 'deprecated';
+export type RuleLifecycleEntry = {
+  lifecycle: RuleLifecycle;
+  since: number;
+  note?: string;
+};
+
+// Per-path severity override — narrow a rule's severity for a glob.
+// Stored per rule under `pathOverrides`.
+export type PathSeverityOverride = {
+  pattern: string;
+  severity: RuleSeverity;
 };
 
 // Bulk action target — list of rule ids selected in the rules table.
@@ -89,6 +122,15 @@ export type AdmissionStore = {
 
   // Overrides (audit log)
   overrides: OverrideEntry[];
+
+  // Suppressions (audit log + active mutes)
+  suppressions: SuppressionEntry[];
+
+  // Rule lifecycle (experimental → enforced → deprecated)
+  lifecycle: Record<string, RuleLifecycleEntry>;
+
+  // Per-rule path severity overrides
+  pathOverrides: Record<string, PathSeverityOverride[]>;
 
   // Bulk selection (Rules page)
   selection: BulkSelection;
@@ -120,6 +162,17 @@ export type AdmissionStore = {
 
   // Overrides
   recordOverride: (entry: Omit<OverrideEntry, 'id' | 'at'>) => void;
+
+  // Suppressions
+  recordSuppression: (entry: Omit<SuppressionEntry, 'id' | 'at'>) => void;
+  revokeSuppression: (id: string) => void;
+
+  // Lifecycle
+  setLifecycle: (ruleId: string, lifecycle: RuleLifecycle, note?: string) => void;
+
+  // Path overrides
+  addPathOverride: (ruleId: string, pattern: string, severity: RuleSeverity) => void;
+  removePathOverride: (ruleId: string, pattern: string) => void;
 
   // Import / export
   exportRules: () => string;                    // returns JSON
@@ -212,7 +265,35 @@ export const useAdmissionStore = create<AdmissionStore>((set, get) => ({
   packs: SAMPLE_PACKS,
   rollouts: [],
   overrides: SAMPLE_OVERRIDES,
+  suppressions: [],
+  lifecycle: {},
+  pathOverrides: {},
   selection: new Set(),
+
+  recordSuppression: (entry) => { set((s) => ({
+    suppressions: [
+      ...s.suppressions,
+      { ...entry, id: `sup-${String(Date.now())}-${String(Math.random()).slice(2, 8)}`, at: Date.now() },
+    ],
+  })); },
+  revokeSuppression: (id) => { set((s) => ({
+    suppressions: s.suppressions.filter((e) => e.id !== id),
+  })); },
+
+  setLifecycle: (ruleId, lifecycle, note) => { set((s) => ({
+    lifecycle: { ...s.lifecycle, [ruleId]: { lifecycle, since: Date.now(), note } },
+  })); },
+
+  addPathOverride: (ruleId, pattern, severity) => { set((s) => {
+    const list = s.pathOverrides[ruleId] ?? [];
+    const next = list.filter((o) => o.pattern !== pattern).concat({ pattern, severity });
+    return { pathOverrides: { ...s.pathOverrides, [ruleId]: next } };
+  }); },
+  removePathOverride: (ruleId, pattern) => { set((s) => {
+    const list = s.pathOverrides[ruleId] ?? [];
+    const next = list.filter((o) => o.pattern !== pattern);
+    return { pathOverrides: { ...s.pathOverrides, [ruleId]: next } };
+  }); },
 
   toggle: (id) => { set((s) => ({
     rules: s.rules.map((r) => (r.id === id ? { ...r, enabled: !r.enabled } : r)),

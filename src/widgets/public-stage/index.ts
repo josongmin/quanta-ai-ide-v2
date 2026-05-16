@@ -1,0 +1,9 @@
+export { default as PricingPage }       from './pages/PricingPage';
+export { default as ChangelogPage }     from './pages/ChangelogPage';
+export { default as HelpPage }          from './pages/HelpPage';
+export { default as StatusPage }        from './pages/StatusPage';
+export { default as TermsPage }         from './pages/TermsPage';
+export { default as PrivacyPage }       from './pages/PrivacyPage';
+export { default as DpaPage }           from './pages/DpaPage';
+export { default as SubprocessorsPage } from './pages/SubprocessorsPage';
+export { default as AdminPage }         from './pages/AdminPage';

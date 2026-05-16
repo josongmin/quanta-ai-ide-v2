@@ -1,0 +1,306 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import {
+  Eye, EyeOff, Mail, KeyRound, ArrowRight, Building2,
+} from 'lucide-react';
+import { GithubIcon } from '@shared/ui/brand-icons';
+import { AuthShell } from './parts/AuthShell';
+import { Field, Button, HRule } from './parts/AuthForm';
+import { OAuthRedirectOverlay } from './parts/OAuthRedirectOverlay';
+import { PasswordStrengthPanel } from './parts/PasswordStrengthPanel';
+import { evaluatePassword } from './lib/passwordRules';
+import { lookupIdP, PROVIDER_LABEL } from './lib/idpDirectory';
+import { formatTime } from '@shared/i18n';
+
+type Step = 'form' | 'submitting' | 'sent';
+
+export default function SignUpPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const [showPw, setShowPw] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [step, setStep] = useState<Step>('form');
+  const [oauth, setOauth] = useState<null | 'github' | 'gitlab' | 'google'>(null);
+  const [touchedEmail, setTouchedEmail] = useState(false);
+
+  const report = useMemo(() => evaluatePassword(pw, name), [pw, name]);
+  const idp = useMemo(() => (email.includes('@') ? lookupIdP(email) : null), [email]);
+
+  const emailError = touchedEmail && email.length > 0 && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
+    ? 'Use a complete email like name@company.com'
+    : undefined;
+
+  const canSubmit =
+    name.trim().length > 0
+    && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
+    && report.score >= 3
+    && !report.breached
+    && agreed;
+
+  useEffect(() => {
+    if (step !== 'submitting') return;
+    const id = setTimeout(() => { setStep('sent'); }, 900);
+    return () => { clearTimeout(id); };
+  }, [step]);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+    setStep('submitting');
+  };
+
+  // SSO-enforced org? Steer them to /auth/sso instead of letting them create
+  // a duplicate account.
+  if (idp?.enforced && touchedEmail) {
+    return (
+      <AuthShell
+        title={`${idp.org} uses SSO`}
+        subtitle="Your organization manages accounts through their identity provider, so there's no separate signup."
+        topRight={<Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Sign in</Link>}
+        footer={
+          <>
+            <span>Different organization?</span>
+            <button
+              type="button"
+              onClick={() => { setEmail(''); setTouchedEmail(false); }}
+              style={{ color: 'var(--fg-link)' }}
+            >
+              Use another email
+            </button>
+          </>
+        }
+      >
+        <div
+          className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
+          style={{ background: 'var(--brand-bg)', border: '1px solid var(--brand-vivid)' }}
+        >
+          <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+          <div className="flex flex-col gap-0.5 text-[12px] leading-snug">
+            <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
+              Identity provider: {PROVIDER_LABEL[idp.provider]}
+            </span>
+            <span style={{ color: 'var(--fg-muted)' }}>
+              Sign in with your <span className="font-mono">{idp.domain}</span> credentials —
+              we&apos;ll create your se · field account on the way.
+            </span>
+          </div>
+        </div>
+
+        <Link
+          to={'/auth/sso' as never}
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold w-full"
+          style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
+        >
+          <KeyRound className="w-3.5 h-3.5" />
+          Continue with SSO
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </AuthShell>
+    );
+  }
+
+  if (step === 'sent') {
+    return (
+      <AuthShell
+        title="Check your inbox"
+        subtitle={`We sent a verification link to ${email}. Click it to finish setting up your account.`}
+        footer={
+          <>
+            <span>Didn&apos;t get it?</span>
+            <button type="button" onClick={() => { setStep('form'); }} style={{ color: 'var(--fg-link)' }}>
+              Resend or use a different email
+            </button>
+          </>
+        }
+      >
+        <div
+          className="flex flex-col items-center gap-4 py-4"
+        >
+          <div
+            className="w-12 h-12 rounded-full flex items-center justify-center"
+            style={{ background: 'var(--brand-bg)' }}
+          >
+            <Mail className="w-5 h-5" style={{ color: 'var(--brand-fg)' }} />
+          </div>
+          <div
+            className="text-[11px] font-mono tabular-nums px-3 py-1.5 rounded"
+            style={{
+              background: 'var(--bg-surface-muted)',
+              color: 'var(--fg-default)',
+              border: '1px solid var(--border-muted)',
+            }}
+          >
+            sent · {formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })}
+          </div>
+        </div>
+      </AuthShell>
+    );
+  }
+
+  return (
+    <>
+      <AuthShell
+        title="Create your account"
+        subtitle="Start with a free workspace. You can invite teammates next."
+        topRight={
+          <span>Already have an account?{' '}
+            <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Sign in</Link>
+          </span>
+        }
+        footer={
+          <span>Free for individuals · Team plan starts at $20/seat/mo</span>
+        }
+      >
+        <form className="flex flex-col gap-4" onSubmit={submit}>
+          <Field
+            label="Full name"
+            type="text"
+            autoComplete="name"
+            value={name}
+            onChange={(e) => { setName(e.target.value); }}
+            placeholder="Sora Kim"
+            required
+          />
+          <Field
+            label="Work email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => { setEmail(e.target.value); }}
+            onBlur={() => { setTouchedEmail(true); }}
+            placeholder="you@company.com"
+            error={emailError}
+            required
+          />
+
+          {/* Soft suggestion when domain is known but SSO not enforced. */}
+          {idp && !idp.enforced && (
+            <div
+              className="text-[11px] flex items-start gap-2 -mt-2 px-2.5 py-1.5 rounded onb-stagger"
+              style={{
+                background: 'var(--bg-surface-muted)',
+                color: 'var(--fg-muted)',
+                border: '1px solid var(--border-muted)',
+              }}
+            >
+              <Building2 className="w-3 h-3 mt-0.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
+              <span>
+                {idp.org} also uses {PROVIDER_LABEL[idp.provider]} —{' '}
+                <Link to={'/auth/sso' as never} style={{ color: 'var(--fg-link)' }}>
+                  use SSO instead?
+                </Link>
+              </span>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2.5">
+            <Field
+              label="Password"
+              type={showPw ? 'text' : 'password'}
+              autoComplete="new-password"
+              value={pw}
+              onChange={(e) => { setPw(e.target.value); }}
+              placeholder="At least 12 characters"
+              required
+              trailing={
+                <button
+                  type="button"
+                  onClick={() => { setShowPw((v) => !v); }}
+                  className="p-1 rounded-md"
+                  style={{ color: 'var(--fg-muted)' }}
+                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                >
+                  {showPw ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                </button>
+              }
+            />
+            {pw.length > 0 && <PasswordStrengthPanel report={report} />}
+          </div>
+
+          <TermsCheck checked={agreed} onChange={setAgreed} />
+
+          <Button type="submit" disabled={!canSubmit || step === 'submitting'}>
+            {step === 'submitting' ? 'Creating account…' : 'Create account'}
+          </Button>
+        </form>
+
+        <HRule />
+
+        <div className="flex flex-col gap-2">
+          <Button variant="secondary" leading={<GithubIcon className="w-3.5 h-3.5" />} onClick={() => { setOauth('github'); }}>
+            Continue with GitHub
+          </Button>
+          <Button variant="secondary" leading={<GitLabMark />} onClick={() => { setOauth('gitlab'); }}>
+            Continue with GitLab
+          </Button>
+          <Button variant="secondary" leading={<Mail className="w-3.5 h-3.5" />} onClick={() => { setOauth('google'); }}>
+            Continue with Google
+          </Button>
+        </div>
+      </AuthShell>
+
+      {oauth && (
+        <OAuthRedirectOverlay
+          provider={oauth}
+          onCancel={() => { setOauth(null); }}
+          onComplete={() => { setOauth(null); setStep('sent'); }}
+        />
+      )}
+    </>
+  );
+}
+
+function GitLabMark() {
+  return (
+    <span
+      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-[7px] font-black"
+      style={{ background: 'var(--fg-default)', color: 'var(--bg-canvas)' }}
+    >
+      GL
+    </span>
+  );
+}
+
+function TermsCheck({
+  checked, onChange,
+}: { checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <label className="flex items-start gap-2 cursor-pointer">
+      <span
+        className="relative w-4 h-4 rounded shrink-0 mt-0.5 transition-colors"
+        style={{
+          background: checked ? 'var(--brand-vivid)' : 'transparent',
+          border: `1.5px solid ${checked ? 'var(--brand-vivid)' : 'var(--border-strong)'}`,
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => { onChange(e.target.checked); }}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
+        {checked && (
+          <svg className="w-full h-full p-0.5" viewBox="0 0 12 12" fill="none">
+            <path
+              d="M2.5 6 L5 8.5 L9.5 4"
+              stroke="var(--bg-canvas)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="12"
+              style={{ animation: 'onb-checkmark 280ms ease-out both' }}
+            />
+          </svg>
+        )}
+      </span>
+      <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+        I agree to the{' '}
+        <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Terms of Service</button>
+        {' '}and{' '}
+        <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Privacy Policy</button>.
+        {' '}I understand this app indexes my code and my AI usage may be billed.
+      </span>
+    </label>
+  );
+}

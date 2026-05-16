@@ -1,4 +1,4 @@
-import { useFilterFacets, useFilterActions } from '../model/FilterContext';
+import { useFilterFacets, useFilterActions } from '@entities/filter-state';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import type { SortKey } from '@entities/repo';

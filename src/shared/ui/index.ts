@@ -20,6 +20,10 @@ export { Switch } from './Switch';
 export { SegmentedControl } from './SegmentedControl';
 export { Pill } from './Pill';
 export { ResizeHandle } from './ResizeHandle';
+export { SideNavShell, type SideNavItem, type SideNavGroup } from './SideNavShell';
+export { Drawer } from './Drawer';
+export { TabBar } from './TabBar';
+export { PanelFooter } from './PanelFooter';
 
 // ── Data display ──
 export { Score } from './Score';

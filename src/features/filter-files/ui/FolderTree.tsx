@@ -3,7 +3,7 @@ import { ChevronRight, Folder, FolderOpen, FileCode } from 'lucide-react';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import type { FileRecord, FolderRecord } from '@entities/repo';
-import { useFilterStore } from '../model/FilterContext';
+import { useFilterStore } from '@entities/filter-state';
 
 type Tree = { folder: FolderRecord; children: Tree[] };
 

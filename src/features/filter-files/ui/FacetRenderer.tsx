@@ -1,5 +1,5 @@
 import { Lock } from 'lucide-react';
-import { useFilter, useFilterStore } from '../model/FilterContext';
+import { useFilter, useFilterStore } from '@entities/filter-state';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { usePrefs } from '@features/tweak-prefs';

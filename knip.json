@@ -9,11 +9,22 @@
   "entry": [
     "src/main.tsx",
     "src/app/App.tsx",
+    "src/app/router/router.tsx",
+    "src/app/router/workspaceTabsRegistry.tsx",
+    "src/app/providers/AppProviders.tsx",
     "vite.config.ts",
-    "eslint.config.js"
+    "vitest.config.ts",
+    "eslint.config.js",
+    "tailwind.config.js"
   ],
   "project": [
     "src/**/*.{ts,tsx}"
   ],
-  "ignoreDependencies": []
+  "ignoreDependencies": [
+    "@tauri-apps/plugin-shell"
+  ],
+  "ignoreBinaries": [
+    "python3",
+    "semgrep"
+  ]
 }

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { ChevronDown, Flame, ShieldAlert, Skull, FileWarning, FolderGit2, X } from 'lucide-react';
-import { useFilterFacets, useFilterActions } from '../model/FilterContext';
+import { useFilterFacets, useFilterActions } from '@entities/filter-state';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { useClickOutside } from '@shared/lib';

@@ -30,3 +30,12 @@ export {
   findStack,
   findApprovalPath,
 } from './mock';
+
+export {
+  applyFreshnessDecay,
+  identifyInactiveOwners,
+  aggregateLayeredScores,
+  scoreOwnershipZone,
+  type FreshnessDecayOptions,
+  type ZoneScoringResult,
+} from './lib/scoring';

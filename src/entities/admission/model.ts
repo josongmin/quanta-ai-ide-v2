@@ -17,7 +17,7 @@ export type CostClass = 'instant' | 'fast' | 'medium' | 'slow' | 'background';
 // Honesty layer carry-over (Spec §4, §11). When a rule's signal can only be
 // computed via overapproximation we want that visible at preview time, not
 // hidden behind a green checkmark.
-type EvidenceLevel = 'exact' | 'overapprox' | 'unknown';
+export type EvidenceLevel = 'exact' | 'overapprox' | 'unknown';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Signals — the "what does this rule look at" union.
@@ -46,7 +46,7 @@ export type MetricField =
 
 export type CompareOp = '>' | '>=' | '<' | '<=' | '=' | '!=';
 
-type MetricSignal = {
+export type MetricSignal = {
   kind: 'metric';
   field: MetricField;
   op: CompareOp;
@@ -68,7 +68,7 @@ export type GraphPattern =
   | 'unknown-region-creep'     // PR adds files w/ confidence != exact
   | 'layer-violation';         // file has layerViolation flag
 
-type GraphSignal = {
+export type GraphSignal = {
   kind: 'graph';
   pattern: GraphPattern;
   /** Optional numeric parameter (e.g. spike threshold). */
@@ -84,7 +84,7 @@ type GraphSignal = {
 export type TaintSource = 'env' | 'http' | 'user-input' | 'config' | 'secret';
 export type TaintSink = 'fs.write' | 'exec' | 'sql' | 'network' | 'log';
 
-type TaintSignal = {
+export type TaintSignal = {
   kind: 'taint';
   source: TaintSource;
   sink: TaintSink;
@@ -96,7 +96,7 @@ type TaintSignal = {
  * Free-form DSL. Reuses the existing facet DSL so authors can write
  * `safety:<40 +publicApi` and have it act as a rule. Compiled lazily.
  */
-type DslSignal = {
+export type DslSignal = {
   kind: 'dsl';
   expr: string;
 };
@@ -107,7 +107,7 @@ type DslSignal = {
  * `tool` + `ruleId` is the join key against the synthetic `findings` field
  * on the file record (see `entities/admission/sample.ts`).
  */
-type ExternalSignal = {
+export type ExternalSignal = {
   kind: 'external';
   tool: 'eslint' | 'semgrep' | 'codeql' | 'bandit' | 'ruff';
   ruleId: string;
@@ -126,7 +126,14 @@ export type RuleSignal =
 // avoid full glob to keep the live preview O(N) and predictable.
 // ─────────────────────────────────────────────────────────────────────────
 
-type RuleScope = {
+/**
+ * Where the rule lives in the policy hierarchy.
+ *  - 'workspace' = applies to every repo (org-wide policy)
+ *  - 'repo'      = applies only to the current repo
+ */
+export type RuleAppliesTo = 'workspace' | 'repo';
+
+export type RuleScope = {
   /** Path substrings; a file matches if any substring is in `folderPath` or `name`. */
   pathIncludes: string[];
   /** Path substrings to exclude. Takes precedence over `pathIncludes`. */
@@ -135,7 +142,7 @@ type RuleScope = {
   labels: string[];
 };
 
-type RuleOverride = {
+export type RuleOverride = {
   /** PR author can self-override (sets the violation to `info`). */
   allowAuthor: boolean;
   /** If set, override requires an approver with this role. */
@@ -155,6 +162,8 @@ export type AdmissionRule = {
   enabled: boolean;
   signal: RuleSignal;
   scope: RuleScope;
+  /** Policy tier — workspace-wide vs repo-local. */
+  appliesTo?: RuleAppliesTo;
   override: RuleOverride;
   /** Author-declared evidence level. Preview can downgrade this if the
       actual matched files disagree (e.g. all matches are overapprox). */

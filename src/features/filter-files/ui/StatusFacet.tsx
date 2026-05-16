@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useFilterStore } from '../model/FilterContext';
+import { useFilterStore } from '@entities/filter-state';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { STATUS_CSS, type StatusKey } from '@entities/repo';
