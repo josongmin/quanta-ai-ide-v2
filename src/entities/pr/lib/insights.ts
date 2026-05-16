@@ -11,7 +11,7 @@
 
 import type { FileRecord, RepoData } from '@entities/repo';
 import type {
-  CheckRun, ConversationItem, FileDiff, LineThread, PullRequest,
+  FileDiff, PullRequest,
 } from '../model';
 import { findPerson } from './people';
 
@@ -275,7 +275,7 @@ export function summariseConversation(pr: PullRequest): UnresolvedThreadDigest[]
 
 export type EngineSeverity = 'blocker' | 'high' | 'medium' | 'low';
 
-export type EngineCategory =
+type EngineCategory =
   | 'STRUCT-INTEGRITY'
   | 'TESTS'
   | 'OBSERV'
@@ -637,5 +637,3 @@ export function displayName(login: string): string {
   return findPerson(login).display;
 }
 
-// Small helpers re-exported so widget code can stay generic.
-export type { CheckRun, ConversationItem, FileDiff, LineThread };

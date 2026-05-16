@@ -114,11 +114,11 @@ export default function OwnerMatrix({
                 </span>
                 {g.reviewerRequested ? (
                   <span title="A reviewer matching this owner is requested">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-500/80 shrink-0" />
+                    <CheckCircle2 className="w-3 h-3 shrink-0" style={{ color: 'color-mix(in srgb, var(--intent-success-vivid) 80%, transparent)' }} />
                   </span>
                 ) : g.owner !== 'unowned' && (
                   <span title="No reviewer for this owner team has been requested">
-                    <AlertCircle className="w-3 h-3 text-amber-500/80 shrink-0" />
+                    <AlertCircle className="w-3 h-3 shrink-0" style={{ color: 'color-mix(in srgb, var(--intent-warn-vivid) 80%, transparent)' }} />
                   </span>
                 )}
                 <span className="text-[10px] font-mono text-white/35 ml-auto tabular-nums">

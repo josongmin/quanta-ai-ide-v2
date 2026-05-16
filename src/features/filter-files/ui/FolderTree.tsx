@@ -67,7 +67,16 @@ function Row({
         />
       )}
       <div
+        role="button"
+        tabIndex={0}
         onClick={() => { toggleFolder(path); onOpenFolder?.(path); }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleFolder(path);
+            onOpenFolder?.(path);
+          }
+        }}
         className={`group flex items-center gap-2 py-1.5 px-2 rounded-lg cursor-pointer transition-all duration-200 ${
           isSelected
             ? (isDark ? 'bg-[#4f9a5c]/15 text-white' : 'bg-[#4f9a5c]/20 text-black')

@@ -4,7 +4,7 @@
 
 import type { FileRecord, RepoData } from '@entities/repo';
 import type {
-  CheckRun, ConversationItem, FileDiff, LineThread, PullRequest,
+  CheckRun, FileDiff, LineThread, PullRequest,
 } from '../model';
 
 let _idSeq = 1000;
@@ -152,4 +152,3 @@ export function makeThread(over: Partial<LineThread>): LineThread {
   };
 }
 
-export type { ConversationItem };

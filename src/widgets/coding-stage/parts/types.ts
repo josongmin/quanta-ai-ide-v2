@@ -18,6 +18,9 @@ export type CodingDiffHunk = {
   // comment that hasn't been resolved yet. 2026 expectation: agents land
   // bigger diffs and reviewers want to greenlight pieces independently.
   decision?: 'accepted' | 'rejected';
+  // Optional 1-based line number of the hunk's first line in the *new*
+  // file. Used by the finding constructor to anchor a hotspot location.
+  startLine?: number;
 };
 
 // Inline comment on a hunk. `kind` distinguishes a question that should
@@ -350,4 +353,100 @@ export type Integration = {
   label: string;
   // True when the most recent ping/sync succeeded. Drives the dot tone.
   connected: boolean;
+};
+
+// ─── Agent customization profile ─────────────────────────────────────────
+// Trust dial: 1 = lowest autonomy (read-only/propose) → 5 = full autonomy.
+// Drives the "what can the agent do without asking" mental model.
+export type TrustLevel = 1 | 2 | 3 | 4 | 5;
+
+// Mode icon glyph keys — resolved to lucide components in `agent-profile/types`.
+export type AgentModeIcon =
+  | 'wand' | 'shield' | 'scale' | 'flask' | 'compass' | 'hammer' | 'feather';
+
+// Brand accent for mode chip / cards.
+export type AgentModeAccent = 'emerald' | 'sky' | 'violet' | 'amber' | 'rose' | 'cyan';
+
+// Tool allow-list — matches the ToolBlock `tool` literal.
+export type AgentTool = 'read' | 'edit' | 'run' | 'search' | 'plan' | 'web';
+
+export type AgentMode = {
+  id: string;
+  name: string;
+  blurb: string;
+  icon: AgentModeIcon;
+  accent: AgentModeAccent;
+  systemPrompt: string;
+  allowedTools: AgentTool[];
+  preferredModel?: string;
+  trust: TrustLevel;
+  // True when the mode is one of the built-in defaults — keeps the UI
+  // from offering "delete" on Builder/Reviewer/Sandbox.
+  system?: boolean;
+};
+
+export type AgentRule = {
+  id: string;
+  name: string;
+  body: string;
+  // glob patterns the rule applies to. `['**/*']` = repo-wide.
+  globs: string[];
+  // `always`     → injected on every turn that matches `globs`
+  // `requested`  → only when the user explicitly invokes it
+  // `manual`     → never auto-applied; reference only
+  scope: 'always' | 'requested' | 'manual';
+  enabled: boolean;
+  // Where the rule came from. Drives the badge in the rules list.
+  source: 'authored' | 'pain-point' | 'diff-pattern' | 'marketplace';
+  // Back-ref when source = 'pain-point': the agent turn id that
+  // generated the rule.
+  fromTurnId?: string;
+  updatedAtMs: number;
+};
+
+export type AgentWorkflow = {
+  id: string;
+  // URL-safe slug used to invoke as `/<slug>` in the composer.
+  slug: string;
+  name: string;
+  blurb: string;
+  steps: string[];
+  // Optional: prefer running this workflow under a specific mode.
+  pairedModeId?: string;
+};
+
+export type MarketplaceProfile = {
+  id: string;
+  name: string;
+  author: string;
+  // Coarse category for filtering.
+  domain: 'frontend' | 'backend' | 'ml' | 'devops' | 'mobile';
+  blurb: string;
+  installs: number;
+  rating: number;
+  // Counts shown before import — actual items are synthesised on import.
+  preview: { rules: number; modes: number; workflows: number };
+};
+
+export type AgentProfile = {
+  rules: AgentRule[];
+  modes: AgentMode[];
+  workflows: AgentWorkflow[];
+  // Which mode is currently active for this profile.
+  activeModeId: string;
+  // When set, the profile was imported from this marketplace listing.
+  importedFromId?: string;
+};
+
+// ─── Pins ────────────────────────────────────────────────────────────────
+// Sticky context anchors surfaced under the thread header. The user
+// pins a file, symbol, or earlier turn so the agent keeps it in context
+// across follow-ups without re-typing.
+export type Pin = {
+  kind: 'file' | 'symbol' | 'turn';
+  // Display label for the pill.
+  label: string;
+  // Stable reference. For files = path, symbols = `path:symbol`,
+  // turns = `turn:<index>`.
+  ref: string;
 };

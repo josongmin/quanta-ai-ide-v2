@@ -162,12 +162,12 @@ function ThemeTokenMatrix({
         <ColumnHeader title="Light" />
 
         {keys.map((key) => (
-          <Fragment key={String(key)}>
+          <Fragment key={key}>
             <div
               className="text-[10px] font-mono pt-2"
               style={{ color: 'var(--fg-muted)' }}
             >
-              {humanizeKey(String(key))}
+              {humanizeKey(key)}
             </div>
             <TokenField value={dark[key]} onChange={(value) => { onDarkChange(key, value); }} />
             <TokenField value={light[key]} onChange={(value) => { onLightChange(key, value); }} />
@@ -221,12 +221,13 @@ function GlobalTokenGroup<S extends keyof GlobalTokenSections>({
       </div>
 
       {entries.map(([key, value]) => (
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion -- keyof GlobalTokenSections[S] can include `symbol`; String() guards the interpolation
         <div key={`${String(section)}-${String(key)}`} className="space-y-1.5">
           <div className="text-[10px] font-mono" style={{ color: 'var(--fg-muted)' }}>
             {humanizeKey(String(key))}
           </div>
           <TokenField
-            value={value}
+            value={value as string | number}
             onChange={(next) => {
               onChange(key, (typeof value === 'number' ? Number(next) : next) as GlobalTokenSections[S][typeof key]);
             }}

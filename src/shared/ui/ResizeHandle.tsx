@@ -122,6 +122,9 @@ export function ResizeHandle({
   const dotColor = isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.45)';
 
   return (
+    // Resize-handle WAI-ARIA pattern uses role="separator" with interactive
+    // pointer/key handlers — canonical pattern, but lint rule flags it.
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
       role="separator"
       aria-orientation="vertical"

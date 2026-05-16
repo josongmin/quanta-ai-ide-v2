@@ -3,7 +3,7 @@ import type { Person } from '../model';
 // Cast of fictional contributors. Hue is the avatar bg; initials are the
 // glyph. Keep small — one switch statement saves a lookup table.
 
-export const PEOPLE: Person[] = [
+const PEOPLE: Person[] = [
   { login: 'songmin',   display: 'Song Min',     initials: 'SM', hue: 145 },
   { login: 'haeun',     display: 'Ha Eun',       initials: 'HE', hue: 215 },
   { login: 'jiho',      display: 'Ji Ho',        initials: 'JH', hue: 30  },

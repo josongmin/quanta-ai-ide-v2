@@ -49,7 +49,7 @@ export function Notebook({
 }: Props) {
   const [text, setText] = useState('');
   const [pickedQt, setPickedQt] = useState<QuestionType>(currentQuestionType);
-  const disabled = !entry || !entry.target;
+  const disabled = !entry?.target;
 
   const answeredQuestions = useMemo(
     () => entry.questions
@@ -102,7 +102,7 @@ export function Notebook({
             <input
               type="text"
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => { setText(e.target.value); }}
               placeholder={
                 disabled
                   ? 'Pick a target to start asking…'
@@ -143,7 +143,7 @@ export function Notebook({
                 <button
                   key={opt.value}
                   type="button"
-                  onClick={() => setPickedQt(opt.value)}
+                  onClick={() => { setPickedQt(opt.value); }}
                   style={pillStyle}
                   className="px-1.5 py-0.5 rounded font-mono uppercase tracking-wider"
                 >

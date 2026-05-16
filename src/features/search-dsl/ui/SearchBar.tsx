@@ -96,9 +96,12 @@ export default function SearchBar({
                   aria-hidden
                   className="pointer-events-none absolute inset-0 flex items-center px-1 py-1.5 font-mono text-[12px] whitespace-pre overflow-hidden"
                 >
-                  {tokens.map((t) => (
-                    <span key={`${String(t.pos)}-${t.kind}`} className={tokenClass(t.kind, isDark)}>{t.text}</span>
-                  ))}
+                  {tokens.map((t) => {
+                    const ts = tokenStyle(t.kind, isDark);
+                    return (
+                      <span key={`${String(t.pos)}-${t.kind}`} style={ts.style} className={ts.className}>{t.text}</span>
+                    );
+                  })}
                 </div>
               )}
               <input
@@ -110,9 +113,10 @@ export default function SearchBar({
                 placeholder={placeholder}
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); }}
+                style={hasError ? { color: 'var(--intent-danger-fg)' } : undefined}
                 className={`relative w-full bg-transparent text-[12px] font-medium px-1 py-1.5 focus:outline-none ${
                   hasError
-                    ? 'text-red-400'
+                    ? ''
                     : isDark ? 'text-white placeholder:text-white/30' : 'text-black placeholder:text-black/30'
                 } ${searchMode !== 'text' ? 'font-mono' : ''} ${
                   showOverlay ? `text-transparent ${isDark ? 'caret-white' : 'caret-black'}` : ''
@@ -152,11 +156,14 @@ export default function SearchBar({
             <button type="button"
               onClick={() => { setAdvOpen((v) => !v); }}
               title={t('action.advanced')}
+              style={!advOpen && searchMode !== 'text'
+                ? { background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)', color: 'var(--intent-success-fg)' }
+                : undefined}
               className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 ml-0.5 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
                 advOpen
                   ? (isDark ? 'bg-white text-black' : 'bg-black text-white')
                   : searchMode !== 'text'
-                    ? (isDark ? 'bg-[#4f9a5c]/15 text-[#4f9a5c]' : 'bg-[#4f9a5c]/15 text-emerald-700')
+                    ? ''
                     : (isDark ? 'text-white/55 hover:bg-white/10 hover:text-white' : 'text-black/55 hover:bg-black/10 hover:text-black')
               }`}
             >
@@ -169,9 +176,10 @@ export default function SearchBar({
 
         {/* Inline error */}
         {hasError && (
-          <div className={`mx-3 mb-2 px-3 py-1.5 text-[10px] font-mono rounded-md ${
-            isDark ? 'bg-red-500/10 text-red-300' : 'bg-red-500/10 text-red-700'
-          }`}>
+          <div
+            style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)' }}
+            className="mx-3 mb-2 px-3 py-1.5 text-[10px] font-mono rounded-md"
+          >
             ✕ {searchError}
           </div>
         )}
@@ -201,9 +209,10 @@ function PatternToggle({
             key={id}
             onClick={() => { setMode(id); }}
             title={t(`mode.${id}.title`)}
+            style={active ? { color: 'var(--intent-success-fg)' } : undefined}
             className={`px-2.5 font-mono text-[11px] font-black transition-colors ${
               active
-                ? (dark ? 'bg-white/10 text-[#4f9a5c]' : 'bg-black/5 text-emerald-700')
+                ? (dark ? 'bg-white/10' : 'bg-black/5')
                 : (dark ? 'text-white/40 hover:text-white hover:bg-white/5' : 'text-black/40 hover:text-black hover:bg-black/5')
             }`}
           >
@@ -273,17 +282,17 @@ function tokenize(src: string, mode: SearchMode): Token[] {
   return out;
 }
 
-function tokenClass(kind: TokenKind, dark: boolean): string {
+function tokenStyle(kind: TokenKind, dark: boolean): { style?: React.CSSProperties; className?: string } {
   // Tonally consistent with the rest of the UI:
   // accent green for "live" tokens (numeric facets), white/black alpha shades for everything else.
   switch (kind) {
-    case 'numeric': return dark ? 'text-[#4f9a5c]' : 'text-emerald-700';
-    case 'string':  return dark ? 'text-white' : 'text-black';
-    case 'flag':    return dark ? 'text-[#4f9a5c]' : 'text-emerald-700';
-    case 'quote':   return dark ? 'text-white/85' : 'text-black/85';
-    case 'op':      return dark ? 'text-white/40' : 'text-black/40';
+    case 'numeric': return { style: { color: 'var(--intent-success-fg)' } };
+    case 'string':  return { className: dark ? 'text-white' : 'text-black' };
+    case 'flag':    return { style: { color: 'var(--intent-success-fg)' } };
+    case 'quote':   return { className: dark ? 'text-white/85' : 'text-black/85' };
+    case 'op':      return { className: dark ? 'text-white/40' : 'text-black/40' };
     case 'plain':
-    default:        return dark ? 'text-white' : 'text-black';
+    default:        return { className: dark ? 'text-white' : 'text-black' };
   }
 }
 

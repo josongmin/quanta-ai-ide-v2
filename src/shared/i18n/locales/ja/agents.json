@@ -1,0 +1,182 @@
+{
+  "header": {
+    "title": "エージェント艦隊",
+    "subtitle": "あなたが寝ている間にPRを作るバックグラウンド・ルーチン",
+    "newRoutine": "新しいルーチン",
+    "weekRoi": "今週",
+    "roi": {
+      "prsMerged": "PR {{n}}件マージ",
+      "locDeleted": "{{n}}行削除",
+      "hoursSaved": "レビュー{{h}}時間節約",
+      "spent": "${{usd}} 使用"
+    }
+  },
+  "rail": {
+    "title": "ルーチン",
+    "search": "ルーチン検索…",
+    "filter": { "all": "全て", "active": "稼働中", "paused": "一時停止", "draft": "下書き" },
+    "empty": "該当するルーチンはありません。",
+    "nextFire": "次回: {{when}}",
+    "noNextFire": "イベント駆動",
+    "metricSuccess": "成功率 {{pct}}% · 30日",
+    "metricNet": "純LOC {{n}}",
+    "metricSaved": "{{h}}時間節約",
+    "memoryItems": "メモリノート{{n}}件"
+  },
+  "status": { "active": "稼働中", "paused": "一時停止", "draft": "下書き" },
+  "trust": {
+    "level": "信頼 {{n}}/5",
+    "level1": "読み取り専用",
+    "level2": "提案",
+    "level3": "パッチ",
+    "level4": "プッシュ",
+    "level5": "自動マージ",
+    "tooltip": "このルーチンが確認なしに行える最大の操作。"
+  },
+  "trigger": {
+    "cron": "スケジュール · {{label}}",
+    "event": "イベント · {{event}}",
+    "manual": "手動",
+    "evt": {
+      "pr.merged": "PRマージ",
+      "ci.failed": "CI失敗",
+      "dep.released": "上流リリース",
+      "bench.regressed": "ベンチマーク後退"
+    }
+  },
+  "outputKind": { "pr": "PR", "issue": "Issue", "report": "レポート" },
+  "run": {
+    "header": "最近の実行",
+    "empty": "まだ実行はありません。",
+    "live": "ライブ",
+    "elapsed": "{{ms}}ms",
+    "started": "開始 {{when}}",
+    "ended": "終了 {{when}}",
+    "trigger": "トリガー: {{by}}",
+    "trustEffective": "信頼 {{n}}",
+    "openOutput": "成果物を開く",
+    "viewLogs": "ログを見る",
+    "cancel": "実行をキャンセル",
+    "approveGate": "ゲートを承認",
+    "details": "実行詳細",
+    "candidates": "Best-of-N 候補",
+    "candidateWinner": "選択",
+    "candidateAdopt": "この候補を採用",
+    "selfEval": "自己評価 {{pct}}%",
+    "blastRadius": "影響範囲",
+    "br": { "safe": "安全", "review": "要レビュー", "blast-radius": "広範囲" }
+  },
+  "runStatus": {
+    "queued": "待機",
+    "running": "実行中",
+    "awaiting-human": "人待ち",
+    "merged": "マージ済",
+    "closed": "クローズ",
+    "failed": "失敗",
+    "cancelled": "キャンセル"
+  },
+  "stepPhase": {
+    "plan": "計画",
+    "reading": "読込",
+    "searching": "検索",
+    "editing": "編集",
+    "running": "実行",
+    "reviewing": "レビュー",
+    "pr": "PR"
+  },
+  "stepState": {
+    "pending": "待機",
+    "running": "実行中",
+    "ok": "成功",
+    "fail": "失敗",
+    "skipped": "スキップ",
+    "gated": "人ゲート"
+  },
+  "fleet": {
+    "title": "艦隊",
+    "concurrency": "{{running}}実行 · {{queued}}待機",
+    "concurrencyMax": "最大 {{n}} 同時",
+    "spendHour": "${{usd}}/時 · 予測 ${{day}}/日",
+    "attention": "レビュー注意力予算",
+    "attentionSpent": "今週 {{h}}時間 / {{budget}}時間",
+    "alerts": "アラート",
+    "noAlerts": "異常なし。",
+    "conflicts": "ファイル競合",
+    "conflictRow": "{{a}} ↔ {{b}}",
+    "conflictResolve": "直列化",
+    "alertKind": {
+      "loop": "ループ疑い",
+      "cost-spike": "コスト急増",
+      "pr-storm": "PR大量発生",
+      "silent-failure": "サイレント失敗",
+      "guardrail-hit": "ガードレール作動"
+    }
+  },
+  "hitl": {
+    "title": "あなた待ち",
+    "empty": "受信ゼロ — 艦隊は自走中です。",
+    "waiting": "{{when}} 待機",
+    "approveAll": "安全分を一括承認",
+    "checkpoint": {
+      "plan-approval": "計画承認",
+      "pre-push": "プッシュ前レビュー",
+      "risky-tier-only": "高リスクのみ確認"
+    }
+  },
+  "editor": {
+    "open": "ルーチン編集",
+    "title": "{{name}}",
+    "tabDefinition": "定義",
+    "tabGuardrails": "ガードレール",
+    "tabSchedule": "スケジュール",
+    "tabDryRun": "Dry-runプレビュー",
+    "save": "保存",
+    "discard": "破棄",
+    "scope": "スコープ",
+    "trustDial": "信頼ダイヤル",
+    "guardrail": {
+      "maxLoc": "PRあたり最大LOC",
+      "forbidden": "禁止パス",
+      "confidenceFloor": "信頼度下限",
+      "requireGreenCi": "CIグリーン必須",
+      "checkpoints": "HITLチェックポイント",
+      "noCheckpoints": "人チェックポイントなし"
+    },
+    "budget": {
+      "title": "予算",
+      "daily": "日 ${{n}}",
+      "weekly": "週 ${{n}}",
+      "perRun": "実行毎 ${{n}}"
+    },
+    "dryRun": {
+      "title": "昨日のリポジトリ状態でこのルーチンが走っていたら…",
+      "summary": "PR {{prs}}件作成 · {{lines}} LOC影響 · 約 ${{usd}} 使用",
+      "candidatesHeader": "主な候補",
+      "noCandidates": "発火する候補はありません。"
+    }
+  },
+  "metrics": {
+    "successRate": "成功率",
+    "merged": "マージ",
+    "rejected": "却下",
+    "issues": "Issue",
+    "spent": "使用",
+    "netLoc": "純LOC",
+    "reviewerTouches": "レビュー修正",
+    "memory": "メモリ",
+    "thirtyDay": "直近30日"
+  },
+  "footer": "se-dot-field-demo · agents",
+  "actions": {
+    "pause": "一時停止",
+    "resume": "再開",
+    "runNow": "今すぐ実行",
+    "duplicate": "複製",
+    "delete": "削除",
+    "edit": "編集"
+  },
+  "empty": {
+    "title": "ルーチンが選択されていません",
+    "subtitle": "左から選ぶか、新しいルーチンを定義してバックグラウンド作業を開始しましょう。"
+  }
+}

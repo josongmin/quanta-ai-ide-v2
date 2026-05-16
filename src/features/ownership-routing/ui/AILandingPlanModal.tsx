@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import { Modal, GlassCard, EmptyHint } from '@shared/ui';
 import {
   findPerson,
@@ -17,7 +17,7 @@ import {
 // presentational; reads from the already-computed mock stack and stages a
 // timeline so it *feels* like the model is composing the plan in real time.
 
-export interface AILandingPlanModalProps {
+export type AILandingPlanModalProps = {
   open: boolean;
   onClose: () => void;
   zone: OwnershipZone | undefined;
@@ -386,12 +386,17 @@ export function AILandingPlanModal({
   }, [people]);
 
   // Start / reset cadence whenever the modal is opened with a stack present.
+  // The setRevealed calls drive the stage-reveal animation; they must run
+  // from an effect because they are paired with imperative window.setTimeout
+  // scheduling and timer cleanup. Deriving `revealed` from props would skip
+  // the animated cadence entirely.
   useEffect(() => {
     // Always clear pending timers on (re)entry.
     for (const t of timersRef.current) window.clearTimeout(t);
     timersRef.current = [];
 
     if (!open || !stack) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setRevealed(0);
       return;
     }
@@ -407,7 +412,7 @@ export function AILandingPlanModal({
     }
 
     setRevealed(0);
-    const schedule: Array<{ at: number; to: number }> = [];
+    const schedule: { at: number; to: number }[] = [];
     let cursor = 0;
     // Stage 1: rationale
     cursor += 250;
@@ -425,7 +430,7 @@ export function AILandingPlanModal({
     schedule.push({ at: cursor, to: 3 + stack.steps.length });
 
     for (const ev of schedule) {
-      const id = window.setTimeout(() => setRevealed(ev.to), ev.at);
+      const id = window.setTimeout(() => { setRevealed(ev.to); }, ev.at);
       timersRef.current.push(id);
     }
 
@@ -629,7 +634,7 @@ export function AILandingPlanModal({
               <FooterButton
                 label="Open as draft PRs"
                 onClick={() => {
-                  console.log('[AILandingPlanModal] open-as-draft-prs', {
+                  console.warn('[AILandingPlanModal] open-as-draft-prs', {
                     zoneId: zone.id,
                     stackId: stack.id,
                   });
@@ -638,7 +643,7 @@ export function AILandingPlanModal({
               <FooterButton
                 label="Copy as checklist"
                 onClick={() => {
-                  console.log('[AILandingPlanModal] copy-as-checklist', {
+                  console.warn('[AILandingPlanModal] copy-as-checklist', {
                     zoneId: zone.id,
                     stackId: stack.id,
                   });

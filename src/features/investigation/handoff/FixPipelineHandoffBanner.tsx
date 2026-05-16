@@ -9,9 +9,14 @@ export function FixPipelineHandoffBanner() {
   useEffect(() => {
     const p = consumePendingHandoff();
     if (!p) return;
+    // `consumePendingHandoff` has side effects (one-shot read of module
+    // state), so it must run in an effect — we then mirror the payload
+    // into local state so the banner has something to render and auto-
+    // dismiss. Synchronous setState here is unavoidable.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPayload(p);
-    const t = window.setTimeout(() => setPayload(null), 8000);
-    return () => window.clearTimeout(t);
+    const t = window.setTimeout(() => { setPayload(null); }, 8000);
+    return () => { window.clearTimeout(t); };
   }, []);
 
   if (!payload) return null;
@@ -38,7 +43,7 @@ export function FixPipelineHandoffBanner() {
           </div>
           <button
             type="button"
-            onClick={() => setPayload(null)}
+            onClick={() => { setPayload(null); }}
             aria-label="Dismiss handoff banner"
             className="rounded p-0.5 transition-colors hover:[background:var(--bg-hover)]"
             style={{ color: 'var(--fg-subtle)', cursor: 'pointer' }}

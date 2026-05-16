@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, ArrowRight, Hash, Slash, Sparkles } from 'lucide-react';
-import type { Task } from './types';
+import type { Task } from '../types';
 
 // Cmd-K global command palette. Three sections:
 //   - Actions     (parent-supplied callbacks: new task, switch model, …)
@@ -133,14 +133,20 @@ export function CommandPalette({
   const faint = isDark ? 'text-white/35' : 'text-black/40';
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4">
       {/* Backdrop — click anywhere outside to close. */}
-      <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-black/20'} backdrop-blur-sm`} />
+      <button
+        type="button"
+        aria-label="Close command palette"
+        className={`absolute inset-0 cursor-default ${isDark ? 'bg-black/40' : 'bg-black/20'} backdrop-blur-sm`}
+        onClick={onClose}
+        onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
+      />
 
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
         className={`relative w-full max-w-[600px] rounded-xl border shadow-2xl overflow-hidden ${
           isDark ? 'bg-[#11141a]/95 border-white/[0.10]' : 'bg-white/95 border-black/[0.10]'
         }`}
@@ -148,7 +154,6 @@ export function CommandPalette({
           backdropFilter: 'blur(22px) saturate(160%)',
           WebkitBackdropFilter: 'blur(22px) saturate(160%)',
         }}
-        onClick={(e) => { e.stopPropagation(); }}
       >
         <div className={`flex items-center gap-2 px-3 py-2.5 border-b ${
           isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'

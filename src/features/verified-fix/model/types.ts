@@ -18,7 +18,7 @@ export type ObligationCategory = 'static' | 'dynamic' | 'stylistic';
 
 export type ObligationStatus = 'pass' | 'fail' | 'partial' | 'unknown' | 'pending';
 
-export interface ProofObligation {
+export type ProofObligation = {
   id: string;
   label: string;
   category: ObligationCategory;
@@ -26,13 +26,13 @@ export interface ProofObligation {
   detail: string;
 }
 
-export interface EvidenceRef {
+export type EvidenceRef = {
   kind: 'taint-path' | 'sarif' | 'trace' | 'symbol' | 'test';
   label: string;
   path?: string;
 }
 
-export interface Seed {
+export type Seed = {
   id: string;
   kind: SeedKind;
   title: string;
@@ -50,14 +50,14 @@ export interface Seed {
 // reason a careful reviewer might still reject, even though the engine
 // considers the candidate viable. Must render with the same visual
 // weight as the proof obligations.
-export interface CounterEvidence {
+export type CounterEvidence = {
   id: string;
   label: string;
   detail: string;
   severity: 'note' | 'concern' | 'block';
 }
 
-export interface CandidateFix {
+export type CandidateFix = {
   id: string;
   seedId: string;
   title: string;
@@ -80,7 +80,7 @@ export interface CandidateFix {
 
 // Output of the validation step. Mock-only for now; in real wiring this
 // is fed by the engine's static + dynamic validation rails.
-export interface ValidationRun {
+export type ValidationRun = {
   candidateId: string;
   attempt: number;            // 1 = first pass, 2 = post-critique
   startedAt: number;
@@ -93,7 +93,7 @@ export interface ValidationRun {
 
 // Final delivery package. Either we ship this, or the gate routes to
 // human checkpoint. Authoring done in store.buildDraftPackage().
-export interface DraftPRPackage {
+export type DraftPRPackage = {
   candidateId: string;
   title: string;
   summary: string;
@@ -105,14 +105,14 @@ export interface DraftPRPackage {
   gateReason: string;
 }
 
-export interface DiffHunk {
+export type DiffHunk = {
   file: string;
   before: string[];
   after: string[];
   startLine: number;
 }
 
-export interface LoopIteration {
+export type LoopIteration = {
   index: number;
   stage: LoopStage;
   note: string;
@@ -120,7 +120,7 @@ export interface LoopIteration {
   validationSeconds: number;
 }
 
-export interface FixCase {
+export type FixCase = {
   id: string;
   seedId: string;
   rootCause: string;
@@ -144,14 +144,14 @@ export interface FixCase {
 
 // ─── Phase 2 surfaces ───────────────────────────────────────────────────
 
-export interface ReanalysisDelta {
+export type ReanalysisDelta = {
   metric: 'taint paths' | 'blast modules' | 'hotspot score' | 'policy hits' | 'unknown zone';
   before: number;
   after: number;
   unit?: string;
 }
 
-export interface ReviewerCandidate {
+export type ReviewerCandidate = {
   handle: string;
   role: 'codeowner' | 'domain' | 'security' | 'oncall';
   loadPct: number;        // 0..100 — current PR queue load
@@ -161,7 +161,7 @@ export interface ReviewerCandidate {
 
 // ─── Phase 3 surfaces ───────────────────────────────────────────────────
 
-export interface PolicyThreshold {
+export type PolicyThreshold = {
   id: string;
   label: string;
   value: number;
@@ -171,14 +171,14 @@ export interface PolicyThreshold {
   description: string;
 }
 
-export interface RollbackPlan {
+export type RollbackPlan = {
   trigger: string;     // "p99 latency >  +5%", "error rate > baseline + 2σ", etc.
   window: string;      // "first 30 min", "next 24h"
   action: string;      // "auto-revert PR-N + reopen incident"
   owner: string;
 }
 
-export interface DismissedRecord {
+export type DismissedRecord = {
   candidateId: string;
   candidateTitle: string;
   reasonTag: string;

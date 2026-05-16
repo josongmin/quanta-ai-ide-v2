@@ -9,7 +9,7 @@ export { findPerson } from './lib/people';
 export { SAMPLE_PRS } from './lib/sample';
 export {
   computePrRisk, summariseChecks,
-  type PrRiskProfile, type RiskTier, type CiSummary,
+  type RiskTier,
 } from './lib/risk';
 export {
   suggestReviewers,
@@ -24,7 +24,6 @@ export {
   displayName,
   type EngineFinding,
   type EngineSeverity,
-  type EngineSummary,
   type IncidentMatch,
   type CallGraphChange,
 } from './lib/insights';

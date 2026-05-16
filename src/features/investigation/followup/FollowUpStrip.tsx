@@ -30,7 +30,7 @@ export function FollowUpStrip({ followups, onPick }: Props) {
           <button
             key={f.id}
             type="button"
-            onClick={() => onPick(f)}
+            onClick={() => { onPick(f); }}
             style={chipStyle}
             className="border rounded-md px-2 py-1 flex flex-col items-start gap-0.5 text-left"
             title={f.question}

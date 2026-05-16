@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import { GlassCard, SectionHeader, EmptyHint } from '@shared/ui';
 import type {
   MergeStrategy,
@@ -12,7 +12,7 @@ import type {
   StackStepKind,
 } from '@entities/ownership';
 
-export interface StackPlannerProps {
+export type StackPlannerProps = {
   stack: RefactorStack | undefined;
   people: Person[];
   onPlanRefactor?: () => void;
@@ -34,7 +34,7 @@ const KIND_LABEL: Record<StackStepKind, string> = {
   gate: 'GATE',
 };
 
-interface RiskTone {
+type RiskTone = {
   fg: string;
   bg: string;
   label: string;
@@ -654,7 +654,7 @@ function FooterActions({ onPlanRefactor }: { onPlanRefactor?: () => void }) {
       <FooterButton
         label="Export"
         onClick={() => {
-          console.log('[StackPlanner] export clicked');
+          console.warn('[StackPlanner] export clicked');
         }}
       />
     </div>

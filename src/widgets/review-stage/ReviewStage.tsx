@@ -8,12 +8,10 @@ import { VerifiedFixCardActive } from '@features/verified-fix';
 import { useTheme } from '@shared/theme/ThemeContext';
 import {
   callGraphChanges,
-  computePrRisk, coverageDeltas, displayName, engineFindings, engineSummary,
-  summariseChecks, summariseConversation,
+  computePrRisk,
   type CallGraphChange,
-  type CheckRun, type CheckStatus, type ChangeKind, type EngineFinding,
-  type EngineSeverity, type FileDiff,
-  type PullRequest, type ReviewerState, type RiskTier,
+  type EngineSeverity,
+  type PullRequest, type RiskTier,
 } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
 import {
@@ -21,14 +19,11 @@ import {
 } from '@features/review-pr';
 import { useReviewKeyboard } from './lib/keyboard';
 import {
-  getSession, intentMismatch, prSummary, prodCorrelations,
+  getSession, intentMismatch, prSummary,
   saveSession, symbolChanges,
 } from './lib/sota';
-import {
-  formatDuration,
-  timeAgo,
-  trimMid,
-} from './lib/reviewStageFormatting';
+
+
 import SummaryCard from './ui/SummaryCard';
 import SymbolChangesCard from './ui/SymbolChangesCard';
 import CallGraphChangesCard from './ui/CallGraphChangesCard';
@@ -39,7 +34,6 @@ import { InspectionPath } from './ui/ReviewCopilot';
 import HotLineSaliency from './ui/HotLineSaliency';
 import DependencyContext from './ui/DependencyContext';
 import ReviewTimeline from './ui/ReviewTimeline';
-import FatigueMeter from './ui/FatigueMeter';
 import DiffNarrative from './ui/DiffNarrative';
 import ReviewerRotation from './ui/ReviewerRotation';
 import CommandPalette from './ui/CommandPalette';
@@ -63,7 +57,6 @@ import {
   EngineFindingsPanel,
   StatusBar,
 } from './ui/ReviewShellChrome';
-import { SceneHeader, V2Card } from './ui/ReviewSurface';
 
 // Re-exported so the keyboard hook (and any external consumers) keep working.
 // The new layout is sectioned rather than tabbed, but the hook still uses

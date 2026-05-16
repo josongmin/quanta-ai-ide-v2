@@ -1,4 +1,4 @@
-import type { Turn, AgentTurn, AgentBlock } from './types';
+import type { Turn, AgentTurn, AgentBlock } from '../types';
 
 // Per-turn metadata used by the enriched scrubber. The bare scrubber
 // only had {role, id} to work with; this module distils the heavier

@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
-import { TaskRail } from './parts/TaskRail';
+import { TaskRail } from './parts/chrome/TaskRail';
 import { type ComposerModelId } from './parts/Composer';
-import { sliceToHead } from './parts/TimelineScrubber';
-import { CommandPalette, type PaletteAction } from './parts/CommandPalette';
-import { TurnContextMenu } from './parts/TurnContextMenu';
-import { ACCENT_HEX, ThreadPane } from './parts/ThreadPane';
-import { ContextRail } from './parts/ContextRail';
+import { sliceToHead } from './parts/timeline/TimelineScrubber';
+import { CommandPalette, type PaletteAction } from './parts/palette/CommandPalette';
+import { TurnContextMenu } from './parts/turn/TurnContextMenu';
+import { ACCENT_HEX, ThreadPane } from './parts/chrome/ThreadPane';
+import { ContextRail } from './parts/chrome/ContextRail';
 import { SAMPLE_PROJECTS, getSampleTasks } from './parts/data';
 import {
   buildTurnMenuItems,
@@ -17,7 +17,7 @@ import {
   pickKeyword,
 } from './lib/codingStageHelpers';
 import type {
-  AgentBlock, AgentTurn, DiffBlock, Project, Task, Turn, ReactionKind,
+  AgentBlock, AgentTurn, DiffBlock, Project, Task, Turn, UserTurn, ReactionKind,
 } from './parts/types';
 import {
   candidatesFromFinding,
@@ -62,7 +62,7 @@ export default function CodingStage() {
   // every onSubmit fires both `model` and `sideBySideModel` in parallel
   // and the renderer pairs the two outputs in a 2-column grid so the
   // user can pick the winner.
-  const [sideBySideModel, setSideBySideModel] = useState<ComposerModelId | null>(null);
+  const [sideBySideModel] = useState<ComposerModelId | null>(null);
 
   // Lifted model selection. Persists across task switches; per-project
   // default applies on project change unless the user has overridden in
@@ -362,7 +362,7 @@ export default function CodingStage() {
     const firstFile = diff.files[0];
     if (firstFile === undefined) return;
 
-    const isApi = firstFile.path.includes('/api/') || /\.d\.ts$/.test(firstFile.path);
+    const isApi = firstFile.path.includes('/api/') || firstFile.path.endsWith(".d.ts");
     const rule = isApi ? 'public-surface'
       : totalChanged > 80 ? 'edit-safety'
       : 'console-usage';
@@ -600,10 +600,11 @@ export default function CodingStage() {
     }
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('keydown', onKey); };
-     
-    // closes over `active?.projectId` and several setters; including it
-    // would re-bind the global keydown listener on every render. The narrow
-    // dep is intentional — re-bind only when the active project changes.
+    // closes over `active?.projectId` and several setters; including
+    // `startNewTask` would re-bind the global keydown listener on every
+    // render. The narrow dep is intentional — re-bind only when the
+    // active project changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active?.projectId]);
 
   if (!active || !activeProject) return null;
@@ -775,14 +776,19 @@ function BudgetSoftCapModal({
   // Prettify model id for display.
   const modelLabel = (id: ComposerModelId) => id.replace(/^claude-/, '').replace(/-(\d)/, ' $1').replace(/-/g, '.');
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      onClick={onStop}
-    >
-      <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-black/20'} backdrop-blur-sm`} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      <button
+        type="button"
+        aria-label="Close dialog"
+        className={`absolute inset-0 cursor-default ${isDark ? 'bg-black/40' : 'bg-black/20'} backdrop-blur-sm`}
+        onClick={onStop}
+        onKeyDown={(e) => { if (e.key === 'Escape') onStop(); }}
+      />
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Soft cap reached"
         className={`relative w-full max-w-[480px] rounded-xl border shadow-2xl ${surface} coding-pill-rise`}
-        onClick={(e) => { e.stopPropagation(); }}
       >
         <div className="px-5 py-4">
           <div className={`flex items-center gap-2 mb-1`}>
@@ -797,11 +803,12 @@ function BudgetSoftCapModal({
               type="button"
               onClick={onAutoDowngrade}
               autoFocus
-              className={`w-full text-left px-3 py-2.5 rounded-md border transition-colors ${
-                isDark
-                  ? 'border-emerald-400/30 bg-emerald-400/10 hover:bg-emerald-400/15 text-emerald-200'
-                  : 'border-emerald-500/30 bg-emerald-50 hover:bg-emerald-100 text-emerald-700'
-              }`}
+              style={{
+                borderColor: 'color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)',
+                background: 'var(--intent-success-bg)',
+                color: 'var(--intent-success-fg)',
+              }}
+              className="w-full text-left px-3 py-2.5 rounded-md border transition-colors"
             >
               <div className="text-[12px] font-semibold">
                 {t('budgetV2.softCapAutoDown', { model: modelLabel(downgrade), est: estDown })}
@@ -810,11 +817,12 @@ function BudgetSoftCapModal({
             <button
               type="button"
               onClick={onOverride}
-              className={`w-full text-left px-3 py-2.5 rounded-md border transition-colors ${
-                isDark
-                  ? 'border-amber-400/30 bg-amber-400/[0.06] hover:bg-amber-400/[0.10] text-amber-200'
-                  : 'border-amber-500/30 bg-amber-50 hover:bg-amber-100 text-amber-700'
-              }`}
+              style={{
+                borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
+                background: 'var(--intent-warn-bg)',
+                color: 'var(--intent-warn-fg)',
+              }}
+              className="w-full text-left px-3 py-2.5 rounded-md border transition-colors"
             >
               <div className="text-[12px] font-semibold">
                 {t('budgetV2.softCapOverride', { newCap })}

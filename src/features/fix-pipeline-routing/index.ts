@@ -1,1 +1,1 @@
-export { suggestReviewer, loadLabel } from './lib/routing';
+export { suggestReviewer } from './lib/routing';

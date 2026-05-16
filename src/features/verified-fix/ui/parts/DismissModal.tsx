@@ -26,25 +26,35 @@ export function DismissModal({
   const [note, setNote] = useState<string>('');
 
   useEffect(() => {
+    // Reset form fields when the modal opens; safe because `open` is the
+    // sole dependency and the reset is idempotent — equivalent to a
+    // `key={open}` remount but cheaper than rebuilding the dialog tree.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (open) { setReason(REASONS[0]); setNote(''); }
   }, [open]);
 
   if (!open || !candidate) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
-      onClick={onCancel}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <button
+        type="button"
+        aria-label="Close dialog"
+        className="absolute inset-0 cursor-default"
+        style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
+        onClick={onCancel}
+        onKeyDown={(e) => { if (e.key === 'Escape') onCancel(); }}
+      />
       <div
-        className="w-[480px] max-w-[92vw] rounded-lg border overflow-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Dismiss candidate fix"
+        className="relative w-[480px] max-w-[92vw] rounded-lg border overflow-hidden"
         style={{
           background: t.cardBacking,
           borderColor: t.border,
           boxShadow: '0 20px 60px -12px rgba(0,0,0,0.55)',
         }}
-        onClick={(e) => { e.stopPropagation(); }}
       >
         <div
           className="flex items-center gap-2 px-4 py-3 border-b"

@@ -50,7 +50,7 @@ export function computeCouplingClusters(
 }
 
 class UnionFind {
-  private parent = new Map<number, number>();
+  private readonly parent = new Map<number, number>();
 
   find(x: number): number {
     if (!this.parent.has(x)) {
@@ -59,11 +59,11 @@ class UnionFind {
     }
     let root = x;
     while (this.parent.get(root) !== root) {
-      root = this.parent.get(root) as number;
+      root = this.parent.get(root)!;
     }
     let cur = x;
     while (this.parent.get(cur) !== root) {
-      const next = this.parent.get(cur) as number;
+      const next = this.parent.get(cur)!;
       this.parent.set(cur, root);
       cur = next;
     }

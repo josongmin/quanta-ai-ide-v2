@@ -3,7 +3,7 @@ import {
   ArrowLeft, ShieldCheck, ShieldAlert, RotateCcw,
   Sparkles, User, Wrench, Check, AlertTriangle, FileText, ListChecks,
 } from 'lucide-react';
-import type { Turn } from './types';
+import type { Turn } from '../types';
 import {
   approxCost, classifyInverse, turnMeta,
   type InverseRisk, type TurnMeta, type TurnStatus,
@@ -218,15 +218,16 @@ export function TimelineScrubber({
           <button
             type="button"
             onClick={() => { onApplyInverse(headSafe, inverse.risk); }}
-            className={`ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] transition-colors ${
-              inverse.risk === 'safe'
-                ? (isDark
-                    ? 'bg-emerald-500/15 text-emerald-200 hover:bg-emerald-500/25'
-                    : 'bg-emerald-700/10 text-emerald-700 hover:bg-emerald-700/20')
-                : (isDark
-                    ? 'bg-amber-400/15 text-amber-200 hover:bg-amber-400/25'
-                    : 'bg-amber-700/10 text-amber-700 hover:bg-amber-700/20')
-            }`}
+            style={inverse.risk === 'safe'
+              ? {
+                  background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)',
+                  color: 'var(--intent-success-fg)',
+                }
+              : {
+                  background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)',
+                  color: 'var(--intent-warn-fg)',
+                }}
+            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] transition-colors"
             title={t(
               inverse.risk === 'safe'
                 ? 'scrubber.inverse.applyTooltipSafe'

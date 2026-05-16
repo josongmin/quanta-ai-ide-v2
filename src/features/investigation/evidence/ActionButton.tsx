@@ -34,7 +34,7 @@ export function ActionButton({ action, onRun }: Props) {
     <button
       type="button"
       disabled={disabled}
-      onClick={onRun && !disabled ? () => onRun(action) : undefined}
+      onClick={onRun && !disabled ? () => { onRun(action); } : undefined}
       title={disabled ? 'coming soon' : (action.description ?? action.label)}
       style={style}
       className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] font-medium"

@@ -9,13 +9,10 @@
 // ── Layout / surfaces ──
 export { GlassCard, SectionHeader } from './GlassCard';
 export { Section } from './Section';
-export { PanelFooter } from './PanelFooter';
-export { TabBar, type TabSpec } from './TabBar';
 
 // ── Primitives ──
 export { Portal } from './Portal';
 export { Modal } from './Modal';
-export { Drawer } from './Drawer';
 export { Popover } from './Popover';
 export { useDialogA11y } from './useDialogA11y';
 export { IconButton } from './IconButton';

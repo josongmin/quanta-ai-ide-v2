@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import {
   GlassCard,
   SectionHeader,
@@ -16,7 +16,7 @@ import type {
   ReviewerRationale,
 } from '@entities/ownership';
 
-export interface RoutingCardProps {
+export type RoutingCardProps = {
   zone: OwnershipZone;
   people: Person[];
 }
@@ -28,10 +28,10 @@ const LAYER_ORDER: OwnershipLayer[] = [
   'impact',
 ];
 
-const RATIONALE_FIELDS: ReadonlyArray<{
+const RATIONALE_FIELDS: readonly {
   key: keyof ReviewerRationale;
   label: string;
-}> = [
+}[] = [
   { key: 'touchedAreaFamiliarity', label: 'Touched area' },
   { key: 'recentReviewer', label: 'Recent reviewer' },
   { key: 'incidentResolver', label: 'Incident resolver' },
@@ -313,9 +313,9 @@ function OwnerSplit({
   approver: Person | undefined;
 }) {
   const sameTeam =
-    implementer && approver && implementer.team === approver.team;
+    implementer && implementer.team === approver?.team;
   const samePerson =
-    implementer && approver && implementer.id === approver.id;
+    implementer && implementer.id === approver?.id;
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-stretch">
       <GlassCard tone="inner" className="px-3 py-2.5 min-w-0">
@@ -632,7 +632,7 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
   const resolve = (id: PersonId | null | undefined): Person | undefined =>
     id ? personIndex.get(id) : undefined;
 
-  if (!zone || !zone.id || !zone.label) {
+  if (!zone?.id || !zone.label) {
     return (
       <GlassCard className="px-3.5 py-3">
         <SectionHeader title="Smart Routing" />
@@ -695,7 +695,7 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
       <div>
         <button
           type="button"
-          onClick={() => setSignalsOpen((s) => !s)}
+          onClick={() => { setSignalsOpen((s) => !s); }}
           className="w-full flex items-center gap-2 px-0.5 py-1 rounded-md hover:[background:var(--bg-hover)] transition-colors"
           aria-expanded={signalsOpen}
         >

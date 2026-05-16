@@ -355,7 +355,12 @@ export default function ChatAgent({
             separator + VS Code panel grip.
             Only shown when there's a conversation — empty state hugs
             content and has nothing to resize. */}
-        {hasConversation && <div
+        {/* Resize-handle WAI-ARIA pattern uses role="separator" but with
+            interactive pointer/key handlers — the lint rule flags this even
+            though it is the canonical pattern. */}
+        {/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */}
+        {hasConversation && (
+          <div
           role="separator"
           aria-orientation="horizontal"
           aria-label={t('agent.resize', { defaultValue: 'Resize chat panel' })}
@@ -377,7 +382,9 @@ export default function ChatAgent({
                 : 'bg-[color:var(--fg-subtle)] opacity-30 group-hover:opacity-70 group-focus-visible:opacity-90'
             }`}
           />
-        </div>}
+        </div>
+        )}
+        {/* eslint-enable jsx-a11y/no-noninteractive-element-interactions */}
         {/* Header — p0 brand on the left, tab strip inline, close on the right */}
         <header
           className="shrink-0 flex items-stretch border-b"

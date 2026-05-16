@@ -88,8 +88,8 @@ export function PanelTabs({
         aria-label="Investigation view mode"
         className="flex items-center gap-1"
       >
-        <ModeTab label="Answer" active={mode === 'answer'} onClick={() => onModeChange('answer')} />
-        <ModeTab label="Notebook" active={mode === 'notebook'} onClick={() => onModeChange('notebook')} />
+        <ModeTab label="Answer" active={mode === 'answer'} onClick={() => { onModeChange('answer'); }} />
+        <ModeTab label="Notebook" active={mode === 'notebook'} onClick={() => { onModeChange('notebook'); }} />
       </div>
       {mode === 'answer' ? (
         <div className="flex items-center gap-1 ml-1">
@@ -98,7 +98,7 @@ export function PanelTabs({
               key={tab.value}
               label={tab.label}
               active={questionType === tab.value}
-              onClick={() => onQuestionTypeChange(tab.value)}
+              onClick={() => { onQuestionTypeChange(tab.value); }}
             />
           ))}
         </div>

@@ -7,7 +7,7 @@ import {
 import {
   MentionPicker, findMentionAtCaret,
   type MentionItem, type MentionTrigger,
-} from './MentionPicker';
+} from './palette/MentionPicker';
 import { useClickOutside, scanForSecrets, redactText, type SecretMatch } from '@shared/lib';
 
 // Composer with intent toggle, model picker, slash commands, mention
@@ -405,9 +405,20 @@ export function Composer({
     ? (isDark
         ? 'bg-white/[0.06] text-white/70 hover:bg-white/[0.10] border border-white/[0.10]'
         : 'bg-black/[0.05] text-black/70 hover:bg-black/[0.10] border border-black/[0.10]')
+    : '';
+  const stopInlineStyle: React.CSSProperties | undefined = stopHeat === 0
+    ? undefined
     : stopHeat === 1
-    ? 'bg-amber-500/15 text-amber-500 hover:bg-amber-500/25 border border-amber-500/30'
-    : 'bg-rose-500/15 text-rose-400 hover:bg-rose-500/25 border border-rose-500/30';
+      ? {
+          background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)',
+          color: 'var(--intent-warn-vivid)',
+          border: '1px solid color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
+        }
+      : {
+          background: 'color-mix(in srgb, var(--intent-danger-vivid) 15%, transparent)',
+          color: 'var(--intent-danger-fg)',
+          border: '1px solid color-mix(in srgb, var(--intent-danger-vivid) 30%, transparent)',
+        };
 
   return (
     <div className="relative">
@@ -471,9 +482,10 @@ export function Composer({
                       : (isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-black/[0.02]')
                   }`}
                 >
-                  <span className={`font-mono text-[12px] font-semibold ${
-                    isDark ? 'text-emerald-300' : 'text-emerald-700'
-                  }`}>
+                  <span
+                    style={{ color: 'var(--intent-success-fg)' }}
+                    className="font-mono text-[12px] font-semibold"
+                  >
                     {c.cmd}
                   </span>
                   <span className={`text-[11px] ${textMuted}`}>{c.desc}</span>
@@ -667,6 +679,7 @@ export function Composer({
                 heat={stopHeat}
                 onStop={onStop}
                 styles={stopStyles}
+                styleObj={stopInlineStyle}
                 label={t('composer.stop')}
                 holdLabel={t('stop.holdToStop')}
               />
@@ -825,10 +838,11 @@ function VoiceBtn({
   const idle = isDark
     ? 'text-white/40 hover:text-white/85 hover:bg-white/[0.05]'
     : 'text-black/40 hover:text-black/85 hover:bg-black/[0.04]';
-  const active = isDark
-    ? 'text-rose-300 bg-rose-400/15'
-    : 'text-rose-700 bg-rose-100';
   const off = isDark ? 'text-white/20 cursor-not-allowed' : 'text-black/20 cursor-not-allowed';
+  const activeStyle: React.CSSProperties = {
+    color: 'var(--intent-danger-fg)',
+    background: 'color-mix(in srgb, var(--intent-danger-vivid) 15%, transparent)',
+  };
 
   return (
     <button
@@ -839,7 +853,8 @@ function VoiceBtn({
       aria-disabled={!supported}
       onClick={() => { if (!supported) return; if (listening) stop(); else start(); }}
       tabIndex={supported ? 0 : -1}
-      className={`p-1.5 rounded-md transition-colors ${supported ? (listening ? active : idle) : off}`}
+      style={supported && listening ? activeStyle : undefined}
+      className={`p-1.5 rounded-md transition-colors ${supported ? (listening ? '' : idle) : off}`}
     >
       <Mic className={`w-3.5 h-3.5 ${listening ? 'coding-breath' : ''}`} />
     </button>
@@ -876,9 +891,15 @@ function SecretChallengeModal({
     : 'bg-white border-black/[0.10]';
   const heading = isDark ? 'text-white/90' : 'text-black/85';
   const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const tone = mode === 'block'
-    ? (isDark ? 'border-rose-400/40 bg-rose-400/[0.08]' : 'border-rose-500/40 bg-rose-50')
-    : (isDark ? 'border-amber-400/40 bg-amber-400/[0.08]' : 'border-amber-500/40 bg-amber-50');
+  const toneStyle: React.CSSProperties = mode === 'block'
+    ? {
+        borderColor: 'color-mix(in srgb, var(--intent-danger-vivid) 40%, transparent)',
+        background: 'color-mix(in srgb, var(--intent-danger-vivid) 8%, transparent)',
+      }
+    : {
+        borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 40%, transparent)',
+        background: 'color-mix(in srgb, var(--intent-warn-vivid) 8%, transparent)',
+      };
 
   return (
     <div
@@ -888,7 +909,7 @@ function SecretChallengeModal({
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
       }}
     >
-      <div className={`border ${tone} rounded-xl ${surface}`}>
+      <div style={toneStyle} className={`border rounded-xl ${surface}`}>
         <div className={`px-4 py-3`}>
           <div className={`flex items-center gap-2 mb-1.5`}>
             <span className="text-[14px]" aria-hidden>{mode === 'block' ? '🔐' : '⚠'}</span>
@@ -907,9 +928,10 @@ function SecretChallengeModal({
                   isDark ? 'bg-white/[0.04]' : 'bg-black/[0.03]'
                 }`}
               >
-                <span className={`shrink-0 w-1.5 h-1.5 rounded-full ${
-                  m.pattern.severity === 'critical' ? 'bg-rose-500' : 'bg-amber-500'
-                }`} />
+                <span
+                  style={{ background: m.pattern.severity === 'critical' ? 'var(--intent-danger-vivid)' : 'var(--intent-warn-vivid)' }}
+                  className="shrink-0 w-1.5 h-1.5 rounded-full"
+                />
                 <span className={muted}>{t(`secretGuard.patterns.${m.pattern.id}`, { defaultValue: m.pattern.label })}</span>
                 <span className={`ml-auto opacity-70 ${heading}`}>
                   {/* Show only first 4 chars + ellipsis. Reveal-once
@@ -945,11 +967,12 @@ function SecretChallengeModal({
             <button
               type="button"
               onClick={onMaskAndSend}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors ${
-                isDark
-                  ? 'bg-emerald-400/15 text-emerald-200 hover:bg-emerald-400/25 border border-emerald-400/40'
-                  : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-500/40'
-              }`}
+              style={{
+                background: 'var(--intent-success-bg)',
+                color: 'var(--intent-success-fg)',
+                border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 40%, transparent)',
+              }}
+              className="px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors"
             >
               {t('secretGuard.maskNow')}
             </button>
@@ -976,11 +999,12 @@ function Kbd({ isDark, children }: { isDark: boolean; children: React.ReactNode 
 // holds. Releasing early surfaces the original label so the affordance
 // stays discoverable. Vercel's "press to cancel" flow.
 function PressHoldStop({
-  heat, onStop, styles, label, holdLabel,
+  heat, onStop, styles, styleObj, label, holdLabel,
 }: {
   heat: 0 | 1 | 2;
   onStop?: () => void;
   styles: string;
+  styleObj?: React.CSSProperties;
   label: string;
   holdLabel: string;
 }) {
@@ -1048,6 +1072,7 @@ function PressHoldStop({
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStop?.(); }
       }}
+      style={styleObj}
       className={`flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-semibold transition-colors select-none touch-none ${styles}`}
       aria-label={heat === 0 ? label : holdLabel}
       title={heat === 0 ? label : holdLabel}

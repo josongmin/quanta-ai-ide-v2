@@ -136,7 +136,7 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
 
     set((s) => mergeCase(s, caseId, (cur) => ({
       ...cur,
-      loop: { ...cur.loop, currentStage: 'validate' as LoopStage,
+      loop: { ...cur.loop, currentStage: 'validate',
         iterations: pushIter(cur.loop.iterations, 'validate', 'attempt 1: running proofs') },
     })));
 
@@ -247,7 +247,7 @@ function buildDraftPackage(
 
   return {
     candidateId: candidate.id,
-    title: `${candidate.title}`,
+    title: candidate.title,
     summary: seed ? `${seed.title} — ${candidate.diffSummary}` : candidate.diffSummary,
     whyThisFix: candidate.rationale,
     validationSummary: blocked

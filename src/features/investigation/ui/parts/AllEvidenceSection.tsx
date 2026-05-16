@@ -23,7 +23,7 @@ export function AllEvidenceSection({
     >
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => { setOpen((v) => !v); }}
         className="flex items-center gap-1.5 mb-2"
         style={{
           color: 'var(--fg-subtle)',
@@ -45,7 +45,7 @@ export function AllEvidenceSection({
           {evidence.map((ev) => (
             <div
               key={ev.id}
-              onClick={() => onPick(ev.id === pickedId ? null : ev.id)}
+              onClick={() => { onPick(ev.id === pickedId ? null : ev.id); }}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -66,7 +66,7 @@ export function AllEvidenceSection({
               <EvidenceCard
                 evidence={ev}
                 expanded={ev.id === pickedId}
-                onToggle={() => onPick(ev.id === pickedId ? null : ev.id)}
+                onToggle={() => { onPick(ev.id === pickedId ? null : ev.id); }}
               />
             </div>
           ))}

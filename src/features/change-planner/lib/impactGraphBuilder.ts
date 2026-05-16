@@ -18,7 +18,7 @@ import type {
 } from '../model/types';
 import { edgeStyle, inferEdgeConfidence } from './confidenceModel';
 
-interface BuildOpts {
+type BuildOpts = {
   // Cap how far the BFS expands. Default is L3 — anything past 3 hops is
   // noise, and trying to render it tanks the SVG renderer in real datasets.
   maxRing?: ImpactRing;
@@ -94,7 +94,7 @@ export function buildImpactGraph(
 
   // Standard BFS frontier. We track hop distance per-id so a node reached via
   // two different paths still gets its shortest-distance ring.
-  const queue: Array<{ id: string; hop: number; parent: ImpactNode }> = [];
+  const queue: { id: string; hop: number; parent: ImpactNode }[] = [];
   for (const child of adjacency[seed.targetId] ?? []) {
     queue.push({ id: child, hop: 1, parent: seedNode });
   }

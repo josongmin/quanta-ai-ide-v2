@@ -5,22 +5,17 @@
 // features (e.g. confidence + delivery-gate) cannot drift on the same shape.
 
 export type {
-  SeedKind,
-  EvidenceRef,
   FixSeed,
   ConfidenceLevel,
   ConfidenceScore,
   ObligationCategory,
-  ObligationStatus,
   ProofObligation,
   DiffHunk,
   FixCandidate,
-  DeliveryTier,
   DeliveryDecision,
   ValidationResult,
   DismissReason,
   CandidateDismissal,
-  PipelineSnapshot,
   // Adjacent-but-still-public model types — exported so features and
   // widgets can consume them without reaching into the model file.
   CycleCost,
@@ -34,13 +29,12 @@ export type {
   ReviewerSuggestion,
   ReviewerRef,
   CritiqueIteration,
-  SubmissionStatus,
   SubmissionRecord,
   RollbackPackage,
   PartialAcceptance,
 } from './model';
 
 export { SAMPLE_SEEDS } from './lib/sample';
-export { validateSeed, describeError, type SeedValidationError } from './lib/seedValidator';
+export { validateSeed } from './lib/seedValidator';
 export { freshnessNow, describeFreshness } from './lib/freshness';
 export { SAMPLE_CONFLICTS } from './lib/sampleConflicts';

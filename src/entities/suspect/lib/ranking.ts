@@ -27,7 +27,7 @@ export function aggregateSignalWeight(signals: SuspectSignal[]): number {
 //   weak_inferred   : single signal or under-corroborated
 // ─────────────────────────────────────────────────────────────────────────
 
-export function inferConfidence(signals: SuspectSignal[]): SuspectConfidence {
+function inferConfidence(signals: SuspectSignal[]): SuspectConfidence {
   const kinds = new Set(signals.map((s) => s.kind));
   if (kinds.has('stack_match') && kinds.has('symbol_overlap')) {
     return 'exact';

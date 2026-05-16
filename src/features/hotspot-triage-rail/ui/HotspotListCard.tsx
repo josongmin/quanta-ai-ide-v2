@@ -71,7 +71,7 @@ export function HotspotListCard({
             <button
               key={k}
               type="button"
-              onClick={() => setSortKey(k)}
+              onClick={() => { setSortKey(k); }}
               className="px-1.5 py-0.5 rounded-full border text-[9px] font-mono uppercase tracking-[0.14em]"
               style={{
                 color: active ? 'var(--fg-default)' : 'var(--fg-subtle)',

@@ -704,7 +704,7 @@ function BackgroundMonitor({
               </div>
               <div className="mt-1 flex items-center gap-2 text-[10px] font-mono text-white/45">
                 <span className="tabular-nums">
-                  <span className="text-emerald-400/80">{it.passed}</span>
+                  <span style={{ color: 'color-mix(in srgb, var(--intent-success-fg) 80%, transparent)' }}>{it.passed}</span>
                   <span className="text-white/25">/</span>
                   <span>{it.total}</span>
                 </span>

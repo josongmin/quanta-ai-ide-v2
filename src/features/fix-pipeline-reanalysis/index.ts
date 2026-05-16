@@ -1,1 +1,1 @@
-export { buildReanalysis, markRan, snapshotBefore, snapshotAfter } from './lib/reanalyze';
+export { buildReanalysis, markRan } from './lib/reanalyze';

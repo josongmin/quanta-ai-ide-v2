@@ -81,11 +81,16 @@ export function JobsProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  // `advance` recurses through `setTimeout` to keep ticking until the job
+  // completes. We thread the recursion through a ref initialized lazily on
+  // first call so the binding is reachable before the `useCallback`
+  // initializer settles (TDZ-safe) without writing the ref during render.
+  const advanceRef = useRef<(id: string) => void>(() => { /* set by effect after first render */ });
   const advance = useCallback((id: string) => {
     setJobs((cur) => {
       const idx = cur.findIndex((j) => j.id === id);
       if (idx === -1) return cur;
-      const j = cur[idx]!;
+      const j = cur[idx];
       if (j.status === 'cancelled' || j.status === 'completed' || j.status === 'failed') {
         return cur;
       }
@@ -104,7 +109,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
       const next = [...cur];
       next[idx] = updated;
       if (!isDone) {
-        const t = setTimeout(() => advance(id), timing.stepMs);
+        const t = setTimeout(() => { advanceRef.current(id); }, timing.stepMs);
         timersRef.current.set(id, t);
       } else {
         timersRef.current.delete(id);
@@ -112,6 +117,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
       return next;
     });
   }, []);
+  useEffect(() => { advanceRef.current = advance; }, [advance]);
 
   const enqueue = useCallback((kind: JobKind, target: InvestigationTarget, label?: string): string => {
     const id = makeJobId();
@@ -126,7 +132,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
     };
     setJobs((cur) => [job, ...cur]);
     // Per-kind queue delay — heavier ops sit in the queue longer.
-    const t = setTimeout(() => advance(id), KIND_TIMING[kind].queueMs);
+    const t = setTimeout(() => { advance(id); }, KIND_TIMING[kind].queueMs);
     timersRef.current.set(id, t);
     return id;
   }, [advance]);

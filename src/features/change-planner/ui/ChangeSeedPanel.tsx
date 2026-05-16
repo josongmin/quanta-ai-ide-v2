@@ -8,7 +8,7 @@
 import { FileCode2, Hash, Route, Plug, Flag } from 'lucide-react';
 import type { ChangeSeed, SeedKind } from '../model/types';
 
-interface Props {
+type Props = {
   seeds: ChangeSeed[];
   selectedId?: string;
   onSelect: (id: string) => void;

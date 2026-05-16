@@ -1,0 +1,199 @@
+{
+  "header": {
+    "title": "에이전트 함대",
+    "subtitle": "당신이 자는 동안 PR을 만드는 백그라운드 루틴",
+    "newRoutine": "새 루틴",
+    "weekRoi": "이번 주",
+    "roi": {
+      "prsMerged": "PR {{n}}건 머지",
+      "locDeleted": "{{n}}줄 삭제",
+      "hoursSaved": "리뷰 {{h}}시간 절약",
+      "spent": "${{usd}} 사용"
+    }
+  },
+  "rail": {
+    "title": "루틴",
+    "search": "루틴 검색…",
+    "filter": {
+      "all": "전체",
+      "active": "활성",
+      "paused": "일시정지",
+      "draft": "초안"
+    },
+    "empty": "일치하는 루틴이 없습니다.",
+    "nextFire": "다음 실행: {{when}}",
+    "noNextFire": "이벤트 기반",
+    "metricSuccess": "성공률 {{pct}}% · 30일",
+    "metricNet": "순 LOC {{n}}",
+    "metricSaved": "{{h}}시간 절약",
+    "memoryItems": "메모리 노트 {{n}}개"
+  },
+  "status": {
+    "active": "활성",
+    "paused": "일시정지",
+    "draft": "초안"
+  },
+  "trust": {
+    "level": "신뢰 {{n}}/5",
+    "level1": "읽기 전용",
+    "level2": "제안",
+    "level3": "패치",
+    "level4": "푸시",
+    "level5": "자동 머지",
+    "tooltip": "이 루틴이 묻지 않고 할 수 있는 최대 행동."
+  },
+  "trigger": {
+    "cron": "스케줄 · {{label}}",
+    "event": "이벤트 · {{event}}",
+    "manual": "수동",
+    "evt": {
+      "pr.merged": "PR 머지",
+      "ci.failed": "CI 실패",
+      "dep.released": "업스트림 릴리스",
+      "bench.regressed": "벤치마크 회귀"
+    }
+  },
+  "outputKind": {
+    "pr": "PR",
+    "issue": "이슈",
+    "report": "리포트"
+  },
+  "run": {
+    "header": "최근 실행",
+    "empty": "아직 실행이 없습니다.",
+    "live": "실시간",
+    "elapsed": "{{ms}}ms",
+    "started": "{{when}} 시작",
+    "ended": "{{when}} 종료",
+    "trigger": "트리거: {{by}}",
+    "trustEffective": "신뢰 {{n}}",
+    "openOutput": "결과 열기",
+    "viewLogs": "로그 보기",
+    "cancel": "실행 취소",
+    "approveGate": "게이트 승인",
+    "details": "실행 상세",
+    "candidates": "Best-of-N 후보",
+    "candidateWinner": "선택됨",
+    "candidateAdopt": "이 후보 채택",
+    "selfEval": "자체평가 {{pct}}%",
+    "blastRadius": "영향 범위",
+    "br": {
+      "safe": "안전",
+      "review": "검토",
+      "blast-radius": "광범위"
+    }
+  },
+  "runStatus": {
+    "queued": "대기",
+    "running": "실행 중",
+    "awaiting-human": "사람 대기",
+    "merged": "머지됨",
+    "closed": "닫힘",
+    "failed": "실패",
+    "cancelled": "취소됨"
+  },
+  "stepPhase": {
+    "plan": "계획",
+    "reading": "읽기",
+    "searching": "검색",
+    "editing": "편집",
+    "running": "실행",
+    "reviewing": "검토",
+    "pr": "PR"
+  },
+  "stepState": {
+    "pending": "대기",
+    "running": "실행 중",
+    "ok": "성공",
+    "fail": "실패",
+    "skipped": "건너뜀",
+    "gated": "사람 게이트"
+  },
+  "fleet": {
+    "title": "함대",
+    "concurrency": "{{running}}개 실행 · {{queued}}개 대기",
+    "concurrencyMax": "최대 {{n}}개 동시",
+    "spendHour": "${{usd}}/시 · 예상 ${{day}}/일",
+    "attention": "리뷰 주의력 예산",
+    "attentionSpent": "이번 주 {{h}}시간 / {{budget}}시간",
+    "alerts": "알림",
+    "noAlerts": "이상 없음.",
+    "conflicts": "파일 충돌",
+    "conflictRow": "{{a}} ↔ {{b}}",
+    "conflictResolve": "직렬화",
+    "alertKind": {
+      "loop": "루프 의심",
+      "cost-spike": "비용 급증",
+      "pr-storm": "PR 폭주",
+      "silent-failure": "조용한 실패",
+      "guardrail-hit": "가드레일 발동"
+    }
+  },
+  "hitl": {
+    "title": "당신을 기다리는 작업",
+    "empty": "받은함 비어있음 — 함대가 알아서 굴러갑니다.",
+    "waiting": "{{when}} 대기 중",
+    "approveAll": "안전한 항목 일괄 승인",
+    "checkpoint": {
+      "plan-approval": "계획 승인",
+      "pre-push": "푸시 전 검토",
+      "risky-tier-only": "위험 티어만 검토"
+    }
+  },
+  "editor": {
+    "open": "루틴 편집",
+    "title": "{{name}}",
+    "tabDefinition": "정의",
+    "tabGuardrails": "가드레일",
+    "tabSchedule": "스케줄",
+    "tabDryRun": "Dry-run 미리보기",
+    "save": "저장",
+    "discard": "취소",
+    "scope": "범위",
+    "trustDial": "신뢰 다이얼",
+    "guardrail": {
+      "maxLoc": "PR당 최대 LOC",
+      "forbidden": "금지 경로",
+      "confidenceFloor": "최소 신뢰도",
+      "requireGreenCi": "CI green 필수",
+      "checkpoints": "HITL 체크포인트",
+      "noCheckpoints": "사람 체크포인트 없음"
+    },
+    "budget": {
+      "title": "예산",
+      "daily": "일 ${{n}}",
+      "weekly": "주 ${{n}}",
+      "perRun": "실행당 ${{n}}"
+    },
+    "dryRun": {
+      "title": "어제 저장소 상태에 이 루틴이 돌았다면…",
+      "summary": "PR {{prs}}건 생성 · {{lines}} LOC 영향 · 약 ${{usd}} 사용",
+      "candidatesHeader": "주요 후보",
+      "noCandidates": "발화될 후보가 없습니다."
+    }
+  },
+  "metrics": {
+    "successRate": "성공률",
+    "merged": "머지",
+    "rejected": "거절",
+    "issues": "이슈",
+    "spent": "사용",
+    "netLoc": "순 LOC",
+    "reviewerTouches": "리뷰어 수정",
+    "memory": "메모리",
+    "thirtyDay": "최근 30일"
+  },
+  "footer": "se-dot-field-demo · agents",
+  "actions": {
+    "pause": "일시정지",
+    "resume": "재개",
+    "runNow": "지금 실행",
+    "duplicate": "복제",
+    "delete": "삭제",
+    "edit": "편집"
+  },
+  "empty": {
+    "title": "선택된 루틴이 없습니다",
+    "subtitle": "왼쪽에서 하나 선택하거나, 새 루틴을 정의해서 백그라운드 작업을 시작하세요."
+  }
+}

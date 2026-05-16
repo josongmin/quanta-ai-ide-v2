@@ -292,10 +292,18 @@ function RuleListSection({
             return (
               <div
                 key={r.id}
+                role="button"
+                tabIndex={0}
                 className={`grid grid-cols-[28px_minmax(0,1fr)_80px_70px_60px_70px_24px] gap-2 px-4 py-2.5 items-center border-b border-white/[0.04] cursor-pointer transition-colors ${
                   checked ? 'bg-[#7aa7d4]/[0.06]' : 'hover:bg-white/[0.025]'
                 } ${!r.enabled ? 'opacity-50' : ''}`}
                 onClick={() => { openEditor(r.id); }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openEditor(r.id);
+                  }
+                }}
               >
                 <button type="button"
                   onClick={(e) => { e.stopPropagation(); selectToggle(r.id); }}

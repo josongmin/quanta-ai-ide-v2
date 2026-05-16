@@ -212,14 +212,22 @@ function FileTooltip({ x, y, file, isDark }: { x: number; y: number; file: FileR
         <Row label={t('tooltip.complexity')} value={file.metrics.complexity} valueClass="text-[#4f9a5c]" />
         <Row label={t('tooltip.fanInOut')} value={`${file.metrics.fanIn} / ${file.metrics.fanOut}`} />
         <Row label={t('tooltip.blastRadius')} value={file.metrics.blastRadius} />
-        <Row label={t('tooltip.editSafety')} value={`${file.metrics.editSafety}/100`} valueClass={safetyClass(file.metrics.editSafety, isDark)} />
+        <Row
+          label={t('tooltip.editSafety')}
+          value={`${file.metrics.editSafety}/100`}
+          valueClass={safetyClass(file.metrics.editSafety, isDark)}
+          valueStyle={file.metrics.editSafety >= 20 && file.metrics.editSafety < 40 ? { color: 'var(--intent-warn-vivid)' } : undefined}
+        />
         <Row
           label={t('tooltip.confidence')}
           value={file.metrics.confidence.toUpperCase()}
           valueClass={confidenceClass(file.metrics.confidence)}
         />
         {file.metrics.unknownReasons.length > 0 && (
-          <div className={`text-[9px] mt-1 italic ${isDark ? 'text-amber-300/80' : 'text-amber-600'}`}>
+          <div
+            style={{ color: 'color-mix(in srgb, var(--intent-warn-fg) 80%, transparent)' }}
+            className="text-[9px] mt-1 italic"
+          >
             {t('tooltip.warning', { reasons: file.metrics.unknownReasons.join(' · ') })}
           </div>
         )}
@@ -228,11 +236,11 @@ function FileTooltip({ x, y, file, isDark }: { x: number; y: number; file: FileR
   );
 }
 
-function Row({ label, value, valueClass }: { label: string; value: string | number; valueClass?: string }) {
+function Row({ label, value, valueClass, valueStyle }: { label: string; value: string | number; valueClass?: string; valueStyle?: React.CSSProperties }) {
   return (
     <div className="flex justify-between gap-4">
       <span className="opacity-60">{label}</span>
-      <b className={valueClass ?? ''}>{value}</b>
+      <b className={valueClass ?? ''} style={valueStyle}>{value}</b>
     </div>
   );
 }
@@ -246,8 +254,9 @@ function confidenceClass(c: 'exact' | 'overapprox' | 'unknown' | 'stale'): strin
   }
 }
 function safetyClass(s: number, isDark: boolean): string {
+  void isDark;
   if (s >= 70) return 'text-[#5fa86c]';
   if (s >= 40) return 'text-[#a8893a]';
-  if (s >= 20) return isDark ? 'text-orange-400' : 'text-orange-600';
+  if (s >= 20) return '';
   return 'text-[#c25a55]';
 }

@@ -133,41 +133,6 @@ function variance(xs: number[], m: number): number {
   return s / xs.length;
 }
 
-// ─── Bayesian posterior for a Bernoulli rate ────────────────────────
-// Beta(α, β) prior, conjugate to Bernoulli. Posterior after k successes
-// in n trials is Beta(α + k, β + n - k). We expose the posterior mean
-// and a 95% equal-tailed credible interval (approximation via the
-// posterior's standard deviation × 1.96; for the demo this is plenty
-// accurate and avoids importing a digamma function).
-
-export type BetaPosterior = {
-  alpha: number;
-  beta: number;
-  mean: number;
-  lo: number;
-  hi: number;
-};
-
-export function betaPosterior(
-  k: number,
-  n: number,
-  priorAlpha = 1,   // Laplace prior — "no idea"
-  priorBeta = 1,
-): BetaPosterior {
-  const alpha = priorAlpha + k;
-  const beta = priorBeta + Math.max(0, n - k);
-  const mean = alpha / (alpha + beta);
-  const variance = (alpha * beta) / (((alpha + beta) ** 2) * (alpha + beta + 1));
-  const sd = Math.sqrt(variance);
-  return {
-    alpha,
-    beta,
-    mean,
-    lo: Math.max(0, mean - 1.96 * sd),
-    hi: Math.min(1, mean + 1.96 * sd),
-  };
-}
-
 // ─── F1 / precision / recall ────────────────────────────────────────
 // Standard classification scoring. We treat each rule's firing on a PR
 // as a "predicted positive" (would block) and compare to the ground-

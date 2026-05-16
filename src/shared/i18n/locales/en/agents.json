@@ -1,0 +1,199 @@
+{
+  "header": {
+    "title": "Agent Fleet",
+    "subtitle": "Background routines that ship PRs while you sleep",
+    "newRoutine": "New routine",
+    "weekRoi": "This week",
+    "roi": {
+      "prsMerged": "{{n}} PRs merged",
+      "locDeleted": "{{n}} lines deleted",
+      "hoursSaved": "{{h}}h review saved",
+      "spent": "${{usd}} spent"
+    }
+  },
+  "rail": {
+    "title": "Routines",
+    "search": "Search routines…",
+    "filter": {
+      "all": "All",
+      "active": "Active",
+      "paused": "Paused",
+      "draft": "Draft"
+    },
+    "empty": "No routines match.",
+    "nextFire": "Next: {{when}}",
+    "noNextFire": "On event",
+    "metricSuccess": "{{pct}}% success · 30d",
+    "metricNet": "{{n}} net LOC",
+    "metricSaved": "{{h}}h saved",
+    "memoryItems": "{{n}} memory notes"
+  },
+  "status": {
+    "active": "Active",
+    "paused": "Paused",
+    "draft": "Draft"
+  },
+  "trust": {
+    "level": "Trust {{n}}/5",
+    "level1": "Read-only",
+    "level2": "Suggest",
+    "level3": "Patch",
+    "level4": "Push",
+    "level5": "Auto-merge",
+    "tooltip": "Maximum action this routine can take without asking."
+  },
+  "trigger": {
+    "cron": "Cron · {{label}}",
+    "event": "Event · {{event}}",
+    "manual": "Manual",
+    "evt": {
+      "pr.merged": "PR merged",
+      "ci.failed": "CI failed",
+      "dep.released": "Upstream release",
+      "bench.regressed": "Benchmark regression"
+    }
+  },
+  "outputKind": {
+    "pr": "PR",
+    "issue": "Issue",
+    "report": "Report"
+  },
+  "run": {
+    "header": "Recent runs",
+    "empty": "No runs yet.",
+    "live": "Live",
+    "elapsed": "{{ms}}ms",
+    "started": "Started {{when}}",
+    "ended": "Ended {{when}}",
+    "trigger": "Triggered by {{by}}",
+    "trustEffective": "Trust {{n}}",
+    "openOutput": "Open output",
+    "viewLogs": "View logs",
+    "cancel": "Cancel run",
+    "approveGate": "Approve gate",
+    "details": "Run details",
+    "candidates": "Best-of-N candidates",
+    "candidateWinner": "Winner",
+    "candidateAdopt": "Adopt this candidate",
+    "selfEval": "self-eval {{pct}}%",
+    "blastRadius": "Blast radius",
+    "br": {
+      "safe": "Safe",
+      "review": "Review",
+      "blast-radius": "Wide blast"
+    }
+  },
+  "runStatus": {
+    "queued": "Queued",
+    "running": "Running",
+    "awaiting-human": "Awaiting human",
+    "merged": "Merged",
+    "closed": "Closed",
+    "failed": "Failed",
+    "cancelled": "Cancelled"
+  },
+  "stepPhase": {
+    "plan": "Plan",
+    "reading": "Reading",
+    "searching": "Searching",
+    "editing": "Editing",
+    "running": "Running",
+    "reviewing": "Reviewing",
+    "pr": "PR"
+  },
+  "stepState": {
+    "pending": "pending",
+    "running": "running",
+    "ok": "ok",
+    "fail": "failed",
+    "skipped": "skipped",
+    "gated": "human gate"
+  },
+  "fleet": {
+    "title": "Fleet",
+    "concurrency": "{{running}} running · {{queued}} queued",
+    "concurrencyMax": "max {{n}} concurrent",
+    "spendHour": "${{usd}}/hr · proj. ${{day}}/d",
+    "attention": "Reviewer attention",
+    "attentionSpent": "{{h}}h of {{budget}}h this week",
+    "alerts": "Alerts",
+    "noAlerts": "All clear.",
+    "conflicts": "File conflicts",
+    "conflictRow": "{{a}} ↔ {{b}}",
+    "conflictResolve": "Serialize",
+    "alertKind": {
+      "loop": "Loop suspected",
+      "cost-spike": "Cost spike",
+      "pr-storm": "PR storm",
+      "silent-failure": "Silent failure",
+      "guardrail-hit": "Guardrail hit"
+    }
+  },
+  "hitl": {
+    "title": "Awaiting you",
+    "empty": "Inbox zero — fleet is steering itself.",
+    "waiting": "waiting {{when}}",
+    "approveAll": "Approve all safe",
+    "checkpoint": {
+      "plan-approval": "Plan approval",
+      "pre-push": "Pre-push review",
+      "risky-tier-only": "Risky-tier check"
+    }
+  },
+  "editor": {
+    "open": "Edit routine",
+    "title": "{{name}}",
+    "tabDefinition": "Definition",
+    "tabGuardrails": "Guardrails",
+    "tabSchedule": "Schedule",
+    "tabDryRun": "Dry-run preview",
+    "save": "Save changes",
+    "discard": "Discard",
+    "scope": "Scope",
+    "trustDial": "Trust dial",
+    "guardrail": {
+      "maxLoc": "Max LOC per PR",
+      "forbidden": "Forbidden paths",
+      "confidenceFloor": "Confidence floor",
+      "requireGreenCi": "Require green CI",
+      "checkpoints": "HITL checkpoints",
+      "noCheckpoints": "No human checkpoints"
+    },
+    "budget": {
+      "title": "Budget",
+      "daily": "Daily ${{n}}",
+      "weekly": "Weekly ${{n}}",
+      "perRun": "Per-run ${{n}}"
+    },
+    "dryRun": {
+      "title": "If this routine had run on yesterday's repo state…",
+      "summary": "{{prs}} PRs would open · {{lines}} LOC affected · ~${{usd}} spent",
+      "candidatesHeader": "Top candidates",
+      "noCandidates": "No candidates would have fired."
+    }
+  },
+  "metrics": {
+    "successRate": "Success rate",
+    "merged": "Merged",
+    "rejected": "Rejected",
+    "issues": "Issues",
+    "spent": "Spent",
+    "netLoc": "Net LOC",
+    "reviewerTouches": "Reviewer touches",
+    "memory": "Memory",
+    "thirtyDay": "Last 30 days"
+  },
+  "footer": "se-dot-field-demo · agents",
+  "actions": {
+    "pause": "Pause",
+    "resume": "Resume",
+    "runNow": "Run now",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "edit": "Edit"
+  },
+  "empty": {
+    "title": "No routine selected",
+    "subtitle": "Pick one on the left, or define a new one to start letting agents work in the background."
+  }
+}

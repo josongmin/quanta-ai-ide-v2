@@ -8,8 +8,8 @@ import type {
 import { type RangeKey, type BoolKey } from '@entities/facet';
 import {
   computeDerived,
-  type Derived,
   makeMaskCache,
+  type MaskCache,
 } from './filterMatchEngine';
 import {
   defaultState,

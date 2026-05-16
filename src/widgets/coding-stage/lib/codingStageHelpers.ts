@@ -1,6 +1,6 @@
 import type { ComposerModelId } from '../parts/Composer';
 import type { Turn } from '../parts/types';
-import type { TurnContextMenuItem } from '../parts/TurnContextMenu';
+import type { TurnContextMenuItem } from '../parts/turn/TurnContextMenu';
 
 export const MODEL_PRICING: Record<string, { in: number; out: number }> = {
   'claude-opus-4-7':   { in: 15.00, out: 75.00 },

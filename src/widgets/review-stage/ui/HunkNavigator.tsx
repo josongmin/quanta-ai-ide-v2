@@ -154,9 +154,9 @@ export default function HunkNavigator({ file }: Props) {
         L{cur.newStart}–{cur.newEnd}
       </span>
       <span className="shrink-0 text-[10px] font-mono">
-        <span className="text-emerald-500/80">+{cur.added}</span>
+        <span style={{ color: 'color-mix(in srgb, var(--intent-success-vivid) 80%, transparent)' }}>+{cur.added}</span>
         <span className="text-white/25 mx-1">·</span>
-        <span className="text-rose-500/80">−{cur.removed}</span>
+        <span style={{ color: 'color-mix(in srgb, var(--intent-danger-vivid) 80%, transparent)' }}>−{cur.removed}</span>
       </span>
       {/* Mini multi-tick progress: each hunk is a tick, current
           is filled solid. Lets a reviewer see "3/8" not just as a

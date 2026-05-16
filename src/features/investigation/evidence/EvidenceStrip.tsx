@@ -28,7 +28,7 @@ export function EvidenceStrip({ evidence, pickedId, onPick }: Props) {
           <button
             key={ev.id}
             type="button"
-            onClick={onPick ? () => onPick(ev.id) : undefined}
+            onClick={onPick ? () => { onPick(ev.id); } : undefined}
             disabled={!onPick}
             style={style}
             className="border rounded px-2 py-1 inline-flex items-center gap-1.5 flex-shrink-0"

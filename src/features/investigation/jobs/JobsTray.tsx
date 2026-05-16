@@ -54,7 +54,7 @@ export function JobsTray() {
           </span>
           <button
             type="button"
-            onClick={() => setOpen((cur) => !cur)}
+            onClick={() => { setOpen((cur) => !cur); }}
             title={open ? 'Collapse' : 'Expand'}
             className="p-0.5 rounded hover:[background:var(--bg-hover)]"
             style={{ color: 'var(--fg-muted)' }}

@@ -1,8 +1,8 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import type { ApprovalPath, ApprovalStep, Person } from '@entities/ownership';
 import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
 
-export interface ApprovalPathCardProps {
+export type ApprovalPathCardProps = {
   path: ApprovalPath | undefined;
   people: Person[];
 }

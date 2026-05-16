@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { formatNumber } from '@shared/lib';
 import { BlockView } from './Blocks';
-import type { AgentTurn, ReactionKind, Turn, UserTurn } from './types';
+import type { AgentTurn, ReactionKind, Turn, UserTurn } from '../types';
 
 type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 
@@ -36,11 +36,11 @@ export function TurnView({
   }
 
   if (turn.role === 'user') {
-    return <div onContextMenu={onCtx}><UserTurnView turn={turn} isDark={isDark} /></div>;
+    return <div role="presentation" onContextMenu={onCtx}><UserTurnView turn={turn} isDark={isDark} /></div>;
   }
 
   return (
-    <div onContextMenu={onCtx}>
+    <div role="presentation" onContextMenu={onCtx}>
       <AgentTurnView
         turn={turn}
         isDark={isDark}
@@ -138,17 +138,29 @@ function AgentTurnView({
           )}
           {turn.confidence != null && (() => {
             const pct = Math.round(turn.confidence * 100);
-            const tone = pct >= 85
-              ? (isDark ? 'bg-emerald-400/10 text-emerald-300 border-emerald-400/30' : 'bg-emerald-50 text-emerald-700 border-emerald-500/30')
+            const toneStyle: React.CSSProperties = pct >= 85
+              ? {
+                  background: 'var(--intent-success-bg)',
+                  color: 'var(--intent-success-fg)',
+                  borderColor: 'color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)',
+                }
               : pct >= 60
-                ? (isDark ? 'bg-white/[0.04] text-white/55 border-white/[0.10]' : 'bg-black/[0.04] text-black/55 border-black/[0.10]')
-                : (isDark ? 'bg-amber-400/10 text-amber-300 border-amber-400/30' : 'bg-amber-50 text-amber-700 border-amber-500/30');
+                ? {}
+                : {
+                    background: 'var(--intent-warn-bg)',
+                    color: 'var(--intent-warn-fg)',
+                    borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
+                  };
+            const toneClass = pct >= 60 && pct < 85
+              ? (isDark ? 'bg-white/[0.04] text-white/55 border-white/[0.10]' : 'bg-black/[0.04] text-black/55 border-black/[0.10]')
+              : '';
             const label = pct >= 85 ? t('selfEval.high', { pct })
               : pct >= 60 ? t('selfEval.mid', { pct })
                 : t('selfEval.low', { pct });
             return (
               <span
-                className={`flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border ${tone}`}
+                style={toneStyle}
+                className={`flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border ${toneClass}`}
                 title={turn.confidenceRationale ?? t('selfEval.tooltip')}
               >
                 <Target className="w-2.5 h-2.5" />
@@ -169,10 +181,12 @@ function AgentTurnView({
           {turn.streaming && <TpsLiveMeter turn={turn} isDark={isDark} t={t} />}
           {turn.inverseOf && (
             <span
-              className={`flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono ${
-                isDark ? 'bg-amber-400/10 text-amber-300 border border-amber-400/30'
-                  : 'bg-amber-50 text-amber-700 border border-amber-500/30'
-              }`}
+              style={{
+                background: 'var(--intent-warn-bg)',
+                color: 'var(--intent-warn-fg)',
+                border: '1px solid color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
+              }}
+              className="flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono"
               title={t('inverse.anchor')}
             >
               <RotateCcw className="w-2.5 h-2.5" />
@@ -335,18 +349,20 @@ function LatencyBar({
     if (baseTotal > 0 && cmpTotal > 0) {
       const ratio = cmpTotal / baseTotal;
       const isMatch = ratio >= 0.85 && ratio <= 1.15;
-      const tone = isMatch
-        ? muted
+      const toneClass = isMatch ? muted : '';
+      const toneStyle: React.CSSProperties | undefined = isMatch
+        ? undefined
         : ratio < 1
-          ? (isDark ? 'text-emerald-300' : 'text-emerald-700')
-          : (isDark ? 'text-amber-300' : 'text-amber-700');
+          ? { color: 'var(--intent-success-fg)' }
+          : { color: 'var(--intent-warn-fg)' };
       const x = (ratio < 1 ? 1 / ratio : ratio).toFixed(1);
       const label = isMatch
         ? t('latencyBaseline.match')
         : ratio < 1 ? t('latencyBaseline.faster', { x }) : t('latencyBaseline.slower', { x });
       baselineChip = (
         <span
-          className={`shrink-0 text-[9px] font-mono tabular-nums ${tone}`}
+          style={toneStyle}
+          className={`shrink-0 text-[9px] font-mono tabular-nums ${toneClass}`}
           title={t('latencyBaseline.tooltip')}
         >
           {label}
@@ -414,9 +430,11 @@ function CitationStrip({
           c.note,
           isStale ? t('citationStale.tooltip') : null,
         ].filter(Boolean).join(' · ');
-        const staleChipTone = isDark
-          ? 'border-amber-400/40 bg-amber-400/10 text-amber-300'
-          : 'border-amber-500/40 bg-amber-50 text-amber-700';
+        const staleChipStyle: React.CSSProperties = {
+          borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 40%, transparent)',
+          background: 'var(--intent-warn-bg)',
+          color: 'var(--intent-warn-fg)',
+        };
         return (
           <span
             key={`${c.path}:${i}`}
@@ -430,7 +448,10 @@ function CitationStrip({
             <span className="opacity-60">·</span>
             <span className="opacity-70">{range}</span>
             {isStale && (
-              <span className={`ml-0.5 px-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.16em] border ${staleChipTone}`}>
+              <span
+                style={staleChipStyle}
+                className="ml-0.5 px-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.16em] border"
+              >
                 {t('citationStale.label')}
               </span>
             )}
@@ -461,17 +482,17 @@ function ReactionBar({
   isDark: boolean;
   t: TranslateFn;
 }) {
-  const items: { kind: ReactionKind; Icon: ComponentType<{ className?: string; fill?: string }>; tone: string }[] = [
-    { kind: 'thumbsUp', Icon: ThumbsUp, tone: isDark ? 'text-emerald-300 bg-emerald-400/15' : 'text-emerald-700 bg-emerald-100' },
-    { kind: 'thumbsDown', Icon: ThumbsDown, tone: isDark ? 'text-rose-300 bg-rose-400/15' : 'text-rose-700 bg-rose-100' },
-    { kind: 'heart', Icon: Heart, tone: isDark ? 'text-pink-300 bg-pink-400/15' : 'text-pink-700 bg-pink-100' },
-    { kind: 'target', Icon: Target, tone: isDark ? 'text-amber-300 bg-amber-400/15' : 'text-amber-700 bg-amber-100' },
+  const items: { kind: ReactionKind; Icon: ComponentType<{ className?: string; fill?: string }>; toneStyle: React.CSSProperties }[] = [
+    { kind: 'thumbsUp', Icon: ThumbsUp, toneStyle: { color: 'var(--intent-success-fg)', background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)' } },
+    { kind: 'thumbsDown', Icon: ThumbsDown, toneStyle: { color: 'var(--intent-danger-fg)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 15%, transparent)' } },
+    { kind: 'heart', Icon: Heart, toneStyle: { color: 'var(--intent-danger-fg)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 15%, transparent)' } },
+    { kind: 'target', Icon: Target, toneStyle: { color: 'var(--intent-warn-fg)', background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)' } },
   ];
   const idle = isDark ? 'text-white/30 hover:text-white/70 hover:bg-white/[0.05]' : 'text-black/30 hover:text-black/70 hover:bg-black/[0.04]';
 
   return (
     <div className="mt-2 flex items-center gap-0.5 opacity-60 hover:opacity-100 transition-opacity">
-      {items.map(({ kind, Icon, tone }) => {
+      {items.map(({ kind, Icon, toneStyle }) => {
         const active = reactions?.[kind];
         return (
           <button
@@ -481,7 +502,8 @@ function ReactionBar({
             title={t(`reactions.${kind}`)}
             aria-label={t(`reactions.${kind}`)}
             aria-pressed={!!active}
-            className={`p-1 rounded transition-colors ${active ? tone : idle}`}
+            style={active ? toneStyle : undefined}
+            className={`p-1 rounded transition-colors ${active ? '' : idle}`}
           >
             <Icon className="w-3 h-3" fill={active ? 'currentColor' : 'none'} />
           </button>

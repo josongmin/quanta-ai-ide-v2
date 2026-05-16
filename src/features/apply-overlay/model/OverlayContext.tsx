@@ -4,77 +4,72 @@ import {
 import type { HeatMetricKey } from '@entities/metric';
 import type { RiskLensKey, TimeWindow } from '@entities/repo';
 
-type Ctx = {
+type MetricOverlayCtx = {
   metric: HeatMetricKey;
   setMetric: (m: HeatMetricKey) => void;
-  intensity: number;       // 0..1 multiplier for halo alpha
+  intensity: number;
   setIntensity: (n: number) => void;
-  radius: number;          // 0..1 multiplier for halo size
+  radius: number;
   setRadius: (n: number) => void;
-  threshold: number;       // 0..1 — scores below this are clipped to 0
+  threshold: number;
   setThreshold: (n: number) => void;
+};
 
-  // Time-axis hotspot — when active, the overlay heat is replaced by a
-  // window-scaled churn×complexity score (`metric: 'time-hotspot'`). Picker
-  // sits next to the metric dropdown.
-  timeWindow: TimeWindow;
-  setTimeWindow: (w: TimeWindow) => void;
-
-  // Blast radius preview — id of the file whose transitive dependents
-  // should be highlighted on the stage. Cleared on Esc / "clear blast".
+type PathTracerCtx = {
   blastSeed: number | null;
   setBlastSeed: (id: number | null) => void;
   clearBlast: () => void;
-
-  // Path witness — a from→to file pair whose shortest dependency path
-  // should glow on the stage. Triggered from the "Trace path to…" action.
   pathFrom: number | null;
   pathTo: number | null;
   setPath: (from: number | null, to: number | null) => void;
   clearPath: () => void;
-
-  // Risk lens — pre-baked overlay preset. Mutually exclusive with the raw
-  // metric dropdown; activating a lens forces `metric` to a sentinel and
-  // pins the lens key on the snapshot.
   riskLens: RiskLensKey | null;
   setRiskLens: (l: RiskLensKey | null) => void;
+};
 
-  // Public-API ring — a thin outer ring around files whose external fanIn
-  // suggests they're widely consumed. Toggle, no payload.
+type NetworkOverlayCtx = {
+  timeWindow: TimeWindow;
+  setTimeWindow: (w: TimeWindow) => void;
   apiRing: boolean;
   setApiRing: (v: boolean) => void;
-
-  // PR preview — when set, the stage shows a synthetic before/after diff
-  // keyed by this seed. Setting null clears the diff.
   prSeed: number | null;
   setPrSeed: (s: number | null) => void;
 };
 
-const C = createContext<Ctx | null>(null);
+type Ctx = MetricOverlayCtx & PathTracerCtx & NetworkOverlayCtx;
 
-export function OverlayProvider({ children }: { children: ReactNode }) {
+const MetricOverlayC = createContext<MetricOverlayCtx | null>(null);
+const PathTracerC = createContext<PathTracerCtx | null>(null);
+const NetworkOverlayC = createContext<NetworkOverlayCtx | null>(null);
+
+function MetricOverlayProvider({ children }: { children: ReactNode }) {
   const [metric, setMetricState] = useState<HeatMetricKey>('none');
   const [intensity, setIntensityState] = useState(0.7);
   const [radius, setRadiusState] = useState(0.7);
   const [threshold, setThresholdState] = useState(0.05);
-  const [timeWindow, setTimeWindowState] = useState<TimeWindow>('90d');
-  const [blastSeed, setBlastSeedState] = useState<number | null>(null);
-  const [pathFrom, setPathFrom] = useState<number | null>(null);
-  const [pathTo, setPathTo] = useState<number | null>(null);
-  const [riskLens, setRiskLensState] = useState<RiskLensKey | null>(null);
-  const [apiRing, setApiRingState] = useState<boolean>(false);
-  const [prSeed, setPrSeedState] = useState<number | null>(null);
 
   const setMetric = useCallback((m: HeatMetricKey) => { setMetricState(() => m); }, []);
   const setIntensity = useCallback((n: number) => { setIntensityState(() => n); }, []);
   const setRadius = useCallback((n: number) => { setRadiusState(() => n); }, []);
   const setThreshold = useCallback((n: number) => { setThresholdState(() => n); }, []);
-  const setTimeWindow = useCallback((w: TimeWindow) => { setTimeWindowState(() => w); }, []);
-  const setBlastSeed = useCallback((id: number | null) => { setBlastSeedState(() => id); }, []);
-  const setRiskLens = useCallback((l: RiskLensKey | null) => { setRiskLensState(() => l); }, []);
-  const setApiRing = useCallback((v: boolean) => { setApiRingState(() => v); }, []);
-  const setPrSeed = useCallback((s: number | null) => { setPrSeedState(() => s); }, []);
 
+  const value = useMemo<MetricOverlayCtx>(() => ({
+    metric, setMetric,
+    intensity, setIntensity,
+    radius, setRadius,
+    threshold, setThreshold,
+  }), [metric, setMetric, intensity, setIntensity, radius, setRadius, threshold, setThreshold]);
+
+  return <MetricOverlayC.Provider value={value}>{children}</MetricOverlayC.Provider>;
+}
+
+function PathTracerProvider({ children }: { children: ReactNode }) {
+  const [blastSeed, setBlastSeedState] = useState<number | null>(null);
+  const [pathFrom, setPathFrom] = useState<number | null>(null);
+  const [pathTo, setPathTo] = useState<number | null>(null);
+  const [riskLens, setRiskLensState] = useState<RiskLensKey | null>(null);
+
+  const setBlastSeed = useCallback((id: number | null) => { setBlastSeedState(() => id); }, []);
   const clearBlast = useCallback(() => { setBlastSeedState(null); }, []);
   const setPath = useCallback((from: number | null, to: number | null) => {
     setPathFrom(from);
@@ -84,35 +79,74 @@ export function OverlayProvider({ children }: { children: ReactNode }) {
     setPathFrom(null);
     setPathTo(null);
   }, []);
+  const setRiskLens = useCallback((l: RiskLensKey | null) => { setRiskLensState(() => l); }, []);
 
-  const value = useMemo<Ctx>(() => ({
-    metric, setMetric,
-    intensity, setIntensity,
-    radius, setRadius,
-    threshold, setThreshold,
-    timeWindow, setTimeWindow,
+  const value = useMemo<PathTracerCtx>(() => ({
     blastSeed, setBlastSeed, clearBlast,
     pathFrom, pathTo, setPath, clearPath,
     riskLens, setRiskLens,
-    apiRing, setApiRing,
-    prSeed, setPrSeed,
   }), [
-    metric, setMetric,
-    intensity, setIntensity,
-    radius, setRadius,
-    threshold, setThreshold,
-    timeWindow, setTimeWindow,
     blastSeed, setBlastSeed, clearBlast,
     pathFrom, pathTo, setPath, clearPath,
     riskLens, setRiskLens,
+  ]);
+
+  return <PathTracerC.Provider value={value}>{children}</PathTracerC.Provider>;
+}
+
+function NetworkOverlayProvider({ children }: { children: ReactNode }) {
+  const [timeWindow, setTimeWindowState] = useState<TimeWindow>('90d');
+  const [apiRing, setApiRingState] = useState<boolean>(false);
+  const [prSeed, setPrSeedState] = useState<number | null>(null);
+
+  const setTimeWindow = useCallback((w: TimeWindow) => { setTimeWindowState(() => w); }, []);
+  const setApiRing = useCallback((v: boolean) => { setApiRingState(() => v); }, []);
+  const setPrSeed = useCallback((s: number | null) => { setPrSeedState(() => s); }, []);
+
+  const value = useMemo<NetworkOverlayCtx>(() => ({
+    timeWindow, setTimeWindow,
     apiRing, setApiRing,
     prSeed, setPrSeed,
-  ]);
-  return <C.Provider value={value}>{children}</C.Provider>;
+  }), [timeWindow, setTimeWindow, apiRing, setApiRing, prSeed, setPrSeed]);
+
+  return <NetworkOverlayC.Provider value={value}>{children}</NetworkOverlayC.Provider>;
+}
+
+export function OverlayProvider({ children }: { children: ReactNode }) {
+  return (
+    <MetricOverlayProvider>
+      <PathTracerProvider>
+        <NetworkOverlayProvider>{children}</NetworkOverlayProvider>
+      </PathTracerProvider>
+    </MetricOverlayProvider>
+  );
+}
+
+export function useMetricOverlay(): MetricOverlayCtx {
+  const c = useContext(MetricOverlayC);
+  if (!c) throw new Error('useMetricOverlay must be inside OverlayProvider');
+  return c;
+}
+
+export function usePathTracer(): PathTracerCtx {
+  const c = useContext(PathTracerC);
+  if (!c) throw new Error('usePathTracer must be inside OverlayProvider');
+  return c;
+}
+
+export function useNetworkOverlay(): NetworkOverlayCtx {
+  const c = useContext(NetworkOverlayC);
+  if (!c) throw new Error('useNetworkOverlay must be inside OverlayProvider');
+  return c;
 }
 
 export function useOverlay(): Ctx {
-  const c = useContext(C);
-  if (!c) throw new Error('useOverlay must be inside OverlayProvider');
-  return c;
+  const metric = useMetricOverlay();
+  const path = usePathTracer();
+  const network = useNetworkOverlay();
+  return useMemo<Ctx>(() => ({
+    ...metric,
+    ...path,
+    ...network,
+  }), [metric, path, network]);
 }

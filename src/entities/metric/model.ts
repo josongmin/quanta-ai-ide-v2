@@ -6,7 +6,7 @@
 // Verdict carries presentation-agnostic data so the UI layer is responsible
 // for translation. `key` selects the message; `params` feeds ICU-style
 // interpolation (e.g. {{vulnerable}} files); `tone` drives palette only.
-export type VerdictKey =
+type VerdictKey =
   | 'shipReady'
   | 'reviewNeeded'         // generic warn fallback
   | 'highHumanReview'      // too many off-limits-to-agents files
@@ -15,7 +15,7 @@ export type VerdictKey =
   | 'criticalBlock'        // vulnerable files
   | 'noData';
 
-export type VerdictTone = 'ok' | 'warn' | 'critical' | 'info';
+type VerdictTone = 'ok' | 'warn' | 'critical' | 'info';
 
 export type Verdict = {
   tone: VerdictTone;

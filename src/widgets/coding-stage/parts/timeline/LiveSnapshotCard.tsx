@@ -4,7 +4,7 @@ import {
   CheckCircle2, ListTodo, Cpu, Coins, Zap, Activity,
 } from 'lucide-react';
 import { formatNumber } from '@shared/lib';
-import type { Task, PlanBlock, AgentTurn } from './types';
+import type { Task, PlanBlock, AgentTurn } from '../types';
 
 // Same prices used by the cost meter in CodingStage. Duplicated here to
 // avoid a circular import; if pricing changes, update both.
@@ -99,9 +99,9 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
           label={t('snapshot.diff')}
           value={
             <span className="font-mono">
-              <span className="text-emerald-500">+{stats.added}</span>
+              <span style={{ color: 'var(--intent-success-vivid)' }}>+{stats.added}</span>
               <span className={textFaint}> · </span>
-              <span className="text-rose-500">−{stats.removed}</span>
+              <span style={{ color: 'var(--intent-danger-vivid)' }}>−{stats.removed}</span>
             </span>
           }
           isDark={isDark}
@@ -181,7 +181,7 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
                 }`}
                 title={file.path}
               >
-                <span className={file.kind === 'edit' ? 'text-emerald-400' : 'text-sky-400'}>
+                <span style={{ color: file.kind === 'edit' ? 'var(--intent-success-fg)' : 'var(--intent-info-fg)' }}>
                   {file.kind === 'edit' ? '✎' : '◵'}
                 </span>
                 {file.path.split('/').pop()}
@@ -199,7 +199,10 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
       <div className={`flex items-center gap-2 px-3 py-2 border-t ${divider} ${
         isDark ? 'bg-white/[0.015]' : 'bg-black/[0.015]'
       }`}>
-        <CheckCircle2 className={`w-3 h-3 shrink-0 ${planRemaining === 0 ? 'text-emerald-400' : textFaint}`} />
+        <CheckCircle2
+          className={`w-3 h-3 shrink-0 ${planRemaining === 0 ? '' : textFaint}`}
+          style={planRemaining === 0 ? { color: 'var(--intent-success-fg)' } : undefined}
+        />
         <span className={`text-[11px] ${textMuted} truncate`}>{planLabel}</span>
         <div className="flex-1" />
         <button
@@ -216,11 +219,12 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
         </button>
         <button
           type="button"
-          className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
-            isDark
-              ? 'text-emerald-200 bg-emerald-400/10 hover:bg-emerald-400/15 border border-emerald-400/20'
-              : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200'
-          }`}
+          style={{
+            color: 'var(--intent-success-fg)',
+            background: 'var(--intent-success-bg)',
+            border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)',
+          }}
+          className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors"
         >
           <GitPullRequest className="w-2.5 h-2.5" />
           {t('snapshot.openPr')}

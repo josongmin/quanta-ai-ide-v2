@@ -18,7 +18,6 @@ export type {
 } from './model/types';
 
 export { buildImpactGraph } from './lib/impactGraphBuilder';
-export { edgeStyle, inferEdgeConfidence } from './lib/confidenceModel';
 export { planSafeChange } from './lib/safeChangePlanner';
 export { MOCK_ADJACENCY, MOCK_SEEDS } from './lib/fixtures';
 

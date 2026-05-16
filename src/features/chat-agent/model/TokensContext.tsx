@@ -246,36 +246,40 @@ function migrateLegacy(raw: unknown): Partial<Tokens> | null {
   const asString = (value: unknown): string | undefined =>
     typeof value === 'string' && value.trim().length > 0 ? value : undefined;
 
-  const next: Partial<Tokens> = { global: {} };
-  next.global!.glass = {};
-  next.global!.card = {};
+  // mergeTokens accepts a deep-partial shape, so the migration shape is
+  // intentionally loosely typed and cast at the boundary.
+  const glass: Partial<GlobalTokenSections['glass']> = {};
+  const card: Partial<GlobalTokenSections['card']> = {};
 
-  const glassAlphaDark = asNumber(legacy.glassAlphaDark);
-  if (glassAlphaDark != null) next.global!.glass!.fillAlphaDark = glassAlphaDark;
-  const glassAlphaLight = asNumber(legacy.glassAlphaLight);
-  if (glassAlphaLight != null) next.global!.glass!.fillAlphaLight = glassAlphaLight;
-  const borderDark = asNumber(legacy.glassBorderAlphaDark);
-  if (borderDark != null) next.global!.glass!.borderDark = borderDark;
-  const borderLight = asNumber(legacy.glassBorderAlphaLight);
-  if (borderLight != null) next.global!.glass!.borderLight = borderLight;
-  const blur = asNumber(legacy.glassBlur);
-  if (blur != null) next.global!.glass!.blur = `${blur}px`;
-  const radius = asNumber(legacy.radius);
-  if (radius != null) next.global!.glass!.radius = `${radius}px`;
-  const radiusSm = asNumber(legacy.radiusSm);
-  if (radiusSm != null) next.global!.card!.radiusInner = `${radiusSm}px`;
-  const cardPad = asNumber(legacy.cardPad);
-  if (cardPad != null) next.global!.card!.padding = `${cardPad}px`;
-  const gapY = asNumber(legacy.gapY);
-  if (gapY != null) next.global!.card!.gap = `${gapY}px`;
+  const glassAlphaDark = asNumber(legacy['glassAlphaDark']);
+  if (glassAlphaDark != null) glass.fillAlphaDark = glassAlphaDark;
+  const glassAlphaLight = asNumber(legacy['glassAlphaLight']);
+  if (glassAlphaLight != null) glass.fillAlphaLight = glassAlphaLight;
+  const borderDark = asNumber(legacy['glassBorderAlphaDark']);
+  if (borderDark != null) glass.borderDark = borderDark;
+  const borderLight = asNumber(legacy['glassBorderAlphaLight']);
+  if (borderLight != null) glass.borderLight = borderLight;
+  const blur = asNumber(legacy['glassBlur']);
+  if (blur != null) glass.blur = `${String(blur)}px`;
+  const radius = asNumber(legacy['radius']);
+  if (radius != null) glass.radius = `${String(radius)}px`;
+  const radiusSm = asNumber(legacy['radiusSm']);
+  if (radiusSm != null) card.radiusInner = `${String(radiusSm)}px`;
+  const cardPad = asNumber(legacy['cardPad']);
+  if (cardPad != null) card.padding = `${String(cardPad)}px`;
+  const gapY = asNumber(legacy['gapY']);
+  if (gapY != null) card.gap = `${String(gapY)}px`;
 
-  const bgDark = asString(legacy.bgDark);
-  const bgLight = asString(legacy.bgLight);
-  if (bgDark || bgLight) {
-    next.semantic = {};
-    if (bgDark) next.semantic.dark = { bgSurface: bgDark, bgStage: bgDark };
-    if (bgLight) next.semantic.light = { bgSurface: bgLight, bgStage: bgLight };
-  }
+  const semanticPartial: { dark?: Partial<SemanticTokens>; light?: Partial<SemanticTokens> } = {};
+  const bgDark = asString(legacy['bgDark']);
+  const bgLight = asString(legacy['bgLight']);
+  if (bgDark) semanticPartial.dark = { bgSurface: bgDark, bgStage: bgDark };
+  if (bgLight) semanticPartial.light = { bgSurface: bgLight, bgStage: bgLight };
+
+  const next = {
+    global: { glass, card },
+    ...(bgDark || bgLight ? { semantic: semanticPartial } : {}),
+  } as unknown as Partial<Tokens>;
 
   return next;
 }
@@ -298,7 +302,7 @@ function applySemanticTheme(theme: Theme, tokens: SemanticTokens) {
   for (const [key, value] of Object.entries(tokens) as [keyof SemanticTokens, string][]) {
     root.style.setProperty(SEMANTIC_TO_CSS_VAR[key], value);
   }
-  root.dataset.theme = theme;
+  root.dataset['theme'] = theme;
   root.style.background = tokens.bgCanvas;
   root.style.backgroundColor = tokens.bgCanvas;
   root.style.colorScheme = theme;

@@ -51,7 +51,7 @@ export function EmptyBody({ onPick }: { onPick: (target: InvestigationTarget) =>
           </div>
           <div className="flex flex-col">
             {items.map((t) => (
-              <FixtureRow key={t.id} target={t} onClick={() => onPick(t)} />
+              <FixtureRow key={t.id} target={t} onClick={() => { onPick(t); }} />
             ))}
           </div>
         </div>

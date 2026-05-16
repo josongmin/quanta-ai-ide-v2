@@ -14,7 +14,7 @@ export function ConflictsPanel({ conflicts, t }: Props) {
   if (conflicts.length === 0) return null;
   return (
     <GlassCard className="rounded-lg p-3">
-      <SectionHeader title={t('conflicts.header')} badge={`${conflicts.length.toString()}`} />
+      <SectionHeader title={t('conflicts.header')} badge={conflicts.length.toString()} />
       <ul className="flex flex-col gap-1.5 mt-1">
         {conflicts.map((c) => (
           <li

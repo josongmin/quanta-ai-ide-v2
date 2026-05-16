@@ -22,9 +22,9 @@ export function selectDeteriorating(
   prev: HotspotEntry[],
   curr: HotspotEntry[],
   minDelta = 0.05,
-): Array<HotspotEntry & { delta: number }> {
+): (HotspotEntry & { delta: number })[] {
   const prevById = new Map(prev.map((e) => [e.fileId, e]));
-  const out: Array<HotspotEntry & { delta: number }> = [];
+  const out: (HotspotEntry & { delta: number })[] = [];
   for (const e of curr) {
     const before = prevById.get(e.fileId);
     if (!before) continue;
@@ -39,13 +39,13 @@ export function selectSeamCandidates(
   entries: HotspotEntry[],
   couplings: TemporalCouplingCluster[],
   n = 10,
-): Array<{ cluster: TemporalCouplingCluster; topEntry: HotspotEntry; aggregateScore: number }> {
+): { cluster: TemporalCouplingCluster; topEntry: HotspotEntry; aggregateScore: number }[] {
   const byFile = new Map(entries.map((e) => [e.fileId, e]));
-  const ranked: Array<{
+  const ranked: {
     cluster: TemporalCouplingCluster;
     topEntry: HotspotEntry;
     aggregateScore: number;
-  }> = [];
+  }[] = [];
 
   for (const cluster of couplings) {
     let topEntry: HotspotEntry | null = null;

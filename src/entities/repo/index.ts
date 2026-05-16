@@ -5,7 +5,6 @@ export type {
   Layer,
   IngressProtocol,
   EgressProtocol,
-  Boundary,
   Confidence,
   FileRecord,
   FolderRecord,

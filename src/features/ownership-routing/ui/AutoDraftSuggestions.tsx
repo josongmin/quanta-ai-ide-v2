@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import type { AutoDraftSuggestion } from '@entities/ownership';
 import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
 
-export interface AutoDraftSuggestionsProps {
+export type AutoDraftSuggestionsProps = {
   suggestions: AutoDraftSuggestion[];
   onAccept?: (id: string, zoneId: string, action: AutoDraftSuggestion['proposedAction']) => void;
   onDismiss?: (id: string) => void;
@@ -233,7 +233,7 @@ export function AutoDraftSuggestions({
               key={s.id}
               suggestion={s}
               onAccept={() => onAccept?.(s.id, s.zoneId, s.proposedAction)}
-              onDismiss={() => handleDismiss(s.id)}
+              onDismiss={() => { handleDismiss(s.id); }}
             />
           ))}
         </div>

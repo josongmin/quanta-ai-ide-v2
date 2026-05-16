@@ -85,7 +85,7 @@ export function buildFollowUps(
       questionType: currentType,
     });
   } else if (bundle.evidence.length > 0) {
-    const first = bundle.evidence[0]!;
+    const first = bundle.evidence[0];
     out.push({
       id: `fu-${bundle.id}-evidence`,
       question: evidenceQuestion(first),

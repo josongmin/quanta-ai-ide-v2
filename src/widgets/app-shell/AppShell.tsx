@@ -1,7 +1,7 @@
 import { lazy, Suspense, useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Brain, GitPullRequest, Code2, Bell, ChevronDown, Palette,
-  Sun, Moon, RotateCcw, ShieldCheck, Bot, Radar, Wand2, ListChecks,
+  Sun, Moon, RotateCcw, ShieldCheck, Bot, Radar, Wand2,
   Search,
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';

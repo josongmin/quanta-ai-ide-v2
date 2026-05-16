@@ -61,7 +61,7 @@ function dominantKind(items: EvidenceItem[]): EvidenceKind | null {
   for (const it of items) {
     counts.set(it.kind, (counts.get(it.kind) ?? 0) + 1);
   }
-  let best: EvidenceKind = items[0]!.kind;
+  let best: EvidenceKind = items[0].kind;
   let bestCount = -1;
   for (const [kind, count] of counts) {
     if (count > bestCount) {
@@ -225,7 +225,7 @@ export async function runPlanner(opts: RunPlannerOptions): Promise<PlannerTrace>
     } else {
       await delay(300, signal);
     }
-    const s = ordered[i]!;
+    const s = ordered[i];
     allSteps.push(s);
     if (onStep) onStep(s, [...allSteps]);
   }

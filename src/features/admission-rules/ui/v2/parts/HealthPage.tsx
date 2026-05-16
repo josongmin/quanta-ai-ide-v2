@@ -1026,7 +1026,7 @@ function FeedRow({
     : '#5fa86c';
 
   const fired = decision.ruleResults.filter((r) => r.status === 'block' || r.status === 'warn');
-  const topRule = fired.length > 0 ? fired[0]!.ruleName : null;
+  const topRule = fired.length > 0 ? fired[0].ruleName : null;
 
   // Real metrics for the row: counts come from the actual PR diff and
   // decision rather than placeholder copy, so each row shows the same
@@ -1034,7 +1034,7 @@ function FeedRow({
   const filesChanged = diff.changes.length;
   const rippleCount = diff.affected.length;
   // Deterministic relative time per seed — newer seeds = more recent.
-  const ageMin = (RETRO_SEEDS[RETRO_SEEDS.length - 1]! - seed) * 47 + index * 3;
+  const ageMin = (RETRO_SEEDS[RETRO_SEEDS.length - 1] - seed) * 47 + index * 3;
   const ageLabel = ageMin < 60
     ? `${ageMin}m`
     : ageMin < 1440
@@ -1281,6 +1281,7 @@ function Retroactive({
           return (
             <div
               key={r.seed}
+              role="presentation"
               onMouseEnter={() => { setHover(i); }}
               onMouseLeave={() => { setHover((v) => (v === i ? null : v)); }}
               className="relative flex-1 rounded-t-sm transition-all cursor-pointer"

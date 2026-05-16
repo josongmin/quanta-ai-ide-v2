@@ -1,0 +1,182 @@
+{
+  "header": {
+    "title": "智能体舰队",
+    "subtitle": "你睡觉时仍在生成 PR 的后台例程",
+    "newRoutine": "新建例程",
+    "weekRoi": "本周",
+    "roi": {
+      "prsMerged": "合并 PR {{n}} 个",
+      "locDeleted": "删除 {{n}} 行",
+      "hoursSaved": "节省评审 {{h}} 小时",
+      "spent": "已花费 ${{usd}}"
+    }
+  },
+  "rail": {
+    "title": "例程",
+    "search": "搜索例程…",
+    "filter": { "all": "全部", "active": "运行", "paused": "暂停", "draft": "草稿" },
+    "empty": "无匹配例程。",
+    "nextFire": "下次: {{when}}",
+    "noNextFire": "事件触发",
+    "metricSuccess": "成功率 {{pct}}% · 30天",
+    "metricNet": "净 LOC {{n}}",
+    "metricSaved": "节省 {{h}} 小时",
+    "memoryItems": "{{n}} 条记忆"
+  },
+  "status": { "active": "运行", "paused": "暂停", "draft": "草稿" },
+  "trust": {
+    "level": "信任 {{n}}/5",
+    "level1": "只读",
+    "level2": "建议",
+    "level3": "补丁",
+    "level4": "推送",
+    "level5": "自动合并",
+    "tooltip": "此例程无需询问可执行的最大动作。"
+  },
+  "trigger": {
+    "cron": "定时 · {{label}}",
+    "event": "事件 · {{event}}",
+    "manual": "手动",
+    "evt": {
+      "pr.merged": "PR 合并",
+      "ci.failed": "CI 失败",
+      "dep.released": "上游发布",
+      "bench.regressed": "性能回退"
+    }
+  },
+  "outputKind": { "pr": "PR", "issue": "Issue", "report": "报告" },
+  "run": {
+    "header": "近期运行",
+    "empty": "暂无运行。",
+    "live": "实时",
+    "elapsed": "{{ms}}ms",
+    "started": "{{when}} 开始",
+    "ended": "{{when}} 结束",
+    "trigger": "触发: {{by}}",
+    "trustEffective": "信任 {{n}}",
+    "openOutput": "打开产物",
+    "viewLogs": "查看日志",
+    "cancel": "取消运行",
+    "approveGate": "批准门控",
+    "details": "运行详情",
+    "candidates": "Best-of-N 候选",
+    "candidateWinner": "已选",
+    "candidateAdopt": "采用此候选",
+    "selfEval": "自评 {{pct}}%",
+    "blastRadius": "影响范围",
+    "br": { "safe": "安全", "review": "需评审", "blast-radius": "广泛" }
+  },
+  "runStatus": {
+    "queued": "排队",
+    "running": "运行中",
+    "awaiting-human": "等待人工",
+    "merged": "已合并",
+    "closed": "已关闭",
+    "failed": "失败",
+    "cancelled": "已取消"
+  },
+  "stepPhase": {
+    "plan": "规划",
+    "reading": "读取",
+    "searching": "搜索",
+    "editing": "编辑",
+    "running": "运行",
+    "reviewing": "评审",
+    "pr": "PR"
+  },
+  "stepState": {
+    "pending": "等待",
+    "running": "运行中",
+    "ok": "成功",
+    "fail": "失败",
+    "skipped": "跳过",
+    "gated": "人工门控"
+  },
+  "fleet": {
+    "title": "舰队",
+    "concurrency": "{{running}} 运行 · {{queued}} 排队",
+    "concurrencyMax": "最多 {{n}} 并发",
+    "spendHour": "${{usd}}/时 · 预计 ${{day}}/天",
+    "attention": "评审注意力预算",
+    "attentionSpent": "本周 {{h}}/{{budget}} 小时",
+    "alerts": "告警",
+    "noAlerts": "一切正常。",
+    "conflicts": "文件冲突",
+    "conflictRow": "{{a}} ↔ {{b}}",
+    "conflictResolve": "串行化",
+    "alertKind": {
+      "loop": "疑似循环",
+      "cost-spike": "成本飙升",
+      "pr-storm": "PR 爆量",
+      "silent-failure": "静默失败",
+      "guardrail-hit": "护栏触发"
+    }
+  },
+  "hitl": {
+    "title": "等你处理",
+    "empty": "收件零 — 舰队自驾中。",
+    "waiting": "等待 {{when}}",
+    "approveAll": "批量批准安全项",
+    "checkpoint": {
+      "plan-approval": "计划批准",
+      "pre-push": "推送前评审",
+      "risky-tier-only": "仅高风险检查"
+    }
+  },
+  "editor": {
+    "open": "编辑例程",
+    "title": "{{name}}",
+    "tabDefinition": "定义",
+    "tabGuardrails": "护栏",
+    "tabSchedule": "调度",
+    "tabDryRun": "Dry-run 预览",
+    "save": "保存",
+    "discard": "放弃",
+    "scope": "范围",
+    "trustDial": "信任拨盘",
+    "guardrail": {
+      "maxLoc": "每个 PR 最大 LOC",
+      "forbidden": "禁止路径",
+      "confidenceFloor": "信任下限",
+      "requireGreenCi": "CI 必须通过",
+      "checkpoints": "HITL 检查点",
+      "noCheckpoints": "无人工检查点"
+    },
+    "budget": {
+      "title": "预算",
+      "daily": "每日 ${{n}}",
+      "weekly": "每周 ${{n}}",
+      "perRun": "单次 ${{n}}"
+    },
+    "dryRun": {
+      "title": "若该例程昨日就跑过…",
+      "summary": "将开 PR {{prs}} 个 · 影响 {{lines}} LOC · 约 ${{usd}}",
+      "candidatesHeader": "主要候选",
+      "noCandidates": "无可触发候选。"
+    }
+  },
+  "metrics": {
+    "successRate": "成功率",
+    "merged": "合并",
+    "rejected": "拒绝",
+    "issues": "Issues",
+    "spent": "花费",
+    "netLoc": "净 LOC",
+    "reviewerTouches": "评审者改动",
+    "memory": "记忆",
+    "thirtyDay": "近 30 日"
+  },
+  "footer": "se-dot-field-demo · agents",
+  "actions": {
+    "pause": "暂停",
+    "resume": "恢复",
+    "runNow": "立即运行",
+    "duplicate": "复制",
+    "delete": "删除",
+    "edit": "编辑"
+  },
+  "empty": {
+    "title": "未选中例程",
+    "subtitle": "在左侧选择一个,或新建一个例程,让智能体在后台开始工作。"
+  }
+}

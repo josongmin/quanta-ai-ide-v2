@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import type {
   AgentTurn, BranchState, CiCheck, Integration, PrState, Project, Task,
-} from './types';
+} from '../types';
 
 type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 type Density = 'compact' | 'comfortable' | 'spacious';
@@ -207,9 +207,10 @@ export function ContextRail({
               {t('a11y.highContrast')}
             </span>
             <span
+              style={highContrast ? { background: 'var(--intent-success-vivid)' } : undefined}
               className={`shrink-0 inline-flex items-center w-7 h-3.5 rounded-full transition-colors ${
                 highContrast
-                  ? (isDark ? 'bg-emerald-400/85' : 'bg-emerald-500')
+                  ? ''
                   : (isDark ? 'bg-white/[0.15]' : 'bg-black/[0.15]')
               }`}
             >
@@ -243,17 +244,17 @@ function SuccessRatePanel({
 
   function rateRow(label: string, ok: number, total: number, key: string) {
     const pct = total > 0 ? (ok / total) * 100 : 0;
-    const fillTone = pct >= 80
-      ? 'bg-emerald-400/85'
+    const fillBg = pct >= 80
+      ? 'var(--intent-success-vivid)'
       : pct >= 50
-        ? (isDark ? 'bg-amber-400/80' : 'bg-amber-500/85')
-        : (isDark ? 'bg-rose-400/80' : 'bg-rose-500/85');
+        ? 'var(--intent-warn-vivid)'
+        : 'var(--intent-danger-vivid)';
 
     return (
       <div key={key} className="flex items-center gap-2 text-[10px]">
         <span className={`shrink-0 w-14 truncate font-mono ${muted}`} title={label}>{label}</span>
         <div className={`flex-1 h-1 rounded-full ${trackBg} overflow-hidden`}>
-          <div className={`h-full rounded-full ${fillTone}`} style={{ width: `${pct}%` }} />
+          <div className="h-full rounded-full" style={{ width: `${pct}%`, background: fillBg }} />
         </div>
         <span className={`shrink-0 w-10 text-right font-mono tabular-nums ${muted}`}>
           {t('successRate.rate', { ok, total })}
@@ -298,17 +299,26 @@ function DriftRow({
   t: TranslateFn;
 }) {
   if (drift.kind === 'idle') return null;
+  void isDark;
   const isAnomaly = drift.kind === 'stuck' || drift.kind === 'noisy';
-  const tone = isAnomaly
-    ? (isDark ? 'border-amber-400/40 bg-amber-400/10 text-amber-300' : 'border-amber-500/40 bg-amber-50 text-amber-700')
-    : (isDark ? 'border-emerald-400/30 bg-emerald-400/[0.06] text-emerald-300' : 'border-emerald-500/30 bg-emerald-50 text-emerald-700');
+  const toneStyle: React.CSSProperties = isAnomaly
+    ? {
+        borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 40%, transparent)',
+        background: 'var(--intent-warn-bg)',
+        color: 'var(--intent-warn-fg)',
+      }
+    : {
+        borderColor: 'color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)',
+        background: 'var(--intent-success-bg)',
+        color: 'var(--intent-success-fg)',
+      };
   const x = drift.multiple.toFixed(1);
   const text = drift.kind === 'stuck' ? t('drift.stuck', { x })
     : drift.kind === 'noisy' ? t('drift.noisy', { x })
     : t('drift.ok');
 
   return (
-    <div className={`flex items-start gap-2 px-2 py-1.5 rounded-md border ${tone}`}>
+    <div style={toneStyle} className="flex items-start gap-2 px-2 py-1.5 rounded-md border">
       <Activity className="w-3 h-3 shrink-0 mt-0.5 opacity-80" />
       <span className="text-[11px] leading-relaxed">{text}</span>
     </div>
@@ -337,12 +347,12 @@ function PrCiPanel({
   const heading = isDark ? 'text-white/85' : 'text-black/85';
   const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
 
-  function checkTone(status: CiCheck['status']): { dot: string; running: boolean } {
-    if (status === 'success') return { dot: 'bg-emerald-500', running: false };
-    if (status === 'failure') return { dot: 'bg-rose-500', running: false };
-    if (status === 'cancelled') return { dot: 'bg-zinc-400/60', running: false };
-    if (status === 'queued') return { dot: 'bg-zinc-400/60', running: false };
-    return { dot: isDark ? 'bg-amber-300' : 'bg-amber-500', running: true };
+  function checkTone(status: CiCheck['status']): { style: React.CSSProperties; running: boolean } {
+    if (status === 'success') return { style: { background: 'var(--intent-success-vivid)' }, running: false };
+    if (status === 'failure') return { style: { background: 'var(--intent-danger-vivid)' }, running: false };
+    if (status === 'cancelled') return { style: { background: 'color-mix(in srgb, var(--fg-muted) 60%, transparent)' }, running: false };
+    if (status === 'queued') return { style: { background: 'color-mix(in srgb, var(--fg-muted) 60%, transparent)' }, running: false };
+    return { style: { background: 'var(--intent-warn-fg)' }, running: true };
   }
 
   return (
@@ -354,15 +364,15 @@ function PrCiPanel({
           <span className={muted}>{t('prCi.behind', { n: branchState.behind })}</span>
           <span className={faint}>·</span>
           {branchState.mergeable === 'clean' ? (
-            <span className={isDark ? 'text-emerald-300' : 'text-emerald-700'}>
+            <span style={{ color: 'var(--intent-success-fg)' }}>
               ✓ {t('prCi.mergeable')}
             </span>
           ) : branchState.mergeable === 'dirty' ? (
-            <span className={isDark ? 'text-rose-300' : 'text-rose-700'}>
+            <span style={{ color: 'var(--intent-danger-fg)' }}>
               ⚠ {t('prCi.dirty')}
             </span>
           ) : branchState.mergeable === 'blocked' ? (
-            <span className={isDark ? 'text-amber-300' : 'text-amber-700'}>
+            <span style={{ color: 'var(--intent-warn-fg)' }}>
               ⊘ {t('prCi.blocked')}
             </span>
           ) : null}
@@ -395,15 +405,19 @@ function PrCiPanel({
               </div>
               <div className="flex flex-wrap gap-1">
                 {prState.reviewers.map((r) => {
-                  const tone = r.state === 'approved'
-                    ? (isDark ? 'text-emerald-300 border-emerald-400/30' : 'text-emerald-700 border-emerald-500/30')
+                  const toneStyle: React.CSSProperties = r.state === 'approved'
+                    ? { color: 'var(--intent-success-fg)', borderColor: 'color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)' }
                     : r.state === 'changes_requested'
-                      ? (isDark ? 'text-rose-300 border-rose-400/30' : 'text-rose-700 border-rose-500/30')
-                      : (isDark ? 'text-white/55 border-white/[0.10]' : 'text-black/55 border-black/[0.10]');
+                      ? { color: 'var(--intent-danger-fg)', borderColor: 'color-mix(in srgb, var(--intent-danger-vivid) 30%, transparent)' }
+                      : {};
+                  const toneClass = r.state === 'approved' || r.state === 'changes_requested'
+                    ? ''
+                    : (isDark ? 'text-white/55 border-white/[0.10]' : 'text-black/55 border-black/[0.10]');
                   return (
                     <span
                       key={r.handle}
-                      className={`inline-flex items-center gap-1 px-1.5 py-px rounded text-[10px] font-mono border ${tone}`}
+                      style={toneStyle}
+                      className={`inline-flex items-center gap-1 px-1.5 py-px rounded text-[10px] font-mono border ${toneClass}`}
                     >
                       {r.state === 'approved' ? '✓' : r.state === 'changes_requested' ? '⚠' : '○'}
                       {r.handle}
@@ -427,7 +441,7 @@ function PrCiPanel({
                       key={`${c.name}:${i}`}
                       className={`flex items-center gap-2 text-[10px] font-mono ${muted}`}
                     >
-                      <span className={`coding-ci-dot ${tone.dot} ${tone.running ? 'coding-ci-dot--running' : ''}`} />
+                      <span style={tone.style} className={`coding-ci-dot ${tone.running ? 'coding-ci-dot--running' : ''}`} />
                       <span className="flex-1 truncate">{c.name}</span>
                       <span className={faint}>{t(`prCi.check${c.status.charAt(0).toUpperCase() + c.status.slice(1)}`)}</span>
                       {c.durationMs != null && (
@@ -441,7 +455,7 @@ function PrCiPanel({
           )}
 
           {prState.conflicts > 0 && (
-            <div className={`text-[10px] ${isDark ? 'text-rose-300' : 'text-rose-700'}`}>
+            <div style={{ color: 'var(--intent-danger-fg)' }} className="text-[10px]">
               ⚠ {t('prCi.conflicts', { n: prState.conflicts })}
             </div>
           )}
@@ -461,7 +475,10 @@ function IntegrationRow({
   const Icon = INTEGRATION_ICON[integration.kind];
   const labelColor = isDark ? 'text-white/85' : 'text-black/85';
   const subColor = isDark ? 'text-white/40' : 'text-black/45';
-  const dotTone = integration.connected ? 'bg-emerald-400/85' : (isDark ? 'bg-white/20' : 'bg-black/20');
+  const dotStyle: React.CSSProperties | undefined = integration.connected
+    ? { background: 'var(--intent-success-vivid)' }
+    : undefined;
+  const dotTone = integration.connected ? '' : (isDark ? 'bg-white/20' : 'bg-black/20');
 
   return (
     <div className={`flex items-center gap-2 px-2 py-1.5 rounded-md ${
@@ -477,6 +494,7 @@ function IntegrationRow({
         </div>
       </div>
       <span
+        style={dotStyle}
         className={`shrink-0 w-1.5 h-1.5 rounded-full ${dotTone} ${integration.connected ? 'animate-pulse' : ''}`}
         title={integration.connected ? t('integrations.connected') : t('integrations.disconnected')}
       />

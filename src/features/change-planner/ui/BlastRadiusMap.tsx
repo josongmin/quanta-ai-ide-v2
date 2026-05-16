@@ -19,7 +19,7 @@ import type {
   ImpactRing,
 } from '../model/types';
 
-interface Props {
+type Props = {
   graph: ImpactGraph;
 }
 

@@ -10,14 +10,14 @@ const RELATIVE_TIME_RE = /\d+\s*(d|w|mo|y|months?|days?|weeks?|years?)\s*(ago)?/
 const PAREN_AGO_RE = /\(\d+\s+(months?|days?|weeks?|years?)\s+ago\)/i;
 
 function parseId(summary: string): string {
-  const m = summary.match(INCIDENT_ID_RE);
+  const m = INCIDENT_ID_RE.exec(summary);
   return m ? m[0] : 'Similar incident';
 }
 
 function parseAge(summary: string): string {
-  const paren = summary.match(PAREN_AGO_RE);
+  const paren = PAREN_AGO_RE.exec(summary);
   if (paren) return paren[0].replace(/[()]/g, '');
-  const rel = summary.match(RELATIVE_TIME_RE);
+  const rel = RELATIVE_TIME_RE.exec(summary);
   if (rel) return rel[0];
   return '(date unknown)';
 }

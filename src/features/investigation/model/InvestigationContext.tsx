@@ -21,7 +21,20 @@ import {
 import { gatherContext, rankEvidence } from '../planner/gatherContext';
 import { composeAnswer, enrichBundle } from '../planner/answerComposer';
 
-type Ctx = {
+type NotebookCtx = {
+  notebook: NotebookEntry[];
+  activeNotebookId: string | null;
+  addQuestion: (targetId: string, text: string, questionType: QuestionType) => string;
+  answerQuestion: (questionId: string, answer: InvestigationAnswer, bundleId: string) => void;
+  archiveQuestion: (questionId: string) => void;
+  pinNotebook: (id: string) => void;
+  unpinNotebook: (id: string) => void;
+  setActiveNotebook: (id: string | null) => void;
+  clearNotebook: (id: string) => void;
+  ensureNotebookForTarget: (target: InvestigationTarget) => string;
+};
+
+type InvestigationRunnerCtx = {
   activeTarget: InvestigationTarget | null;
   bundle: ContextBundle | null;
   answer: InvestigationAnswer | null;
@@ -37,53 +50,20 @@ type Ctx = {
   openPanel: () => void;
   closePanel: () => void;
   pickEvidence: (id: string | null) => void;
-  // Phase 2: notebook
-  notebook: NotebookEntry[];
-  activeNotebookId: string | null;
-  addQuestion: (targetId: string, text: string, questionType: QuestionType) => string;
-  answerQuestion: (questionId: string, answer: InvestigationAnswer, bundleId: string) => void;
-  archiveQuestion: (questionId: string) => void;
-  pinNotebook: (id: string) => void;
-  unpinNotebook: (id: string) => void;
-  setActiveNotebook: (id: string | null) => void;
-  clearNotebook: (id: string) => void;
 };
 
-const InvestigationCtx = createContext<Ctx | null>(null);
+type Ctx = InvestigationRunnerCtx & Omit<NotebookCtx, 'ensureNotebookForTarget'>;
+
+const NotebookC = createContext<NotebookCtx | null>(null);
+const InvestigationRunnerC = createContext<InvestigationRunnerCtx | null>(null);
 
 function notebookIdForTarget(targetId: string): string {
   return `nb-${targetId}`;
 }
 
-export function InvestigationProvider({ children }: { children: ReactNode }) {
-  const [activeTarget, setActiveTarget] = useState<InvestigationTarget | null>(null);
-  const [bundle, setBundle] = useState<ContextBundle | null>(null);
-  const [answer, setAnswer] = useState<InvestigationAnswer | null>(null);
-  const [status, setStatus] = useState<BundleStatus>('idle');
-  const [questionType, setQuestionTypeState] = useState<QuestionType>('why_risky');
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [pickedEvidenceId, setPickedEvidenceId] = useState<string | null>(null);
-
+function NotebookProvider({ children }: { children: ReactNode }) {
   const [notebook, setNotebook] = useState<NotebookEntry[]>(FIXTURE_NOTEBOOKS);
   const [activeNotebookId, setActiveNotebookIdState] = useState<string | null>(null);
-
-  const abortRef = useRef<AbortController | null>(null);
-  const runIdRef = useRef(0);
-  // Avoid auto-answering the same pending question twice for one completion.
-  const lastAutoAnsweredRef = useRef<string | null>(null);
-
-  const cancelInternal = useCallback(() => {
-    if (abortRef.current) {
-      abortRef.current.abort();
-      abortRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      cancelInternal();
-    };
-  }, [cancelInternal]);
 
   const ensureNotebookForTarget = useCallback((target: InvestigationTarget): string => {
     const wantId = notebookIdForTarget(target.id);
@@ -101,110 +81,6 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
     return wantId;
   }, []);
 
-  const runStart = useCallback((target: InvestigationTarget, qt: QuestionType) => {
-    cancelInternal();
-    const controller = new AbortController();
-    abortRef.current = controller;
-    const myRunId = ++runIdRef.current;
-
-    setActiveTarget(target);
-    setBundle(null);
-    setAnswer(null);
-    setStatus('gathering');
-    setQuestionTypeState(qt);
-    setPanelOpen(true);
-    setPickedEvidenceId(null);
-
-    // Ensure a notebook entry exists for this target and mark it active.
-    const nbId = ensureNotebookForTarget(target);
-    setActiveNotebookIdState(nbId);
-    lastAutoAnsweredRef.current = null;
-
-    const onPartial = (partial: ContextBundle) => {
-      if (myRunId !== runIdRef.current) return;
-      setBundle(partial);
-      setStatus('partial');
-    };
-
-    gatherContext(target, qt, onPartial, controller.signal)
-      .then((finalBundle) => {
-        if (myRunId !== runIdRef.current) return;
-        const enriched = enrichBundle(finalBundle);
-        const composed = composeAnswer(enriched);
-        setBundle(enriched);
-        setAnswer(composed);
-        setStatus('complete');
-      })
-      .catch((err: unknown) => {
-        if (myRunId !== runIdRef.current) return;
-        if (err instanceof DOMException && err.name === 'AbortError') {
-          return;
-        }
-        setStatus('error');
-      });
-  }, [cancelInternal, ensureNotebookForTarget]);
-
-  const start = useCallback((target: InvestigationTarget, qt: QuestionType = 'why_risky') => {
-    runStart(target, qt);
-  }, [runStart]);
-
-  const cancel = useCallback(() => {
-    cancelInternal();
-    runIdRef.current += 1;
-    setStatus((cur) => (cur === 'gathering' || cur === 'partial' ? 'idle' : cur));
-  }, [cancelInternal]);
-
-  const regenerate = useCallback(() => {
-    if (!activeTarget) return;
-    runStart(activeTarget, questionType);
-  }, [activeTarget, questionType, runStart]);
-
-  const setQuestionType = useCallback((qt: QuestionType) => {
-    setQuestionTypeState(qt);
-    if (!activeTarget) return;
-    // If we already have a complete bundle for this target, just rerank +
-    // recompose locally — no need to re-stream the same fixture evidence.
-    // This is the same shortcut a real backend should take when the
-    // evidence pool hasn't changed: rank is cheap, gathering isn't.
-    if (bundle && bundle.target.id === activeTarget.id && status === 'complete') {
-      const ranked: ContextBundle = {
-        ...bundle,
-        questionType: qt,
-        evidence: rankEvidence(bundle.evidence, qt),
-      };
-      const enriched = enrichBundle(ranked);
-      setBundle(enriched);
-      setAnswer(composeAnswer(enriched));
-      setPickedEvidenceId(null);
-      return;
-    }
-    runStart(activeTarget, qt);
-  }, [activeTarget, bundle, status, runStart]);
-
-  const clear = useCallback(() => {
-    cancelInternal();
-    runIdRef.current += 1;
-    setActiveTarget(null);
-    setBundle(null);
-    setAnswer(null);
-    setStatus('idle');
-    setPickedEvidenceId(null);
-    setPanelOpen(false);
-  }, [cancelInternal]);
-
-  const openPanel = useCallback(() => {
-    setPanelOpen(true);
-  }, []);
-
-  const closePanel = useCallback(() => {
-    setPanelOpen(false);
-  }, []);
-
-  const pickEvidence = useCallback((id: string | null) => {
-    setPickedEvidenceId((cur) => (cur === id ? null : id));
-  }, []);
-
-  // ── Notebook actions ──────────────────────────────────────────
   const addQuestion = useCallback((targetId: string, text: string, qt: QuestionType): string => {
     const trimmed = text.trim();
     const newId = `nbq-${targetId}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -220,11 +96,7 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
         askedAt: Date.now(),
       };
       if (idx === -1) {
-        // Need a target to create the entry; fall back to a stub one if none
-        // available — caller must usually have an active target.
-        const stubTarget: InvestigationTarget = activeTarget && activeTarget.id === targetId
-          ? activeTarget
-          : { kind: 'file', id: targetId, label: targetId };
+        const stubTarget: InvestigationTarget = { kind: 'file', id: targetId, label: targetId };
         const fresh: NotebookEntry = {
           id: wantId,
           target: stubTarget,
@@ -240,7 +112,7 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
     });
     setActiveNotebookIdState(wantId);
     return newId;
-  }, [activeTarget]);
+  }, []);
 
   const answerQuestion = useCallback((questionId: string, ans: InvestigationAnswer, bundleId: string) => {
     setNotebook((cur) =>
@@ -288,9 +160,180 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
     setNotebook((cur) => cur.map((e) => (e.id === id ? { ...e, questions: [] } : e)));
   }, []);
 
-  // Auto-answer wiring: when the active investigation completes, find the
-  // most recent `pending` question on the active notebook entry whose
-  // questionType matches the current run, and flip it to `answered`.
+  const value = useMemo<NotebookCtx>(() => ({
+    notebook,
+    activeNotebookId,
+    addQuestion,
+    answerQuestion,
+    archiveQuestion,
+    pinNotebook,
+    unpinNotebook,
+    setActiveNotebook,
+    clearNotebook,
+    ensureNotebookForTarget,
+  }), [
+    notebook, activeNotebookId,
+    addQuestion, answerQuestion, archiveQuestion,
+    pinNotebook, unpinNotebook, setActiveNotebook, clearNotebook,
+    ensureNotebookForTarget,
+  ]);
+
+  return <NotebookC.Provider value={value}>{children}</NotebookC.Provider>;
+}
+
+function useNotebookInternal(): NotebookCtx {
+  const c = useContext(NotebookC);
+  if (!c) throw new Error('useNotebook must be used inside InvestigationProvider');
+  return c;
+}
+
+export function useNotebook(): Omit<NotebookCtx, 'ensureNotebookForTarget'> {
+  const c = useNotebookInternal();
+  return useMemo(() => ({
+    notebook: c.notebook,
+    activeNotebookId: c.activeNotebookId,
+    addQuestion: c.addQuestion,
+    answerQuestion: c.answerQuestion,
+    archiveQuestion: c.archiveQuestion,
+    pinNotebook: c.pinNotebook,
+    unpinNotebook: c.unpinNotebook,
+    setActiveNotebook: c.setActiveNotebook,
+    clearNotebook: c.clearNotebook,
+  }), [c]);
+}
+
+function InvestigationRunnerProvider({ children }: { children: ReactNode }) {
+  const {
+    ensureNotebookForTarget,
+    setActiveNotebook,
+    activeNotebookId,
+    notebook,
+    answerQuestion,
+  } = useNotebookInternal();
+
+  const [activeTarget, setActiveTarget] = useState<InvestigationTarget | null>(null);
+  const [bundle, setBundle] = useState<ContextBundle | null>(null);
+  const [answer, setAnswer] = useState<InvestigationAnswer | null>(null);
+  const [status, setStatus] = useState<BundleStatus>('idle');
+  const [questionType, setQuestionTypeState] = useState<QuestionType>('why_risky');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [pickedEvidenceId, setPickedEvidenceId] = useState<string | null>(null);
+
+  const abortRef = useRef<AbortController | null>(null);
+  const runIdRef = useRef(0);
+  const lastAutoAnsweredRef = useRef<string | null>(null);
+
+  const cancelInternal = useCallback(() => {
+    if (abortRef.current) {
+      abortRef.current.abort();
+      abortRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      cancelInternal();
+    };
+  }, [cancelInternal]);
+
+  const runStart = useCallback((target: InvestigationTarget, qt: QuestionType) => {
+    cancelInternal();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const myRunId = ++runIdRef.current;
+
+    setActiveTarget(target);
+    setBundle(null);
+    setAnswer(null);
+    setStatus('gathering');
+    setQuestionTypeState(qt);
+    setPanelOpen(true);
+    setPickedEvidenceId(null);
+
+    const nbId = ensureNotebookForTarget(target);
+    setActiveNotebook(nbId);
+    lastAutoAnsweredRef.current = null;
+
+    const onPartial = (partial: ContextBundle) => {
+      if (myRunId !== runIdRef.current) return;
+      setBundle(partial);
+      setStatus('partial');
+    };
+
+    gatherContext(target, qt, onPartial, controller.signal)
+      .then((finalBundle) => {
+        if (myRunId !== runIdRef.current) return;
+        const enriched = enrichBundle(finalBundle);
+        const composed = composeAnswer(enriched);
+        setBundle(enriched);
+        setAnswer(composed);
+        setStatus('complete');
+      })
+      .catch((err: unknown) => {
+        if (myRunId !== runIdRef.current) return;
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          return;
+        }
+        setStatus('error');
+      });
+  }, [cancelInternal, ensureNotebookForTarget, setActiveNotebook]);
+
+  const start = useCallback((target: InvestigationTarget, qt: QuestionType = 'why_risky') => {
+    runStart(target, qt);
+  }, [runStart]);
+
+  const cancel = useCallback(() => {
+    cancelInternal();
+    runIdRef.current += 1;
+    setStatus((cur) => (cur === 'gathering' || cur === 'partial' ? 'idle' : cur));
+  }, [cancelInternal]);
+
+  const regenerate = useCallback(() => {
+    if (!activeTarget) return;
+    runStart(activeTarget, questionType);
+  }, [activeTarget, questionType, runStart]);
+
+  const setQuestionType = useCallback((qt: QuestionType) => {
+    setQuestionTypeState(qt);
+    if (!activeTarget) return;
+    if (bundle?.target.id === activeTarget.id && status === 'complete') {
+      const ranked: ContextBundle = {
+        ...bundle,
+        questionType: qt,
+        evidence: rankEvidence(bundle.evidence, qt),
+      };
+      const enriched = enrichBundle(ranked);
+      setBundle(enriched);
+      setAnswer(composeAnswer(enriched));
+      setPickedEvidenceId(null);
+      return;
+    }
+    runStart(activeTarget, qt);
+  }, [activeTarget, bundle, status, runStart]);
+
+  const clear = useCallback(() => {
+    cancelInternal();
+    runIdRef.current += 1;
+    setActiveTarget(null);
+    setBundle(null);
+    setAnswer(null);
+    setStatus('idle');
+    setPickedEvidenceId(null);
+    setPanelOpen(false);
+  }, [cancelInternal]);
+
+  const openPanel = useCallback(() => {
+    setPanelOpen(true);
+  }, []);
+
+  const closePanel = useCallback(() => {
+    setPanelOpen(false);
+  }, []);
+
+  const pickEvidence = useCallback((id: string | null) => {
+    setPickedEvidenceId((cur) => (cur === id ? null : id));
+  }, []);
+
   useEffect(() => {
     if (status !== 'complete') return;
     if (!answer || !bundle) return;
@@ -298,7 +341,6 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
     const entry = notebook.find((e) => e.id === activeNotebookId);
     if (!entry) return;
 
-    // Walk newest-first; pick first pending matching the active questionType.
     const candidates = [...entry.questions]
       .filter((q) => q.status === 'pending' && q.questionType === questionType)
       .sort((a, b) => b.askedAt - a.askedAt);
@@ -309,7 +351,7 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
     answerQuestion(target.id, answer, bundle.id);
   }, [status, answer, bundle, activeNotebookId, questionType, notebook, answerQuestion]);
 
-  const value = useMemo<Ctx>(() => ({
+  const value = useMemo<InvestigationRunnerCtx>(() => ({
     activeTarget,
     bundle,
     answer,
@@ -325,31 +367,33 @@ export function InvestigationProvider({ children }: { children: ReactNode }) {
     openPanel,
     closePanel,
     pickEvidence,
-    notebook,
-    activeNotebookId,
-    addQuestion,
-    answerQuestion,
-    archiveQuestion,
-    pinNotebook,
-    unpinNotebook,
-    setActiveNotebook,
-    clearNotebook,
   }), [
     activeTarget, bundle, answer, status, questionType, panelOpen, pickedEvidenceId,
     start, cancel, regenerate, setQuestionType, clear, openPanel, closePanel, pickEvidence,
-    notebook, activeNotebookId,
-    addQuestion, answerQuestion, archiveQuestion, pinNotebook, unpinNotebook, setActiveNotebook, clearNotebook,
   ]);
 
+  return <InvestigationRunnerC.Provider value={value}>{children}</InvestigationRunnerC.Provider>;
+}
+
+export function useInvestigationRunner(): InvestigationRunnerCtx {
+  const c = useContext(InvestigationRunnerC);
+  if (!c) throw new Error('useInvestigationRunner must be used inside InvestigationProvider');
+  return c;
+}
+
+export function InvestigationProvider({ children }: { children: ReactNode }) {
   return (
-    <InvestigationCtx.Provider value={value}>
-      {children}
-    </InvestigationCtx.Provider>
+    <NotebookProvider>
+      <InvestigationRunnerProvider>{children}</InvestigationRunnerProvider>
+    </NotebookProvider>
   );
 }
 
 export function useInvestigation(): Ctx {
-  const ctx = useContext(InvestigationCtx);
-  if (!ctx) throw new Error('useInvestigation must be used inside InvestigationProvider');
-  return ctx;
+  const runner = useInvestigationRunner();
+  const nb = useNotebook();
+  return useMemo<Ctx>(() => ({
+    ...runner,
+    ...nb,
+  }), [runner, nb]);
 }

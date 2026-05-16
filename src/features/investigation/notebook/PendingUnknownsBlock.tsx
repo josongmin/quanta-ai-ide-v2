@@ -36,7 +36,7 @@ export function PendingUnknownsBlock({ entry, onResolveUnknown }: Props) {
         <button
           key={u.id}
           type="button"
-          onClick={() => onResolveUnknown(u.label)}
+          onClick={() => { onResolveUnknown(u.label); }}
           title={`Click to follow up: ${u.reason}`}
           className="appearance-none p-0 border-0 bg-transparent"
           style={{ cursor: 'pointer' }}

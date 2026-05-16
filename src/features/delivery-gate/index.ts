@@ -1,1 +1,1 @@
-export { decideTier, tierLabel, TIER_THRESHOLDS } from './lib/decideTier';
+export { decideTier } from './lib/decideTier';

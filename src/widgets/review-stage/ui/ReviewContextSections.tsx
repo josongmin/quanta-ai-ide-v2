@@ -97,9 +97,9 @@ export function BranchSection({
       <div className="flex items-center justify-between gap-2">
         <span className="text-[11px] text-white/40">{t('merge.aheadBehind')}</span>
         <span className="text-[11px] font-mono tabular-nums">
-          <span className="text-emerald-500">+{pr.ahead}</span>
+          <span style={{ color: 'var(--intent-success-vivid)' }}>+{pr.ahead}</span>
           <span className="text-white/40"> / </span>
-          <span className="text-rose-500">−{pr.behind}</span>
+          <span style={{ color: 'var(--intent-danger-vivid)' }}>−{pr.behind}</span>
         </span>
       </div>
       {pr.hasConflicts && (

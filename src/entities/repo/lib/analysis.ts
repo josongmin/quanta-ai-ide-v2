@@ -206,7 +206,7 @@ export function findSimilar(
 // Path witness — shortest dependency path from A → B
 // ─────────────────────────────────────────────────────────────────────────
 
-export type PathHopKind = 'import' | 'call' | 'type';
+type PathHopKind = 'import' | 'call' | 'type';
 
 export type PathWitness = {
   fileIds: number[];                         // [from, …intermediate, to]
@@ -285,7 +285,7 @@ export type RiskLensHit = {
 
 function clamp01(v: number): number { return Math.max(0, Math.min(1, v)); }
 
-export function riskLensScore(
+function riskLensScore(
   file: FileRecord,
   repo: RepoData,
   lens: RiskLensKey,

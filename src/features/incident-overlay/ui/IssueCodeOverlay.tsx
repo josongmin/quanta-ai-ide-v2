@@ -25,23 +25,26 @@ function NodeButton({
   onClick?: (id: string) => void;
 }) {
   const direct = emphasis === 'direct';
+  const style: React.CSSProperties = direct
+    ? { boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)' }
+    : { boxShadow: 'inset 0 0 0 1px var(--border-default)' };
   const tone = direct
-    ? 'text-zinc-800 dark:text-zinc-100 ring-emerald-400/30'
-    : 'text-zinc-500 dark:text-zinc-400 ring-zinc-400/20';
+    ? 'text-zinc-800 dark:text-zinc-100'
+    : 'text-zinc-500 dark:text-zinc-400';
   const handle = () => onClick?.(id);
-  const className = `text-left font-mono text-[11px] px-2 py-1 rounded-md ring-1 ring-inset bg-white/30 dark:bg-white/[0.03] ${tone} ${
+  const className = `text-left font-mono text-[11px] px-2 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] ${tone} ${
     typeof onClick === 'function'
       ? 'cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.05]'
       : ''
   }`;
   if (typeof onClick === 'function') {
     return (
-      <button type="button" onClick={handle} className={className}>
+      <button type="button" onClick={handle} style={style} className={className}>
         {id}
       </button>
     );
   }
-  return <span className={className}>{id}</span>;
+  return <span style={style} className={className}>{id}</span>;
 }
 
 function Section({

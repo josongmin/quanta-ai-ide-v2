@@ -1,8 +1,8 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import { GlassCard, SectionHeader, StackedRatioBar, EmptyHint } from '@shared/ui';
 import type { ProofObligation } from '@entities/ownership';
 
-export interface ProofObligationsCardProps {
+export type ProofObligationsCardProps = {
   obligations: ProofObligation[];
 }
 

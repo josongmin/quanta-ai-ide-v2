@@ -3,7 +3,7 @@
 
 export type Platform = 'macos' | 'windows' | 'linux' | 'unknown';
 
-export const detectPlatform = (): Platform => {
+const detectPlatform = (): Platform => {
   if (typeof navigator === 'undefined') return 'unknown';
   const ua = navigator.userAgent.toLowerCase();
   if (ua.includes('mac os x') || ua.includes('macintosh')) return 'macos';

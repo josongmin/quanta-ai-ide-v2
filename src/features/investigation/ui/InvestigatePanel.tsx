@@ -60,15 +60,18 @@ export default function InvestigatePanel() {
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
 
   // Track mount for slide animation: keep mounted briefly after close so the
-  // exit transition runs, then unmount.
+  // exit transition runs, then unmount. The setState during open-edge is
+  // intentional — the alternative (deriving from prop) would skip the slide-
+  // in transition because the element would render at its final position.
   const [mounted, setMounted] = useState(panelOpen);
   useEffect(() => {
     if (panelOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMounted(true);
       return;
     }
-    const t = window.setTimeout(() => setMounted(false), 220);
-    return () => window.clearTimeout(t);
+    const t = window.setTimeout(() => { setMounted(false); }, 220);
+    return () => { window.clearTimeout(t); };
   }, [panelOpen]);
 
   const {
@@ -111,7 +114,7 @@ export default function InvestigatePanel() {
       return;
     }
     if (action.kind === 'assign_owner') {
-      console.log('[investigation] assign_owner queued', action);
+      console.warn('[investigation] assign_owner queued', action);
       setOwnerBanner('Owner assignment queued');
       return;
     }
@@ -170,9 +173,14 @@ export default function InvestigatePanel() {
       .map((q) => q.id);
   }, [activeEntry]);
 
-  // Keep selection valid as the question list shifts.
+  // Keep selection valid as the question list shifts: when the selected
+  // id falls out of the visible window (or notebook mode opens with no
+  // pick), snap to the first visible question. The selection is user-
+  // controlled state, so deriving it would lose the user's pick the moment
+  // the list reshuffles for any unrelated reason.
   useEffect(() => {
     if (selectedQuestionId && !visibleQuestionIds.includes(selectedQuestionId)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedQuestionId(visibleQuestionIds[0] ?? null);
     } else if (!selectedQuestionId && visibleQuestionIds.length > 0 && mode === 'notebook') {
       setSelectedQuestionId(visibleQuestionIds[0] ?? null);
@@ -186,7 +194,7 @@ export default function InvestigatePanel() {
     selectedQuestionId,
     activeTarget,
     onClose: closePanel,
-    onModeToggle: () => setMode((cur) => (cur === 'answer' ? 'notebook' : 'answer')),
+    onModeToggle: () => { setMode((cur) => (cur === 'answer' ? 'notebook' : 'answer')); },
     onSelectQuestion: setSelectedQuestionId,
     onRegenerate: regenerate,
   });
@@ -227,7 +235,7 @@ export default function InvestigatePanel() {
         <OwnerBanner message={ownerBanner} />
 
         <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
-          {!activeTarget && <EmptyBody onPick={(t) => start(t)} />}
+          {!activeTarget && <EmptyBody onPick={(t) => { start(t); }} />}
 
           {activeTarget && mode === 'answer' && (
             <AnswerBody

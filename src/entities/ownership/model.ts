@@ -1,6 +1,6 @@
 export type PersonId = string;
 
-export interface Person {
+export type Person = {
   id: PersonId;
   name: string;
   team: string;
@@ -12,7 +12,7 @@ export interface Person {
 
 export type OwnershipLayer = 'declared' | 'historical' | 'expertise' | 'impact';
 
-export interface OwnershipScore {
+export type OwnershipScore = {
   personId: PersonId;
   layer: OwnershipLayer;
   weight: number;
@@ -27,20 +27,20 @@ export type OwnershipState =
   | 'cross-team'
   | 'healthy';
 
-export interface ReviewerRationale {
+export type ReviewerRationale = {
   touchedAreaFamiliarity: number;
   recentReviewer: number;
   incidentResolver: number;
   codeOwner: number;
 }
 
-export interface ImpactNarrative {
+export type ImpactNarrative = {
   declaredTeam: string;
   blastTeams: string[];
   summary: string;
 }
 
-export interface OwnershipZone {
+export type OwnershipZone = {
   id: string;
   label: string;
   kind: 'folder' | 'hotspot' | 'incident' | 'symbol';
@@ -60,7 +60,7 @@ export interface OwnershipZone {
 export type StackStepKind = 'prep' | 'adapter' | 'migration' | 'cleanup' | 'gate';
 export type RiskBadge = 'low' | 'medium' | 'high';
 
-export interface StackStep {
+export type StackStep = {
   id: string;
   kind: StackStepKind;
   title: string;
@@ -80,27 +80,27 @@ export type MergeStrategy =
   | 'parallelizable'
   | 'risky-serial';
 
-export interface MergeStrategyAdvice {
+export type MergeStrategyAdvice = {
   strategy: MergeStrategy;
   reason: string;
   alternative?: { strategy: MergeStrategy; reason: string };
 }
 
-export interface ProofObligation {
+export type ProofObligation = {
   id: string;
   label: string;
   status: 'satisfied' | 'pending' | 'unknown' | 'placeholder';
   detail?: string;
 }
 
-export interface SafeSeamCandidate {
+export type SafeSeamCandidate = {
   id: string;
   module: string;
   reason: string;
   status: 'detected' | 'placeholder';
 }
 
-export interface RefactorStack {
+export type RefactorStack = {
   id: string;
   zoneId: string;
   rationale: string;
@@ -116,7 +116,7 @@ export interface RefactorStack {
 
 // ─── Phase 2: Cross-team hotspot detection ──────────────────────────
 
-export interface CrossTeamHotspot {
+export type CrossTeamHotspot = {
   id: string;
   zoneId: string;
   label: string;
@@ -128,14 +128,14 @@ export interface CrossTeamHotspot {
 
 // ─── Phase 3: Approval path ─────────────────────────────────────────
 
-export interface ApprovalStep {
+export type ApprovalStep = {
   personId: PersonId;
   role: string;
   reason: string;
   required: boolean;
 }
 
-export interface ApprovalPath {
+export type ApprovalPath = {
   zoneId: string;
   steps: ApprovalStep[];
   estimatedDurationHours: number;
@@ -144,7 +144,7 @@ export interface ApprovalPath {
 
 // ─── Phase 3: Auto-draft suggestion (no user trigger) ───────────────
 
-export interface AutoDraftSuggestion {
+export type AutoDraftSuggestion = {
   id: string;
   zoneId: string;
   hook: string;

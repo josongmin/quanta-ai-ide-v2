@@ -15,9 +15,8 @@ export function HandoffBreadcrumb() {
   // Best-effort: re-check after mount in case the crumb was set after the
   // first render (the navigate happens synchronously, but the destination
   // may mount on a microtask boundary where the slot is already populated).
-  useEffect(() => {
-    setCrumb(readHandoffBreadcrumb());
-  }, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setCrumb(readHandoffBreadcrumb()); }, []);
 
   if (!crumb) return null;
 

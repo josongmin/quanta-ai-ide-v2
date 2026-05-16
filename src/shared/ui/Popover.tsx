@@ -187,6 +187,7 @@ export function Popover({
         // reads as a focused surface, not a floating menu. The panel is
         // a flex child so it stays viewport-centered without measuring.
         <div
+          role="presentation"
           className="fixed inset-0 z-[var(--z-modal,var(--z-dropdown))] flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.32)' }}
           onMouseDown={(e) => {

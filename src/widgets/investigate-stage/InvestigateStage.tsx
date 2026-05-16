@@ -42,7 +42,7 @@ function deriveCouplingsFromRepo(repo: RepoData) {
     arr.push(file.id);
     byFolder.set(folder, arr);
   }
-  const commits: Array<{ files: number[] }> = [];
+  const commits: { files: number[] }[] = [];
   for (const ids of byFolder.values()) {
     if (ids.length < 2) continue;
     for (let i = 0; i < Math.min(ids.length, 6); i++) {
@@ -129,7 +129,8 @@ export default function InvestigateStage() {
             {incidentIds.map((id) => (
               <button
                 key={id}
-                onClick={() => setIncidentId(id)}
+                type="button"
+                onClick={() => { setIncidentId(id); }}
                 className="px-3 h-7 rounded-full text-[11px] font-semibold uppercase tracking-[0.12em] border transition-colors"
                 style={{
                   borderColor: 'var(--border-default)',

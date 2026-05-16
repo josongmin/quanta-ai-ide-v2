@@ -8,7 +8,7 @@
 
 import type { ChangePlan, ChangeStep } from '../model/types';
 
-interface Props {
+type Props = {
   plan: ChangePlan;
 }
 

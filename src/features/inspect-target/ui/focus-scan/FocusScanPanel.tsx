@@ -2,7 +2,15 @@ import { useMemo, useState } from 'react';
 import { ScrollText, Sparkles, Network, FileSearch, ShieldAlert } from 'lucide-react';
 import { useFilterRepo } from '@features/filter-files';
 import type { FileRecord } from '@entities/repo';
-import { INTELLIGENCE_LAYOUT } from '@app/router/intelligence/panelLayout';
+// Intelligence layout constants — duplicated here to avoid features → app
+// boundary violation. Source of truth is @app/router/intelligence/panelLayout.
+const INTELLIGENCE_LAYOUT = {
+  sideInset: 12,
+  panelGap: 20,
+  topInset: 12,
+  bottomInset: 12,
+  centerReserve: 88,
+} as const;
 import { GlassCard, Portal } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import { Badge } from './shared';

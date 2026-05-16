@@ -1,8 +1,8 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import { GlassCard, SectionHeader, EmptyHint } from '@shared/ui';
 import type { SafeSeamCandidate } from '@entities/ownership';
 
-export interface SafeSeamsCardProps {
+export type SafeSeamsCardProps = {
   seams: SafeSeamCandidate[];
 }
 

@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import {
   MOCK_PEOPLE,
   type OwnershipState,
@@ -9,13 +9,13 @@ import {
 import { GlassCard, SectionHeader } from '@shared/ui/GlassCard';
 import { EmptyHint } from '@shared/ui/EmptyHint';
 
-export interface OwnershipHeatLayerProps {
+export type OwnershipHeatLayerProps = {
   zones: OwnershipZone[];
   selectedZoneId?: string;
   onZoneSelect?: (zoneId: string) => void;
 }
 
-interface StateVisual {
+type StateVisual = {
   label: string;
   bgVar: string;
   fgVar: string;

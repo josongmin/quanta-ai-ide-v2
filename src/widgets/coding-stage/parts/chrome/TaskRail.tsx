@@ -4,7 +4,7 @@ import {
   Pin, FolderPlus, ListFilter, GripVertical, Cloud,
 } from 'lucide-react';
 import { ResizeHandle } from '@shared/ui';
-import type { Project, Task, TaskStatus } from './types';
+import type { Project, Task, TaskStatus } from '../types';
 
 // Project-grouped task rail. Each project is a collapsible group; selected
 // task gets a left-edge accent matching the project's tone. The rail is
@@ -148,11 +148,12 @@ export function TaskRail({
             )}
             {awaitingCount > 0 && (
               <span
-                className={`shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border ${
-                  isDark
-                    ? 'border-amber-400/30 text-amber-300 bg-amber-400/10'
-                    : 'border-amber-500/30 text-amber-700 bg-amber-50'
-                }`}
+                style={{
+                  borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
+                  color: 'var(--intent-warn-fg)',
+                  background: 'var(--intent-warn-bg)',
+                }}
+                className="shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border"
                 title={t('rail.awaitingYou', { count: awaitingCount })}
               >
                 <span className="w-1 h-1 rounded-full coding-breath bg-current opacity-80" />
@@ -164,11 +165,12 @@ export function TaskRail({
                 once when a task switches surface. */}
             {cloudCount > 0 && (
               <span
-                className={`coding-bg-arrive shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border ${
-                  isDark
-                    ? 'border-sky-400/30 text-sky-300 bg-sky-400/10'
-                    : 'border-sky-500/30 text-sky-700 bg-sky-50'
-                }`}
+                style={{
+                  borderColor: 'color-mix(in srgb, var(--intent-info-fg) 30%, transparent)',
+                  color: 'var(--fg-link)',
+                  background: 'var(--intent-info-bg)',
+                }}
+                className="coding-bg-arrive shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border"
                 title={t('background.ribbon', { count: cloudCount })}
               >
                 <Cloud className="w-2.5 h-2.5" />
@@ -425,6 +427,7 @@ function TaskRow({
 
   return (
     <div
+      role="presentation"
       className="relative"
       // Drop indicator above the row when it's the active target. Drawn
       // as a 2px line on the *top* (never as a left-edge stripe — that
@@ -517,7 +520,8 @@ function TaskRow({
                 <>
                   <span className="opacity-50">·</span>
                   <Cloud
-                    className={`w-2.5 h-2.5 ${isDark ? 'text-sky-300' : 'text-sky-700'}`}
+                    style={{ color: 'var(--fg-link)' }}
+                    className="w-2.5 h-2.5"
                     aria-label="cloud"
                   />
                 </>

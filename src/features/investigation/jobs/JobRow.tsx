@@ -86,7 +86,7 @@ export function JobRow({ job, onCancel }: Props) {
         {onCancel && isActive ? (
           <button
             type="button"
-            onClick={() => onCancel(job.id)}
+            onClick={() => { onCancel(job.id); }}
             title="Cancel job"
             className="p-0.5 rounded hover:[background:var(--bg-hover)]"
             style={{ color: 'var(--fg-muted)' }}

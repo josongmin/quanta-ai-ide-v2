@@ -11,11 +11,6 @@ export type {
   TaintSource,
   TaintSink,
   RuleSignal,
-  RuleOverride,
-  RuleMatch,
-  RulePreview,
-  AdmissionDecision,
-  RuleEvaluation,
 } from './model';
 
 export { SAMPLE_RULES } from './lib/sample';
@@ -23,5 +18,4 @@ export { estimateCost } from './lib/cost';
 export {
   previewRule,
   evaluateAdmission,
-  type RetroResult,
 } from './lib/evaluate';

@@ -131,10 +131,10 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
               className="font-mono text-[10px] mr-2 mt-0.5 shrink-0"
               style={{ color: t.textFaint }}
             >
-              #{fixCase.loop.iterations[fixCase.loop.iterations.length - 1]!.index}
+              #{fixCase.loop.iterations[fixCase.loop.iterations.length - 1].index}
             </span>
             <span className="text-[11px] leading-snug flex-1" style={{ color: t.textBody }}>
-              {fixCase.loop.iterations[fixCase.loop.iterations.length - 1]!.note}
+              {fixCase.loop.iterations[fixCase.loop.iterations.length - 1].note}
             </span>
             <span
               className="text-[9px] font-mono ml-2 mt-0.5 shrink-0"

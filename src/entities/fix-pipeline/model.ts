@@ -5,9 +5,9 @@
 // back through their own logic; widgets only render. Replaceable analyzers
 // (static / AI / hybrid) all conform to these shapes.
 
-export type SeedKind = 'incident' | 'hotspot' | 'alert' | 'focus';
+type SeedKind = 'incident' | 'hotspot' | 'alert' | 'focus';
 
-export type EvidenceRef = {
+type EvidenceRef = {
   kind: 'file' | 'symbol' | 'taint-path' | 'sarif' | 'stack-frame';
   // Display label — `src/auth/session.ts:42` style. No filesystem access.
   label: string;
@@ -57,7 +57,7 @@ export type ObligationCategory =
   | 'policy'      // compliance, secret-scan, forbidden patterns
   | 'human';      // reviewer judgement, public-API migration
 
-export type ObligationStatus = 'pass' | 'fail' | 'unknown' | 'pending';
+type ObligationStatus = 'pass' | 'fail' | 'unknown' | 'pending';
 
 export type ProofObligation = {
   id: string;
@@ -100,7 +100,7 @@ export type FixCandidate = {
 
 // Three tiers from the spec. The numeric thresholds live in delivery-gate;
 // this is just the vocabulary the rest of the pipeline consumes.
-export type DeliveryTier = 'safe-mechanical' | 'guarded' | 'human-required';
+type DeliveryTier = 'safe-mechanical' | 'guarded' | 'human-required';
 
 export type DeliveryDecision = {
   tier: DeliveryTier;
@@ -265,7 +265,7 @@ export type CritiqueIteration = {
 // Phase 3's "policy-aware auto submit". A candidate moves through these
 // states; only `auto-submitted` and `manually-submitted` are terminal
 // success states.
-export type SubmissionStatus =
+type SubmissionStatus =
   | 'unsubmitted'
   | 'submitting'
   | 'manually-submitted'

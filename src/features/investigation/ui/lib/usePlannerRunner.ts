@@ -29,12 +29,16 @@ export function usePlannerRunner(opts: {
   const plannerAbortRef = useRef<AbortController | null>(null);
 
   // Cancel + reset planner whenever the active target changes or the panel
-  // closes — those make the trace stale.
+  // closes — those make the trace stale. The setStates are paired with an
+  // imperative AbortController.abort() side effect, so they must run from
+  // an effect; deriving the running/steps/trace state from props would
+  // lose the in-flight run's identity.
   useEffect(() => {
     if (plannerAbortRef.current) {
       plannerAbortRef.current.abort();
       plannerAbortRef.current = null;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPlannerRunning(false);
     setPlannerSteps([]);
     setPlannerTrace(null);

@@ -5,8 +5,7 @@ import {
   type EvidenceItem,
   type NotebookQuestion,
 } from '@entities/investigation';
-import { EvidenceStrip } from '../evidence';
-import { HypothesisBlock } from '../evidence';
+import { EvidenceStrip , HypothesisBlock } from '../evidence';
 
 type Props = {
   question: NotebookQuestion;

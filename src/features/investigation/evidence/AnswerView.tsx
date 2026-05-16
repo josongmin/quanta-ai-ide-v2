@@ -4,6 +4,7 @@ import type {
   ContextBundle,
   EvidenceItem,
   InvestigationAnswer,
+  UnknownTag as UnknownTagType,
 } from '@entities/investigation';
 import { EvidenceStrip } from './EvidenceStrip';
 import { UnknownTag } from './UnknownTag';
@@ -17,7 +18,7 @@ type Props = {
   onAction?: (action: ActionRecommendation) => void;
   onPickEvidence?: (id: string) => void;
   pickedEvidenceId?: string | null;
-  onResolveUnknown?: (tag: import('@entities/investigation').UnknownTag) => void;
+  onResolveUnknown?: (tag: UnknownTagType) => void;
 };
 
 function SectionHeader({ children }: { children: ReactNode }) {

@@ -28,7 +28,7 @@ export type Boundary =
 export type Confidence = 'exact' | 'overapprox' | 'unknown' | 'stale';
 
 // Spec §6/§7: AI edit safety + analysis freshness for the Honesty layer.
-export type IndexState = 'fresh' | 'indexing' | 'stale' | 'timeout';
+type IndexState = 'fresh' | 'indexing' | 'stale' | 'timeout';
 
 export type FileRecord = {
   id: number;

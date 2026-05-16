@@ -3,11 +3,11 @@ import {
   Activity, CheckCircle2, Coins, GitBranch, GitPullRequest, MoreHorizontal, Sparkles,
 } from 'lucide-react';
 import { formatNumber } from '@shared/lib';
-import { Composer, type ComposerModelId } from './Composer';
-import { LiveSnapshotCard } from './LiveSnapshotCard';
-import { TimelineScrubber } from './TimelineScrubber';
-import { TurnView } from './TurnViews';
-import type { AgentTurn, Project, ReactionKind, Task, Turn } from './types';
+import { Composer, type ComposerModelId } from '../Composer';
+import { LiveSnapshotCard } from '../timeline/LiveSnapshotCard';
+import { TimelineScrubber } from '../timeline/TimelineScrubber';
+import { TurnView } from '../turn/TurnViews';
+import type { AgentTurn, Project, ReactionKind, Task, Turn } from '../types';
 
 type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 
@@ -117,27 +117,32 @@ export function ThreadPane({
         <div className="flex items-center gap-3">
           {(cost.inTok + cost.outTok > 0) && (() => {
             const budget = project.budget;
-            let tone = textMuted;
+            let toneStyle: React.CSSProperties | undefined;
+            let toneClass = textMuted;
             let badge: string | null = null;
             let pulseClass = '';
 
             if (budget?.hardCapUsd != null && cost.usd >= budget.hardCapUsd) {
-              tone = isDark ? 'text-rose-300' : 'text-rose-700';
+              toneStyle = { color: 'var(--intent-danger-fg)' };
+              toneClass = '';
               badge = t('budgetV2.tier.hardCap');
               pulseClass = 'coding-cost-hard';
             } else if (budget?.softCapUsd != null && cost.usd >= budget.softCapUsd) {
-              tone = isDark ? 'text-rose-300' : 'text-rose-700';
+              toneStyle = { color: 'var(--intent-danger-fg)' };
+              toneClass = '';
               badge = t('budgetV2.tier.softCap');
               pulseClass = 'coding-cost-hard';
             } else if (budget?.alertUsd != null && cost.usd >= budget.alertUsd) {
-              tone = isDark ? 'text-amber-300' : 'text-amber-700';
+              toneStyle = { color: 'var(--intent-warn-fg)' };
+              toneClass = '';
               badge = t('budgetV2.tier.alert');
               pulseClass = 'coding-cost-alert';
             }
 
             return (
               <span
-                className={`flex items-center gap-1.5 text-[11px] font-mono ${tone} ${pulseClass} px-1.5 py-0.5`}
+                style={toneStyle}
+                className={`flex items-center gap-1.5 text-[11px] font-mono ${toneClass} ${pulseClass} px-1.5 py-0.5`}
                 title={t('cost.tooltip')}
               >
                 <Coins className="w-3 h-3" />
@@ -148,11 +153,12 @@ export function ThreadPane({
                   {t('cost.estimate')} ${cost.usd.toFixed(cost.usd < 0.01 ? 4 : cost.usd < 1 ? 3 : 2)}
                 </span>
                 {badge != null && (
-                  <span className={`px-1 py-px rounded-sm text-[9px] font-bold uppercase tracking-[0.16em] border ${
-                    badge === t('budget.exceeded')
-                      ? (isDark ? 'border-rose-400/40 bg-rose-400/10' : 'border-rose-500/40 bg-rose-50')
-                      : (isDark ? 'border-amber-400/40 bg-amber-400/10' : 'border-amber-500/40 bg-amber-50')
-                  }`}>{badge}</span>
+                  <span
+                    style={badge === t('budget.exceeded')
+                      ? { borderColor: 'color-mix(in srgb, var(--intent-danger-vivid) 40%, transparent)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 10%, transparent)' }
+                      : { borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 40%, transparent)', background: 'color-mix(in srgb, var(--intent-warn-vivid) 10%, transparent)' }}
+                    className="px-1 py-px rounded-sm text-[9px] font-bold uppercase tracking-[0.16em] border"
+                  >{badge}</span>
                 )}
                 {cost.avgUsd > 0 && (
                   <span className={`${textFaint} tabular-nums`}>· {t('projection.label')} ${cost.avgUsd.toFixed(3)}</span>

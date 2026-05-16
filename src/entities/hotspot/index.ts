@@ -1,9 +1,6 @@
 export type {
   SignalKey,
-  HotspotSignals,
-  SignalContribution,
   HotspotEntry,
-  HotspotExplanation,
 } from './model';
 export { HOTSPOT_VISIBLE_PERCENTILE } from './model';
 export { computeHotspots } from './lib/compute';

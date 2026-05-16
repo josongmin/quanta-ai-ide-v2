@@ -1,5 +1,4 @@
-import type {
-  FileRecord, FilterState, RepoData, SortKey,
+import type { FilterState, RepoData, SortKey,
 } from '@entities/repo';
 import { parseDsl } from '@entities/facet';
 import {

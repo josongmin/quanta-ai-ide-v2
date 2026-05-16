@@ -39,7 +39,10 @@ export default function FixModePanel({ onAction, recommended }: Props) {
           Fix mode
         </span>
         {recommended && (
-          <span className="font-mono text-[10px] text-emerald-700 dark:text-emerald-300">
+          <span
+            style={{ color: 'var(--intent-success-fg)' }}
+            className="font-mono text-[10px]"
+          >
             recommended: {recommended}
           </span>
         )}
@@ -47,18 +50,21 @@ export default function FixModePanel({ onAction, recommended }: Props) {
       <div className="flex flex-wrap gap-1.5">
         {BUTTONS.map((b) => {
           const isRecommended = recommended !== undefined && b.action === recommended;
-          const ring = isRecommended
-            ? 'ring-emerald-400/50'
-            : 'ring-black/5 dark:ring-white/10';
-          const text = isRecommended
-            ? 'text-emerald-800 dark:text-emerald-200'
-            : 'text-zinc-700 dark:text-zinc-200';
+          const style: React.CSSProperties = isRecommended
+            ? {
+                color: 'var(--intent-success-fg)',
+                boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--intent-success-vivid) 50%, transparent)',
+              }
+            : {};
+          const text = isRecommended ? '' : 'text-zinc-700 dark:text-zinc-200';
+          const ring = isRecommended ? '' : 'ring-1 ring-inset ring-black/5 dark:ring-white/10';
           return (
             <button
               key={b.action}
               type="button"
-              onClick={() => onAction(b.action)}
-              className={`text-[11px] font-medium px-2.5 py-1 rounded-md ring-1 ring-inset bg-white/30 dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${ring} ${text}`}
+              onClick={() => { onAction(b.action); }}
+              style={style}
+              className={`text-[11px] font-medium px-2.5 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${ring} ${text}`}
             >
               {b.label}
             </button>

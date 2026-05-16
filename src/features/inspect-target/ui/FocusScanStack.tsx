@@ -4,7 +4,15 @@ import { useFilterRepo } from '@features/filter-files';
 import type { RepoData } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
 import { ResizeHandle } from '@shared/ui';
-import { INTELLIGENCE_LAYOUT } from '@app/router/intelligence/panelLayout';
+// Intelligence layout constants — duplicated here to avoid features → app
+// boundary violation. Source of truth is @app/router/intelligence/panelLayout.
+const INTELLIGENCE_LAYOUT = {
+  sideInset: 12,
+  panelGap: 20,
+  topInset: 12,
+  bottomInset: 12,
+  centerReserve: 88,
+} as const;
 import { useStack, stackKey, type StackItem } from '../model/StackContext';
 import FocusScanPanel from './focus-scan/FocusScanPanel';
 import InspectPanel from './InspectPanel';
@@ -276,9 +284,11 @@ function CrestTab({
             : 'inset 0 -2px 4px rgba(0,0,0,0.08)'),
       }}
     >
-      <span className={`shrink-0 text-[9px] font-mono tabular-nums ${
+      <span
+        style={isActive ? { color: 'var(--intent-success-fg)' } : undefined}
+        className={`shrink-0 text-[9px] font-mono tabular-nums ${
         isActive
-          ? (isDark ? 'text-[#4f9a5c]' : 'text-emerald-700')
+          ? ''
           : (isDark ? 'text-white/40' : 'text-black/40')
       }`}>
         {index}
@@ -371,7 +381,16 @@ function HistoryButton({
               return (
                 <div
                   key={k}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => { onPick(k); setOpen(false); }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onPick(k);
+                      setOpen(false);
+                    }
+                  }}
                   className={`group relative flex items-center gap-2 px-3 py-1.5 cursor-pointer transition-colors ${
                     a
                       ? (isDark ? 'bg-white/[0.08]' : 'bg-black/[0.05]')
@@ -379,8 +398,10 @@ function HistoryButton({
                   }`}
                 >
                   {a && <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[#4f9a5c] rounded-r" />}
-                  <span className={`shrink-0 w-4 text-[9px] font-mono tabular-nums text-right ${
-                    a ? (isDark ? 'text-[#4f9a5c]' : 'text-emerald-700') : (isDark ? 'text-white/30' : 'text-black/30')
+                  <span
+                    style={a ? { color: 'var(--intent-success-fg)' } : undefined}
+                    className={`shrink-0 w-4 text-[9px] font-mono tabular-nums text-right ${
+                    a ? '' : (isDark ? 'text-white/30' : 'text-black/30')
                   }`}>
                     {i + 1}
                   </span>

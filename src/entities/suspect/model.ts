@@ -86,7 +86,7 @@ export type EvidenceEdge = {
 
 export type TriageAction = 'investigate' | 'patch' | 'rollback' | 'escalate';
 
-export type VerificationStep = {
+type VerificationStep = {
   id: string;
   description: string;
   kind: 'unit_test' | 'integration_test' | 'manual_qa' | 'canary';

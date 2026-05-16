@@ -17,7 +17,7 @@ export type CostClass = 'instant' | 'fast' | 'medium' | 'slow' | 'background';
 // Honesty layer carry-over (Spec §4, §11). When a rule's signal can only be
 // computed via overapproximation we want that visible at preview time, not
 // hidden behind a green checkmark.
-export type EvidenceLevel = 'exact' | 'overapprox' | 'unknown';
+type EvidenceLevel = 'exact' | 'overapprox' | 'unknown';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Signals — the "what does this rule look at" union.
@@ -46,7 +46,7 @@ export type MetricField =
 
 export type CompareOp = '>' | '>=' | '<' | '<=' | '=' | '!=';
 
-export type MetricSignal = {
+type MetricSignal = {
   kind: 'metric';
   field: MetricField;
   op: CompareOp;
@@ -68,7 +68,7 @@ export type GraphPattern =
   | 'unknown-region-creep'     // PR adds files w/ confidence != exact
   | 'layer-violation';         // file has layerViolation flag
 
-export type GraphSignal = {
+type GraphSignal = {
   kind: 'graph';
   pattern: GraphPattern;
   /** Optional numeric parameter (e.g. spike threshold). */
@@ -84,7 +84,7 @@ export type GraphSignal = {
 export type TaintSource = 'env' | 'http' | 'user-input' | 'config' | 'secret';
 export type TaintSink = 'fs.write' | 'exec' | 'sql' | 'network' | 'log';
 
-export type TaintSignal = {
+type TaintSignal = {
   kind: 'taint';
   source: TaintSource;
   sink: TaintSink;
@@ -96,7 +96,7 @@ export type TaintSignal = {
  * Free-form DSL. Reuses the existing facet DSL so authors can write
  * `safety:<40 +publicApi` and have it act as a rule. Compiled lazily.
  */
-export type DslSignal = {
+type DslSignal = {
   kind: 'dsl';
   expr: string;
 };
@@ -107,7 +107,7 @@ export type DslSignal = {
  * `tool` + `ruleId` is the join key against the synthetic `findings` field
  * on the file record (see `entities/admission/sample.ts`).
  */
-export type ExternalSignal = {
+type ExternalSignal = {
   kind: 'external';
   tool: 'eslint' | 'semgrep' | 'codeql' | 'bandit' | 'ruff';
   ruleId: string;
@@ -126,7 +126,7 @@ export type RuleSignal =
 // avoid full glob to keep the live preview O(N) and predictable.
 // ─────────────────────────────────────────────────────────────────────────
 
-export type RuleScope = {
+type RuleScope = {
   /** Path substrings; a file matches if any substring is in `folderPath` or `name`. */
   pathIncludes: string[];
   /** Path substrings to exclude. Takes precedence over `pathIncludes`. */
@@ -135,7 +135,7 @@ export type RuleScope = {
   labels: string[];
 };
 
-export type RuleOverride = {
+type RuleOverride = {
   /** PR author can self-override (sets the violation to `info`). */
   allowAuthor: boolean;
   /** If set, override requires an approver with this role. */

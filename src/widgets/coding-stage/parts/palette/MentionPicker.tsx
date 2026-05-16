@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { FileCode, AtSign } from 'lucide-react';
-import { SAMPLE_MENTION_FILES, SAMPLE_MENTION_SYMBOLS } from './data';
+import { SAMPLE_MENTION_FILES, SAMPLE_MENTION_SYMBOLS } from '../data';
 
 // Mention picker. Pops above the textarea when the cursor sits inside a
 // `#…` (file) or `@…` (symbol) token. Pure UI — the parent owns the

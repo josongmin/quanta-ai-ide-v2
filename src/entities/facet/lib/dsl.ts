@@ -1,12 +1,12 @@
 import type { FileRecord, StatusKey } from '@entities/repo';
 
-export type DslPredicate = (f: FileRecord) => boolean;
+type DslPredicate = (f: FileRecord) => boolean;
 
 export type ParseResult =
   | { ok: true; predicate: DslPredicate; tokens: ParsedToken[] }
   | { ok: false; error: string; at?: number };
 
-export type ParsedToken =
+type ParsedToken =
   | { kind: 'text'; raw: string; value: string }
   | { kind: 'flag'; raw: string; flag: FlagKey; negate: boolean }
   | { kind: 'kv'; raw: string; key: string; op: Op; value: string };

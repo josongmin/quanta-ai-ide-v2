@@ -229,12 +229,13 @@ export function GatePage({
                         {!overridden && (
                           <div className="mt-3 flex items-center gap-2">
                             <button
+                              type="button"
                               onClick={() => { setOverrideTarget({ ruleId: r.ruleId, ruleName: r.ruleName, severity: r.severity }); }}
                               className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md hover:bg-white/5 text-white/55 hover:text-white border border-white/10"
                             >
                               override with reason
                             </button>
-                            <button className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md hover:bg-white/5 text-white/55 hover:text-white border border-white/10">
+                            <button type="button" className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md hover:bg-white/5 text-white/55 hover:text-white border border-white/10">
                               request escalation
                             </button>
                           </div>
@@ -269,13 +270,20 @@ export function GatePage({
       {/* Override modal */}
       {overrideTarget && (
         <Portal>
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- backdrop click-to-dismiss with paired Escape onKeyDown */}
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Override admission rule"
           className="fixed inset-0 z-[210] flex items-center justify-center"
           style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
           onClick={() => { setOverrideTarget(null); setOverrideReason(''); }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') { setOverrideTarget(null); setOverrideReason(''); }
+          }}
         >
           <V2Card className="p-6 w-[480px] admv2-rise" >
-            <div onClick={(e) => { e.stopPropagation(); }}>
+            <div role="presentation" onClick={(e) => { e.stopPropagation(); }}>
               <div className="flex items-center gap-2 mb-4">
                 <Gavel className="w-4 h-4 text-white/55" />
                 <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">
@@ -298,6 +306,7 @@ export function GatePage({
               </Field>
               <div className="mt-5 flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={() => { setOverrideTarget(null); setOverrideReason(''); }}
                   className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1.5 rounded-md text-white/55 hover:text-white border border-white/10 hover:bg-white/5"
                 >
@@ -305,6 +314,7 @@ export function GatePage({
                 </button>
                 <div className="flex-1" />
                 <button
+                  type="button"
                   disabled={!overrideReason.trim()}
                   onClick={() => {
                     recordOverride({

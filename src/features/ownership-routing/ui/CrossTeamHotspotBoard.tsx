@@ -1,9 +1,10 @@
 import { Fragment } from 'react';
+import type { JSX } from 'react';
 import type { CrossTeamHotspot } from '@entities/ownership';
 import { GlassCard, SectionHeader } from '@shared/ui/GlassCard';
 import { EmptyHint } from '@shared/ui/EmptyHint';
 
-export interface CrossTeamHotspotBoardProps {
+export type CrossTeamHotspotBoardProps = {
   hotspots: CrossTeamHotspot[];
   selectedZoneId?: string;
   onSelect?: (zoneId: string) => void;
@@ -11,7 +12,7 @@ export interface CrossTeamHotspotBoardProps {
 
 type Severity = CrossTeamHotspot['severity'];
 
-interface SeverityVisual {
+type SeverityVisual = {
   shortLabel: string;
   fgVar: string;
   bgVar: string;

@@ -29,15 +29,16 @@ const CONFIDENCE_LABEL: Record<SuspectConfidence, string> = {
 
 function ConfidencePill({ confidence }: { confidence: SuspectConfidence }) {
   // Tone via text + ring, never via a left bar. Three tiers, three weights.
-  const tone =
+  const style: React.CSSProperties =
     confidence === 'exact'
-      ? 'text-emerald-700 dark:text-emerald-300 ring-emerald-400/30'
+      ? { color: 'var(--intent-success-fg)', boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)' }
       : confidence === 'strong_inferred'
-        ? 'text-amber-700 dark:text-amber-300 ring-amber-400/30'
-        : 'text-zinc-600 dark:text-zinc-400 ring-zinc-400/20';
+        ? { color: 'var(--intent-warn-fg)', boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)' }
+        : { color: 'var(--fg-muted)', boxShadow: 'inset 0 0 0 1px var(--border-default)' };
   return (
     <span
-      className={`inline-flex items-center px-1.5 h-5 rounded-md text-[9px] font-bold uppercase tracking-[0.14em] ring-1 ring-inset bg-white/30 dark:bg-white/[0.03] ${tone}`}
+      style={style}
+      className="inline-flex items-center px-1.5 h-5 rounded-md text-[9px] font-bold uppercase tracking-[0.14em] bg-white/30 dark:bg-white/[0.03]"
     >
       {CONFIDENCE_LABEL[confidence]}
     </span>

@@ -79,7 +79,10 @@ export default function FixPipelineStage() {
     () => seeds.find((s) => s.id === selectedSeedId) ?? null,
     [seeds, selectedSeedId],
   );
-  const candidates = selectedSeedId !== null ? candidatesBySeed[selectedSeedId] ?? [] : [];
+  const candidates = useMemo(
+    () => (selectedSeedId !== null ? candidatesBySeed[selectedSeedId] ?? [] : []),
+    [selectedSeedId, candidatesBySeed],
+  );
   const candidate = useMemo(
     () => candidates.find((c) => c.id === selectedCandidateId) ?? null,
     [candidates, selectedCandidateId],

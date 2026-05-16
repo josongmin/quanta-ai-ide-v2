@@ -10,7 +10,7 @@ import { useTranslation } from '@shared/i18n';
 import type {
   AgentBlock, ToolBlock, DiffBlock, TextBlock, ThinkingBlock, PlanBlock, CodingFileChange,
   HunkComment, DiffPreviewBlock, CodingDiffHunk,
-} from './types';
+} from '../types';
 
 // Each block knows how to render itself. Tool blocks expand inline to show
 // terminal output; diff blocks expand each file to show hunks. The
@@ -37,10 +37,11 @@ function TextBlockView({ block, isDark }: { block: TextBlock; isDark: boolean })
         p.startsWith('`') && p.endsWith('`') && p.length > 2 ? (
           <code
             key={i}
+            style={{ color: 'var(--intent-success-fg)' }}
             className={`mx-px px-1 py-px rounded-md text-[12px] font-mono ${
               isDark
-                ? 'bg-white/[0.08] text-emerald-300/90 border border-white/[0.06]'
-                : 'bg-black/[0.05] text-emerald-700 border border-black/[0.05]'
+                ? 'bg-white/[0.08] border border-white/[0.06]'
+                : 'bg-black/[0.05] border border-black/[0.05]'
             }`}
           >
             {p.slice(1, -1)}
@@ -115,9 +116,12 @@ function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boolean })
   const labelColor = isDark ? 'text-white/85' : 'text-black/85';
   const sub = isDark ? 'text-white/40' : 'text-black/55';
   const checkOff = isDark ? 'border-white/15 hover:border-white/40' : 'border-black/15 hover:border-black/40';
-  const checkOn = isDark ? 'bg-emerald-400/90 border-emerald-400/90' : 'bg-emerald-600 border-emerald-600';
+  const checkOnStyle: React.CSSProperties = {
+    background: 'var(--intent-success-vivid)',
+    borderColor: 'var(--intent-success-vivid)',
+  };
   const dotIdle = isDark ? 'bg-white/[0.10]' : 'bg-black/[0.10]';
-  const dotOn   = isDark ? 'bg-emerald-400/85' : 'bg-emerald-500';
+  const dotOnStyle: React.CSSProperties = { background: 'var(--intent-success-vivid)' };
 
   function toggle(id: string) {
     const wasDone = done[id];
@@ -149,9 +153,13 @@ function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boolean })
           onClick={() => { setAutoAdvance((v) => !v); }}
           aria-pressed={autoAdvance}
           title={t('autoadvance.tooltip')}
+          style={autoAdvance ? {
+            background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)',
+            color: 'var(--intent-success-fg)',
+          } : undefined}
           className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
             autoAdvance
-              ? (isDark ? 'bg-emerald-400/15 text-emerald-300' : 'bg-emerald-50 text-emerald-700')
+              ? ''
               : (isDark ? 'text-white/40 hover:text-white/70 hover:bg-white/[0.04]' : 'text-black/40 hover:text-black/70 hover:bg-black/[0.04]')
           }`}
         >
@@ -163,8 +171,8 @@ function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boolean })
             {block.items.map((item, idx) => (
               <span
                 key={item.id}
-                className={`block w-2 h-2 rounded-full ${done[item.id] ? `${dotOn} coding-dot-pop` : dotIdle}`}
-                style={done[item.id] ? { animationDelay: `${idx * 60}ms` } : undefined}
+                className={`block w-2 h-2 rounded-full ${done[item.id] ? 'coding-dot-pop' : dotIdle}`}
+                style={done[item.id] ? { ...dotOnStyle, animationDelay: `${idx * 60}ms` } : undefined}
               />
             ))}
           </div>
@@ -179,18 +187,22 @@ function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boolean })
           // from Anthropic's published self-eval calibration: their
           // models cluster around 0.7 when answering correctly and
           // 0.55 when wrong, so 0.6 is the practical decision line.
+          const confidenceStyle: React.CSSProperties | undefined = pct == null ? undefined
+            : pct >= 85 ? { color: 'color-mix(in srgb, var(--intent-success-fg) 85%, transparent)' }
+            : pct >= 60 ? undefined
+            : { color: 'color-mix(in srgb, var(--intent-warn-fg) 85%, transparent)' };
           const confidenceTone = pct == null ? null
-            : pct >= 85 ? (isDark ? 'text-emerald-300/85' : 'text-emerald-700')
-            : pct >= 60 ? sub
-            : (isDark ? 'text-amber-300/85' : 'text-amber-700');
+            : pct >= 60 && pct < 85 ? sub
+            : '';
           return (
             <li key={item.id} className="flex items-start gap-2">
               <button
                 type="button"
                 onClick={() => { toggle(item.id); }}
                 aria-pressed={done[item.id]}
+                style={done[item.id] ? checkOnStyle : undefined}
                 className={`mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-[5px] border shrink-0 transition-colors cursor-pointer ${
-                  done[item.id] ? checkOn : checkOff
+                  done[item.id] ? '' : checkOff
                 }`}
               >
                 {done[item.id] && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
@@ -208,6 +220,7 @@ function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boolean })
                   <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono">
                     {pct != null && (
                       <span
+                        style={confidenceStyle}
                         className={confidenceTone ?? sub}
                         title={pct < 60 ? t('planMeta.lowConfidence') : t('planMeta.confidence', { pct })}
                       >
@@ -234,24 +247,29 @@ function PlanBlockView({ block, isDark }: { block: PlanBlock; isDark: boolean })
 // ─── tool ─────────────────────────────────────────────────────────────────
 
 const TOOL_META = {
-  read:   { Icon: FileCode, label: 'read',   tone: { d: 'text-sky-300',     l: 'text-sky-700' } },
-  edit:   { Icon: FileCode, label: 'edit',   tone: { d: 'text-emerald-300', l: 'text-emerald-700' } },
-  run:    { Icon: Terminal, label: 'run',    tone: { d: 'text-amber-300',   l: 'text-amber-700' } },
-  search: { Icon: Search,   label: 'search', tone: { d: 'text-violet-300',  l: 'text-violet-700' } },
-  plan:   { Icon: Sparkles, label: 'plan',   tone: { d: 'text-pink-300',    l: 'text-pink-700' } },
-  web:    { Icon: Globe,    label: 'web',    tone: { d: 'text-cyan-300',    l: 'text-cyan-700' } },
+  read:   { Icon: FileCode, label: 'read',   color: 'var(--fg-link)' },
+  edit:   { Icon: FileCode, label: 'edit',   color: 'var(--intent-success-fg)' },
+  run:    { Icon: Terminal, label: 'run',    color: 'var(--intent-warn-fg)' },
+  search: { Icon: Search,   label: 'search', color: 'var(--brand-fg)' },
+  plan:   { Icon: Sparkles, label: 'plan',   color: 'var(--intent-danger-fg)' },
+  web:    { Icon: Globe,    label: 'web',    color: 'var(--fg-link)' },
 } as const;
 
 function ToolBlockView({ block, isDark }: { block: ToolBlock; isDark: boolean }) {
   const [open, setOpen] = useState(false);
   const meta = TOOL_META[block.tool];
   const Icon = meta.Icon;
-  const tone = isDark ? meta.tone.d : meta.tone.l;
+  const toneStyle: React.CSSProperties = { color: meta.color };
   const card = isDark ? 'bg-white/[0.025] border-white/[0.06] hover:border-white/[0.12]' : 'bg-white border-black/[0.06] hover:border-black/[0.12]';
   const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
   const textFaint = isDark ? 'text-white/40' : 'text-black/40';
   const StatusIcon = block.status === 'fail' ? XCircle : block.status === 'running' ? Loader2 : CheckCircle2;
-  const statusTone = block.status === 'fail' ? 'text-rose-400' : block.status === 'running' ? 'text-amber-400 animate-spin' : 'text-emerald-400';
+  const statusStyle: React.CSSProperties = block.status === 'fail'
+    ? { color: 'var(--intent-danger-fg)' }
+    : block.status === 'running'
+      ? { color: 'var(--intent-warn-fg)' }
+      : { color: 'var(--intent-success-fg)' };
+  const statusClass = block.status === 'running' ? 'animate-spin' : '';
 
   return (
     <div className={`rounded-md border overflow-hidden transition-colors ${card}`}>
@@ -259,8 +277,8 @@ function ToolBlockView({ block, isDark }: { block: ToolBlock; isDark: boolean })
         onClick={() => { if (block.output) setOpen((v) => !v); }}
         className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left"
       >
-        <Icon className={`w-3 h-3 shrink-0 ${tone}`} />
-        <span className={`uppercase tracking-[0.18em] text-[9px] font-bold shrink-0 ${tone}`}>
+        <Icon style={toneStyle} className="w-3 h-3 shrink-0" />
+        <span style={toneStyle} className="uppercase tracking-[0.18em] text-[9px] font-bold shrink-0">
           {meta.label}
         </span>
         <span className={`flex-1 truncate font-mono text-[12px] ${textPrimary}`}>{block.label}</span>
@@ -268,7 +286,7 @@ function ToolBlockView({ block, isDark }: { block: ToolBlock; isDark: boolean })
           <span className={`shrink-0 font-mono text-[11px] ${textFaint}`}>{block.detail}</span>
         )}
         {block.status && (
-          <StatusIcon className={`w-3 h-3 shrink-0 ${statusTone}`} />
+          <StatusIcon style={statusStyle} className={`w-3 h-3 shrink-0 ${statusClass}`} />
         )}
         {block.output && (
           <ChevronRight className={`w-3 h-3 shrink-0 transition-transform ${textFaint} ${open ? 'rotate-90' : ''}`} />
@@ -310,10 +328,14 @@ function TestFailuresCard({
   const heading = isDark ? 'text-white/85' : 'text-black/85';
   const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
   return (
-    <div className={`border-t ${border} ${isDark ? 'bg-rose-400/[0.04]' : 'bg-rose-50/60'} px-3 py-2 space-y-1.5`}>
-      <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] ${
-        isDark ? 'text-rose-300' : 'text-rose-700'
-      }`}>
+    <div
+      style={{ background: 'color-mix(in srgb, var(--intent-danger-vivid) 6%, transparent)' }}
+      className={`border-t ${border} px-3 py-2 space-y-1.5`}
+    >
+      <div
+        style={{ color: 'var(--intent-danger-fg)' }}
+        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
+      >
         <XCircle className="w-2.5 h-2.5" />
         {t('testMap.linkedFailures')} · {run.failed} / {run.failed + run.passed}
       </div>
@@ -343,8 +365,8 @@ function TestFailuresCard({
                   }}
                   className={`inline-flex items-center gap-1 px-1.5 py-px rounded text-[9.5px] font-mono transition-colors ${
                     isDark
-                      ? 'bg-white/[0.05] text-white/70 hover:bg-rose-400/10 hover:text-rose-300'
-                      : 'bg-black/[0.04] text-black/70 hover:bg-rose-50 hover:text-rose-700'
+                      ? 'bg-white/[0.05] text-white/70 hover:text-[var(--intent-danger-fg)]'
+                      : 'bg-black/[0.04] text-black/70 hover:text-[var(--intent-danger-fg)]'
                   }`}
                   title={t('testMap.jumpToHunk')}
                 >
@@ -376,10 +398,15 @@ function DiffBlockView({ block, isDark }: { block: DiffBlock; isDark: boolean })
   const card = isDark ? 'bg-white/[0.02] border-white/[0.08]' : 'bg-white border-black/[0.08]';
   const headerBorder = isDark ? 'border-white/[0.06]' : 'border-black/[0.05]';
 
+  const stateBadgeStyle: React.CSSProperties | undefined = applied
+    ? {
+        background: 'var(--intent-success-bg)',
+        color: 'var(--intent-success-fg)',
+        borderColor: 'color-mix(in srgb, var(--intent-success-vivid) 20%, transparent)',
+      }
+    : undefined;
   const stateBadge = applied
-    ? (isDark
-        ? 'bg-emerald-400/10 text-emerald-300 border-emerald-400/20'
-        : 'bg-emerald-50 text-emerald-700 border-emerald-200')
+    ? ''
     : (isDark
         ? 'bg-white/[0.05] text-white/65 border-white/[0.10]'
         : 'bg-black/[0.04] text-black/65 border-black/[0.10]');
@@ -396,6 +423,7 @@ function DiffBlockView({ block, isDark }: { block: DiffBlock; isDark: boolean })
           {block.files.length} {block.files.length === 1 ? t('block.fileOne') : t('block.fileMany')}
         </span>
         <span
+          style={stateBadgeStyle}
           className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-bold uppercase tracking-[0.18em] border ${stateBadge}`}
         >
           <StateIcon className="w-2.5 h-2.5" />
@@ -436,8 +464,8 @@ function DiffBlockView({ block, isDark }: { block: DiffBlock; isDark: boolean })
           </button>
         </div>
         <div className="flex items-center gap-2 text-[11px] font-mono tabular-nums">
-          <span className="text-emerald-500 coding-num-rise">+{block.added}</span>
-          <span className="text-rose-500 coding-num-rise" style={{ animationDelay: '60ms' }}>−{block.removed}</span>
+          <span style={{ color: 'var(--intent-success-vivid)' }} className="coding-num-rise">+{block.added}</span>
+          <span style={{ color: 'var(--intent-danger-vivid)', animationDelay: '60ms' }} className="coding-num-rise">−{block.removed}</span>
         </div>
       </div>
 
@@ -501,11 +529,12 @@ function DiffBlockView({ block, isDark }: { block: DiffBlock; isDark: boolean })
           )}
           <button
             type="button"
-            className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
-              isDark
-                ? 'text-emerald-200 bg-emerald-400/10 hover:bg-emerald-400/15 border border-emerald-400/20'
-                : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200'
-            }`}
+            style={{
+              color: 'var(--intent-success-fg)',
+              background: 'var(--intent-success-bg)',
+              border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 20%, transparent)',
+            }}
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors"
           >
             <ExternalLink className="w-2.5 h-2.5" />
             {applied ? t('apply.applyAndPr') : t('block.openPr')}
@@ -630,9 +659,8 @@ function FileRow({
           <span className={`text-[11px] font-mono truncate ${textPrimary}`}>{file.path}</span>
           {expandable && acceptedCount > 0 && (
             <span
-              className={`shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono ${
-                isDark ? 'bg-emerald-400/10 text-emerald-300' : 'bg-emerald-50 text-emerald-700'
-              }`}
+              style={{ background: 'var(--intent-success-bg)', color: 'var(--intent-success-fg)' }}
+              className="shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono"
               title={t('hunk.summary', { accepted: acceptedCount, total })}
             >
               <Check className="w-2.5 h-2.5" />
@@ -648,8 +676,8 @@ function FileRow({
           )}
         </div>
         <div className="flex items-center gap-2 text-[10px] font-mono shrink-0">
-          <span className="text-emerald-500">+{file.added}</span>
-          <span className="text-rose-500">−{file.removed}</span>
+          <span style={{ color: 'var(--intent-success-vivid)' }}>+{file.added}</span>
+          <span style={{ color: 'var(--intent-danger-vivid)' }}>−{file.removed}</span>
           <DiffBar added={file.added} removed={file.removed} isDark={isDark} />
         </div>
       </button>
@@ -680,13 +708,14 @@ function FileRow({
                 >
                   {hunkDrifted && driftGlyph && (
                     <span
-                      className={`shrink-0 ${
-                        file.drift?.state === 'overlap'
-                          ? (isDark ? 'text-amber-300' : 'text-amber-700')
+                      style={{
+                        color: file.drift?.state === 'overlap'
+                          ? 'var(--intent-warn-fg)'
                           : file.drift?.state === 'gone'
-                            ? (isDark ? 'text-rose-300' : 'text-rose-700')
-                            : (isDark ? 'text-sky-300' : 'text-sky-700')
-                      }`}
+                            ? 'var(--intent-danger-fg)'
+                            : 'var(--fg-link)',
+                      }}
+                      className="shrink-0"
                       title={
                         file.drift?.state === 'overlap' ? t('drift.fileOverlap')
                         : file.drift?.state === 'gone' ? t('drift.fileGone')
@@ -703,10 +732,13 @@ function FileRow({
                     title={t('hunk.accept')}
                     aria-label={t('hunk.accept')}
                     aria-pressed={isAccepted}
+                    style={isAccepted
+                      ? { color: 'var(--intent-success-fg)', background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)' }
+                      : undefined}
                     className={`p-0.5 rounded transition-colors ${
                       isAccepted
-                        ? (isDark ? 'text-emerald-300 bg-emerald-400/15' : 'text-emerald-700 bg-emerald-100')
-                        : (isDark ? 'text-white/30 hover:text-emerald-300 hover:bg-emerald-400/10' : 'text-black/30 hover:text-emerald-700 hover:bg-emerald-50')
+                        ? ''
+                        : (isDark ? 'text-white/30 hover:text-[var(--intent-success-fg)]' : 'text-black/30 hover:text-[var(--intent-success-fg)]')
                     }`}
                   >
                     <Check className="w-3 h-3" />
@@ -717,10 +749,13 @@ function FileRow({
                     title={t('hunk.reject')}
                     aria-label={t('hunk.reject')}
                     aria-pressed={isRejected}
+                    style={isRejected
+                      ? { color: 'var(--intent-danger-fg)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 15%, transparent)' }
+                      : undefined}
                     className={`p-0.5 rounded transition-colors ${
                       isRejected
-                        ? (isDark ? 'text-rose-300 bg-rose-400/15' : 'text-rose-700 bg-rose-100')
-                        : (isDark ? 'text-white/30 hover:text-rose-300 hover:bg-rose-400/10' : 'text-black/30 hover:text-rose-700 hover:bg-rose-50')
+                        ? ''
+                        : (isDark ? 'text-white/30 hover:text-[var(--intent-danger-fg)]' : 'text-black/30 hover:text-[var(--intent-danger-fg)]')
                     }`}
                   >
                     <XCircle className="w-3 h-3" />
@@ -868,9 +903,12 @@ function HunkCommentThread({
                   type="button"
                   onClick={() => { setKind('ask'); }}
                   aria-pressed={kind === 'ask'}
+                  style={kind === 'ask'
+                    ? { background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)', color: 'var(--intent-warn-fg)' }
+                    : undefined}
                   className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
                     kind === 'ask'
-                      ? (isDark ? 'bg-amber-400/15 text-amber-300' : 'bg-amber-50 text-amber-700')
+                      ? ''
                       : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70')
                   }`}
                 >
@@ -943,10 +981,13 @@ function CommentNode({
     : (isDark ? 'bg-white/[0.025]' : 'bg-white');
   // Avatar tone: agent is the same neutral as everywhere else; "ask"
   // user comments get amber to nudge the eye toward unanswered questions.
+  const avatarStyle: React.CSSProperties | undefined = !isAgent && comment.kind === 'ask'
+    ? { background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)', color: 'var(--intent-warn-fg)' }
+    : undefined;
   const avatarTone = isAgent
     ? (isDark ? 'bg-white/[0.08] text-white/70' : 'bg-black/[0.06] text-black/70')
     : comment.kind === 'ask'
-      ? (isDark ? 'bg-amber-400/15 text-amber-300' : 'bg-amber-50 text-amber-700')
+      ? ''
       : (isDark ? 'bg-white/[0.05] text-white/55' : 'bg-black/[0.04] text-black/55');
   const Icon = isAgent ? Sparkles : comment.kind === 'ask' ? HelpCircle : MessageSquare;
 
@@ -956,6 +997,7 @@ function CommentNode({
         className={`flex items-start gap-2 px-2 py-1.5 rounded-md text-[11px] leading-relaxed border ${border} ${cardBg}`}
       >
         <span
+          style={avatarStyle}
           className={`shrink-0 mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-md ${avatarTone}`}
           title={
             isAgent ? t('reply.agentLabel')
@@ -972,9 +1014,10 @@ function CommentNode({
             </span>
             <span className={`text-[9px] font-mono ${faint}`}>{comment.at}</span>
             {comment.resolved && (
-              <span className={`text-[9px] font-mono px-1.5 py-px rounded ${
-                isDark ? 'bg-emerald-400/10 text-emerald-300' : 'bg-emerald-50 text-emerald-700'
-              }`}>
+              <span
+                style={{ background: 'var(--intent-success-bg)', color: 'var(--intent-success-fg)' }}
+                className="text-[9px] font-mono px-1.5 py-px rounded"
+              >
                 {t('reply.resolved')}
               </span>
             )}
@@ -1173,15 +1216,21 @@ function DiffLine({
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState('');
   void sideHint;
-  const tone =
+  const toneStyle: React.CSSProperties | undefined =
     line.kind === 'add'
-      ? (isDark ? 'bg-emerald-400/[0.08] text-emerald-200/90' : 'bg-emerald-100/60 text-emerald-900')
+      ? { background: 'color-mix(in srgb, var(--intent-success-vivid) 8%, transparent)', color: 'var(--intent-success-fg)' }
       : line.kind === 'del'
-      ? (isDark ? 'bg-rose-400/[0.08] text-rose-200/90' : 'bg-rose-100/60 text-rose-900')
-      : (isDark ? 'text-white/55' : 'text-black/55');
-  const gutterTone =
-    line.kind === 'add' ? 'text-emerald-500'
-    : line.kind === 'del' ? 'text-rose-500'
+      ? { background: 'color-mix(in srgb, var(--intent-danger-vivid) 8%, transparent)', color: 'var(--intent-danger-fg)' }
+      : undefined;
+  const tone = line.kind === 'add' || line.kind === 'del'
+    ? ''
+    : (isDark ? 'text-white/55' : 'text-black/55');
+  const gutterStyle: React.CSSProperties | undefined =
+    line.kind === 'add' ? { color: 'var(--intent-success-vivid)' }
+    : line.kind === 'del' ? { color: 'var(--intent-danger-vivid)' }
+    : undefined;
+  const gutterTone = line.kind === 'add' || line.kind === 'del'
+    ? ''
     : (isDark ? 'text-white/30' : 'text-black/30');
 
   function dispatchRewrite() {
@@ -1194,8 +1243,8 @@ function DiffLine({
   }
 
   return (
-    <div className={`group/line relative px-2 py-px whitespace-pre ${tone}`}>
-      <span className={`select-none mr-2 inline-block w-3 ${gutterTone}`}>
+    <div style={toneStyle} className={`group/line relative px-2 py-px whitespace-pre ${tone}`}>
+      <span style={gutterStyle} className={`select-none mr-2 inline-block w-3 ${gutterTone}`}>
         {line.kind === 'add' ? '+' : line.kind === 'del' ? '−' : ' '}
       </span>
       {line.text}
@@ -1272,10 +1321,23 @@ function DriftBadge({
   isDark: boolean;
   t: (k: string, opts?: Record<string, unknown>) => string;
 }) {
-  const tone =
-    drift.state === 'overlap' ? (isDark ? 'bg-amber-400/10 text-amber-300 border-amber-400/30' : 'bg-amber-50 text-amber-700 border-amber-500/30')
-    : drift.state === 'gone'  ? (isDark ? 'bg-rose-400/10 text-rose-300 border-rose-400/30'   : 'bg-rose-50 text-rose-700 border-rose-500/30')
-    :                            (isDark ? 'bg-sky-400/10 text-sky-300 border-sky-400/30'    : 'bg-sky-50 text-sky-700 border-sky-500/30');
+  void isDark;
+  const toneStyle: React.CSSProperties =
+    drift.state === 'overlap' ? {
+        background: 'var(--intent-warn-bg)',
+        color: 'var(--intent-warn-fg)',
+        borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
+      }
+    : drift.state === 'gone'  ? {
+        background: 'var(--intent-danger-bg)',
+        color: 'var(--intent-danger-fg)',
+        borderColor: 'color-mix(in srgb, var(--intent-danger-vivid) 30%, transparent)',
+      }
+    : {
+        background: 'var(--intent-info-bg)',
+        color: 'var(--fg-link)',
+        borderColor: 'color-mix(in srgb, var(--intent-info-fg) 30%, transparent)',
+      };
   const glyph =
     drift.state === 'overlap' ? '⚠'
     : drift.state === 'gone'  ? '✕'
@@ -1302,7 +1364,8 @@ function DriftBadge({
     : '';
   return (
     <span
-      className={`shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border ${tone}`}
+      style={toneStyle}
+      className="shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border"
       title={ago ? `${label} · ${t('drift.lastTouched', { ago })}` : label}
     >
       <span aria-hidden>{glyph}</span>
@@ -1350,11 +1413,12 @@ function DiffPreviewBlockView({ block, isDark }: { block: DiffPreviewBlock; isDa
         </button>
         <button
           type="button"
-          className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
-            isDark
-              ? 'text-emerald-200 bg-emerald-400/10 hover:bg-emerald-400/15 border border-emerald-400/20'
-              : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200'
-          }`}
+          style={{
+            color: 'var(--intent-success-fg)',
+            background: 'var(--intent-success-bg)',
+            border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 20%, transparent)',
+          }}
+          className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors"
         >
           <ExternalLink className="w-2.5 h-2.5" />
           {t('diffPreview.openInPr')}
@@ -1375,10 +1439,18 @@ function DiffBar({ added, removed, isDark }: { added: number; removed: number; i
   return (
     <div className="flex items-center gap-px ml-1">
       {Array.from({ length: a }).map((_, i) => (
-        <span key={`a${i}`} className="w-1 h-1.5 rounded-sm bg-emerald-500/80" />
+        <span
+          key={`a${i}`}
+          style={{ background: 'color-mix(in srgb, var(--intent-success-vivid) 80%, transparent)' }}
+          className="w-1 h-1.5 rounded-sm"
+        />
       ))}
       {Array.from({ length: d }).map((_, i) => (
-        <span key={`d${i}`} className={`w-1 h-1.5 rounded-sm ${i < removed ? 'bg-rose-500/70' : idle}`} />
+        <span
+          key={`d${i}`}
+          style={i < removed ? { background: 'color-mix(in srgb, var(--intent-danger-vivid) 70%, transparent)' } : undefined}
+          className={`w-1 h-1.5 rounded-sm ${i < removed ? '' : idle}`}
+        />
       ))}
     </div>
   );

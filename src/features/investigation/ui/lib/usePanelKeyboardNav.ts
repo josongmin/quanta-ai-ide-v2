@@ -77,7 +77,7 @@ export function usePanelKeyboardNav(opts: {
       }
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => { window.removeEventListener('keydown', onKey); };
   }, [
     panelOpen,
     mode,

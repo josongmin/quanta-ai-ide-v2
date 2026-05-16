@@ -10,7 +10,7 @@
 // downstream impact).
 export type SeedKind = 'file' | 'symbol' | 'route' | 'api' | 'config_key';
 
-export interface ChangeSeed {
+export type ChangeSeed = {
   id: string;
   kind: SeedKind;
   // Engine-side identifier (path, fully-qualified symbol, route key, etc).
@@ -37,7 +37,7 @@ export type ImpactLayer =
 // exactly the bug we're trying to avoid by sharing the vocabulary.
 export type ConfidenceState = 'exact' | 'overapprox' | 'unknown';
 
-export interface ImpactNode {
+export type ImpactNode = {
   id: string;
   label: string;
   ring: ImpactRing;
@@ -48,7 +48,7 @@ export interface ImpactNode {
   reason: string;
 }
 
-export interface ImpactEdge {
+export type ImpactEdge = {
   from: string;
   to: string;
   ring: ImpactRing;
@@ -59,7 +59,7 @@ export interface ImpactEdge {
   style: 'solid' | 'dashed' | 'faded';
 }
 
-export interface ImpactGraph {
+export type ImpactGraph = {
   seed: ChangeSeed;
   nodes: ImpactNode[];
   edges: ImpactEdge[];
@@ -68,7 +68,7 @@ export interface ImpactGraph {
 // A "safe seam" is a place to insert a backwards-compatible interface so the
 // change can be split into smaller, individually-deployable steps. The
 // canonical seam types correspond to standard refactor moves.
-export interface SafeSeam {
+export type SafeSeam = {
   id: string;
   nodeId: string;
   reason: string;
@@ -78,7 +78,7 @@ export interface SafeSeam {
 // One ordered step in the change plan. `kind` matches the StackStepKind in
 // entities/ownership so feature 05 (refactor stack) can adopt the same plans
 // without a translation layer.
-export interface ChangeStep {
+export type ChangeStep = {
   id: string;
   order: number;
   kind: 'prep' | 'adapter' | 'migration' | 'cleanup' | 'gate';
@@ -93,14 +93,14 @@ export interface ChangeStep {
   obligations: string[];
 }
 
-export interface PRSplitSuggestion {
+export type PRSplitSuggestion = {
   id: string;
   title: string;
   stepIds: string[];
   rationale: string;
 }
 
-export interface ChangePlan {
+export type ChangePlan = {
   id: string;
   seed: ChangeSeed;
   steps: ChangeStep[];

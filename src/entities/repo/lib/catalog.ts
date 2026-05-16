@@ -33,8 +33,8 @@ function clamp01(v: number): number { return Math.max(0, Math.min(1, v)); }
 //   Synthesised from `fnCount`, `cyclomatic`, `cognitive`, `largestFnLoc`.
 // ─────────────────────────────────────────────────────────────────────────
 
-export type EffectKind = 'pure' | 'io' | 'heap' | 'mutation' | 'async';
-export type CostBand = 'O(1)' | 'O(log n)' | 'O(n)' | 'O(n log n)' | 'O(n²)';
+type EffectKind = 'pure' | 'io' | 'heap' | 'mutation' | 'async';
+type CostBand = 'O(1)' | 'O(log n)' | 'O(n)' | 'O(n log n)' | 'O(n²)';
 
 export type FunctionSummaryRow = {
   name: string;
@@ -96,7 +96,7 @@ export function functionSummary(file: FileRecord, max = 6): FunctionSummaryRow[]
 
 export type RiskChannelKey = 'taint' | 'race' | 'typestate' | 'vuln' | 'layer' | 'publicApi';
 
-export type RiskChannelHit = {
+type RiskChannelHit = {
   /** Short witness label, e.g. "user-input → eval (depth 3)". */
   label: string;
   /** Severity in 0..1 — UI maps to color band. */

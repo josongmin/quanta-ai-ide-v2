@@ -166,8 +166,8 @@ function FileScannerRow({
         )}
       </button>
       <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-mono tabular-nums">
-        <span className="text-emerald-500/85">+{f.added}</span>
-        <span className="text-rose-500/85">−{f.removed}</span>
+        <span style={{ color: 'color-mix(in srgb, var(--intent-success-vivid) 85%, transparent)' }}>+{f.added}</span>
+        <span style={{ color: 'color-mix(in srgb, var(--intent-danger-vivid) 85%, transparent)' }}>−{f.removed}</span>
       </span>
       <div className="shrink-0 w-[80px] h-1.5 rounded-full overflow-hidden bg-white/[0.04]">
         <div
@@ -193,8 +193,8 @@ function FileScannerRow({
 }
 
 function FileKindIcon({ kind }: { kind: ChangeKind }) {
-  if (kind === 'added') return <FilePlus className="w-3 h-3 text-emerald-500 shrink-0" />;
-  if (kind === 'deleted') return <FileMinus className="w-3 h-3 text-rose-500 shrink-0" />;
+  if (kind === 'added') return <FilePlus className="w-3 h-3 shrink-0" style={{ color: 'var(--intent-success-vivid)' }} />;
+  if (kind === 'deleted') return <FileMinus className="w-3 h-3 shrink-0" style={{ color: 'var(--intent-danger-vivid)' }} />;
   if (kind === 'renamed') return <FileSymlink className="w-3 h-3 text-white/40 shrink-0" />;
   return <FileCode className="w-3 h-3 text-white/40 shrink-0" />;
 }
