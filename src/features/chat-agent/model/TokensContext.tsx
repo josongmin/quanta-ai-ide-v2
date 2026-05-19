@@ -88,7 +88,11 @@ type Ctx = {
 };
 
 const TokensCtx = createContext<Ctx | null>(null);
-const STORAGE_KEY = 'cflens.tokens.v2';
+// Bumped v2 → v3: the glass-tint / fillAlphaDark token semantics changed
+// (applyGlassTints, dark alpha 0.04 → 0.5). Stale persisted v2 tokens
+// would otherwise override the new defaults and freeze the chrome —
+// invalidate them once so everyone picks up the new theming.
+const STORAGE_KEY = 'cflens.tokens.v3';
 const LEGACY_STORAGE_KEY = 'cflens.tokens.v1';
 
 const SEMANTIC_TO_CSS_VAR: Record<keyof SemanticTokens, string> = {
