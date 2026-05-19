@@ -9,43 +9,105 @@
 
 import { lazy, Suspense, useMemo } from 'react';
 import {
-  createRootRoute, createRoute, createRouter, Outlet, redirect,
+  createRootRoute, createRoute, createRouter, Outlet, redirect, useRouterState,
 } from '@tanstack/react-router';
 
-import { useTheme } from '@shared/theme';
-import { useTranslation } from '@shared/i18n';
 import { buildRepo } from '@entities/repo';
 import { FilterProvider } from '@features/filter-files';
 import { AppShell } from '@widgets/app-shell';
 import { ErrorBoundary } from '@app/providers';
-import { IntelligenceLayout } from './intelligence';
 
-// Lazy stages — same boundaries we had before so route splits keep
-// matching `viz-modes` / `coding-stage` / `review-stage` chunks.
-const CodingStage = lazy(() =>
-  import('@widgets/coding-stage').then((m) => ({ default: m.CodingStage })),
+// Tab-kind routes are now rendered by WorkspaceTabsHost — the host keeps
+// every open tab mounted in parallel and only paints the active one. The
+// per-kind route components below all delegate to the host; the URL is
+// preserved purely as a deep-linking surface.
+const BillingStage = lazy(() =>
+  import('@widgets/billing-stage').then((m) => ({ default: m.BillingStage })),
 );
-const ReviewStage = lazy(() =>
-  import('@widgets/review-stage').then((m) => ({ default: m.ReviewStage })),
-);
-const AdmissionRoot = lazy(() =>
-  import('@features/admission-rules').then((m) => ({ default: m.AdmissionRoot })),
-);
-const VerifiedFixRoot = lazy(() =>
-  import('@features/verified-fix').then((m) => ({ default: m.VerifiedFixRoot })),
-);
-const FixPipelineStage = lazy(() =>
-  import('@widgets/fix-pipeline-stage').then((m) => ({ default: m.FixPipelineStage })),
-);
-const FixPipelineHandoffBanner = lazy(() =>
-  import('@features/investigation').then((m) => ({ default: m.FixPipelineHandoffBanner })),
-);
-const HandoffBreadcrumb = lazy(() =>
-  import('@features/investigation/handoff').then((m) => ({ default: m.HandoffBreadcrumb })),
-);
-const InvestigateStage = lazy(() =>
-  import('@widgets/investigate-stage').then((m) => ({ default: m.InvestigateStage })),
-);
+const OnboardingStage     = lazy(() => import('@widgets/onboarding-stage').then((m) => ({ default: m.OnboardingStage })));
+const ProfilePage         = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.ProfilePage })));
+const AccountPage         = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.AccountPage })));
+const SecurityPage        = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.SecurityPage })));
+const ConnectedAppsPage   = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.ConnectedAppsPage })));
+const ApiTokensPage       = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.ApiTokensPage })));
+const NotificationsPage   = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.NotificationsPage })));
+const AppearancePage      = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.AppearancePage })));
+const PreferencesPage     = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.PreferencesPage })));
+const KeyboardPage        = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.KeyboardPage })));
+const AiPage              = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.AiPage })));
+const OrgMembersPage      = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.MembersPage })));
+const OrgGeneralPage      = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.GeneralPage })));
+const OrgTeamsPage        = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.TeamsPage })));
+const OrgRolesPage        = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.RolesPage })));
+const OrgSecurityPage     = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.SecurityPage })));
+const OrgIntegrationsPage = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.IntegrationsPage })));
+const OrgWebhooksPage     = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.WebhooksPage })));
+const OrgApiOAuthPage     = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.ApiOAuthPage })));
+const OrgPoliciesPage     = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.PoliciesPage })));
+const OrgAiPoliciesPage   = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.AiPoliciesPage })));
+const OrgSamlSsoPage      = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.SamlSsoPage })));
+const OrgScimPage         = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.ScimPage })));
+const OrgAuditLogPage     = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.AuditLogPage })));
+const OrgDataResidencyPage= lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.DataResidencyPage })));
+const OrgRetentionPage    = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.RetentionPolicyPage })));
+const WsGeneralPage       = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsGeneralPage })));
+const WsSourcePage        = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsSourcePage })));
+const WsOwnershipPage     = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsOwnershipPage })));
+const WsAdmissionPage     = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsAdmissionPage })));
+const WsReviewPage        = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsReviewPage })));
+const WsFixPipelinePage   = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsFixPipelinePage })));
+const WsAgentsPage        = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsAgentsPage })));
+const WsSecretsPage       = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsSecretsPage })));
+const WsEnvironmentsPage  = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsEnvironmentsPage })));
+const WsWebhooksPage      = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsWebhooksPage })));
+const WsLabelsPage        = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsLabelsPage })));
+const WsDangerPage        = lazy(() => import('@widgets/ws-stage').then((m) => ({ default: m.WsDangerPage })));
+const SignInPage          = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.SignInPage })));
+const SignUpPage          = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.SignUpPage })));
+const SsoRedirectPage     = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.SsoRedirectPage })));
+const ForgotPasswordPage  = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.ForgotPasswordPage })));
+const ResetPasswordPage   = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.ResetPasswordPage })));
+const VerifyEmailPage     = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.VerifyEmailPage })));
+const MfaChallengePage    = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.MfaChallengePage })));
+const SessionExpiredPage  = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.SessionExpiredPage })));
+const PricingPage         = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.PricingPage })));
+const ChangelogPage       = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.ChangelogPage })));
+const HelpPage            = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.HelpPage })));
+const StatusPage          = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.StatusPage })));
+const TermsPage           = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.TermsPage })));
+const PrivacyPage         = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.PrivacyPage })));
+const DpaPage             = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.DpaPage })));
+const SubprocessorsPage   = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.SubprocessorsPage })));
+const AdminPage           = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.AdminPage })));
+
+// New SaaS scaffold pages — developer platform, marketplace, trust, support, errors.
+const DevOverviewPage     = lazy(() => import('@widgets/developer-stage').then((m) => ({ default: m.DevOverviewPage })));
+const ApiReferencePage    = lazy(() => import('@widgets/developer-stage').then((m) => ({ default: m.ApiReferencePage })));
+const PlaygroundPage      = lazy(() => import('@widgets/developer-stage').then((m) => ({ default: m.PlaygroundPage })));
+const OAuthAppsPage       = lazy(() => import('@widgets/developer-stage').then((m) => ({ default: m.OAuthAppsPage })));
+const WebhooksLogPage     = lazy(() => import('@widgets/developer-stage').then((m) => ({ default: m.WebhooksLogPage })));
+const CliPage             = lazy(() => import('@widgets/developer-stage').then((m) => ({ default: m.CliPage })));
+const SdksPage            = lazy(() => import('@widgets/developer-stage').then((m) => ({ default: m.SdksPage })));
+const MarketplacePage         = lazy(() => import('@widgets/marketplace-stage').then((m) => ({ default: m.MarketplacePage })));
+const IntegrationDetailPage   = lazy(() => import('@widgets/marketplace-stage').then((m) => ({ default: m.IntegrationDetailPage })));
+const TrustCenterPage         = lazy(() => import('@widgets/trust-stage').then((m) => ({ default: m.TrustCenterPage })));
+const SecurityDisclosurePage  = lazy(() => import('@widgets/trust-stage').then((m) => ({ default: m.SecurityDisclosurePage })));
+const SupportPage         = lazy(() => import('@widgets/support-stage').then((m) => ({ default: m.SupportPage })));
+const ContactSalesPage    = lazy(() => import('@widgets/support-stage').then((m) => ({ default: m.ContactSalesPage })));
+const FeedbackPage        = lazy(() => import('@widgets/support-stage').then((m) => ({ default: m.FeedbackPage })));
+const NotFoundPage        = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.NotFoundPage })));
+const ServerErrorPage     = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.ServerErrorPage })));
+const MaintenancePage     = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.MaintenancePage })));
+const OfflinePage         = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.OfflinePage })));
+const CookiesPage         = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.CookiesPage })));
+const AccessibilityPage   = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.AccessibilityPage })));
+const WhatsNewPage        = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.WhatsNewPage })));
+const RoadmapPage         = lazy(() => import('@widgets/error-stage').then((m) => ({ default: m.RoadmapPage })));
+// Extra org-level pages.
+const OrgInvitationsPage      = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.InvitationsPage })));
+const OrgDomainsPage          = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.DomainsPage })));
+const OrgServiceAccountsPage  = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.ServiceAccountsPage })));
+const OrgUsagePage            = lazy(() => import('@widgets/org-stage').then((m) => ({ default: m.UsagePage })));
 
 // ─────────────────────────────────────────────────────────────────────────
 // Root route — owns the chrome (header, tabs, modals) via AppShell. The
@@ -54,17 +116,48 @@ const InvestigateStage = lazy(() =>
 
 const rootRoute = createRootRoute({
   component: function RootLayout() {
-    // Outer boundary — protects the entire tree (AppShell + active route).
-    // A crash here gives the user a chance to recover without forcing a
-    // full reload, and keeps the canvas-based stages from taking the whole
-    // app down on a Three.js / WebGL fault.
+    // Auth pages render full-bleed, without the AppShell chrome (header,
+    // GNB, modals). We branch here so the auth stage owns the whole
+    // viewport — same pattern Linear / Vercel use for /login.
+    const pathname = useRouterState({ select: (s) => s.location.pathname });
+    // Both /auth/* and /onboarding render full-bleed without GNB chrome.
+    const isAuth = pathname.startsWith('/auth') || pathname.startsWith('/onboarding');
+    // Public/marketing/legal pages and the super-admin internal console all
+    // render full-bleed without the AppShell chrome — each owns its own
+    // shell (PublicShell / AdminShell).
+    const isPublic =
+      pathname === '/pricing'
+      || pathname === '/changelog'
+      || pathname === '/help'
+      || pathname === '/status'
+      || pathname === '/integrations'
+      || pathname.startsWith('/integrations/')
+      || pathname === '/trust'
+      || pathname === '/security'
+      || pathname === '/support'
+      || pathname === '/contact-sales'
+      || pathname === '/feedback'
+      || pathname === '/whats-new'
+      || pathname === '/roadmap'
+      || pathname === '/accessibility'
+      || pathname === '/maintenance'
+      || pathname === '/offline'
+      || pathname === '/_errors/404'
+      || pathname === '/_errors/500'
+      || pathname.startsWith('/legal/')
+      || pathname.startsWith('/_admin');
+
     return (
       <ErrorBoundary label="App">
-        <FilterProviderRoot>
-          <AppShell>
-            <Outlet />
-          </AppShell>
-        </FilterProviderRoot>
+        {isAuth || isPublic ? (
+          <Outlet />
+        ) : (
+          <FilterProviderRoot>
+            <AppShell>
+              <Outlet />
+            </AppShell>
+          </FilterProviderRoot>
+        )}
       </ErrorBoundary>
     );
   },
@@ -78,11 +171,15 @@ function FilterProviderRoot({ children }: { children: React.ReactNode }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// Intelligence route (default) — the dot-field stage + filter sidebar.
+// Tab-kind routes — every kind that the WorkspaceTabsHost knows about
+// renders nothing. The host lives in AppShell (above the route boundary)
+// and reads the URL to decide which tab to activate. Putting the host
+// *inside* the route would unmount/remount it on every tab switch,
+// which would defeat the keep-mounted contract.
 // ─────────────────────────────────────────────────────────────────────────
 
-function IntelligenceRoute() {
-  return <IntelligenceLayout />;
+function TabHostRoute() {
+  return null;
 }
 
 // Index ('/') redirects to '/intelligence' so deep-linking is consistent —
@@ -96,133 +193,224 @@ const indexRoute = createRoute({
 const intelligenceRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/intelligence',
-  component: IntelligenceRoute,
+  component: TabHostRoute,
 });
 
 const codingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/coding',
-  component: function CodingRouteComponent() {
-    return (
-      <Suspense fallback={null}>
-        <CodingStage />
-      </Suspense>
-    );
-  },
+  component: TabHostRoute,
 });
 
 const agentsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/agents',
-  component: function AgentsRouteComponent() {
-    return <PlaceholderTab tab="agents" />;
-  },
+  component: TabHostRoute,
 });
 
 const reviewsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/reviews',
-  component: function ReviewsRouteComponent() {
-    return (
-      <Suspense fallback={null}>
-        <ReviewStage />
-      </Suspense>
-    );
-  },
+  component: TabHostRoute,
 });
 
 const admissionRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/admission',
-  component: function AdmissionRouteComponent() {
-    return (
-      <Suspense fallback={null}>
-        <AdmissionRoot />
-      </Suspense>
-    );
-  },
+  component: TabHostRoute,
 });
 
 const fixesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/fixes',
-  component: function FixesRouteComponent() {
-    return (
-      <Suspense fallback={null}>
-        <VerifiedFixRoot />
-      </Suspense>
-    );
-  },
+  component: TabHostRoute,
 });
 
 const fixPipelineRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/fix-pipeline',
-  component: function FixPipelineRouteComponent() {
-    return (
-      <Suspense fallback={null}>
-        <FixPipelineStage />
-        <FixPipelineHandoffBanner />
-        <HandoffBreadcrumb />
-      </Suspense>
-    );
-  },
+  component: TabHostRoute,
 });
 
-const investigateRoute = createRoute({
+const billingRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/investigate',
-  component: function InvestigateRouteComponent() {
+  path: '/org/$org/billing',
+  component: function BillingRouteComponent() {
     return (
       <Suspense fallback={null}>
-        <InvestigateStage />
+        <BillingStage />
       </Suspense>
     );
   },
 });
 
-// ─────────────────────────────────────────────────────────────────────────
-// /me/* — the per-user settings area (profile, account, appearance/theme
-// presets, …). Each page self-wraps in MeShell (side-nav + AppShell
-// chrome stays visible), so a route only needs to render the page. The
-// page set used to be unreachable — present in `@widgets/me-stage` but
-// never wired into the tree, which is why the theme/appearance picker
-// "disappeared". Data-driven so the 11 paths stay in one place.
-// ─────────────────────────────────────────────────────────────────────────
-const meStage = () => import('@widgets/me-stage');
-const ME_ROUTES: { path: string; load: Parameters<typeof lazy>[0] }[] = [
-  { path: '/me/profile',        load: () => meStage().then((m) => ({ default: m.ProfilePage })) },
-  { path: '/me/account',        load: () => meStage().then((m) => ({ default: m.AccountPage })) },
-  { path: '/me/security',       load: () => meStage().then((m) => ({ default: m.SecurityPage })) },
-  { path: '/me/connected-apps', load: () => meStage().then((m) => ({ default: m.ConnectedAppsPage })) },
-  { path: '/me/api-tokens',     load: () => meStage().then((m) => ({ default: m.ApiTokensPage })) },
-  { path: '/me/notifications',  load: () => meStage().then((m) => ({ default: m.NotificationsPage })) },
-  { path: '/me/appearance',     load: () => meStage().then((m) => ({ default: m.AppearancePage })) },
-  { path: '/me/preferences',    load: () => meStage().then((m) => ({ default: m.PreferencesPage })) },
-  { path: '/me/keyboard',       load: () => meStage().then((m) => ({ default: m.KeyboardPage })) },
-  { path: '/me/ai',             load: () => meStage().then((m) => ({ default: m.AiPage })) },
-  { path: '/me/inbox',          load: () => meStage().then((m) => ({ default: m.InboxPage })) },
-];
-const meRoutes = ME_ROUTES.map(({ path, load }) => {
-  const Page = lazy(load);
+function makeOrg(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
+  return createRoute({
+    getParentRoute: () => rootRoute,
+    path,
+    component: function OrgRouteComponent() {
+      return (
+        <Suspense fallback={null}>
+          <Component />
+        </Suspense>
+      );
+    },
+  });
+}
+const orgGeneralRoute      = makeOrg('/org/$org/general',      OrgGeneralPage);
+const orgMembersRoute      = makeOrg('/org/$org/members',      OrgMembersPage);
+const orgTeamsRoute        = makeOrg('/org/$org/teams',        OrgTeamsPage);
+const orgRolesRoute        = makeOrg('/org/$org/roles',        OrgRolesPage);
+const orgSecurityRoute     = makeOrg('/org/$org/security',     OrgSecurityPage);
+const orgIntegrationsRoute = makeOrg('/org/$org/integrations', OrgIntegrationsPage);
+const orgWebhooksRoute     = makeOrg('/org/$org/webhooks',     OrgWebhooksPage);
+const orgApiRoute          = makeOrg('/org/$org/api',          OrgApiOAuthPage);
+const orgPoliciesRoute     = makeOrg('/org/$org/policies',     OrgPoliciesPage);
+const orgAiPoliciesRoute   = makeOrg('/org/$org/ai-policies',  OrgAiPoliciesPage);
+const orgSamlSsoRoute      = makeOrg('/org/$org/sso',            OrgSamlSsoPage);
+const orgScimRoute         = makeOrg('/org/$org/scim',           OrgScimPage);
+const orgAuditRoute        = makeOrg('/org/$org/audit',          OrgAuditLogPage);
+const orgResidencyRoute    = makeOrg('/org/$org/data-residency', OrgDataResidencyPage);
+const orgRetentionRoute    = makeOrg('/org/$org/retention',      OrgRetentionPage);
+
+function makeWs(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
+  return createRoute({
+    getParentRoute: () => rootRoute,
+    path,
+    component: function WsRouteComponent() {
+      return (
+        <Suspense fallback={null}>
+          <Component />
+        </Suspense>
+      );
+    },
+  });
+}
+const wsGeneralRoute      = makeWs('/$org/$ws/settings/general',      WsGeneralPage);
+const wsSourceRoute       = makeWs('/$org/$ws/settings/source',       WsSourcePage);
+const wsOwnershipRoute    = makeWs('/$org/$ws/settings/ownership',    WsOwnershipPage);
+const wsAdmissionRoute    = makeWs('/$org/$ws/settings/admission',    WsAdmissionPage);
+const wsReviewRoute       = makeWs('/$org/$ws/settings/review',       WsReviewPage);
+const wsFixRoute          = makeWs('/$org/$ws/settings/fix',          WsFixPipelinePage);
+const wsAgentsRoute       = makeWs('/$org/$ws/settings/agents',       WsAgentsPage);
+const wsSecretsRoute      = makeWs('/$org/$ws/settings/secrets',      WsSecretsPage);
+const wsEnvironmentsRoute = makeWs('/$org/$ws/settings/environments', WsEnvironmentsPage);
+const wsWebhooksRoute     = makeWs('/$org/$ws/settings/webhooks',     WsWebhooksPage);
+const wsLabelsRoute       = makeWs('/$org/$ws/settings/labels',       WsLabelsPage);
+const wsDangerRoute       = makeWs('/$org/$ws/settings/danger',       WsDangerPage);
+
+const catalogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/catalog',
+  component: TabHostRoute,
+});
+
+// Personal account pages (/me/*). These render INSIDE the AppShell chrome
+// (the GNB tabs stay visible). Each page mounts its own MeShell which adds
+// the left-side settings sidebar.
+function makeMe(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
   return createRoute({
     getParentRoute: () => rootRoute,
     path,
     component: function MeRouteComponent() {
       return (
         <Suspense fallback={null}>
-          <Page />
+          <Component />
         </Suspense>
       );
     },
   });
-});
-// Bare /me → first settings page.
-const meIndexRoute = createRoute({
+}
+const meProfileRoute        = makeMe('/me/profile',        ProfilePage);
+const meAccountRoute        = makeMe('/me/account',        AccountPage);
+const meSecurityRoute       = makeMe('/me/security',       SecurityPage);
+const meConnectedAppsRoute  = makeMe('/me/connected-apps', ConnectedAppsPage);
+const meApiTokensRoute      = makeMe('/me/api-tokens',     ApiTokensPage);
+const meNotificationsRoute  = makeMe('/me/notifications',  NotificationsPage);
+const meAppearanceRoute     = makeMe('/me/appearance',     AppearancePage);
+const mePreferencesRoute    = makeMe('/me/preferences',    PreferencesPage);
+const meKeyboardRoute       = makeMe('/me/keyboard',       KeyboardPage);
+const meAiRoute             = makeMe('/me/ai',             AiPage);
+// Inbox is a tab-kind, so its route renders the host (the host owns the
+// InboxPage instance). The other /me/* routes stay page-direct because
+// they are personal-account surfaces, not workspace tabs.
+const meInboxRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/me',
-  beforeLoad: () => { redirect({ to: '/me/profile', throw: true }); },
+  path: '/me/inbox',
+  component: TabHostRoute,
 });
+
+// Auth surfaces (sign-in flow). Mount under /auth/* so the root layout
+// can drop the AppShell chrome for the entire branch.
+function makeAuth(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
+  return createRoute({
+    getParentRoute: () => rootRoute,
+    path,
+    component: function AuthRouteComponent() {
+      return (
+        <Suspense fallback={null}>
+          <Component />
+        </Suspense>
+      );
+    },
+  });
+}
+const onboardingRoute   = makeAuth('/onboarding',           OnboardingStage);
+const authLoginRoute    = makeAuth('/auth/login',           SignInPage);
+const authSignupRoute   = makeAuth('/auth/signup',          SignUpPage);
+const authSsoRoute      = makeAuth('/auth/sso',             SsoRedirectPage);
+const authForgotRoute   = makeAuth('/auth/forgot',          ForgotPasswordPage);
+const authResetRoute    = makeAuth('/auth/reset',           ResetPasswordPage);
+const authVerifyRoute   = makeAuth('/auth/verify-email',    VerifyEmailPage);
+const authMfaRoute      = makeAuth('/auth/mfa',             MfaChallengePage);
+const authExpiredRoute  = makeAuth('/auth/session-expired', SessionExpiredPage);
+
+// Public marketing / legal / status pages — chromeless, same lazy-suspense
+// wrapper as auth.
+const pricingRoute       = makeAuth('/pricing',                PricingPage);
+const changelogRoute     = makeAuth('/changelog',              ChangelogPage);
+const helpRoute          = makeAuth('/help',                   HelpPage);
+const statusRoute        = makeAuth('/status',                 StatusPage);
+const legalTermsRoute    = makeAuth('/legal/terms',            TermsPage);
+const legalPrivacyRoute  = makeAuth('/legal/privacy',          PrivacyPage);
+const legalDpaRoute      = makeAuth('/legal/dpa',              DpaPage);
+const legalSubsRoute     = makeAuth('/legal/subprocessors',    SubprocessorsPage);
+const adminRoute         = makeAuth('/_admin',                 AdminPage);
+
+// Developer platform — renders inside AppShell (keeps GNB visible).
+const devOverviewRoute   = makeMe('/developers',             DevOverviewPage);
+const devApiRoute        = makeMe('/developers/api',         ApiReferencePage);
+const devPlaygroundRoute = makeMe('/developers/playground',  PlaygroundPage);
+const devOAuthRoute      = makeMe('/developers/oauth-apps',  OAuthAppsPage);
+const devWebhooksRoute   = makeMe('/developers/webhooks',    WebhooksLogPage);
+const devCliRoute        = makeMe('/developers/cli',         CliPage);
+const devSdksRoute       = makeMe('/developers/sdks',        SdksPage);
+
+// Marketplace + trust + support + meta — chromeless (own their own shell).
+const marketplaceRoute       = makeAuth('/integrations',          MarketplacePage);
+const integrationDetailRoute = makeAuth('/integrations/$slug',    IntegrationDetailPage);
+const trustRoute             = makeAuth('/trust',                 TrustCenterPage);
+const securityDisclosureRoute = makeAuth('/security',             SecurityDisclosurePage);
+const supportRoute           = makeAuth('/support',               SupportPage);
+const contactSalesRoute      = makeAuth('/contact-sales',         ContactSalesPage);
+const feedbackRoute          = makeAuth('/feedback',              FeedbackPage);
+const whatsNewRoute          = makeAuth('/whats-new',             WhatsNewPage);
+const roadmapRoute           = makeAuth('/roadmap',               RoadmapPage);
+const cookiesRoute           = makeAuth('/legal/cookies',         CookiesPage);
+const accessibilityRoute     = makeAuth('/accessibility',         AccessibilityPage);
+
+// Error / status pages — chromeless previews. Real 404 already redirects via
+// the catch-all; these are linkable demo previews from the catalog.
+const errors404Route     = makeAuth('/_errors/404',     NotFoundPage);
+const errors500Route     = makeAuth('/_errors/500',     ServerErrorPage);
+const maintenanceRoute   = makeAuth('/maintenance',     MaintenancePage);
+const offlineRoute       = makeAuth('/offline',         OfflinePage);
+
+// Extra org-level surfaces.
+const orgInvitationsRoute     = makeOrg('/org/$org/invitations',      OrgInvitationsPage);
+const orgDomainsRoute         = makeOrg('/org/$org/domains',          OrgDomainsPage);
+const orgServiceAccountsRoute = makeOrg('/org/$org/service-accounts', OrgServiceAccountsPage);
+const orgUsageRoute           = makeOrg('/org/$org/usage',            OrgUsagePage);
 
 // 404 — anything else lands back on intelligence. Cheaper than a real
 // not-found page for an internal app and keeps copy-pasted bad URLs from
@@ -234,19 +422,6 @@ const catchAllRoute = createRoute({
 });
 
 // ─────────────────────────────────────────────────────────────────────────
-
-function PlaceholderTab({ tab }: { tab: string }) {
-  const { isDark } = useTheme();
-  const { t } = useTranslation('app');
-  return (
-    <div className={`absolute inset-0 flex items-center justify-center ${isDark ? 'text-white/30' : 'text-black/30'}`}>
-      <div className="text-center">
-        <div className="text-[10px] uppercase tracking-[0.18em] font-black mb-2">{tab}</div>
-        <div className="text-[12px]">{t('placeholder.comingSoon')}</div>
-      </div>
-    </div>
-  );
-}
 
 // ─────────────────────────────────────────────────────────────────────────
 // Tree assembly + router instance.
@@ -261,9 +436,90 @@ const routeTree = rootRoute.addChildren([
   admissionRoute,
   fixesRoute,
   fixPipelineRoute,
-  investigateRoute,
-  meIndexRoute,
-  ...meRoutes,
+  billingRoute,
+  orgGeneralRoute,
+  orgMembersRoute,
+  orgTeamsRoute,
+  orgRolesRoute,
+  orgSecurityRoute,
+  orgIntegrationsRoute,
+  orgWebhooksRoute,
+  orgApiRoute,
+  orgPoliciesRoute,
+  orgAiPoliciesRoute,
+  orgSamlSsoRoute,
+  orgScimRoute,
+  orgAuditRoute,
+  orgResidencyRoute,
+  orgRetentionRoute,
+  wsGeneralRoute,
+  wsSourceRoute,
+  wsOwnershipRoute,
+  wsAdmissionRoute,
+  wsReviewRoute,
+  wsFixRoute,
+  wsAgentsRoute,
+  wsSecretsRoute,
+  wsEnvironmentsRoute,
+  wsWebhooksRoute,
+  wsLabelsRoute,
+  wsDangerRoute,
+  catalogRoute,
+  meProfileRoute,
+  meAccountRoute,
+  meSecurityRoute,
+  meConnectedAppsRoute,
+  meApiTokensRoute,
+  meNotificationsRoute,
+  meAppearanceRoute,
+  mePreferencesRoute,
+  meKeyboardRoute,
+  meAiRoute,
+  meInboxRoute,
+  onboardingRoute,
+  authLoginRoute,
+  authSignupRoute,
+  authSsoRoute,
+  authForgotRoute,
+  authResetRoute,
+  authVerifyRoute,
+  authMfaRoute,
+  authExpiredRoute,
+  pricingRoute,
+  changelogRoute,
+  helpRoute,
+  statusRoute,
+  legalTermsRoute,
+  legalPrivacyRoute,
+  legalDpaRoute,
+  legalSubsRoute,
+  adminRoute,
+  devOverviewRoute,
+  devApiRoute,
+  devPlaygroundRoute,
+  devOAuthRoute,
+  devWebhooksRoute,
+  devCliRoute,
+  devSdksRoute,
+  marketplaceRoute,
+  integrationDetailRoute,
+  trustRoute,
+  securityDisclosureRoute,
+  supportRoute,
+  contactSalesRoute,
+  feedbackRoute,
+  whatsNewRoute,
+  roadmapRoute,
+  cookiesRoute,
+  accessibilityRoute,
+  errors404Route,
+  errors500Route,
+  maintenanceRoute,
+  offlineRoute,
+  orgInvitationsRoute,
+  orgDomainsRoute,
+  orgServiceAccountsRoute,
+  orgUsageRoute,
   catchAllRoute,
 ]);
 
