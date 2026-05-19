@@ -34,7 +34,7 @@ export function JobsTray() {
   };
 
   return (
-    <div className="fixed bottom-3 left-3 z-30 pointer-events-auto">
+    <div className="fixed bottom-3 left-3 z-50 pointer-events-auto">
       <GlassCard
         className="rounded-lg overflow-hidden"
         style={{ width: 320 }}
