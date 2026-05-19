@@ -21,7 +21,7 @@ import { useNavigate } from '@tanstack/react-router';
 import {
   Search, ArrowRight, ArrowUp, CornerDownLeft,
   Brain, Code2, Bot, GitPullRequest, ShieldCheck, Wand2, Sun, Moon,
-  Undo2, Coins, Activity, HelpCircle, History, List,
+  Undo2, Coins, Activity, HelpCircle, History, List, Palette,
   type LucideIcon,
 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
@@ -83,6 +83,7 @@ const ICONS: Record<string, LucideIcon> = {
   help:     HelpCircle,
   history:  History,
   list:     List,
+  palette:  Palette,
 };
 
 type Props = {

@@ -81,6 +81,19 @@ export function buildCommands(ctx: BuildContext): Command[] {
   };
   out.push(catalog);
 
+  // Appearance / theme settings (mode, accent, density, syntax-theme
+  // presets). Theme selection is a full page (/me/appearance), not a
+  // popup — this makes it one keystroke away from Cmd-K.
+  const appearance: NavigateCommand = {
+    id: 'nav:appearance',
+    kind: 'navigate',
+    label: 'Appearance & theme',
+    path: '/me/appearance',
+    iconKey: 'palette',
+    keywords: ['theme', 'appearance', 'tokyo', 'preset', 'accent', 'dark', 'light', '테마', '외관', '프리셋', '색'],
+  };
+  out.push(appearance);
+
   // 3. Actions — global toggles. Locale-friendly keywords so a Korean
   //    user can find them with mixed input.
   const themeLabel = ctx.isDark
