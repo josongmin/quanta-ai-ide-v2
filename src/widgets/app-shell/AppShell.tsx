@@ -109,11 +109,22 @@ export default function AppShell({ children }: { children: ReactNode }) {
       >
         Skip to main content
       </a>
+      {/* Dark-only blur: light theme uses near-opaque --bg-overlay, so an
+          always-on backdrop-filter just smears the scrolled page behind the
+          translucent header (it reads as content "hidden behind" the GNB)
+          while burning GPU each frame. Mirrors the StatusBar treatment. */}
+      <style>{`
+        html[data-theme="dark"] header[data-app-chrome="gnb"] {
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+        }
+      `}</style>
       <header
         // The whole header is a drag handle; interactive children opt out via
         // `data-tauri-drag-region="false"` (Tauri honours the closest ancestor).
         data-tauri-drag-region
-        className="shrink-0 h-12 flex items-stretch border-b backdrop-blur-xl select-none relative z-50"
+        data-app-chrome="gnb"
+        className="shrink-0 h-12 flex items-stretch border-b select-none relative z-50"
         style={{
           borderColor: 'var(--border-muted)',
           background: 'var(--bg-overlay)',
