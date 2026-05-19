@@ -124,7 +124,7 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
                 }}
               />
               <span
-                className="relative w-[42%] text-[var(--fs-sm)] font-mono font-semibold truncate pl-1"
+                className="relative w-[42%] text-sm font-mono font-semibold truncate pl-1"
                 style={{ color: 'var(--fg-default)' }}
                 title={p.from}
               >
@@ -137,7 +137,7 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
                 →
               </span>
               <span
-                className="relative w-[42%] text-[var(--fs-sm)] font-mono font-semibold truncate"
+                className="relative w-[42%] text-sm font-mono font-semibold truncate"
                 style={{ color: 'var(--fg-default)' }}
                 title={p.to}
               >

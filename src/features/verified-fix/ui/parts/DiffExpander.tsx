@@ -69,10 +69,10 @@ function DiffHunkView({ hunk }: { hunk: DiffHunk }) {
         style={{ borderColor: t.borderSoft }}
       >
         <FileCode2 className="w-3 h-3" style={{ color: t.textFaint }} />
-        <span className="text-[var(--fs-sm)] font-mono" style={{ color: t.textBody }}>
+        <span className="text-sm font-mono" style={{ color: t.textBody }}>
           {hunk.file}
         </span>
-        <span className="text-[var(--fs-xs)] font-mono ml-auto" style={{ color: t.textFaint }}>
+        <span className="text-xs font-mono ml-auto" style={{ color: t.textFaint }}>
           {tr('diff.atLine', { line: hunk.startLine })}
         </span>
       </div>

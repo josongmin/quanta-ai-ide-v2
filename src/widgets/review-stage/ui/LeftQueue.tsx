@@ -381,7 +381,7 @@ export default function LeftQueue({
       {/* ── 4. Repo-grouped list ────────────────────────────────── */}
       <div className="flex-1 min-h-0 overflow-auto">
         {groups.length === 0 ? (
-          <div className="px-4 py-12 text-center text-[var(--fs-sm)] text-[var(--fg-subtle)]">
+          <div className="px-4 py-12 text-center text-sm text-[var(--fg-subtle)]">
             매칭되는 PR이 없습니다.
           </div>
         ) : (

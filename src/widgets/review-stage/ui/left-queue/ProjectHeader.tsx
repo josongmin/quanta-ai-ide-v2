@@ -20,7 +20,7 @@ export function ProjectHeader({
 }) {
   return (
     <div className="shrink-0 flex items-center gap-1.5 px-3 pt-3 pb-2 min-w-0">
-      <div className="shrink-0 text-[var(--fs-sm)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] leading-tight">
+      <div className="shrink-0 text-sm font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] leading-tight">
         프로젝트
       </div>
       {/* dot counters: critical (red) · attention (amber). Only render

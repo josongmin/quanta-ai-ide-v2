@@ -114,7 +114,7 @@ export function DecisionHeadsUp({
           style={{ background: accent, boxShadow: `0 0 0 3px color-mix(in srgb, ${accent} 12%, transparent)` }}
         />
         <span
-          className="text-[var(--fs-sm)] font-black uppercase tracking-[var(--track-widest)]"
+          className="text-sm font-black uppercase tracking-[var(--track-widest)]"
           style={{ color: accent }}
         >
           {verdictLabel}
@@ -145,7 +145,7 @@ export function DecisionHeadsUp({
         ))}
         {pr.hasConflicts && (
           <span
-            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-[var(--fs-xs)] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-xs font-bold uppercase tracking-[var(--track-eyebrow)]"
             style={{ background: `color-mix(in srgb, ${severityColors.blocker} 11%, transparent)`, color: severityColors.blocker, border: `1px solid color-mix(in srgb, ${severityColors.blocker} 33%, transparent)` }}
           >
             conflict
@@ -159,7 +159,7 @@ export function DecisionHeadsUp({
           type="button"
           disabled={!canDecide}
           onClick={() => { submitReview(pr.number, 'approve', 'Looks good!', viewerLogin); }}
-          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[var(--fs-sm)] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
+          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
           style={{
             background: 'var(--intent-success-bg)',
             color: 'var(--intent-success-fg)',
@@ -173,7 +173,7 @@ export function DecisionHeadsUp({
           type="button"
           disabled={!canDecide}
           onClick={() => { submitReview(pr.number, 'request-changes', 'Please address findings.', viewerLogin); }}
-          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[var(--fs-sm)] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
+          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
           style={{
             background: 'var(--intent-danger-bg)',
             color: 'var(--intent-danger-fg)',
@@ -283,10 +283,10 @@ export function VerdictHero({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-2 h-4">
-              <span className="text-[var(--fs-xs)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+              <span className="text-xs font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
                 pull request
               </span>
-              <span className="text-[var(--fs-xs)] font-mono text-[var(--fg-subtle)] tabular-nums">
+              <span className="text-xs font-mono text-[var(--fg-subtle)] tabular-nums">
                 #{pr.number}
               </span>
               <span className="w-px h-3 bg-[var(--border-default)]" />
@@ -306,7 +306,7 @@ export function VerdictHero({
                 {pr.title}
               </span>
             </div>
-            <div className="text-[var(--fs-sm)] font-mono text-[var(--fg-subtle)] mt-2 flex items-center gap-1.5">
+            <div className="text-sm font-mono text-[var(--fg-subtle)] mt-2 flex items-center gap-1.5">
               <GitBranch className="w-3 h-3" />
               <span className="text-[var(--fg-muted)]">{pr.baseBranch}</span>
               <span className="text-[var(--fg-subtle)]">←</span>
@@ -321,7 +321,7 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'approve', 'Looks good!', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-10 rounded-lg text-[var(--fs-base)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)] transition-all hover:brightness-115 active:brightness-95 disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-10 rounded-lg text-base font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)] transition-all hover:brightness-115 active:brightness-95 disabled:opacity-40"
               style={{
                 background: 'linear-gradient(180deg, color-mix(in srgb, var(--intent-success-fg) 22%, transparent) 0%, color-mix(in srgb, var(--intent-success-fg) 14%, transparent) 100%)',
                 border: '1px solid color-mix(in srgb, var(--intent-success-fg) 55%, transparent)',
@@ -348,7 +348,7 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'comment', 'Comment.', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-8 rounded-md text-[var(--fs-sm)] font-semibold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)] transition-colors disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-8 rounded-md text-sm font-semibold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)] transition-colors disabled:opacity-40"
             >
               <MessageSquare className="w-3 h-3" strokeWidth={2.25} />
               Comment
@@ -372,7 +372,7 @@ export function VerdictHero({
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-[var(--fs-xs)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] shrink-0">
+          <span className="text-xs font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] shrink-0">
             pace
           </span>
           <EffortMeter effort={effort} />

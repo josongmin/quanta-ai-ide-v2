@@ -26,7 +26,7 @@ export function ScopeStrip({
               role="tab"
               aria-selected={active}
               onClick={() => { onChange(it.key); }}
-              className={`relative pb-1.5 text-[var(--fs-md)] font-medium tracking-tight transition-colors ${
+              className={`relative pb-1.5 text-md font-medium tracking-tight transition-colors ${
                 active ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-muted)] hover:text-[var(--fg-default)]'
               }`}
             >

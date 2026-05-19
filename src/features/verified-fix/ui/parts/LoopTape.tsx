@@ -154,7 +154,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
                 return (
                   <li
                     key={it.index}
-                    className="flex items-start gap-2 text-[var(--fs-sm)]"
+                    className="flex items-start gap-2 text-sm"
                   >
                     <span
                       className="font-mono mt-0.5 shrink-0 inline-flex items-center justify-center w-5 h-4 rounded"

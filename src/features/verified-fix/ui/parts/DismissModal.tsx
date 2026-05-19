@@ -85,7 +85,7 @@ export function DismissModal({
             <div className="text-[12px] font-semibold" style={{ color: t.textHi }}>
               {candidate.title}
             </div>
-            <div className="text-[var(--fs-sm)] mt-1" style={{ color: t.textFaint }}>
+            <div className="text-sm mt-1" style={{ color: t.textFaint }}>
               {tr('dismissModal.feedbackHint')}
             </div>
           </div>

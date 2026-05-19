@@ -122,7 +122,7 @@ function TestFailuresCard({
                       detail: { file: h.file, line: h.line, hunkId: h.hunkId },
                     }));
                   }}
-                  className="inline-flex items-center gap-1 px-1.5 py-px rounded text-[length:var(--fs-xs)] font-mono transition-colors bg-[color:var(--bg-hover)] text-[color:var(--fg-default)] hover:text-[var(--intent-danger-fg)]"
+                  className="inline-flex items-center gap-1 px-1.5 py-px rounded text-xs font-mono transition-colors bg-[color:var(--bg-hover)] text-[color:var(--fg-default)] hover:text-[var(--intent-danger-fg)]"
                   title={t('testMap.jumpToHunk')}
                 >
                   <ArrowRight className="w-2.5 h-2.5" />

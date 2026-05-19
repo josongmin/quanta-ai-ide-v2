@@ -423,7 +423,7 @@ function CitationStrip({
             {isStale && (
               <span
                 style={staleChipStyle}
-                className="ml-0.5 px-1 rounded-sm text-[length:var(--fs-2xs)] font-bold uppercase tracking-[var(--track-eyebrow)] border"
+                className="ml-0.5 px-1 rounded-sm text-2xs font-bold uppercase tracking-[var(--track-eyebrow)] border"
               >
                 {t('citationStale.label')}
               </span>

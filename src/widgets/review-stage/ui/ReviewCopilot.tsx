@@ -310,7 +310,7 @@ export function ProvenanceBadge({ kind }: { kind: 'ai' | 'static' }) {
   if (kind === 'ai') {
     return (
       <span
-        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-[var(--fs-2xs)] font-bold uppercase tracking-[var(--track-eyebrow)]"
+        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-[var(--track-eyebrow)]"
         style={{
           background: 'color-mix(in srgb, var(--fg-accent) 18%, transparent)',
           color: 'var(--fg-accent)',
@@ -325,7 +325,7 @@ export function ProvenanceBadge({ kind }: { kind: 'ai' | 'static' }) {
   }
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[var(--fs-2xs)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]"
       style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-strong)' }}
       title="Deterministic static analysis"
     >

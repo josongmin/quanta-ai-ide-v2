@@ -47,7 +47,7 @@ export function PolicyThresholds() {
       </div>
 
       <div
-        className="mt-3 pt-3 border-t text-[var(--fs-xs)] font-mono"
+        className="mt-3 pt-3 border-t text-xs font-mono"
         style={{ borderColor: t.borderHair, color: t.textFaint }}
       >
         {tr('policy.footer')}
@@ -66,7 +66,7 @@ function ThresholdRow({
   return (
     <div>
       <div className="flex items-center gap-2 mb-1">
-        <span className="text-[var(--fs-sm)] font-bold" style={{ color: t.textHi }}>
+        <span className="text-sm font-bold" style={{ color: t.textHi }}>
           {policy.label}
         </span>
         <span
@@ -92,7 +92,7 @@ function ThresholdRow({
         <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
           {policy.min}
         </span>
-        <span className="text-[var(--fs-xs)]" style={{ color: t.textMuted }}>
+        <span className="text-xs" style={{ color: t.textMuted }}>
           {policy.description}
         </span>
         <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>

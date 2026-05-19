@@ -62,7 +62,7 @@ function Cell({
     <div className="flex items-center gap-1.5 shrink-0">
       <Icon className="w-3 h-3" style={{ color: t.textFaint }} />
       <div>
-        <div className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
+        <div className="text-2xs font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
           {label}
         </div>
         <div className="text-[11px] font-mono" style={{ color: t.textHi }}>

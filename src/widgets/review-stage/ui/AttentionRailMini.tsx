@@ -134,7 +134,7 @@ export default function AttentionRailMini({
                 aria-label={`${label} — ${formatMs(ms)} attended`}
                 className="w-full flex items-center gap-2 px-1.5 py-1 rounded hover:bg-[var(--bg-surface-muted)] transition-colors group"
               >
-                <span className="shrink-0 w-14 text-[var(--fs-sm)] font-mono text-[var(--fg-muted)] text-left truncate">
+                <span className="shrink-0 w-14 text-sm font-mono text-[var(--fg-muted)] text-left truncate">
                   {label}
                 </span>
                 <span
@@ -151,7 +151,7 @@ export default function AttentionRailMini({
                     }}
                   />
                 </span>
-                <span className="shrink-0 w-9 text-[var(--fs-xs)] font-mono tabular-nums text-[var(--fg-muted)] text-right">
+                <span className="shrink-0 w-9 text-xs font-mono tabular-nums text-[var(--fg-muted)] text-right">
                   {ms === 0 ? '—' : formatMsCompact(ms)}
                 </span>
               </button>

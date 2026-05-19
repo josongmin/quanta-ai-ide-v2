@@ -178,7 +178,7 @@ export function QueueRow({
         {/* Row 1: title #N · age (right) */}
         <div className="flex items-baseline gap-1.5 min-w-0">
           <span
-            className={`text-[var(--fs-md)] leading-snug truncate ${active ? 'font-semibold' : 'font-medium'}`}
+            className={`text-md leading-snug truncate ${active ? 'font-semibold' : 'font-medium'}`}
             style={{ color: 'var(--fg-default)' }}
           >
             {pr.title}
@@ -209,7 +209,7 @@ export function QueueRow({
             Order = decision priority. State chip uses tier+myState
             to render the clearest "what does this want from me?" word. */}
         <div
-          className="mt-1 flex items-center gap-2 text-[var(--fs-sm)] min-w-0"
+          className="mt-1 flex items-center gap-2 text-sm min-w-0"
           style={{ color: 'var(--fg-subtle)' }}
         >
           <StateLabel

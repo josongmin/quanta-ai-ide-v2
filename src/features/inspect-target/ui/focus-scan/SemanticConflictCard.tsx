@@ -143,13 +143,13 @@ function ConflictRow({ c }: { c: ConflictCandidate }) {
           <GitPullRequest className="w-2.5 h-2.5 shrink-0"
                           style={{ color: 'var(--fg-subtle)' }} />
           <span
-            className="text-[var(--fs-sm)] font-mono font-bold truncate"
+            className="text-sm font-mono font-bold truncate"
             style={{ color: 'var(--fg-default)' }}
           >
             #{c.prId}
           </span>
           <span
-            className="text-[var(--fs-xs)] truncate"
+            className="text-xs truncate"
             style={{ color: 'var(--fg-muted)' }}
           >
             {c.prTitle}
@@ -162,7 +162,7 @@ function ConflictRow({ c }: { c: ConflictCandidate }) {
           {c.author} · {c.branch}
         </div>
         <div
-          className="mt-0.5 text-[var(--fs-xs)]"
+          className="mt-0.5 text-xs"
           style={{ color: 'var(--fg-muted)' }}
         >
           {REASON_LABEL[c.reason]} ·

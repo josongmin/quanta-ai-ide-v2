@@ -79,7 +79,7 @@ function DeltaBar({ delta, max }: { delta: ReanalysisDelta; max: number }) {
     <div>
       <div className="flex items-center gap-1.5 mb-0.5">
         <span
-          className="text-[var(--fs-sm)] font-bold uppercase tracking-[0.12em]"
+          className="text-sm font-bold uppercase tracking-[0.12em]"
           style={{ color: t.textBody }}
         >
           {delta.metric}
@@ -103,10 +103,10 @@ function DeltaBar({ delta, max }: { delta: ReanalysisDelta; max: number }) {
         />
       </div>
       <div className="flex justify-between mt-0.5">
-        <span className="text-[var(--fs-2xs)] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {tr('reanalysis.before')}
         </span>
-        <span className="text-[var(--fs-2xs)] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {tr('reanalysis.after')}
         </span>
       </div>

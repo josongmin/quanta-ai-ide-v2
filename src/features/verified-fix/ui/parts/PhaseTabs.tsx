@@ -37,7 +37,7 @@ export function PhaseTabs({ active, onChange }: { active: PhaseId; onChange: (p:
             >
               {tr(p.labelKey)}
             </div>
-            <div className="text-[var(--fs-xs)] mt-0.5" style={{ color: on ? t.textMuted : t.textFaint }}>
+            <div className="text-xs mt-0.5" style={{ color: on ? t.textMuted : t.textFaint }}>
               {tr(p.subKey)}
             </div>
           </button>

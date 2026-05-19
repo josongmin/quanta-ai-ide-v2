@@ -350,7 +350,7 @@ function RailRow({
 function OnPill() {
   return (
     <span
-      className="text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)] px-1 py-px rounded leading-none"
+      className="text-2xs font-black uppercase tracking-[var(--track-eyebrow)] px-1 py-px rounded leading-none"
       style={{
         background: ACCENT_TINT_BG,
         color: ACCENT_TEXT,
@@ -513,7 +513,7 @@ function ApiDetail({
           }} />
           <span className="absolute left-1/2 top-1/2 w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--fg-link)]" />
         </span>
-        <span className="text-[var(--fs-xs)] text-[var(--fg-muted)]">
+        <span className="text-xs text-[var(--fg-muted)]">
           {t('panel.detail.apiPreview')}
         </span>
       </div>
@@ -680,9 +680,9 @@ function MetricRow({
         }}
       />
       <div className="min-w-0 flex-1">
-        <div className="text-[var(--fs-base)] font-bold leading-tight">{label}</div>
+        <div className="text-base font-bold leading-tight">{label}</div>
         <div
-          className={`text-[var(--fs-xs)] leading-snug mt-0.5 ${
+          className={`text-xs leading-snug mt-0.5 ${
             active ? 'text-[var(--fg-muted)]' : 'text-[var(--fg-subtle)]'
           }`}
           style={{

@@ -53,7 +53,7 @@ export function RepoGroup({
           {initial}
         </span>
         <span
-          className="text-[var(--fs-base)] font-semibold truncate"
+          className="text-base font-semibold truncate"
           style={{ color: 'var(--fg-default)' }}
         >
           {name}

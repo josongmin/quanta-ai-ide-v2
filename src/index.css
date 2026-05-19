@@ -47,7 +47,7 @@
      Fallback 255,255,255 keeps it white pre-theme-init. Legacy rgba()
      form — `rgb(R, G, B / A)` (comma triplet + slash) is invalid CSS
      and silently drops to transparent. */
-  background-color: rgba(var(--glass-tint-light, 255, 255, 255), 1);
+  background-color: color-mix(in srgb, rgb(var(--glass-tint-light, 255, 255, 255)) 14%, #ffffff);
   border-color: rgba(var(--glass-tint-light, 255, 255, 255), var(--glass-border-light));
   border-width: var(--glass-border-width, 1px);
   border-radius: var(--radius);
@@ -68,7 +68,7 @@
 }
 html[data-theme="light"] .glass {
   /* Light theme: opaque, theme-tinted — see `.glass-light` above. */
-  background-color: rgba(var(--glass-tint-light, 255, 255, 255), 1);
+  background-color: color-mix(in srgb, rgb(var(--glass-tint-light, 255, 255, 255)) 14%, #ffffff);
   border-color: rgba(var(--glass-tint-light, 255, 255, 255), var(--glass-border-light));
   backdrop-filter: none;
   -webkit-backdrop-filter: none;

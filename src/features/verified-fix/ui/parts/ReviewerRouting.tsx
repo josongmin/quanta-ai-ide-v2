@@ -67,27 +67,27 @@ function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; prima
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
           <span
-            className="text-[var(--fs-base)] font-mono font-semibold"
+            className="text-base font-mono font-semibold"
             style={{ color: t.textHi }}
           >
             {reviewer.handle}
           </span>
           <span
-            className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.14em] px-1 py-px rounded"
+            className="text-2xs font-bold uppercase tracking-[0.14em] px-1 py-px rounded"
             style={{ background: t.badgeBg, color: t.textMuted }}
           >
             {tr(`reviewer.role.${reviewer.role}`)}
           </span>
           {primary && (
             <span
-              className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.14em] px-1 py-px rounded ml-auto"
+              className="text-2xs font-bold uppercase tracking-[0.14em] px-1 py-px rounded ml-auto"
               style={{ background: t.accent, color: 'var(--fg-on-accent)' }}
             >
               {tr('reviewer.suggest')}
             </span>
           )}
         </div>
-        <div className="text-[var(--fs-sm)] mt-0.5" style={{ color: t.textMuted }}>
+        <div className="text-sm mt-0.5" style={{ color: t.textMuted }}>
           {reviewer.rationale}
         </div>
       </div>
@@ -108,7 +108,7 @@ function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; prima
               style={{ width: `${reviewer.loadPct}%`, background: loadColor }}
             />
           </span>
-          <span className="text-[var(--fs-2xs)] font-mono" style={{ color: t.textFaint }}>
+          <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
             {tr('reviewer.load', { pct: reviewer.loadPct })}
           </span>
         </div>

@@ -118,7 +118,7 @@ export function SafeRenameCard({ file }: { file: FileRecord }) {
         ) : (
           <ShieldAlert className="w-3 h-3" style={{ color: verdictColor }} />
         )}
-        <span className="text-[var(--fs-xs)]" style={{ color: 'var(--fg-muted)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-muted)' }}>
           {verdictKey === 'exact'
             ? t('safeRename.cta.exact', { defaultValue: 'Refactor engine will handle every callsite' })
             : verdictKey === 'overapprox'

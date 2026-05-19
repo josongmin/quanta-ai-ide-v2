@@ -78,7 +78,7 @@ export function TrustPanel({
                   {tr(tierKey(candidate.tier))}
                 </span>
               </div>
-              <div className="text-[var(--fs-sm)] mb-2" style={{ color: t.textMuted }}>
+              <div className="text-sm mb-2" style={{ color: t.textMuted }}>
                 {tr(tierExplainKey(candidate.tier))}
               </div>
               <TierRuleChecklist candidate={candidate} />
@@ -108,13 +108,13 @@ export function TrustPanel({
                   style={{ color: weakest.status === 'fail' ? t.bad : t.warn }}
                 />
                 <span
-                  className="text-[var(--fs-sm)] font-bold"
+                  className="text-sm font-bold"
                   style={{ color: weakest.status === 'fail' ? t.bad : t.warn }}
                 >
                   {weakest.label}
                 </span>
               </div>
-              <div className="text-[var(--fs-sm)] leading-snug" style={{ color: t.textBody }}>
+              <div className="text-sm leading-snug" style={{ color: t.textBody }}>
                 {weakest.detail}
               </div>
             </div>
@@ -240,16 +240,16 @@ function CounterEvidenceRow({ item }: { item: CounterEvidence }) {
     >
       <div className="flex items-center gap-1.5 mb-1">
         <span
-          className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.14em] px-1 py-px rounded font-mono"
+          className="text-2xs font-bold uppercase tracking-[0.14em] px-1 py-px rounded font-mono"
           style={{ background: sevBg, color: sevColor }}
         >
           {tr(`trust.counterSeverity.${item.severity}`)}
         </span>
-        <span className="text-[var(--fs-sm)] font-semibold" style={{ color: t.textHi }}>
+        <span className="text-sm font-semibold" style={{ color: t.textHi }}>
           {item.label}
         </span>
       </div>
-      <div className="text-[var(--fs-sm)] leading-snug" style={{ color: t.textMuted }}>
+      <div className="text-sm leading-snug" style={{ color: t.textMuted }}>
         {item.detail}
       </div>
     </div>
@@ -286,7 +286,7 @@ function ConfidenceDial({ value }: { value: number }) {
         <div className="text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
           {tr('trust.patchConfidence')}
         </div>
-        <div className="text-[var(--fs-sm)] mt-0.5 leading-snug" style={{ color: t.textBody }}>
+        <div className="text-sm mt-0.5 leading-snug" style={{ color: t.textBody }}>
           {tr(confidenceKey(value))}
         </div>
       </div>
@@ -315,7 +315,7 @@ function DeliveryGate({ gateDecision, gateReason }: { gateDecision: string; gate
           {tr(`gateDecision.${gateDecision}`)}
         </span>
       </div>
-      <div className="text-[var(--fs-sm)] leading-snug" style={{ color: t.textMuted }}>
+      <div className="text-sm leading-snug" style={{ color: t.textMuted }}>
         {gateReason}
       </div>
     </div>

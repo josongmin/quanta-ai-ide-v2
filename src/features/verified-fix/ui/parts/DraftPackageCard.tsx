@@ -88,7 +88,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
         <div>
           <Label>{tr('draft.field.title')}</Label>
           <div
-            className="text-[var(--fs-md)] font-mono mt-0.5 leading-snug"
+            className="text-md font-mono mt-0.5 leading-snug"
             style={{ color: t.textHi }}
           >
             {draft.title}
@@ -99,7 +99,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
         <div>
           <Label>{tr('draft.field.summary')}</Label>
           <div
-            className="text-[var(--fs-base)] leading-relaxed mt-0.5"
+            className="text-base leading-relaxed mt-0.5"
             style={{ color: t.textBody }}
           >
             {draft.summary}
@@ -135,13 +135,13 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
               <HelpCircle className="w-2.5 h-2.5 inline -mt-px" /> {tr('draft.field.unknowns')}
             </Label>
             {draft.remainingUnknowns.length === 0 ? (
-              <div className="text-[var(--fs-sm)] mt-1" style={{ color: t.textFaint }}>
+              <div className="text-sm mt-1" style={{ color: t.textFaint }}>
                 {tr('draft.noUnknowns')}
               </div>
             ) : (
               <ul className="mt-1 space-y-0.5">
                 {draft.remainingUnknowns.map((u, i) => (
-                  <li key={i} className="text-[var(--fs-sm)]" style={{ color: t.textMuted }}>
+                  <li key={i} className="text-sm" style={{ color: t.textMuted }}>
                     · {u}
                   </li>
                 ))}
@@ -152,7 +152,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
             <Label>
               <Users className="w-2.5 h-2.5 inline -mt-px" /> {tr('draft.field.reviewer')}
             </Label>
-            <div className="text-[var(--fs-sm)] mt-1 leading-snug" style={{ color: t.textBody }}>
+            <div className="text-sm mt-1 leading-snug" style={{ color: t.textBody }}>
               {draft.reviewerSuggestion}
             </div>
           </div>
@@ -169,7 +169,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
           >
             {tr('draft.gateLine', { decision: tr(`gateDecision.${draft.gateDecision}`) })}
           </div>
-          <div className="text-[var(--fs-sm)] leading-snug" style={{ color: t.textBody }}>
+          <div className="text-sm leading-snug" style={{ color: t.textBody }}>
             {draft.gateReason}
           </div>
         </div>

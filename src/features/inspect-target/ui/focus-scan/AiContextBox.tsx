@@ -104,7 +104,7 @@ export function AiContextBox({ file }: { file: FileRecord }) {
           return (
             <span
               key={a.label}
-              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[var(--fs-xs)] font-mono"
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-xs font-mono"
               style={{ background: bg, color: fg }}
               title={`${a.label}: ${a.detail}`}
             >
@@ -138,7 +138,7 @@ export function AiContextBox({ file }: { file: FileRecord }) {
 
       {hopTokens > 32000 && (
         <div
-          className="mt-2 text-[var(--fs-xs)] leading-relaxed px-2 py-1.5 rounded-md"
+          className="mt-2 text-xs leading-relaxed px-2 py-1.5 rounded-md"
           style={{
             background: 'rgb(from var(--intent-warn-vivid) r g b / 0.12)',
             color: 'var(--intent-warn-fg)',
@@ -165,7 +165,7 @@ function BudgetCell({
   return (
     <div>
       <div
-        className="flex items-center gap-1 text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="flex items-center gap-1 text-2xs font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {icon}

@@ -308,7 +308,7 @@ function ActionRow({ action }: { action: Action }) {
               style={{ color: 'var(--fg-subtle)' }}
             />
           </div>
-          <div className="mt-0.5 flex items-center gap-2 text-[var(--fs-xs)] font-mono"
+          <div className="mt-0.5 flex items-center gap-2 text-xs font-mono"
                style={{ color: 'var(--fg-subtle)' }}>
             <span>{action.delta}</span>
             <span className="opacity-50">·</span>

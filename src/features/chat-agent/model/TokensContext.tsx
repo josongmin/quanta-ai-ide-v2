@@ -363,8 +363,12 @@ function applyGlassTints(allSemantic: { dark: SemanticTokens; light: SemanticTok
   // Nord=blue), so dark pulls its tint from fgAccent — that makes the
   // chrome visibly track the palette. Light stays on bgSurface (light
   // surfaces vary and an accent at alpha-1 would be far too loud).
+  // Both themes tint from the accent — it's the only token that
+  // visibly characterises a palette (every theme's bgSurface is a
+  // near-identical near-black / near-white). Light blends it into white
+  // via color-mix in CSS so the panel stays opaque + readable.
   const darkSource = allSemantic.dark.fgAccent ?? allSemantic.dark.bgSurface;
-  const lightSource = allSemantic.light.bgSurface;
+  const lightSource = allSemantic.light.fgAccent ?? allSemantic.light.bgSurface;
   const darkTriplet = colorToRgbTriplet(darkSource);
   const lightTriplet = colorToRgbTriplet(lightSource);
   if (darkTriplet) root.style.setProperty('--glass-tint-dark', darkTriplet);

@@ -1,6 +1,6 @@
 // Emits the semantic + primitive tokens onto :root as CSS custom properties.
 // Components reference them via `var(--bg-canvas)` etc., or via Tailwind
-// arbitrary-value classes (`bg-[var(--bg-canvas)]`, `text-[var(--fs-sm)]`).
+// arbitrary-value classes (`bg-[var(--bg-canvas)]`, `text-sm`).
 //
 // Call once per theme change from `ThemeContext` / `TokensContext`.
 

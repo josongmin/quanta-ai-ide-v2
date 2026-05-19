@@ -169,7 +169,7 @@ export function TimelineScrubber({
           </button>
         )}
 
-        <span className={`shrink-0 text-[length:var(--fs-2xs)] font-mono uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+        <span className={`shrink-0 text-2xs font-mono uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
           {t('scrubber.kbHint')}
         </span>
       </div>
@@ -487,7 +487,7 @@ function HoverCard({
         <span className={`ml-auto font-mono ${subText}`}>#{meta.index + 1}</span>
       </span>
 
-      <span className={`block mt-0.5 text-[length:var(--fs-sm)] font-bold leading-snug ${headText}`}>
+      <span className={`block mt-0.5 text-sm font-bold leading-snug ${headText}`}>
         {meta.shortTitle}
       </span>
 
@@ -496,7 +496,7 @@ function HoverCard({
           {meta.files.slice(0, 3).map((f) => (
             <span
               key={f}
-              className={`flex items-center gap-1 text-[length:var(--fs-xs)] font-mono ${subText}`}
+              className={`flex items-center gap-1 text-xs font-mono ${subText}`}
             >
               <FileText className="w-2.5 h-2.5 shrink-0" />
               <span className="truncate">{f}</span>

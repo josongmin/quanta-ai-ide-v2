@@ -147,7 +147,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
                 defaultValue: 'Complexity jump',
               })}
             </div>
-            <div className="mt-0.5 text-[var(--fs-xs)] font-mono"
+            <div className="mt-0.5 text-xs font-mono"
                  style={{ color: 'var(--fg-subtle)' }}>
               #{jump.prId} · {jump.author} · {jump.daysAgo}d ago
               <span className="opacity-60"> · </span>
@@ -156,7 +156,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
               </span>
             </div>
             <div
-              className="mt-0.5 text-[var(--fs-xs)] truncate italic"
+              className="mt-0.5 text-xs truncate italic"
               style={{ color: 'var(--fg-muted)' }}
             >
               {`“${jump.message}”`}
@@ -181,7 +181,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
         style={{ borderColor: 'var(--border-muted)' }}
       >
         <div
-          className="text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('timeMachine.recent', { defaultValue: 'Recent commits' })}
@@ -189,7 +189,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
         {ticks.slice(-3).reverse().map((tk) => (
           <div
             key={tk.prId}
-            className="flex items-center gap-1.5 text-[var(--fs-xs)] font-mono"
+            className="flex items-center gap-1.5 text-xs font-mono"
             style={{ color: 'var(--fg-muted)' }}
           >
             <GitCommit className="w-2.5 h-2.5 shrink-0"

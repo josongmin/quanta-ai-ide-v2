@@ -97,13 +97,13 @@ function Row({
               ? <FolderOpen className="w-3.5 h-3.5 text-[var(--fg-default)]" />
               : <Folder className="w-3.5 h-3.5 text-[var(--fg-muted)]" />)
             : <FileCode className="w-3.5 h-3.5 text-[var(--fg-subtle)]" />}
-          <span className={`text-[var(--fs-sm)] truncate ${depth === 0 ? 'font-black uppercase tracking-wider' : 'font-medium'} ${
+          <span className={`text-sm truncate ${depth === 0 ? 'font-black uppercase tracking-wider' : 'font-medium'} ${
             isSelected ? '' : 'text-[var(--fg-muted)]'
           }`}>
             {depth === 0 ? tr('tree.repo') : node.folder.name}
           </span>
         </div>
-        <span className={`tabular-nums text-[9px] ${m === 0 ? 'text-[var(--fg-subtle)]' : 'text-[var(--fg-muted)]'}`}>
+        <span className={`tabular-nums text-2xs ${m === 0 ? 'text-[var(--fg-subtle)]' : 'text-[var(--fg-muted)]'}`}>
           {m}/{t}
         </span>
       </div>
@@ -177,7 +177,7 @@ function FileRow({
       <FileCode className={`w-3 h-3 shrink-0 ${
         isActive ? 'text-[var(--fg-default)]' : 'text-[var(--fg-subtle)]'
       }`} />
-      <span className={`flex-1 min-w-0 truncate text-[10px] font-mono ${
+      <span className={`flex-1 min-w-0 truncate text-sm font-medium ${
         isActive
           ? 'text-[var(--fg-strong)]'
           : matched

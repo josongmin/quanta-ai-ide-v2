@@ -187,7 +187,7 @@ function ImpactCell({
   return (
     <div>
       <div
-        className="flex items-center gap-1 text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="flex items-center gap-1 text-2xs font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {icon}
