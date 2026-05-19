@@ -37,7 +37,7 @@ export default function BillingStage() {
     <div
       ref={scrollerRef}
       className="absolute inset-0 overflow-y-auto"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       <div className="max-w-[860px] mx-auto px-10 pt-12 pb-32">
         <BillingHeader

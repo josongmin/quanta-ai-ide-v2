@@ -181,7 +181,7 @@ export function Toggle({
           height: 14,
           background: checked ? 'var(--bg-canvas)' : 'var(--fg-muted)',
           transform: `translateX(${checked ? '18px' : '2px'})`,
-          boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+          boxShadow: 'var(--shadow-sm)',
         }}
       />
     </button>

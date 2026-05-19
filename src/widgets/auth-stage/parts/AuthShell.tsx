@@ -21,7 +21,7 @@ type Props = {
 // in sync, but with a tighter container — auth pages must read at a glance.
 export function AuthShell({ title, subtitle, footer, topRight, children }: Props) {
   const { isDark } = useTheme();
-  const pageBg = isDark ? 'var(--bg-canvas)' : '#ffffff';
+  const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
 
   return (
     <div

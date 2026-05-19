@@ -96,7 +96,7 @@ export function TrustPanel({
               {tr('trust.weakest')}
             </div>
             <div
-              className="rounded-lg border-l-0 border p-3"
+              className="rounded-lg border p-3"
               style={{
                 background: t.cardBacking,
                 borderColor: weakest.status === 'fail' ? t.bad + '40' : t.warn + '40',

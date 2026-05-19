@@ -36,7 +36,7 @@ export function OnboardingShell({
   steps, current, onPrev, actions, children, topRight,
 }: Props) {
   const { isDark } = useTheme();
-  const pageBg = isDark ? 'var(--bg-canvas)' : '#ffffff';
+  const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
   const scrollerRef = useRef<HTMLElement>(null);
   useScrollRestoration('onboarding', scrollerRef);
 

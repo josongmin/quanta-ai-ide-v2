@@ -27,7 +27,7 @@ export function AdminShell({ active = 'overview', children }: Props) {
   return (
     <div
       className="absolute inset-0 flex flex-col"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       {/* Admin context strip — quiet, monochrome bar with a single pulsing
           dot as the only chromatic affordance. Still full-width so the

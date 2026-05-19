@@ -23,7 +23,7 @@ function ErrorScene({
   return (
     <div
       className="absolute inset-0 overflow-hidden flex items-center justify-center"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       {/* Mesh backdrop */}
       <div

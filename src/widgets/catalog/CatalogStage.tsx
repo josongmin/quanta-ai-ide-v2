@@ -44,7 +44,7 @@ export default function CatalogStage() {
     <div
       ref={scrollerRef}
       className="absolute inset-0 overflow-y-auto"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       <div className="max-w-[960px] mx-auto px-10 pt-12 pb-32">
         <header className="flex flex-col gap-3 mb-10">
@@ -155,7 +155,7 @@ export default function CatalogStage() {
 
 function CatalogCell({ entry, isDark }: { entry: CatalogEntry; isDark: boolean }) {
   const live = entry.status === 'live';
-  const pageBg = isDark ? 'var(--bg-canvas)' : '#ffffff';
+  const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
   const innerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = innerRef.current;

@@ -312,7 +312,7 @@ function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
       </p>
       {advice.alternative && (
         <div
-          className="rounded-md px-2.5 py-2 border-l-0 border"
+          className="rounded-md px-2.5 py-2 border"
           style={{
             background: 'var(--bg-elevated)',
             borderColor: 'var(--border-muted)',

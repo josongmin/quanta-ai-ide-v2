@@ -64,7 +64,7 @@ export function DeveloperShell({ title, subtitle, topRight, children, bleed }: P
   return (
     <div
       className="absolute inset-0 flex"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       <Sidebar />
 

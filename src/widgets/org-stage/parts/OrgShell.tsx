@@ -87,7 +87,7 @@ export function OrgShell({ orgName, orgSlug, title, subtitle, topRight, children
   return (
     <div
       className="absolute inset-0 flex"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       <Sidebar orgName={orgName} orgSlug={orgSlug} />
 

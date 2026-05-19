@@ -77,7 +77,7 @@ export function WsShell({ orgName, orgSlug, wsName, wsSlug, title, subtitle, top
   return (
     <div
       className="absolute inset-0 flex"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       <Sidebar orgSlug={orgSlug} wsName={wsName} wsSlug={wsSlug} />
 

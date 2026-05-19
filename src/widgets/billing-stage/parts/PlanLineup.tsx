@@ -12,7 +12,7 @@ type Props = {
 
 export function PlanLineup({ currentPlan, cycle, onSelect }: Props) {
   const { isDark } = useTheme();
-  const pageBg = isDark ? 'var(--bg-canvas)' : '#ffffff';
+  const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
   return (
     <div className="grid grid-cols-4 gap-px rounded-md overflow-hidden"
       style={{ background: 'var(--border-muted)' }}

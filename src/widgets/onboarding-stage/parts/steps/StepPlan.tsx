@@ -43,7 +43,7 @@ type Props = {
 
 export function StepPlan({ value, onChange }: Props) {
   const { isDark } = useTheme();
-  const pageBg = isDark ? 'var(--bg-canvas)' : '#ffffff';
+  const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
   const plan = PLANS.find((p) => p.id === value.id)!;
 
   return (

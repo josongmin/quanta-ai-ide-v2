@@ -13,7 +13,7 @@ type Props = { data: WizardData };
 // 100% we surface a next-action checklist + a single CTA into /intelligence.
 export function DonePage({ data }: Props) {
   const { isDark } = useTheme();
-  const pageBg = isDark ? 'var(--bg-canvas)' : '#ffffff';
+  const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
 
   return (
     <div
