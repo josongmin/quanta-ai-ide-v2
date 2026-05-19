@@ -11,7 +11,7 @@ export function GlassCard({
   const toneStyle: CSSProperties = tone === 'inner'
     ? {
         ['--glass-alpha-dark' as string]: '0.01',
-        ['--glass-alpha-light' as string]: '0.46',
+        ['--glass-alpha-light' as string]: '1',
         ['--glass-border-dark' as string]: '0.045',
         ['--glass-border-light' as string]: '0.14',
       }

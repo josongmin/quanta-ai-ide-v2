@@ -117,7 +117,114 @@
     "copyMd": "Markdown でコピー",
     "share": "共有",
     "export": "エクスポート",
-    "openInNewTask": "新規タスクで開く"
+    "openInNewTask": "新規タスクで開く",
+    "saveAsRule": "この編集パターンをルールに保存"
+  },
+  "agentProfile": {
+    "title": "エージェントプロファイル",
+    "subtitle": "このエージェントをカスタマイズ",
+    "titleFor": "{{project}} のエージェント",
+    "savesAs": ".agent/profile.yaml にコミットされます",
+    "close": "閉じる",
+    "tabs": {
+      "modes": "モード",
+      "rules": "ルール",
+      "workflows": "ワークフロー",
+      "painpoints": "ペインポイント",
+      "marketplace": "マーケット"
+    },
+    "modeChip": {
+      "tooltip": "モード: {{mode}} · 信頼度 {{trust}}/5"
+    },
+    "modes": {
+      "intro": "各モードはシステムプロンプト、許可ツール、優先モデル、信頼レベルをまとめます。組み込みモードは複製のみ可能。",
+      "active": "アクティブ",
+      "system": "組み込み",
+      "use": "使用",
+      "duplicate": "複製",
+      "delete": "削除",
+      "trust": {
+        "label": "信頼ダイヤル",
+        "level1": "1 · 読み取り専用",
+        "level2": "2 · 確認後に編集",
+        "level3": "3 · 自動編集",
+        "level4": "4 · 編集+実行 自動",
+        "level5": "5 · 完全自律",
+        "desc1": "diff のみ提案。作業ツリーには書き込まない。ペアレビュー向け。",
+        "desc2": "ファイル単位で確認しながら書き込む。未知のリポでの安全な既定。",
+        "desc3": "自由に書く。スクリプト実行や破壊的操作のみ確認。",
+        "desc4": "書き込みと実行を自動。push/merge 直前で停止。",
+        "desc5": "CI が通れば push・コメント・merge まで。スクラッチ専用。"
+      },
+      "tools": { "label": "許可ツール" },
+      "prompt": { "label": "システムプロンプト" }
+    },
+    "rules": {
+      "add": "新規ルール",
+      "newName": "無題のルール",
+      "searchPlaceholder": "名前・本文・glob で検索…",
+      "filterAll": "すべて",
+      "sourceAuthored": "手書き",
+      "sourcePainPoint": "ペインポイント由来",
+      "sourceDiffPattern": "diff 由来",
+      "sourceMarketplace": "マーケット由来",
+      "empty": "条件に合うルールがありません。",
+      "alwaysOn": "常時適用",
+      "enable": "有効化",
+      "disable": "無効化",
+      "delete": "削除",
+      "body": "本文 (Markdown)",
+      "bodyPlaceholder": "エージェントが何を行うべきか、または絶対に避けるべきかを *理由付き* で。",
+      "globs": "Glob (カンマ区切り)",
+      "scope": "適用範囲",
+      "derivedFrom": "Turn {{id}} から派生"
+    },
+    "workflows": {
+      "intro": "スラッシュ・プレイブック。コンポーザで /<slug> を入力するとステップが順に実行されます。モードと組み合わせて信頼ダイヤルを固定できます。",
+      "add": "新規ワークフロー",
+      "newName": "無題のワークフロー",
+      "blurbPlaceholder": "スラッシュコマンド下に表示する1行説明",
+      "steps": "ステップ",
+      "removeStep": "ステップ削除",
+      "addStep": "ステップ追加",
+      "firstStepPlaceholder": "最初に行うべきこと…",
+      "pairWith": "ペアモード:",
+      "pairNone": "(ペアなし)",
+      "delete": "ワークフロー削除",
+      "empty": "まだワークフローがありません。+ 新規 でひとつ作成してください。"
+    },
+    "painpoint": {
+      "title": "リアクションから収集したペインポイント",
+      "intro": "👎 を付けたエージェント応答がここに集まります。ルール化すれば同じミスを避けるよう学習します。",
+      "empty": "まだ 👎 が付いた応答はありません。優秀ですね。",
+      "deriveCta": "ルール化",
+      "flagged": "フラグ済み · {{at}}",
+      "deriveName": "回避: {{preview}}",
+      "deriveBody": "ユーザが過去の応答に 👎 を付けました。同じパターンを次回避けてください。元の抜粋:\n\n> {{preview}}"
+    },
+    "marketplace": {
+      "intro": "他の開発者が公開したプロファイル。import するとルール/モード/ワークフローがプロジェクトへコピーされます — 後で編集可能。",
+      "searchPlaceholder": "プロファイル名・作者で検索…",
+      "domainAll": "すべて",
+      "domainFrontend": "フロントエンド",
+      "domainBackend": "バックエンド",
+      "domainMl": "ML",
+      "domainDevops": "DevOps",
+      "domainMobile": "モバイル",
+      "install": "Import",
+      "installed": "インストール済み",
+      "fabRuleName": "{{mp}} · ルール {{n}}",
+      "fabRuleBody": "{{author}} の {{mp}} から import。リポに合わせて編集してください。",
+      "fabModeName": "{{mp}} · モード {{n}}",
+      "fabModeBlurb": "{{mp}} のプリセット",
+      "fabModePrompt": "{{mp}} から import したモードです。プロンプトを書き換えてください。",
+      "fabWfName": "{{mp}} · ワークフロー {{n}}",
+      "fabWfBlurb": "{{mp}} のプレイブック",
+      "fabWfStep1": "変更前に影響範囲を読みます。",
+      "fabWfStep2": "import したパターンを適用。逸脱時は理由を残します。",
+      "fabWfStep3": "プロジェクト自身のテストで検証します。"
+    },
+    "openButton": "エージェントをカスタマイズ"
   },
   "palette": {
     "title": "コマンドパレット",
@@ -270,6 +377,17 @@
     "noData": "データなし",
     "rate": "{{ok}}/{{total}}"
   },
+  "costValue": {
+    "label": "コスト対効果",
+    "summary": "{{usd}} 消費 · {{lines}} 行採用",
+    "ratio": "{{cents}}¢/行",
+    "verdictEarning": "効率良好 · {{cents}}¢/行",
+    "verdictExpensive": "割高 · {{cents}}¢/行",
+    "verdictIdle": "未稼働 · 差分なし",
+    "legendCost": "コスト",
+    "legendLines": "行",
+    "tooltip": "ターン毎のコスト対採用差分行数 (直近12ターン)"
+  },
   "tps": {
     "label": "tok/s",
     "tooltip": "毎秒出力トークン — ストリーミング中"
@@ -288,6 +406,18 @@
     "high": "高 ({{pct}}%)",
     "mid": "中 ({{pct}}%)",
     "low": "低 — 確認推奨 ({{pct}}%)"
+  },
+  "riskTier": {
+    "safe": "安全",
+    "review": "要確認",
+    "blast": "影響大",
+    "tooltip": "このターンの影響範囲に基づくリスク評価",
+    "reason": {
+      "publicSurface": "公開 API 面",
+      "largeChange": "大きな差分 ({{n}} 行)",
+      "manyFiles": "{{n}} ファイルに変更",
+      "ranCommand": "シェルコマンド実行"
+    }
   },
   "latencyBaseline": {
     "label": "基準比",
@@ -422,6 +552,18 @@
   "header": {
     "openPr": "PRを開く"
   },
+  "replayExport": {
+    "button": "エクスポート",
+    "title": "このタスクをリプレイ",
+    "tabMarkdown": "Markdown 議事録",
+    "tabScript": "claude CLI スクリプト",
+    "copy": "コピー",
+    "copied": "コピー済み",
+    "downloadMd": ".md をダウンロード",
+    "downloadSh": ".sh をダウンロード",
+    "closeHint": "Esc で閉じる",
+    "bytes": "{{n}} バイト"
+  },
   "snapshot": {
     "title": "作業スナップショット",
     "subtitle": "エージェントがこれまでに行ったこと",
@@ -473,6 +615,16 @@
     "symbolsHeader": "シンボル",
     "empty": "一致なし",
     "hint": "↑↓ 移動 · ↵ 選択 · esc 閉じる"
+  },
+  "pins": {
+    "header": "ピン留めコンテキスト",
+    "addFile": "ファイル",
+    "addSymbol": "シンボル",
+    "addTurn": "ターン",
+    "empty": "まだピン留めされていません",
+    "unpin": "削除",
+    "chipStripLabel": "添付中: {{n}}",
+    "tooltip": "このタスクのすべてのプロンプトに自動添付されます"
   },
   "scroll": {
     "newMessages": "最新へ移動"

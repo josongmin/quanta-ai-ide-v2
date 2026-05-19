@@ -1,7 +1,6 @@
 {
   "tab": {
     "intelligence": "智能",
-    "investigate": "调查",
     "coding": "编码",
     "agents": "智能体",
     "reviews": "评审",
@@ -115,6 +114,32 @@
     "override": {
       "title": "覆盖准入规则",
       "notice": "绕过规则将记录在审计日志中，任何人都可以查看是谁、何时、为何执行。"
+    }
+  },
+  "palette": {
+    "title": "控制面板",
+    "placeholder": "搜索命令、页面或操作…",
+    "go": "前往 {{label}}",
+    "section": {
+      "recent": "最近",
+      "navigate": "导航",
+      "action": "操作"
+    },
+    "empty": "无结果",
+    "footer": {
+      "navigate": "↑↓ 导航",
+      "open": "Enter 打开",
+      "close": "Esc 关闭"
+    },
+    "trigger": "打开控制面板 (⌘K)",
+    "openShort": "⌘K",
+    "action": {
+      "themeLight": "主题 → 浅色",
+      "themeDark": "主题 → 深色",
+      "resetFilters": "重置筛选器",
+      "tokens": "查看令牌使用",
+      "activity": "查看 AI 活动",
+      "help": "键盘快捷键"
     }
   }
 }

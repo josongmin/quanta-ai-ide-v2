@@ -107,5 +107,206 @@
     "sub": "{{n}}-bin · expected calibration error",
     "over": "over-confident",
     "under": "under-confident"
+  },
+  "root": {
+    "eyebrow": "Internal · admission",
+    "title": "Admission gate",
+    "summary": "{{pass}} pass · {{warn}} warn · {{block}} block",
+    "tab": {
+      "gate": "Gate",
+      "rules": "Rules",
+      "calibration": "Calibration"
+    },
+    "rail": {
+      "groupView": "View",
+      "ariaLabel": "Admission view",
+      "centered": "Centered width",
+      "fullWidth": "Full width"
+    },
+    "desc": {
+      "gate": "Why the current PR is mergeable, held, or warned — with the file-level evidence and override path the author needs to act.",
+      "rules": "Active ruleset and full library. Fire-rate and F1 are computed across {{n}} retro replays so noisy rules surface to the top.",
+      "calibration": "Honesty checks on the gate as a classifier: Wilson 95% CI on pass-rate, mean F1 across rules, and the exact / overapprox / unknown evidence mix. Computed from {{n}} retro PRs."
+    },
+    "verdict": {
+      "allowLabel": "Mergeable",
+      "warnLabel": "Mergeable with ack",
+      "blockLabel": "Merge held",
+      "allowCopy": "All {{n}} active rules pass on this PR.",
+      "warnCopy_one": "{{count}} warning fired. Author can ack and merge.",
+      "warnCopy_other": "{{count}} warnings fired. Author can ack and merge.",
+      "blockCopy_one": "{{count}} blocking rule fired. Fix the violations or request an override.",
+      "blockCopy_other": "{{count}} blocking rules fired. Fix the violations or request an override.",
+      "seedFiles": "seed {{seed}} · {{count}} files changed",
+      "regenerate": "Regenerate"
+    },
+    "override": {
+      "selfOk": "Author can self-override on every blocking rule.",
+      "requires": "Override requires approval from: {{roles}}.",
+      "fallbackRole": "maintainer"
+    },
+    "section": {
+      "authorNl": "Author with natural language",
+      "authorNlHint": "Describe the rule in plain English; we compile a structured signal you can inspect before adding to the workspace.",
+      "lifecycle": "Lifecycle",
+      "lifecycleHint": "Experimental rules earn trust before promoting to enforced — and stay browseable as deprecated for audit.",
+      "pathScoping": "Per-path scoping",
+      "pathScopingHint": "Override a rule's severity inside specific paths so /experiments and /tools don't share rules with /core.",
+      "findings": "Findings",
+      "findingsHint": "Clustered across analyzers — consensus findings (2+ sources agree) and risk score per finding.",
+      "counterfactual": "Counterfactual",
+      "counterfactualHint": "What if a rule were disabled? See the new aggregate risk before pulling the trigger in Calibration.",
+      "actionPlan": "Action plan",
+      "actionPlanHint": "One card per blocking or warning rule, with the line-level evidence the engine matched and the path forward — fix with the agent, formally override, or suppress the file.",
+      "ledger": "Override ledger",
+      "ledgerHint": "Acknowledged exceptions on this PR — overrides bypass a rule, suppressions narrow it to one file. Both expire automatically.",
+      "activeRuleset": "Active ruleset",
+      "activeRulesetHint": "{{count}} enabled · sortable. Fire-rate and precision computed from {{n}}-PR retro replay against synthetic ground truth.",
+      "library": "Library",
+      "libraryHint": "All rules in this workspace, including disabled. Click to toggle.",
+      "calibration": "Calibration",
+      "calibrationHint": "Three honesty checks: how often the gate lets PRs through, how precise its rules are on average, and what fraction of evidence is exact vs approximated."
+    },
+    "search": {
+      "rulesPlaceholder": "Filter by name, source, or severity…",
+      "clear": "Clear"
+    },
+    "portfolio": {
+      "empty": "No active rules.",
+      "colRule": "Rule",
+      "colSignal": "Signal",
+      "colSeverity": "Sev",
+      "colFire": "Fire 30d",
+      "colF1": "F1",
+      "colPr": "PR",
+      "clickToToggle": "Click to toggle",
+      "previewTruncated": "Preview truncated",
+      "fireTitle": "Fired on {{count}} of 30 retro PRs ({{pct}}%)",
+      "f1Title": "precision {{p}} · recall {{r}}"
+    },
+    "severity": {
+      "block": "Block",
+      "warn": "Warn",
+      "info": "Info",
+      "off": "Off"
+    },
+    "evidence": {
+      "exactTip": "Analyzer is certain about this finding.",
+      "overapproxTip": "May contain false positives — engine over-approximated.",
+      "unknownTip": "Confidence unknown — analyzer could not resolve precisely."
+    },
+    "calib": {
+      "passRate": "Pass-rate (95% CI)",
+      "passRateSecondary": "Wilson [{{lo}}–{{hi}}%] · n={{n}}",
+      "passRateGloss": "What fraction of recent PRs the gate let through, with a 95% confidence interval — narrow CI ⇒ stable, wide ⇒ undersampled.",
+      "meanF1": "Mean F1 across rules",
+      "meanF1WellCalibrated": "well calibrated",
+      "meanF1Mixed": "mixed precision",
+      "meanF1Noisy": "noisy classifiers",
+      "meanF1Gloss": "Per-rule precision/recall harmonic mean against synthetic ground truth (PR=problematic iff a blocking rule fires). Low F1 ⇒ rule fires when it shouldn't, or misses when it should.",
+      "evidenceMix": "Evidence mix",
+      "evidenceMixValue": "{{pct}}% exact",
+      "evidenceMixSecondary": "{{exact}} exact · {{overapprox}} overapprox · {{unknown}} unknown",
+      "evidenceMixGloss": "Honesty bar: how many of the engine's matches are exact vs over-approximations vs unknown. A green checkmark on an unknown match is a lie — surface it.",
+      "barExact": "{{count}} exact",
+      "barOverapprox": "{{count}} overapprox",
+      "barUnknown": "{{count}} unknown"
+    },
+    "library": {
+      "disabled": "Disabled · {{count}}",
+      "enable": "Enable",
+      "disable": "Disable",
+      "rowTitle": "Click to {{action}} · 30d fire-rate {{pct}}%",
+      "groupHeader": "{{label}} · {{count}}"
+    },
+    "actionPlan": {
+      "empty": "No rules fired on this PR. Regenerate to sample a different change set."
+    },
+    "ledger": {
+      "empty": "No overrides or suppressions on this PR yet.",
+      "kindOverride": "override",
+      "kindSuppression": "suppression",
+      "byActor": "by {{actor}} · {{when}}",
+      "expired": "expired",
+      "expiresIn": "expires {{when}}",
+      "revoke": "Revoke"
+    },
+    "time": {
+      "minutes_ago": "{{n}}m ago",
+      "minutes_in": "in {{n}}m",
+      "hours_ago": "{{n}}h ago",
+      "hours_in": "in {{n}}h",
+      "days_ago": "{{n}}d ago",
+      "days_in": "in {{n}}d"
+    }
+  },
+  "gate": {
+    "card": {
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "overridden": "overridden",
+      "overriddenTitle": "Already overridden on this PR",
+      "hits_one": "{{count}} hit",
+      "hits_other": "{{count}} hits",
+      "moreHits_one": "… {{count}} more hit",
+      "moreHits_other": "… {{count}} more hits",
+      "suppressedNote": "suppressed on this branch · expires soon",
+      "suppressForFile": "Suppress for this file",
+      "draftFix": "Draft fix with agent",
+      "overrideWithReason": "Override with reason",
+      "noFix": "No automated fix available."
+    },
+    "fixHint": {
+      "semgrep": "Pattern-based — agent can draft a patch.",
+      "codeql": "Dataflow finding — agent can suggest a sanitiser or refactor.",
+      "eslint": "Lint rule — agent can apply the fixer.",
+      "custom": "Hand-written rule — agent will draft a patch.",
+      "native": "Engine signal — typically a metric; fix may need a refactor."
+    },
+    "modal": {
+      "close": "Close",
+      "cancel": "Cancel"
+    },
+    "fix": {
+      "title": "Draft fix · {{rule}}",
+      "intro": "The agent has drafted a patch from the analyzer's evidence. Apply to the working tree, or open it in the IDE for inspection.",
+      "diffHeader": "proposed diff",
+      "confidenceNote": "The agent's confidence in this patch is moderate — verify the parameterised query lands in your DB layer before merging.",
+      "applyDisabledTitle": "Demo: not wired to a real fix service",
+      "apply": "Apply via agent"
+    },
+    "override": {
+      "title": "Override · {{rule}}",
+      "needsApprover": "Author cannot self-override this rule. Requires approval from",
+      "reasonLabel": "Reason (required)",
+      "reasonPlaceholder": "Why are you bypassing this rule? (visible in the audit log)",
+      "expiresLabel": "Expires after",
+      "ledgerNote": "Override will appear in the override ledger and auto-expire on {{date}}.",
+      "submit": "Record override"
+    },
+    "suppress": {
+      "title": "Suppress in {{path}}",
+      "intro": "Suppress this rule for <0>{{path}}</0> on this branch only. Other files are still gated.",
+      "reasonLabel": "Reason (required)",
+      "reasonPlaceholder": "Why is this file an exception? (e.g. legacy migration tracked in ABC-123)",
+      "expiresLabel": "Expires after",
+      "submit": "Suppress for this file"
+    },
+    "expiry": {
+      "h24": "24 hours",
+      "d7": "7 days",
+      "d14": "14 days",
+      "d30": "30 days"
+    },
+    "lens": {
+      "exact": "exact",
+      "overapprox": "overapprox",
+      "unknown": "unknown",
+      "exactTip": "Analyzer is certain about this finding.",
+      "overapproxTip": "May contain false positives — engine over-approximated.",
+      "unknownTip": "Confidence unknown — analyzer could not resolve precisely.",
+      "copy": "Copy snippet",
+      "openIDE": "Open in IDE"
+    }
   }
 }

@@ -1,7 +1,6 @@
 {
   "tab": {
     "intelligence": "Intelligence",
-    "investigate": "Investigate",
     "coding": "Coding",
     "agents": "Agents",
     "reviews": "Reviews",
@@ -116,6 +115,32 @@
     "override": {
       "title": "Override admission rule",
       "notice": "Bypassing a rule is logged in the audit trail. Anyone can review who, when, and why."
+    }
+  },
+  "palette": {
+    "title": "Control palette",
+    "placeholder": "Search commands, pages, actions…",
+    "go": "Go to {{label}}",
+    "section": {
+      "recent": "Recent",
+      "navigate": "Navigate",
+      "action": "Actions"
+    },
+    "empty": "No results",
+    "footer": {
+      "navigate": "↑↓ navigate",
+      "open": "Enter open",
+      "close": "Esc close"
+    },
+    "trigger": "Open control palette (⌘K)",
+    "openShort": "⌘K",
+    "action": {
+      "themeLight": "Theme → Light",
+      "themeDark": "Theme → Dark",
+      "resetFilters": "Reset all filters",
+      "tokens": "Show token usage",
+      "activity": "Show AI activity",
+      "help": "Keyboard shortcuts"
     }
   }
 }

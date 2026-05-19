@@ -50,5 +50,100 @@
       "duration": "소요 시간",
       "action": "작업"
     }
+  },
+  "queue": {
+    "noMatches": "매칭되는 PR이 없습니다.",
+    "project": "프로젝트",
+    "newQueryAria": "새 쿼리 추가",
+    "newQueryTitle": "새 쿼리 추가",
+    "searchPlaceholder": "검색...",
+    "clearSearchAria": "검색어 지우기",
+    "filterAria": "필터",
+    "scope": {
+      "all": "전체",
+      "mine": "내 작업",
+      "archived": "보관"
+    },
+    "group": {
+      "expandAria": "{{name}} 그룹 펼치기",
+      "collapseAria": "{{name}} 그룹 접기",
+      "pinAria": "그룹 핀 고정",
+      "unpinAria": "그룹 핀 해제",
+      "pinTitle": "핀 고정",
+      "unpinTitle": "핀 해제"
+    },
+    "row": {
+      "dragToReorder": "드래그하여 순서 변경",
+      "pinAria": "PR 핀 고정",
+      "unpinAria": "PR 핀 해제",
+      "pinTitle": "핀 고정",
+      "unpinTitle": "핀 해제"
+    },
+    "state": {
+      "needsReReview": "재검토 필요",
+      "myTurn": "내 차례",
+      "approved": "승인함",
+      "changesRequested": "변경 요청함",
+      "readyToMerge": "머지 대기",
+      "blockedAuthor": "작성자 대기",
+      "teamTurn": "팀 대기"
+    }
+  },
+  "bgJobs": {
+    "summary": "진행 중인 백그라운드 작업 {{count}}개",
+    "empty": "진행 중인 작업이 없습니다.",
+    "header": "백그라운드 작업",
+    "runningCount": "{{count}}개 진행 중",
+    "failedCount": "{{count}} 실패"
+  },
+  "savedViews": {
+    "aria": "저장된 뷰",
+    "view": {
+      "myTurn": "내 차례",
+      "slaRisk": "SLA 위험",
+      "blockers": "블로커 있음",
+      "risky": "고위험"
+    },
+    "applyTitle": "{{label}} 적용",
+    "clearTitle": "{{label}} 해제",
+    "removeAria": "{{label}} 삭제",
+    "removeTitle": "저장된 뷰 삭제",
+    "saveCurrentTitle": "현재 검색을 뷰로 저장",
+    "saveLabel": "저장",
+    "namePlaceholder": "이름…",
+    "saveConfirm": "저장"
+  },
+  "sla": {
+    "header": "SLA 만료",
+    "summary": "{{count}}개 · 7일+",
+    "stalled": "{{days}}d 정체",
+    "waiting": "@{{login}} 대기",
+    "waitingMore": "@{{login}}+{{extra}} 대기",
+    "pingCooldownTitle": "최근 30분 내 ping 발송됨 (cooldown)",
+    "pingTitle": "대기 중 reviewer에게 ping (PR 코멘트로 발송)",
+    "pingSent": "발송됨",
+    "pingWaiting": "대기",
+    "pingNoop": "없음",
+    "pingLabel": "ping",
+    "dismissAria": "이 알림 무시"
+  },
+  "share": {
+    "copiedTitle": "클립보드에 복사됨",
+    "shareTitle": "이 뷰의 공유 링크 복사",
+    "copiedLabel": "복사됨",
+    "shareLabel": "공유"
+  },
+  "outliers": {
+    "empty": "비슷한 outlier PR이 없습니다.",
+    "header": "비슷한 outlier",
+    "count": "{{count}}개"
+  },
+  "authorVelocity": {
+    "zVsSelf": "{{sign}}{{value}}σ vs 본인",
+    "tooltip": "@{{author}} · 중앙값 {{median}} · p95 {{p95}} · 평균 {{loc}} LOC (n={{count}})"
+  },
+  "palette": {
+    "pinTitle": "#{{number}} 핀 고정 (⌘⇧P)",
+    "unpinTitle": "#{{number}} 핀 해제 (⌘⇧P)"
   }
 }

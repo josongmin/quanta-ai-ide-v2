@@ -107,5 +107,206 @@
     "sub": "{{n}}-bin · 期待較正誤差",
     "over": "過信",
     "under": "過小"
+  },
+  "root": {
+    "eyebrow": "内部 · アドミッション",
+    "title": "アドミッションゲート",
+    "summary": "通過 {{pass}} · 警告 {{warn}} · ブロック {{block}}",
+    "tab": {
+      "gate": "ゲート",
+      "rules": "ルール",
+      "calibration": "キャリブレーション"
+    },
+    "rail": {
+      "groupView": "ビュー",
+      "ariaLabel": "アドミッションビュー",
+      "centered": "中央寄せ幅",
+      "fullWidth": "全幅"
+    },
+    "desc": {
+      "gate": "現在のPRがマージ可能か、保留中か、警告中かを — 作成者が行動できるよう、ファイルレベルの証拠とオーバーライド経路と共に表示します。",
+      "rules": "アクティブなルールセットと全ライブラリ。発火率とF1は{{n}}件の遡及リプレイで計算され、ノイズの多いルールが上位に浮上します。",
+      "calibration": "分類器としてのゲートの誠実性チェック: 通過率の Wilson 95% CI、ルール平均F1、exact / overapprox / unknown 証拠ミックス。{{n}}件の遡及PRから計算。"
+    },
+    "verdict": {
+      "allowLabel": "マージ可能",
+      "warnLabel": "確認の上マージ可能",
+      "blockLabel": "マージ保留",
+      "allowCopy": "このPRで{{n}}件のアクティブルールが全て通過しました。",
+      "warnCopy_one": "{{count}}件の警告が発火。作成者が確認してマージ可能。",
+      "warnCopy_other": "{{count}}件の警告が発火。作成者が確認してマージ可能。",
+      "blockCopy_one": "{{count}}件のブロッキングルールが発火。違反を修正するかオーバーライドを依頼してください。",
+      "blockCopy_other": "{{count}}件のブロッキングルールが発火。違反を修正するかオーバーライドを依頼してください。",
+      "seedFiles": "seed {{seed}} · 変更ファイル {{count}}",
+      "regenerate": "再生成"
+    },
+    "override": {
+      "selfOk": "全てのブロッキングルールに対して作成者が自己オーバーライド可能。",
+      "requires": "オーバーライドには次の承認が必要です: {{roles}}。",
+      "fallbackRole": "メンテナ"
+    },
+    "section": {
+      "authorNl": "自然言語でルール作成",
+      "authorNlHint": "ルールを平易な日本語/英語で記述すると、ワークスペース追加前に確認可能な構造化シグナルにコンパイルされます。",
+      "lifecycle": "ライフサイクル",
+      "lifecycleHint": "実験的ルールは強制適用に昇格する前に信頼を獲得 — 監査用にdeprecatedとして閲覧可能。",
+      "pathScoping": "パス別スコープ",
+      "pathScopingHint": "特定パスでルール重大度を上書きし、/experimentsや/toolsが/coreと同じルールを共有しないようにします。",
+      "findings": "検出結果",
+      "findingsHint": "アナライザ間でクラスタリング — 合意された検出（2つ以上のソース一致）と検出ごとのリスクスコア。",
+      "counterfactual": "反事実分析",
+      "counterfactualHint": "もしルールを無効にしたら？ キャリブレーションでトリガーを引く前に新しい総合リスクを確認。",
+      "actionPlan": "アクションプラン",
+      "actionPlanHint": "ブロックまたは警告ルールごとに1カード — エンジンがマッチした行レベルの証拠と、エージェントで修正・正式オーバーライド・ファイル抑制の3つの道筋を提示。",
+      "ledger": "オーバーライド台帳",
+      "ledgerHint": "このPRで承認された例外 — オーバーライドはルールを迂回し、抑制は1ファイルに絞ります。両方とも自動失効。",
+      "activeRuleset": "アクティブルールセット",
+      "activeRulesetHint": "{{count}}件有効 · ソート可能。発火率と精度は{{n}}件のPR遡及リプレイから合成正解に対して計算。",
+      "library": "ライブラリ",
+      "libraryHint": "このワークスペースの全ルール（無効含む）。クリックで切り替え。",
+      "calibration": "キャリブレーション",
+      "calibrationHint": "3つの誠実性チェック: ゲートのPR通過頻度、ルール平均精度、exact vs 近似の証拠比率。"
+    },
+    "search": {
+      "rulesPlaceholder": "名前・ソース・重大度で絞り込み…",
+      "clear": "クリア"
+    },
+    "portfolio": {
+      "empty": "アクティブなルールがありません。",
+      "colRule": "ルール",
+      "colSignal": "シグナル",
+      "colSeverity": "重大度",
+      "colFire": "30日 発火",
+      "colF1": "F1",
+      "colPr": "PR",
+      "clickToToggle": "クリックで切り替え",
+      "previewTruncated": "プレビュー切り詰め",
+      "fireTitle": "遡及PR 30件中 {{count}}件で発火 ({{pct}}%)",
+      "f1Title": "適合率 {{p}} · 再現率 {{r}}"
+    },
+    "severity": {
+      "block": "ブロック",
+      "warn": "警告",
+      "info": "情報",
+      "off": "オフ"
+    },
+    "evidence": {
+      "exactTip": "アナライザはこの発見について確実です。",
+      "overapproxTip": "偽陽性を含む可能性 — エンジンが過大近似しました。",
+      "unknownTip": "信頼度不明 — アナライザが正確に解決できませんでした。"
+    },
+    "calib": {
+      "passRate": "通過率 (95% CI)",
+      "passRateSecondary": "Wilson [{{lo}}–{{hi}}%] · n={{n}}",
+      "passRateGloss": "最近のPRのうちゲートが通過させた割合と95%信頼区間 — 狭いCI ⇒ 安定、広いCI ⇒ サンプル不足。",
+      "meanF1": "ルール平均F1",
+      "meanF1WellCalibrated": "良好に較正",
+      "meanF1Mixed": "精度混在",
+      "meanF1Noisy": "ノイズの多い分類器",
+      "meanF1Gloss": "合成正解（ブロッキングルール発火 = PRに問題あり）に対するルール別 精度/再現率 調和平均。低F1 ⇒ ルールの誤発火または見逃し。",
+      "evidenceMix": "証拠ミックス",
+      "evidenceMixValue": "{{pct}}% exact",
+      "evidenceMixSecondary": "exact {{exact}} · overapprox {{overapprox}} · unknown {{unknown}}",
+      "evidenceMixGloss": "誠実性バー: エンジンのマッチのうち exact, 過大近似, 不明の比率。unknownマッチに緑チェックは嘘 — 表に出すべき。",
+      "barExact": "exact {{count}}",
+      "barOverapprox": "overapprox {{count}}",
+      "barUnknown": "unknown {{count}}"
+    },
+    "library": {
+      "disabled": "無効 · {{count}}",
+      "enable": "有効化",
+      "disable": "無効化",
+      "rowTitle": "クリックで{{action}} · 30日発火率 {{pct}}%",
+      "groupHeader": "{{label}} · {{count}}"
+    },
+    "actionPlan": {
+      "empty": "このPRで発火したルールはありません。別の変更セットをサンプリングするには再生成してください。"
+    },
+    "ledger": {
+      "empty": "このPRにはまだオーバーライドや抑制がありません。",
+      "kindOverride": "オーバーライド",
+      "kindSuppression": "抑制",
+      "byActor": "{{actor}} · {{when}}",
+      "expired": "失効",
+      "expiresIn": "失効 {{when}}",
+      "revoke": "取り消し"
+    },
+    "time": {
+      "minutes_ago": "{{n}}分前",
+      "minutes_in": "{{n}}分後",
+      "hours_ago": "{{n}}時間前",
+      "hours_in": "{{n}}時間後",
+      "days_ago": "{{n}}日前",
+      "days_in": "{{n}}日後"
+    }
+  },
+  "gate": {
+    "card": {
+      "expand": "展開",
+      "collapse": "折りたたみ",
+      "overridden": "オーバーライド済",
+      "overriddenTitle": "このPRで既にオーバーライド済み",
+      "hits_one": "{{count}}件",
+      "hits_other": "{{count}}件",
+      "moreHits_one": "… あと{{count}}件",
+      "moreHits_other": "… あと{{count}}件",
+      "suppressedNote": "このブランチで抑制中 · まもなく失効",
+      "suppressForFile": "このファイルで抑制",
+      "draftFix": "エージェントで修正案",
+      "overrideWithReason": "理由付きでオーバーライド",
+      "noFix": "自動修正は利用できません。"
+    },
+    "fixHint": {
+      "semgrep": "パターンベース — エージェントがパッチを起草できます。",
+      "codeql": "データフロー検出 — エージェントがサニタイザやリファクタを提案できます。",
+      "eslint": "Lintルール — エージェントが自動修正を適用できます。",
+      "custom": "手書きルール — エージェントがパッチを起草します。",
+      "native": "エンジンシグナル — 通常メトリック。修正にはリファクタが必要な場合あり。"
+    },
+    "modal": {
+      "close": "閉じる",
+      "cancel": "キャンセル"
+    },
+    "fix": {
+      "title": "修正案 · {{rule}}",
+      "intro": "アナライザの証拠からエージェントがパッチを起草しました。作業ツリーに適用するか、IDEで確認してください。",
+      "diffHeader": "提案された diff",
+      "confidenceNote": "このパッチに対するエージェントの確信度は中程度 — マージ前にパラメータ化クエリがDBレイヤーに到達することを確認してください。",
+      "applyDisabledTitle": "デモ: 実際の修正サービスには接続されていません",
+      "apply": "エージェントで適用"
+    },
+    "override": {
+      "title": "オーバーライド · {{rule}}",
+      "needsApprover": "このルールは作成者が自己オーバーライドできません。次の承認が必要",
+      "reasonLabel": "理由 (必須)",
+      "reasonPlaceholder": "なぜこのルールを迂回しますか？（監査ログに表示されます）",
+      "expiresLabel": "失効まで",
+      "ledgerNote": "オーバーライドは台帳に記録され、{{date}}に自動失効します。",
+      "submit": "オーバーライドを記録"
+    },
+    "suppress": {
+      "title": "抑制: {{path}}",
+      "intro": "このルールを <0>{{path}}</0> でこのブランチに限定して抑制します。他のファイルは引き続きゲートされます。",
+      "reasonLabel": "理由 (必須)",
+      "reasonPlaceholder": "このファイルが例外な理由は？（例: ABC-123で追跡中のレガシー移行）",
+      "expiresLabel": "失効まで",
+      "submit": "このファイルで抑制"
+    },
+    "expiry": {
+      "h24": "24時間",
+      "d7": "7日",
+      "d14": "14日",
+      "d30": "30日"
+    },
+    "lens": {
+      "exact": "exact",
+      "overapprox": "overapprox",
+      "unknown": "unknown",
+      "exactTip": "アナライザはこの発見について確実です。",
+      "overapproxTip": "偽陽性を含む可能性 — エンジンが過大近似しました。",
+      "unknownTip": "信頼度不明 — アナライザが正確に解決できませんでした。",
+      "copy": "スニペットをコピー",
+      "openIDE": "IDEで開く"
+    }
   }
 }

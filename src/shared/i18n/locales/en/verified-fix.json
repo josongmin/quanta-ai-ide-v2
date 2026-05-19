@@ -97,6 +97,7 @@
     "header": "candidate fixes · {{count}} of 3 max",
     "subtitle": "choose one to draft",
     "apiBreak": "api break",
+    "recommended": "recommended",
     "stat": {
       "lines": "lines",
       "files": "files",

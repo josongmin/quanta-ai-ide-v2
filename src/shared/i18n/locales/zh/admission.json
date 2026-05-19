@@ -107,5 +107,206 @@
     "sub": "{{n}} 区间 · 期望校准误差",
     "over": "过度自信",
     "under": "信心不足"
+  },
+  "root": {
+    "eyebrow": "内部 · 准入",
+    "title": "准入门禁",
+    "summary": "通过 {{pass}} · 警告 {{warn}} · 阻塞 {{block}}",
+    "tab": {
+      "gate": "门禁",
+      "rules": "规则",
+      "calibration": "校准"
+    },
+    "rail": {
+      "groupView": "视图",
+      "ariaLabel": "准入视图",
+      "centered": "居中宽度",
+      "fullWidth": "全宽"
+    },
+    "desc": {
+      "gate": "当前 PR 是否可合并、被搁置或被警告 — 附带文件级证据和作者所需的覆盖路径。",
+      "rules": "活跃规则集和完整库。发火率和 F1 基于 {{n}} 次回放计算，使噪声规则浮现到顶部。",
+      "calibration": "门禁作为分类器的诚实性检查：通过率 Wilson 95% CI、规则平均 F1，以及 exact / overapprox / unknown 证据比例。基于 {{n}} 个回放 PR。"
+    },
+    "verdict": {
+      "allowLabel": "可合并",
+      "warnLabel": "确认后可合并",
+      "blockLabel": "合并搁置",
+      "allowCopy": "该 PR 的 {{n}} 条活跃规则全部通过。",
+      "warnCopy_one": "{{count}} 条警告触发。作者可确认后合并。",
+      "warnCopy_other": "{{count}} 条警告触发。作者可确认后合并。",
+      "blockCopy_one": "{{count}} 条阻塞规则触发。请修复违规或申请覆盖。",
+      "blockCopy_other": "{{count}} 条阻塞规则触发。请修复违规或申请覆盖。",
+      "seedFiles": "seed {{seed}} · 已修改 {{count}} 文件",
+      "regenerate": "重新生成"
+    },
+    "override": {
+      "selfOk": "作者可对所有阻塞规则自行覆盖。",
+      "requires": "覆盖需以下角色批准：{{roles}}。",
+      "fallbackRole": "维护者"
+    },
+    "section": {
+      "authorNl": "用自然语言编写规则",
+      "authorNlHint": "用平实的语言描述规则；我们将其编译为可在加入工作区前检查的结构化信号。",
+      "lifecycle": "生命周期",
+      "lifecycleHint": "实验性规则在升级为强制执行前先建立信任 — 已弃用的规则仍可作为审计参考。",
+      "pathScoping": "按路径作用域",
+      "pathScopingHint": "在特定路径中覆盖规则严重性，使 /experiments 和 /tools 与 /core 不共用规则。",
+      "findings": "发现",
+      "findingsHint": "跨分析器聚类 — 共识发现（2 个以上来源一致）与每项发现的风险分。",
+      "counterfactual": "反事实分析",
+      "counterfactualHint": "如果某规则被禁用会怎样？ 在校准中扣动扳机前查看新的聚合风险。",
+      "actionPlan": "行动计划",
+      "actionPlanHint": "每条阻塞或警告规则一张卡 — 包含引擎匹配的行级证据和前进路径：用代理修复、正式覆盖、或抑制该文件。",
+      "ledger": "覆盖账本",
+      "ledgerHint": "该 PR 上已确认的例外 — 覆盖绕过规则，抑制将范围缩小到一个文件。两者均自动过期。",
+      "activeRuleset": "活跃规则集",
+      "activeRulesetHint": "已启用 {{count}} 条 · 可排序。发火率和精确率基于 {{n}} 个 PR 回放对合成真值计算。",
+      "library": "库",
+      "libraryHint": "该工作区的所有规则（含已禁用）。点击切换。",
+      "calibration": "校准",
+      "calibrationHint": "三项诚实性检查：门禁放行 PR 的频率、规则平均精度，以及 exact 与近似证据的比例。"
+    },
+    "search": {
+      "rulesPlaceholder": "按名称、来源或严重性筛选…",
+      "clear": "清除"
+    },
+    "portfolio": {
+      "empty": "无活跃规则。",
+      "colRule": "规则",
+      "colSignal": "信号",
+      "colSeverity": "严重性",
+      "colFire": "30 天发火",
+      "colF1": "F1",
+      "colPr": "PR",
+      "clickToToggle": "点击切换",
+      "previewTruncated": "预览已截断",
+      "fireTitle": "30 个回放 PR 中触发 {{count}} 次 ({{pct}}%)",
+      "f1Title": "精确率 {{p}} · 召回率 {{r}}"
+    },
+    "severity": {
+      "block": "阻塞",
+      "warn": "警告",
+      "info": "信息",
+      "off": "关闭"
+    },
+    "evidence": {
+      "exactTip": "分析器对此发现确信无疑。",
+      "overapproxTip": "可能包含假阳性 — 引擎过度近似。",
+      "unknownTip": "置信度未知 — 分析器无法精确解析。"
+    },
+    "calib": {
+      "passRate": "通过率 (95% CI)",
+      "passRateSecondary": "Wilson [{{lo}}–{{hi}}%] · n={{n}}",
+      "passRateGloss": "近期 PR 中门禁放行的比例及 95% 置信区间 — 区间窄 ⇒ 稳定，宽 ⇒ 样本不足。",
+      "meanF1": "规则平均 F1",
+      "meanF1WellCalibrated": "校准良好",
+      "meanF1Mixed": "精度混合",
+      "meanF1Noisy": "噪声较大",
+      "meanF1Gloss": "对合成真值（阻塞规则触发即 PR=有问题）按规则计算的精确率/召回率调和平均。低 F1 ⇒ 规则误报或漏报。",
+      "evidenceMix": "证据构成",
+      "evidenceMixValue": "{{pct}}% exact",
+      "evidenceMixSecondary": "exact {{exact}} · overapprox {{overapprox}} · unknown {{unknown}}",
+      "evidenceMixGloss": "诚实性条：引擎匹配中 exact、过度近似、未知的比例。对 unknown 匹配打绿勾就是说谎 — 必须暴露。",
+      "barExact": "exact {{count}}",
+      "barOverapprox": "overapprox {{count}}",
+      "barUnknown": "unknown {{count}}"
+    },
+    "library": {
+      "disabled": "已禁用 · {{count}}",
+      "enable": "启用",
+      "disable": "禁用",
+      "rowTitle": "点击{{action}} · 30 天发火率 {{pct}}%",
+      "groupHeader": "{{label}} · {{count}}"
+    },
+    "actionPlan": {
+      "empty": "该 PR 未触发任何规则。重新生成以采样不同的变更集。"
+    },
+    "ledger": {
+      "empty": "该 PR 暂无覆盖或抑制。",
+      "kindOverride": "覆盖",
+      "kindSuppression": "抑制",
+      "byActor": "{{actor}} · {{when}}",
+      "expired": "已过期",
+      "expiresIn": "过期 {{when}}",
+      "revoke": "撤销"
+    },
+    "time": {
+      "minutes_ago": "{{n}} 分钟前",
+      "minutes_in": "{{n}} 分钟后",
+      "hours_ago": "{{n}} 小时前",
+      "hours_in": "{{n}} 小时后",
+      "days_ago": "{{n}} 天前",
+      "days_in": "{{n}} 天后"
+    }
+  },
+  "gate": {
+    "card": {
+      "expand": "展开",
+      "collapse": "折叠",
+      "overridden": "已覆盖",
+      "overriddenTitle": "该 PR 已被覆盖",
+      "hits_one": "{{count}} 处命中",
+      "hits_other": "{{count}} 处命中",
+      "moreHits_one": "… 还有 {{count}} 处",
+      "moreHits_other": "… 还有 {{count}} 处",
+      "suppressedNote": "该分支已抑制 · 即将过期",
+      "suppressForFile": "为该文件抑制",
+      "draftFix": "用代理草拟修复",
+      "overrideWithReason": "附理由覆盖",
+      "noFix": "无可用的自动修复。"
+    },
+    "fixHint": {
+      "semgrep": "基于模式 — 代理可草拟补丁。",
+      "codeql": "数据流发现 — 代理可建议清理器或重构。",
+      "eslint": "Lint 规则 — 代理可应用修复。",
+      "custom": "手写规则 — 代理将草拟补丁。",
+      "native": "引擎信号 — 通常为指标，修复可能需重构。"
+    },
+    "modal": {
+      "close": "关闭",
+      "cancel": "取消"
+    },
+    "fix": {
+      "title": "草拟修复 · {{rule}}",
+      "intro": "代理已根据分析器证据草拟补丁。可应用到工作树或在 IDE 中查看。",
+      "diffHeader": "建议的 diff",
+      "confidenceNote": "代理对此补丁的置信度中等 — 合并前请确认参数化查询落到 DB 层。",
+      "applyDisabledTitle": "演示：未连接到真实修复服务",
+      "apply": "通过代理应用"
+    },
+    "override": {
+      "title": "覆盖 · {{rule}}",
+      "needsApprover": "作者无法自行覆盖此规则。需以下角色批准",
+      "reasonLabel": "理由（必填）",
+      "reasonPlaceholder": "为何绕过此规则？（在审计日志中可见）",
+      "expiresLabel": "过期时间",
+      "ledgerNote": "覆盖将记录在账本中，并将于 {{date}} 自动过期。",
+      "submit": "记录覆盖"
+    },
+    "suppress": {
+      "title": "抑制：{{path}}",
+      "intro": "在该分支为 <0>{{path}}</0> 抑制此规则。其他文件仍受门禁约束。",
+      "reasonLabel": "理由（必填）",
+      "reasonPlaceholder": "该文件为何例外？（例如：在 ABC-123 跟踪的遗留迁移）",
+      "expiresLabel": "过期时间",
+      "submit": "为该文件抑制"
+    },
+    "expiry": {
+      "h24": "24 小时",
+      "d7": "7 天",
+      "d14": "14 天",
+      "d30": "30 天"
+    },
+    "lens": {
+      "exact": "exact",
+      "overapprox": "overapprox",
+      "unknown": "unknown",
+      "exactTip": "分析器对此发现确信无疑。",
+      "overapproxTip": "可能包含假阳性 — 引擎过度近似。",
+      "unknownTip": "置信度未知 — 分析器无法精确解析。",
+      "copy": "复制片段",
+      "openIDE": "在 IDE 中打开"
+    }
   }
 }

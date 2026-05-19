@@ -97,6 +97,7 @@
     "header": "候補フィックス · 最大3件中 {{count}} 件",
     "subtitle": "ドラフトする候補を選択",
     "apiBreak": "API 破壊",
+    "recommended": "推奨",
     "stat": {
       "lines": "行",
       "files": "ファイル",

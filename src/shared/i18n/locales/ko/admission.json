@@ -107,5 +107,206 @@
     "sub": "{{n}}-bin · 기대 보정 오차",
     "over": "과신",
     "under": "과소"
+  },
+  "root": {
+    "eyebrow": "내부 · 어드미션",
+    "title": "어드미션 게이트",
+    "summary": "통과 {{pass}} · 경고 {{warn}} · 차단 {{block}}",
+    "tab": {
+      "gate": "게이트",
+      "rules": "규칙",
+      "calibration": "보정"
+    },
+    "rail": {
+      "groupView": "보기",
+      "ariaLabel": "어드미션 보기",
+      "centered": "고정 폭",
+      "fullWidth": "전체 폭"
+    },
+    "desc": {
+      "gate": "현재 PR이 머지 가능한지, 보류 중인지, 경고 중인지를 — 작성자가 행동에 옮길 수 있도록 파일 단위 증거와 오버라이드 경로와 함께 보여줍니다.",
+      "rules": "활성 룰셋과 전체 라이브러리. Fire-rate와 F1은 {{n}}건의 회고 리플레이로 계산되어 잡음이 많은 룰이 상단에 노출됩니다.",
+      "calibration": "분류기로서의 게이트 정직성 검사: 통과율의 Wilson 95% CI, 룰 평균 F1, exact / overapprox / unknown 증거 비율. 회고 PR {{n}}건 기준."
+    },
+    "verdict": {
+      "allowLabel": "머지 가능",
+      "warnLabel": "확인 후 머지 가능",
+      "blockLabel": "머지 보류",
+      "allowCopy": "이 PR에서 활성 룰 {{n}}건이 모두 통과했습니다.",
+      "warnCopy_one": "경고 {{count}}건 발동. 작성자가 확인 후 머지할 수 있습니다.",
+      "warnCopy_other": "경고 {{count}}건 발동. 작성자가 확인 후 머지할 수 있습니다.",
+      "blockCopy_one": "차단 룰 {{count}}건 발동. 위반을 수정하거나 오버라이드를 요청하세요.",
+      "blockCopy_other": "차단 룰 {{count}}건 발동. 위반을 수정하거나 오버라이드를 요청하세요.",
+      "seedFiles": "seed {{seed}} · 변경 파일 {{count}}개",
+      "regenerate": "다시 생성"
+    },
+    "override": {
+      "selfOk": "모든 차단 룰에 대해 작성자가 직접 오버라이드할 수 있습니다.",
+      "requires": "오버라이드는 다음 승인 권한이 필요합니다: {{roles}}.",
+      "fallbackRole": "메인테이너"
+    },
+    "section": {
+      "authorNl": "자연어로 룰 작성",
+      "authorNlHint": "룰을 평이한 한국어/영어로 설명하면 — 워크스페이스에 추가하기 전에 검사할 수 있는 구조화된 시그널로 컴파일됩니다.",
+      "lifecycle": "라이프사이클",
+      "lifecycleHint": "실험적 룰은 강제 적용으로 승격되기 전에 신뢰를 쌓고 — 감사용으로 deprecated 상태로도 계속 조회할 수 있습니다.",
+      "pathScoping": "경로별 스코프",
+      "pathScopingHint": "특정 경로에서 룰의 심각도를 재정의해 /experiments와 /tools가 /core와 같은 룰을 공유하지 않도록 합니다.",
+      "findings": "발견 사항",
+      "findingsHint": "분석기 전반에 걸쳐 클러스터링 — 합의된 발견(2개 이상 소스 일치)과 발견별 위험 점수.",
+      "counterfactual": "반사실 분석",
+      "counterfactualHint": "룰을 비활성화하면? 보정에서 트리거를 당기기 전에 새로운 종합 위험을 확인하세요.",
+      "actionPlan": "조치 계획",
+      "actionPlanHint": "차단 또는 경고 룰 하나마다 카드 한 장 — 엔진이 매칭한 라인 단위 증거와 함께, 에이전트로 수정하거나 공식 오버라이드, 또는 파일 단위 억제로 해결할 수 있습니다.",
+      "ledger": "오버라이드 원장",
+      "ledgerHint": "이 PR의 승인된 예외 목록 — 오버라이드는 룰을 우회하고, 억제는 한 파일로 범위를 좁힙니다. 둘 다 자동 만료됩니다.",
+      "activeRuleset": "활성 룰셋",
+      "activeRulesetHint": "활성 {{count}}개 · 정렬 가능. Fire-rate와 정밀도는 {{n}}건의 합성 정답 회고 리플레이로 계산됩니다.",
+      "library": "라이브러리",
+      "libraryHint": "이 워크스페이스의 모든 룰(비활성 포함). 클릭하여 토글합니다.",
+      "calibration": "보정",
+      "calibrationHint": "세 가지 정직성 검사: 게이트가 PR을 얼마나 통과시키는지, 룰의 평균 정밀도는 어느 정도인지, 증거 중 exact 대비 근사치 비율이 얼마인지."
+    },
+    "search": {
+      "rulesPlaceholder": "이름, 출처, 심각도로 필터…",
+      "clear": "지우기"
+    },
+    "portfolio": {
+      "empty": "활성 룰이 없습니다.",
+      "colRule": "룰",
+      "colSignal": "시그널",
+      "colSeverity": "심각도",
+      "colFire": "30일 발화",
+      "colF1": "F1",
+      "colPr": "PR",
+      "clickToToggle": "클릭하여 토글",
+      "previewTruncated": "미리보기 잘림",
+      "fireTitle": "회고 PR 30건 중 {{count}}건에서 발화 ({{pct}}%)",
+      "f1Title": "정밀도 {{p}} · 재현율 {{r}}"
+    },
+    "severity": {
+      "block": "차단",
+      "warn": "경고",
+      "info": "정보",
+      "off": "꺼짐"
+    },
+    "evidence": {
+      "exactTip": "분석기가 이 발견에 대해 확신합니다.",
+      "overapproxTip": "거짓양성이 있을 수 있습니다 — 엔진이 과대근사했습니다.",
+      "unknownTip": "신뢰도 미상 — 분석기가 정확히 해석하지 못했습니다."
+    },
+    "calib": {
+      "passRate": "통과율 (95% CI)",
+      "passRateSecondary": "Wilson [{{lo}}–{{hi}}%] · n={{n}}",
+      "passRateGloss": "최근 PR 중 게이트가 통과시킨 비율을 95% 신뢰구간과 함께 표시 — 좁은 CI ⇒ 안정적, 넓으면 ⇒ 표본 부족.",
+      "meanF1": "룰 평균 F1",
+      "meanF1WellCalibrated": "잘 보정됨",
+      "meanF1Mixed": "정밀도 혼재",
+      "meanF1Noisy": "잡음이 많은 분류기",
+      "meanF1Gloss": "합성 정답(차단 룰이 발화하면 PR=문제) 대비 룰별 정밀도/재현율 조화 평균. 낮은 F1 ⇒ 룰이 잘못 발화하거나 놓치고 있음.",
+      "evidenceMix": "증거 구성",
+      "evidenceMixValue": "{{pct}}% exact",
+      "evidenceMixSecondary": "exact {{exact}} · overapprox {{overapprox}} · unknown {{unknown}}",
+      "evidenceMixGloss": "정직성 막대: 엔진의 매치 중 exact, 과대근사, 미상 비율. unknown 매치에 녹색 체크는 거짓 — 드러내야 합니다.",
+      "barExact": "exact {{count}}건",
+      "barOverapprox": "overapprox {{count}}건",
+      "barUnknown": "unknown {{count}}건"
+    },
+    "library": {
+      "disabled": "비활성 · {{count}}",
+      "enable": "활성화",
+      "disable": "비활성화",
+      "rowTitle": "클릭하여 {{action}} · 30일 발화율 {{pct}}%",
+      "groupHeader": "{{label}} · {{count}}"
+    },
+    "actionPlan": {
+      "empty": "이 PR에서 발동된 룰이 없습니다. 다른 변경 세트를 샘플링하려면 다시 생성하세요."
+    },
+    "ledger": {
+      "empty": "이 PR에는 아직 오버라이드 또는 억제가 없습니다.",
+      "kindOverride": "오버라이드",
+      "kindSuppression": "억제",
+      "byActor": "{{actor}} · {{when}}",
+      "expired": "만료됨",
+      "expiresIn": "만료 {{when}}",
+      "revoke": "취소"
+    },
+    "time": {
+      "minutes_ago": "{{n}}분 전",
+      "minutes_in": "{{n}}분 후",
+      "hours_ago": "{{n}}시간 전",
+      "hours_in": "{{n}}시간 후",
+      "days_ago": "{{n}}일 전",
+      "days_in": "{{n}}일 후"
+    }
+  },
+  "gate": {
+    "card": {
+      "expand": "펼치기",
+      "collapse": "접기",
+      "overridden": "오버라이드됨",
+      "overriddenTitle": "이 PR에서 이미 오버라이드되었습니다",
+      "hits_one": "{{count}}건",
+      "hits_other": "{{count}}건",
+      "moreHits_one": "… {{count}}건 더",
+      "moreHits_other": "… {{count}}건 더",
+      "suppressedNote": "이 브랜치에서 억제됨 · 곧 만료",
+      "suppressForFile": "이 파일에서 억제",
+      "draftFix": "에이전트로 수정 초안",
+      "overrideWithReason": "사유와 함께 오버라이드",
+      "noFix": "자동 수정을 사용할 수 없습니다."
+    },
+    "fixHint": {
+      "semgrep": "패턴 기반 — 에이전트가 패치 초안을 작성할 수 있습니다.",
+      "codeql": "데이터플로 발견 — 에이전트가 새니타이저 또는 리팩터를 제안할 수 있습니다.",
+      "eslint": "Lint 룰 — 에이전트가 자동 수정기를 적용할 수 있습니다.",
+      "custom": "수기 작성 룰 — 에이전트가 패치 초안을 작성합니다.",
+      "native": "엔진 시그널 — 보통 메트릭이며 수정에 리팩터가 필요할 수 있습니다."
+    },
+    "modal": {
+      "close": "닫기",
+      "cancel": "취소"
+    },
+    "fix": {
+      "title": "수정 초안 · {{rule}}",
+      "intro": "에이전트가 분석기 증거를 기반으로 패치를 작성했습니다. 작업 트리에 적용하거나 IDE에서 검토하세요.",
+      "diffHeader": "제안된 diff",
+      "confidenceNote": "이 패치에 대한 에이전트의 확신은 보통입니다 — 머지 전에 매개변수화된 쿼리가 DB 레이어에 안착하는지 확인하세요.",
+      "applyDisabledTitle": "데모: 실제 수정 서비스에 연결되어 있지 않습니다",
+      "apply": "에이전트로 적용"
+    },
+    "override": {
+      "title": "오버라이드 · {{rule}}",
+      "needsApprover": "이 룰은 작성자가 직접 오버라이드할 수 없습니다. 다음 승인이 필요합니다",
+      "reasonLabel": "사유 (필수)",
+      "reasonPlaceholder": "이 룰을 우회하는 이유는? (감사 로그에 표시됩니다)",
+      "expiresLabel": "만료 기간",
+      "ledgerNote": "오버라이드는 원장에 기록되며 {{date}}에 자동 만료됩니다.",
+      "submit": "오버라이드 기록"
+    },
+    "suppress": {
+      "title": "억제: {{path}}",
+      "intro": "이 룰을 <0>{{path}}</0>에서 이 브랜치에 한해 억제합니다. 다른 파일은 계속 게이팅됩니다.",
+      "reasonLabel": "사유 (필수)",
+      "reasonPlaceholder": "이 파일이 예외인 이유? (예: ABC-123에서 추적 중인 레거시 마이그레이션)",
+      "expiresLabel": "만료 기간",
+      "submit": "이 파일에서 억제"
+    },
+    "expiry": {
+      "h24": "24시간",
+      "d7": "7일",
+      "d14": "14일",
+      "d30": "30일"
+    },
+    "lens": {
+      "exact": "exact",
+      "overapprox": "overapprox",
+      "unknown": "unknown",
+      "exactTip": "분석기가 이 발견에 대해 확신합니다.",
+      "overapproxTip": "거짓양성이 있을 수 있습니다 — 엔진이 과대근사했습니다.",
+      "unknownTip": "신뢰도 미상 — 분석기가 정확히 해석하지 못했습니다.",
+      "copy": "스니펫 복사",
+      "openIDE": "IDE에서 열기"
+    }
   }
 }

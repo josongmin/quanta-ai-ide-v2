@@ -444,5 +444,14 @@
   },
   "tree": {
     "repo": "リポジトリ"
+  },
+  "layer": {
+    "view": "view",
+    "controller": "controller",
+    "service": "service",
+    "repository": "repository",
+    "util": "util",
+    "test": "test",
+    "vendor": "vendor"
   }
 }

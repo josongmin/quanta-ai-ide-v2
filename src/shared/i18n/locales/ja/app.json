@@ -1,7 +1,6 @@
 {
   "tab": {
     "intelligence": "インテリジェンス",
-    "investigate": "調査",
     "coding": "コーディング",
     "agents": "エージェント",
     "reviews": "レビュー",
@@ -116,6 +115,32 @@
     "override": {
       "title": "アドミッションルールをオーバーライド",
       "notice": "ルールのバイパスは監査ログに記録されます。誰が、いつ、なぜ行ったかを誰でも確認できます。"
+    }
+  },
+  "palette": {
+    "title": "コントロールパレット",
+    "placeholder": "コマンド、ページ、アクションを検索…",
+    "go": "{{label}}へ移動",
+    "section": {
+      "recent": "最近",
+      "navigate": "移動",
+      "action": "アクション"
+    },
+    "empty": "結果なし",
+    "footer": {
+      "navigate": "↑↓ 移動",
+      "open": "Enter 実行",
+      "close": "Esc 閉じる"
+    },
+    "trigger": "コントロールパレットを開く (⌘K)",
+    "openShort": "⌘K",
+    "action": {
+      "themeLight": "テーマ → ライト",
+      "themeDark": "テーマ → ダーク",
+      "resetFilters": "フィルタをリセット",
+      "tokens": "トークン使用量",
+      "activity": "AI アクティビティ",
+      "help": "キーボードショートカット"
     }
   }
 }

@@ -97,6 +97,7 @@
     "header": "候选修复 · 最多 3 个中的 {{count}} 个",
     "subtitle": "选择一个生成草稿",
     "apiBreak": "API 破坏",
+    "recommended": "推荐",
     "stat": {
       "lines": "行数",
       "files": "文件",

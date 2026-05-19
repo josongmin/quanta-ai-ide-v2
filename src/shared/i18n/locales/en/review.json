@@ -50,5 +50,104 @@
       "duration": "Duration",
       "action": "Action"
     }
+  },
+  "queue": {
+    "noMatches": "No matching PRs.",
+    "project": "Project",
+    "newQueryAria": "Add new query",
+    "newQueryTitle": "Add new query",
+    "searchPlaceholder": "Search...",
+    "clearSearchAria": "Clear search",
+    "filterAria": "Filter",
+    "scope": {
+      "all": "All",
+      "mine": "Mine",
+      "archived": "Archived"
+    },
+    "group": {
+      "expandAria": "Expand {{name}} group",
+      "collapseAria": "Collapse {{name}} group",
+      "pinAria": "Pin group",
+      "unpinAria": "Unpin group",
+      "pinTitle": "Pin",
+      "unpinTitle": "Unpin"
+    },
+    "row": {
+      "dragToReorder": "Drag to reorder",
+      "pinAria": "Pin PR",
+      "unpinAria": "Unpin PR",
+      "pinTitle": "Pin",
+      "unpinTitle": "Unpin"
+    },
+    "state": {
+      "needsReReview": "Needs re-review",
+      "myTurn": "My turn",
+      "approved": "Approved",
+      "changesRequested": "Changes requested",
+      "readyToMerge": "Ready to merge",
+      "blockedAuthor": "Awaiting author",
+      "teamTurn": "Team's turn"
+    }
+  },
+  "bgJobs": {
+    "summary_one": "{{count}} background job running",
+    "summary_other": "{{count}} background jobs running",
+    "empty": "No jobs running.",
+    "header": "Background jobs",
+    "runningCount_one": "{{count}} running",
+    "runningCount_other": "{{count}} running",
+    "failedCount": "{{count}} failed"
+  },
+  "savedViews": {
+    "aria": "Saved views",
+    "view": {
+      "myTurn": "My turn",
+      "slaRisk": "SLA risk",
+      "blockers": "Has blockers",
+      "risky": "High risk"
+    },
+    "applyTitle": "Apply {{label}}",
+    "clearTitle": "Clear {{label}}",
+    "removeAria": "Remove {{label}}",
+    "removeTitle": "Remove saved view",
+    "saveCurrentTitle": "Save current search as view",
+    "saveLabel": "Save",
+    "namePlaceholder": "Name…",
+    "saveConfirm": "Save"
+  },
+  "sla": {
+    "header": "SLA breached",
+    "summary_one": "{{count}} · 7d+",
+    "summary_other": "{{count}} · 7d+",
+    "stalled": "{{days}}d stalled",
+    "waiting": "@{{login}} waiting",
+    "waitingMore": "@{{login}}+{{extra}} waiting",
+    "pingCooldownTitle": "Ping sent in last 30min (cooldown)",
+    "pingTitle": "Ping pending reviewers (posts as PR comment)",
+    "pingSent": "Sent",
+    "pingWaiting": "Waiting",
+    "pingNoop": "None",
+    "pingLabel": "ping",
+    "dismissAria": "Dismiss this alert"
+  },
+  "share": {
+    "copiedTitle": "Copied to clipboard",
+    "shareTitle": "Copy share link for this view",
+    "copiedLabel": "Copied",
+    "shareLabel": "Share"
+  },
+  "outliers": {
+    "empty": "No similar outlier PRs.",
+    "header": "Similar outliers",
+    "count_one": "{{count}}",
+    "count_other": "{{count}}"
+  },
+  "authorVelocity": {
+    "zVsSelf": "{{sign}}{{value}}σ vs self",
+    "tooltip": "@{{author}} · median {{median}} · p95 {{p95}} · avg {{loc}} LOC (n={{count}})"
+  },
+  "palette": {
+    "pinTitle": "Pin #{{number}} (⌘⇧P)",
+    "unpinTitle": "Unpin #{{number}} (⌘⇧P)"
   }
 }

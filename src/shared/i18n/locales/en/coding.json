@@ -117,7 +117,118 @@
     "copyMd": "Copy as markdown",
     "share": "Share",
     "export": "Export",
-    "openInNewTask": "Open in new task"
+    "openInNewTask": "Open in new task",
+    "saveAsRule": "Save edit pattern as rule"
+  },
+  "agentProfile": {
+    "title": "Agent profile",
+    "subtitle": "Customise this agent",
+    "titleFor": "Agent for {{project}}",
+    "savesAs": "Committed to .agent/profile.yaml",
+    "close": "Close",
+    "tabs": {
+      "modes": "Modes",
+      "rules": "Rules",
+      "workflows": "Workflows",
+      "painpoints": "Pain-points",
+      "marketplace": "Marketplace"
+    },
+    "modeChip": {
+      "tooltip": "Mode: {{mode}} · trust {{trust}} of 5"
+    },
+    "modes": {
+      "intro": "Each mode bundles a system prompt, allowed tools, a sticky model, and a trust level. Built-in modes can be duplicated but not deleted.",
+      "active": "Active",
+      "system": "Built-in",
+      "use": "Use",
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "trust": {
+        "label": "Trust dial",
+        "level1": "1 · Read-only",
+        "level2": "2 · Edit on confirm",
+        "level3": "3 · Edit auto",
+        "level4": "4 · Run + edit auto",
+        "level5": "5 · Full autonomy",
+        "desc1": "Proposes diffs only. Never writes to the working tree. Best for paired-review work.",
+        "desc2": "Writes one file at a time, asks before each. Safe default for unfamiliar repos.",
+        "desc3": "Writes freely. Asks before running scripts or destructive commands.",
+        "desc4": "Writes and runs scripts without asking. Stops before push or merge.",
+        "desc5": "Pushes, comments, and merges if CI passes. Use only in scratch branches."
+      },
+      "tools": {
+        "label": "Allowed tools"
+      },
+      "prompt": {
+        "label": "System prompt"
+      }
+    },
+    "rules": {
+      "add": "New rule",
+      "newName": "Untitled rule",
+      "searchPlaceholder": "Search rules by name, body, or glob…",
+      "filterAll": "all",
+      "sourceAuthored": "authored",
+      "sourcePainPoint": "from pain-point",
+      "sourceDiffPattern": "from diff",
+      "sourceMarketplace": "from market",
+      "empty": "No rules match the current filter.",
+      "alwaysOn": "always on",
+      "enable": "Enable",
+      "disable": "Disable",
+      "delete": "Delete",
+      "body": "Body (markdown)",
+      "bodyPlaceholder": "What should the agent do — or never do? Include the *why* so it generalises.",
+      "globs": "Globs (comma-separated)",
+      "scope": "Scope",
+      "derivedFrom": "Derived from turn {{id}}"
+    },
+    "workflows": {
+      "intro": "Slash playbooks. Type /<slug> in the composer to fire the steps in order. Pair with a mode to lock the trust dial automatically.",
+      "add": "New workflow",
+      "newName": "Untitled workflow",
+      "blurbPlaceholder": "1-line description shown under the slash command",
+      "steps": "Steps",
+      "removeStep": "Remove step",
+      "addStep": "Add step",
+      "firstStepPlaceholder": "First step the agent should take…",
+      "pairWith": "Pair with mode:",
+      "pairNone": "(no pairing)",
+      "delete": "Delete workflow",
+      "empty": "No workflows yet. Click +New to author your first."
+    },
+    "painpoint": {
+      "title": "Pain-points captured from your reactions",
+      "intro": "Every agent turn you flagged with 👎 lands here. Convert them into rules so the agent learns from past misses.",
+      "empty": "No 👎 reactions yet. The agent has been on its best behavior.",
+      "deriveCta": "Derive rule",
+      "flagged": "Flagged · {{at}}",
+      "deriveName": "Avoid: {{preview}}",
+      "deriveBody": "The user flagged a previous answer with 👎. Avoid the same pattern next time. Original excerpt:\n\n> {{preview}}"
+    },
+    "marketplace": {
+      "intro": "Profiles other developers shipped. Importing copies their rules, modes, and workflows into your project — you can edit afterwards.",
+      "searchPlaceholder": "Search profiles or authors…",
+      "domainAll": "all",
+      "domainFrontend": "frontend",
+      "domainBackend": "backend",
+      "domainMl": "ml",
+      "domainDevops": "devops",
+      "domainMobile": "mobile",
+      "install": "Import",
+      "installed": "Installed",
+      "fabRuleName": "{{mp}} · rule {{n}}",
+      "fabRuleBody": "Imported from {{mp}} by {{author}}. Edit to fit your repo.",
+      "fabModeName": "{{mp}} · mode {{n}}",
+      "fabModeBlurb": "Imported preset from {{mp}}",
+      "fabModePrompt": "Imported mode from {{mp}}. Replace this prompt with your own.",
+      "fabWfName": "{{mp}} · workflow {{n}}",
+      "fabWfBlurb": "Imported playbook from {{mp}}",
+      "fabWfStep1": "Read the affected scope before any change.",
+      "fabWfStep2": "Apply the imported pattern; deviate only when justified.",
+      "fabWfStep3": "Verify with the project's own tests."
+    },
+    "openButton": "Customise agent"
   },
   "palette": {
     "title": "Command palette",
@@ -270,6 +381,17 @@
     "noData": "No data yet",
     "rate": "{{ok}}/{{total}}"
   },
+  "costValue": {
+    "label": "Cost vs Value",
+    "summary": "{{usd}} spent · {{lines}} lines kept",
+    "ratio": "{{cents}}¢/line",
+    "verdictEarning": "Earning · {{cents}}¢/line",
+    "verdictExpensive": "Expensive · {{cents}}¢/line",
+    "verdictIdle": "Idle · no diffs yet",
+    "legendCost": "cost",
+    "legendLines": "lines",
+    "tooltip": "Per-turn cost vs accepted diff lines (last 12 turns)"
+  },
   "tps": {
     "label": "tok/s",
     "tooltip": "Output tokens per second — live during streaming"
@@ -288,6 +410,18 @@
     "high": "High ({{pct}}%)",
     "mid": "Mid ({{pct}}%)",
     "low": "Low — review recommended ({{pct}}%)"
+  },
+  "riskTier": {
+    "safe": "Safe",
+    "review": "Review",
+    "blast": "Blast radius",
+    "tooltip": "Risk assessment based on this turn's surface area",
+    "reason": {
+      "publicSurface": "public API surface",
+      "largeChange": "large diff ({{n}} lines)",
+      "manyFiles": "{{n}} files touched",
+      "ranCommand": "executed shell command"
+    }
   },
   "latencyBaseline": {
     "label": "vs baseline",
@@ -422,6 +556,18 @@
   "header": {
     "openPr": "Open PR"
   },
+  "replayExport": {
+    "button": "Export",
+    "title": "Replay this task",
+    "tabMarkdown": "Markdown transcript",
+    "tabScript": "claude CLI script",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "downloadMd": "Download .md",
+    "downloadSh": "Download .sh",
+    "closeHint": "Esc to close",
+    "bytes": "{{n}} bytes"
+  },
   "snapshot": {
     "title": "Working snapshot",
     "subtitle": "What the agent has done so far",
@@ -473,6 +619,16 @@
     "symbolsHeader": "Symbols",
     "empty": "No matches",
     "hint": "↑↓ move · ↵ pick · esc close"
+  },
+  "pins": {
+    "header": "Pinned context",
+    "addFile": "File",
+    "addSymbol": "Symbol",
+    "addTurn": "Turn",
+    "empty": "Nothing pinned yet",
+    "unpin": "Remove",
+    "chipStripLabel": "Riding along: {{n}}",
+    "tooltip": "These are auto-attached to every prompt in this task"
   },
   "scroll": {
     "newMessages": "Jump to latest"

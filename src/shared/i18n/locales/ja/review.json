@@ -50,5 +50,100 @@
       "duration": "所要時間",
       "action": "アクション"
     }
+  },
+  "queue": {
+    "noMatches": "一致するPRはありません。",
+    "project": "プロジェクト",
+    "newQueryAria": "新しいクエリを追加",
+    "newQueryTitle": "新しいクエリを追加",
+    "searchPlaceholder": "検索...",
+    "clearSearchAria": "検索をクリア",
+    "filterAria": "フィルタ",
+    "scope": {
+      "all": "すべて",
+      "mine": "自分",
+      "archived": "アーカイブ"
+    },
+    "group": {
+      "expandAria": "{{name}} グループを展開",
+      "collapseAria": "{{name}} グループを折りたたむ",
+      "pinAria": "グループをピン留め",
+      "unpinAria": "グループのピンを外す",
+      "pinTitle": "ピン留め",
+      "unpinTitle": "ピンを外す"
+    },
+    "row": {
+      "dragToReorder": "ドラッグして並び替え",
+      "pinAria": "PRをピン留め",
+      "unpinAria": "PRのピンを外す",
+      "pinTitle": "ピン留め",
+      "unpinTitle": "ピンを外す"
+    },
+    "state": {
+      "needsReReview": "再レビュー必要",
+      "myTurn": "自分の番",
+      "approved": "承認済み",
+      "changesRequested": "変更リクエスト済み",
+      "readyToMerge": "マージ待ち",
+      "blockedAuthor": "作成者待ち",
+      "teamTurn": "チーム待ち"
+    }
+  },
+  "bgJobs": {
+    "summary": "進行中のバックグラウンドジョブ {{count}}件",
+    "empty": "進行中のジョブはありません。",
+    "header": "バックグラウンドジョブ",
+    "runningCount": "{{count}}件 進行中",
+    "failedCount": "{{count}} 失敗"
+  },
+  "savedViews": {
+    "aria": "保存されたビュー",
+    "view": {
+      "myTurn": "自分の番",
+      "slaRisk": "SLAリスク",
+      "blockers": "ブロッカーあり",
+      "risky": "高リスク"
+    },
+    "applyTitle": "{{label}} を適用",
+    "clearTitle": "{{label}} を解除",
+    "removeAria": "{{label}} を削除",
+    "removeTitle": "保存されたビューを削除",
+    "saveCurrentTitle": "現在の検索をビューとして保存",
+    "saveLabel": "保存",
+    "namePlaceholder": "名前…",
+    "saveConfirm": "保存"
+  },
+  "sla": {
+    "header": "SLA超過",
+    "summary": "{{count}}件 · 7日+",
+    "stalled": "{{days}}日 停滞",
+    "waiting": "@{{login}} 待ち",
+    "waitingMore": "@{{login}}+{{extra}} 待ち",
+    "pingCooldownTitle": "直近30分以内にping送信済み (cooldown)",
+    "pingTitle": "待機中のレビュワーへping (PRコメントとして投稿)",
+    "pingSent": "送信済み",
+    "pingWaiting": "待機",
+    "pingNoop": "なし",
+    "pingLabel": "ping",
+    "dismissAria": "この通知を無視"
+  },
+  "share": {
+    "copiedTitle": "クリップボードにコピーしました",
+    "shareTitle": "このビューの共有リンクをコピー",
+    "copiedLabel": "コピー済み",
+    "shareLabel": "共有"
+  },
+  "outliers": {
+    "empty": "類似のoutlier PRはありません。",
+    "header": "類似のoutlier",
+    "count": "{{count}}件"
+  },
+  "authorVelocity": {
+    "zVsSelf": "{{sign}}{{value}}σ vs 本人",
+    "tooltip": "@{{author}} · 中央値 {{median}} · p95 {{p95}} · 平均 {{loc}} LOC (n={{count}})"
+  },
+  "palette": {
+    "pinTitle": "#{{number}} をピン留め (⌘⇧P)",
+    "unpinTitle": "#{{number}} のピンを外す (⌘⇧P)"
   }
 }

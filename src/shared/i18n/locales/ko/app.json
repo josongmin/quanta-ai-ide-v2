@@ -1,7 +1,6 @@
 {
   "tab": {
     "intelligence": "인텔리전스",
-    "investigate": "조사",
     "coding": "코딩",
     "agents": "에이전트",
     "reviews": "리뷰",
@@ -116,6 +115,32 @@
     "override": {
       "title": "어드미션 규칙 오버라이드",
       "notice": "규칙 우회는 감사 로그에 남습니다. 누가, 언제, 왜 했는지 누구나 확인할 수 있습니다."
+    }
+  },
+  "palette": {
+    "title": "컨트롤 패널",
+    "placeholder": "명령, 페이지, 액션 검색…",
+    "go": "{{label}}로 이동",
+    "section": {
+      "recent": "최근",
+      "navigate": "이동",
+      "action": "액션"
+    },
+    "empty": "결과 없음",
+    "footer": {
+      "navigate": "↑↓ 이동",
+      "open": "Enter 실행",
+      "close": "Esc 닫기"
+    },
+    "trigger": "컨트롤 패널 열기 (⌘K)",
+    "openShort": "⌘K",
+    "action": {
+      "themeLight": "테마 → 라이트 모드",
+      "themeDark": "테마 → 다크 모드",
+      "resetFilters": "필터 초기화",
+      "tokens": "토큰 사용량 보기",
+      "activity": "AI 활동 보기",
+      "help": "단축키 도움말"
     }
   }
 }

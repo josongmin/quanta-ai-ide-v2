@@ -2,6 +2,18 @@
   "header": {
     "openPr": "PR 열기"
   },
+  "replayExport": {
+    "button": "내보내기",
+    "title": "이 태스크 리플레이",
+    "tabMarkdown": "Markdown 트랜스크립트",
+    "tabScript": "claude CLI 스크립트",
+    "copy": "복사",
+    "copied": "복사됨",
+    "downloadMd": ".md 다운로드",
+    "downloadSh": ".sh 다운로드",
+    "closeHint": "Esc로 닫기",
+    "bytes": "{{n}} 바이트"
+  },
   "snapshot": {
     "title": "작업 스냅샷",
     "subtitle": "에이전트가 지금까지 한 일",
@@ -53,6 +65,16 @@
     "symbolsHeader": "심볼",
     "empty": "일치 항목 없음",
     "hint": "↑↓ 이동 · ↵ 선택 · esc 닫기"
+  },
+  "pins": {
+    "header": "고정된 컨텍스트",
+    "addFile": "파일",
+    "addSymbol": "심볼",
+    "addTurn": "턴",
+    "empty": "아직 고정된 항목이 없습니다",
+    "unpin": "제거",
+    "chipStripLabel": "함께 첨부: {{n}}",
+    "tooltip": "이 작업의 모든 프롬프트에 자동으로 첨부됩니다"
   },
   "scroll": {
     "newMessages": "새 메시지 보기"
@@ -188,7 +210,118 @@
     "copyMd": "마크다운 복사",
     "share": "공유",
     "export": "내보내기",
-    "openInNewTask": "새 태스크에 복사"
+    "openInNewTask": "새 태스크에 복사",
+    "saveAsRule": "이 편집 패턴을 룰로 저장"
+  },
+  "agentProfile": {
+    "title": "에이전트 프로파일",
+    "subtitle": "이 에이전트를 커스터마이즈",
+    "titleFor": "{{project}} 의 에이전트",
+    "savesAs": ".agent/profile.yaml 로 커밋됨",
+    "close": "닫기",
+    "tabs": {
+      "modes": "모드",
+      "rules": "룰",
+      "workflows": "워크플로",
+      "painpoints": "페인포인트",
+      "marketplace": "마켓플레이스"
+    },
+    "modeChip": {
+      "tooltip": "모드: {{mode}} · 신뢰도 {{trust}}/5"
+    },
+    "modes": {
+      "intro": "각 모드는 시스템 프롬프트, 허용 도구, 기본 모델, 신뢰 등급을 묶습니다. 빌트인 모드는 복제만 가능합니다.",
+      "active": "활성",
+      "system": "빌트인",
+      "use": "사용",
+      "duplicate": "복제",
+      "delete": "삭제",
+      "trust": {
+        "label": "신뢰 다이얼",
+        "level1": "1 · 읽기만",
+        "level2": "2 · 확인 후 편집",
+        "level3": "3 · 자동 편집",
+        "level4": "4 · 자동 편집+실행",
+        "level5": "5 · 완전 자율",
+        "desc1": "diff 만 제안. 작업 트리에는 절대 쓰지 않음. 페어리뷰에 적합.",
+        "desc2": "한 파일씩 쓰고 매번 확인. 낯선 레포 기본값.",
+        "desc3": "자유롭게 작성. 스크립트 실행이나 파괴적 명령은 확인.",
+        "desc4": "쓰기와 실행 자유. push/merge 직전에만 정지.",
+        "desc5": "CI 통과 시 push, 댓글, merge 까지. 스크래치 브랜치에서만 사용."
+      },
+      "tools": {
+        "label": "허용 도구"
+      },
+      "prompt": {
+        "label": "시스템 프롬프트"
+      }
+    },
+    "rules": {
+      "add": "새 룰",
+      "newName": "이름 없는 룰",
+      "searchPlaceholder": "이름, 본문, glob 으로 검색…",
+      "filterAll": "전체",
+      "sourceAuthored": "직접 작성",
+      "sourcePainPoint": "페인포인트 출처",
+      "sourceDiffPattern": "diff 출처",
+      "sourceMarketplace": "마켓 출처",
+      "empty": "필터에 맞는 룰이 없습니다.",
+      "alwaysOn": "항상 적용",
+      "enable": "활성화",
+      "disable": "비활성화",
+      "delete": "삭제",
+      "body": "본문 (마크다운)",
+      "bodyPlaceholder": "에이전트가 무엇을 하거나 절대 하지 말아야 하나요? *왜* 그래야 하는지 함께 적어두면 일반화됩니다.",
+      "globs": "Glob (쉼표 구분)",
+      "scope": "범위",
+      "derivedFrom": "Turn {{id}} 에서 파생됨"
+    },
+    "workflows": {
+      "intro": "슬래시 플레이북. 컴포저에 /<slug> 를 입력하면 단계가 순서대로 실행됩니다. 모드와 페어링하면 신뢰 다이얼이 자동 잠깁니다.",
+      "add": "새 워크플로",
+      "newName": "이름 없는 워크플로",
+      "blurbPlaceholder": "슬래시 명령어 아래 1줄 설명",
+      "steps": "단계",
+      "removeStep": "단계 제거",
+      "addStep": "단계 추가",
+      "firstStepPlaceholder": "에이전트가 가장 먼저 할 일…",
+      "pairWith": "페어링 모드:",
+      "pairNone": "(페어링 없음)",
+      "delete": "워크플로 삭제",
+      "empty": "아직 워크플로가 없습니다. + 새로 만들기로 첫 번째를 작성하세요."
+    },
+    "painpoint": {
+      "title": "리액션에서 수집된 페인포인트",
+      "intro": "👎 를 누른 모든 에이전트 응답이 여기 모입니다. 룰로 변환하면 같은 실수를 피하도록 학습합니다.",
+      "empty": "👎 리액션이 아직 없습니다. 에이전트가 잘 하고 있네요.",
+      "deriveCta": "룰 만들기",
+      "flagged": "표시됨 · {{at}}",
+      "deriveName": "회피: {{preview}}",
+      "deriveBody": "사용자가 이전 답변에 👎 를 표시했습니다. 다음에는 같은 패턴을 피하세요. 원본 발췌:\n\n> {{preview}}"
+    },
+    "marketplace": {
+      "intro": "다른 개발자들이 공개한 프로파일입니다. import 하면 룰/모드/워크플로가 프로젝트로 복사됩니다 — 이후 수정 가능.",
+      "searchPlaceholder": "프로파일 또는 작성자 검색…",
+      "domainAll": "전체",
+      "domainFrontend": "프론트엔드",
+      "domainBackend": "백엔드",
+      "domainMl": "ML",
+      "domainDevops": "데브옵스",
+      "domainMobile": "모바일",
+      "install": "Import",
+      "installed": "설치됨",
+      "fabRuleName": "{{mp}} · 룰 {{n}}",
+      "fabRuleBody": "{{author}} 의 {{mp}} 에서 import 됨. 레포에 맞게 수정하세요.",
+      "fabModeName": "{{mp}} · 모드 {{n}}",
+      "fabModeBlurb": "{{mp}} 의 프리셋",
+      "fabModePrompt": "{{mp}} 에서 import 한 모드입니다. 프롬프트를 수정하세요.",
+      "fabWfName": "{{mp}} · 워크플로 {{n}}",
+      "fabWfBlurb": "{{mp}} 의 플레이북",
+      "fabWfStep1": "변경 전에 영향 범위를 먼저 읽습니다.",
+      "fabWfStep2": "import 한 패턴을 적용. 벗어날 때는 이유를 남깁니다.",
+      "fabWfStep3": "프로젝트의 자체 테스트로 검증합니다."
+    },
+    "openButton": "에이전트 커스터마이즈"
   },
   "palette": {
     "title": "명령 팔레트",
@@ -341,6 +474,17 @@
     "noData": "아직 데이터 없음",
     "rate": "{{ok}}/{{total}}"
   },
+  "costValue": {
+    "label": "비용 대비 효율",
+    "summary": "{{usd}} 사용 · {{lines}}줄 반영됩니다",
+    "ratio": "{{cents}}¢/줄",
+    "verdictEarning": "효율적 · {{cents}}¢/줄",
+    "verdictExpensive": "비쌉니다 · {{cents}}¢/줄",
+    "verdictIdle": "유휴 · 반영된 diff 없음",
+    "legendCost": "비용",
+    "legendLines": "줄",
+    "tooltip": "턴별 비용 대비 반영된 diff 라인 수 (최근 12턴)"
+  },
   "tps": {
     "label": "tok/s",
     "tooltip": "초당 출력 토큰 — 스트리밍 동안 실시간"
@@ -359,6 +503,18 @@
     "high": "높음 ({{pct}}%)",
     "mid": "보통 ({{pct}}%)",
     "low": "낮음 — 검토 권장 ({{pct}}%)"
+  },
+  "riskTier": {
+    "safe": "안전",
+    "review": "검토",
+    "blast": "영향 범위 큼",
+    "tooltip": "이번 턴이 건드린 표면적 기반 리스크 평가",
+    "reason": {
+      "publicSurface": "공개 API 표면",
+      "largeChange": "큰 diff ({{n}}줄)",
+      "manyFiles": "{{n}}개 파일 수정",
+      "ranCommand": "쉘 명령 실행"
+    }
   },
   "latencyBaseline": {
     "label": "기준 대비",

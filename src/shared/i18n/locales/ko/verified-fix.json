@@ -97,6 +97,7 @@
     "header": "후보 픽스 · 최대 3개 중 {{count}}개",
     "subtitle": "드래프트할 항목을 선택하세요",
     "apiBreak": "API 변경",
+    "recommended": "추천",
     "stat": {
       "lines": "라인",
       "files": "파일",

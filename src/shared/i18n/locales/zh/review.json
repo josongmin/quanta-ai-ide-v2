@@ -50,5 +50,100 @@
       "duration": "时长",
       "action": "操作"
     }
+  },
+  "queue": {
+    "noMatches": "没有匹配的 PR。",
+    "project": "项目",
+    "newQueryAria": "添加新查询",
+    "newQueryTitle": "添加新查询",
+    "searchPlaceholder": "搜索...",
+    "clearSearchAria": "清除搜索词",
+    "filterAria": "筛选",
+    "scope": {
+      "all": "全部",
+      "mine": "我的",
+      "archived": "归档"
+    },
+    "group": {
+      "expandAria": "展开 {{name}} 分组",
+      "collapseAria": "折叠 {{name}} 分组",
+      "pinAria": "固定分组",
+      "unpinAria": "取消固定分组",
+      "pinTitle": "固定",
+      "unpinTitle": "取消固定"
+    },
+    "row": {
+      "dragToReorder": "拖动以重新排序",
+      "pinAria": "固定 PR",
+      "unpinAria": "取消固定 PR",
+      "pinTitle": "固定",
+      "unpinTitle": "取消固定"
+    },
+    "state": {
+      "needsReReview": "需要重新审阅",
+      "myTurn": "轮到我",
+      "approved": "已批准",
+      "changesRequested": "已请求变更",
+      "readyToMerge": "等待合并",
+      "blockedAuthor": "等待作者",
+      "teamTurn": "等待团队"
+    }
+  },
+  "bgJobs": {
+    "summary": "进行中的后台任务 {{count}} 个",
+    "empty": "没有进行中的任务。",
+    "header": "后台任务",
+    "runningCount": "{{count}} 个进行中",
+    "failedCount": "{{count}} 失败"
+  },
+  "savedViews": {
+    "aria": "已保存的视图",
+    "view": {
+      "myTurn": "轮到我",
+      "slaRisk": "SLA 风险",
+      "blockers": "存在阻塞项",
+      "risky": "高风险"
+    },
+    "applyTitle": "应用 {{label}}",
+    "clearTitle": "清除 {{label}}",
+    "removeAria": "删除 {{label}}",
+    "removeTitle": "删除已保存的视图",
+    "saveCurrentTitle": "将当前搜索保存为视图",
+    "saveLabel": "保存",
+    "namePlaceholder": "名称…",
+    "saveConfirm": "保存"
+  },
+  "sla": {
+    "header": "SLA 超时",
+    "summary": "{{count}} 个 · 7天+",
+    "stalled": "{{days}}d 停滞",
+    "waiting": "@{{login}} 等待",
+    "waitingMore": "@{{login}}+{{extra}} 等待",
+    "pingCooldownTitle": "近 30 分钟内已发送 ping (冷却中)",
+    "pingTitle": "向等待中的审阅者发送 ping (作为 PR 评论)",
+    "pingSent": "已发送",
+    "pingWaiting": "等待",
+    "pingNoop": "无",
+    "pingLabel": "ping",
+    "dismissAria": "忽略此提醒"
+  },
+  "share": {
+    "copiedTitle": "已复制到剪贴板",
+    "shareTitle": "复制此视图的分享链接",
+    "copiedLabel": "已复制",
+    "shareLabel": "分享"
+  },
+  "outliers": {
+    "empty": "没有类似的 outlier PR。",
+    "header": "类似 outlier",
+    "count": "{{count}} 个"
+  },
+  "authorVelocity": {
+    "zVsSelf": "{{sign}}{{value}}σ vs 本人",
+    "tooltip": "@{{author}} · 中位数 {{median}} · p95 {{p95}} · 平均 {{loc}} LOC (n={{count}})"
+  },
+  "palette": {
+    "pinTitle": "固定 #{{number}} (⌘⇧P)",
+    "unpinTitle": "取消固定 #{{number}} (⌘⇧P)"
   }
 }
