@@ -130,20 +130,19 @@ export default function AppShell({ children }: { children: ReactNode }) {
           <ChevronDown className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         </button>
 
-        {/* Chrome-style workspace tab strip. Owns its own navigation
-            (clicking a tab pushes the kind's canonical route), so the
-            existing router/<Outlet> still renders the active content —
-            no WorkspaceTabsHost / route refactor required here. */}
-        <div
-          data-tauri-drag-region="false"
-          className="flex min-w-0 flex-1 items-stretch"
-        >
-          <WorkspaceTabsStrip />
+        {/* Chrome-style workspace tab strip. It IS the flexible middle
+            region (single flex-1 — must not coexist with another flex-1
+            drag handle, or the two split the bar and the strip gets
+            half). Owns its own navigation (clicking a tab pushes the
+            kind's canonical route), so the existing router/<Outlet>
+            still renders the active content — no WorkspaceTabsHost /
+            route refactor needed. The strip's own empty track area
+            stays draggable for window moves. */}
+        <div data-tauri-drag-region="false" className="min-w-0 flex-1">
+          <div className="flex min-w-0 h-full items-center">
+            <WorkspaceTabsStrip />
+          </div>
         </div>
-
-        {/* Flexible drag handle: dominates the empty middle area so users can
-            grab anywhere between the nav and the right-side controls. */}
-        <div data-tauri-drag-region className="flex-1" />
 
         <div data-tauri-drag-region="false" className="flex items-center gap-1 px-3">
           <IconButton
