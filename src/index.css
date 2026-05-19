@@ -31,7 +31,7 @@
    automatically. The alpha vars stay separate so the glassmorphism feel
    (low alpha + backdrop-blur) stays intact regardless of tint colour. */
 .glass-dark {
-  background-color: rgba(var(--glass-tint-dark, 255, 255, 255), 0.5); /* fixed: var(--glass-alpha-dark) gets clobbered to ~0.01 by GlassCard tone=inner / stale tokens, washing out the theme tint */
+  background-color: var(--bg-overlay); /* match the GNB header chrome — same token, follows theme/preset */
   border-color: rgba(var(--glass-tint-dark, 255, 255, 255), var(--glass-border-dark));
   border-width: var(--glass-border-width, 1px);
   backdrop-filter: blur(var(--glass-blur)) saturate(160%);
@@ -47,7 +47,7 @@
      Fallback 255,255,255 keeps it white pre-theme-init. Legacy rgba()
      form — `rgb(R, G, B / A)` (comma triplet + slash) is invalid CSS
      and silently drops to transparent. */
-  background-color: color-mix(in srgb, rgb(var(--glass-tint-light, 255, 255, 255)) 14%, #ffffff);
+  background-color: var(--bg-overlay); /* match the GNB header chrome */
   border-color: rgba(var(--glass-tint-light, 255, 255, 255), var(--glass-border-light));
   border-width: var(--glass-border-width, 1px);
   border-radius: var(--radius);
@@ -58,7 +58,7 @@
    active theme's surface via `[data-theme]` on <html>. Lets components drop
    `isDark` prop-drilling. Defaults to dark for SSR / pre-theme-init paint. */
 .glass {
-  background-color: rgba(var(--glass-tint-dark, 255, 255, 255), 0.5); /* fixed: var(--glass-alpha-dark) gets clobbered to ~0.01 by GlassCard tone=inner / stale tokens, washing out the theme tint */
+  background-color: var(--bg-overlay); /* match the GNB header chrome — same token, follows theme/preset */
   border-color: rgba(var(--glass-tint-dark, 255, 255, 255), var(--glass-border-dark));
   border-width: var(--glass-border-width, 1px);
   backdrop-filter: blur(var(--glass-blur)) saturate(160%);
@@ -68,7 +68,7 @@
 }
 html[data-theme="light"] .glass {
   /* Light theme: opaque, theme-tinted — see `.glass-light` above. */
-  background-color: color-mix(in srgb, rgb(var(--glass-tint-light, 255, 255, 255)) 14%, #ffffff);
+  background-color: var(--bg-overlay); /* match the GNB header chrome */
   border-color: rgba(var(--glass-tint-light, 255, 255, 255), var(--glass-border-light));
   backdrop-filter: none;
   -webkit-backdrop-filter: none;

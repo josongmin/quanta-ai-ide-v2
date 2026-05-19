@@ -14,7 +14,6 @@ import {
   BufferGeometry,
   Color,
   DoubleSide,
-  GridHelper,
   Line,
   LineBasicMaterial,
   LineSegments,
@@ -27,6 +26,7 @@ import {
   Raycaster,
   RingGeometry,
   Scene,
+  ShaderMaterial,
   SphereGeometry,
   TorusGeometry,
   Vector2,
@@ -90,7 +90,8 @@ export function createDotFieldMode(): ViewMode {
   let cachedHeatKey: string | null = null;
   let cachedScores: Float32Array = new Float32Array(0);
   let folderZones: { div: HTMLDivElement; xStart: number; zStart: number; line: Line }[] = [];
-  let gridHelper: GridHelper | null = null;
+  let gridHelper: Mesh | null = null;
+  let gridMat: ShaderMaterial | null = null;
   let lineObjects: Line[] = [];
   // ── Blast radius preview state ──
   // Cached so we recompute only when (seedId, repo) changes; the animate
@@ -384,15 +385,9 @@ export function createDotFieldMode(): ViewMode {
 
   function applyThemeStatics(pal: Palette, theme: 'dark' | 'light') {
     scene.background = new Color(pal.bg);
-    if (gridHelper) {
-      const mat = gridHelper.material as LineBasicMaterial | LineBasicMaterial[];
-      const targetOpacity = theme === 'light' ? 0.5 : 1;
-      const set = (m: LineBasicMaterial) => {
-        m.color.setHex(pal.grid);
-        m.transparent = true;
-        m.opacity = targetOpacity;
-      };
-      Array.isArray(mat) ? mat.forEach(set) : set(mat);
+    if (gridMat) {
+      (gridMat.uniforms.uColor.value as Color).setHex(pal.grid);
+      gridMat.uniforms.uOpacity.value = theme === 'light' ? 0.5 : 1;
     }
     // CSS-class default in index.css is dark-mode optimized (#fff text +
     // black shadow). Override per-theme so labels stay legible on both bgs.
@@ -1273,20 +1268,62 @@ export function createDotFieldMode(): ViewMode {
 
       raycaster = new Raycaster();
 
-      // Oversize the grid so it fills the canvas no matter how the user pans
-      // or how wide the viewport is. Cell size stays the same so spacing is
-      // identical to the data area.
+      // Single shader-plane grid. A line-geometry GridHelper draws thousands
+      // of 1px GL lines that collapse to sub-pixel under perspective: the
+      // alpha-blended overlaps pile up and the grid "breathes" dark/light as
+      // you zoom/pan (moiré). Instead we draw ONE quad and compute line
+      // coverage analytically per fragment from world XZ using screen-space
+      // derivatives (fwidth) — constant ~1px line at any zoom, single
+      // coverage value per pixel, so no overdraw and no moiré. A camera-
+      // distance fade keeps the far horizon from turning into busy mush.
       const GRID_OVERSCAN = 4;
-      gridHelper = new GridHelper(
-        GRID_COUNT * CELL_SIZE * GRID_OVERSCAN,
-        GRID_COUNT * GRID_OVERSCAN,
-        pal.grid,
-        pal.grid,
-      );
+      const GRID_EXTENT = GRID_COUNT * CELL_SIZE * GRID_OVERSCAN;
+      gridMat = new ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        side: DoubleSide,
+        extensions: { derivatives: true },
+        uniforms: {
+          uColor: { value: new Color(pal.grid) },
+          uOpacity: { value: c.getTheme() === 'light' ? 0.5 : 1 },
+          uCell: { value: CELL_SIZE },
+          uFadeNear: { value: 1100 },
+          uFadeFar: { value: 2000 },
+        },
+        vertexShader: /* glsl */ `
+          varying vec3 vWorld;
+          void main() {
+            vec4 wp = modelMatrix * vec4(position, 1.0);
+            vWorld = wp.xyz;
+            gl_Position = projectionMatrix * viewMatrix * wp;
+          }
+        `,
+        fragmentShader: /* glsl */ `
+          precision highp float;
+          uniform vec3 uColor;
+          uniform float uOpacity;
+          uniform float uCell;
+          uniform float uFadeNear;
+          uniform float uFadeFar;
+          varying vec3 vWorld;
+          void main() {
+            vec2 c = vWorld.xz / uCell;
+            vec2 g = abs(fract(c - 0.5) - 0.5);
+            vec2 aa = g / fwidth(c);
+            float line = 1.0 - min(min(aa.x, aa.y), 1.0);
+            if (line <= 0.0) discard;
+            float d = distance(cameraPosition, vWorld);
+            float fade = 1.0 - smoothstep(uFadeNear, uFadeFar, d);
+            float a = line * uOpacity * fade;
+            if (a <= 0.001) discard;
+            gl_FragColor = vec4(uColor, a);
+          }
+        `,
+      });
+      const gridGeo = new PlaneGeometry(GRID_EXTENT, GRID_EXTENT, 1, 1);
+      gridHelper = new Mesh(gridGeo, gridMat);
+      gridHelper.rotation.x = -Math.PI / 2;
       gridHelper.position.y = -0.05;
-      const gm = gridHelper.material as Material;
-      gm.transparent = true;
-      gm.opacity = c.getTheme() === 'light' ? 0.5 : 1;
       scene.add(gridHelper);
 
       // folders
@@ -1440,7 +1477,7 @@ export function createDotFieldMode(): ViewMode {
       if (renderer.domElement.parentNode === ctx?.mountEl) {
         ctx.mountEl.removeChild(renderer.domElement);
       }
-      fileMeshes = []; fileLabels = []; folderZones = []; gridHelper = null; lastTheme = null;
+      fileMeshes = []; fileLabels = []; folderZones = []; gridHelper = null; gridMat = null; lastTheme = null;
       ctx = null;
     },
   };

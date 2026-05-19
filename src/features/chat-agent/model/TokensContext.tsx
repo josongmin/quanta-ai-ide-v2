@@ -323,28 +323,6 @@ function applySemanticTheme(theme: Theme, tokens: SemanticTokens) {
   }
 }
 
-// Parse a hex / rgb() colour into the "r, g, b" triplet form the glass
-// CSS vars expect. Returns null for anything unparseable so callers can
-// fall back to the default white tint.
-function colorToRgbTriplet(input: string): string | null {
-  const value = input.trim();
-  if (value.startsWith('#')) {
-    let hex = value.slice(1);
-    if (hex.length === 3) hex = hex.split('').map((c) => c + c).join('');
-    if (hex.length !== 6) return null;
-    const r = parseInt(hex.slice(0, 2), 16);
-    const g = parseInt(hex.slice(2, 4), 16);
-    const b = parseInt(hex.slice(4, 6), 16);
-    if ([r, g, b].some(Number.isNaN)) return null;
-    return `${r}, ${g}, ${b}`;
-  }
-  const rgbMatch = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/i.exec(value);
-  if (rgbMatch) {
-    return `${Math.round(Number(rgbMatch[1]))}, ${Math.round(Number(rgbMatch[2]))}, ${Math.round(Number(rgbMatch[3]))}`;
-  }
-  return null;
-}
-
 // Emit the glass tint triplets for both themes whenever tokens change.
 // `--glass-tint-dark` / `--glass-tint-light` feed the chrome (FilterBar,
 // InspectPanel, SearchBar, all GlassCard surfaces) so applying a palette
@@ -367,14 +345,14 @@ function applyGlassTints(allSemantic: { dark: SemanticTokens; light: SemanticTok
   // visibly characterises a palette (every theme's bgSurface is a
   // near-identical near-black / near-white). Light blends it into white
   // via color-mix in CSS so the panel stays opaque + readable.
-  const darkSource = allSemantic.dark.fgAccent ?? allSemantic.dark.bgSurface;
-  const lightSource = allSemantic.light.fgAccent ?? allSemantic.light.bgSurface;
-  const darkTriplet = colorToRgbTriplet(darkSource);
-  const lightTriplet = colorToRgbTriplet(lightSource);
-  if (darkTriplet) root.style.setProperty('--glass-tint-dark', darkTriplet);
-  else root.style.removeProperty('--glass-tint-dark');
-  if (lightTriplet) root.style.setProperty('--glass-tint-light', lightTriplet);
-  else root.style.removeProperty('--glass-tint-light');
+  // Tint is pinned to white (memory rule): panels now take their fill
+  // straight from --bg-overlay (the GNB chrome token) so they read as
+  // one bright/dark layer WITH the header and follow the theme through
+  // that token. --glass-tint-* only feeds the subtle GlassCard border;
+  // keep it neutral so borders never pick up an accent hue.
+  void allSemantic;
+  root.style.removeProperty('--glass-tint-dark');
+  root.style.removeProperty('--glass-tint-light');
 }
 
 function applyGlobalTokens(
