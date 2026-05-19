@@ -31,7 +31,7 @@
    automatically. The alpha vars stay separate so the glassmorphism feel
    (low alpha + backdrop-blur) stays intact regardless of tint colour. */
 .glass-dark {
-  background-color: rgba(var(--glass-tint-dark, 255, 255, 255), var(--glass-alpha-dark));
+  background-color: rgba(var(--glass-tint-dark, 255, 255, 255), 0.5); /* fixed: var(--glass-alpha-dark) gets clobbered to ~0.01 by GlassCard tone=inner / stale tokens, washing out the theme tint */
   border-color: rgba(var(--glass-tint-dark, 255, 255, 255), var(--glass-border-dark));
   border-width: var(--glass-border-width, 1px);
   backdrop-filter: blur(var(--glass-blur)) saturate(160%);
@@ -58,7 +58,7 @@
    active theme's surface via `[data-theme]` on <html>. Lets components drop
    `isDark` prop-drilling. Defaults to dark for SSR / pre-theme-init paint. */
 .glass {
-  background-color: rgba(var(--glass-tint-dark, 255, 255, 255), var(--glass-alpha-dark));
+  background-color: rgba(var(--glass-tint-dark, 255, 255, 255), 0.5); /* fixed: var(--glass-alpha-dark) gets clobbered to ~0.01 by GlassCard tone=inner / stale tokens, washing out the theme tint */
   border-color: rgba(var(--glass-tint-dark, 255, 255, 255), var(--glass-border-dark));
   border-width: var(--glass-border-width, 1px);
   backdrop-filter: blur(var(--glass-blur)) saturate(160%);
