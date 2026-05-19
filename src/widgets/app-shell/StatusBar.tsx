@@ -1,8 +1,9 @@
 import { useMemo, type CSSProperties } from 'react';
-import { Database, GitBranch, FileCheck2, Coins, Bot } from 'lucide-react';
+import { Database, GitBranch, FileCheck2, Coins, Bot, ListChecks } from 'lucide-react';
 import { useFilterRepo } from '@entities/filter-state';
 import { useFixPipelineStore } from '@widgets/fix-pipeline-stage';
 import { useActivityStore } from '@features/ai-activity';
+import { useJobs } from '@features/investigation';
 
 // Fixed-height bottom chrome. Surfaces the long-running, cross-stage signals
 // the operator needs to keep in their head while flipping between stages:
@@ -298,6 +299,37 @@ function AgentsCell() {
   );
 }
 
+// ─── Investigation jobs ───────────────────────────────────────────────
+// Clickable cell — toggles the JobsTray popup (anchored just above the
+// bar). Shows how many investigation jobs are still in flight so the
+// operator knows there's work to look at without the tray floating.
+function JobsCell() {
+  const { jobs, open, setOpen } = useJobs();
+  const active = jobs.filter(
+    (j) => j.status !== 'completed' && j.status !== 'cancelled' && j.status !== 'failed',
+  ).length;
+
+  return (
+    <button
+      type="button"
+      onClick={() => { setOpen(!open); }}
+      title={`Investigation jobs — ${active} active${open ? ' (open)' : ''}`}
+      aria-pressed={open}
+      style={{
+        ...cellStyle,
+        background: open ? 'var(--bg-hover)' : 'none',
+        border: 'none',
+        cursor: 'pointer',
+      }}
+      className="hover:[background:var(--bg-hover)]"
+    >
+      <ListChecks size={11} aria-hidden="true" style={subtleIconStyle} />
+      <span style={labelStyle}>Jobs</span>
+      <span style={valueStyle}>{active > 0 ? active : 'idle'}</span>
+    </button>
+  );
+}
+
 // ─── Cost telemetry ───────────────────────────────────────────────────
 // The unit-economics signal: cycles burned and cumulative USD across all
 // candidates this session. Hidden when there's nothing to show.
@@ -438,6 +470,8 @@ export default function StatusBar() {
         <div data-tauri-drag-region className="flex-1" />
 
         <div data-tauri-drag-region="false" className="flex items-stretch min-w-0">
+          <JobsCell />
+          <span style={dividerStyle} aria-hidden="true" />
           <AgentsCell />
           <PipelineTelemetryGroup />
         </div>

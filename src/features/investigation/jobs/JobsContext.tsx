@@ -20,6 +20,10 @@ type Ctx = {
   enqueue: (kind: JobKind, target: InvestigationTarget, label?: string) => string;
   cancel: (id: string) => void;
   clearCompleted: () => void;
+  // Tray UI open state. Driven by the status-bar Jobs button — the tray
+  // no longer floats unconditionally; it pops up from the bar on demand.
+  open: boolean;
+  setOpen: (v: boolean) => void;
 };
 
 const JobsCtx = createContext<Ctx | null>(null);
@@ -63,6 +67,8 @@ const KIND_TIMING: Record<JobKind, { stepMs: number; progressDelta: number; queu
 
 export function JobsProvider({ children }: { children: ReactNode }) {
   const [jobs, setJobs] = useState<Job[]>(FIXTURE_JOBS);
+  // Closed by default — surfaced via the status-bar Jobs button.
+  const [open, setOpen] = useState(false);
   const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
   const clearTimerFor = useCallback((id: string) => {
@@ -157,8 +163,8 @@ export function JobsProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<Ctx>(
-    () => ({ jobs, enqueue, cancel, clearCompleted }),
-    [jobs, enqueue, cancel, clearCompleted],
+    () => ({ jobs, enqueue, cancel, clearCompleted, open, setOpen }),
+    [jobs, enqueue, cancel, clearCompleted, open],
   );
 
   return <JobsCtx.Provider value={value}>{children}</JobsCtx.Provider>;

@@ -1,14 +1,17 @@
-import { useState, type CSSProperties } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { type CSSProperties } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { GlassCard } from '@shared/ui';
 import { useJobs } from './JobsContext';
 import { JobRow } from './JobRow';
 
+// Popup surfaced from the status-bar Jobs button. `open` lives in
+// JobsContext so the bar (in AppShell) and this tray (in the layout)
+// share one source of truth. Anchored just above the status bar so it
+// reads as "pulled up out of the bar".
 export function JobsTray() {
-  const { jobs, cancel, clearCompleted } = useJobs();
-  const [open, setOpen] = useState(true);
+  const { jobs, cancel, clearCompleted, open, setOpen } = useJobs();
 
-  if (jobs.length === 0) return null;
+  if (!open || jobs.length === 0) return null;
 
   const completedCount = jobs.filter(
     (j) => j.status === 'completed' || j.status === 'cancelled' || j.status === 'failed',
@@ -34,7 +37,10 @@ export function JobsTray() {
   };
 
   return (
-    <div className="fixed bottom-3 left-3 z-50 pointer-events-auto">
+    <div
+      className="fixed left-3 z-50 pointer-events-auto"
+      style={{ bottom: 'calc(var(--app-statusbar-h, 24px) + 8px)' }}
+    >
       <GlassCard
         className="rounded-lg overflow-hidden"
         style={{ width: 320 }}
@@ -54,44 +60,41 @@ export function JobsTray() {
           </span>
           <button
             type="button"
-            onClick={() => { setOpen((cur) => !cur); }}
-            title={open ? 'Collapse' : 'Expand'}
+            onClick={() => { setOpen(false); }}
+            title="Close"
+            aria-label="Close jobs"
             className="p-0.5 rounded hover:[background:var(--bg-hover)]"
             style={{ color: 'var(--fg-muted)' }}
           >
-            {open ? <ChevronDown size={12} aria-hidden="true" /> : <ChevronUp size={12} aria-hidden="true" />}
+            <ChevronDown size={12} aria-hidden="true" />
           </button>
         </div>
-        {open ? (
-          <>
-            <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
-              {jobs.map((job) => (
-                <JobRow key={job.id} job={job} onCancel={cancel} />
-              ))}
-            </div>
-            <div
-              className="flex items-center justify-between px-2.5 py-1.5"
-              style={footerStyle}
-            >
-              <span>
-                {completedCount} settled · {jobs.length - completedCount} active
-              </span>
-              <button
-                type="button"
-                onClick={clearCompleted}
-                disabled={completedCount === 0}
-                style={{
-                  color: completedCount === 0 ? 'var(--fg-subtle)' : 'var(--fg-default)',
-                  cursor: completedCount === 0 ? 'not-allowed' : 'pointer',
-                  opacity: completedCount === 0 ? 0.5 : 1,
-                }}
-                className="font-mono uppercase tracking-wider px-1.5 py-0.5 rounded hover:[background:var(--bg-hover)]"
-              >
-                Clear completed
-              </button>
-            </div>
-          </>
-        ) : null}
+        <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
+          {jobs.map((job) => (
+            <JobRow key={job.id} job={job} onCancel={cancel} />
+          ))}
+        </div>
+        <div
+          className="flex items-center justify-between px-2.5 py-1.5"
+          style={footerStyle}
+        >
+          <span>
+            {completedCount} settled · {jobs.length - completedCount} active
+          </span>
+          <button
+            type="button"
+            onClick={clearCompleted}
+            disabled={completedCount === 0}
+            style={{
+              color: completedCount === 0 ? 'var(--fg-subtle)' : 'var(--fg-default)',
+              cursor: completedCount === 0 ? 'not-allowed' : 'pointer',
+              opacity: completedCount === 0 ? 0.5 : 1,
+            }}
+            className="font-mono uppercase tracking-wider px-1.5 py-0.5 rounded hover:[background:var(--bg-hover)]"
+          >
+            Clear completed
+          </button>
+        </div>
       </GlassCard>
     </div>
   );
