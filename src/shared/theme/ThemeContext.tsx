@@ -2,7 +2,6 @@ import {
   createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode,
 } from 'react';
 
-import { applyTokens } from '../tokens';
 
 type Theme = 'dark' | 'light';
 type ThemeCtx = { theme: Theme; isDark: boolean; toggle: () => void };
@@ -37,15 +36,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // first-paint surface in `index.html`.
   const [theme, setTheme] = useState<Theme>(() => readStored() ?? readMediaQuery() ?? 'dark');
 
-  // Push the active theme onto :root so every CSS variable consumer
-  // (Tailwind arbitrary values, raw `var(...)` lookups) updates atomically.
-  //
-  // useLayoutEffect (not useEffect) so the tokens land on :root *before*
-  // the first paint after a state change — otherwise a fresh mount with
-  // no tokens yet would paint a single frame against unset variables and
-  // flash white where children expect `var(--bg-canvas)` to be dark.
+  // Token emission is single-owner: TokensProvider (preset-aware —
+  // applyTokens + applySemanticTheme for the active palette) on every
+  // [theme, tokens] change, plus main.tsx for the pre-React boot paint.
+  // ThemeProvider must NOT also call applyTokens here: it emits the
+  // STATIC built-in palette and, as the outer provider, its layout
+  // effect runs AFTER TokensProvider's (child) — so it clobbered the
+  // selected preset's --bg-overlay/semantic vars back to defaults on
+  // every mount and light/dark toggle. We only own the theme STATE +
+  // its data-theme flag (the latter also set by applySemanticTheme).
   useLayoutEffect(() => {
-    applyTokens(theme);
+    document.documentElement.dataset['theme'] = theme;
+    document.documentElement.style.colorScheme = theme;
   }, [theme]);
 
   // Persistence is non-visual; keep it in useEffect so we don't block paint.
