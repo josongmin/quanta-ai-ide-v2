@@ -120,112 +120,6 @@
     "openInNewTask": "在新任务中打开",
     "saveAsRule": "将编辑模式保存为规则"
   },
-  "agentProfile": {
-    "title": "Agent 配置",
-    "subtitle": "自定义此 Agent",
-    "titleFor": "{{project}} 的 Agent",
-    "savesAs": "已提交至 .agent/profile.yaml",
-    "close": "关闭",
-    "tabs": {
-      "modes": "模式",
-      "rules": "规则",
-      "workflows": "工作流",
-      "painpoints": "痛点",
-      "marketplace": "市场"
-    },
-    "modeChip": {
-      "tooltip": "模式: {{mode}} · 信任度 {{trust}}/5"
-    },
-    "modes": {
-      "intro": "每个模式封装系统提示、允许工具、首选模型与信任级别。内置模式可复制但不能删除。",
-      "active": "激活",
-      "system": "内置",
-      "use": "使用",
-      "duplicate": "复制",
-      "delete": "删除",
-      "trust": {
-        "label": "信任刻度",
-        "level1": "1 · 只读",
-        "level2": "2 · 确认后编辑",
-        "level3": "3 · 自动编辑",
-        "level4": "4 · 编辑 + 运行自动",
-        "level5": "5 · 完全自治",
-        "desc1": "仅提议 diff,不写入工作树。适合结对评审。",
-        "desc2": "逐文件写入并确认。陌生仓库的安全默认。",
-        "desc3": "自由写入。脚本执行或破坏性命令需确认。",
-        "desc4": "写入和运行自动化。push 或 merge 前停下。",
-        "desc5": "CI 通过即 push、评论与合并。仅用于实验分支。"
-      },
-      "tools": { "label": "允许的工具" },
-      "prompt": { "label": "系统提示" }
-    },
-    "rules": {
-      "add": "新建规则",
-      "newName": "未命名规则",
-      "searchPlaceholder": "按名称、内容或 glob 搜索…",
-      "filterAll": "全部",
-      "sourceAuthored": "手写",
-      "sourcePainPoint": "源自痛点",
-      "sourceDiffPattern": "源自 diff",
-      "sourceMarketplace": "源自市场",
-      "empty": "没有匹配当前筛选的规则。",
-      "alwaysOn": "始终启用",
-      "enable": "启用",
-      "disable": "禁用",
-      "delete": "删除",
-      "body": "正文 (Markdown)",
-      "bodyPlaceholder": "Agent 应该做什么——或绝不做什么?写明 *原因* 以便泛化。",
-      "globs": "Glob (逗号分隔)",
-      "scope": "范围",
-      "derivedFrom": "派生自 turn {{id}}"
-    },
-    "workflows": {
-      "intro": "斜杠 playbook。在 composer 里输入 /<slug> 按顺序触发步骤。与模式配对可自动锁定信任刻度。",
-      "add": "新建工作流",
-      "newName": "未命名工作流",
-      "blurbPlaceholder": "斜杠命令下方显示的一行简介",
-      "steps": "步骤",
-      "removeStep": "移除步骤",
-      "addStep": "添加步骤",
-      "firstStepPlaceholder": "第一步…",
-      "pairWith": "配对模式:",
-      "pairNone": "(不配对)",
-      "delete": "删除工作流",
-      "empty": "还没有工作流。点 + 新建创建第一个。"
-    },
-    "painpoint": {
-      "title": "从反馈中收集的痛点",
-      "intro": "你给 👎 的所有 Agent 回答都汇集于此。把它们转换为规则,Agent 就能从过往失误中学习。",
-      "empty": "还没有 👎 反馈。Agent 表现良好。",
-      "deriveCta": "派生规则",
-      "flagged": "已标记 · {{at}}",
-      "deriveName": "回避: {{preview}}",
-      "deriveBody": "用户对此前回答给出 👎。下次避免相同模式。原文摘录:\n\n> {{preview}}"
-    },
-    "marketplace": {
-      "intro": "其他开发者发布的配置。import 后会把它们的规则/模式/工作流复制到你的项目 — 之后可以编辑。",
-      "searchPlaceholder": "搜索配置或作者…",
-      "domainAll": "全部",
-      "domainFrontend": "前端",
-      "domainBackend": "后端",
-      "domainMl": "ML",
-      "domainDevops": "DevOps",
-      "domainMobile": "移动",
-      "install": "Import",
-      "installed": "已安装",
-      "fabRuleName": "{{mp}} · 规则 {{n}}",
-      "fabRuleBody": "从 {{author}} 的 {{mp}} 导入。请按你的仓库调整。",
-      "fabModeName": "{{mp}} · 模式 {{n}}",
-      "fabModeBlurb": "来自 {{mp}} 的预设",
-      "fabModePrompt": "从 {{mp}} 导入的模式。请替换该提示词。",
-      "fabWfName": "{{mp}} · 工作流 {{n}}",
-      "fabWfBlurb": "来自 {{mp}} 的 playbook",
-      "fabWfStep1": "在改动前先阅读影响范围。",
-      "fabWfStep2": "套用已导入的模式;偏离时记录原因。",
-      "fabWfStep3": "用项目自身的测试验证。"
-    },
-    "openButton": "自定义 Agent"
-  },
   "palette": {
     "title": "命令面板",
     "placeholder": "搜索命令、任务、文件…",
@@ -361,7 +255,16 @@
     "label": "漂移",
     "stuck": "思考时间比平时长 ({{x}}×)",
     "noisy": "工具调用比平时多 {{x}}×",
-    "ok": "节奏正常"
+    "ok": "节奏正常",
+    "fileClean": "工作树未变",
+    "fileShifted": "其他行变更 (自动重定位)",
+    "fileOverlap": "同一行被改 — 预计冲突",
+    "fileGone": "工作树已删",
+    "useWorking": "采用工作树",
+    "forceApply": "强制应用",
+    "openMerge": "打开三方合并",
+    "lastTouched": "{{ago}} 修改",
+    "draftedAt": "{{ago}} 起草"
   },
   "latency": {
     "label": "延迟分布",
@@ -376,17 +279,6 @@
     "byModel": "按模型",
     "noData": "暂无数据",
     "rate": "{{ok}}/{{total}}"
-  },
-  "costValue": {
-    "label": "成本与价值",
-    "summary": "已花 {{usd}} · 保留 {{lines}} 行",
-    "ratio": "{{cents}}¢/行",
-    "verdictEarning": "高效 · {{cents}}¢/行",
-    "verdictExpensive": "偏贵 · {{cents}}¢/行",
-    "verdictIdle": "未产出 · 暂无差分",
-    "legendCost": "成本",
-    "legendLines": "行数",
-    "tooltip": "每回合成本与已采纳差分行数 (最近 12 回合)"
   },
   "tps": {
     "label": "tok/s",
@@ -406,18 +298,6 @@
     "high": "高 ({{pct}}%)",
     "mid": "中 ({{pct}}%)",
     "low": "低 — 建议复核 ({{pct}}%)"
-  },
-  "riskTier": {
-    "safe": "安全",
-    "review": "需复核",
-    "blast": "影响面广",
-    "tooltip": "基于本回合涉及面的风险评估",
-    "reason": {
-      "publicSurface": "公开 API 面",
-      "largeChange": "大型 diff ({{n}} 行)",
-      "manyFiles": "改动 {{n}} 个文件",
-      "ranCommand": "执行 shell 命令"
-    }
   },
   "latencyBaseline": {
     "label": "对比基准",
@@ -519,21 +399,6 @@
     "openOnGitHub": "在 GitHub 打开",
     "lastPush": "上次 push {{ago}}"
   },
-  "drift": {
-    "label": "漂移",
-    "stuck": "思考时间比平时长 ({{x}}×)",
-    "noisy": "工具调用比平时多 {{x}}×",
-    "ok": "节奏正常",
-    "fileClean": "工作树未变",
-    "fileShifted": "其他行变更 (自动重定位)",
-    "fileOverlap": "同一行被改 — 预计冲突",
-    "fileGone": "工作树已删",
-    "useWorking": "采用工作树",
-    "forceApply": "强制应用",
-    "openMerge": "打开三方合并",
-    "lastTouched": "{{ago}} 修改",
-    "draftedAt": "{{ago}} 起草"
-  },
   "background": {
     "label": "后台",
     "runHere": "此处运行",
@@ -551,18 +416,6 @@
   },
   "header": {
     "openPr": "打开 PR"
-  },
-  "replayExport": {
-    "button": "导出",
-    "title": "回放此任务",
-    "tabMarkdown": "Markdown 记录",
-    "tabScript": "claude CLI 脚本",
-    "copy": "复制",
-    "copied": "已复制",
-    "downloadMd": "下载 .md",
-    "downloadSh": "下载 .sh",
-    "closeHint": "按 Esc 关闭",
-    "bytes": "{{n}} 字节"
   },
   "snapshot": {
     "title": "工作快照",
@@ -615,16 +468,6 @@
     "symbolsHeader": "符号",
     "empty": "无匹配",
     "hint": "↑↓ 移动 · ↵ 选择 · esc 关闭"
-  },
-  "pins": {
-    "header": "固定上下文",
-    "addFile": "文件",
-    "addSymbol": "符号",
-    "addTurn": "对话",
-    "empty": "尚未固定任何内容",
-    "unpin": "移除",
-    "chipStripLabel": "随附: {{n}}",
-    "tooltip": "这些会自动附加到此任务的每个提示中"
   },
   "scroll": {
     "newMessages": "跳到最新"
@@ -788,5 +631,160 @@
     "readyToReview": "准备审阅",
     "patch": "补丁",
     "openPr": "打开 PR"
+  },
+  "agentProfile": {
+    "title": "Agent 配置",
+    "subtitle": "自定义此 Agent",
+    "titleFor": "{{project}} 的 Agent",
+    "savesAs": "已提交至 .agent/profile.yaml",
+    "close": "关闭",
+    "tabs": {
+      "modes": "模式",
+      "rules": "规则",
+      "workflows": "工作流",
+      "painpoints": "痛点",
+      "marketplace": "市场"
+    },
+    "modeChip": {
+      "tooltip": "模式: {{mode}} · 信任度 {{trust}}/5"
+    },
+    "modes": {
+      "intro": "每个模式封装系统提示、允许工具、首选模型与信任级别。内置模式可复制但不能删除。",
+      "active": "激活",
+      "system": "内置",
+      "use": "使用",
+      "duplicate": "复制",
+      "delete": "删除",
+      "trust": {
+        "label": "信任刻度",
+        "level1": "1 · 只读",
+        "level2": "2 · 确认后编辑",
+        "level3": "3 · 自动编辑",
+        "level4": "4 · 编辑 + 运行自动",
+        "level5": "5 · 完全自治",
+        "desc1": "仅提议 diff,不写入工作树。适合结对评审。",
+        "desc2": "逐文件写入并确认。陌生仓库的安全默认。",
+        "desc3": "自由写入。脚本执行或破坏性命令需确认。",
+        "desc4": "写入和运行自动化。push 或 merge 前停下。",
+        "desc5": "CI 通过即 push、评论与合并。仅用于实验分支。"
+      },
+      "tools": {
+        "label": "允许的工具"
+      },
+      "prompt": {
+        "label": "系统提示"
+      }
+    },
+    "rules": {
+      "add": "新建规则",
+      "newName": "未命名规则",
+      "searchPlaceholder": "按名称、内容或 glob 搜索…",
+      "filterAll": "全部",
+      "sourceAuthored": "手写",
+      "sourcePainPoint": "源自痛点",
+      "sourceDiffPattern": "源自 diff",
+      "sourceMarketplace": "源自市场",
+      "empty": "没有匹配当前筛选的规则。",
+      "alwaysOn": "始终启用",
+      "enable": "启用",
+      "disable": "禁用",
+      "delete": "删除",
+      "body": "正文 (Markdown)",
+      "bodyPlaceholder": "Agent 应该做什么——或绝不做什么?写明 *原因* 以便泛化。",
+      "globs": "Glob (逗号分隔)",
+      "scope": "范围",
+      "derivedFrom": "派生自 turn {{id}}"
+    },
+    "workflows": {
+      "intro": "斜杠 playbook。在 composer 里输入 /<slug> 按顺序触发步骤。与模式配对可自动锁定信任刻度。",
+      "add": "新建工作流",
+      "newName": "未命名工作流",
+      "blurbPlaceholder": "斜杠命令下方显示的一行简介",
+      "steps": "步骤",
+      "removeStep": "移除步骤",
+      "addStep": "添加步骤",
+      "firstStepPlaceholder": "第一步…",
+      "pairWith": "配对模式:",
+      "pairNone": "(不配对)",
+      "delete": "删除工作流",
+      "empty": "还没有工作流。点 + 新建创建第一个。"
+    },
+    "painpoint": {
+      "title": "从反馈中收集的痛点",
+      "intro": "你给 👎 的所有 Agent 回答都汇集于此。把它们转换为规则,Agent 就能从过往失误中学习。",
+      "empty": "还没有 👎 反馈。Agent 表现良好。",
+      "deriveCta": "派生规则",
+      "flagged": "已标记 · {{at}}",
+      "deriveName": "回避: {{preview}}",
+      "deriveBody": "用户对此前回答给出 👎。下次避免相同模式。原文摘录:\n\n> {{preview}}"
+    },
+    "marketplace": {
+      "intro": "其他开发者发布的配置。import 后会把它们的规则/模式/工作流复制到你的项目 — 之后可以编辑。",
+      "searchPlaceholder": "搜索配置或作者…",
+      "domainAll": "全部",
+      "domainFrontend": "前端",
+      "domainBackend": "后端",
+      "domainMl": "ML",
+      "domainDevops": "DevOps",
+      "domainMobile": "移动",
+      "install": "Import",
+      "installed": "已安装",
+      "fabRuleName": "{{mp}} · 规则 {{n}}",
+      "fabRuleBody": "从 {{author}} 的 {{mp}} 导入。请按你的仓库调整。",
+      "fabModeName": "{{mp}} · 模式 {{n}}",
+      "fabModeBlurb": "来自 {{mp}} 的预设",
+      "fabModePrompt": "从 {{mp}} 导入的模式。请替换该提示词。",
+      "fabWfName": "{{mp}} · 工作流 {{n}}",
+      "fabWfBlurb": "来自 {{mp}} 的 playbook",
+      "fabWfStep1": "在改动前先阅读影响范围。",
+      "fabWfStep2": "套用已导入的模式;偏离时记录原因。",
+      "fabWfStep3": "用项目自身的测试验证。"
+    },
+    "openButton": "自定义 Agent"
+  },
+  "costValue": {
+    "label": "成本与价值",
+    "summary": "已花 {{usd}} · 保留 {{lines}} 行",
+    "ratio": "{{cents}}¢/行",
+    "verdictEarning": "高效 · {{cents}}¢/行",
+    "verdictExpensive": "偏贵 · {{cents}}¢/行",
+    "verdictIdle": "未产出 · 暂无差分",
+    "legendCost": "成本",
+    "legendLines": "行数",
+    "tooltip": "每回合成本与已采纳差分行数 (最近 12 回合)"
+  },
+  "riskTier": {
+    "safe": "安全",
+    "review": "需复核",
+    "blast": "影响面广",
+    "tooltip": "基于本回合涉及面的风险评估",
+    "reason": {
+      "publicSurface": "公开 API 面",
+      "largeChange": "大型 diff ({{n}} 行)",
+      "manyFiles": "改动 {{n}} 个文件",
+      "ranCommand": "执行 shell 命令"
+    }
+  },
+  "replayExport": {
+    "button": "导出",
+    "title": "回放此任务",
+    "tabMarkdown": "Markdown 记录",
+    "tabScript": "claude CLI 脚本",
+    "copy": "复制",
+    "copied": "已复制",
+    "downloadMd": "下载 .md",
+    "downloadSh": "下载 .sh",
+    "closeHint": "按 Esc 关闭",
+    "bytes": "{{n}} 字节"
+  },
+  "pins": {
+    "header": "固定上下文",
+    "addFile": "文件",
+    "addSymbol": "符号",
+    "addTurn": "对话",
+    "empty": "尚未固定任何内容",
+    "unpin": "移除",
+    "chipStripLabel": "随附: {{n}}",
+    "tooltip": "这些会自动附加到此任务的每个提示中"
   }
 }

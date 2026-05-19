@@ -178,7 +178,10 @@
   "deps": {
     "edgesSummary": "{{n}} エッジ · フォルダ階層でまとめ",
     "layeredSummary": "層間 {{edges}} · 違反 {{violations}}",
-    "legend": { "down": "正常 / ベンダー", "up": "上方向の違反" },
+    "legend": {
+      "down": "正常 / ベンダー",
+      "up": "上方向の違反"
+    },
     "topOffender": "→ {{target}} ({{n}})",
     "violationsUnit": "違反",
     "matrixSummary": "{{n}}×{{n}} フォルダ行列 · 対角下 {{cycles}}",
@@ -195,18 +198,46 @@
       "remaining": "+ 小さなペアで {{n}} 件"
     },
     "slide": {
-      "bundle": { "label": "エッジバンドリング", "hint": "Holten 2006 · フォルダ別" },
-      "layered": { "label": "レイヤー準拠", "hint": "下 → 上の呼び出しは規約違反" },
-      "matrix": { "label": "DSM 行列", "hint": "フォルダ × フォルダ · 対角下が循環" },
-      "sunburst": { "label": "サンバースト", "hint": "放射ツリー · 弧 ∝ ファイル数" },
-      "chord": { "label": "強結合ランキング", "hint": "最も強く結合したモジュール対" },
-      "treemap": { "label": "ツリーマップ", "hint": "面積 ∝ LOC · WinDirStat 方式" },
-      "heatmap": { "label": "リスクヒートマップ", "hint": "複雑度 × 変更頻度 · Feathers" },
-      "cycles": { "label": "循環依存", "hint": "circular import · madge 方式" }
+      "bundle": {
+        "label": "エッジバンドリング",
+        "hint": "Holten 2006 · フォルダ別"
+      },
+      "layered": {
+        "label": "レイヤー準拠",
+        "hint": "下 → 上の呼び出しは規約違反"
+      },
+      "matrix": {
+        "label": "DSM 行列",
+        "hint": "フォルダ × フォルダ · 対角下が循環"
+      },
+      "sunburst": {
+        "label": "サンバースト",
+        "hint": "放射ツリー · 弧 ∝ ファイル数"
+      },
+      "chord": {
+        "label": "強結合ランキング",
+        "hint": "最も強く結合したモジュール対"
+      },
+      "treemap": {
+        "label": "ツリーマップ",
+        "hint": "面積 ∝ LOC · WinDirStat 方式"
+      },
+      "heatmap": {
+        "label": "リスクヒートマップ",
+        "hint": "複雑度 × 変更頻度 · Feathers"
+      },
+      "cycles": {
+        "label": "循環依存",
+        "hint": "circular import · madge 方式"
+      }
     },
     "treemapSummary": "{{n}} ファイル · LOC {{loc}} で面積比例",
     "heatmapSummary": "{{n}} ファイル表示 · 危険領域 {{danger}} 件",
-    "heatmap": { "x": "複雑度", "y": "変更頻度", "danger": "危険領域" },
+    "heatmap": {
+      "x": "複雑度",
+      "y": "変更頻度",
+      "danger": "危険領域"
+    },
     "cycle": {
       "none": "循環なし",
       "topPairs": "最も絡んでいるペア",
@@ -326,12 +357,26 @@
     "confidence": "信頼 {{n}}%",
     "blast": "影響 {{n}}",
     "batchHint": "類似ファイルに一括適用",
-    "extract": { "title": "関数抽出" },
-    "types": { "title": "明示的な型を追加" },
-    "tsignore": { "title": "@ts-ignore 解消" },
-    "dead": { "title": "デッドコード除去", "delta": "−{{loc}} LOC" },
-    "addtest": { "title": "テスト雛形を生成", "delta": "+テスト 1" },
-    "lint": { "title": "Lint エラー自動修正" }
+    "extract": {
+      "title": "関数抽出"
+    },
+    "types": {
+      "title": "明示的な型を追加"
+    },
+    "tsignore": {
+      "title": "@ts-ignore 解消"
+    },
+    "dead": {
+      "title": "デッドコード除去",
+      "delta": "−{{loc}} LOC"
+    },
+    "addtest": {
+      "title": "テスト雛形を生成",
+      "delta": "+テスト 1"
+    },
+    "lint": {
+      "title": "Lint エラー自動修正"
+    }
   },
   "timeMachine": {
     "title": "シンボルタイムマシン",
@@ -350,7 +395,11 @@
     "summary": "候補 {{n}} 件",
     "cleanHint": "同じコールグラフ領域に触れているオープン PR はありません。マージ安全。",
     "note": "コールグラフ予測 — 単純な git diff では検出できません。",
-    "severity": { "high": "高", "medium": "中", "low": "低" }
+    "severity": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    }
   },
   "safeRename": {
     "title": "安全リネーム信頼度",
@@ -365,7 +414,10 @@
       "overapprox": "危険なコールサイトは差分プレビューで確認推奨",
       "unknown": "手動レビュー必要 — 自動リネーム無効"
     },
-    "btn": { "rename": "リネーム", "preview": "プレビュー" }
+    "btn": {
+      "rename": "リネーム",
+      "preview": "プレビュー"
+    }
   },
   "catalog": {
     "profileTitle": "ファイルアウトライン",

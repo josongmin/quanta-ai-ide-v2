@@ -40,10 +40,22 @@
   "risk": {
     "toggleHint": "렌즈를 선택해 적용하고, 다시 누르면 해제됩니다.",
     "lens": {
-      "security":  { "label": "보안",      "hint": "SAST × 시크릿 × 취약 상태" },
-      "testGaps":  { "label": "테스트 공백", "hint": "큰 파일 × 낮은 커버리지 × 테스트 없음" },
-      "busFactor": { "label": "Bus factor", "hint": "단일 작성자 × 높은 수신 참조" },
-      "techDebt":  { "label": "기술 부채",   "hint": "복잡도 × 편집 안정성 낮음 × churn" }
+      "security": {
+        "label": "보안",
+        "hint": "SAST × 시크릿 × 취약 상태"
+      },
+      "testGaps": {
+        "label": "테스트 공백",
+        "hint": "큰 파일 × 낮은 커버리지 × 테스트 없음"
+      },
+      "busFactor": {
+        "label": "Bus factor",
+        "hint": "단일 작성자 × 높은 수신 참조"
+      },
+      "techDebt": {
+        "label": "기술 부채",
+        "hint": "복잡도 × 편집 안정성 낮음 × churn"
+      }
     }
   },
   "boundaries": {

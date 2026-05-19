@@ -40,10 +40,22 @@
   "risk": {
     "toggleHint": "Pick a lens to apply, click again to clear.",
     "lens": {
-      "security":  { "label": "Security",   "hint": "SAST × secrets × vulnerable status" },
-      "testGaps":  { "label": "Test gaps",  "hint": "Big files × low coverage × no test" },
-      "busFactor": { "label": "Bus factor", "hint": "Single-author × high incoming refs" },
-      "techDebt":  { "label": "Tech debt",  "hint": "Complexity × low edit-safety × churn" }
+      "security": {
+        "label": "Security",
+        "hint": "SAST × secrets × vulnerable status"
+      },
+      "testGaps": {
+        "label": "Test gaps",
+        "hint": "Big files × low coverage × no test"
+      },
+      "busFactor": {
+        "label": "Bus factor",
+        "hint": "Single-author × high incoming refs"
+      },
+      "techDebt": {
+        "label": "Tech debt",
+        "hint": "Complexity × low edit-safety × churn"
+      }
     }
   },
   "boundaries": {

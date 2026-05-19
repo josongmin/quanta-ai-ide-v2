@@ -99,8 +99,31 @@
       "glass": "玻璃",
       "shape": "形状",
       "type": "字体与密度",
-      "themePalette": "主题色板",
-      "presets": "快速预设"
+      "presets": "快速预设",
+      "themePalette": "主题色板"
+    },
+    "labels": {
+      "accent": "强调色",
+      "bgDark": "背景 (深)",
+      "bgLight": "背景 (浅)",
+      "alphaDark": "透明度 · 深",
+      "alphaLight": "透明度 · 浅",
+      "borderDark": "边框 · 深",
+      "borderLight": "边框 · 浅",
+      "blur": "模糊",
+      "radiusLg": "圆角 (大)",
+      "radiusSm": "圆角 (小)",
+      "fontScale": "字体缩放",
+      "cardPad": "卡片内边距",
+      "gapY": "区块间距"
+    },
+    "presets": {
+      "default": "默认",
+      "sharper": "锐利",
+      "softer": "柔和",
+      "compact": "紧凑",
+      "cozy": "舒适",
+      "cyberpunk": "赛博朋克"
     },
     "tone": {
       "dark": "深色",
@@ -136,29 +159,6 @@
       "kanagawa-lotus": "Kanagawa Lotus",
       "quiet-light": "Quiet Light",
       "night-owl-light": "Night Owl Light"
-    },
-    "labels": {
-      "accent": "强调色",
-      "bgDark": "背景 (深)",
-      "bgLight": "背景 (浅)",
-      "alphaDark": "透明度 · 深",
-      "alphaLight": "透明度 · 浅",
-      "borderDark": "边框 · 深",
-      "borderLight": "边框 · 浅",
-      "blur": "模糊",
-      "radiusLg": "圆角 (大)",
-      "radiusSm": "圆角 (小)",
-      "fontScale": "字体缩放",
-      "cardPad": "卡片内边距",
-      "gapY": "区块间距"
-    },
-    "presets": {
-      "default": "默认",
-      "sharper": "锐利",
-      "softer": "柔和",
-      "compact": "紧凑",
-      "cozy": "舒适",
-      "cyberpunk": "赛博朋克"
     }
   }
 }

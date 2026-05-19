@@ -72,12 +72,17 @@
     "title": "异常哨兵",
     "sub": "30 天 · EWMA α=0.3 · |z|≥2 标记",
     "outliers": "{{n}} 天中异常值",
-    "legend": { "trend": "EWMA", "anom": "|z| ≥ 2" }
+    "legend": {
+      "trend": "EWMA",
+      "anom": "|z| ≥ 2"
+    }
   },
   "calibration": {
     "title": "规则校准",
     "sub": "精确率 · 召回率 · F1 · 假阳性率",
-    "col": { "rule": "规则" },
+    "col": {
+      "rule": "规则"
+    },
     "empty": "暂无样本足够多的规则用于校准。"
   },
   "counterfactual": {
@@ -93,7 +98,10 @@
     "sub": "Kaplan-Meier · Greenwood 95% CI 带",
     "median": "中位数",
     "vs": "对比",
-    "legend": { "treated": "规则触发", "control": "规则未触发" }
+    "legend": {
+      "treated": "规则触发",
+      "control": "规则未触发"
+    }
   },
   "cusum": {
     "title": "CUSUM 漂移检测",

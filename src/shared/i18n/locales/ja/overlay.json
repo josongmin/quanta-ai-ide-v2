@@ -40,10 +40,22 @@
   "risk": {
     "toggleHint": "レンズを選んで適用、もう一度押すと解除します。",
     "lens": {
-      "security":  { "label": "セキュリティ", "hint": "SAST × シークレット × 脆弱性ステータス" },
-      "testGaps":  { "label": "テスト不足",   "hint": "大きいファイル × 低カバレッジ × テストなし" },
-      "busFactor": { "label": "Bus factor",   "hint": "単独著者 × 高い被参照" },
-      "techDebt":  { "label": "技術的負債",   "hint": "複雑度 × 低い編集安全性 × churn" }
+      "security": {
+        "label": "セキュリティ",
+        "hint": "SAST × シークレット × 脆弱性ステータス"
+      },
+      "testGaps": {
+        "label": "テスト不足",
+        "hint": "大きいファイル × 低カバレッジ × テストなし"
+      },
+      "busFactor": {
+        "label": "Bus factor",
+        "hint": "単独著者 × 高い被参照"
+      },
+      "techDebt": {
+        "label": "技術的負債",
+        "hint": "複雑度 × 低い編集安全性 × churn"
+      }
     }
   },
   "boundaries": {

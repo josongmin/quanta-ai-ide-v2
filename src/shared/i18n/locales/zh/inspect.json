@@ -178,7 +178,10 @@
   "deps": {
     "edgesSummary": "{{n}} 条边 · 按目录层级聚合",
     "layeredSummary": "跨层 {{edges}} · 违规 {{violations}}",
-    "legend": { "down": "正常 / 厂商", "up": "向上违规" },
+    "legend": {
+      "down": "正常 / 厂商",
+      "up": "向上违规"
+    },
     "topOffender": "→ {{target}} ({{n}})",
     "violationsUnit": "违规",
     "matrixSummary": "{{n}}×{{n}} 目录矩阵 · 对角线下方 {{cycles}}",
@@ -195,18 +198,46 @@
       "remaining": "+ 其余小对 {{n}} 次"
     },
     "slide": {
-      "bundle": { "label": "边捆绑", "hint": "Holten 2006 · 按目录分组" },
-      "layered": { "label": "分层合规", "hint": "下 → 上 调用即违规" },
-      "matrix": { "label": "DSM 矩阵", "hint": "目录 × 目录 · 对角线下为循环" },
-      "sunburst": { "label": "旭日图", "hint": "径向树 · 弧 ∝ 文件数" },
-      "chord": { "label": "强耦合排名", "hint": "最强耦合的模块对优先" },
-      "treemap": { "label": "树状图", "hint": "面积 ∝ LOC · WinDirStat 风格" },
-      "heatmap": { "label": "风险热图", "hint": "复杂度 × 变更频率 · Feathers" },
-      "cycles": { "label": "循环依赖", "hint": "circular import · madge 风格" }
+      "bundle": {
+        "label": "边捆绑",
+        "hint": "Holten 2006 · 按目录分组"
+      },
+      "layered": {
+        "label": "分层合规",
+        "hint": "下 → 上 调用即违规"
+      },
+      "matrix": {
+        "label": "DSM 矩阵",
+        "hint": "目录 × 目录 · 对角线下为循环"
+      },
+      "sunburst": {
+        "label": "旭日图",
+        "hint": "径向树 · 弧 ∝ 文件数"
+      },
+      "chord": {
+        "label": "强耦合排名",
+        "hint": "最强耦合的模块对优先"
+      },
+      "treemap": {
+        "label": "树状图",
+        "hint": "面积 ∝ LOC · WinDirStat 风格"
+      },
+      "heatmap": {
+        "label": "风险热图",
+        "hint": "复杂度 × 变更频率 · Feathers"
+      },
+      "cycles": {
+        "label": "循环依赖",
+        "hint": "circular import · madge 风格"
+      }
     },
     "treemapSummary": "{{n}} 文件 · 按 LOC {{loc}} 比例",
     "heatmapSummary": "已绘制 {{n}} 文件 · 危险区 {{danger}} 个",
-    "heatmap": { "x": "复杂度", "y": "变更频率", "danger": "危险区" },
+    "heatmap": {
+      "x": "复杂度",
+      "y": "变更频率",
+      "danger": "危险区"
+    },
     "cycle": {
       "none": "无循环",
       "topPairs": "最紧密的循环对",
@@ -326,12 +357,26 @@
     "confidence": "置信 {{n}}%",
     "blast": "影响 {{n}}",
     "batchHint": "对相似文件批量应用",
-    "extract": { "title": "提取函数" },
-    "types": { "title": "添加显式类型" },
-    "tsignore": { "title": "解决 @ts-ignore" },
-    "dead": { "title": "移除死代码", "delta": "−{{loc}} LOC" },
-    "addtest": { "title": "生成测试脚手架", "delta": "+测试 1" },
-    "lint": { "title": "自动修复 lint 错误" }
+    "extract": {
+      "title": "提取函数"
+    },
+    "types": {
+      "title": "添加显式类型"
+    },
+    "tsignore": {
+      "title": "解决 @ts-ignore"
+    },
+    "dead": {
+      "title": "移除死代码",
+      "delta": "−{{loc}} LOC"
+    },
+    "addtest": {
+      "title": "生成测试脚手架",
+      "delta": "+测试 1"
+    },
+    "lint": {
+      "title": "自动修复 lint 错误"
+    }
   },
   "timeMachine": {
     "title": "符号时光机",
@@ -350,7 +395,11 @@
     "summary": "{{n}} 个候选",
     "cleanHint": "没有触及相同调用图邻域的打开 PR。可以安全合并。",
     "note": "基于调用图预测 — 单纯 git diff 无法检测。",
-    "severity": { "high": "高", "medium": "中", "low": "低" }
+    "severity": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    }
   },
   "safeRename": {
     "title": "安全重命名置信度",
@@ -365,7 +414,10 @@
       "overapprox": "对风险调用点建议先看差异预览",
       "unknown": "需手动审查 — 自动重命名已禁用"
     },
-    "btn": { "rename": "重命名", "preview": "预览" }
+    "btn": {
+      "rename": "重命名",
+      "preview": "预览"
+    }
   },
   "catalog": {
     "profileTitle": "文件大纲",

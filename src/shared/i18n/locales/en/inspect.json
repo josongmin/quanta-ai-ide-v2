@@ -178,7 +178,10 @@
   "deps": {
     "edgesSummary": "{{n}} edges · bundled by folder hierarchy",
     "layeredSummary": "{{edges}} cross-layer · {{violations}} violations",
-    "legend": { "down": "Down / vendor", "up": "Upward violation" },
+    "legend": {
+      "down": "Down / vendor",
+      "up": "Upward violation"
+    },
     "topOffender": "→ {{target}} ({{n}})",
     "violationsUnit": "VIOL",
     "matrixSummary": "{{n}}×{{n}} folder matrix · {{cycles}} below-diagonal",
@@ -195,18 +198,46 @@
       "remaining": "+ {{n}} more imports across smaller pairs"
     },
     "slide": {
-      "bundle": { "label": "Edge bundling", "hint": "Holten 2006 · folder-grouped" },
-      "layered": { "label": "Layer compliance", "hint": "lower → upper imports are violations" },
-      "matrix": { "label": "DSM matrix", "hint": "folder × folder · cycles below diagonal" },
-      "sunburst": { "label": "Sunburst", "hint": "radial tree · arc ∝ file count" },
-      "chord": { "label": "Top coupling", "hint": "heaviest module pairs first" },
-      "treemap": { "label": "Treemap", "hint": "squarified · area ∝ LOC" },
-      "heatmap": { "label": "Risk heatmap", "hint": "complexity × churn · Feathers hotspot" },
-      "cycles": { "label": "Cycles", "hint": "circular imports · madge-style" }
+      "bundle": {
+        "label": "Edge bundling",
+        "hint": "Holten 2006 · folder-grouped"
+      },
+      "layered": {
+        "label": "Layer compliance",
+        "hint": "lower → upper imports are violations"
+      },
+      "matrix": {
+        "label": "DSM matrix",
+        "hint": "folder × folder · cycles below diagonal"
+      },
+      "sunburst": {
+        "label": "Sunburst",
+        "hint": "radial tree · arc ∝ file count"
+      },
+      "chord": {
+        "label": "Top coupling",
+        "hint": "heaviest module pairs first"
+      },
+      "treemap": {
+        "label": "Treemap",
+        "hint": "squarified · area ∝ LOC"
+      },
+      "heatmap": {
+        "label": "Risk heatmap",
+        "hint": "complexity × churn · Feathers hotspot"
+      },
+      "cycles": {
+        "label": "Cycles",
+        "hint": "circular imports · madge-style"
+      }
     },
     "treemapSummary": "{{n}} files · {{loc}} LOC sized by weight",
     "heatmapSummary": "{{n}} files plotted · {{danger}} in danger zone",
-    "heatmap": { "x": "Complexity", "y": "Churn", "danger": "Danger zone" },
+    "heatmap": {
+      "x": "Complexity",
+      "y": "Churn",
+      "danger": "Danger zone"
+    },
     "cycle": {
       "none": "No cycles detected",
       "topPairs": "Tightest cycle pairs",
@@ -326,12 +357,26 @@
     "confidence": "conf {{n}}%",
     "blast": "blast {{n}}",
     "batchHint": "Apply across similar files",
-    "extract": { "title": "Extract function" },
-    "types": { "title": "Add explicit types" },
-    "tsignore": { "title": "Resolve @ts-ignore" },
-    "dead": { "title": "Remove dead code", "delta": "−{{loc}} LOC" },
-    "addtest": { "title": "Generate test scaffold", "delta": "+1 test file" },
-    "lint": { "title": "Auto-fix lint errors" }
+    "extract": {
+      "title": "Extract function"
+    },
+    "types": {
+      "title": "Add explicit types"
+    },
+    "tsignore": {
+      "title": "Resolve @ts-ignore"
+    },
+    "dead": {
+      "title": "Remove dead code",
+      "delta": "−{{loc}} LOC"
+    },
+    "addtest": {
+      "title": "Generate test scaffold",
+      "delta": "+1 test file"
+    },
+    "lint": {
+      "title": "Auto-fix lint errors"
+    }
   },
   "timeMachine": {
     "title": "Symbol time machine",
@@ -350,7 +395,11 @@
     "summary": "{{n}} candidates",
     "cleanHint": "No open PRs touch the same call-graph neighborhood. Safe to merge.",
     "note": "Predicted from the call graph — git diff alone wouldn’t flag these.",
-    "severity": { "high": "High", "medium": "Medium", "low": "Low" }
+    "severity": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    }
   },
   "safeRename": {
     "title": "Safe-rename confidence",
@@ -365,7 +414,10 @@
       "overapprox": "Diff preview recommended for risky callsites",
       "unknown": "Manual review required — auto-rename disabled"
     },
-    "btn": { "rename": "Rename", "preview": "Preview" }
+    "btn": {
+      "rename": "Rename",
+      "preview": "Preview"
+    }
   },
   "catalog": {
     "profileTitle": "File outline",

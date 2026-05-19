@@ -99,8 +99,31 @@
       "glass": "Glass",
       "shape": "Shape",
       "type": "Type & Density",
-      "themePalette": "Theme palette",
-      "presets": "Quick presets"
+      "presets": "Quick presets",
+      "themePalette": "Theme palette"
+    },
+    "labels": {
+      "accent": "Accent",
+      "bgDark": "BG (dark)",
+      "bgLight": "BG (light)",
+      "alphaDark": "Alpha · dark",
+      "alphaLight": "Alpha · light",
+      "borderDark": "Border · dark",
+      "borderLight": "Border · light",
+      "blur": "Blur",
+      "radiusLg": "Radius (lg)",
+      "radiusSm": "Radius (sm)",
+      "fontScale": "Font scale",
+      "cardPad": "Card padding",
+      "gapY": "Section gap"
+    },
+    "presets": {
+      "default": "Default",
+      "sharper": "Sharper",
+      "softer": "Softer",
+      "compact": "Compact",
+      "cozy": "Cozy",
+      "cyberpunk": "Cyberpunk"
     },
     "tone": {
       "dark": "Dark",
@@ -136,29 +159,6 @@
       "kanagawa-lotus": "Kanagawa Lotus",
       "quiet-light": "Quiet Light",
       "night-owl-light": "Night Owl Light"
-    },
-    "labels": {
-      "accent": "Accent",
-      "bgDark": "BG (dark)",
-      "bgLight": "BG (light)",
-      "alphaDark": "Alpha · dark",
-      "alphaLight": "Alpha · light",
-      "borderDark": "Border · dark",
-      "borderLight": "Border · light",
-      "blur": "Blur",
-      "radiusLg": "Radius (lg)",
-      "radiusSm": "Radius (sm)",
-      "fontScale": "Font scale",
-      "cardPad": "Card padding",
-      "gapY": "Section gap"
-    },
-    "presets": {
-      "default": "Default",
-      "sharper": "Sharper",
-      "softer": "Softer",
-      "compact": "Compact",
-      "cozy": "Cozy",
-      "cyberpunk": "Cyberpunk"
     }
   }
 }

@@ -72,12 +72,17 @@
     "title": "Anomaly sentinel",
     "sub": "30 d · EWMA α=0.3 · |z|≥2 flagged",
     "outliers": "outliers in {{n}} d",
-    "legend": { "trend": "EWMA", "anom": "|z| ≥ 2" }
+    "legend": {
+      "trend": "EWMA",
+      "anom": "|z| ≥ 2"
+    }
   },
   "calibration": {
     "title": "Rule calibration",
     "sub": "precision · recall · F1 · false-positive rate",
-    "col": { "rule": "Rule" },
+    "col": {
+      "rule": "Rule"
+    },
     "empty": "No rules with enough samples to calibrate yet."
   },
   "counterfactual": {
@@ -93,7 +98,10 @@
     "sub": "Kaplan-Meier · Greenwood 95% CI band",
     "median": "median",
     "vs": "vs",
-    "legend": { "treated": "rule fired", "control": "rule skipped" }
+    "legend": {
+      "treated": "rule fired",
+      "control": "rule skipped"
+    }
   },
   "cusum": {
     "title": "CUSUM drift detector",

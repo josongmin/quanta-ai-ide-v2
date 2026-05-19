@@ -14,7 +14,12 @@
   "rail": {
     "title": "例程",
     "search": "搜索例程…",
-    "filter": { "all": "全部", "active": "运行", "paused": "暂停", "draft": "草稿" },
+    "filter": {
+      "all": "全部",
+      "active": "运行",
+      "paused": "暂停",
+      "draft": "草稿"
+    },
     "empty": "无匹配例程。",
     "nextFire": "下次: {{when}}",
     "noNextFire": "事件触发",
@@ -23,7 +28,11 @@
     "metricSaved": "节省 {{h}} 小时",
     "memoryItems": "{{n}} 条记忆"
   },
-  "status": { "active": "运行", "paused": "暂停", "draft": "草稿" },
+  "status": {
+    "active": "运行",
+    "paused": "暂停",
+    "draft": "草稿"
+  },
   "trust": {
     "level": "信任 {{n}}/5",
     "level1": "只读",
@@ -44,7 +53,11 @@
       "bench.regressed": "性能回退"
     }
   },
-  "outputKind": { "pr": "PR", "issue": "Issue", "report": "报告" },
+  "outputKind": {
+    "pr": "PR",
+    "issue": "Issue",
+    "report": "报告"
+  },
   "run": {
     "header": "近期运行",
     "empty": "暂无运行。",
@@ -64,7 +77,11 @@
     "candidateAdopt": "采用此候选",
     "selfEval": "自评 {{pct}}%",
     "blastRadius": "影响范围",
-    "br": { "safe": "安全", "review": "需评审", "blast-radius": "广泛" }
+    "br": {
+      "safe": "安全",
+      "review": "需评审",
+      "blast-radius": "广泛"
+    }
   },
   "runStatus": {
     "queued": "排队",

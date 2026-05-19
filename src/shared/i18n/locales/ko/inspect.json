@@ -178,7 +178,10 @@
   "deps": {
     "edgesSummary": "엣지 {{n}}개 · 폴더 계층으로 번들",
     "layeredSummary": "레이어 간 {{edges}}개 · 위반 {{violations}}건",
-    "legend": { "down": "정상 / 벤더", "up": "위로 향한 위반" },
+    "legend": {
+      "down": "정상 / 벤더",
+      "up": "위로 향한 위반"
+    },
     "topOffender": "→ {{target}} ({{n}}건)",
     "violationsUnit": "위반",
     "matrixSummary": "{{n}}×{{n}} 폴더 행렬 · 대각선 아래 {{cycles}}",
@@ -195,18 +198,46 @@
       "remaining": "+ 그 외 작은 쌍에 {{n}}건 더"
     },
     "slide": {
-      "bundle": { "label": "엣지 번들링", "hint": "Holten 2006 · 폴더 단위 묶음" },
-      "layered": { "label": "레이어 컴플라이언스", "hint": "아래 → 위 호출은 규칙 위반" },
-      "matrix": { "label": "DSM 행렬", "hint": "폴더 × 폴더 · 대각선 아래는 순환" },
-      "sunburst": { "label": "선버스트", "hint": "방사형 트리 · 호 크기 ∝ 파일 수" },
-      "chord": { "label": "강결합 랭킹", "hint": "가장 강하게 묶인 모듈 쌍 순" },
-      "treemap": { "label": "트리맵", "hint": "면적 ∝ LOC · WinDirStat 방식" },
-      "heatmap": { "label": "리스크 히트맵", "hint": "복잡도 × 변경량 · Feathers 핫스팟" },
-      "cycles": { "label": "순환 의존", "hint": "circular import · madge 방식" }
+      "bundle": {
+        "label": "엣지 번들링",
+        "hint": "Holten 2006 · 폴더 단위 묶음"
+      },
+      "layered": {
+        "label": "레이어 컴플라이언스",
+        "hint": "아래 → 위 호출은 규칙 위반"
+      },
+      "matrix": {
+        "label": "DSM 행렬",
+        "hint": "폴더 × 폴더 · 대각선 아래는 순환"
+      },
+      "sunburst": {
+        "label": "선버스트",
+        "hint": "방사형 트리 · 호 크기 ∝ 파일 수"
+      },
+      "chord": {
+        "label": "강결합 랭킹",
+        "hint": "가장 강하게 묶인 모듈 쌍 순"
+      },
+      "treemap": {
+        "label": "트리맵",
+        "hint": "면적 ∝ LOC · WinDirStat 방식"
+      },
+      "heatmap": {
+        "label": "리스크 히트맵",
+        "hint": "복잡도 × 변경량 · Feathers 핫스팟"
+      },
+      "cycles": {
+        "label": "순환 의존",
+        "hint": "circular import · madge 방식"
+      }
     },
     "treemapSummary": "파일 {{n}}개 · LOC {{loc}}로 크기 비례",
     "heatmapSummary": "파일 {{n}}개 표시 · 위험 영역 {{danger}}개",
-    "heatmap": { "x": "복잡도", "y": "변경량", "danger": "위험 영역" },
+    "heatmap": {
+      "x": "복잡도",
+      "y": "변경량",
+      "danger": "위험 영역"
+    },
     "cycle": {
       "none": "순환 없음",
       "topPairs": "가장 엮인 페어",
@@ -326,12 +357,26 @@
     "confidence": "신뢰도 {{n}}%",
     "blast": "영향 {{n}}",
     "batchHint": "유사 파일에 일괄 적용",
-    "extract": { "title": "함수 추출" },
-    "types": { "title": "명시적 타입 추가" },
-    "tsignore": { "title": "@ts-ignore 해소" },
-    "dead": { "title": "데드 코드 제거", "delta": "−{{loc}} LOC" },
-    "addtest": { "title": "테스트 스캐폴드 생성", "delta": "+테스트 파일 1" },
-    "lint": { "title": "린트 에러 자동 수정" }
+    "extract": {
+      "title": "함수 추출"
+    },
+    "types": {
+      "title": "명시적 타입 추가"
+    },
+    "tsignore": {
+      "title": "@ts-ignore 해소"
+    },
+    "dead": {
+      "title": "데드 코드 제거",
+      "delta": "−{{loc}} LOC"
+    },
+    "addtest": {
+      "title": "테스트 스캐폴드 생성",
+      "delta": "+테스트 파일 1"
+    },
+    "lint": {
+      "title": "린트 에러 자동 수정"
+    }
   },
   "timeMachine": {
     "title": "심볼 타임머신",
@@ -350,7 +395,11 @@
     "summary": "후보 {{n}}건",
     "cleanHint": "같은 콜그래프 영역을 만지는 열린 PR이 없습니다. 머지 안전합니다.",
     "note": "콜그래프 기반 예측 — 단순 git diff로는 잡히지 않습니다.",
-    "severity": { "high": "높음", "medium": "중간", "low": "낮음" }
+    "severity": {
+      "high": "높음",
+      "medium": "중간",
+      "low": "낮음"
+    }
   },
   "safeRename": {
     "title": "안전 리네임 신뢰도",
@@ -365,7 +414,10 @@
       "overapprox": "위험 콜사이트는 diff 미리보기로 확인하세요",
       "unknown": "수동 검토 필요 — 자동 리네임 비활성"
     },
-    "btn": { "rename": "리네임", "preview": "미리보기" }
+    "btn": {
+      "rename": "리네임",
+      "preview": "미리보기"
+    }
   },
   "catalog": {
     "profileTitle": "파일 아웃라인",

@@ -72,12 +72,17 @@
     "title": "이상치 감시",
     "sub": "30일 · EWMA α=0.3 · |z|≥2 표시",
     "outliers": "{{n}}일 중 이상치",
-    "legend": { "trend": "EWMA", "anom": "|z| ≥ 2" }
+    "legend": {
+      "trend": "EWMA",
+      "anom": "|z| ≥ 2"
+    }
   },
   "calibration": {
     "title": "룰 교정",
     "sub": "정밀도 · 재현율 · F1 · 거짓양성률",
-    "col": { "rule": "룰" },
+    "col": {
+      "rule": "룰"
+    },
     "empty": "교정할 만큼 샘플이 충분한 룰이 아직 없습니다."
   },
   "counterfactual": {
@@ -93,7 +98,10 @@
     "sub": "Kaplan-Meier · Greenwood 95% CI 밴드",
     "median": "중앙값",
     "vs": "대비",
-    "legend": { "treated": "룰 발화", "control": "룰 미발화" }
+    "legend": {
+      "treated": "룰 발화",
+      "control": "룰 미발화"
+    }
   },
   "cusum": {
     "title": "CUSUM 드리프트 감지",

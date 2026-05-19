@@ -99,8 +99,31 @@
       "glass": "글래스",
       "shape": "모양",
       "type": "타이포 & 밀도",
-      "themePalette": "테마 팔레트",
-      "presets": "빠른 프리셋"
+      "presets": "빠른 프리셋",
+      "themePalette": "테마 팔레트"
+    },
+    "labels": {
+      "accent": "강조색",
+      "bgDark": "배경 (다크)",
+      "bgLight": "배경 (라이트)",
+      "alphaDark": "투명도 · 다크",
+      "alphaLight": "투명도 · 라이트",
+      "borderDark": "테두리 · 다크",
+      "borderLight": "테두리 · 라이트",
+      "blur": "블러",
+      "radiusLg": "반경 (대)",
+      "radiusSm": "반경 (소)",
+      "fontScale": "폰트 배율",
+      "cardPad": "카드 여백",
+      "gapY": "섹션 간격"
+    },
+    "presets": {
+      "default": "기본",
+      "sharper": "샤프",
+      "softer": "부드럽게",
+      "compact": "콤팩트",
+      "cozy": "코지",
+      "cyberpunk": "사이버펑크"
     },
     "tone": {
       "dark": "다크",
@@ -136,29 +159,6 @@
       "kanagawa-lotus": "Kanagawa Lotus",
       "quiet-light": "Quiet Light",
       "night-owl-light": "Night Owl Light"
-    },
-    "labels": {
-      "accent": "강조색",
-      "bgDark": "배경 (다크)",
-      "bgLight": "배경 (라이트)",
-      "alphaDark": "투명도 · 다크",
-      "alphaLight": "투명도 · 라이트",
-      "borderDark": "테두리 · 다크",
-      "borderLight": "테두리 · 라이트",
-      "blur": "블러",
-      "radiusLg": "반경 (대)",
-      "radiusSm": "반경 (소)",
-      "fontScale": "폰트 배율",
-      "cardPad": "카드 여백",
-      "gapY": "섹션 간격"
-    },
-    "presets": {
-      "default": "기본",
-      "sharper": "샤프",
-      "softer": "부드럽게",
-      "compact": "콤팩트",
-      "cozy": "코지",
-      "cyberpunk": "사이버펑크"
     }
   }
 }

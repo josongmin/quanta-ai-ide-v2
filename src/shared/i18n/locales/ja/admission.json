@@ -72,12 +72,17 @@
     "title": "異常値センチネル",
     "sub": "30日 · EWMA α=0.3 · |z|≥2 検出",
     "outliers": "{{n}}日中の異常値",
-    "legend": { "trend": "EWMA", "anom": "|z| ≥ 2" }
+    "legend": {
+      "trend": "EWMA",
+      "anom": "|z| ≥ 2"
+    }
   },
   "calibration": {
     "title": "ルールキャリブレーション",
     "sub": "適合率 · 再現率 · F1 · 偽陽性率",
-    "col": { "rule": "ルール" },
+    "col": {
+      "rule": "ルール"
+    },
     "empty": "キャリブレーション可能な十分なサンプルを持つルールはまだありません。"
   },
   "counterfactual": {
@@ -93,7 +98,10 @@
     "sub": "Kaplan-Meier · Greenwood 95% CI バンド",
     "median": "中央値",
     "vs": "対",
-    "legend": { "treated": "ルール発火", "control": "ルール未発火" }
+    "legend": {
+      "treated": "ルール発火",
+      "control": "ルール未発火"
+    }
   },
   "cusum": {
     "title": "CUSUM ドリフト検出",

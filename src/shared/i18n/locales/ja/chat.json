@@ -99,8 +99,31 @@
       "glass": "グラス",
       "shape": "シェイプ",
       "type": "タイポ & 密度",
-      "themePalette": "テーマパレット",
-      "presets": "クイックプリセット"
+      "presets": "クイックプリセット",
+      "themePalette": "テーマパレット"
+    },
+    "labels": {
+      "accent": "アクセント",
+      "bgDark": "BG (ダーク)",
+      "bgLight": "BG (ライト)",
+      "alphaDark": "アルファ · ダーク",
+      "alphaLight": "アルファ · ライト",
+      "borderDark": "ボーダー · ダーク",
+      "borderLight": "ボーダー · ライト",
+      "blur": "ブラー",
+      "radiusLg": "角丸 (大)",
+      "radiusSm": "角丸 (小)",
+      "fontScale": "フォントスケール",
+      "cardPad": "カード余白",
+      "gapY": "セクション間隔"
+    },
+    "presets": {
+      "default": "デフォルト",
+      "sharper": "シャープ",
+      "softer": "ソフト",
+      "compact": "コンパクト",
+      "cozy": "コージー",
+      "cyberpunk": "サイバーパンク"
     },
     "tone": {
       "dark": "ダーク",
@@ -136,29 +159,6 @@
       "kanagawa-lotus": "Kanagawa Lotus",
       "quiet-light": "Quiet Light",
       "night-owl-light": "Night Owl Light"
-    },
-    "labels": {
-      "accent": "アクセント",
-      "bgDark": "BG (ダーク)",
-      "bgLight": "BG (ライト)",
-      "alphaDark": "アルファ · ダーク",
-      "alphaLight": "アルファ · ライト",
-      "borderDark": "ボーダー · ダーク",
-      "borderLight": "ボーダー · ライト",
-      "blur": "ブラー",
-      "radiusLg": "角丸 (大)",
-      "radiusSm": "角丸 (小)",
-      "fontScale": "フォントスケール",
-      "cardPad": "カード余白",
-      "gapY": "セクション間隔"
-    },
-    "presets": {
-      "default": "デフォルト",
-      "sharper": "シャープ",
-      "softer": "ソフト",
-      "compact": "コンパクト",
-      "cozy": "コージー",
-      "cyberpunk": "サイバーパンク"
     }
   }
 }
