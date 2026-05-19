@@ -24,19 +24,19 @@ const KIND_LABEL: Record<Kind, string> = {
 };
 
 const KIND_COLOR: Record<Kind, string> = {
-  modified:    '#8b949e',
-  signature:   '#a8893a',
-  concurrency: '#9583b8',
-  new:         '#4f9a5c',
+  modified:    'var(--fg-muted)',
+  signature:   'var(--intent-warn-fg)',
+  concurrency: 'var(--fg-accent)',
+  new:         'var(--intent-success-fg)',
 };
 
 export default function CallGraphChangesCard({ pr, repo, isDark }: Props) {
   const rows = useMemo(() => callGraphChanges(pr, repo), [pr, repo]);
 
-  const cardBg     = isDark ? 'bg-white/[0.025]' : 'bg-black/[0.02]';
-  const cardBorder = isDark ? 'border-white/5'   : 'border-black/5';
-  const title      = isDark ? 'text-white/85'    : 'text-black/85';
-  const subtitle   = isDark ? 'text-white/40'    : 'text-black/40';
+  const cardBg     = 'bg-[var(--bg-surface-muted)]';
+  const cardBorder = 'border-[var(--border-muted)]';
+  const title      = 'text-[var(--fg-default)]';
+  const subtitle   = 'text-[var(--fg-subtle)]';
 
   return (
     <section className={`rounded-lg border ${cardBg} ${cardBorder}`}>
@@ -64,10 +64,10 @@ export default function CallGraphChangesCard({ pr, repo, isDark }: Props) {
 
 // ─── Row ─────────────────────────────────────────────────────────────────
 
-function CallGraphRow({ row, isDark }: { row: CallGraphChange; isDark: boolean }) {
-  const symbol = isDark ? 'text-white/70' : 'text-black/70';
-  const arrow  = isDark ? 'text-white/30' : 'text-black/30';
-  const hop    = isDark ? 'text-white/40' : 'text-black/40';
+function CallGraphRow({ row }: { row: CallGraphChange; isDark: boolean }) {
+  const symbol = 'text-[var(--fg-muted)]';
+  const arrow  = 'text-[var(--fg-subtle)]';
+  const hop    = 'text-[var(--fg-subtle)]';
 
   return (
     <div className="flex items-center gap-2 py-1 text-[11px]">
@@ -90,8 +90,8 @@ function KindPill({ kind }: { kind: Kind }) {
   const color = KIND_COLOR[kind];
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold font-mono uppercase tracking-[0.18em] shrink-0"
-      style={{ background: `${color}26`, color }}
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold font-mono uppercase tracking-[var(--track-eyebrow)] shrink-0"
+      style={{ background: `color-mix(in srgb, ${color} 15%, transparent)`, color }}
     >
       {KIND_LABEL[kind]}
     </span>
@@ -100,8 +100,8 @@ function KindPill({ kind }: { kind: Kind }) {
 
 // ─── Empty state ─────────────────────────────────────────────────────────
 
-function EmptyState({ isDark }: { isDark: boolean }) {
-  const muted = isDark ? 'text-white/40' : 'text-black/40';
+function EmptyState(_props: { isDark: boolean }) {
+  const muted = 'text-[var(--fg-subtle)]';
   return (
     <div className={`text-[11px] italic ${muted}`}>
       No call-graph movement detected

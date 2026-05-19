@@ -1,6 +1,5 @@
 import { useRef, type ReactNode, type ComponentType } from 'react';
 import { useScrollRestoration } from '@shared/lib';
-import { useTheme } from '@shared/theme';
 
 // SideNavShell — generic two-pane layout shared by every settings-style
 // surface (MeShell, AdmissionShell, future WsShell/OrgShell). Renders a
@@ -62,7 +61,6 @@ export function SideNavShell<K extends string>({
   scrollKey = 'side-nav-shell',
   contentMaxWidth = 820,
 }: Props<K>) {
-  const { isDark } = useTheme();
   const scrollerRef = useRef<HTMLDivElement>(null);
   useScrollRestoration(scrollKey, scrollerRef);
 
@@ -74,7 +72,7 @@ export function SideNavShell<K extends string>({
   return (
     <div
       className="absolute inset-0 flex"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: 'var(--bg-canvas)' }}
     >
       <Sidebar
         groups={groups}

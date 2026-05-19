@@ -81,17 +81,17 @@ export default function OwnerMatrix({
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <Users className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <Users className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Ownership
         </span>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {fragmentation} {fragmentation === 1 ? 'team' : 'teams'} · {pr.files.length} files
         </span>
         {missingReviewers > 0 && (
           <span
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
-            style={{ background: 'rgba(168,137,58,0.18)', color: '#d3b264', border: '1px solid rgba(168,137,58,0.40)' }}
+            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            style={{ background: 'color-mix(in srgb, var(--intent-warn-fg) 18%, transparent)', color: 'var(--intent-warn-fg)', border: '1px solid color-mix(in srgb, var(--intent-warn-fg) 40%, transparent)' }}
             title={`${String(missingReviewers)} owner ${missingReviewers === 1 ? 'team has' : 'teams have'} no reviewer requested`}
           >
             <AlertCircle className="w-2.5 h-2.5" />
@@ -102,14 +102,14 @@ export default function OwnerMatrix({
 
       <ul className="space-y-1">
         {groups.map((g) => (
-          <li key={g.owner} className="flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-white/[0.025]">
-            <span className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md text-[11px] font-mono font-bold tabular-nums text-white/85"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <li key={g.owner} className="flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-[var(--bg-surface-muted)]">
+            <span className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md text-[11px] font-mono font-bold tabular-nums text-[var(--fg-default)]"
+              style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}>
               {g.files.length}
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <span className="text-[12px] font-bold text-white/85 truncate">
+                <span className="text-[12px] font-bold text-[var(--fg-default)] truncate">
                   @{g.owner}
                 </span>
                 {g.reviewerRequested ? (
@@ -121,25 +121,25 @@ export default function OwnerMatrix({
                     <AlertCircle className="w-3 h-3 shrink-0" style={{ color: 'color-mix(in srgb, var(--intent-warn-vivid) 80%, transparent)' }} />
                   </span>
                 )}
-                <span className="text-[10px] font-mono text-white/35 ml-auto tabular-nums">
+                <span className="text-[10px] font-mono text-[var(--fg-subtle)] ml-auto tabular-nums">
                   {Math.round(g.share * 100)}%
                 </span>
               </div>
               {/* Proportion bar — share of touched files. Share, not absolute
                   count, because the relative load is what matters for
                   coordinating who reads first. */}
-              <div className="mt-1 h-1 rounded-full overflow-hidden bg-white/[0.04]">
+              <div className="mt-1 h-1 rounded-full overflow-hidden bg-[var(--bg-hover)]">
                 <div
                   className="h-full"
                   style={{
                     width: `${String(Math.round(g.share * 100))}%`,
                     background: g.reviewerRequested
-                      ? 'linear-gradient(90deg, #5fa86c, #7aa7d4)'
-                      : 'linear-gradient(90deg, #a8893a, #c25a55)',
+                      ? 'linear-gradient(90deg, var(--intent-success-fg), var(--fg-link))'
+                      : 'linear-gradient(90deg, var(--intent-warn-fg), var(--intent-danger-fg))',
                   }}
                 />
               </div>
-              <div className="mt-1 text-[10px] font-mono text-white/35 truncate" title={g.files.join('  ·  ')}>
+              <div className="mt-1 text-[10px] font-mono text-[var(--fg-subtle)] truncate" title={g.files.join('  ·  ')}>
                 {g.files.slice(0, 2).join(' · ')}
                 {g.files.length > 2 && ` · +${String(g.files.length - 2)}`}
               </div>

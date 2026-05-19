@@ -24,12 +24,10 @@ const NAV: { id: NonNullable<Props['active']>; label: string; to: string }[] = [
 // outside the product, so they own the full viewport. Top nav + content +
 // footer. No GNB tabs, no left sidebar.
 export function PublicShell({ active, width = 'wide', children }: Props) {
-  const { isDark } = useTheme();
-
   return (
     <div
       className="absolute inset-0 overflow-y-auto"
-      style={{ background: isDark ? 'var(--bg-canvas)' : '#ffffff' }}
+      style={{ background: 'var(--bg-canvas)' }}
     >
       <TopNav active={active} />
       {width === 'bleed' ? (

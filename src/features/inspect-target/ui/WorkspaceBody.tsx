@@ -72,7 +72,7 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
         <div className="flex items-start gap-2 min-w-0">
           <div className="min-w-0 flex-1">
             <div
-              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em]"
+              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
               style={{ color: 'var(--fg-subtle)' }}
             >
               <Boxes className="w-3 h-3" /> {t('header.workspace')}
@@ -90,13 +90,13 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
         </div>
         <div className="flex items-center gap-1.5 mt-2.5 mb-3 flex-wrap">
           <span
-            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
+            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             {t('header.main')}
           </span>
           <span
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             <span
@@ -118,7 +118,7 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
                   type="button"
                   key={id}
                   onClick={() => { setTab(id); }}
-                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] whitespace-nowrap transition-colors"
+                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] whitespace-nowrap transition-colors"
                   style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                 >
                   <Icon className="w-3 h-3 shrink-0" />
@@ -162,7 +162,7 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
 
       <GlassCard
         tone="inner"
-        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[0.18em]"
+        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {tabFooter(tab, t)}
@@ -195,7 +195,7 @@ function SubCard({
     >
       <div className="flex items-baseline gap-2">
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {title}
@@ -380,7 +380,7 @@ const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats: Return
               className="w-1.5 h-1.5 rounded-full shrink-0"
               style={{ background: 'var(--intent-warn-vivid)' }}
             />
-            <span className="font-bold uppercase tracking-[0.18em]">{t('stack.noTestRunner')}</span>
+            <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">{t('stack.noTestRunner')}</span>
             <span className="ml-auto" style={{ opacity: 0.7 }}>
               {t('stack.addTestRunner')}
             </span>
@@ -414,7 +414,7 @@ function VerdictStrip({ verdict }: { verdict: Verdict }) {
       text: 'var(--intent-danger-fg)',
     };
     return {
-      dot: '#5a8fce',
+      dot: 'var(--fg-link)',
       bg: 'rgb(from var(--fg-link) r g b / 0.10)',
       text: 'var(--fg-link)',
     };
@@ -441,7 +441,7 @@ function VerdictStrip({ verdict }: { verdict: Verdict }) {
         </div>
       </div>
       <span
-        className="text-[8px] font-black uppercase tracking-[0.18em]"
+        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: palette.text, opacity: 0.75 }}
       >
         {tone === 'ok' ? t('verdict.ready') : tone === 'critical' ? t('verdict.block') : tone === 'warn' ? t('verdict.review') : t('verdict.info')}
@@ -460,7 +460,7 @@ function TopOffenders({
       style={{ borderColor: 'var(--border-muted)' }}
     >
       <div
-        className="text-[8px] font-black uppercase tracking-[0.18em]"
+        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {title}
@@ -495,7 +495,7 @@ function SafetyHistogram({
   return (
     <div className="mt-2">
       <div
-        className="text-[8px] font-black uppercase tracking-[0.18em] mb-1"
+        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {t('histogram.title')}
@@ -514,7 +514,7 @@ function SafetyHistogram({
           );
         })}
       </div>
-      <div className="flex items-center justify-between mt-0.5 text-[8px] uppercase tracking-[0.18em]">
+      <div className="flex items-center justify-between mt-0.5 text-[8px] uppercase tracking-[var(--track-eyebrow)]">
         <span style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}>{t('histogram.dontTouch')}</span>
         <span style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}>{t('histogram.safe')}</span>
       </div>
@@ -536,7 +536,7 @@ function AgentCapacityLine({
       style={{ background: 'var(--bg-surface-muted)' }}
     >
       <span
-        className="font-black uppercase tracking-[0.18em] mr-2"
+        className="font-black uppercase tracking-[var(--track-eyebrow)] mr-2"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {t('agent.label')}
@@ -561,7 +561,7 @@ function ChipBlock({
   return (
     <div className="mt-2.5">
       <div
-        className="text-[8px] font-black uppercase tracking-[0.18em] mb-1"
+        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}

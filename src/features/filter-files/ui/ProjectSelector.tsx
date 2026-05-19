@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { ChevronDown, Flame, ShieldAlert, Skull, FileWarning, FolderGit2, X } from 'lucide-react';
 import { useFilterFacets, useFilterActions } from '@entities/filter-state';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { useClickOutside } from '@shared/lib';
 import { GlassCard } from '@shared/ui';
@@ -23,7 +22,6 @@ const PRESETS: {
 // The active preset becomes the visible label so the user can always see
 // which lens is on without opening the menu.
 export default function ProjectSelector() {
-  const { isDark } = useTheme();
   const { t } = useTranslation('filter');
   const { t: ti } = useTranslation('inspect');
   const { state } = useFilterFacets();
@@ -45,14 +43,14 @@ export default function ProjectSelector() {
           className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left transition-colors hover:bg-[color:var(--bg-hover)]"
         >
           {activePreset ? (
-            <activePreset.icon className="w-3.5 h-3.5 shrink-0 text-[#4f9a5c]" />
+            <activePreset.icon className="w-3.5 h-3.5 shrink-0 text-[color:var(--fg-accent)]" />
           ) : (
             <FolderGit2 className="w-3.5 h-3.5 shrink-0 text-[color:var(--fg-muted)]" />
           )}
           <div className="min-w-0 flex-1">
             <div className={`text-[11px] font-bold truncate leading-tight ${
               activePreset
-                ? 'text-[#4f9a5c]'
+                ? 'text-[color:var(--fg-accent)]'
                 : 'text-[color:var(--fg-strong)]'
             }`}>
               {activePreset ? t(`preset.${activePreset.i18nKey}.label`) : projectName}
@@ -81,7 +79,7 @@ export default function ProjectSelector() {
       {open && (
         <div className="absolute left-0 right-0 mt-1 z-10">
           <GlassCard className="p-1.5">
-            <div className="text-[9px] font-black uppercase tracking-[0.18em] mb-1 px-1.5 pt-0.5 text-[color:var(--fg-subtle)]">
+            <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1 px-1.5 pt-0.5 text-[color:var(--fg-subtle)]">
               {t('section.savedQueries')}
             </div>
             <div className="space-y-0.5">
@@ -96,19 +94,17 @@ export default function ProjectSelector() {
                     onClick={() => { applyPreset(active ? null : p.key); setOpen(false); }}
                     className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-left transition-colors ${
                       active
-                        ? 'bg-[#4f9a5c]/15'
+                        ? '[background:color-mix(in_srgb,var(--fg-accent)_15%,transparent)]'
                         : 'hover:bg-[color:var(--bg-hover)]'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#4f9a5c]' : 'text-[color:var(--fg-muted)]'}`} />
+                    <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[color:var(--fg-accent)]' : 'text-[color:var(--fg-muted)]'}`} />
                     <span className={`text-[11px] font-bold flex-1 truncate ${
-                      active ? 'text-[#4f9a5c]' : 'text-[color:var(--fg-strong)]'
+                      active ? 'text-[color:var(--fg-accent)]' : 'text-[color:var(--fg-strong)]'
                     }`}>
                       {label}
                     </span>
-                    <span className={`text-[9px] font-mono truncate ${
-                      isDark ? 'text-white/30' : 'text-black/30'
-                    }`}>
+                    <span className="text-[9px] font-mono truncate text-[color:var(--fg-subtle)]">
                       {hint}
                     </span>
                   </button>

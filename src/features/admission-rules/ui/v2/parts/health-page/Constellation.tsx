@@ -61,12 +61,12 @@ export function Constellation({
     <V2Card className="p-5 relative overflow-hidden">
       <div className="flex items-center gap-3 mb-4">
         <SectionTitle icon={Zap}>{tA('section.ruleConstellation')}</SectionTitle>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {visible.length} nodes · severity = hue · matches = glow · dashed = fired
         </span>
         <div className="flex-1" />
         <FilterChips value={filter} onChange={setFilter} rules={rules} />
-        <button type="button" className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] bg-white text-black hover:bg-white/90">
+        <button type="button" className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] bg-[var(--fg-strong)] text-[var(--bg-surface)] hover:opacity-90">
           <Plus className="w-3 h-3" />
           New rule
         </button>
@@ -88,10 +88,10 @@ export function Constellation({
               <text
                 x={12}
                 y={bandY(s) + 3}
-                fill="rgba(255,255,255,0.30)"
+                fill="var(--fg-subtle)"
                 fontSize={9}
                 fontFamily="ui-monospace, SFMono-Regular, monospace"
-                style={{ letterSpacing: '0.18em', textTransform: 'uppercase' }}
+                style={{ letterSpacing: 'var(--track-eyebrow)', textTransform: 'uppercase' }}
               >
                 {SOURCE_GLYPH[s]} {s}
               </text>
@@ -100,7 +100,7 @@ export function Constellation({
                 x2={W - 20}
                 y1={bandY(s)}
                 y2={bandY(s)}
-                stroke="rgba(255,255,255,0.05)"
+                stroke="var(--border-muted)"
                 strokeDasharray="2 4"
               />
             </g>
@@ -161,12 +161,12 @@ export function Constellation({
             <animate attributeName="r" values="10;13;10" dur="2.4s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="0.95;0.55;0.95" dur="2.4s" repeatCount="indefinite" />
           </circle>
-          <circle cx={W - 40} cy={H / 2} r={4} fill="#fff" opacity={0.95} />
+          <circle cx={W - 40} cy={H / 2} r={4} fill="var(--fg-strong)" opacity={0.95} />
           <text
             x={W - 40}
             y={H / 2 + 64}
             textAnchor="middle"
-            fill="rgba(255,255,255,0.55)"
+            fill="var(--fg-muted)"
             fontSize={9}
             fontFamily="ui-monospace, SFMono-Regular, monospace"
             style={{ letterSpacing: '0.22em', textTransform: 'uppercase' }}
@@ -198,7 +198,7 @@ export function Constellation({
             const fired = firedIds.has(rule.id);
             const sev = rule.severity === 'block' ? SEVERITY_COLOR.block
               : rule.severity === 'warn' ? SEVERITY_COLOR.warn
-              : 'rgba(255,255,255,0.55)';
+              : 'var(--fg-muted)';
             const radius = 6 + Math.min(8, matches / 5);
             const isHover = hovered === rule.id;
             const opacity = !rule.enabled ? 0.25 : isHover || hovered === null ? 1 : 0.5;
@@ -225,7 +225,7 @@ export function Constellation({
                   cx={x}
                   cy={y}
                   r={radius}
-                  fill={rule.enabled ? sev : 'rgba(255,255,255,0.2)'}
+                  fill={rule.enabled ? sev : 'var(--fg-subtle)'}
                   opacity={rule.enabled ? 0.95 : 0.4}
                   style={{
                     filter: rule.enabled
@@ -248,7 +248,7 @@ export function Constellation({
                   x={x}
                   y={y - radius - 6}
                   textAnchor="middle"
-                  fill={isHover ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.45)'}
+                  fill={isHover ? 'var(--fg-strong)' : 'var(--fg-subtle)'}
                   fontSize={9}
                   fontFamily="ui-monospace, SFMono-Regular, monospace"
                 >
@@ -261,7 +261,7 @@ export function Constellation({
       </div>
 
       {/* Inspector */}
-      <div className="mt-2 pt-4 border-t border-white/5 min-h-[88px]">
+      <div className="mt-2 pt-4 border-t border-[var(--border-muted)] min-h-[88px]">
         {hoveredRule ? (
           <RuleInspector rule={hoveredRule} preview={hoveredPreview} evalResult={hoveredEval} />
         ) : (
@@ -281,9 +281,9 @@ function RuleInspector({
 }) {
   const cost = estimateCost(rule);
   const sevColor = rule.severity === 'block' ? SEVERITY_COLOR.block
-    : rule.severity === 'warn' ? SEVERITY_COLOR.warn : 'rgba(255,255,255,0.55)';
+    : rule.severity === 'warn' ? SEVERITY_COLOR.warn : 'var(--fg-muted)';
   const fired = evalResult && (evalResult.status === 'block' || evalResult.status === 'warn');
-  const dotColor = rule.enabled ? sevColor : 'rgba(255,255,255,0.25)';
+  const dotColor = rule.enabled ? sevColor : 'var(--fg-subtle)';
   return (
     <div className="flex items-start gap-3 admv2-rise">
       <span className="relative shrink-0 mt-1 inline-flex items-center justify-center w-3 h-3">
@@ -303,40 +303,40 @@ function RuleInspector({
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-mono text-white/40">
+          <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
             {SOURCE_GLYPH[rule.source]} {rule.source}
           </span>
-          <span className="text-white/30">·</span>
+          <span className="text-[var(--fg-subtle)]">·</span>
           <span
-            className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
+            className="text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)] px-1.5 py-px rounded-md"
             style={{ color: sevColor, background: `${sevColor}1a` }}
           >
             {rule.severity}
           </span>
-          <span className="text-white/30">·</span>
-          <span className="text-[10px] font-mono text-white/55">{cost}</span>
+          <span className="text-[var(--fg-subtle)]">·</span>
+          <span className="text-[10px] font-mono text-[var(--fg-muted)]">{cost}</span>
           {fired && (
             <span
-              className="ml-auto text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+              className="ml-auto text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] px-2 py-0.5 rounded-md"
               style={{ color: sevColor, background: `${sevColor}22`, border: `1px solid ${sevColor}55` }}
             >
               fired in PR
             </span>
           )}
         </div>
-        <div className="mt-1 text-[14px] font-bold text-white/85 truncate">
+        <div className="mt-1 text-[14px] font-bold text-[var(--fg-default)] truncate">
           {rule.name}
         </div>
-        <div className="mt-0.5 text-[11px] font-mono text-white/40 truncate">
+        <div className="mt-0.5 text-[11px] font-mono text-[var(--fg-subtle)] truncate">
           uses {usesHint(rule.signal)} · {describeSignal(rule.signal)}
         </div>
         {preview && (
-          <div className="mt-2 flex items-center gap-3 text-[10px] font-mono text-white/55">
+          <div className="mt-2 flex items-center gap-3 text-[10px] font-mono text-[var(--fg-muted)]">
             <span>{preview.matches.length} repo-wide</span>
-            <span className="text-white/30">·</span>
-            <span className="text-white/85">{preview.confidenceMix.exact} exact</span>
+            <span className="text-[var(--fg-subtle)]">·</span>
+            <span className="text-[var(--fg-default)]">{preview.confidenceMix.exact} exact</span>
             <span>{preview.confidenceMix.overapprox} over</span>
-            <span className="text-white/40">{preview.confidenceMix.unknown} unk</span>
+            <span className="text-[var(--fg-subtle)]">{preview.confidenceMix.unknown} unk</span>
           </div>
         )}
       </div>
@@ -346,7 +346,7 @@ function RuleInspector({
 
 function EmptyInspector() {
   return (
-    <div className="flex items-center gap-3 text-[11px] font-mono text-white/40">
+    <div className="flex items-center gap-3 text-[11px] font-mono text-[var(--fg-subtle)]">
       <Eye className="w-3.5 h-3.5" />
       Hover a node to inspect signal, cost, and evidence.
     </div>
@@ -362,7 +362,7 @@ function FilterChips({
 }) {
   const opts: (RuleSource | 'all')[] = ['all', 'native', 'eslint', 'semgrep', 'codeql', 'custom'];
   return (
-    <div className="flex items-center gap-px rounded-md overflow-hidden bg-white/[0.04]">
+    <div className="flex items-center gap-px rounded-md overflow-hidden bg-[var(--bg-hover)]">
       {opts.map((o) => {
         const active = value === o;
         const count = o === 'all' ? rules.length : rules.filter((r) => r.source === o).length;
@@ -371,7 +371,7 @@ function FilterChips({
             key={o}
             onClick={() => { onChange(o); }}
             className={`px-2 py-1 text-[10px] font-mono transition-colors ${
-              active ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'
+              active ? 'bg-[var(--bg-active)] text-[var(--fg-strong)]' : 'text-[var(--fg-subtle)] hover:text-[var(--fg-default)]'
             }`}
           >
             {o}

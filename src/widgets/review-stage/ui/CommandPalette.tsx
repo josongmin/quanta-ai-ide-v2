@@ -45,13 +45,13 @@ type Item =
 type SymbolKindSig = SymbolChange['kind'];
 
 const SEV_TONE: Record<EngineSeverity, string> = {
-  blocker: '#c25a55', high: '#d98a85', medium: '#a8893a', low: '#5a8fce',
+  blocker: 'var(--intent-danger-fg)', high: 'var(--intent-danger-fg)', medium: 'var(--intent-warn-fg)', low: 'var(--intent-info-fg)',
 };
 
 const KIND_TONE = {
-  file:    '#7aa7d4',
-  symbol:  '#9583b8',
-  finding: '#c25a55',
+  file:    'var(--fg-link)',
+  symbol:  'var(--fg-accent)',
+  finding: 'var(--intent-danger-fg)',
 } as const;
 
 const KIND_LABEL = {
@@ -238,8 +238,8 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
           color: 'var(--fg-default)',
         }}
       >
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.08]">
-          <Search className="w-4 h-4 text-white/45 shrink-0" strokeWidth={2} />
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border-default)]">
+          <Search className="w-4 h-4 text-[var(--fg-muted)] shrink-0" strokeWidth={2} />
           <input
             ref={inputRef}
             type="text"
@@ -247,12 +247,12 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
             onChange={(e) => { setQuery(e.target.value); }}
             onKeyDown={onInputKey}
             placeholder="Jump to file, symbol, or finding…"
-            className="flex-1 bg-transparent border-0 outline-none text-[13px] font-mono text-white/85 placeholder:text-white/30"
+            className="flex-1 bg-transparent border-0 outline-none text-[13px] font-mono text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)]"
             aria-label="Search files, symbols, and findings"
             autoComplete="off"
             spellCheck={false}
           />
-          <span className="shrink-0 text-[10px] font-mono text-white/30">
+          <span className="shrink-0 text-[10px] font-mono text-[var(--fg-subtle)]">
             {visible.length} {visible.length === 1 ? 'result' : 'results'}
           </span>
           <button
@@ -260,15 +260,15 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
             onClick={togglePin}
             aria-pressed={isPinned}
             title={isPinned ? `#${String(pr.number)} 핀 해제 (⌘⇧P)` : `#${String(pr.number)} 핀 고정 (⌘⇧P)`}
-            className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded transition-colors hover:bg-white/[0.04]"
+            className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded transition-colors hover:bg-[var(--bg-hover)]"
             style={{
-              color: isPinned ? '#c2b3e0' : 'var(--fg-muted)',
+              color: isPinned ? 'var(--fg-accent)' : 'var(--fg-muted)',
             }}
           >
             <Pin
               className="w-3 h-3"
               strokeWidth={2}
-              style={isPinned ? { fill: '#c2b3e0' } : undefined}
+              style={isPinned ? { fill: 'var(--fg-accent)' } : undefined}
             />
           </button>
         </div>
@@ -280,7 +280,7 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
           aria-label="Search results"
         >
           {visible.length === 0 ? (
-            <div className="px-3 py-6 text-center text-[12px] text-white/40">
+            <div className="px-3 py-6 text-center text-[12px] text-[var(--fg-subtle)]">
               No matches.
             </div>
           ) : (
@@ -297,26 +297,26 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
           )}
         </div>
 
-        <div className="px-4 py-2 border-t border-white/[0.08] flex items-center gap-3 text-[10px] font-mono text-white/35">
+        <div className="px-4 py-2 border-t border-[var(--border-default)] flex items-center gap-3 text-[10px] font-mono text-[var(--fg-subtle)]">
           <span className="inline-flex items-center gap-1.5">
-            <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">↑</kbd>
-            <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">↓</kbd>
+            <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">↑</kbd>
+            <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">↓</kbd>
             navigate
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">⏎</kbd>
+            <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">⏎</kbd>
             open
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">⇥</kbd>
+            <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">⇥</kbd>
             cycle class
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">⌘⇧P</kbd>
+            <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">⌘⇧P</kbd>
             pin
           </span>
           <span className="ml-auto inline-flex items-center gap-1.5">
-            <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">esc</kbd>
+            <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">esc</kbd>
             close
           </span>
         </div>
@@ -345,32 +345,32 @@ function PaletteRow({
       onClick={onClick}
       className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-left transition-colors"
       style={{
-        background: active ? 'rgba(122,167,212,0.12)' : 'transparent',
-        border: active ? '1px solid rgba(122,167,212,0.45)' : '1px solid transparent',
+        background: active ? 'color-mix(in srgb, var(--fg-link) 12%, transparent)' : 'transparent',
+        border: active ? '1px solid color-mix(in srgb, var(--fg-link) 45%, transparent)' : '1px solid transparent',
       }}
     >
       <span
         className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded"
-        style={{ background: `${tone}1a`, color: tone, border: `1px solid ${tone}40` }}
+        style={{ background: `color-mix(in srgb, ${tone} 10%, transparent)`, color: tone, border: `1px solid color-mix(in srgb, ${tone} 25%, transparent)` }}
       >
         <RowIcon kind={item.kind} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[12px] font-mono text-white/85 truncate">
+        <span className="block text-[12px] font-mono text-[var(--fg-default)] truncate">
           {labelFor(item)}
         </span>
-        <span className="block text-[10px] font-mono text-white/45 truncate">
+        <span className="block text-[10px] font-mono text-[var(--fg-muted)] truncate">
           {sublabelFor(item)}
         </span>
       </span>
       <span
-        className="shrink-0 text-[9px] font-bold uppercase tracking-[0.16em]"
+        className="shrink-0 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: tone }}
       >
         {KIND_LABEL[item.kind]}
       </span>
       {active && (
-        <CornerDownLeft className="shrink-0 w-3 h-3 text-white/55" />
+        <CornerDownLeft className="shrink-0 w-3 h-3 text-[var(--fg-muted)]" />
       )}
     </button>
   );

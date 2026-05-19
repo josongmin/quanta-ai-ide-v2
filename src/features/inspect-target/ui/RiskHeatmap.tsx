@@ -157,9 +157,7 @@ export default function RiskHeatmap({ repo, isDark, size = 280 }: Props) {
   return (
     <div className="flex flex-col items-center w-full">
       <canvas ref={canvasRef} />
-      <div className={`mt-1 text-[9px] uppercase tracking-[0.18em] ${
-        isDark ? 'text-white/40' : 'text-black/40'
-      }`}>
+      <div className="mt-1 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {t('deps.heatmapSummary', {
           n: data.total,
           danger: data.danger,

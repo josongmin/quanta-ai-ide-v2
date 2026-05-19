@@ -48,13 +48,13 @@ export function SafeRenameCard({ file }: { file: FileRecord }) {
       >
         <Edit3 className="w-3 h-3" style={{ color: verdictColor }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('safeRename.title', { defaultValue: 'Safe-rename confidence' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[0.16em]"
+          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: verdictColor }}
         >
           {verdictLabel}
@@ -118,7 +118,7 @@ export function SafeRenameCard({ file }: { file: FileRecord }) {
         ) : (
           <ShieldAlert className="w-3 h-3" style={{ color: verdictColor }} />
         )}
-        <span className="text-[9.5px]" style={{ color: 'var(--fg-muted)' }}>
+        <span className="text-[var(--fs-xs)]" style={{ color: 'var(--fg-muted)' }}>
           {verdictKey === 'exact'
             ? t('safeRename.cta.exact', { defaultValue: 'Refactor engine will handle every callsite' })
             : verdictKey === 'overapprox'
@@ -128,7 +128,7 @@ export function SafeRenameCard({ file }: { file: FileRecord }) {
         <button
           type="button"
           disabled={verdictKey === 'unknown'}
-          className="ml-auto shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[0.18em] transition-colors hover-surface disabled:opacity-50 disabled:cursor-not-allowed"
+          className="ml-auto shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
             background: verdictKey === 'exact'
               ? 'rgb(from var(--intent-success-vivid) r g b / 0.15)'

@@ -4,14 +4,12 @@ import FacetRenderer from './FacetRenderer';
 import { facetsByCategory } from '@entities/facet';
 import { usePrefs } from '@features/tweak-prefs';
 import type { FacetCategoryKey } from '@entities/facet';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 
 type Props = { category: FacetCategoryKey };
 
 export default function CategorySection({ category }: Props) {
   const prefs = usePrefs();
-  const { isDark } = useTheme();
   const { t } = useTranslation('filter');
   const facets = facetsByCategory(category);
   const visibleFacets = facets.filter((f) => prefs.isVisible(f));
@@ -28,9 +26,7 @@ export default function CategorySection({ category }: Props) {
         className="w-full flex items-center justify-between mb-1.5 group"
       >
         <div className="flex items-center gap-2">
-          <h3 className={`text-[10px] font-black uppercase tracking-[0.18em] ${
-            isDark ? 'text-white/70' : 'text-black/55'
-          }`}>{t(`category.${category}`)}</h3>
+          <h3 className="text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-muted)]">{t(`category.${category}`)}</h3>
           <span className="text-[8px] tabular-nums text-[color:var(--fg-subtle)]">
             {visibleFacets.length}{lockedFacets.length > 0 && <span> + {lockedFacets.length}🔒</span>}
           </span>

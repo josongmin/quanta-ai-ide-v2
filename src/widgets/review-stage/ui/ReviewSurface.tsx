@@ -41,12 +41,12 @@ export function SceneHeader({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <Icon className="w-3.5 h-3.5 text-white/55" />
-      <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+      <Icon className="w-3.5 h-3.5 text-[var(--fg-muted)]" />
+      <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
         {title}
       </span>
       {hint !== undefined && (
-        <span className="text-[10px] font-mono text-white/40 ml-auto">{hint}</span>
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)] ml-auto">{hint}</span>
       )}
     </div>
   );

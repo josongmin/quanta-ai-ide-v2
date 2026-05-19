@@ -10,7 +10,6 @@ import {
 import type { TFunction } from 'i18next';
 import { useOverlay } from '../model/OverlayContext';
 import { useBoundaries } from '@features/inspect-boundaries';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { GlassCard, Popover } from '@shared/ui';
 import { HEAT_METRICS, findMetric, type HeatMetricKey } from '@entities/metric';
@@ -34,13 +33,13 @@ const INGRESS_PROTOCOLS: IngressProtocol[] = ['http', 'webhook', 'queue', 'grpc'
 const EGRESS_PROTOCOLS: EgressProtocol[] = ['http', 'db', 'fs', 'queue'];
 
 // Per-lens hue parallels the warm/cool semantic the heat metrics use, so
-// the four risk cards aren't a wall of identical pills. Hues picked from
-// the existing palette (warm-red, blue, violet, amber).
+// the four risk cards aren't a wall of identical pills. Hues mapped to the
+// theme-aware intent palette (danger, link, info, warn).
 const RISK_LENSES: { key: RiskLensKey; Icon: LucideIcon; hue: string }[] = [
-  { key: 'security',  Icon: ShieldAlert, hue: '#d98a85' },
-  { key: 'testGaps',  Icon: TestTube,    hue: '#7aa7d4' },
-  { key: 'busFactor', Icon: User,        hue: '#b58fcb' },
-  { key: 'techDebt',  Icon: Wrench,      hue: '#c9a45a' },
+  { key: 'security',  Icon: ShieldAlert, hue: 'var(--intent-danger-fg)' },
+  { key: 'testGaps',  Icon: TestTube,    hue: 'var(--fg-link)' },
+  { key: 'busFactor', Icon: User,        hue: 'var(--intent-info-fg)' },
+  { key: 'techDebt',  Icon: Wrench,      hue: 'var(--intent-warn-fg)' },
 ];
 
 const TIME_WINDOWS: readonly TimeWindow[] = ['7d', '30d', '90d'] as const;
@@ -51,13 +50,21 @@ const TIME_WINDOWS: readonly TimeWindow[] = ['7d', '30d', '90d'] as const;
 // renderer ignores.
 const METRICS_WITHOUT_THRESHOLD = new Set<HeatMetricKey>(['cycles', 'unknown']);
 
-const ACCENT = '#5fa86c';
-const ACCENT_TINT_BG = 'rgba(95,168,108,0.16)';
-const ACCENT_TINT_RING = 'rgba(95,168,108,0.42)';
-const ACCENT_TEXT = '#7bc488';
+// Brand "on / active" affordance. Theme-aware via --fg-accent so the panel
+// no longer hardcodes a green that breaks in light mode.
+const ACCENT = 'var(--fg-accent)';
+const ACCENT_TINT_BG = 'color-mix(in srgb, var(--fg-accent) 16%, transparent)';
+const ACCENT_TINT_RING = 'color-mix(in srgb, var(--fg-accent) 42%, transparent)';
+const ACCENT_TEXT = 'var(--fg-accent)';
+
+// Discrete category hues for the footer / preview chips, theme-aware.
+const HUE_DANGER = 'var(--intent-danger-fg)';
+const HUE_LINK = 'var(--fg-link)';
+const HUE_WARN = 'var(--intent-warn-fg)';
+const HUE_INFO = 'var(--intent-info-fg)';
+const HUE_NEUTRAL = 'var(--fg-muted)';
 
 export default function OverlayPopover() {
-  const { isDark } = useTheme();
   const { t } = useTranslation('overlay');
   const ov = useOverlay();
   const b = useBoundaries();
@@ -108,13 +115,13 @@ export default function OverlayPopover() {
     id: RowId; icon: LucideIcon; iconColor: string; label: string;
     value: string; on: boolean;
   }[] = [
-    { id: 'heat', icon: Flame,       iconColor: '#d98a85', label: t('panel.tile.heat'),
+    { id: 'heat', icon: Flame,       iconColor: HUE_DANGER, label: t('panel.tile.heat'),
       value: heatOn ? heatLabel : t('panel.off'), on: heatOn },
-    { id: 'risk', icon: ShieldAlert, iconColor: '#a8893a', label: t('panel.tile.risk'),
+    { id: 'risk', icon: ShieldAlert, iconColor: HUE_WARN, label: t('panel.tile.risk'),
       value: riskOn ? (riskLabel ?? '') : t('panel.off'), on: riskOn },
-    { id: 'api',  icon: Radar,       iconColor: '#7aa7d4', label: t('panel.tile.api'),
+    { id: 'api',  icon: Radar,       iconColor: HUE_LINK, label: t('panel.tile.api'),
       value: apiOn ? t('panel.on') : t('panel.off'), on: apiOn },
-    { id: 'boundaries', icon: Compass, iconColor: '#8b949e', label: t('panel.tile.boundaries'),
+    { id: 'boundaries', icon: Compass, iconColor: HUE_NEUTRAL, label: t('panel.tile.boundaries'),
       value: boundariesValue, on: boundariesOn },
   ];
 
@@ -135,14 +142,10 @@ export default function OverlayPopover() {
               onClick={toggleTrigger}
               aria-expanded={open}
               aria-haspopup="dialog"
-              className={`group flex items-center gap-1.5 pl-2 pr-1.5 h-8 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
-                isDark
-                  ? (open ? 'bg-white/[0.06]' : 'hover:bg-white/[0.04]')
-                  : (open ? 'bg-black/[0.05]' : 'hover:bg-black/[0.04]')
+              className={`group flex items-center gap-1.5 pl-2 pr-1.5 h-8 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors ${
+                open ? 'bg-[var(--bg-elevated)]' : 'hover:bg-[var(--bg-hover)]'
               } ${
-                active
-                  ? (isDark ? 'text-white' : 'text-black')
-                  : (isDark ? 'text-white/65' : 'text-black/65')
+                active ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-muted)]'
               }`}
             >
               <Layers
@@ -163,9 +166,7 @@ export default function OverlayPopover() {
                 </span>
               )}
               <ChevronDown
-                className={`w-3 h-3 -mr-0.5 transition-all duration-200 ${open ? 'rotate-180' : ''} ${
-                  isDark ? 'text-white/40 group-hover:text-white/70' : 'text-black/35 group-hover:text-black/60'
-                }`}
+                className={`w-3 h-3 -mr-0.5 transition-all duration-200 ${open ? 'rotate-180' : ''} text-[var(--fg-subtle)] group-hover:text-[var(--fg-default)]`}
               />
             </button>
           </GlassCard>
@@ -175,15 +176,11 @@ export default function OverlayPopover() {
       <GlassCard className="p-0 overflow-hidden">
         {/* Header — panel title only. The reset/active summary lives in the
             footer next to the chip strip so they read as one unit. */}
-        <div className={`flex items-center justify-between px-3 py-2 border-b ${
-          isDark ? 'border-white/10 text-white/40' : 'border-black/10 text-black/40'
-        }`}>
-          <span className="text-[9px] font-black uppercase tracking-[0.18em]">
+        <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-default)] text-[var(--fg-subtle)]">
+          <span className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]">
             {t('panel.heading')}
           </span>
-          <span className={`text-[9px] font-mono normal-case tracking-normal ${
-            isDark ? 'text-white/30' : 'text-black/30'
-          }`}>
+          <span className="text-[9px] font-mono normal-case tracking-normal text-[var(--fg-subtle)]">
             esc
           </span>
         </div>
@@ -193,49 +190,44 @@ export default function OverlayPopover() {
             rows={rows}
             selected={selected}
             onSelect={setSelected}
-            isDark={isDark}
           />
 
           {/* Right detail. Min-height keeps the popover stable across
               category switches; Popover itself clamps to viewport so we
               don't need an inner scroll container. */}
           <div className="flex-1 min-h-[280px] p-3">
-            {selected === 'heat' && <HeatDetail isDark={isDark} t={t} />}
-            {selected === 'risk' && <RiskDetail isDark={isDark} t={t} />}
-            {selected === 'api'  && <ApiDetail  isDark={isDark} t={t} />}
-            {selected === 'boundaries' && <BoundariesDetail isDark={isDark} t={t} />}
+            {selected === 'heat' && <HeatDetail t={t} />}
+            {selected === 'risk' && <RiskDetail t={t} />}
+            {selected === 'api'  && <ApiDetail  t={t} />}
+            {selected === 'boundaries' && <BoundariesDetail t={t} />}
           </div>
         </div>
 
         {/* Footer — what's currently painting on the dot field. Reset all
             sits at the right so the user's eye finds the active state
             and the way to clear it together. */}
-        <div className={`flex items-center gap-2 px-3 py-1.5 border-t text-[9px] font-black uppercase tracking-[0.18em] ${
-          isDark ? 'border-white/10 text-white/45' : 'border-black/10 text-black/45'
-        }`}>
+        <div className="flex items-center gap-2 px-3 py-1.5 border-t border-[var(--border-default)] text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           <span className="shrink-0">{t('panel.painting')}</span>
           {activeCount === 0 && previewCount === 0 ? (
-            <span className={isDark ? 'text-white/30' : 'text-black/30'}>
+            <span className="text-[var(--fg-subtle)]">
               {t('panel.paintingEmpty')}
             </span>
           ) : (
             <span className="flex items-center gap-1 flex-wrap min-w-0">
-              {heatOn       && <FooterChip color="#d98a85" label={`heat · ${heatLabel}`} onClear={() => { ov.setMetric('none'); }} />}
-              {riskOn       && <FooterChip color="#a8893a" label={`risk · ${riskLabel ?? ''}`} onClear={() => { ov.setRiskLens(null); }} />}
-              {apiOn        && <FooterChip color="#7aa7d4" label="public api" onClear={() => { ov.setApiRing(false); }} />}
-              {boundariesOn && <FooterChip color="#8b949e" label={`boundaries · ${boundariesValue}`} onClear={() => { b.clearAll(); }} />}
-              {blastOn      && <FooterChip color="#d98a85" label={t('panel.preview.blast')} onClear={() => { ov.clearBlast(); }} />}
-              {pathOn       && <FooterChip color="#7aa7d4" label={t('panel.preview.path')} onClear={() => { ov.clearPath(); }} />}
-              {prOn         && <FooterChip color="#b58fcb" label={t('panel.preview.pr')} onClear={() => { ov.setPrSeed(null); }} />}
+              {heatOn       && <FooterChip color={HUE_DANGER} label={`heat · ${heatLabel}`} onClear={() => { ov.setMetric('none'); }} />}
+              {riskOn       && <FooterChip color={HUE_WARN} label={`risk · ${riskLabel ?? ''}`} onClear={() => { ov.setRiskLens(null); }} />}
+              {apiOn        && <FooterChip color={HUE_LINK} label="public api" onClear={() => { ov.setApiRing(false); }} />}
+              {boundariesOn && <FooterChip color={HUE_NEUTRAL} label={`boundaries · ${boundariesValue}`} onClear={() => { b.clearAll(); }} />}
+              {blastOn      && <FooterChip color={HUE_DANGER} label={t('panel.preview.blast')} onClear={() => { ov.clearBlast(); }} />}
+              {pathOn       && <FooterChip color={HUE_LINK} label={t('panel.preview.path')} onClear={() => { ov.clearPath(); }} />}
+              {prOn         && <FooterChip color={HUE_INFO} label={t('panel.preview.pr')} onClear={() => { ov.setPrSeed(null); }} />}
             </span>
           )}
           {(activeCount > 0 || previewCount > 0) && (
             <button
               type="button"
               onClick={resetAll}
-              className={`ml-auto shrink-0 flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.18em] px-1.5 py-0.5 rounded transition-colors ${
-                isDark ? 'text-white/55 hover:text-white hover:bg-white/5' : 'text-black/55 hover:text-black hover:bg-black/5'
-              }`}
+              className="ml-auto shrink-0 flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] px-1.5 py-0.5 rounded transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]"
             >
               <X className="w-3 h-3" />
               {t('panel.resetAll')}
@@ -250,12 +242,11 @@ export default function OverlayPopover() {
 // --- Rail with arrow-key navigation --------------------------------------
 
 function Rail({
-  rows, selected, onSelect, isDark,
+  rows, selected, onSelect,
 }: {
   rows: { id: RowId; icon: LucideIcon; iconColor: string; label: string; value: string; on: boolean }[];
   selected: RowId;
   onSelect: (id: RowId) => void;
-  isDark: boolean;
 }) {
   const railRef = useRef<HTMLDivElement>(null);
 
@@ -280,9 +271,7 @@ function Rail({
     <div
       ref={railRef}
       onKeyDown={onKey}
-      className={`shrink-0 w-[220px] py-1.5 ${
-        isDark ? 'border-r border-white/10' : 'border-r border-black/10'
-      }`}
+      className="shrink-0 w-[220px] py-1.5 border-r border-[var(--border-default)]"
       role="tablist"
       aria-orientation="vertical"
     >
@@ -297,7 +286,6 @@ function Rail({
           on={row.on}
           selected={selected === row.id}
           onSelect={() => { onSelect(row.id); }}
-          isDark={isDark}
         />
       ))}
     </div>
@@ -305,7 +293,7 @@ function Rail({
 }
 
 function RailRow({
-  rowId, icon: Icon, iconColor, label, value, on, selected, onSelect, isDark,
+  rowId, icon: Icon, iconColor, label, value, on, selected, onSelect,
 }: {
   rowId: RowId;
   icon: LucideIcon;
@@ -315,21 +303,20 @@ function RailRow({
   on: boolean;
   selected: boolean;
   onSelect: () => void;
-  isDark: boolean;
 }) {
   // Selection takes precedence over on-state for the surface — that way the
   // user always sees which row drives the right-pane content. The on-state
   // carries through the icon tint and the "ON" pill (no left-edge stripe
   // per project convention).
   const surface = selected
-    ? (isDark ? 'bg-white/[0.08]' : 'bg-black/[0.06]')
-    : (isDark ? 'hover:bg-white/[0.04]' : 'hover:bg-black/[0.03]');
+    ? 'bg-[var(--bg-active)]'
+    : 'hover:bg-[var(--bg-hover)]';
   const labelColor = selected || on
-    ? (isDark ? 'text-white' : 'text-black')
-    : (isDark ? 'text-white/70' : 'text-black/70');
+    ? 'text-[var(--fg-strong)]'
+    : 'text-[var(--fg-default)]';
   const valueColor = on
-    ? (isDark ? 'text-white/70' : 'text-black/70')
-    : (isDark ? 'text-white/35' : 'text-black/35');
+    ? 'text-[var(--fg-default)]'
+    : 'text-[var(--fg-subtle)]';
 
   return (
     <button
@@ -345,7 +332,7 @@ function RailRow({
         <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: on ? iconColor : undefined }} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <span className={`text-[10px] font-black uppercase tracking-[0.18em] leading-tight ${labelColor}`}>
+            <span className={`text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] leading-tight ${labelColor}`}>
               {label}
             </span>
             {on && <OnPill />}
@@ -353,9 +340,7 @@ function RailRow({
           <div className={`mt-0.5 text-[10px] truncate ${valueColor}`}>{value}</div>
         </div>
         <ChevronRight className={`w-3 h-3 shrink-0 ${
-          selected
-            ? (isDark ? 'text-white/70' : 'text-black/70')
-            : (isDark ? 'text-white/30' : 'text-black/30')
+          selected ? 'text-[var(--fg-default)]' : 'text-[var(--fg-subtle)]'
         }`} />
       </div>
     </button>
@@ -365,7 +350,7 @@ function RailRow({
 function OnPill() {
   return (
     <span
-      className="text-[8.5px] font-black uppercase tracking-[0.14em] px-1 py-px rounded leading-none"
+      className="text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)] px-1 py-px rounded leading-none"
       style={{
         background: ACCENT_TINT_BG,
         color: ACCENT_TEXT,
@@ -380,9 +365,8 @@ function OnPill() {
 // --- Detail panes ---------------------------------------------------------
 
 function HeatDetail({
-  isDark, t,
+  t,
 }: {
-  isDark: boolean;
   t: TFunction;
 }) {
   const ov = useOverlay();
@@ -395,7 +379,7 @@ function HeatDetail({
 
   return (
     <div>
-      <DetailHeader isDark={isDark} title={t('metric')} onClear={isOn ? () => { ov.setMetric('none'); } : undefined} />
+      <DetailHeader title={t('metric')} onClear={isOn ? () => { ov.setMetric('none'); } : undefined} />
       <div className="space-y-0.5">
         {realMetrics.map((m) => (
           <MetricRow
@@ -404,21 +388,17 @@ function HeatDetail({
             label={m.label}
             hint={m.hint}
             hue={m.hue}
-            isDark={isDark}
             onClick={() => { ov.setMetric(m.key); }}
           />
         ))}
       </div>
 
       {timeActive && (
-        <div className={`mt-2 pt-2 border-t ${isDark ? 'border-white/10' : 'border-black/10'}`}>
-          <div className={`mb-1.5 px-1 text-[9px] font-black uppercase tracking-[0.18em] ${
-            isDark ? 'text-white/40' : 'text-black/40'
-          }`}>
+        <div className="mt-2 pt-2 border-t border-[var(--border-default)]">
+          <div className="mb-1.5 px-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
             {t('panel.tile.time')}
           </div>
           <SegmentedControl
-            isDark={isDark}
             options={TIME_WINDOWS.map((w) => ({ key: w, label: w.toUpperCase() }))}
             value={ov.timeWindow}
             onChange={(v) => { ov.setTimeWindow(v); }}
@@ -427,16 +407,14 @@ function HeatDetail({
       )}
 
       {isOn && (
-        <div className={`mt-2 pt-2 border-t space-y-2 ${isDark ? 'border-white/10' : 'border-black/10'}`}>
-          <div className={`px-1.5 text-[9px] font-black uppercase tracking-[0.18em] ${
-            isDark ? 'text-white/40' : 'text-black/40'
-          }`}>
+        <div className="mt-2 pt-2 border-t border-[var(--border-default)] space-y-2">
+          <div className="px-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
             {t('panel.tile.controls')}
           </div>
-          <Slider label={t('controls.intensity')} value={ov.intensity} onChange={ov.setIntensity} isDark={isDark} />
-          <Slider label={t('controls.radius')}    value={ov.radius}    onChange={ov.setRadius}    isDark={isDark} />
+          <Slider label={t('controls.intensity')} value={ov.intensity} onChange={ov.setIntensity} />
+          <Slider label={t('controls.radius')}    value={ov.radius}    onChange={ov.setRadius} />
           {showThreshold && (
-            <Slider label={t('controls.threshold')} value={ov.threshold} onChange={ov.setThreshold} isDark={isDark} />
+            <Slider label={t('controls.threshold')} value={ov.threshold} onChange={ov.setThreshold} />
           )}
         </div>
       )}
@@ -445,9 +423,8 @@ function HeatDetail({
 }
 
 function RiskDetail({
-  isDark, t,
+  t,
 }: {
-  isDark: boolean;
   t: TFunction;
 }) {
   const ov = useOverlay();
@@ -456,7 +433,6 @@ function RiskDetail({
   return (
     <div>
       <DetailHeader
-        isDark={isDark}
         title={t('panel.tile.risk')}
         onClear={active ? () => { ov.setRiskLens(null); } : undefined}
       />
@@ -469,28 +445,26 @@ function RiskDetail({
               type="button"
               onClick={() => { ov.setRiskLens(on ? null : key); }}
               aria-pressed={on}
-              className={`relative text-left px-2.5 py-2 rounded-md transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#5fa86c]/60 ${
+              className={`relative text-left px-2.5 py-2 rounded-md transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--border-focus)] ${
                 on
-                  ? (isDark ? 'bg-white/[0.06]' : 'bg-black/[0.05]')
-                  : (isDark ? 'hover:bg-white/[0.04] text-white/85' : 'hover:bg-black/[0.04] text-black/85')
+                  ? 'bg-[var(--bg-elevated)]'
+                  : 'hover:bg-[var(--bg-hover)] text-[var(--fg-default)]'
               }`}
-              style={on ? { boxShadow: `inset 0 0 0 1px ${hue}55` } : undefined}
+              style={on ? { boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${hue} 33%, transparent)` } : undefined}
             >
               <div className="flex items-center gap-1.5">
                 <Icon
                   className="w-3 h-3 shrink-0"
                   style={{ color: on ? hue : undefined }}
                 />
-                <span className={`text-[10px] font-black uppercase tracking-[0.18em] ${
-                  on ? '' : (isDark ? 'text-white/85' : 'text-black/85')
+                <span className={`text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] ${
+                  on ? '' : 'text-[var(--fg-default)]'
                 }`} style={on ? { color: hue } : undefined}>
                   {t(`risk.lens.${key}.label`)}
                 </span>
               </div>
               <div
-                className={`mt-1 text-[9px] leading-snug ${
-                  isDark ? 'text-white/45' : 'text-black/45'
-                }`}
+                className="mt-1 text-[9px] leading-snug text-[var(--fg-muted)]"
                 style={{
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
@@ -504,7 +478,7 @@ function RiskDetail({
           );
         })}
       </div>
-      <div className={`mt-2 px-1 text-[9px] leading-snug ${isDark ? 'text-white/35' : 'text-black/35'}`}>
+      <div className="mt-2 px-1 text-[9px] leading-snug text-[var(--fg-subtle)]">
         {t('risk.toggleHint')}
       </div>
     </div>
@@ -512,9 +486,8 @@ function RiskDetail({
 }
 
 function ApiDetail({
-  isDark, t,
+  t,
 }: {
-  isDark: boolean;
   t: TFunction;
 }) {
   const ov = useOverlay();
@@ -522,11 +495,10 @@ function ApiDetail({
   return (
     <div>
       <DetailHeader
-        isDark={isDark}
         title={t('panel.tile.api')}
         onClear={on ? () => { ov.setApiRing(false); } : undefined}
       />
-      <div className={`text-[11px] leading-relaxed mb-3 ${isDark ? 'text-white/55' : 'text-black/55'}`}>
+      <div className="text-[11px] leading-relaxed mb-3 text-[var(--fg-muted)]">
         {t('panel.detail.apiBody')}
       </div>
 
@@ -536,18 +508,17 @@ function ApiDetail({
       <div className="flex items-center gap-2 mb-3 px-1">
         <span className="relative inline-block w-5 h-5">
           <span className="absolute inset-0 rounded-full" style={{
-            border: '1px solid #7aa7d4',
-            boxShadow: '0 0 6px rgba(122,167,212,0.5)',
+            border: '1px solid var(--fg-link)',
+            boxShadow: '0 0 6px color-mix(in srgb, var(--fg-link) 50%, transparent)',
           }} />
-          <span className="absolute left-1/2 top-1/2 w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#7aa7d4]" />
+          <span className="absolute left-1/2 top-1/2 w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--fg-link)]" />
         </span>
-        <span className={`text-[9.5px] ${isDark ? 'text-white/45' : 'text-black/45'}`}>
+        <span className="text-[var(--fs-xs)] text-[var(--fg-muted)]">
           {t('panel.detail.apiPreview')}
         </span>
       </div>
 
       <ToggleButton
-        isDark={isDark}
         on={on}
         onClick={() => { ov.setApiRing(!on); }}
         label={on ? t('panel.disable') : t('panel.enable')}
@@ -557,9 +528,8 @@ function ApiDetail({
 }
 
 function BoundariesDetail({
-  isDark, t,
+  t,
 }: {
-  isDark: boolean;
   t: TFunction;
 }) {
   const b = useBoundaries();
@@ -567,25 +537,24 @@ function BoundariesDetail({
   return (
     <div>
       <DetailHeader
-        isDark={isDark}
         title={t('panel.tile.boundaries')}
         onClear={anyOn ? () => { b.clearAll(); } : undefined}
       />
       <div className="space-y-1">
         <BoundaryRow
-          isDark={isDark} active={b.showEntry}
+          active={b.showEntry}
           label={t('boundaries.entry')} caption={t('boundaries.entryCaption')}
           onToggle={() => { b.setShowEntry(!b.showEntry); }}
         />
         <BoundaryRow
-          isDark={isDark} active={b.showIngress}
+          active={b.showIngress}
           label={t('boundaries.ingress')} caption={t('boundaries.ingressCaption')}
           onToggle={() => { b.setShowIngress(!b.showIngress); }}
         />
         {b.showIngress && (
-          <ProtocolPills isDark={isDark}>
+          <ProtocolPills>
             {INGRESS_PROTOCOLS.map((p) => (
-              <ProtocolPill key={p} isDark={isDark}
+              <ProtocolPill key={p}
                 active={b.ingressProtocols.has(p)}
                 label={t(`boundaries.protocol.${p}`)}
                 onClick={() => { b.toggleIngressProtocol(p); }} />
@@ -593,14 +562,14 @@ function BoundariesDetail({
           </ProtocolPills>
         )}
         <BoundaryRow
-          isDark={isDark} active={b.showEgress}
+          active={b.showEgress}
           label={t('boundaries.egress')} caption={t('boundaries.egressCaption')}
           onToggle={() => { b.setShowEgress(!b.showEgress); }}
         />
         {b.showEgress && (
-          <ProtocolPills isDark={isDark}>
+          <ProtocolPills>
             {EGRESS_PROTOCOLS.map((p) => (
-              <ProtocolPill key={p} isDark={isDark}
+              <ProtocolPill key={p}
                 active={b.egressProtocols.has(p)}
                 label={t(`boundaries.protocol.${p}`)}
                 onClick={() => { b.toggleEgressProtocol(p); }} />
@@ -613,55 +582,51 @@ function BoundariesDetail({
 }
 
 function BoundaryRow({
-  isDark, active, label, caption, onToggle,
-}: { isDark: boolean; active: boolean; label: string; caption: string; onToggle: () => void }) {
+  active, label, caption, onToggle,
+}: { active: boolean; label: string; caption: string; onToggle: () => void }) {
   return (
     <button type="button" onClick={onToggle} aria-pressed={active}
       className={`w-full flex items-start gap-2 px-2 py-1.5 rounded-lg text-left transition-colors ${
         active
-          ? (isDark ? 'bg-white/10' : 'bg-black/10')
-          : (isDark ? 'hover:bg-white/5' : 'hover:bg-black/5')
+          ? 'bg-[var(--bg-active)]'
+          : 'hover:bg-[var(--bg-hover)]'
       }`}
     >
       <span
         className={`mt-0.5 w-3 h-3 rounded-[4px] shrink-0 border transition-colors ${
-          active ? 'border-transparent' : (isDark ? 'border-white/30' : 'border-black/30')
+          active ? 'border-transparent' : 'border-[var(--border-strong)]'
         }`}
-        style={{ background: active ? '#d98a85' : 'transparent' }}
+        style={{ background: active ? 'var(--intent-danger-fg)' : 'transparent' }}
       />
       <div className="min-w-0 flex-1">
-        <div className={`text-[11px] font-bold leading-tight ${isDark ? 'text-white/85' : 'text-black/85'}`}>{label}</div>
+        <div className="text-[11px] font-bold leading-tight text-[var(--fg-default)]">{label}</div>
         {!active && (
-          <div className={`text-[9px] leading-tight mt-0.5 ${isDark ? 'text-white/40' : 'text-black/40'}`}>{caption}</div>
+          <div className="text-[9px] leading-tight mt-0.5 text-[var(--fg-subtle)]">{caption}</div>
         )}
       </div>
     </button>
   );
 }
 
-function ProtocolPills({ isDark, children }: { isDark: boolean; children: ReactNode }) {
+function ProtocolPills({ children }: { children: ReactNode }) {
   // No left-edge stripe (project convention) — indent via padding only.
-  void isDark;
   return (
     <div className="mx-2 mb-1 -mt-0.5 pl-5 flex flex-wrap gap-1 pb-1">{children}</div>
   );
 }
 
 function ProtocolPill({
-  isDark, active, label, onClick,
-}: { isDark: boolean; active: boolean; label: string; onClick: () => void }) {
+  active, label, onClick,
+}: { active: boolean; label: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-pressed={active}
-      className={`px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[0.18em] transition-colors border`}
+      className="px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors border"
       style={active
         ? { background: ACCENT_TINT_BG, color: ACCENT_TEXT, borderColor: ACCENT_TINT_RING }
         : undefined
       }
     >
-      <span className={!active
-        ? (isDark ? 'text-white/55' : 'text-black/45')
-        : ''
-      }>{label}</span>
+      <span className={!active ? 'text-[var(--fg-muted)]' : ''}>{label}</span>
     </button>
   );
 }
@@ -669,22 +634,18 @@ function ProtocolPill({
 // --- Shared bits ----------------------------------------------------------
 
 function DetailHeader({
-  isDark, title, onClear,
-}: { isDark: boolean; title: string; onClear?: () => void }) {
+  title, onClear,
+}: { title: string; onClear?: () => void }) {
   return (
     <div className="flex items-center justify-between mb-2">
-      <div className={`text-[9px] font-black uppercase tracking-[0.18em] ${
-        isDark ? 'text-white/40' : 'text-black/40'
-      }`}>
+      <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {title}
       </div>
       {onClear && (
         <button
           type="button"
           onClick={onClear}
-          className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.18em] px-1.5 py-0.5 rounded transition-colors ${
-            isDark ? 'text-white/55 hover:text-white/85 hover:bg-white/5' : 'text-black/55 hover:text-black/85 hover:bg-black/5'
-          }`}
+          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] px-1.5 py-0.5 rounded transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]"
         >
           <X className="w-2.5 h-2.5" /> clear
         </button>
@@ -694,10 +655,10 @@ function DetailHeader({
 }
 
 function MetricRow({
-  active, onClick, label, hint, hue, isDark,
+  active, onClick, label, hint, hue,
 }: {
   active: boolean; onClick: () => void;
-  label: string; hint: string; hue: string; isDark: boolean;
+  label: string; hint: string; hue: string;
 }) {
   return (
     <button type="button"
@@ -705,8 +666,8 @@ function MetricRow({
       aria-pressed={active}
       className={`group w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left transition-colors ${
         active
-          ? (isDark ? 'bg-white/[0.08] text-white' : 'bg-black/[0.05] text-black')
-          : (isDark ? 'hover:bg-white/[0.04] text-white/75' : 'hover:bg-black/[0.04] text-black/75')
+          ? 'bg-[var(--bg-active)] text-[var(--fg-strong)]'
+          : 'hover:bg-[var(--bg-hover)] text-[var(--fg-default)]'
       }`}
     >
       <span
@@ -715,16 +676,14 @@ function MetricRow({
           background: active ? hue : 'transparent',
           boxShadow: active
             ? `0 0 0 1px ${hue}, 0 0 10px ${hue}`
-            : `inset 0 0 0 1px ${isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.25)'}`,
+            : 'inset 0 0 0 1px var(--border-strong)',
         }}
       />
       <div className="min-w-0 flex-1">
-        <div className="text-[11.5px] font-bold leading-tight">{label}</div>
+        <div className="text-[var(--fs-base)] font-bold leading-tight">{label}</div>
         <div
-          className={`text-[9.5px] leading-snug mt-0.5 ${
-            active
-              ? (isDark ? 'text-white/65' : 'text-black/55')
-              : (isDark ? 'text-white/40' : 'text-black/40')
+          className={`text-[var(--fs-xs)] leading-snug mt-0.5 ${
+            active ? 'text-[var(--fg-muted)]' : 'text-[var(--fg-subtle)]'
           }`}
           style={{
             display: '-webkit-box',
@@ -742,15 +701,13 @@ function MetricRow({
 }
 
 function Slider({
-  label, value, onChange, isDark,
+  label, value, onChange,
 }: {
-  label: string; value: number; onChange: (v: number) => void; isDark: boolean;
+  label: string; value: number; onChange: (v: number) => void;
 }) {
   return (
     <div className="px-1.5">
-      <div className={`flex justify-between text-[9px] font-bold uppercase tracking-[0.18em] mb-1 ${
-        isDark ? 'text-white/55' : 'text-black/55'
-      }`}>
+      <div className="flex justify-between text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] mb-1 text-[var(--fg-muted)]">
         <span>{label}</span>
         <span className="font-mono tabular-nums">{value.toFixed(2)}</span>
       </div>
@@ -758,7 +715,8 @@ function Slider({
         type="range" min={0} max={1} step={0.01}
         value={value}
         onChange={(e) => { onChange(+e.target.value); }}
-        className="w-full accent-[#d98a85]"
+        className="w-full"
+        style={{ accentColor: 'var(--intent-danger-fg)' }}
       />
     </div>
   );
@@ -767,9 +725,8 @@ function Slider({
 // Pill-group control with arrow-key navigation. Used for the time-window
 // picker; centralised so segmented controls feel uniform across the panel.
 function SegmentedControl<T extends string>({
-  isDark, options, value, onChange,
+  options, value, onChange,
 }: {
-  isDark: boolean;
   options: { key: T; label: string }[];
   value: T;
   onChange: (v: T) => void;
@@ -805,7 +762,7 @@ function SegmentedControl<T extends string>({
             role="radio"
             aria-checked={active}
             tabIndex={active ? 0 : -1}
-            className={`flex-1 px-2 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[#5fa86c]/60`}
+            className="flex-1 px-2 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--border-focus)]"
             style={active
               ? {
                   background: ACCENT_TINT_BG,
@@ -815,10 +772,7 @@ function SegmentedControl<T extends string>({
               : undefined
             }
           >
-            <span className={!active
-              ? (isDark ? 'text-white/65' : 'text-black/55')
-              : ''
-            }>{label}</span>
+            <span className={!active ? 'text-[var(--fg-muted)]' : ''}>{label}</span>
           </button>
         );
       })}
@@ -827,14 +781,14 @@ function SegmentedControl<T extends string>({
 }
 
 function ToggleButton({
-  isDark, on, onClick, label,
-}: { isDark: boolean; on: boolean; onClick: () => void; label: string }) {
+  on, onClick, label,
+}: { on: boolean; onClick: () => void; label: string }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={on}
-      className={`flex items-center gap-2 px-3 py-2 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors`}
+      className="flex items-center gap-2 px-3 py-2 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors"
       style={on
         ? {
             background: ACCENT_TINT_BG,
@@ -844,8 +798,8 @@ function ToggleButton({
         : undefined
       }
     >
-      <Power className={`w-3.5 h-3.5 ${on ? '' : (isDark ? 'text-white/60' : 'text-black/60')}`} />
-      <span className={!on ? (isDark ? 'text-white/85' : 'text-black/85') : ''}>{label}</span>
+      <Power className={`w-3.5 h-3.5 ${on ? '' : 'text-[var(--fg-muted)]'}`} />
+      <span className={!on ? 'text-[var(--fg-default)]' : ''}>{label}</span>
     </button>
   );
 }
@@ -857,11 +811,11 @@ function FooterChip({
 }: { color: string; label: string; onClear: () => void }) {
   return (
     <span
-      className="inline-flex items-center gap-1 pl-1.5 pr-0.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-[0.14em]"
+      className="inline-flex items-center gap-1 pl-1.5 pr-0.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
       style={{
-        background: `${color}1f`,
+        background: `color-mix(in srgb, ${color} 12%, transparent)`,
         color,
-        boxShadow: `inset 0 0 0 1px ${color}40`,
+        boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${color} 25%, transparent)`,
       }}
     >
       <span className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />

@@ -89,7 +89,7 @@ const VIEWS: SavedView[] = [
     id: 'sla-risk',
     label: 'SLA 위험',
     icon: Clock,
-    tone: '#d3b264',
+    tone: 'var(--intent-warn-fg)',
     scope: 'all',
     match: (pr) => {
       if (pr.status === 'closed' || pr.status === 'merged' || pr.status === 'draft') return false;
@@ -102,7 +102,7 @@ const VIEWS: SavedView[] = [
     id: 'blockers',
     label: '블로커 있음',
     icon: AlertCircle,
-    tone: '#c25a55',
+    tone: 'var(--intent-danger-fg)',
     scope: 'all',
     match: (pr) => {
       if (pr.status === 'closed' || pr.status === 'merged' || pr.status === 'draft') return false;
@@ -114,7 +114,7 @@ const VIEWS: SavedView[] = [
     id: 'risky',
     label: '고위험',
     icon: FileWarning,
-    tone: '#e88a85',
+    tone: 'var(--intent-danger-fg)',
     scope: 'all',
     match: (pr, repo) => {
       if (pr.status === 'closed' || pr.status === 'merged' || pr.status === 'draft') return false;
@@ -206,9 +206,9 @@ export default function SavedViews({
             onClick={() => { onApply(active ? null : v); }}
             className="shrink-0 inline-flex items-center gap-1.5 h-6 px-2 rounded-full text-[10px] font-mono tabular-nums transition-colors"
             style={{
-              background: active ? `${v.tone}1f` : 'var(--bg-surface-muted)',
+              background: active ? `color-mix(in srgb, ${v.tone} 12%, transparent)` : 'var(--bg-surface-muted)',
               border: active
-                ? `1px solid ${v.tone}55`
+                ? `1px solid color-mix(in srgb, ${v.tone} 33%, transparent)`
                 : '1px solid var(--border-default)',
               color: active ? v.tone : 'var(--fg-muted)',
             }}
@@ -228,7 +228,7 @@ export default function SavedViews({
       {/* Custom user-saved views */}
       {customViews.map((cv) => {
         const active = activeCustomId === cv.id;
-        const tone = '#9583b8'; // single tone for all customs
+        const tone = 'var(--fg-accent)'; // single tone for all customs
         return (
           <span key={cv.id} className="shrink-0 inline-flex items-center group">
             <button
@@ -238,8 +238,8 @@ export default function SavedViews({
               onClick={() => { onApplyCustom?.(active ? null : cv); }}
               className="inline-flex items-center gap-1.5 h-6 pl-2 pr-1 rounded-l-full text-[10px] font-mono transition-colors"
               style={{
-                background: active ? `${tone}1f` : 'var(--bg-surface-muted)',
-                border: active ? `1px solid ${tone}55` : '1px solid var(--border-default)',
+                background: active ? `color-mix(in srgb, ${tone} 12%, transparent)` : 'var(--bg-surface-muted)',
+                border: active ? `1px solid color-mix(in srgb, ${tone} 33%, transparent)` : '1px solid var(--border-default)',
                 borderRight: 'none',
                 color: active ? tone : 'var(--fg-muted)',
               }}
@@ -253,10 +253,10 @@ export default function SavedViews({
               onClick={() => { onRemove(cv.id); }}
               aria-label={`${cv.label} 삭제`}
               title="저장된 뷰 삭제"
-              className="inline-flex items-center justify-center h-6 w-5 rounded-r-full text-white/30 hover:text-white/85 hover:bg-white/[0.04] transition-colors"
+              className="inline-flex items-center justify-center h-6 w-5 rounded-r-full text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors"
               style={{
-                background: active ? `${tone}1f` : 'var(--bg-surface-muted)',
-                border: active ? `1px solid ${tone}55` : '1px solid var(--border-default)',
+                background: active ? `color-mix(in srgb, ${tone} 12%, transparent)` : 'var(--bg-surface-muted)',
+                border: active ? `1px solid color-mix(in srgb, ${tone} 33%, transparent)` : '1px solid var(--border-default)',
                 borderLeft: 'none',
               }}
             >
@@ -274,7 +274,7 @@ export default function SavedViews({
             type="button"
             onClick={() => { setShowSavePrompt(true); setDraftLabel(currentQuery ?? ''); }}
             title="현재 검색을 뷰로 저장"
-            className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono text-white/45 hover:text-white/85 hover:bg-white/[0.04] transition-colors"
+            className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors"
             style={{ border: '1px dashed var(--border-strong)' }}
           >
             <BookmarkIcon className="w-2.5 h-2.5" strokeWidth={2.2} />
@@ -289,8 +289,8 @@ export default function SavedViews({
         <span
           className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full"
           style={{
-            background: 'rgba(149,131,184,0.10)',
-            border: '1px solid rgba(149,131,184,0.40)',
+            background: 'color-mix(in srgb, var(--fg-accent) 10%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--fg-accent) 40%, transparent)',
           }}
         >
           <input
@@ -303,13 +303,13 @@ export default function SavedViews({
               else if (e.key === 'Escape') { setShowSavePrompt(false); setDraftLabel(''); }
             }}
             placeholder="이름…"
-            className="bg-transparent outline-none text-[10px] font-mono text-white/85 placeholder:text-white/30 w-20"
+            className="bg-transparent outline-none text-[10px] font-mono text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)] w-20"
           />
           <button
             type="button"
             onClick={submitSave}
             disabled={draftLabel.trim().length === 0}
-            className="text-[9px] font-bold uppercase tracking-[0.14em] text-[#c2b3e0] disabled:opacity-40"
+            className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-accent)] disabled:opacity-40"
           >
             저장
           </button>

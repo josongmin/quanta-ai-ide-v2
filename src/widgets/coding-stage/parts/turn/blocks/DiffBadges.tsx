@@ -68,13 +68,13 @@ export function DriftBadge({
 }
 
 // Tiny visual bar showing add/remove ratio. Caps at 5 segments total.
-export function DiffBar({ added, removed, isDark }: { added: number; removed: number; isDark: boolean }) {
+export function DiffBar({ added, removed }: { added: number; removed: number }) {
   const total = added + removed;
   if (total === 0) return null;
   const segs = 5;
   const a = Math.round((added / total) * segs);
   const d = segs - a;
-  const idle = isDark ? 'bg-white/[0.10]' : 'bg-black/[0.08]';
+  const idle = 'bg-[color:var(--bg-active-strong)]';
   return (
     <div className="flex items-center gap-px ml-1">
       {Array.from({ length: a }).map((_, i) => (

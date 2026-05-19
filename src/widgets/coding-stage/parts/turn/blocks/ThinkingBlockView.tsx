@@ -3,17 +3,17 @@ import { Brain, ChevronRight } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import type { ThinkingBlock } from '../../types';
 
-function ThinkingBlockViewImpl({ block, isDark }: { block: ThinkingBlock; isDark: boolean }) {
+function ThinkingBlockViewImpl({ block }: { block: ThinkingBlock }) {
   const { t } = useTranslation('coding');
   const [open, setOpen] = useState(false);
   const seconds = (block.durationMs / 1000).toFixed(1);
-  const muted = isDark ? 'text-white/40' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
   return (
     <div>
       <button type="button"
         onClick={() => { setOpen((v) => !v); }}
-        className={`group flex items-center gap-1.5 text-[11px] font-medium transition-colors ${muted} hover:${isDark ? 'text-white/70' : 'text-black/70'}`}
+        className={`group flex items-center gap-1.5 text-[11px] font-medium transition-colors ${muted} hover:text-[color:var(--fg-default)]`}
       >
         <Brain className="w-3 h-3" />
         <span>{t('block.thoughtFor', { seconds })}</span>
@@ -21,9 +21,7 @@ function ThinkingBlockViewImpl({ block, isDark }: { block: ThinkingBlock; isDark
       </button>
       {open && (
         <div
-          className={`mt-1.5 ml-4 pl-3 border-l text-[12px] leading-[1.6] italic ${
-            isDark ? 'border-white/[0.08] text-white/55' : 'border-black/[0.08] text-black/55'
-          }`}
+          className="mt-1.5 ml-4 pl-3 border-l text-[12px] leading-[1.6] italic border-[color:var(--border-default)] text-[color:var(--fg-muted)]"
         >
           {block.text}
         </div>

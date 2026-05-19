@@ -93,7 +93,7 @@ export default function DepsCarousel({ repo, isDark, size = 260 }: Props) {
       <div className="flex items-center justify-between mb-2">
         <div className="flex flex-col">
           <span
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-default)' }}
           >
             {cur.label}

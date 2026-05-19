@@ -32,7 +32,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
       >
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofTrust')}
@@ -44,7 +44,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
         </div>
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofFreshness')}
@@ -53,7 +53,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
         </div>
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofEnvelope')}
@@ -62,7 +62,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
         </div>
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofReplay')}
@@ -87,7 +87,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
       {/* Witness lines (legacy evidence trace) */}
       <div>
         <div
-          className="text-[9px] uppercase tracking-[0.18em] mb-2"
+          className="text-[9px] uppercase tracking-[var(--track-eyebrow)] mb-2"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('focus.evidenceTrace')}
@@ -108,7 +108,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
       {fresh.verifiedEnvelope && (
         <button
           type="button"
-          className="w-full py-2 rounded-lg text-[10px] font-black uppercase tracking-[0.18em] transition-colors hover:brightness-110"
+          className="w-full py-2 rounded-lg text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover:brightness-110"
           style={{
             background: 'rgb(from var(--intent-success-vivid) r g b / 0.15)',
             color: 'var(--intent-success-fg)',
@@ -163,7 +163,7 @@ function PlannerRow({
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: dotColor }} />
         <span className="font-mono font-bold flex-1 truncate">{cand.algorithm}</span>
         <span
-          className="shrink-0 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
+          className="shrink-0 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={
             cand.selected
               ? { background: 'rgb(from var(--intent-success-fg) r g b / 0.20)', color: 'var(--intent-success-fg)' }

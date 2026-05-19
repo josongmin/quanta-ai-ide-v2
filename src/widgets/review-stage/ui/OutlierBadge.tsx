@@ -56,10 +56,10 @@ export default function OutlierBadge({ pr, allPrs, onJumpToPr }: Props) {
   if (stats.length === 0) return null;
   const top = stats[0];
   const tone = top.z >= 3
-    ? '#c25a55'
+    ? 'var(--intent-danger-fg)'
     : top.z >= 2
-      ? '#d3b264'
-      : '#7aa7d4';
+      ? 'var(--intent-warn-fg)'
+      : 'var(--fg-link)';
   const direction = top.z > 0 ? '↑' : '↓';
   const sigma = Math.abs(top.z).toFixed(1);
 
@@ -89,7 +89,7 @@ export default function OutlierBadge({ pr, allPrs, onJumpToPr }: Props) {
           title={'평균 PR 대비 outlier — ' + tooltip + ' (클릭: 비슷한 PR 보기)'}
         >
           <Sigma className="w-2.5 h-2.5" strokeWidth={2.5} />
-          <span className="font-bold uppercase tracking-[0.14em]">outlier</span>
+          <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">outlier</span>
           <span className="tabular-nums">
             {direction}{sigma}σ {top.noun}
           </span>
@@ -101,7 +101,7 @@ export default function OutlierBadge({ pr, allPrs, onJumpToPr }: Props) {
         style={{
           background: 'var(--bg-elevated)',
           border: '1px solid var(--border-strong)',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.45)',
+          boxShadow: '0 8px 24px var(--shadow-md)',
         }}
       >
         <SimilarOutliers pr={pr} allPrs={allPrs} onJump={onJumpToPr} />

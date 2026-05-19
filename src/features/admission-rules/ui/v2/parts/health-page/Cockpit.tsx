@@ -72,17 +72,17 @@ export function Cockpit({
             const isNative = s === 'native';
             return (
               <div key={s} className="flex items-center gap-2 text-[11px] font-mono">
-                <span className={`w-3 text-center ${isNative ? 'text-white/85' : 'text-white/40'}`}>
+                <span className={`w-3 text-center ${isNative ? 'text-[var(--fg-default)]' : 'text-[var(--fg-subtle)]'}`}>
                   {SOURCE_GLYPH[s]}
                 </span>
-                <span className={isNative ? 'text-white/85 font-bold' : 'text-white/55'}>{s}</span>
-                <div className="flex-1 h-px bg-white/5" />
-                <span className="text-white/55 tabular-nums">{enabled}/{total}</span>
+                <span className={isNative ? 'text-[var(--fg-default)] font-bold' : 'text-[var(--fg-muted)]'}>{s}</span>
+                <div className="flex-1 h-px bg-[var(--border-muted)]" />
+                <span className="text-[var(--fg-muted)] tabular-nums">{enabled}/{total}</span>
               </div>
             );
           })}
         </div>
-        <div className="mt-3 pt-3 border-t border-white/5 text-[10px] font-mono text-white/40 leading-relaxed">
+        <div className="mt-3 pt-3 border-t border-[var(--border-muted)] text-[10px] font-mono text-[var(--fg-subtle)] leading-relaxed">
           ★ native = engine-only signals. lint/semgrep can&apos;t see graph,
           taint, or PR-shape predicates.
         </div>
@@ -119,7 +119,7 @@ function VerdictDonut({
           </filter>
         </defs>
         {/* track */}
-        <circle cx={40} cy={40} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={6} />
+        <circle cx={40} cy={40} r={r} fill="none" stroke="var(--border-default)" strokeWidth={6} />
         {total > 0 && (
           <g transform="rotate(-90 40 40)">
             <circle
@@ -154,10 +154,10 @@ function VerdictDonut({
         )}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-[18px] font-black text-white tabular-nums leading-none">
+        <span className="text-[18px] font-black text-[var(--fg-strong)] tabular-nums leading-none">
           {total}
         </span>
-        <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/40 mt-0.5">
+        <span className="text-[8px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] mt-0.5">
           rules
         </span>
       </div>
@@ -183,21 +183,21 @@ function CostLedger({ rules }: { rules: AdmissionRule[] }) {
         const heavy = c === 'slow' || c === 'background';
         return (
           <div key={c} className="flex items-center gap-2 text-[11px] font-mono">
-            <span className={heavy ? 'text-white/85 font-bold' : 'text-white/55'}>{c}</span>
-            <div className="flex-1 h-px bg-white/5" />
+            <span className={heavy ? 'text-[var(--fg-default)] font-bold' : 'text-[var(--fg-muted)]'}>{c}</span>
+            <div className="flex-1 h-px bg-[var(--border-muted)]" />
             <div
               className="h-1.5 rounded-full relative overflow-hidden"
-              style={{ width: 80, background: 'rgba(255,255,255,0.05)' }}
+              style={{ width: 80, background: 'var(--bg-hover)' }}
             >
               <span
                 className="absolute inset-y-0 left-0 rounded-full"
                 style={{
                   width: `${(n / total) * 100}%`,
-                  background: heavy ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.45)',
+                  background: heavy ? 'var(--fg-default)' : 'var(--fg-subtle)',
                 }}
               />
             </div>
-            <span className="text-white/70 tabular-nums w-6 text-right">{n}</span>
+            <span className="text-[var(--fg-default)] tabular-nums w-6 text-right">{n}</span>
           </div>
         );
       })}

@@ -108,7 +108,7 @@ export default function FocusScanPanel({
                 <button type="button"
                   key={id}
                   onClick={() => { setTab(id); }}
-                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] whitespace-nowrap transition-colors"
+                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] whitespace-nowrap transition-colors"
                   style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                 >
                   <Icon className="w-3 h-3 shrink-0" />
@@ -141,7 +141,7 @@ export default function FocusScanPanel({
 
       <GlassCard
         tone="inner"
-        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[0.18em]"
+        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {t('footer.focusScan', { state: file.metrics.indexState })}

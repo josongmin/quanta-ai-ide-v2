@@ -1,14 +1,13 @@
-// ProjectHeader — top strip with project label, status-dot counters,
-// a "backgrounded · cloud" pill, and a "+" affordance for new queries.
-// Anchors the queue to the broader project context the way Linear's
-// left rail does.
-
 import { Cloud, Plus } from 'lucide-react';
-import { Popover } from '@shared/ui';
 import type { PullRequest } from '@entities/pr';
+import { Popover } from '@shared/ui';
 import QueueBurndown from '../QueueBurndown';
 import { DotPill } from './DotPill';
 import { BackgroundMonitor } from './BackgroundMonitor';
+
+// ─────────────────────────────────────────────────────────────────────────
+// 1. ProjectHeader
+// ─────────────────────────────────────────────────────────────────────────
 
 export function ProjectHeader({
   prs, attention, critical, backgrounded, onJumpToPr,
@@ -21,17 +20,17 @@ export function ProjectHeader({
 }) {
   return (
     <div className="shrink-0 flex items-center gap-1.5 px-3 pt-3 pb-2 min-w-0">
-      <div className="shrink-0 text-[11px] font-bold uppercase tracking-[0.16em] text-white/55 leading-tight">
+      <div className="shrink-0 text-[var(--fs-sm)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] leading-tight">
         프로젝트
       </div>
       {/* dot counters: critical (red) · attention (amber). Only render
           if non-zero so a clean queue isn't cluttered. */}
       <div className="flex items-center gap-1.5 shrink-0">
         {critical > 0 && (
-          <DotPill tone="#c25a55" label={String(critical)} title={`${String(critical)} critical PR${critical === 1 ? '' : 's'}`} />
+          <DotPill tone="var(--intent-danger-fg)" label={String(critical)} title={`${String(critical)} critical PR${critical === 1 ? '' : 's'}`} />
         )}
         {attention > 0 && (
-          <DotPill tone="#d3b264" label={String(attention)} title={`${String(attention)} attention PR${attention === 1 ? '' : 's'}`} />
+          <DotPill tone="var(--intent-warn-fg)" label={String(attention)} title={`${String(attention)} attention PR${attention === 1 ? '' : 's'}`} />
         )}
       </div>
       {/* 7-day burndown sparkline — DORA leading indicator. Hidden
@@ -55,10 +54,10 @@ export function ProjectHeader({
                 onClick={toggle}
                 aria-expanded={open}
                 aria-haspopup="dialog"
-                className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono tabular-nums transition-colors hover:bg-[rgba(122,167,212,0.18)]"
+                className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono tabular-nums transition-colors hover:bg-[var(--bg-active)]"
                 style={{
-                  background: 'rgba(122,167,212,0.12)',
-                  border: '1px solid rgba(122,167,212,0.35)',
+                  background: 'var(--intent-info-bg)',
+                  border: '1px solid color-mix(in srgb, var(--intent-info-fg) 35%, transparent)',
                   color: 'var(--fg-default)',
                 }}
                 title={`진행 중인 백그라운드 작업 ${String(backgrounded)}개`}
@@ -73,7 +72,7 @@ export function ProjectHeader({
               style={{
                 background: 'var(--bg-elevated)',
                 border: '1px solid var(--border-strong)',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.45)',
+                boxShadow: 'var(--shadow-md)',
               }}
             >
               <BackgroundMonitor prs={prs} onJumpToPr={onJumpToPr} />
@@ -84,7 +83,7 @@ export function ProjectHeader({
       <button
         type="button"
         aria-label="새 쿼리 추가"
-        className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded text-white/45 hover:text-white/85 hover:bg-white/[0.04] transition-colors"
+        className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)] transition-colors"
         title="새 쿼리 추가"
       >
         <Plus className="w-3.5 h-3.5" strokeWidth={2} />

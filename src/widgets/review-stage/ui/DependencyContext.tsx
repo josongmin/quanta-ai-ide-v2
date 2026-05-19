@@ -68,10 +68,10 @@ const LANE_LABEL: Record<Lane, string> = {
   vendor: 'vendor',
 };
 const LANE_TONE: Record<Lane, string> = {
-  ui:     '#7aa7d4',
-  logic:  '#9583b8',
-  data:   '#5fa86c',
-  vendor: '#a8893a',
+  ui:     'var(--fg-link)',
+  logic:  'var(--fg-accent)',
+  data:   'var(--intent-success-fg)',
+  vendor: 'var(--intent-warn-fg)',
 };
 
 const PANEL_W = 720;
@@ -196,27 +196,27 @@ export default function DependencyContext({
   const reachLabel = (() => {
     const touchesData = (laneToNodes.get('data') ?? []).some((n) => n.touched);
     const touchesVendor = (laneToNodes.get('vendor') ?? []).some((n) => n.touched);
-    if (touchesVendor) return { text: 'reaches vendor', tone: '#c25a55' };
-    if (touchesData) return { text: 'reaches data', tone: '#a8893a' };
-    return { text: 'ui/logic only', tone: '#5fa86c' };
+    if (touchesVendor) return { text: 'reaches vendor', tone: 'var(--intent-danger-fg)' };
+    if (touchesData) return { text: 'reaches data', tone: 'var(--intent-warn-fg)' };
+    return { text: 'ui/logic only', tone: 'var(--intent-success-fg)' };
   })();
 
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <Network className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <Network className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Dependency context
         </span>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {touchedCount} touched · {laneSpread} {laneSpread === 1 ? 'layer' : 'layers'}
         </span>
         <span
-          className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
+          className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
           style={{
-            background: `${reachLabel.tone}22`,
+            background: `color-mix(in srgb, ${reachLabel.tone} 13%, transparent)`,
             color: reachLabel.tone,
-            border: `1px solid ${reachLabel.tone}55`,
+            border: `1px solid color-mix(in srgb, ${reachLabel.tone} 33%, transparent)`,
           }}
         >
           {reachLabel.text}
@@ -224,8 +224,8 @@ export default function DependencyContext({
       </div>
 
       <div
-        className="rounded-md border border-white/[0.06] overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.015)' }}
+        className="rounded-md border border-[var(--border-default)] overflow-hidden"
+        style={{ background: 'var(--bg-surface-muted)' }}
       >
         <svg
           viewBox={`0 0 ${String(PANEL_W)} ${String(PANEL_H)}`}
@@ -248,7 +248,7 @@ export default function DependencyContext({
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(255,255,255,0.35)" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--fg-subtle)" />
             </marker>
             <marker
               id="dep-arrow-hot"
@@ -259,7 +259,7 @@ export default function DependencyContext({
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#9583b8" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--fg-accent)" />
             </marker>
           </defs>
 
@@ -275,14 +275,14 @@ export default function DependencyContext({
                   y={yTop}
                   width={PANEL_W}
                   height={laneHeight}
-                  fill={li % 2 === 0 ? 'rgba(255,255,255,0.012)' : 'transparent'}
+                  fill={li % 2 === 0 ? 'var(--bg-surface-muted)' : 'transparent'}
                 />
                 <line
                   x1={88}
                   y1={yTop + laneHeight}
                   x2={PANEL_W}
                   y2={yTop + laneHeight}
-                  stroke="rgba(255,255,255,0.04)"
+                  stroke="var(--border-muted)"
                   strokeWidth={1}
                 />
                 <text
@@ -306,7 +306,7 @@ export default function DependencyContext({
             const a = positions.get(e.from);
             const b = positions.get(e.to);
             if (!a || !b) return null;
-            const stroke = e.bothTouched ? '#9583b8' : 'rgba(255,255,255,0.18)';
+            const stroke = e.bothTouched ? 'var(--fg-accent)' : 'var(--border-strong)';
             const sw = e.bothTouched ? 1.5 : 0.75;
             // Curved line for visual decompression when many edges overlap.
             const midX = (a.x + b.x) / 2;
@@ -352,7 +352,7 @@ export default function DependencyContext({
                     cy={p.y}
                     r={r + 7}
                     fill="none"
-                    stroke="#7aa7ff"
+                    stroke="var(--fg-link)"
                     strokeWidth={1.5}
                     opacity={0.9}
                   >
@@ -379,8 +379,8 @@ export default function DependencyContext({
                   cx={p.x}
                   cy={p.y}
                   r={r}
-                  fill={n.touched ? tone : 'rgba(255,255,255,0.18)'}
-                  stroke={n.publicApi ? '#fff' : 'none'}
+                  fill={n.touched ? tone : 'var(--border-strong)'}
+                  stroke={n.publicApi ? 'var(--fg-strong)' : 'none'}
                   strokeWidth={n.publicApi ? 1 : 0}
                 />
                 {n.touched && (
@@ -390,7 +390,7 @@ export default function DependencyContext({
                     textAnchor="middle"
                     fontSize={9}
                     fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
-                    fill="rgba(255,255,255,0.78)"
+                    fill="var(--fg-default)"
                   >
                     {trimMid(n.name, 18)}
                   </text>
@@ -402,27 +402,27 @@ export default function DependencyContext({
       </div>
 
       {/* Legend */}
-      <div className="mt-3 flex items-center gap-4 flex-wrap text-[10px] font-mono text-white/45">
+      <div className="mt-3 flex items-center gap-4 flex-wrap text-[10px] font-mono text-[var(--fg-muted)]">
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: '#9583b8' }} />
+          <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: 'var(--fg-accent)' }} />
           touched
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-white/30" />
+          <span className="inline-block w-2.5 h-2.5 rounded-full bg-[var(--fg-subtle)]" />
           neighbour
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-white/30 ring-1 ring-white" />
+          <span className="inline-block w-2.5 h-2.5 rounded-full bg-[var(--fg-subtle)] ring-1 ring-[var(--fg-strong)]" />
           public API
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block w-3 h-px" style={{ background: '#9583b8' }} />
+          <span className="inline-block w-3 h-px" style={{ background: 'var(--fg-accent)' }} />
           touched ↔ touched
         </span>
-        <span className="ml-auto inline-flex items-center gap-1.5 text-white/35">
-          <kbd className="px-1 rounded text-[9px] font-mono bg-white/[0.06] border border-white/[0.10]">↑↓←→</kbd>
+        <span className="ml-auto inline-flex items-center gap-1.5 text-[var(--fg-subtle)]">
+          <kbd className="px-1 rounded text-[9px] font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)]">↑↓←→</kbd>
           navigate
-          <kbd className="ml-1 px-1 rounded text-[9px] font-mono bg-white/[0.06] border border-white/[0.10]">↵</kbd>
+          <kbd className="ml-1 px-1 rounded text-[9px] font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)]">↵</kbd>
           open
         </span>
       </div>

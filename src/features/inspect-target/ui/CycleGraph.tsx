@@ -178,7 +178,7 @@ export default function CycleGraph({ repo, isDark, size = 280 }: Props) {
           style={{ maxWidth: size }}
         >
           <div
-            className="text-[8px] font-black uppercase tracking-[0.18em] mb-0.5"
+            className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)] mb-0.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('deps.cycle.topPairs', { defaultValue: 'Tightest cycle pairs' })}
@@ -197,9 +197,7 @@ export default function CycleGraph({ repo, isDark, size = 280 }: Props) {
         </div>
       )}
 
-      <div className={`mt-2 text-[9px] uppercase tracking-[0.18em] ${
-        isDark ? 'text-white/40' : 'text-black/40'
-      }`}>
+      <div className="mt-2 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {data.total === 0
           ? t('deps.cycle.cleanSummary', { defaultValue: 'No cycles · architecture is acyclic' })
           : t('deps.cycle.summary', {

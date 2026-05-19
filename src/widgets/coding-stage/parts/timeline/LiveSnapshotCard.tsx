@@ -27,7 +27,7 @@ type Props = {
   onContinue: () => void;
 };
 
-export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
+export function LiveSnapshotCard({ task, t, onContinue }: Props) {
   const stats = task.diffStats;
   const { touched, plan } = useMemo(() => extractAgentState(task), [task]);
 
@@ -58,12 +58,10 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
     return { inTok, outTok, usd, elapsedSec, lastModel, lastPhase };
   }, [task.thread]);
 
-  const card = isDark
-    ? 'bg-gradient-to-b from-white/[0.04] to-white/[0.015] border-white/[0.08]'
-    : 'bg-gradient-to-b from-black/[0.025] to-transparent border-black/[0.08]';
-  const textMuted = isDark ? 'text-white/55' : 'text-black/55';
-  const textFaint = isDark ? 'text-white/35' : 'text-black/40';
-  const divider = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
+  const card = 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-default)]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
+  const divider = 'border-[color:var(--border-muted)]';
 
   const planRemaining = plan ? plan.items.filter((i) => !i.done).length : null;
   const planLabel = plan === null
@@ -80,7 +78,7 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
     <div className={`rounded-xl border ${card} overflow-hidden`}>
       <div className="flex items-center gap-2 px-3.5 py-2.5">
         <Sparkles className={`w-3 h-3 ${textFaint}`} />
-        <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+        <span className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
           {t('snapshot.title')}
         </span>
         <span className={`text-[11px] ${textMuted}`}>{t('snapshot.subtitle')}</span>
@@ -92,7 +90,6 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
           label={t('snapshot.branch')}
           value={task.branch}
           mono
-          isDark={isDark}
         />
         <Stat
           icon={FileCode}
@@ -104,14 +101,12 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
               <span style={{ color: 'var(--intent-danger-vivid)' }}>−{stats.removed}</span>
             </span>
           }
-          isDark={isDark}
           dividerLeft
         />
         <Stat
           icon={ListTodo}
           label={t('snapshot.files')}
           value={<span className="font-mono">{stats.files}</span>}
-          isDark={isDark}
           dividerLeft
         />
       </div>
@@ -127,7 +122,6 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
                 {modelShort ?? '—'}
               </span>
             }
-            isDark={isDark}
           />
           <Stat
             icon={Activity}
@@ -137,7 +131,6 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
                 {agentRoll.lastPhase ? t(`phase.${agentRoll.lastPhase}`) : '—'}
               </span>
             }
-            isDark={isDark}
             dividerLeft
           />
           <Stat
@@ -150,7 +143,6 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
                   : '—'}
               </span>
             }
-            isDark={isDark}
             dividerLeft
           />
           <Stat
@@ -161,7 +153,6 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
                 {agentRoll.elapsedSec > 0 ? `${agentRoll.elapsedSec.toFixed(1)}s` : '—'}
               </span>
             }
-            isDark={isDark}
             dividerLeft
           />
         </div>
@@ -169,16 +160,14 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
 
       {touched.length > 0 && (
         <div className={`px-3.5 py-2.5 border-t ${divider}`}>
-          <div className={`mb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+          <div className={`mb-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
             {t('snapshot.touched')}
           </div>
           <div className="flex flex-wrap gap-1">
             {touched.slice(0, 4).map((file) => (
               <span
                 key={file.path}
-                className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-mono ${
-                  isDark ? 'bg-white/[0.05] text-white/70' : 'bg-black/[0.04] text-black/70'
-                }`}
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-mono bg-[color:var(--bg-hover)] text-[color:var(--fg-default)]"
                 title={file.path}
               >
                 <span style={{ color: file.kind === 'edit' ? 'var(--intent-success-fg)' : 'var(--intent-info-fg)' }}>
@@ -196,9 +185,7 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
         </div>
       )}
 
-      <div className={`flex items-center gap-2 px-3 py-2 border-t ${divider} ${
-        isDark ? 'bg-white/[0.015]' : 'bg-black/[0.015]'
-      }`}>
+      <div className={`flex items-center gap-2 px-3 py-2 border-t ${divider} bg-[color:var(--bg-surface-muted)]`}>
         <CheckCircle2
           className={`w-3 h-3 shrink-0 ${planRemaining === 0 ? '' : textFaint}`}
           style={planRemaining === 0 ? { color: 'var(--intent-success-fg)' } : undefined}
@@ -208,11 +195,7 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
         <button
           type="button"
           onClick={onContinue}
-          className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
-            isDark
-              ? 'text-white/85 bg-white/[0.06] hover:bg-white/[0.10]'
-              : 'text-black/85 bg-black/[0.05] hover:bg-black/[0.08]'
-          }`}
+          className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors text-[color:var(--fg-strong)] bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-active)]"
         >
           {t('snapshot.continue')}
           <ArrowRight className="w-2.5 h-2.5" />
@@ -235,23 +218,22 @@ export function LiveSnapshotCard({ task, isDark, t, onContinue }: Props) {
 }
 
 function Stat({
-  icon: Icon, label, value, isDark, dividerLeft, mono,
+  icon: Icon, label, value, dividerLeft, mono,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: React.ReactNode;
-  isDark: boolean;
   dividerLeft?: boolean;
   mono?: boolean;
 }) {
-  const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
-  const textFaint = isDark ? 'text-white/35' : 'text-black/40';
-  const left = dividerLeft ? (isDark ? 'border-l border-white/[0.06]' : 'border-l border-black/[0.06]') : '';
+  const textPrimary = 'text-[color:var(--fg-strong)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
+  const left = dividerLeft ? 'border-l border-[color:var(--border-muted)]' : '';
   return (
     <div className={`flex flex-col gap-1 px-3.5 py-2.5 min-w-0 ${left}`}>
       <div className="flex items-center gap-1">
         <Icon className={`w-2.5 h-2.5 ${textFaint}`} />
-        <span className={`text-[9px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+        <span className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
           {label}
         </span>
       </div>

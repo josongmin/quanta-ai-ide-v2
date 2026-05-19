@@ -47,7 +47,7 @@ export function Hero({
         {/* Headline */}
         <div className="min-w-0 flex-1">
           <div
-            className="text-[10px] font-semibold uppercase tracking-[0.18em]"
+            className="text-[10px] font-semibold uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: t.textMuted }}
           >
             Admission decision · PR #{seed}
@@ -119,7 +119,7 @@ function Count({ label, value, color, t }: { label: string; value: number; color
         {value}
       </span>
       <span
-        className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em]"
+        className="mt-1 text-[10px] font-semibold uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: t.textSubtle }}
       >
         {label}

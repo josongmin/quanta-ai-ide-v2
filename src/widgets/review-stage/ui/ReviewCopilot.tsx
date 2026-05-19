@@ -32,7 +32,7 @@ import { prSummary, symbolChanges, intentMismatch } from '../lib/sota';
 import V2Card from './V2Card';
 
 const SEV_COLOR: Record<EngineFinding['severity'], string> = {
-  blocker: '#c25a55', high: '#d98a85', medium: '#a8893a', low: '#5a8fce',
+  blocker: 'var(--intent-danger-fg)', high: 'var(--intent-danger-fg)', medium: 'var(--intent-warn-fg)', low: 'var(--intent-info-fg)',
 };
 
 // ── Slot 1: One-line take ────────────────────────────────────────────────
@@ -43,13 +43,13 @@ export function CopilotTake({ pr, repo }: { pr: PullRequest; repo: RepoData }) {
     <span
       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono min-w-0 max-w-full"
       style={{
-        background: 'linear-gradient(90deg, rgba(149,131,184,0.10), rgba(122,167,212,0.10))',
-        border: '1px solid rgba(149,131,184,0.35)',
+        background: 'color-mix(in srgb, var(--fg-accent) 10%, transparent)',
+        border: '1px solid color-mix(in srgb, var(--fg-accent) 35%, transparent)',
         color: 'var(--fg-default)',
       }}
       title={take.long}
     >
-      <Sparkles className="w-2.5 h-2.5 shrink-0" style={{ color: '#b8a4dc' }} />
+      <Sparkles className="w-2.5 h-2.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
       <span className="truncate min-w-0">{take.short}</span>
     </span>
   );
@@ -130,7 +130,7 @@ export function InspectionPath({
         className="absolute inset-0 pointer-events-none rounded-xl"
         style={{
           background:
-            'linear-gradient(135deg, rgba(149,131,184,0.04) 0%, transparent 35%, transparent 65%, rgba(122,167,212,0.04) 100%)',
+            'linear-gradient(135deg, color-mix(in srgb, var(--fg-accent) 4%, transparent) 0%, transparent 35%, transparent 65%, color-mix(in srgb, var(--fg-link) 4%, transparent) 100%)',
         }}
       />
       <button
@@ -138,16 +138,16 @@ export function InspectionPath({
         onClick={() => { setExpanded((v) => !v); }}
         className="relative w-full flex items-center gap-2 mb-3 text-left"
       >
-        <ListOrdered className="w-3.5 h-3.5 text-white/55" />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <ListOrdered className="w-3.5 h-3.5 text-[var(--fg-muted)]" />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Recommended inspection path
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {steps.length} {steps.length === 1 ? 'stop' : 'stops'}
         </span>
         <ChevronRight
-          className={`ml-auto w-3 h-3 text-white/40 transition-transform ${expanded ? 'rotate-90' : ''}`}
+          className={`ml-auto w-3 h-3 text-[var(--fg-subtle)] transition-transform ${expanded ? 'rotate-90' : ''}`}
         />
       </button>
 
@@ -158,23 +158,23 @@ export function InspectionPath({
               <button
                 type="button"
                 onClick={() => { onJumpToFile(s.filePath); }}
-                className="w-full flex items-start gap-3 px-2 py-2 rounded-md text-left hover:bg-white/[0.03] transition-colors"
+                className="w-full flex items-start gap-3 px-2 py-2 rounded-md text-left hover:bg-[var(--bg-hover)] transition-colors"
               >
                 <span
                   className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-mono font-bold tabular-nums"
                   style={{
-                    background: 'rgba(149,131,184,0.18)',
-                    color: '#c2b3e0',
-                    border: '1px solid rgba(149,131,184,0.40)',
+                    background: 'color-mix(in srgb, var(--fg-accent) 18%, transparent)',
+                    color: 'var(--fg-accent)',
+                    border: '1px solid color-mix(in srgb, var(--fg-accent) 40%, transparent)',
                   }}
                 >
                   {s.rank}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[12px] font-mono text-white/85 truncate">
+                  <span className="block text-[12px] font-mono text-[var(--fg-strong)] truncate">
                     {s.filePath}
                   </span>
-                  <span className="block mt-0.5 text-[11px] text-white/55 leading-snug">
+                  <span className="block mt-0.5 text-[11px] text-[var(--fg-muted)] leading-snug">
                     {s.reason}
                   </span>
                 </span>
@@ -288,16 +288,16 @@ function SignalTag({ signal }: { signal: InspectionStep['signal'] }) {
   const map: Record<InspectionStep['signal'], { label: string; color: string }> = {
     blocker:    { label: 'BLOCK',  color: SEV_COLOR.blocker },
     high:       { label: 'HIGH',   color: SEV_COLOR.high },
-    'public-api': { label: 'API',    color: '#7aa7d4' },
-    hot:        { label: 'HOT',    color: '#d3b264' },
-    incident:   { label: 'CHURN',  color: '#b8a4dc' },
-    symbol:     { label: 'EDIT',   color: '#8b949e' },
+    'public-api': { label: 'API',    color: 'var(--fg-link)' },
+    hot:        { label: 'HOT',    color: 'var(--intent-warn-fg)' },
+    incident:   { label: 'CHURN',  color: 'var(--fg-accent)' },
+    symbol:     { label: 'EDIT',   color: 'var(--fg-muted)' },
   };
   const m = map[signal];
   return (
     <span
-      className="shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[0.14em]"
-      style={{ background: `${m.color}26`, color: m.color }}
+      className="shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+      style={{ background: `color-mix(in srgb, ${m.color} 15%, transparent)`, color: m.color }}
     >
       {m.label}
     </span>
@@ -310,11 +310,11 @@ export function ProvenanceBadge({ kind }: { kind: 'ai' | 'static' }) {
   if (kind === 'ai') {
     return (
       <span
-        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.14em]"
+        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-[var(--fs-2xs)] font-bold uppercase tracking-[var(--track-eyebrow)]"
         style={{
-          background: 'linear-gradient(90deg, rgba(149,131,184,0.18), rgba(122,167,212,0.18))',
-          color: '#c2b3e0',
-          border: '1px solid rgba(149,131,184,0.40)',
+          background: 'color-mix(in srgb, var(--fg-accent) 18%, transparent)',
+          color: 'var(--fg-accent)',
+          border: '1px solid color-mix(in srgb, var(--fg-accent) 40%, transparent)',
         }}
         title="Synthesised — would be LLM-derived in production"
       >
@@ -325,7 +325,7 @@ export function ProvenanceBadge({ kind }: { kind: 'ai' | 'static' }) {
   }
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.14em] text-white/55"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[var(--fs-2xs)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]"
       style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-strong)' }}
       title="Deterministic static analysis"
     >

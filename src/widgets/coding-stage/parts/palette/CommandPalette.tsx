@@ -129,8 +129,8 @@ export function CommandPalette({
 
   // Section breaks rendered inline so the index stays flat.
   let lastSection: Row['section'] | null = null;
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/35' : 'text-black/40';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4">
@@ -138,7 +138,7 @@ export function CommandPalette({
       <button
         type="button"
         aria-label="Close command palette"
-        className={`absolute inset-0 cursor-default ${isDark ? 'bg-black/40' : 'bg-black/20'} backdrop-blur-sm`}
+        className="absolute inset-0 cursor-default bg-[color:var(--bg-scrim)] backdrop-blur-sm"
         onClick={onClose}
         onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
       />
@@ -147,17 +147,13 @@ export function CommandPalette({
         role="dialog"
         aria-modal="true"
         aria-label="Command palette"
-        className={`relative w-full max-w-[600px] rounded-xl border shadow-2xl overflow-hidden ${
-          isDark ? 'bg-[#11141a]/95 border-white/[0.10]' : 'bg-white/95 border-black/[0.10]'
-        }`}
+        className="relative w-full max-w-[600px] rounded-xl border shadow-2xl overflow-hidden bg-[var(--bg-elevated)] border-[color:var(--border-default)]"
         style={isDark ? {
           backdropFilter: 'blur(22px) saturate(160%)',
           WebkitBackdropFilter: 'blur(22px) saturate(160%)',
         } : undefined}
       >
-        <div className={`flex items-center gap-2 px-3 py-2.5 border-b ${
-          isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'
-        }`}>
+        <div className="flex items-center gap-2 px-3 py-2.5 border-b border-[color:var(--border-muted)]">
           <Search className={`w-3.5 h-3.5 ${faint}`} />
           <input
             ref={inputRef}
@@ -165,9 +161,7 @@ export function CommandPalette({
             onChange={(e) => { setQuery(e.target.value); setIndex(0); }}
             onKeyDown={onKeyDown}
             placeholder={t('palette.placeholder')}
-            className={`flex-1 bg-transparent outline-none text-[13px] ${
-              isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
-            }`}
+            className="flex-1 bg-transparent outline-none text-[13px] text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
             spellCheck={false}
           />
           <span className={`text-[10px] font-mono ${faint}`}>{t('palette.hint')}</span>
@@ -190,7 +184,7 @@ export function CommandPalette({
               return (
                 <div key={`${row.section}:${i}`}>
                   {showHeader && (
-                    <div className={`px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+                    <div className={`px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
                       {headerLabel}
                     </div>
                   )}
@@ -200,14 +194,12 @@ export function CommandPalette({
                     onMouseEnter={() => { setIndex(i); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-left transition-colors ${
                       active
-                        ? (isDark ? 'bg-white/[0.06]' : 'bg-black/[0.04]')
+                        ? 'bg-[color:var(--bg-hover)]'
                         : ''
                     }`}
                   >
-                    <PaletteRowIcon row={row} isDark={isDark} />
-                    <span className={`flex-1 truncate text-[12px] ${
-                      isDark ? 'text-white/85' : 'text-black/85'
-                    } ${row.kind !== 'action' ? 'font-mono' : ''}`}>
+                    <PaletteRowIcon row={row} />
+                    <span className={`flex-1 truncate text-[12px] text-[color:var(--fg-strong)] ${row.kind !== 'action' ? 'font-mono' : ''}`}>
                       {row.kind === 'action' ? row.action.label
                         : row.kind === 'task'  ? row.task.title
                         : row.cmd}
@@ -232,8 +224,8 @@ export function CommandPalette({
   );
 }
 
-function PaletteRowIcon({ row, isDark }: { row: Row; isDark: boolean }) {
-  const tone = isDark ? 'text-white/45' : 'text-black/45';
+function PaletteRowIcon({ row }: { row: Row }) {
+  const tone = 'text-[color:var(--fg-subtle)]';
   if (row.kind === 'action') return <Sparkles className={`w-3 h-3 ${tone}`} />;
   if (row.kind === 'task')   return <Hash     className={`w-3 h-3 ${tone}`} />;
   return <Slash className={`w-3 h-3 ${tone}`} />;

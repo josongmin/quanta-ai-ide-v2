@@ -105,11 +105,11 @@ export default function AttentionRailMini({
   return (
     <div>
       <div className="mb-2 flex items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
           Attention
         </span>
         <span
-          className="text-[10px] font-mono tabular-nums text-white/45 ml-auto"
+          className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)] ml-auto"
           title={`Total foreground time on this PR: ${formatMs(totalMs)}`}
         >
           {formatMs(totalMs)}
@@ -132,26 +132,26 @@ export default function AttentionRailMini({
                 type="button"
                 onClick={() => { onJump?.(id); }}
                 aria-label={`${label} — ${formatMs(ms)} attended`}
-                className="w-full flex items-center gap-2 px-1.5 py-1 rounded hover:bg-white/[0.03] transition-colors group"
+                className="w-full flex items-center gap-2 px-1.5 py-1 rounded hover:bg-[var(--bg-surface-muted)] transition-colors group"
               >
-                <span className="shrink-0 w-14 text-[10.5px] font-mono text-white/55 text-left truncate">
+                <span className="shrink-0 w-14 text-[var(--fs-sm)] font-mono text-[var(--fg-muted)] text-left truncate">
                   {label}
                 </span>
                 <span
                   className="flex-1 h-1.5 rounded-sm overflow-hidden"
-                  style={{ background: 'rgba(255,255,255,0.04)' }}
+                  style={{ background: 'var(--bg-hover)' }}
                 >
                   <span
                     className="block h-full"
                     style={{
                       width: `${widthPct}%`,
-                      background: `rgba(149,131,184,${alpha.toFixed(2)})`,
-                      outline: isActive ? '1px solid rgba(194,179,224,0.6)' : 'none',
+                      background: `color-mix(in srgb, var(--fg-accent) ${String(Math.round(alpha * 100))}%, transparent)`,
+                      outline: isActive ? '1px solid color-mix(in srgb, var(--fg-accent) 60%, transparent)' : 'none',
                       outlineOffset: -1,
                     }}
                   />
                 </span>
-                <span className="shrink-0 w-9 text-[9.5px] font-mono tabular-nums text-white/45 text-right">
+                <span className="shrink-0 w-9 text-[var(--fs-xs)] font-mono tabular-nums text-[var(--fg-muted)] text-right">
                   {ms === 0 ? '—' : formatMsCompact(ms)}
                 </span>
               </button>

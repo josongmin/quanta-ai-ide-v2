@@ -32,32 +32,7 @@ export function GlassCard({
   );
 }
 
-export function SectionHeader({
-  title, badge,
-}: {
-  title: string;
-  badge?: string;
-}) {
-  return (
-    <div className="flex items-center justify-between mb-1.5 px-0.5">
-      <h3
-        className="text-[10px] font-black uppercase tracking-[0.18em]"
-        style={{ color: 'var(--fg-muted)' }}
-      >
-        {title}
-      </h3>
-      {badge && (
-        <span
-          className="text-[8px] font-bold px-1.5 py-0.5 rounded-md border uppercase"
-          style={{
-            background: 'var(--bg-surface-muted)',
-            color: 'var(--fg-subtle)',
-            borderColor: 'var(--border-muted)',
-          }}
-        >
-          {badge}
-        </span>
-      )}
-    </div>
-  );
-}
+// SectionHeader now lives in its own module — re-exported here so existing
+// `import { SectionHeader } from '@shared/ui/GlassCard'` call sites keep
+// working against the single shared implementation.
+export { SectionHeader } from './SectionHeader';

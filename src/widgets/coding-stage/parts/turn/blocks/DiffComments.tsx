@@ -8,7 +8,7 @@ type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 // stacked bubbles; the [+ Note] / [+ Ask] affordance opens a compact
 // composer that posts back to the parent FileRow's state.
 export function HunkCommentThread({
-  hunkKey, comments, composing, onOpenCompose, onCancelCompose, onSubmit, onReply, onToggleResolve, isDark, t,
+  hunkKey, comments, composing, onOpenCompose, onCancelCompose, onSubmit, onReply, onToggleResolve, t,
 }: {
   hunkKey: string;
   comments: HunkComment[];
@@ -18,16 +18,15 @@ export function HunkCommentThread({
   onSubmit: (text: string, kind: 'note' | 'ask') => void;
   onReply: (parentId: string, text: string) => void;
   onToggleResolve: (commentId: string) => void;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   void hunkKey;
   const [text, setText] = useState('');
   const [kind, setKind] = useState<'note' | 'ask'>('note');
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/35' : 'text-black/40';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const surface = isDark ? 'bg-white/[0.02]' : 'bg-black/[0.015]';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
+  const border = 'border-[color:var(--border-muted)]';
+  const surface = 'bg-[color:var(--bg-surface-muted)]';
 
   const hasAny = comments.length > 0 || composing;
   if (!hasAny) {
@@ -50,7 +49,7 @@ export function HunkCommentThread({
     <div className={`border-t ${border} ${surface}`}>
       {comments.length > 0 && (
         <>
-          <div className={`px-2 pt-1.5 pb-0.5 text-[9px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+          <div className={`px-2 pt-1.5 pb-0.5 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
             {t('comment.header', { count: comments.length })}
           </div>
           <div className="px-2 pb-1.5 space-y-1.5">
@@ -60,7 +59,6 @@ export function HunkCommentThread({
                 comment={c}
                 onReply={(replyText) => { onReply(c.id, replyText); }}
                 onToggleResolve={() => { onToggleResolve(c.id); }}
-                isDark={isDark}
                 t={t}
               />
             ))}
@@ -69,16 +67,14 @@ export function HunkCommentThread({
       )}
       {composing ? (
         <div className={`px-2 pb-2 ${comments.length === 0 ? 'pt-2' : ''}`}>
-          <div className={`rounded-md border ${border} ${isDark ? 'bg-[#11141a]' : 'bg-white'} overflow-hidden`}>
+          <div className={`rounded-md border ${border} bg-[var(--bg-surface)] overflow-hidden`}>
             <textarea
               autoFocus
               value={text}
               onChange={(e) => { setText(e.target.value); }}
               placeholder={t('comment.placeholder')}
               rows={2}
-              className={`w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed ${
-                isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
-              }`}
+              className="w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
               spellCheck={false}
               onKeyDown={(e) => {
                 if (e.nativeEvent.isComposing) return;
@@ -97,8 +93,8 @@ export function HunkCommentThread({
                   aria-pressed={kind === 'note'}
                   className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
                     kind === 'note'
-                      ? (isDark ? 'bg-white/[0.08] text-white/85' : 'bg-black/[0.06] text-black/85')
-                      : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70')
+                      ? 'bg-[color:var(--bg-active)] text-[color:var(--fg-strong)]'
+                      : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]'
                   }`}
                 >
                   <MessageSquare className="w-2.5 h-2.5" />
@@ -114,7 +110,7 @@ export function HunkCommentThread({
                   className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
                     kind === 'ask'
                       ? ''
-                      : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70')
+                      : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]'
                   }`}
                 >
                   <HelpCircle className="w-2.5 h-2.5" />
@@ -135,8 +131,8 @@ export function HunkCommentThread({
                   disabled={!text.trim()}
                   className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
                     text.trim()
-                      ? (isDark ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90')
-                      : (isDark ? 'bg-white/[0.05] text-white/30 cursor-not-allowed' : 'bg-black/[0.04] text-black/30 cursor-not-allowed')
+                      ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] hover:opacity-90'
+                      : 'bg-[color:var(--bg-elevated)] text-[color:var(--fg-subtle)] cursor-not-allowed'
                   }`}
                 >
                   {t('comment.submit')}
@@ -166,34 +162,33 @@ export function HunkCommentThread({
 // Recursive: replies render as a nested CommentNode tree (one level deep
 // in practice, since real review threads rarely go deeper).
 function CommentNode({
-  comment, onReply, onToggleResolve, isDark, t, depth = 0,
+  comment, onReply, onToggleResolve, t, depth = 0,
 }: {
   comment: HunkComment;
   onReply: (text: string) => void;
   onToggleResolve: () => void;
-  isDark: boolean;
   t: TranslateFn;
   depth?: number;
 }) {
   const [replying, setReplying] = useState(false);
   const [replyText, setReplyText] = useState('');
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/35' : 'text-black/40';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
+  const border = 'border-[color:var(--border-muted)]';
   const isAgent = comment.author === 'agent';
   const cardBg = comment.resolved
-    ? (isDark ? 'bg-white/[0.015] opacity-60' : 'bg-black/[0.01] opacity-60')
-    : (isDark ? 'bg-white/[0.025]' : 'bg-white');
+    ? 'bg-[color:var(--bg-surface-muted)] opacity-60'
+    : 'bg-[color:var(--bg-surface-muted)]';
   // Avatar tone: agent is the same neutral as everywhere else; "ask"
   // user comments get amber to nudge the eye toward unanswered questions.
   const avatarStyle: React.CSSProperties | undefined = !isAgent && comment.kind === 'ask'
     ? { background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)', color: 'var(--intent-warn-fg)' }
     : undefined;
   const avatarTone = isAgent
-    ? (isDark ? 'bg-white/[0.08] text-white/70' : 'bg-black/[0.06] text-black/70')
+    ? 'bg-[color:var(--bg-active)] text-[color:var(--fg-default)]'
     : comment.kind === 'ask'
       ? ''
-      : (isDark ? 'bg-white/[0.05] text-white/55' : 'bg-black/[0.04] text-black/55');
+      : 'bg-[color:var(--bg-hover)] text-[color:var(--fg-muted)]';
   const Icon = isAgent ? Sparkles : comment.kind === 'ask' ? HelpCircle : MessageSquare;
 
   return (
@@ -227,7 +222,7 @@ function CommentNode({
               </span>
             )}
           </div>
-          <div className={`whitespace-pre-wrap break-words ${isDark ? 'text-white/80' : 'text-black/80'}`}>
+          <div className="whitespace-pre-wrap break-words text-[color:var(--fg-default)]">
             {comment.text}
           </div>
           <div className="mt-1 flex items-center gap-1.5">
@@ -255,16 +250,14 @@ function CommentNode({
 
       {replying && (
         <div className="mt-1 ml-6">
-          <div className={`rounded-md border ${border} ${isDark ? 'bg-[#11141a]' : 'bg-white'} overflow-hidden`}>
+          <div className={`rounded-md border ${border} bg-[var(--bg-surface)] overflow-hidden`}>
             <textarea
               autoFocus
               value={replyText}
               onChange={(e) => { setReplyText(e.target.value); }}
               placeholder={t('reply.placeholder')}
               rows={2}
-              className={`w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed ${
-                isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
-              }`}
+              className="w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
               spellCheck={false}
               onKeyDown={(e) => {
                 if (e.nativeEvent.isComposing) return;
@@ -289,8 +282,8 @@ function CommentNode({
                 disabled={!replyText.trim()}
                 className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
                   replyText.trim()
-                    ? (isDark ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90')
-                    : (isDark ? 'bg-white/[0.05] text-white/30 cursor-not-allowed' : 'bg-black/[0.04] text-black/30 cursor-not-allowed')
+                    ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] hover:opacity-90'
+                    : 'bg-[color:var(--bg-elevated)] text-[color:var(--fg-subtle)] cursor-not-allowed'
                 }`}
               >
                 {t('reply.submit')}
@@ -308,7 +301,6 @@ function CommentNode({
               comment={r}
               onReply={() => { /* nested replies collapse to flat for v1 */ }}
               onToggleResolve={() => { /* only top-level can be resolved */ }}
-              isDark={isDark}
               t={t}
               depth={depth + 1}
             />

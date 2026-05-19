@@ -43,10 +43,10 @@ type FileBlock = {
 };
 
 const STATUS_COLOR: Record<LineStatus, string> = {
-  covered:   '#5fa86c',
-  partial:   '#a8893a',
-  uncovered: '#c25a55',
-  removed:   '#6e7681',
+  covered:   'var(--intent-success-fg)',
+  partial:   'var(--intent-warn-fg)',
+  uncovered: 'var(--intent-danger-fg)',
+  removed:   'var(--fg-muted)',
 };
 
 // Deterministic per-line coverage synthesis. Anchored to
@@ -140,17 +140,17 @@ export default function ChangedLinesCoverage({
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <TestTube2 className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <TestTube2 className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Changed-line coverage
         </span>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {totals.covered}/{totals.added} new lines tested
         </span>
         {danger && (
           <span
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
-            style={{ background: 'rgba(194,90,85,0.16)', color: '#e88a85', border: '1px solid rgba(194,90,85,0.45)' }}
+            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            style={{ background: 'color-mix(in srgb, var(--intent-danger-fg) 16%, transparent)', color: 'var(--intent-danger-fg)', border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 45%, transparent)' }}
           >
             <AlertTriangle className="w-2.5 h-2.5" />
             {totals.uncovered} untested
@@ -158,7 +158,7 @@ export default function ChangedLinesCoverage({
         )}
       </div>
 
-      <div className="flex items-center gap-3 mb-4 text-[10px] font-mono text-white/45">
+      <div className="flex items-center gap-3 mb-4 text-[10px] font-mono text-[var(--fg-muted)]">
         <span className="inline-flex items-center gap-1">
           <span className="inline-block w-2 h-2 rounded-sm" style={{ background: STATUS_COLOR.covered }} />
           covered
@@ -181,17 +181,17 @@ export default function ChangedLinesCoverage({
         {blocks.map((b) => {
           const fileRate = b.covered / b.added;
           const fileTone = fileRate >= 0.75
-            ? '#5fa86c'
+            ? 'var(--intent-success-fg)'
             : fileRate >= 0.4
-              ? '#a8893a'
-              : '#c25a55';
+              ? 'var(--intent-warn-fg)'
+              : 'var(--intent-danger-fg)';
           // Cap rendered rows per file — the goal is a glance, not a code reader.
           const visibleRows = b.rows.slice(0, 14);
           const overflow = b.rows.length - visibleRows.length;
           return (
-            <div key={b.path} className="rounded-md border border-white/[0.06] overflow-hidden">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/[0.025] border-b border-white/[0.06]">
-                <span className="text-[11px] font-mono text-white/80 truncate flex-1" title={b.path}>
+            <div key={b.path} className="rounded-md border border-[var(--border-default)] overflow-hidden">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--bg-surface-muted)] border-b border-[var(--border-default)]">
+                <span className="text-[11px] font-mono text-[var(--fg-default)] truncate flex-1" title={b.path}>
                   {b.path}
                 </span>
                 <span className="text-[10px] font-mono tabular-nums" style={{ color: fileTone }}>
@@ -205,28 +205,28 @@ export default function ChangedLinesCoverage({
                       className="shrink-0 w-1"
                       style={{ background: STATUS_COLOR[r.status] }}
                     />
-                    <span className="shrink-0 w-9 px-1.5 text-right text-white/30 tabular-nums select-none">
+                    <span className="shrink-0 w-9 px-1.5 text-right text-[var(--fg-subtle)] tabular-nums select-none">
                       {r.newLine ?? r.oldLine ?? ''}
                     </span>
                     <span
                       className="shrink-0 w-3 text-center select-none"
                       style={{
                         color: r.status === 'removed'
-                          ? r.oldLine !== null && r.newLine !== null ? 'transparent' : '#c25a55'
-                          : '#5fa86c',
+                          ? r.oldLine !== null && r.newLine !== null ? 'transparent' : 'var(--intent-danger-fg)'
+                          : 'var(--intent-success-fg)',
                       }}
                     >
                       {r.status === 'removed'
                         ? r.oldLine !== null && r.newLine !== null ? ' ' : '-'
                         : '+'}
                     </span>
-                    <span className="flex-1 px-2 py-px truncate text-white/75">
+                    <span className="flex-1 px-2 py-px truncate text-[var(--fg-muted)]">
                       {r.text}
                     </span>
                   </div>
                 ))}
                 {overflow > 0 && (
-                  <div className="px-3 py-1.5 text-[10px] text-white/35 italic border-t border-white/[0.04]">
+                  <div className="px-3 py-1.5 text-[10px] text-[var(--fg-subtle)] italic border-t border-[var(--border-muted)]">
                     +{overflow} more lines…
                   </div>
                 )}

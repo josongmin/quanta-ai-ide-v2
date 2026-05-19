@@ -102,7 +102,7 @@ export function ProfileTab({ file }: { file: FileRecord }) {
           }}
         >
           <div
-            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em]"
+            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             <AlertTriangle className="w-3 h-3" />
@@ -150,7 +150,7 @@ function RefactorBlock({ file }: { file: FileRecord }) {
       >
         <div className="min-w-0">
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.refactorVerdictHeader')}
@@ -194,7 +194,7 @@ function FunctionRow({ row }: { row: ReturnType<typeof functionSummary>[number] 
       style={{ background: 'var(--bg-surface-muted)' }}
     >
       <span
-        className="shrink-0 px-1.5 py-0.5 rounded-md font-mono text-[9px] uppercase tracking-[0.18em]"
+        className="shrink-0 px-1.5 py-0.5 rounded-md font-mono text-[9px] uppercase tracking-[var(--track-eyebrow)]"
         style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
       >{kindLabel}</span>
       <span className="flex-1 min-w-0 font-mono truncate">{row.name}</span>
@@ -282,7 +282,7 @@ function ActionPill({ label, icon: Icon }: { label: string; icon: React.Componen
   return (
     <button
       type="button"
-      className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors hover-surface"
+      className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
       style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
     >
       <Icon className="w-2.5 h-2.5" />

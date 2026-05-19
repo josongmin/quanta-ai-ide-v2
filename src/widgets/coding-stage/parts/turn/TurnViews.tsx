@@ -36,7 +36,7 @@ export function TurnView({
   }
 
   if (turn.role === 'user') {
-    return <div role="presentation" onContextMenu={onCtx}><UserTurnView turn={turn} isDark={isDark} /></div>;
+    return <div role="presentation" onContextMenu={onCtx}><UserTurnView turn={turn} /></div>;
   }
 
   return (
@@ -54,24 +54,20 @@ export function TurnView({
   );
 }
 
-function UserTurnView({ turn, isDark }: { turn: UserTurn; isDark: boolean }) {
+function UserTurnView({ turn }: { turn: UserTurn }) {
   return (
     <div className="flex justify-end">
       <div className="max-w-[85%]">
-        <div className={`px-3 py-2.5 rounded-2xl rounded-tr-sm text-[13px] leading-relaxed ${
-          isDark ? 'bg-white/[0.07] text-white/85' : 'bg-black/[0.06] text-black/85'
-        }`}>
+        <div className="px-3 py-2.5 rounded-2xl rounded-tr-sm text-[13px] leading-relaxed bg-[color:var(--bg-elevated)] text-[color:var(--fg-strong)]">
           <div className="whitespace-pre-wrap break-words">{turn.text}</div>
           {turn.mentions && turn.mentions.length > 0 && (
             <div className="mt-1.5 flex flex-wrap gap-1">
               {turn.mentions.map((m, i) => (
                 <span
                   key={i}
-                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-mono text-[10px] ${
-                    isDark ? 'bg-white/[0.08] text-white/70' : 'bg-black/[0.06] text-black/70'
-                  }`}
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-mono text-[10px] bg-[color:var(--bg-active)] text-[color:var(--fg-default)]"
                 >
-                  <span className={isDark ? 'text-white/40' : 'text-black/40'}>
+                  <span className="text-[color:var(--fg-subtle)]">
                     {m.kind === 'file' ? '#' : '@'}
                   </span>
                   {m.label}
@@ -80,7 +76,7 @@ function UserTurnView({ turn, isDark }: { turn: UserTurn; isDark: boolean }) {
             </div>
           )}
         </div>
-        <div className={`mt-1 text-right text-[10px] font-mono ${isDark ? 'text-white/30' : 'text-black/40'}`}>
+        <div className="mt-1 text-right text-[10px] font-mono text-[color:var(--fg-subtle)]">
           {turn.at}
         </div>
       </div>
@@ -105,8 +101,8 @@ function AgentTurnView({
   onReact: (kind: ReactionKind) => void;
   baselinePhaseDurationsMs?: Record<string, number>;
 }) {
-  const muted = isDark ? 'text-white/40' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
   const modelLabel = turn.model
     ? turn.model.replace(/^claude-/, '').replace(/-(\d)/, ' $1').replace(/-/g, '.')
     : null;
@@ -114,22 +110,18 @@ function AgentTurnView({
 
   return (
     <div className="flex gap-3 relative group/turn">
-      <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5 ${
-        isDark ? 'bg-gradient-to-br from-white/[0.10] to-white/[0.04] border border-white/[0.10]' : 'bg-gradient-to-br from-black/[0.06] to-black/[0.02] border border-black/[0.08]'
-      }`}>
-        <Sparkles className={`w-3 h-3 ${isDark ? 'text-white/70' : 'text-black/70'}`} />
+      <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5 bg-[color:var(--bg-active)] border border-[color:var(--border-default)]">
+        <Sparkles className="w-3 h-3 text-[color:var(--fg-default)]" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-          <span className={`text-[11px] font-semibold ${isDark ? 'text-white/85' : 'text-black/85'}`}>
+          <span className="text-[11px] font-semibold text-[color:var(--fg-strong)]">
             agent
           </span>
           <span className={`text-[10px] font-mono ${faint}`}>{turn.at}</span>
           {modelLabel && (
             <span
-              className={`flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono ${
-                isDark ? 'bg-white/[0.04] text-white/55' : 'bg-black/[0.04] text-black/55'
-              }`}
+              className="flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-muted)]"
               title={turn.model}
             >
               <Cpu className="w-2.5 h-2.5" />
@@ -152,7 +144,7 @@ function AgentTurnView({
                     borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
                   };
             const toneClass = pct >= 60 && pct < 85
-              ? (isDark ? 'bg-white/[0.04] text-white/55 border-white/[0.10]' : 'bg-black/[0.04] text-black/55 border-black/[0.10]')
+              ? 'bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-muted)] border-[color:var(--border-default)]'
               : '';
             const label = pct >= 85 ? t('selfEval.high', { pct })
               : pct >= 60 ? t('selfEval.mid', { pct })
@@ -169,16 +161,12 @@ function AgentTurnView({
             );
           })()}
           {turn.streaming && (
-            <span className={`flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono ${
-              isDark ? 'bg-white/[0.06] text-white/70' : 'bg-black/[0.05] text-black/65'
-            }`}>
-              <span className={`w-1 h-1 rounded-full coding-tps-live ${
-                isDark ? 'bg-white/60' : 'bg-black/55'
-              }`} />
+            <span className="flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono bg-[color:var(--bg-elevated)] text-[color:var(--fg-default)]">
+              <span className="w-1 h-1 rounded-full coding-tps-live bg-[color:var(--fg-muted)]" />
               {phaseLabel ?? 'streaming'}
             </span>
           )}
-          {turn.streaming && <TpsLiveMeter turn={turn} isDark={isDark} t={t} />}
+          {turn.streaming && <TpsLiveMeter turn={turn} t={t} />}
           {turn.inverseOf && (
             <span
               style={{
@@ -212,36 +200,31 @@ function AgentTurnView({
           <LatencyBar
             durations={turn.phaseDurationsMs}
             baseline={baselinePhaseDurationsMs}
-            isDark={isDark}
             t={t}
           />
         )}
         {turn.citations && turn.citations.length > 0 && (
-          <CitationStrip citations={turn.citations} isDark={isDark} t={t} />
+          <CitationStrip citations={turn.citations} t={t} />
         )}
         <div className="space-y-2">
           {turn.blocks.map((block, i) => (
             <BlockView key={i} block={block} isDark={isDark} />
           ))}
-          {turn.streaming && turn.blocks.length === 0 && <StreamingDots isDark={isDark} />}
+          {turn.streaming && turn.blocks.length === 0 && <StreamingDots />}
         </div>
         {!turn.streaming && turn.blocks.length > 0 && (
-          <ReactionBar reactions={turn.reactions} onReact={onReact} isDark={isDark} t={t} />
+          <ReactionBar reactions={turn.reactions} onReact={onReact} t={t} />
         )}
       </div>
       {!turn.streaming && (
         <div className="absolute top-0 right-0 opacity-0 group-hover/turn:opacity-100 transition-opacity pointer-events-none group-hover/turn:pointer-events-auto">
-          <div className={`flex items-center gap-px rounded-md border shadow-lg ${
-            isDark ? 'bg-[#11141a] border-white/[0.10]' : 'bg-white border-black/[0.10]'
-          }`}>
+          <div className="flex items-center gap-px rounded-md border shadow-lg bg-[var(--bg-elevated)] border-[color:var(--border-default)]">
             <button
               type="button"
               onClick={onApplyInverse}
               title={`${t('applyV2.inverse')} · ${t('applyV2.inverseTooltip')}`}
               aria-label={t('applyV2.inverse')}
-              className={`p-1.5 rounded-l-md transition-colors ${
-                isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.06]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
-              }`}
+              className="p-1.5 rounded-l-md transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
             >
               <RotateCcw className="w-3 h-3" />
             </button>
@@ -250,9 +233,7 @@ function AgentTurnView({
               onClick={onFork}
               title={t('checkpoint.forkFromHere')}
               aria-label={t('checkpoint.forkFromHere')}
-              className={`p-1.5 rounded-r-md transition-colors ${
-                isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.06]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
-              }`}
+              className="p-1.5 rounded-r-md transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
             >
               <GitFork className="w-3 h-3" />
             </button>
@@ -265,11 +246,9 @@ function AgentTurnView({
 
 function TpsLiveMeter({
   turn,
-  isDark,
   t,
 }: {
   turn: AgentTurn;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   const [startedAt, setStartedAt] = useState<number>(0);
@@ -297,9 +276,7 @@ function TpsLiveMeter({
 
   return (
     <span
-      className={`flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono tabular-nums ${
-        isDark ? 'bg-white/[0.04] text-white/70' : 'bg-black/[0.04] text-black/65'
-      }`}
+      className="flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono tabular-nums bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-default)]"
       title={t('tps.tooltip')}
     >
       <Zap className="w-2.5 h-2.5 coding-tps-live" />
@@ -309,31 +286,29 @@ function TpsLiveMeter({
   );
 }
 
-const LATENCY_PHASE_TONE: Record<string, { d: string; l: string }> = {
-  thinking: { d: 'rgba(167,139,250,0.85)', l: 'rgba(124,58,237,0.85)' },
-  reading: { d: 'rgba(125,211,252,0.85)', l: 'rgba(2,132,199,0.85)' },
-  searching: { d: 'rgba(196,181,253,0.85)', l: 'rgba(139,92,246,0.85)' },
-  editing: { d: 'rgba(110,231,183,0.85)', l: 'rgba(5,150,105,0.85)' },
-  running: { d: 'rgba(252,211,77,0.85)', l: 'rgba(217,119,6,0.85)' },
-  planning: { d: 'rgba(249,168,212,0.85)', l: 'rgba(190,24,93,0.85)' },
-  writing: { d: 'rgba(186,230,253,0.85)', l: 'rgba(8,145,178,0.85)' },
+const LATENCY_PHASE_TONE: Record<string, string> = {
+  thinking: 'var(--identity-out-of-scope)',
+  reading: 'var(--intent-info-fg)',
+  searching: 'var(--identity-out-of-scope)',
+  editing: 'var(--intent-success-fg)',
+  running: 'var(--intent-warn-fg)',
+  planning: 'var(--intent-danger-fg)',
+  writing: 'var(--intent-info-fg)',
 };
 
 function LatencyBar({
   durations,
   baseline,
-  isDark,
   t,
 }: {
   durations: NonNullable<AgentTurn['phaseDurationsMs']>;
   baseline?: Record<string, number>;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   const entries = Object.entries(durations).filter((e): e is [string, number] => e[1] != null && e[1] > 0);
   if (entries.length === 0) return null;
   const total = entries.reduce((s, [, ms]) => s + ms, 0);
-  const muted = isDark ? 'text-white/40' : 'text-black/45';
+  const muted = 'text-[color:var(--fg-subtle)]';
   let baselineChip: ReactNode = null;
 
   if (baseline != null) {
@@ -380,11 +355,11 @@ function LatencyBar({
       <div className="flex-1 coding-latency-bar">
         {entries.map(([phase, ms]) => {
           const pct = (ms / total) * 100;
-          const tone = LATENCY_PHASE_TONE[phase] ?? { d: 'rgba(255,255,255,0.5)', l: 'rgba(0,0,0,0.5)' };
+          const tone = LATENCY_PHASE_TONE[phase] ?? 'var(--fg-muted)';
           return (
             <span
               key={phase}
-              style={{ width: `${pct}%`, background: isDark ? tone.d : tone.l }}
+              style={{ width: `${pct}%`, background: tone }}
               title={`${t(`phase.${phase}`)} · ${ms}ms (${pct.toFixed(0)}%)`}
             />
           );
@@ -400,22 +375,20 @@ function LatencyBar({
 
 function CitationStrip({
   citations,
-  isDark,
   t,
 }: {
   citations: NonNullable<AgentTurn['citations']>;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   const [expanded, setExpanded] = useState(false);
   const visible = expanded ? citations : citations.slice(0, 3);
   const overflow = citations.length - visible.length;
-  const muted = isDark ? 'text-white/40' : 'text-black/45';
-  const chip = isDark ? 'bg-white/[0.04] text-white/70' : 'bg-black/[0.04] text-black/70';
+  const muted = 'text-[color:var(--fg-subtle)]';
+  const chip = 'bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-default)]';
 
   return (
     <div className="mb-2 flex items-center gap-1.5 flex-wrap">
-      <span className={`text-[9px] font-bold uppercase tracking-[0.18em] ${muted}`}>
+      <span className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${muted}`}>
         {t('citations.label')}
       </span>
       {visible.map((c, i) => {
@@ -450,7 +423,7 @@ function CitationStrip({
             {isStale && (
               <span
                 style={staleChipStyle}
-                className="ml-0.5 px-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.16em] border"
+                className="ml-0.5 px-1 rounded-sm text-[length:var(--fs-2xs)] font-bold uppercase tracking-[var(--track-eyebrow)] border"
               >
                 {t('citationStale.label')}
               </span>
@@ -474,12 +447,10 @@ function CitationStrip({
 function ReactionBar({
   reactions,
   onReact,
-  isDark,
   t,
 }: {
   reactions: AgentTurn['reactions'];
   onReact: (kind: ReactionKind) => void;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   const items: { kind: ReactionKind; Icon: ComponentType<{ className?: string; fill?: string }>; toneStyle: React.CSSProperties }[] = [
@@ -488,7 +459,7 @@ function ReactionBar({
     { kind: 'heart', Icon: Heart, toneStyle: { color: 'var(--intent-danger-fg)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 15%, transparent)' } },
     { kind: 'target', Icon: Target, toneStyle: { color: 'var(--intent-warn-fg)', background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)' } },
   ];
-  const idle = isDark ? 'text-white/30 hover:text-white/70 hover:bg-white/[0.05]' : 'text-black/30 hover:text-black/70 hover:bg-black/[0.04]';
+  const idle = 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-hover)]';
 
   return (
     <div className="mt-2 flex items-center gap-0.5 opacity-60 hover:opacity-100 transition-opacity">
@@ -513,13 +484,13 @@ function ReactionBar({
   );
 }
 
-function StreamingDots({ isDark }: { isDark: boolean }) {
+function StreamingDots() {
   return (
     <div className="flex items-center gap-1 py-1">
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-white/40' : 'bg-black/35'} animate-pulse`}
+          className="w-1.5 h-1.5 rounded-full bg-[color:var(--fg-subtle)] animate-pulse"
           style={{ animationDelay: `${i * 150}ms` }}
         />
       ))}

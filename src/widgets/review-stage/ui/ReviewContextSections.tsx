@@ -9,7 +9,7 @@ import { Avatar, useReviewStore } from '@features/review-pr';
 export function ReviewRailSection({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
-      <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+      <div className="mb-2 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {label}
       </div>
       <div className="space-y-1.5">{children}</div>
@@ -39,7 +39,7 @@ export function ParticipantsSection({
         />
       ))}
       {pr.reviewers.length === 0 && (
-        <div className="text-[11px] text-white/40">{t('empty.noReviewers')}</div>
+        <div className="text-[11px] text-[var(--fg-subtle)]">{t('empty.noReviewers')}</div>
       )}
     </ReviewRailSection>
   );
@@ -56,19 +56,19 @@ function Participant({
   state?: ReviewerState;
   blockerColor: string;
 }) {
-  const tone = state === 'approved' ? '#5fa86c' : state === 'changes-requested' ? blockerColor : '#8b949e';
+  const tone = state === 'approved' ? 'var(--intent-success-fg)' : state === 'changes-requested' ? blockerColor : 'var(--fg-muted)';
 
   return (
     <div className="flex items-center gap-2">
       <Avatar login={login} size={20} />
       <div className="flex-1 min-w-0">
-        <div className="text-[11px] truncate text-white/85">@{login}</div>
-        <div className="text-[10px] uppercase tracking-[0.18em] text-white/40">{role}</div>
+        <div className="text-[11px] truncate text-[var(--fg-default)]">@{login}</div>
+        <div className="text-[10px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">{role}</div>
       </div>
       {state !== undefined && (
         <span
-          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[0.18em]"
-          style={{ background: `${tone}22`, color: tone }}
+          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+          style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone }}
         >
           {state === 'changes-requested' ? 'Changes' : state}
         </span>
@@ -88,24 +88,24 @@ export function BranchSection({
 
   return (
     <ReviewRailSection label="Branch">
-      <div className="flex items-center gap-1.5 text-[11px] font-mono text-white/85">
+      <div className="flex items-center gap-1.5 text-[11px] font-mono text-[var(--fg-default)]">
         <GitBranch className="w-3 h-3 shrink-0 opacity-70" />
         <span className="truncate">{pr.baseBranch}</span>
-        <span className="text-white/40">←</span>
+        <span className="text-[var(--fg-subtle)]">←</span>
         <span className="truncate">{pr.headBranch}</span>
       </div>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] text-white/40">{t('merge.aheadBehind')}</span>
+        <span className="text-[11px] text-[var(--fg-subtle)]">{t('merge.aheadBehind')}</span>
         <span className="text-[11px] font-mono tabular-nums">
           <span style={{ color: 'var(--intent-success-vivid)' }}>+{pr.ahead}</span>
-          <span className="text-white/40"> / </span>
+          <span className="text-[var(--fg-subtle)]"> / </span>
           <span style={{ color: 'var(--intent-danger-vivid)' }}>−{pr.behind}</span>
         </span>
       </div>
       {pr.hasConflicts && (
         <div
           className="flex items-center gap-1.5 mt-1 px-2 py-1 rounded-md text-[11px]"
-          style={{ background: `${blockerColor}1a`, color: blockerColor, border: `1px solid ${blockerColor}55` }}
+          style={{ background: `color-mix(in srgb, ${blockerColor} 10%, transparent)`, color: blockerColor, border: `1px solid color-mix(in srgb, ${blockerColor} 33%, transparent)` }}
         >
           <AlertTriangle className="w-3 h-3 shrink-0" />
           <span>{t('merge.conflictsPresent')}</span>
@@ -137,10 +137,10 @@ export function MergeActionsSection({ pr }: { pr: PullRequest }) {
             className="inline-flex items-center justify-center gap-1 h-8 rounded-md text-[11px] font-bold transition-colors disabled:cursor-not-allowed"
             style={{
               background: enabled
-                ? 'linear-gradient(140deg, rgba(79,154,92,0.22), rgba(79,154,92,0.06))'
+                ? 'linear-gradient(140deg, color-mix(in srgb, var(--intent-success-fg) 22%, transparent), color-mix(in srgb, var(--intent-success-fg) 6%, transparent))'
                 : 'var(--bg-hover)',
-              color: enabled ? '#9ee2a4' : 'var(--fg-subtle)',
-              border: enabled ? '1px solid rgba(79,154,92,0.45)' : '1px solid var(--border-default)',
+              color: enabled ? 'var(--intent-success-fg)' : 'var(--fg-subtle)',
+              border: enabled ? '1px solid color-mix(in srgb, var(--intent-success-fg) 45%, transparent)' : '1px solid var(--border-default)',
             }}
             title={block ?? `${b.label} into ${pr.baseBranch}`}
           >
@@ -150,7 +150,7 @@ export function MergeActionsSection({ pr }: { pr: PullRequest }) {
         ))}
       </div>
       {block !== null && (
-        <div className="mt-1 text-[11px] text-white/55">
+        <div className="mt-1 text-[11px] text-[var(--fg-muted)]">
           Blocked because {block}.
         </div>
       )}

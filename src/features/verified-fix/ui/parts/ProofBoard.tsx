@@ -114,7 +114,7 @@ export function ProofBoard({
                 </div>
                 <ul className="space-y-0.5">
                   {seed.constraints.map((c, i) => (
-                    <li key={i} className="text-[10.5px]" style={{ color: t.textMuted }}>
+                    <li key={i} className="text-[var(--fs-sm)]" style={{ color: t.textMuted }}>
                       · {c}
                     </li>
                   ))}
@@ -220,7 +220,7 @@ function ObligationGroup({ label, items }: { label: string; items: ProofObligati
   return (
     <div>
       <div
-        className="text-[8.5px] font-bold uppercase tracking-[0.16em] mb-1"
+        className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.16em] mb-1"
         style={{ color: t.textFaint }}
       >
         {label}

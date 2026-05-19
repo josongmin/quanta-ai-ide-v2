@@ -11,7 +11,7 @@ export function SectionHeader({ title, sub }: { title: string; sub?: string }) {
   return (
     <div>
       <div
-        className="text-[9px] font-black uppercase tracking-[0.18em]"
+        className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {title}
@@ -60,7 +60,7 @@ export function Section({ title, children }: { title: string; children: React.Re
   return (
     <div>
       <div
-        className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5"
+        className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {title}
@@ -112,7 +112,7 @@ export function Badge({
 
   return (
     <span
-      className="inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.18em]"
+      className="inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
       style={{ color, borderColor: 'currentColor' }}
     >
       {children}

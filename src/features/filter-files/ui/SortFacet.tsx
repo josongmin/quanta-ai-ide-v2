@@ -1,5 +1,4 @@
 import { useFilterFacets, useFilterActions } from '@entities/filter-state';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import type { SortKey } from '@entities/repo';
 
@@ -29,7 +28,6 @@ function isSortKey(v: string): v is SortKey {
 }
 
 export default function SortFacet() {
-  const { isDark } = useTheme();
   const { t } = useTranslation('filter');
   const { state } = useFilterFacets();
   const { setSort, setTopN } = useFilterActions();
@@ -41,17 +39,13 @@ export default function SortFacet() {
           const v = e.target.value;
           setSort(isSortKey(v) ? v : 'none');
         }}
-        className={`w-full rounded-xl text-[11px] px-3 py-2 focus:outline-none transition-colors border ${
-          isDark
-            ? 'bg-white/5 border-white/10 text-white/85 focus:border-white/30'
-            : 'bg-black/5 border-black/10 text-black/85 focus:border-black/30'
-        }`}
+        className="w-full rounded-xl text-[11px] px-3 py-2 focus:outline-none transition-colors border bg-[color:var(--bg-surface-muted)] border-[color:var(--border-default)] text-[color:var(--fg-default)] focus:border-[color:var(--border-strong)]"
       >
         {SORT_KEYS.map((k) => <option key={k} value={k}>{t(`sort.options.${k}`)}</option>)}
       </select>
       {state.sort !== 'none' && (
         <div className="flex items-center justify-between text-[10px] text-[color:var(--fg-muted)]">
-          <span className="uppercase tracking-[0.18em] font-bold">{t('sort.glowTop')}</span>
+          <span className="uppercase tracking-[var(--track-eyebrow)] font-bold">{t('sort.glowTop')}</span>
           <select
             value={state.topNHighlight}
             onChange={(e) => { setTopN(+e.target.value); }}

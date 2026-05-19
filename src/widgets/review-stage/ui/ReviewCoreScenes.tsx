@@ -34,9 +34,9 @@ export function OverviewScene({ pr, repo }: { pr: PullRequest; repo: RepoData })
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4">
       <V2Card className="p-5">
         <SceneHeader icon={GitPullRequest} title="Description" hint="markdown · author intent" />
-        <div className="mt-3 text-[13px] leading-relaxed text-white/85 whitespace-pre-wrap break-words font-sans">
+        <div className="mt-3 text-[13px] leading-relaxed text-[var(--fg-strong)] whitespace-pre-wrap break-words font-sans">
           {pr.description.trim().length === 0
-            ? <span className="italic text-white/40">{t('empty.noDescription')}</span>
+            ? <span className="italic text-[var(--fg-subtle)]">{t('empty.noDescription')}</span>
             : pr.description}
         </div>
         {pr.labels.length > 0 && (
@@ -44,7 +44,7 @@ export function OverviewScene({ pr, repo }: { pr: PullRequest; repo: RepoData })
             {pr.labels.map((l) => (
               <span
                 key={l}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-mono bg-white/[0.04] border-white/10 text-white/70"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-mono bg-[var(--bg-hover)] border-[var(--border-default)] text-[var(--fg-default)]"
               >
                 #{l}
               </span>
@@ -65,36 +65,36 @@ function ReviewerSuggestionsCard({ pr, repo }: { pr: PullRequest; repo: RepoData
     <V2Card className="p-5">
       <SceneHeader icon={Users} title={t('section.suggestedReviewers')} hint={t('section.suggestedReviewersHint')} />
       {suggestions.length === 0 ? (
-        <div className="mt-3 text-[12px] italic text-white/40">{t('empty.noSuggestions')}</div>
+        <div className="mt-3 text-[12px] italic text-[var(--fg-subtle)]">{t('empty.noSuggestions')}</div>
       ) : (
         <ul className="mt-3 space-y-2">
           {suggestions.map((s) => {
             const person = findPerson(s.login);
             const pct = Math.round(Math.max(0, Math.min(1, s.score)) * 100);
             return (
-              <li key={s.login} className="flex items-center gap-3 px-2 py-1.5 rounded-lg bg-white/[0.025]">
+              <li key={s.login} className="flex items-center gap-3 px-2 py-1.5 rounded-lg bg-[var(--bg-surface-muted)]">
                 <Avatar login={s.login} size={28} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[12px] font-bold text-white/85 truncate">{person.display}</span>
-                    <span className="text-[10px] font-mono text-white/40">@{s.login}</span>
+                    <span className="text-[12px] font-bold text-[var(--fg-strong)] truncate">{person.display}</span>
+                    <span className="text-[10px] font-mono text-[var(--fg-subtle)]">@{s.login}</span>
                   </div>
-                  <div className="mt-0.5 text-[11px] text-white/40 truncate">
+                  <div className="mt-0.5 text-[11px] text-[var(--fg-subtle)] truncate">
                     {s.reasons.join(' · ')}
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0" title={`Match ${String(pct)}%`}>
-                  <div className="h-[4px] w-[60px] rounded-full overflow-hidden bg-white/[0.08]">
+                  <div className="h-[4px] w-[60px] rounded-full overflow-hidden bg-[var(--bg-active)]">
                     <div
                       className="h-full rounded-full"
                       style={{
                         width: `${String(pct)}%`,
-                        background: '#4f9a5c',
+                        background: 'var(--intent-success-fg)',
                         boxShadow: 'none',
                       }}
                     />
                   </div>
-                  <span className="text-[10px] font-mono tabular-nums text-white/55">{pct}</span>
+                  <span className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)]">{pct}</span>
                 </div>
               </li>
             );
@@ -158,13 +158,13 @@ export function EngineScene({
     <V2Card className="p-5">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
-          <Bot className="w-3.5 h-3.5 text-[#5a8fce]" />
-          <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+          <Bot className="w-3.5 h-3.5 text-[var(--intent-info-fg)]" />
+          <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
             p0 engine · auto-review
           </span>
           <span
             className="inline-flex items-center gap-1 px-1.5 h-4 rounded text-[9px] font-mono"
-            style={{ background: 'rgba(90,143,206,0.15)', color: '#7aa7ff', border: '1px solid rgba(90,143,206,0.35)' }}
+            style={{ background: 'var(--intent-info-bg)', color: 'var(--fg-link)', border: '1px solid color-mix(in srgb, var(--intent-info-fg) 35%, transparent)' }}
             title="Findings are produced by deterministic AST + dataflow rules, not an LLM. Each finding is reproducible from the diff alone."
           >
             engine v0.42 · static · cached
@@ -175,11 +175,11 @@ export function EngineScene({
             type="button"
             onClick={() => { setFocusMode((v) => !v); }}
             aria-pressed={focusMode}
-            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
+            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
             style={{
-              background: focusMode ? 'rgba(122,167,212,0.18)' : 'var(--bg-hover)',
-              color: focusMode ? '#7aa7d4' : 'var(--fg-muted)',
-              border: focusMode ? '1px solid rgba(122,167,212,0.55)' : '1px solid var(--border-strong)',
+              background: focusMode ? 'color-mix(in srgb, var(--fg-link) 18%, transparent)' : 'var(--bg-hover)',
+              color: focusMode ? 'var(--fg-link)' : 'var(--fg-muted)',
+              border: focusMode ? '1px solid color-mix(in srgb, var(--fg-link) 55%, transparent)' : '1px solid var(--border-strong)',
             }}
             title="Focus mode shows one finding at a time. Use [ and ] to step."
           >
@@ -189,7 +189,7 @@ export function EngineScene({
             type="button"
             onClick={() => { setGrouped((v) => !v); }}
             aria-pressed={grouped}
-            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 hover:text-white/85 transition-colors"
+            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)] transition-colors"
             style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-strong)' }}
             title={grouped ? 'Switch to flat list' : 'Group identical rules'}
           >
@@ -198,9 +198,9 @@ export function EngineScene({
           {summary.autoFix > 0 && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[11px] font-bold transition-colors text-black"
+              className="inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[11px] font-bold transition-colors text-[var(--fg-on-accent)]"
               style={{
-                background: 'linear-gradient(140deg, #7aa7d4, #5a8fce)',
+                background: 'linear-gradient(140deg, var(--fg-link), var(--intent-info-fg))',
                 boxShadow: 'none',
               }}
             >
@@ -215,7 +215,7 @@ export function EngineScene({
         <SevChip
           label={`All ${String(findings.length)}`}
           active={filter === 'all'}
-          color="#8b949e"
+          color="var(--fg-muted)"
           onClick={() => { setFilter('all'); }}
         />
         {(['blocker', 'high', 'medium', 'low'] as EngineSeverity[]).map((sev) => (
@@ -230,9 +230,9 @@ export function EngineScene({
       </div>
 
       {visible.length === 0 ? (
-        <div className="mt-4 flex flex-col items-center justify-center text-center px-4 py-10 rounded-lg border border-dashed border-white/10">
-          <ShieldCheck className="w-5 h-5 mb-2 text-white/30" />
-          <div className="text-[12px] font-bold text-white/40">{t('empty.noFindings')}</div>
+        <div className="mt-4 flex flex-col items-center justify-center text-center px-4 py-10 rounded-lg border border-dashed border-[var(--border-default)]">
+          <ShieldCheck className="w-5 h-5 mb-2 text-[var(--fg-subtle)]" />
+          <div className="text-[12px] font-bold text-[var(--fg-subtle)]">{t('empty.noFindings')}</div>
         </div>
       ) : focusMode ? (
         <div className="mt-4">
@@ -325,23 +325,23 @@ function FindingGroup({
     <li
       className="rounded-lg overflow-hidden"
       style={{
-        background: `linear-gradient(140deg, ${worstColor}10, transparent 60%)`,
-        border: `1px solid ${worstColor}30`,
+        background: `linear-gradient(140deg, color-mix(in srgb, ${worstColor} 6%, transparent), transparent 60%)`,
+        border: `1px solid color-mix(in srgb, ${worstColor} 19%, transparent)`,
       }}
     >
       <button
         type="button"
         onClick={() => { setExpanded((v) => !v); }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-white/[0.02] transition-colors"
+        className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-[var(--bg-hover)] transition-colors"
       >
         <span
-          className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[0.18em]"
-          style={{ background: `${worstColor}26`, color: worstColor }}
+          className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+          style={{ background: `color-mix(in srgb, ${worstColor} 15%, transparent)`, color: worstColor }}
         >
           ×{items.length}
         </span>
-        <span className="text-[11px] font-mono text-white/85 truncate">{groupKey}</span>
-        <span className="ml-auto text-[10px] font-mono text-white/40">
+        <span className="text-[11px] font-mono text-[var(--fg-strong)] truncate">{groupKey}</span>
+        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
           {expanded ? 'collapse' : 'expand'}
         </span>
       </button>
@@ -391,31 +391,31 @@ function FocusedFinding({
     <div
       className="rounded-lg p-4 relative overflow-hidden"
       style={{
-        background: `linear-gradient(140deg, ${c}10, transparent 60%)`,
-        border: `1px solid ${c}30`,
+        background: `linear-gradient(140deg, color-mix(in srgb, ${c} 6%, transparent), transparent 60%)`,
+        border: `1px solid color-mix(in srgb, ${c} 19%, transparent)`,
       }}
     >
       <div className="flex items-center gap-2 mb-2 flex-wrap">
-        <span className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[0.18em]" style={{ background: `${c}26`, color: c }}>
+        <span className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ background: `color-mix(in srgb, ${c} 15%, transparent)`, color: c }}>
           {severityLabels[f.severity]}
         </span>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {f.category}/{f.rule}
         </span>
         <span
           className="inline-flex items-center gap-1 px-1.5 h-4 rounded-sm text-[9px] font-mono"
-          style={{ background: `${provenance.tone}1a`, color: provenance.tone, border: `1px solid ${provenance.tone}55` }}
+          style={{ background: `color-mix(in srgb, ${provenance.tone} 10%, transparent)`, color: provenance.tone, border: `1px solid color-mix(in srgb, ${provenance.tone} 33%, transparent)` }}
           title="Where this rule comes from"
         >
           {provenance.source}
         </span>
-        <span className="ml-auto text-[10px] font-mono text-white/55 tabular-nums">
+        <span className="ml-auto text-[10px] font-mono text-[var(--fg-muted)] tabular-nums">
           {idx + 1} / {total}
         </span>
       </div>
-      <div className="text-[15px] font-bold leading-snug text-white/90">{f.title}</div>
-      <div className="mt-1 text-[13px] leading-relaxed text-white/70">{f.body}</div>
-      <div className="mt-2 text-[11px] font-mono text-white/45 truncate" title={f.filePath}>
+      <div className="text-[15px] font-bold leading-snug text-[var(--fg-strong)]">{f.title}</div>
+      <div className="mt-1 text-[13px] leading-relaxed text-[var(--fg-default)]">{f.body}</div>
+      <div className="mt-2 text-[11px] font-mono text-[var(--fg-muted)] truncate" title={f.filePath}>
         {f.filePath}{f.line !== null ? `:${String(f.line)}` : ''}
       </div>
       <FixPatchPreview finding={f} />
@@ -424,7 +424,7 @@ function FocusedFinding({
           type="button"
           onClick={onPrev}
           disabled={idx === 0}
-          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold bg-white/[0.06] text-white/85 hover:bg-white/[0.10] disabled:opacity-40"
+          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold bg-[var(--bg-elevated)] text-[var(--fg-strong)] hover:bg-[var(--bg-active)] disabled:opacity-40"
         >
           ← prev
         </button>
@@ -432,14 +432,15 @@ function FocusedFinding({
           type="button"
           onClick={onNext}
           disabled={idx >= total - 1}
-          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold bg-white/[0.06] text-white/85 hover:bg-white/[0.10] disabled:opacity-40"
+          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold bg-[var(--bg-elevated)] text-[var(--fg-strong)] hover:bg-[var(--bg-active)] disabled:opacity-40"
         >
           next →
         </button>
         {f.autoFixable && (
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold bg-[#5a8fce]/15 text-[#7aa7ff] hover:bg-[#5a8fce]/30"
+            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold"
+            style={{ background: 'var(--intent-info-bg)', color: 'var(--fg-link)' }}
           >
             <Wand2 className="w-3 h-3" />
             Auto-fix
@@ -453,9 +454,9 @@ function FocusedFinding({
             title="Useful — keep firing this rule"
             className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[14px] transition-colors"
             style={{
-              background: vote === 'up' ? 'rgba(95,168,108,0.20)' : 'var(--bg-hover)',
-              color: vote === 'up' ? '#9ee2a4' : 'var(--fg-muted)',
-              border: vote === 'up' ? '1px solid rgba(95,168,108,0.55)' : '1px solid var(--border-default)',
+              background: vote === 'up' ? 'color-mix(in srgb, var(--intent-success-fg) 20%, transparent)' : 'var(--bg-hover)',
+              color: vote === 'up' ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
+              border: vote === 'up' ? '1px solid color-mix(in srgb, var(--intent-success-fg) 55%, transparent)' : '1px solid var(--border-default)',
             }}
           >
             ▲
@@ -467,9 +468,9 @@ function FocusedFinding({
             title="False positive — suppress this pattern"
             className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[14px] transition-colors"
             style={{
-              background: vote === 'down' ? 'rgba(194,90,85,0.20)' : 'var(--bg-hover)',
-              color: vote === 'down' ? '#e88a85' : 'var(--fg-muted)',
-              border: vote === 'down' ? '1px solid rgba(194,90,85,0.55)' : '1px solid var(--border-default)',
+              background: vote === 'down' ? 'color-mix(in srgb, var(--intent-danger-fg) 20%, transparent)' : 'var(--bg-hover)',
+              color: vote === 'down' ? 'var(--intent-danger-fg)' : 'var(--fg-muted)',
+              border: vote === 'down' ? '1px solid color-mix(in srgb, var(--intent-danger-fg) 55%, transparent)' : '1px solid var(--border-default)',
             }}
           >
             ▼
@@ -495,11 +496,11 @@ function SevChip({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-1 px-2 h-6 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
+      className="inline-flex items-center gap-1 px-2 h-6 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
       style={{
-        background: active ? `${color}26` : 'var(--bg-hover)',
+        background: active ? `color-mix(in srgb, ${color} 15%, transparent)` : 'var(--bg-hover)',
         color: active ? color : 'var(--fg-muted)',
-        border: active ? `1px solid ${color}77` : '1px solid var(--border-default)',
+        border: active ? `1px solid color-mix(in srgb, ${color} 47%, transparent)` : '1px solid var(--border-default)',
       }}
     >
       <span className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
@@ -528,45 +529,46 @@ function FindingRow({
   const provenance = ruleProvenance(f);
   return (
     <li
-      className={`rounded-lg ${compact ? 'px-2.5 py-2' : 'px-3 py-2.5'} relative overflow-hidden transition-colors hover:bg-white/[0.02]`}
+      className={`rounded-lg ${compact ? 'px-2.5 py-2' : 'px-3 py-2.5'} relative overflow-hidden transition-colors hover:bg-[var(--bg-hover)]`}
       style={compact
         ? { background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }
-        : { background: `linear-gradient(140deg, ${c}10, transparent 60%)`, border: `1px solid ${c}30` }}
+        : { background: `linear-gradient(140deg, color-mix(in srgb, ${c} 6%, transparent), transparent 60%)`, border: `1px solid color-mix(in srgb, ${c} 19%, transparent)` }}
     >
       <div className="flex items-center gap-2 mb-1 flex-wrap">
-        <span className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[0.18em]" style={{ background: `${c}26`, color: c }}>
+        <span className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ background: `color-mix(in srgb, ${c} 15%, transparent)`, color: c }}>
           {severityLabels[f.severity]}
         </span>
-        <span className="text-[10px] font-mono text-white/40 truncate">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)] truncate">
           {f.category}/{f.rule}
         </span>
         {!compact && (
           <span
             className="text-[9px] font-mono px-1 h-4 inline-flex items-center rounded-sm"
             title="Where this rule comes from"
-            style={{ background: `${provenance.tone}14`, color: provenance.tone, border: `1px solid ${provenance.tone}40` }}
+            style={{ background: `color-mix(in srgb, ${provenance.tone} 8%, transparent)`, color: provenance.tone, border: `1px solid color-mix(in srgb, ${provenance.tone} 25%, transparent)` }}
           >
             {provenance.source}
           </span>
         )}
-        <span className="ml-auto text-[10px] font-mono text-white/40 truncate" title={f.filePath}>
+        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)] truncate" title={f.filePath}>
           {trimMid(f.filePath, 36)}{f.line !== null ? `:${String(f.line)}` : ''}
         </span>
       </div>
-      <div className={`${compact ? 'text-[12px]' : 'text-[13px]'} font-bold leading-snug text-white/85`}>{f.title}</div>
-      <div className="mt-0.5 text-[12px] leading-snug text-white/55">{f.body}</div>
+      <div className={`${compact ? 'text-[12px]' : 'text-[13px]'} font-bold leading-snug text-[var(--fg-strong)]`}>{f.title}</div>
+      <div className="mt-0.5 text-[12px] leading-snug text-[var(--fg-muted)]">{f.body}</div>
       {!compact && <FixPatchPreview finding={f} />}
       <div className="mt-2 flex items-center gap-2">
         {f.autoFixable ? (
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-6 px-2.5 rounded-md text-[11px] font-bold transition-colors bg-[#5a8fce]/15 text-[#7aa7ff] hover:bg-[#5a8fce]/30"
+            className="inline-flex items-center gap-1 h-6 px-2.5 rounded-md text-[11px] font-bold transition-colors"
+            style={{ background: 'var(--intent-info-bg)', color: 'var(--fg-link)' }}
           >
             <Wand2 className="w-2.5 h-2.5" />
             Auto-fix
           </button>
         ) : (
-          <span className="text-[11px] text-white/40">{t('merge.needsManualReview')}</span>
+          <span className="text-[11px] text-[var(--fg-subtle)]">{t('merge.needsManualReview')}</span>
         )}
         {onVote && (
           <span className="ml-auto inline-flex items-center gap-1" role="group" aria-label="Was this finding useful?">
@@ -577,9 +579,9 @@ function FindingRow({
               title="Useful — keep firing this rule"
               className="inline-flex items-center justify-center w-6 h-6 rounded-md text-[12px] transition-colors"
               style={{
-                background: vote === 'up' ? 'rgba(95,168,108,0.20)' : 'var(--bg-hover)',
-                color: vote === 'up' ? '#9ee2a4' : 'var(--fg-muted)',
-                border: vote === 'up' ? '1px solid rgba(95,168,108,0.55)' : '1px solid var(--border-default)',
+                background: vote === 'up' ? 'color-mix(in srgb, var(--intent-success-fg) 20%, transparent)' : 'var(--bg-hover)',
+                color: vote === 'up' ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
+                border: vote === 'up' ? '1px solid color-mix(in srgb, var(--intent-success-fg) 55%, transparent)' : '1px solid var(--border-default)',
               }}
             >
               ▲
@@ -591,9 +593,9 @@ function FindingRow({
               title="False positive — suppress this pattern"
               className="inline-flex items-center justify-center w-6 h-6 rounded-md text-[12px] transition-colors"
               style={{
-                background: vote === 'down' ? 'rgba(194,90,85,0.20)' : 'var(--bg-hover)',
-                color: vote === 'down' ? '#e88a85' : 'var(--fg-muted)',
-                border: vote === 'down' ? '1px solid rgba(194,90,85,0.55)' : '1px solid var(--border-default)',
+                background: vote === 'down' ? 'color-mix(in srgb, var(--intent-danger-fg) 20%, transparent)' : 'var(--bg-hover)',
+                color: vote === 'down' ? 'var(--intent-danger-fg)' : 'var(--fg-muted)',
+                border: vote === 'down' ? '1px solid color-mix(in srgb, var(--intent-danger-fg) 55%, transparent)' : '1px solid var(--border-default)',
               }}
             >
               ▼
@@ -602,7 +604,7 @@ function FindingRow({
         )}
         <button
           type="button"
-          className={`${onVote ? '' : 'ml-auto'} inline-flex items-center gap-0.5 text-[11px] font-medium text-[#7aa7ff] hover:underline`}
+          className={`${onVote ? '' : 'ml-auto'} inline-flex items-center gap-0.5 text-[11px] font-medium text-[var(--fg-link)] hover:underline`}
         >
           Jump to file
           <ArrowUpRight className="w-2.5 h-2.5" />
@@ -635,13 +637,13 @@ export function RiskScene({
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2">
-        <ShieldAlert className="w-3.5 h-3.5 text-white/55" />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <ShieldAlert className="w-3.5 h-3.5 text-[var(--fg-muted)]" />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Risk profile
         </span>
         <span
-          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[0.18em]"
-          style={{ background: `${accent}26`, color: accent }}
+          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+          style={{ background: `color-mix(in srgb, ${accent} 15%, transparent)`, color: accent }}
         >
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
           {tierLabels[risk.tier]}
@@ -660,7 +662,7 @@ export function RiskScene({
       {risk.secretsRisk && (
         <div
           className="mt-3 flex items-center gap-2 px-3 py-2 rounded-md text-[12px]"
-          style={{ background: `${severityColors.blocker}1a`, color: severityColors.blocker, border: `1px solid ${severityColors.blocker}55` }}
+          style={{ background: `color-mix(in srgb, ${severityColors.blocker} 10%, transparent)`, color: severityColors.blocker, border: `1px solid color-mix(in srgb, ${severityColors.blocker} 33%, transparent)` }}
         >
           <KeyRound className="w-3.5 h-3.5 shrink-0" />
           A changed file matched the secrets-likely heuristic. Treat with care.
@@ -669,10 +671,10 @@ export function RiskScene({
 
       {risk.reasons.length > 0 && (
         <div className="mt-4">
-          <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+          <div className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
             Why this score
           </div>
-          <ul className="mt-1.5 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[12px] text-white/70">
+          <ul className="mt-1.5 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[12px] text-[var(--fg-default)]">
             {risk.reasons.map((r, i) => (
               <li key={i} className="flex items-start gap-1.5">
                 <span style={{ color: accent }}>▸</span>
@@ -685,7 +687,7 @@ export function RiskScene({
 
       {cov.length > 0 && (
         <div className="mt-5">
-          <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+          <div className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
             Coverage delta
           </div>
           <div className="mt-2 flex flex-col gap-1.5">
@@ -694,16 +696,16 @@ export function RiskScene({
               return (
                 <div key={r.filePath} className="grid grid-cols-[1fr_auto] items-center gap-3">
                   <div className="min-w-0">
-                    <div className="truncate font-mono text-[11px] text-white/70">{r.filePath}</div>
-                    <div className="mt-1 h-1 rounded-full overflow-hidden" style={{ background: `${severityColors.blocker}22` }}>
+                    <div className="truncate font-mono text-[11px] text-[var(--fg-default)]">{r.filePath}</div>
+                    <div className="mt-1 h-1 rounded-full overflow-hidden" style={{ background: `color-mix(in srgb, ${severityColors.blocker} 13%, transparent)` }}>
                       <div className="h-full" style={{ width: `${String(dropPct)}%`, background: severityColors.blocker }} />
                     </div>
                   </div>
                   <div className="shrink-0 flex items-center gap-2 font-mono text-[11px] tabular-nums">
-                    <span className="text-white/40">{r.before}%</span>
-                    <span className="text-white/30">→</span>
-                    <span className="text-white/85">{r.after}%</span>
-                    <span style={{ color: r.drop > 0 ? severityColors.blocker : '#4f9a5c' }}>
+                    <span className="text-[var(--fg-subtle)]">{r.before}%</span>
+                    <span className="text-[var(--fg-subtle)]">→</span>
+                    <span className="text-[var(--fg-strong)]">{r.after}%</span>
+                    <span style={{ color: r.drop > 0 ? severityColors.blocker : 'var(--intent-success-fg)' }}>
                       {r.drop > 0 ? `-${String(r.drop)}pp` : `+${String(-r.drop)}pp`}
                     </span>
                   </div>
@@ -715,8 +717,8 @@ export function RiskScene({
       )}
 
       {testRatio.total > 0 && (
-        <div className="mt-4 text-[12px] text-white/65">
-          <span className="font-bold text-white/85">{Math.round(testRatio.ratio * 100)}%</span> of
+        <div className="mt-4 text-[12px] text-[var(--fg-default)]">
+          <span className="font-bold text-[var(--fg-strong)]">{Math.round(testRatio.ratio * 100)}%</span> of
           {' '}{testRatio.total} touched source {testRatio.total === 1 ? 'file has' : 'files have'} a co-changed test
           {testRatio.ratio < 0.5 && (
             <span className="ml-1.5" style={{ color: severityColors.medium }}>
@@ -729,10 +731,10 @@ export function RiskScene({
       {incidents.length > 0 && (
         <div className="mt-5">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+            <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
               Past incident proximity
             </span>
-            <span className="ml-auto text-[10px] font-mono text-white/40">
+            <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
               {incidents.length} prior {incidents.length === 1 ? 'match' : 'matches'}
             </span>
           </div>
@@ -745,12 +747,12 @@ export function RiskScene({
       {tests !== null && (
         <div className="mt-5">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+            <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
               Failed tests
             </span>
             <span
               className="ml-auto inline-flex items-center px-2 h-5 rounded-full text-[10px] font-mono tabular-nums"
-              style={{ background: '#5fa86c22', color: '#5fa86c' }}
+              style={{ background: 'var(--intent-success-bg)', color: 'var(--intent-success-fg)' }}
             >
               {tests.passed}/{tests.passed + tests.failed} passing
             </span>
@@ -758,11 +760,11 @@ export function RiskScene({
           {tests.failingNames.length > 0 && (
             <ul className="mt-2 flex flex-col gap-1">
               {tests.failingNames.map((name) => (
-                <li key={name} className="flex items-center justify-between gap-3 px-2 py-1 rounded-md bg-white/[0.025]">
-                  <span className="font-mono text-[11px] truncate text-white/85">{name}</span>
+                <li key={name} className="flex items-center justify-between gap-3 px-2 py-1 rounded-md bg-[var(--bg-surface-muted)]">
+                  <span className="font-mono text-[11px] truncate text-[var(--fg-strong)]">{name}</span>
                   <button
                     type="button"
-                    className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold bg-white/[0.06] text-white/70 hover:bg-white/[0.10]"
+                    className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold bg-[var(--bg-elevated)] text-[var(--fg-default)] hover:bg-[var(--bg-active)]"
                   >
                     <Play className="w-3 h-3" />
                     Run
@@ -795,7 +797,7 @@ function RiskStat({
         boxShadow: 'none',
       }}
     >
-      <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">{label}</div>
+      <div className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">{label}</div>
       <div
         className="mt-0.5 text-[18px] font-black tabular-nums leading-none"
         style={{ color: accent ?? 'var(--fg-strong)' }}
@@ -815,19 +817,19 @@ function IncidentMatchRow({
 }) {
   const pct = Math.round(m.similarity * 100);
   const fill = m.similarity >= 0.6 ? mediumColor
-    : m.similarity >= 0.4 ? '#7aa7d4'
-      : '#8b949e';
+    : m.similarity >= 0.4 ? 'var(--fg-link)'
+      : 'var(--fg-muted)';
   return (
-    <li className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-1.5 rounded-md bg-white/[0.025]">
-      <span className="font-mono text-[10px] text-white/55 shrink-0">{m.id}</span>
+    <li className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-1.5 rounded-md bg-[var(--bg-surface-muted)]">
+      <span className="font-mono text-[10px] text-[var(--fg-muted)] shrink-0">{m.id}</span>
       <span className="min-w-0">
-        <span className="block truncate text-[12px] text-white/85">{m.title}</span>
+        <span className="block truncate text-[12px] text-[var(--fg-strong)]">{m.title}</span>
         <span className="block mt-1 h-1 rounded-full overflow-hidden" style={{ background: 'var(--bg-active)' }}>
           <span className="block h-full" style={{ width: `${String(pct)}%`, background: fill }} />
         </span>
       </span>
       <span className="shrink-0 inline-flex items-center gap-2 text-[10px] font-mono tabular-nums">
-        <span className="text-white/40">{m.date}</span>
+        <span className="text-[var(--fg-subtle)]">{m.date}</span>
         <span style={{ color: fill }}>{pct}%</span>
       </span>
     </li>

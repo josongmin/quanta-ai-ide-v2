@@ -22,12 +22,12 @@ export default function ReleaseChip({ readiness }: { readiness: ReleaseReadiness
       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md"
       title={readiness.detail}
       style={{
-        background: `${color}1a`,
-        border: `1px solid ${color}55`,
+        background: `color-mix(in srgb, ${color} 10%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${color} 33%, transparent)`,
       }}
     >
       <GitCommitVertical className="w-3 h-3" style={{ color }} strokeWidth={2.25} />
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color }}>
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color }}>
         release-bound
       </span>
     </span>

@@ -25,7 +25,7 @@ export function SimilarDrawer({ file, onClose }: { file: FileRecord; onClose: ()
       }}
     >
       <div
-        className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5 flex items-center justify-between"
+        className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{t('catalog.openSimilar')}</span>

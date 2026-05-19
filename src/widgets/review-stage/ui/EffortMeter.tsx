@@ -29,12 +29,12 @@ export default function EffortMeter({ effort }: { effort: EffortInfo }) {
       className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md"
       title={`${EFFORT_BAND_LABEL[effort.band]} review · ${effort.label}${effort.oversized ? ' · oversized — consider splitting' : ''}`}
       style={{
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'var(--bg-hover)',
+        border: '1px solid var(--border-default)',
       }}
     >
-      <Hourglass className="w-3 h-3 text-white/55" strokeWidth={2} />
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
+      <Hourglass className="w-3 h-3 text-[var(--fg-muted)]" strokeWidth={2} />
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
         Effort
       </span>
       <span className="flex items-center gap-0.5">
@@ -45,7 +45,7 @@ export default function EffortMeter({ effort }: { effort: EffortInfo }) {
             style={{
               width: 6 + i * 2,
               height: 8,
-              background: i <= reachedIdx ? tone : 'rgba(255,255,255,0.12)',
+              background: i <= reachedIdx ? tone : 'var(--bg-selected)',
               opacity: i <= reachedIdx ? 1 : 0.55,
             }}
           />
@@ -55,7 +55,7 @@ export default function EffortMeter({ effort }: { effort: EffortInfo }) {
         {effort.label}
       </span>
       {effort.oversized && (
-        <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: SEV.medium }}>
+        <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color: SEV.medium }}>
           oversized
         </span>
       )}

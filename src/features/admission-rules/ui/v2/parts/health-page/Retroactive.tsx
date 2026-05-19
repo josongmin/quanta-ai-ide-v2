@@ -67,26 +67,26 @@ export function Retroactive({
                 <div
                   className="absolute -top-16 left-1/2 -translate-x-1/2 z-20 px-3 py-1.5 rounded-lg whitespace-nowrap admv2-rise"
                   style={{
-                    background: 'rgba(13,17,23,0.95)',
+                    background: 'var(--bg-panel-strong)',
                     border: `1px solid ${accent}88`,
                     boxShadow: `0 8px 24px rgba(0,0,0,0.6), 0 0 16px ${accent}44`,
                   }}
                 >
-                  <div className="text-[10px] font-mono text-white/85">#{r.seed}</div>
+                  <div className="text-[10px] font-mono text-[var(--fg-default)]">#{r.seed}</div>
                   <div
-                    className="text-[10px] font-bold uppercase tracking-[0.18em]"
+                    className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
                     style={{ color: accent }}
                   >
                     {r.decision.outcome}
                   </div>
-                  <div className="text-[9px] font-mono text-white/40 mt-0.5">
+                  <div className="text-[9px] font-mono text-[var(--fg-subtle)] mt-0.5">
                     {fired} rules fired
                   </div>
                   <div
                     aria-hidden
                     className="absolute left-1/2 -bottom-[5px] -translate-x-1/2 w-2 h-2 rotate-45"
                     style={{
-                      background: 'rgba(13,17,23,0.95)',
+                      background: 'var(--bg-panel-strong)',
                       borderRight: `1px solid ${accent}88`,
                       borderBottom: `1px solid ${accent}88`,
                     }}
@@ -97,7 +97,7 @@ export function Retroactive({
           );
         })}
       </div>
-      <div className="mt-2 flex items-center justify-between text-[9px] font-mono text-white/30">
+      <div className="mt-2 flex items-center justify-between text-[9px] font-mono text-[var(--fg-subtle)]">
         <span>30d ago</span>
         <span>{hovered ? `#${hovered.seed} · ${hovered.decision.outcome.toUpperCase()}` : 'height = rules fired'}</span>
         <span>now</span>
@@ -110,14 +110,14 @@ function SmallStat({ label, value, color }: { label: string; value: number; colo
   return (
     <div className="flex items-baseline gap-1.5">
       <span className="text-[16px] font-black tabular-nums" style={{ color }}>{value}</span>
-      <span className="text-[9px] font-mono uppercase tracking-[0.18em] text-white/40">{label}</span>
+      <span className="text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">{label}</span>
     </div>
   );
 }
 
 export function Footer() {
   return (
-    <div className="text-center text-[10px] font-mono text-white/30 pt-2">
+    <div className="text-center text-[10px] font-mono text-[var(--fg-subtle)] pt-2">
       admission · v2 · all data synthetic
     </div>
   );

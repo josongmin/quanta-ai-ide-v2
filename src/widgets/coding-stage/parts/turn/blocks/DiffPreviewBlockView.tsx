@@ -5,18 +5,18 @@ import type { DiffPreviewBlock } from '../../types';
 
 // Compact preview card emitted by `/diff <ref>`. Lets the user orient
 // before asking follow-up questions about a branch/ref's diff.
-function DiffPreviewBlockViewImpl({ block, isDark }: { block: DiffPreviewBlock; isDark: boolean }) {
+function DiffPreviewBlockViewImpl({ block }: { block: DiffPreviewBlock }) {
   const { t } = useTranslation('coding');
-  const card = isDark ? 'bg-white/[0.02] border-white/[0.08]' : 'bg-white border-black/[0.08]';
-  const headerBorder = isDark ? 'border-white/[0.06]' : 'border-black/[0.05]';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/35' : 'text-black/40';
-  const primary = isDark ? 'text-white/85' : 'text-black/85';
+  const card = 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-default)]';
+  const headerBorder = 'border-[color:var(--border-muted)]';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
+  const primary = 'text-[color:var(--fg-strong)]';
   return (
     <div className={`rounded-lg border overflow-hidden ${card}`}>
       <div className={`flex items-center gap-2 px-3 py-2 border-b ${headerBorder}`}>
         <GitCompareArrows className={`w-3 h-3 ${muted}`} />
-        <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+        <span className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
           {t('diffPreview.label')}
         </span>
         <span className={`text-[12px] font-mono ${primary}`}>{block.ref}</span>
@@ -30,14 +30,10 @@ function DiffPreviewBlockViewImpl({ block, isDark }: { block: DiffPreviewBlock; 
       <div className={`px-3 py-2 text-[12px] leading-relaxed ${primary}`}>
         {block.summary}
       </div>
-      <div className={`flex items-center justify-end gap-1 px-2 py-1.5 border-t ${headerBorder} ${
-        isDark ? 'bg-white/[0.015]' : 'bg-black/[0.015]'
-      }`}>
+      <div className={`flex items-center justify-end gap-1 px-2 py-1.5 border-t ${headerBorder} bg-[color:var(--bg-surface-muted)]`}>
         <button
           type="button"
-          className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors ${
-            isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.06]' : 'text-black/55 hover:text-black hover:bg-black/[0.06]'
-          }`}
+          className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
         >
           <Sparkles className="w-2.5 h-2.5" />
           {t('diffPreview.askAbout')}

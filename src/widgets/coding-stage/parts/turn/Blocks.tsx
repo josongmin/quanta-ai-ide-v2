@@ -11,11 +11,11 @@ import { DiffPreviewBlockView } from './blocks/DiffPreviewBlockView';
 // components are wrapped in React.memo so unrelated block updates in
 // the same turn don't re-render every sibling.
 export function BlockView({ block, isDark }: { block: AgentBlock; isDark: boolean }) {
-  if (block.kind === 'text') return <TextBlockView block={block} isDark={isDark} />;
-  if (block.kind === 'thinking') return <ThinkingBlockView block={block} isDark={isDark} />;
-  if (block.kind === 'plan') return <PlanBlockView block={block} isDark={isDark} />;
-  if (block.kind === 'tool') return <ToolBlockView block={block} isDark={isDark} />;
-  if (block.kind === 'diff-preview') return <DiffPreviewBlockView block={block} isDark={isDark} />;
+  if (block.kind === 'text') return <TextBlockView block={block} />;
+  if (block.kind === 'thinking') return <ThinkingBlockView block={block} />;
+  if (block.kind === 'plan') return <PlanBlockView block={block} />;
+  if (block.kind === 'tool') return <ToolBlockView block={block} />;
+  if (block.kind === 'diff-preview') return <DiffPreviewBlockView block={block} />;
   return <DiffBlockView block={block} isDark={isDark} />;
 }
 

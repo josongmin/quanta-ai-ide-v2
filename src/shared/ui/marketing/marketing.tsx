@@ -242,7 +242,7 @@ export function SectionHead({
         {title}
       </h2>
       {lede && (
-        <p className="text-[14.5px] leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-[var(--fs-lg)] leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
           {lede}
         </p>
       )}

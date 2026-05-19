@@ -1,6 +1,5 @@
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { ChevronRight, Folder, FolderOpen, FileCode } from 'lucide-react';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import type { FileRecord, FolderRecord } from '@entities/repo';
 import { useFilterStore } from '@entities/filter-state';
@@ -40,7 +39,6 @@ function Row({
   onOpenFile?: (id: number) => void;
   activeKey?: string | null;
 }) {
-  const { isDark } = useTheme();
   const { t: tr } = useTranslation('inspect');
   // Narrow selectors. Each row in a deep tree subscribes only to the slices
   // it actually reads, so a slider tweak elsewhere won't re-render every row.
@@ -62,7 +60,7 @@ function Row({
         // Each level indents the row by 14px; chevron center sits 15px in.
         // Subtracting 0.5 visually centers a 1px line on a sub-pixel.
         <div
-          className={`absolute top-0 bottom-0 w-px ${isDark ? 'bg-white/10' : 'bg-black/10'}`}
+          className="absolute top-0 bottom-0 w-px bg-[var(--border-default)]"
           style={{ left: `${(depth - 1) * 14 + 15 - 0.5}px` }}
         />
       )}
@@ -79,8 +77,8 @@ function Row({
         }}
         className={`group flex items-center gap-2 py-1.5 px-2 rounded-lg cursor-pointer transition-all duration-200 ${
           isSelected
-            ? (isDark ? 'bg-[#4f9a5c]/15 text-white' : 'bg-[#4f9a5c]/20 text-black')
-            : (isDark ? 'hover:bg-white/[0.05]' : 'hover:bg-black/[0.05]')
+            ? 'text-[color:var(--fg-strong)] [background:color-mix(in_srgb,var(--fg-accent)_16%,transparent)]'
+            : 'hover:bg-[var(--bg-hover)]'
         }`}
         style={{ marginLeft: `${depth * 14}px` }}
       >
@@ -90,22 +88,22 @@ function Row({
           tabIndex={hasChildren ? 0 : -1}
         >
           {hasChildren
-            ? <ChevronRight className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-90' : ''} ${isDark ? 'text-white/70' : 'text-black/70'}`} />
-            : <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-white/30' : 'bg-black/30'}`} />}
+            ? <ChevronRight className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-90' : ''} text-[var(--fg-default)]`} />
+            : <span className="w-1.5 h-1.5 rounded-full bg-[var(--fg-subtle)]" />}
         </button>
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           {hasChildren
             ? (isOpen
-              ? <FolderOpen className={`w-3.5 h-3.5 ${isDark ? 'text-white/80' : 'text-black/80'}`} />
-              : <Folder className={`w-3.5 h-3.5 ${isDark ? 'text-white/50' : 'text-black/50'}`} />)
-            : <FileCode className={`w-3.5 h-3.5 ${isDark ? 'text-white/30' : 'text-black/30'}`} />}
-          <span className={`text-[10.5px] truncate ${depth === 0 ? 'font-black uppercase tracking-wider' : 'font-medium'} ${
-            isSelected ? '' : isDark ? 'text-white/60' : 'text-black/60'
+              ? <FolderOpen className="w-3.5 h-3.5 text-[var(--fg-default)]" />
+              : <Folder className="w-3.5 h-3.5 text-[var(--fg-muted)]" />)
+            : <FileCode className="w-3.5 h-3.5 text-[var(--fg-subtle)]" />}
+          <span className={`text-[var(--fs-sm)] truncate ${depth === 0 ? 'font-black uppercase tracking-wider' : 'font-medium'} ${
+            isSelected ? '' : 'text-[var(--fg-muted)]'
           }`}>
             {depth === 0 ? tr('tree.repo') : node.folder.name}
           </span>
         </div>
-        <span className={`tabular-nums text-[9px] ${m === 0 ? (isDark ? 'text-white/15' : 'text-black/15') : (isDark ? 'text-white/40' : 'text-black/40')}`}>
+        <span className={`tabular-nums text-[9px] ${m === 0 ? 'text-[var(--fg-subtle)]' : 'text-[var(--fg-muted)]'}`}>
           {m}/{t}
         </span>
       </div>
@@ -131,7 +129,6 @@ function Row({
               file={f}
               depth={depth + 1}
               matched={Boolean(matched[f.id])}
-              isDark={isDark}
               onOpenFile={onOpenFile}
               isActive={activeKey === `file:${f.id}`}
             />
@@ -143,9 +140,9 @@ function Row({
 }
 
 function FileRow({
-  file, depth, matched, isDark, onOpenFile, isActive,
+  file, depth, matched, onOpenFile, isActive,
 }: {
-  file: FileRecord; depth: number; matched: boolean; isDark: boolean;
+  file: FileRecord; depth: number; matched: boolean;
   onOpenFile?: (id: number) => void;
   isActive: boolean;
 }) {
@@ -164,8 +161,8 @@ function FileRow({
       }}
       className={`group flex items-center gap-2 py-1 px-2 rounded-lg cursor-pointer transition-colors ${
         isActive
-          ? (isDark ? 'bg-[#4f9a5c]/15 text-white' : 'bg-[#4f9a5c]/20 text-black')
-          : (isDark ? 'hover:bg-white/[0.05]' : 'hover:bg-black/[0.05]')
+          ? 'text-[color:var(--fg-strong)] [background:color-mix(in_srgb,var(--fg-accent)_16%,transparent)]'
+          : 'hover:bg-[var(--bg-hover)]'
       }`}
       style={{ marginLeft: `${depth * 14}px` }}
       title={`${file.folderPath}/${file.name}`}
@@ -173,19 +170,19 @@ function FileRow({
       <span className="w-3.5 h-3.5 flex items-center justify-center">
         <span className={`w-1 h-1 rounded-full ${
           matched
-            ? 'bg-[#4f9a5c]'
-            : (isDark ? 'bg-white/15' : 'bg-black/15')
+            ? 'bg-[var(--fg-accent)]'
+            : 'bg-[var(--fg-subtle)]'
         }`} />
       </span>
       <FileCode className={`w-3 h-3 shrink-0 ${
-        isActive ? (isDark ? 'text-white/70' : 'text-black/70') : (isDark ? 'text-white/30' : 'text-black/30')
+        isActive ? 'text-[var(--fg-default)]' : 'text-[var(--fg-subtle)]'
       }`} />
       <span className={`flex-1 min-w-0 truncate text-[10px] font-mono ${
         isActive
-          ? (isDark ? 'text-white' : 'text-black')
+          ? 'text-[var(--fg-strong)]'
           : matched
-            ? (isDark ? 'text-white/75' : 'text-black/75')
-            : (isDark ? 'text-white/35' : 'text-black/35')
+            ? 'text-[var(--fg-default)]'
+            : 'text-[var(--fg-subtle)]'
       }`}>
         {file.name}
       </span>

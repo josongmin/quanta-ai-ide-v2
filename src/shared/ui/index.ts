@@ -7,7 +7,8 @@
 //   • carry no business logic
 
 // ── Layout / surfaces ──
-export { GlassCard, SectionHeader } from './GlassCard';
+export { GlassCard } from './GlassCard';
+export { SectionHeader } from './SectionHeader';
 export { Section } from './Section';
 
 // ── Primitives ──
@@ -19,6 +20,7 @@ export { IconButton } from './IconButton';
 export { Switch } from './Switch';
 export { SegmentedControl } from './SegmentedControl';
 export { Pill } from './Pill';
+export { Badge } from './Badge';
 export { ResizeHandle } from './ResizeHandle';
 export { SideNavShell, type SideNavItem, type SideNavGroup } from './SideNavShell';
 export { Drawer } from './Drawer';

@@ -63,18 +63,18 @@ export default function ReviewerRotation({
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <UserPlus className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <UserPlus className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Reviewer rotation
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {suggestions.length} {suggestions.length === 1 ? 'suggestion' : 'suggestions'}
         </span>
         {gap.hasGap && (
           <span
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
-            style={{ background: 'rgba(168,137,58,0.18)', color: '#d3b264', border: '1px solid rgba(168,137,58,0.40)' }}
+            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            style={{ background: 'color-mix(in srgb, var(--intent-warn-fg) 18%, transparent)', color: 'var(--intent-warn-fg)', border: '1px solid color-mix(in srgb, var(--intent-warn-fg) 40%, transparent)' }}
             title={`${String(gap.missingTeams)} owner team${gap.missingTeams === 1 ? '' : 's'} unrepresented in current reviewers`}
           >
             {gap.missingTeams} gap{gap.missingTeams === 1 ? '' : 's'}
@@ -86,34 +86,34 @@ export default function ReviewerRotation({
         {suggestions.map((s) => {
           const isQueued = queued.has(s.login);
           const conf = Math.round(s.score * 100);
-          const tone = s.score >= 0.7 ? '#5fa86c'
-            : s.score >= 0.45 ? '#7aa7d4'
-            : '#a8893a';
+          const tone = s.score >= 0.7 ? 'var(--intent-success-fg)'
+            : s.score >= 0.45 ? 'var(--fg-link)'
+            : 'var(--intent-warn-fg)';
           return (
             <li
               key={s.login}
-              className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/[0.025]"
+              className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-[var(--bg-surface-muted)]"
             >
               <span
                 className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-[11px] font-mono font-bold tabular-nums"
-                style={{ background: `${tone}22`, color: tone, border: `1px solid ${tone}55` }}
+                style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone, border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)` }}
                 title={`Match score ${String(conf)}%`}
               >
                 {conf}
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[12px] font-bold text-white/85 truncate">
+                  <span className="text-[12px] font-bold text-[var(--fg-default)] truncate">
                     @{s.login}
                   </span>
-                  <span className="inline-block h-1 rounded-full bg-white/[0.04] overflow-hidden flex-1 min-w-12 max-w-32">
+                  <span className="inline-block h-1 rounded-full bg-[var(--bg-hover)] overflow-hidden flex-1 min-w-12 max-w-32">
                     <span
                       className="block h-full"
                       style={{ width: `${String(conf)}%`, background: tone }}
                     />
                   </span>
                 </div>
-                <div className="mt-1 text-[11px] text-white/55 leading-snug">
+                <div className="mt-1 text-[11px] text-[var(--fg-muted)] leading-snug">
                   {s.reasons.join(' · ')}
                 </div>
               </div>
@@ -129,11 +129,11 @@ export default function ReviewerRotation({
                   });
                   requestReviewer(pr.number, s.login);
                 }}
-                className="shrink-0 inline-flex items-center gap-1 h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-[0.14em] transition-colors disabled:opacity-60"
+                className="shrink-0 inline-flex items-center gap-1 h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-60"
                 style={{
-                  background: isQueued ? 'rgba(95,168,108,0.18)' : 'rgba(255,255,255,0.04)',
-                  color: isQueued ? '#9fd0a8' : 'rgba(255,255,255,0.78)',
-                  border: isQueued ? '1px solid rgba(95,168,108,0.45)' : '1px solid rgba(255,255,255,0.10)',
+                  background: isQueued ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)' : 'var(--bg-hover)',
+                  color: isQueued ? 'var(--intent-success-fg)' : 'var(--fg-default)',
+                  border: isQueued ? '1px solid color-mix(in srgb, var(--intent-success-fg) 45%, transparent)' : '1px solid var(--border-default)',
                 }}
               >
                 {isQueued

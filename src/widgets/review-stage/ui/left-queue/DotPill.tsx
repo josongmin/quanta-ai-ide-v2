@@ -1,5 +1,3 @@
-// Tiny status pill used in the project header for critical/attention dot counts.
-
 export function DotPill({
   tone, label, title,
 }: { tone: string; label: string; title: string }) {
@@ -7,8 +5,8 @@ export function DotPill({
     <span
       className="inline-flex items-center gap-1 px-1.5 h-5 rounded-full text-[10px] font-mono tabular-nums"
       style={{
-        background: `${tone}1a`,
-        border: `1px solid ${tone}55`,
+        background: `color-mix(in srgb, ${tone} 10%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)`,
         color: tone,
       }}
       title={title}

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, X, Code2, Regex, CaseSensitive, ChevronDown, History, SlidersHorizontal } from 'lucide-react';
 import { useFilterStore } from '@features/filter-files';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { GlassCard } from '@shared/ui';
 import { useShortcut } from '@shared/lib';
@@ -30,7 +29,6 @@ export default function SearchBar({
 }: {
   maxWidth?: number | string;
 } = {}) {
-  const { isDark } = useTheme();
   const { t } = useTranslation('search');
   // Narrow selectors. Action setters in zustand are reference-stable, so
   // selecting them individually avoids the shallow-equality cost from the
@@ -85,11 +83,11 @@ export default function SearchBar({
         {/* Main row */}
         <div className="flex items-stretch">
           {/* Pattern type toggle (Sourcegraph signature: "" .* [ ]) */}
-          <PatternToggle dark={isDark} mode={searchMode} setMode={setSearchMode} />
+          <PatternToggle mode={searchMode} setMode={setSearchMode} />
 
           {/* Input area */}
           <div className="relative flex-1 min-w-0 flex items-center px-2">
-            <Search className={`w-4 h-4 shrink-0 ${isDark ? 'text-white/55' : 'text-black/55'}`} />
+            <Search className="w-4 h-4 shrink-0 text-[var(--fg-muted)]" />
             <div className="relative flex-1 min-w-0 ml-1">
               {showOverlay && (
                 <div
@@ -97,7 +95,7 @@ export default function SearchBar({
                   className="pointer-events-none absolute inset-0 flex items-center px-1 py-1.5 font-mono text-[12px] whitespace-pre overflow-hidden"
                 >
                   {tokens.map((t) => {
-                    const ts = tokenStyle(t.kind, isDark);
+                    const ts = tokenStyle(t.kind);
                     return (
                       <span key={`${String(t.pos)}-${t.kind}`} style={ts.style} className={ts.className}>{t.text}</span>
                     );
@@ -117,41 +115,35 @@ export default function SearchBar({
                 className={`relative w-full bg-transparent text-[12px] font-medium px-1 py-1.5 focus:outline-none ${
                   hasError
                     ? ''
-                    : isDark ? 'text-white placeholder:text-white/30' : 'text-black placeholder:text-black/30'
+                    : 'text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)]'
                 } ${searchMode !== 'text' ? 'font-mono' : ''} ${
-                  showOverlay ? `text-transparent ${isDark ? 'caret-white' : 'caret-black'}` : ''
+                  showOverlay ? 'text-transparent caret-[var(--fg-strong)]' : ''
                 }`}
               />
             </div>
           </div>
 
           {/* Right cluster */}
-          <div className={`flex items-center gap-1 px-2 border-l ${isDark ? 'border-white/10' : 'border-black/10'}`}>
-            <span className={`shrink-0 px-2 py-1 rounded-md text-[10px] font-mono tabular-nums ${
-              isDark ? 'bg-white/5 text-white/70' : 'bg-black/5 text-black/70'
-            }`}>
-              <span className={isDark ? 'text-white' : 'text-black'}>{matchedCount}</span>
-              <span className={isDark ? 'text-white/30' : 'text-black/30'}> / {total}</span>
+          <div className="flex items-center gap-1 px-2 border-l border-[var(--border-default)]">
+            <span className="shrink-0 px-2 py-1 rounded-md text-[10px] font-mono tabular-nums bg-[var(--bg-hover)] text-[var(--fg-default)]">
+              <span className="text-[var(--fg-strong)]">{matchedCount}</span>
+              <span className="text-[var(--fg-subtle)]"> / {total}</span>
             </span>
 
             {search.length > 0 && (
               <button type="button"
                 onClick={() => { setSearch(''); }}
-                className={`shrink-0 p-1.5 rounded-md transition-colors ${
-                  isDark ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/10'
-                }`}
+                className="shrink-0 p-1.5 rounded-md transition-colors text-[var(--fg-subtle)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-active)]"
                 title={t('action.clear')}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
 
-            <IconChip dark={isDark} disabled title={t('action.caseSensitive')} icon={CaseSensitive} />
-            <IconChip dark={isDark} disabled title={t('action.recent')} icon={History} />
+            <IconChip disabled title={t('action.caseSensitive')} icon={CaseSensitive} />
+            <IconChip disabled title={t('action.recent')} icon={History} />
 
-            <kbd className={`hidden md:inline-flex items-center justify-center mx-0.5 h-5 min-w-[18px] px-1 rounded-md text-[9px] font-mono font-black ${
-              isDark ? 'bg-white/5 text-white/40' : 'bg-black/5 text-black/40'
-            }`}>/</kbd>
+            <kbd className="hidden md:inline-flex items-center justify-center mx-0.5 h-5 min-w-[18px] px-1 rounded-md text-[9px] font-mono font-black bg-[var(--bg-hover)] text-[var(--fg-subtle)]">/</kbd>
 
             <button type="button"
               onClick={() => { setAdvOpen((v) => !v); }}
@@ -159,12 +151,12 @@ export default function SearchBar({
               style={!advOpen && searchMode !== 'text'
                 ? { background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)', color: 'var(--intent-success-fg)' }
                 : undefined}
-              className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 ml-0.5 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
+              className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 ml-0.5 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors ${
                 advOpen
-                  ? (isDark ? 'bg-white text-black' : 'bg-black text-white')
+                  ? 'bg-[var(--fg-strong)] text-[var(--bg-surface)]'
                   : searchMode !== 'text'
                     ? ''
-                    : (isDark ? 'text-white/55 hover:bg-white/10 hover:text-white' : 'text-black/55 hover:bg-black/10 hover:text-black')
+                    : 'text-[var(--fg-muted)] hover:bg-[var(--bg-active)] hover:text-[var(--fg-strong)]'
               }`}
             >
               <SlidersHorizontal className="w-3 h-3" />
@@ -185,15 +177,15 @@ export default function SearchBar({
         )}
 
         {/* Advanced panel */}
-        {advOpen && <AdvancedPanel dark={isDark} mode={searchMode} setMode={setSearchMode} setSearch={setSearch} />}
+        {advOpen && <AdvancedPanel mode={searchMode} setMode={setSearchMode} setSearch={setSearch} />}
       </GlassCard>
     </div>
   );
 }
 
 function PatternToggle({
-  dark, mode, setMode,
-}: { dark: boolean; mode: SearchMode; setMode: (m: SearchMode) => void }) {
+  mode, setMode,
+}: { mode: SearchMode; setMode: (m: SearchMode) => void }) {
   const { t } = useTranslation('search');
   const items: { id: SearchMode; label: string }[] = [
     { id: 'text',  label: '""' },
@@ -201,7 +193,7 @@ function PatternToggle({
     { id: 'dsl',   label: '[ ]' },
   ];
   return (
-    <div className={`flex items-stretch border-r ${dark ? 'border-white/10' : 'border-black/10'}`}>
+    <div className="flex items-stretch border-r border-[var(--border-default)]">
       {items.map(({ id, label }) => {
         const active = mode === id;
         return (
@@ -212,8 +204,8 @@ function PatternToggle({
             style={active ? { color: 'var(--intent-success-fg)' } : undefined}
             className={`px-2.5 font-mono text-[11px] font-black transition-colors ${
               active
-                ? (dark ? 'bg-white/10' : 'bg-black/5')
-                : (dark ? 'text-white/40 hover:text-white hover:bg-white/5' : 'text-black/40 hover:text-black hover:bg-black/5')
+                ? 'bg-[var(--bg-active)]'
+                : 'text-[var(--fg-subtle)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]'
             }`}
           >
             {label}
@@ -225,9 +217,9 @@ function PatternToggle({
 }
 
 function IconChip({
-  dark, disabled, title, icon: Icon, onClick,
+  disabled, title, icon: Icon, onClick,
 }: {
-  dark: boolean; disabled?: boolean; title: string;
+  disabled?: boolean; title: string;
   icon: React.ComponentType<{ className?: string }>; onClick?: () => void;
 }) {
   return (
@@ -238,8 +230,8 @@ function IconChip({
       onClick={onClick}
       className={`shrink-0 p-1.5 rounded-md transition-colors ${
         disabled
-          ? (dark ? 'text-white/30' : 'text-black/30')
-          : (dark ? 'text-white/55 hover:text-white hover:bg-white/10' : 'text-black/55 hover:text-black hover:bg-black/10')
+          ? 'text-[var(--fg-subtle)]'
+          : 'text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-active)]'
       }`}
     >
       <Icon className="w-3.5 h-3.5" />
@@ -282,24 +274,23 @@ function tokenize(src: string, mode: SearchMode): Token[] {
   return out;
 }
 
-function tokenStyle(kind: TokenKind, dark: boolean): { style?: React.CSSProperties; className?: string } {
+function tokenStyle(kind: TokenKind): { style?: React.CSSProperties; className?: string } {
   // Tonally consistent with the rest of the UI:
-  // accent green for "live" tokens (numeric facets), white/black alpha shades for everything else.
+  // accent green for "live" tokens (numeric facets), theme-aware fg shades for everything else.
   switch (kind) {
     case 'numeric': return { style: { color: 'var(--intent-success-fg)' } };
-    case 'string':  return { className: dark ? 'text-white' : 'text-black' };
+    case 'string':  return { className: 'text-[var(--fg-strong)]' };
     case 'flag':    return { style: { color: 'var(--intent-success-fg)' } };
-    case 'quote':   return { className: dark ? 'text-white/85' : 'text-black/85' };
-    case 'op':      return { className: dark ? 'text-white/40' : 'text-black/40' };
+    case 'quote':   return { className: 'text-[var(--fg-default)]' };
+    case 'op':      return { className: 'text-[var(--fg-subtle)]' };
     case 'plain':
-    default:        return { className: dark ? 'text-white' : 'text-black' };
+    default:        return { className: 'text-[var(--fg-strong)]' };
   }
 }
 
 function AdvancedPanel({
-  dark, mode, setMode, setSearch,
+  mode, setMode, setSearch,
 }: {
-  dark: boolean;
   mode: SearchMode;
   setMode: (m: SearchMode) => void;
   setSearch: (s: string) => void;
@@ -311,10 +302,10 @@ function AdvancedPanel({
     { id: 'dsl',   icon: Code2 },
   ];
   return (
-    <div className={`border-t ${dark ? 'border-white/10' : 'border-black/10'} px-3 py-3 space-y-3`}>
+    <div className="border-t border-[var(--border-default)] px-3 py-3 space-y-3">
       {/* Mode switch */}
       <div>
-        <div className={`text-[9px] font-black uppercase tracking-[0.18em] mb-1.5 ${dark ? 'text-white/40' : 'text-black/40'}`}>
+        <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[var(--fg-subtle)]">
           {t('mode.title')}
         </div>
         <div className="flex gap-1">
@@ -325,10 +316,10 @@ function AdvancedPanel({
                 key={id}
                 onClick={() => { setMode(id); }}
                 title={t(`mode.${id}.hint`)}
-                className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors ${
                   active
-                    ? (dark ? 'bg-white text-black' : 'bg-black text-white')
-                    : (dark ? 'bg-white/5 text-white/55 hover:text-white' : 'bg-black/5 text-black/55 hover:text-black')
+                    ? 'bg-[var(--fg-strong)] text-[var(--bg-surface)]'
+                    : 'bg-[var(--bg-hover)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)]'
                 }`}
               >
                 <Icon className="w-3 h-3" />
@@ -337,7 +328,7 @@ function AdvancedPanel({
             );
           })}
         </div>
-        <p className={`mt-1.5 text-[10px] ${dark ? 'text-white/40' : 'text-black/40'}`}>
+        <p className="mt-1.5 text-[10px] text-[var(--fg-subtle)]">
           {t(`mode.${mode}.hint`)}
         </p>
       </div>
@@ -345,7 +336,7 @@ function AdvancedPanel({
       {/* Sample queries (only meaningful for DSL) */}
       {mode === 'dsl' && (
         <div>
-          <div className={`text-[9px] font-black uppercase tracking-[0.18em] mb-1.5 ${dark ? 'text-white/40' : 'text-black/40'}`}>
+          <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[var(--fg-subtle)]">
             {t('samples.title')}
           </div>
           <div className="grid grid-cols-2 gap-1.5">
@@ -353,14 +344,10 @@ function AdvancedPanel({
               <button type="button"
                 key={s.q}
                 onClick={() => { setSearch(s.q); }}
-                className={`text-left px-2.5 py-1.5 rounded-md border text-[10px] transition-colors ${
-                  dark
-                    ? 'bg-white/5 border-white/5 hover:bg-white/10 text-white/70'
-                    : 'bg-black/5 border-black/5 hover:bg-black/10 text-black/70'
-                }`}
+                className="text-left px-2.5 py-1.5 rounded-md border text-[10px] transition-colors bg-[var(--bg-hover)] border-[var(--border-muted)] hover:bg-[var(--bg-active)] text-[var(--fg-default)]"
               >
                 <div className="font-bold">{t(`samples.${s.i18nKey}`)}</div>
-                <code className={`text-[9px] font-mono ${dark ? 'text-white/40' : 'text-black/40'}`}>{s.q}</code>
+                <code className="text-[9px] font-mono text-[var(--fg-subtle)]">{s.q}</code>
               </button>
             ))}
           </div>
@@ -370,20 +357,20 @@ function AdvancedPanel({
       {/* Reference */}
       {mode === 'dsl' && (
         <div>
-          <div className={`text-[9px] font-black uppercase tracking-[0.18em] mb-1.5 ${dark ? 'text-white/40' : 'text-black/40'}`}>
+          <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[var(--fg-subtle)]">
             {t('reference.title')}
           </div>
-          <div className={`grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] ${dark ? 'text-white/55' : 'text-black/55'}`}>
-            <Doc syntax="key:>n / key:<n"   ex="complexity:>30" dark={dark} />
-            <Doc syntax="key:value"          ex="layer:service" dark={dark} />
-            <Doc syntax="!flag / +flag"      ex="!cyclic +dead" dark={dark} />
-            <Doc syntax='"free text"'        ex='"AuthProvider"' dark={dark} />
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] text-[var(--fg-muted)]">
+            <Doc syntax="key:>n / key:<n"   ex="complexity:>30" />
+            <Doc syntax="key:value"          ex="layer:service" />
+            <Doc syntax="!flag / +flag"      ex="!cyclic +dead" />
+            <Doc syntax='"free text"'        ex='"AuthProvider"' />
           </div>
           <details className="mt-2">
-            <summary className={`cursor-pointer text-[10px] font-bold ${dark ? 'text-white/55 hover:text-white' : 'text-black/55 hover:text-black'}`}>
+            <summary className="cursor-pointer text-[10px] font-bold text-[var(--fg-muted)] hover:text-[var(--fg-strong)]">
               {t('reference.allFields')}
             </summary>
-            <div className={`mt-2 text-[10px] space-y-1 ${dark ? 'text-white/55' : 'text-black/55'}`}>
+            <div className="mt-2 text-[10px] space-y-1 text-[var(--fg-muted)]">
               <p><b>{t('reference.numeric')}</b> <code className="font-mono">complexity, cognitive, loc, fanIn, fanOut, churn, days, authors, prs, any, tsIgnore, unsafe, coverage, branch, mutation, eslintErr, eslintWarn, todos, console, sast, bundle, jsdoc, pagerank</code></p>
               <p><b>{t('reference.string')}</b> <code className="font-mono">status, layer, lang, owner, name, path</code></p>
               <p><b>{t('reference.flags')}</b> <code className="font-mono">cyclic, dead, deprecated, generated, test, secrets, strictOptOut, busFactor1, publicApi, hasTest</code></p>
@@ -393,7 +380,7 @@ function AdvancedPanel({
       )}
 
       {mode === 'regex' && (
-        <p className={`text-[10px] ${dark ? 'text-white/55' : 'text-black/55'}`}>
+        <p className="text-[10px] text-[var(--fg-muted)]">
           {t('regexHint.prefix')}<em>{t('regexHint.emphasis')}</em>{t('regexHint.suffix')}<code className="font-mono">{`<filename> + " " + <path>`}</code>.
         </p>
       )}
@@ -401,11 +388,11 @@ function AdvancedPanel({
   );
 }
 
-function Doc({ syntax, ex, dark }: { syntax: string; ex: string; dark: boolean }) {
+function Doc({ syntax, ex }: { syntax: string; ex: string }) {
   return (
     <div className="flex flex-col">
       <code className="font-mono font-bold">{syntax}</code>
-      <code className={`font-mono ${dark ? 'text-white/30' : 'text-black/30'}`}>{ex}</code>
+      <code className="font-mono text-[var(--fg-subtle)]">{ex}</code>
     </div>
   );
 }

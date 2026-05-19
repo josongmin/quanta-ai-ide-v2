@@ -1,13 +1,11 @@
 import { useMemo } from 'react';
 import { useFilterStore } from '@entities/filter-state';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { STATUS_CSS, type StatusKey } from '@entities/repo';
 
 const ORDER: StatusKey[] = ['STABLE', 'MODIFIED', 'NEW', 'SECURITY_ALERT'];
 
 export default function StatusFacet() {
-  const { isDark } = useTheme();
   const { t } = useTranslation('filter');
   // Narrow selectors — reading the four fields we actually use avoids a
   // re-render on every unrelated facet/range change.
@@ -39,12 +37,12 @@ export default function StatusFacet() {
             onClick={() => { toggleStatus(s); }}
             className={`flex items-center gap-1.5 px-2 py-1 rounded-md border text-[10px] transition-colors ${
               selected
-                ? (isDark ? 'bg-white text-black border-white' : 'bg-black text-white border-black')
+                ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] border-[color:var(--fg-strong)]'
                 : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-default)] hover:bg-[color:var(--bg-active)]'
             }`}
           >
             <span className="w-1.5 h-1.5 rounded-sm shrink-0" style={{ backgroundColor: STATUS_CSS[s] }} />
-            <span className="font-bold uppercase tracking-[0.18em]">{t(`status.${s}`)}</span>
+            <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">{t(`status.${s}`)}</span>
             <span className={`text-[9px] tabular-nums font-mono ${
               selected ? 'opacity-70' : 'text-[color:var(--fg-subtle)]'
             }`}>

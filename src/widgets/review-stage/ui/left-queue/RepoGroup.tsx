@@ -1,7 +1,9 @@
-// RepoGroup — collapsible header with count + pin.
-
 import { ChevronDown, ChevronRight, Pin } from 'lucide-react';
-import { repoBadgeColor } from './repo-color';
+import { repoBadgeColor } from './styling';
+
+// ─────────────────────────────────────────────────────────────────────────
+// 4. RepoGroup — collapsible header with count + pin
+// ─────────────────────────────────────────────────────────────────────────
 
 export function RepoGroup({
   name, count, pinned, collapsed, onToggleCollapsed, onTogglePin, children,
@@ -51,7 +53,7 @@ export function RepoGroup({
           {initial}
         </span>
         <span
-          className="text-[11.5px] font-semibold truncate"
+          className="text-[var(--fs-base)] font-semibold truncate"
           style={{ color: 'var(--fg-default)' }}
         >
           {name}
@@ -75,7 +77,7 @@ export function RepoGroup({
             className="w-3 h-3"
             strokeWidth={2}
             style={pinned
-              ? { color: '#7d6db5', fill: '#7d6db5' }
+              ? { color: 'var(--fg-accent)', fill: 'var(--fg-accent)' }
               : { color: 'var(--fg-muted)' }}
           />
         </button>

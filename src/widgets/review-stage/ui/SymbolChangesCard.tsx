@@ -29,9 +29,9 @@ const KIND_ICON: Record<SymbolChange['kind'], string> = {
 };
 
 const CHANGE_TONE: Record<SymbolChange['change'], string> = {
-  modified: '#7aa7d4',
-  added:    '#5fa86c',
-  removed:  '#c25a55',
+  modified: 'var(--fg-link)',
+  added:    'var(--intent-success-fg)',
+  removed:  'var(--intent-danger-fg)',
 };
 
 const CHANGE_LABEL: Record<SymbolChange['change'], string> = {
@@ -56,11 +56,11 @@ export default function SymbolChangesCard({
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <Code2 className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <Code2 className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Symbol changes
         </span>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {symbols.length} {symbols.length === 1 ? 'symbol' : 'symbols'}
           {overflow > 0 ? ` · top ${String(visible.length)}` : ''}
         </span>
@@ -73,22 +73,22 @@ export default function SymbolChangesCard({
             <li key={`${s.filePath}::${s.name}::${String(i)}`}>
               <Tag
                 {...(onJump ? { type: 'button' as const, onClick: () => { onJump(s.filePath); } } : {})}
-                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-left transition-colors ${onJump ? 'hover:bg-white/[0.04]' : ''}`}
-                style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}
+                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-left transition-colors ${onJump ? 'hover:bg-[var(--bg-hover)]' : ''}`}
+                style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--bg-elevated)' }}
               >
                 <span
-                  className="shrink-0 inline-flex items-center justify-center px-1.5 h-4 rounded-sm text-[9px] font-mono font-bold uppercase tracking-[0.10em]"
-                  style={{ background: `${tone}22`, color: tone }}
+                  className="shrink-0 inline-flex items-center justify-center px-1.5 h-4 rounded-sm text-[9px] font-mono font-bold uppercase tracking-[var(--track-eyebrow)]"
+                  style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone }}
                 >
                   {CHANGE_LABEL[s.change]}
                 </span>
-                <span className="shrink-0 text-[9px] font-mono text-white/40 uppercase">
+                <span className="shrink-0 text-[9px] font-mono text-[var(--fg-subtle)] uppercase">
                   {KIND_ICON[s.kind]}
                 </span>
-                <span className="flex-1 min-w-0 text-[12px] font-mono truncate text-white/85">
+                <span className="flex-1 min-w-0 text-[12px] font-mono truncate text-[var(--fg-default)]">
                   {s.name}
                 </span>
-                <span className="shrink-0 text-[10px] font-mono text-white/35 truncate max-w-[160px]" title={s.filePath}>
+                <span className="shrink-0 text-[10px] font-mono text-[var(--fg-subtle)] truncate max-w-[160px]" title={s.filePath}>
                   {trimMid(s.filePath, 24)}
                 </span>
               </Tag>
@@ -97,7 +97,7 @@ export default function SymbolChangesCard({
         })}
       </ul>
       {overflow > 0 && (
-        <div className="mt-2 text-[10px] font-mono text-white/40">
+        <div className="mt-2 text-[10px] font-mono text-[var(--fg-subtle)]">
           +{String(overflow)} more — open the Files section for the full list.
         </div>
       )}

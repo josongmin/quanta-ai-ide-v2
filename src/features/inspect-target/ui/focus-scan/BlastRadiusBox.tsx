@@ -63,7 +63,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
           style={{ color: armed ? sevColor : 'var(--fg-subtle)' }}
         />
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: armed ? sevColor : 'var(--fg-subtle)' }}
         >
           {t('blast.title', { defaultValue: 'Blast radius' })}
@@ -71,7 +71,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
 
         {armed && (
           <span
-            className="text-[9px] font-black uppercase tracking-[0.16em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: sevColor }}
           >
             · {sevLabel}
@@ -82,7 +82,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
           type="button"
           onClick={() => { setArmed((v) => !v); }}
           aria-pressed={armed}
-          className="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[0.18em] transition-colors hover-surface"
+          className="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
           style={{
             background: armed
               ? sevColor
@@ -187,7 +187,7 @@ function ImpactCell({
   return (
     <div>
       <div
-        className="flex items-center gap-1 text-[8.5px] font-black uppercase tracking-[0.16em]"
+        className="flex items-center gap-1 text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {icon}

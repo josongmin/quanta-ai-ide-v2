@@ -325,11 +325,11 @@ export function ruleProvenance(f: EngineFinding): { source: string; tone: string
   switch (f.category) {
     case 'SECURITY':
       // SAST gates on 'sast' rule; auth/secrets rules tagged differently.
-      if (/secret|key|token/i.test(f.rule)) return { source: 'team policy · secrets', tone: '#c25a55' };
-      return { source: 'Semgrep · OSS rulepack', tone: '#d98a85' };
-    case 'API':           return { source: 'team policy · public-API', tone: '#a8893a' };
-    case 'STRUCT-INTEGRITY': return { source: 'engine · static graph', tone: '#7aa7d4' };
-    default:              return { source: 'engine', tone: '#8b949e' };
+      if (/secret|key|token/i.test(f.rule)) return { source: 'team policy · secrets', tone: 'var(--intent-danger-fg)' };
+      return { source: 'Semgrep · OSS rulepack', tone: 'var(--intent-danger-fg)' };
+    case 'API':           return { source: 'team policy · public-API', tone: 'var(--intent-warn-fg)' };
+    case 'STRUCT-INTEGRITY': return { source: 'engine · static graph', tone: 'var(--fg-link)' };
+    default:              return { source: 'engine', tone: 'var(--fg-muted)' };
   }
 }
 

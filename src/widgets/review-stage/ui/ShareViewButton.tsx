@@ -54,11 +54,11 @@ export default function ShareViewButton({ scope, query }: Props) {
       title={copied ? '클립보드에 복사됨' : '이 뷰의 공유 링크 복사'}
       className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono transition-colors"
       style={{
-        background: copied ? 'rgba(95,168,108,0.18)' : 'rgba(255,255,255,0.025)',
+        background: copied ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)' : 'var(--bg-surface-muted)',
         border: copied
-          ? '1px solid rgba(95,168,108,0.45)'
-          : '1px dashed rgba(255,255,255,0.10)',
-        color: copied ? '#9fd0a8' : 'rgba(255,255,255,0.55)',
+          ? '1px solid color-mix(in srgb, var(--intent-success-fg) 45%, transparent)'
+          : '1px dashed var(--border-default)',
+        color: copied ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
       }}
     >
       {copied

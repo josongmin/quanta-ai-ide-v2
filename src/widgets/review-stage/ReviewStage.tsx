@@ -92,13 +92,13 @@ export type ReviewTabKey =
 // ─────────────────────────────────────────────────────────────────────────
 
 const SEV: Record<EngineSeverity, string> = {
-  blocker: '#c25a55', high: '#d98a85', medium: '#a8893a', low: '#5a8fce',
+  blocker: 'var(--intent-danger-fg)', high: 'var(--intent-danger-fg)', medium: 'var(--intent-warn-fg)', low: 'var(--intent-info-fg)',
 };
 const SEV_LABEL: Record<EngineSeverity, string> = {
   blocker: 'Blocker', high: 'High', medium: 'Medium', low: 'Low',
 };
 const TIER_COLOR: Record<RiskTier, string> = {
-  safe: '#4f9a5c', attention: '#a8893a', critical: '#c25a55',
+  safe: 'var(--intent-success-fg)', attention: 'var(--intent-warn-fg)', critical: 'var(--intent-danger-fg)',
 };
 const TIER_LABEL: Record<RiskTier, string> = {
   safe: 'Ready', attention: 'Review', critical: 'Caution',
@@ -282,8 +282,8 @@ export default function ReviewStage() {
             picked a PR sees its blockers without scrolling. Collapses
             when no PR is active so the queue keeps full height. */}
         <aside
-          className="shrink-0 w-[296px] flex flex-col border-r border-white/[0.05]"
-          style={{ background: isDark ? 'rgba(255,255,255,0.012)' : '#ffffff' }}
+          className="shrink-0 w-[296px] flex flex-col border-r border-[var(--border-muted)]"
+          style={{ background: 'var(--bg-surface-muted)' }}
         >
           {activePr !== null && (
             <EngineFindingsPanel
@@ -482,8 +482,8 @@ export default function ReviewStage() {
 
         {/* RIGHT — context + actions */}
         <aside
-          className="shrink-0 w-[300px] flex flex-col border-l border-white/[0.05]"
-          style={{ background: isDark ? 'rgba(255,255,255,0.012)' : '#ffffff' }}
+          className="shrink-0 w-[300px] flex flex-col border-l border-[var(--border-muted)]"
+          style={{ background: 'var(--bg-surface-muted)' }}
         >
           {activePr === null ? (
             <RailEmpty />

@@ -14,10 +14,10 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
   // file in the diff at the same time. Persist across re-renders only
   // for this block instance — refreshing the page resets to unified.
   const [viewMode, setViewMode] = useState<DiffViewMode>('unified');
-  const textMuted = isDark ? 'text-white/55' : 'text-black/55';
-  const textFaint = isDark ? 'text-white/40' : 'text-black/40';
-  const card = isDark ? 'bg-white/[0.02] border-white/[0.08]' : 'bg-white border-black/[0.08]';
-  const headerBorder = isDark ? 'border-white/[0.06]' : 'border-black/[0.05]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
+  const card = 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-default)]';
+  const headerBorder = 'border-[color:var(--border-muted)]';
 
   const stateBadgeStyle: React.CSSProperties | undefined = applied
     ? {
@@ -28,16 +28,14 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
     : undefined;
   const stateBadge = applied
     ? ''
-    : (isDark
-        ? 'bg-white/[0.05] text-white/65 border-white/[0.10]'
-        : 'bg-black/[0.04] text-black/65 border-black/[0.10]');
+    : 'bg-[color:var(--bg-hover)] text-[color:var(--fg-default)] border-[color:var(--border-default)]';
   const StateIcon = applied ? FileEdit : Eye;
 
   return (
     <div className={`rounded-lg border overflow-hidden ${card} shadow-[0_1px_3px_rgba(0,0,0,0.04)]`}>
       <div className={`flex items-center gap-2 px-3 py-2 border-b ${headerBorder}`}>
         <GitPullRequest className={`w-3 h-3 ${textMuted}`} />
-        <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+        <span className={`text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
           changes
         </span>
         <span className={`text-[11px] font-mono ${textMuted}`}>
@@ -45,7 +43,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
         </span>
         <span
           style={stateBadgeStyle}
-          className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-bold uppercase tracking-[0.18em] border ${stateBadge}`}
+          className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] border ${stateBadge}`}
         >
           <StateIcon className="w-2.5 h-2.5" />
           {applied ? t('apply.applied') : t('apply.suggested')}
@@ -54,9 +52,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
         {/* unified ↔ split toggle. Two-button segmented control rather
             than a dropdown — the choice is binary and the icons tell the
             story without a label. */}
-        <div className={`flex items-center gap-px rounded-md p-px ${
-          isDark ? 'bg-white/[0.04]' : 'bg-black/[0.04]'
-        }`} title={t('diffView.toggleTooltip')}>
+        <div className="flex items-center gap-px rounded-md p-px bg-[color:var(--bg-surface-muted)]" title={t('diffView.toggleTooltip')}>
           <button
             type="button"
             onClick={() => { setViewMode('unified'); }}
@@ -64,8 +60,8 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
             title={t('diffView.unified')}
             className={`p-1 rounded transition-colors ${
               viewMode === 'unified'
-                ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black shadow-sm')
-                : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70')
+                ? 'bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]'
+                : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]'
             }`}
           >
             <AlignLeft className="w-3 h-3" />
@@ -77,8 +73,8 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
             title={t('diffView.split')}
             className={`p-1 rounded transition-colors ${
               viewMode === 'split'
-                ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black shadow-sm')
-                : (isDark ? 'text-white/40 hover:text-white/70' : 'text-black/40 hover:text-black/70')
+                ? 'bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]'
+                : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]'
             }`}
           >
             <Columns2 className="w-3 h-3" />
@@ -90,24 +86,20 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
         </div>
       </div>
 
-      <div className={isDark ? 'divide-y divide-white/[0.04]' : 'divide-y divide-black/[0.04]'}>
+      <div className="divide-y divide-[color:var(--border-muted)]">
         {block.files.map((file) => (
           <FileRow key={file.path} file={file} isDark={isDark} viewMode={viewMode} />
         ))}
       </div>
 
-      <div className={`flex items-start gap-2 px-3 py-2 border-t ${headerBorder} ${
-        isDark ? 'bg-white/[0.015]' : 'bg-black/[0.015]'
-      }`}>
+      <div className={`flex items-start gap-2 px-3 py-2 border-t ${headerBorder} bg-[color:var(--bg-surface-muted)]`}>
         <AlertCircle className={`w-3 h-3 shrink-0 mt-0.5 ${textFaint}`} />
         <span className={`text-[10px] leading-relaxed ${textMuted}`}>
           {applied ? t('apply.appliedNote') : t('apply.suggestedNote')}
         </span>
       </div>
 
-      <div className={`flex items-center justify-between px-2.5 py-2 border-t ${headerBorder} ${
-        isDark ? 'bg-white/[0.015]' : 'bg-black/[0.02]'
-      }`}>
+      <div className={`flex items-center justify-between px-2.5 py-2 border-t ${headerBorder} bg-[color:var(--bg-surface-muted)]`}>
         <span className={`text-[11px] font-mono ${textFaint}`}>
           {applied ? t('apply.applied') : t('apply.previewOnly')}
         </span>
@@ -115,9 +107,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
           <button
             type="button"
             title={t('block.patch')}
-            className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors ${
-              isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.06]' : 'text-black/55 hover:text-black hover:bg-black/[0.06]'
-            }`}
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
           >
             <Copy className="w-2.5 h-2.5" />
             {t('block.patch')}
@@ -126,11 +116,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
             <button
               type="button"
               onClick={() => { setApplied(true); }}
-              className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
-                isDark
-                  ? 'text-white/85 bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.10]'
-                  : 'text-black/85 bg-black/[0.06] hover:bg-black/[0.12] border border-black/[0.10]'
-              }`}
+              className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors text-[color:var(--fg-strong)] bg-[color:var(--bg-active)] hover:bg-[color:var(--bg-selected)] border border-[color:var(--border-default)]"
             >
               <FileEdit className="w-2.5 h-2.5" />
               {t('apply.applyToTree')}
@@ -139,9 +125,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
             <button
               type="button"
               onClick={() => { setApplied(false); }}
-              className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.06]' : 'text-black/55 hover:text-black hover:bg-black/[0.06]'
-              }`}
+              className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
               title={t('apply.previewOnly')}
             >
               <Eye className="w-2.5 h-2.5" />

@@ -148,18 +148,18 @@ export default function HunkNavigator({ file }: Props) {
         border: '1px solid var(--border-default)',
       }}
     >
-      <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">
+      <span className="shrink-0 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
         Hunk
       </span>
-      <span className="shrink-0 text-[12px] font-mono tabular-nums text-white/85">
+      <span className="shrink-0 text-[12px] font-mono tabular-nums text-[var(--fg-default)]">
         {safeIdx + 1} / {hunks.length}
       </span>
-      <span className="shrink-0 text-[10px] font-mono text-white/45 tabular-nums">
+      <span className="shrink-0 text-[10px] font-mono text-[var(--fg-muted)] tabular-nums">
         L{cur.newStart}–{cur.newEnd}
       </span>
       <span className="shrink-0 text-[10px] font-mono">
         <span style={{ color: 'color-mix(in srgb, var(--intent-success-vivid) 80%, transparent)' }}>+{cur.added}</span>
-        <span className="text-white/25 mx-1">·</span>
+        <span className="text-[var(--fg-subtle)] mx-1">·</span>
         <span style={{ color: 'color-mix(in srgb, var(--intent-danger-vivid) 80%, transparent)' }}>−{cur.removed}</span>
       </span>
       {/* Mini multi-tick progress: each hunk is a tick, current
@@ -167,7 +167,7 @@ export default function HunkNavigator({ file }: Props) {
           ratio but as spatial position within the file. */}
       <span
         className="flex-1 min-w-12 max-w-[280px] flex items-stretch gap-px h-2 rounded-full overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.04)' }}
+        style={{ background: 'var(--bg-hover)' }}
         role="progressbar"
         aria-valuemin={1}
         aria-valuemax={hunks.length}
@@ -179,17 +179,17 @@ export default function HunkNavigator({ file }: Props) {
             key={i}
             className="flex-1 h-full"
             style={{
-              background: i === safeIdx ? '#7aa7d4'
-                : i < safeIdx ? 'rgba(122,167,212,0.55)'
-                : 'rgba(255,255,255,0.06)',
+              background: i === safeIdx ? 'var(--fg-link)'
+                : i < safeIdx ? 'color-mix(in srgb, var(--fg-link) 55%, transparent)'
+                : 'var(--bg-elevated)',
             }}
           />
         ))}
       </span>
-      <span className="shrink-0 hidden md:inline-flex items-center gap-2 text-[9px] font-mono text-white/35">
+      <span className="shrink-0 hidden md:inline-flex items-center gap-2 text-[9px] font-mono text-[var(--fg-subtle)]">
         <span className="inline-flex items-center gap-1">
-          <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">{'{'}</kbd>
-          <kbd className="px-1 rounded bg-white/[0.06] border border-white/[0.10]">{'}'}</kbd>
+          <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">{'{'}</kbd>
+          <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">{'}'}</kbd>
           step
         </span>
       </span>
@@ -198,7 +198,7 @@ export default function HunkNavigator({ file }: Props) {
           type="button"
           onClick={goPrev}
           disabled={safeIdx === 0}
-          className="inline-flex items-center justify-center w-6 h-6 rounded text-white/55 hover:text-white/85 hover:bg-white/[0.04] disabled:opacity-30 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center w-6 h-6 rounded text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] disabled:opacity-30 disabled:cursor-not-allowed"
           title="Previous hunk ({)"
           aria-label="Previous hunk"
         >
@@ -208,7 +208,7 @@ export default function HunkNavigator({ file }: Props) {
           type="button"
           onClick={goNext}
           disabled={safeIdx >= hunks.length - 1}
-          className="inline-flex items-center justify-center w-6 h-6 rounded text-white/55 hover:text-white/85 hover:bg-white/[0.04] disabled:opacity-30 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center w-6 h-6 rounded text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] disabled:opacity-30 disabled:cursor-not-allowed"
           title="Next hunk (})"
           aria-label="Next hunk"
         >

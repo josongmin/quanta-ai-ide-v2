@@ -96,11 +96,11 @@ export function TaskRail({
     return order.filter((p) => filteredTasks.some((task) => task.projectId === p.id));
   }, [projects, filteredTasks, query, filter]);
 
-  const panel = isDark ? 'bg-[#11161e]' : 'bg-white';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
-  const textMuted = isDark ? 'text-white/40' : 'text-black/55';
-  const inputBg = isDark ? 'bg-white/[0.03]' : 'bg-black/[0.025]';
+  const panel = 'bg-[var(--bg-surface)]';
+  const border = 'border-[color:var(--border-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
+  const inputBg = 'bg-[color:var(--bg-surface-muted)]';
 
   const runningCount = tasks.filter((task) => task.status === 'running').length;
   const awaitingCount = tasks.filter((task) => task.status === 'review' || task.status === 'failed').length;
@@ -130,19 +130,15 @@ export function TaskRail({
             "+" button off the right edge when the cloud-ribbon arrives. */}
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-            <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+            <span className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
               {t('rail.title')}
             </span>
             {runningCount > 0 && (
               <span
-                className={`shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap ${
-                  isDark ? 'bg-white/[0.06] text-white/70' : 'bg-black/[0.05] text-black/65'
-                }`}
+                className="shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap bg-[color:var(--bg-elevated)] text-[color:var(--fg-default)]"
                 title={t('rail.running', { count: runningCount })}
               >
-                <span className={`w-1 h-1 rounded-full coding-breath ${
-                  isDark ? 'bg-white/60' : 'bg-black/55'
-                }`} />
+                <span className="w-1 h-1 rounded-full coding-breath bg-[color:var(--fg-muted)]" />
                 {runningCount}
               </span>
             )}
@@ -182,9 +178,7 @@ export function TaskRail({
             onClick={onNewProject}
             title={t('rail.newProject')}
             aria-label={t('rail.newProject')}
-            className={`shrink-0 p-1 rounded-md transition-colors ${
-              isDark ? 'text-white/40 hover:text-white/85 hover:bg-white/[0.05]' : 'text-black/40 hover:text-black/85 hover:bg-black/[0.04]'
-            }`}
+            className="shrink-0 p-1 rounded-md transition-colors text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
           >
             <FolderPlus className="w-3.5 h-3.5" />
           </button>
@@ -198,9 +192,7 @@ export function TaskRail({
             value={query}
             onChange={(e) => { setQuery(e.target.value); }}
             placeholder={t('rail.searchPlaceholder')}
-            className={`flex-1 bg-transparent outline-none text-[11px] ${
-              isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/30'
-            }`}
+            className="flex-1 bg-transparent outline-none text-[11px] text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
           />
           <kbd className={`text-[9px] font-mono ${textFaint}`}>⌘K</kbd>
         </div>
@@ -214,8 +206,8 @@ export function TaskRail({
             onClick={() => { setFilter(f); }}
             className={`px-2 h-5 rounded-full text-[10px] font-medium transition-colors ${
               filter === f
-                ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-black/[0.08] text-black')
-                : (isDark ? 'text-white/40 hover:text-white/70 hover:bg-white/[0.04]' : 'text-black/40 hover:text-black/70 hover:bg-black/[0.04]')
+                ? 'bg-[color:var(--bg-selected)] text-[color:var(--fg-strong)]'
+                : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-hover)]'
             }`}
           >
             {t(`rail.filter.${f}`)}
@@ -237,7 +229,6 @@ export function TaskRail({
               onNewTask={() => { onNewTask(project.id); }}
               onToggle={() => { setCollapsed((c) => ({ ...c, [project.id]: !isCollapsed })); }}
               collapsed={isCollapsed}
-              isDark={isDark}
               t={t}
               dragSrcId={dragSrcId}
               dragOverId={dragOverId}
@@ -268,7 +259,7 @@ export function TaskRail({
 }
 
 function ProjectGroup({
-  project, tasks, activeId, onSelect, onNewTask, onToggle, collapsed, isDark, t,
+  project, tasks, activeId, onSelect, onNewTask, onToggle, collapsed, t,
   dragSrcId, dragOverId, onDragStart, onDragOver, onDragEnd, onDrop,
 }: {
   project: Project;
@@ -278,7 +269,6 @@ function ProjectGroup({
   onNewTask: () => void;
   onToggle: () => void;
   collapsed: boolean;
-  isDark: boolean;
   t: (k: string, opts?: Record<string, unknown>) => string;
   dragSrcId: string | null;
   dragOverId: string | null;
@@ -288,17 +278,15 @@ function ProjectGroup({
   onDrop: (srcId: string, dstId: string) => void;
 }) {
   const accent = ACCENT_HEX[project.accent];
-  const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
-  const textMuted = isDark ? 'text-white/40' : 'text-black/55';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
+  const textPrimary = 'text-[color:var(--fg-strong)]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
   const running = tasks.filter((task) => task.status === 'running').length;
 
   return (
     <div className="mb-1">
       <div
-        className={`group relative flex items-center gap-1.5 px-1.5 py-1.5 rounded-md transition-colors ${
-          isDark ? 'hover:bg-white/[0.025]' : 'hover:bg-black/[0.025]'
-        }`}
+        className="group relative flex items-center gap-1.5 px-1.5 py-1.5 rounded-md transition-colors hover:bg-[color:var(--bg-hover)]"
       >
         <button type="button"
           onClick={onToggle}
@@ -338,9 +326,7 @@ function ProjectGroup({
           onClick={(e) => { e.stopPropagation(); onNewTask(); }}
           title={t('rail.newTaskInProject')}
           aria-label={t('rail.newTaskInProject')}
-          className={`opacity-0 group-hover:opacity-100 p-0.5 rounded-md transition-opacity ${
-            isDark ? 'text-white/40 hover:text-white hover:bg-white/[0.06]' : 'text-black/40 hover:text-black hover:bg-black/[0.06]'
-          }`}
+          className="opacity-0 group-hover:opacity-100 p-0.5 rounded-md transition-opacity text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-elevated)]"
         >
           <Plus className="w-3 h-3" />
         </button>
@@ -348,15 +334,12 @@ function ProjectGroup({
 
       {!collapsed && (
         <div
-          className="ml-[10px] pl-0.5 border-l flex flex-col gap-px"
-          style={{ borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
+          className="ml-[10px] pl-0.5 border-l border-[color:var(--border-muted)] flex flex-col gap-px"
         >
           {tasks.length === 0 ? (
             <button type="button"
               onClick={onNewTask}
-              className={`text-left px-2 py-1.5 rounded-md text-[11px] transition-colors ${
-                isDark ? 'text-white/40 hover:text-white/70 hover:bg-white/[0.03]' : 'text-black/40 hover:text-black/70 hover:bg-black/[0.03]'
-              }`}
+              className="text-left px-2 py-1.5 rounded-md text-[11px] transition-colors text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-surface-muted)]"
             >
               <span className="inline-flex items-center gap-1.5">
                 <Plus className="w-3 h-3" />
@@ -370,7 +353,6 @@ function ProjectGroup({
                 task={task}
                 active={task.id === activeId}
                 onClick={() => { onSelect(task.id); }}
-                isDark={isDark}
                 t={t}
                 isDragging={dragSrcId === task.id}
                 isDropTarget={dragOverId === task.id && dragSrcId !== null && dragSrcId !== task.id}
@@ -393,13 +375,12 @@ function ProjectGroup({
 }
 
 function TaskRow({
-  task, active, onClick, isDark, t,
+  task, active, onClick, t,
   isDragging, isDropTarget, onDragStart, onDragOver, onDragEnd, onDrop,
 }: {
   task: Task;
   active: boolean;
   onClick: () => void;
-  isDark: boolean;
   t: (k: string, opts?: Record<string, unknown>) => string;
   isDragging: boolean;
   isDropTarget: boolean;
@@ -409,10 +390,10 @@ function TaskRow({
   onDrop: (srcId: string) => void;
 }) {
   const titleColor = active
-    ? (isDark ? 'text-white' : 'text-black')
-    : (isDark ? 'text-white/70' : 'text-black/70');
-  const subColor = isDark ? 'text-white/40' : 'text-black/40';
-  const hoverBg = isDark ? 'hover:bg-white/[0.025]' : 'hover:bg-black/[0.025]';
+    ? 'text-[color:var(--fg-strong)]'
+    : 'text-[color:var(--fg-default)]';
+  const subColor = 'text-[color:var(--fg-subtle)]';
+  const hoverBg = 'hover:bg-[color:var(--bg-hover)]';
 
   // Surface the *current* phase of any in-flight agent turn so the user
   // can scan the rail and see "ah, that one's reading files, that one's
@@ -441,9 +422,7 @@ function TaskRow({
     >
       {isDropTarget && (
         <div
-          className={`absolute -top-px left-2 right-2 h-0.5 rounded-full ${
-            isDark ? 'bg-white/60' : 'bg-black/60'
-          }`}
+          className="absolute -top-px left-2 right-2 h-0.5 rounded-full bg-[color:var(--fg-muted)]"
         />
       )}
       <button type="button"
@@ -459,15 +438,13 @@ function TaskRow({
           active ? 'coding-task-active' : ''
         } ${isDragging ? 'opacity-50' : ''}`}
         style={{
-          background: active ? (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)') : undefined,
+          background: active ? 'var(--bg-hover)' : undefined,
         }}
       >
         <div className="flex items-start gap-2">
           {/* Drag handle — only visible on hover so it doesn't crowd the row. */}
           <span
-            className={`shrink-0 mt-0.5 opacity-0 group-hover/row:opacity-100 transition-opacity cursor-grab active:cursor-grabbing ${
-              isDark ? 'text-white/30' : 'text-black/30'
-            }`}
+            className="shrink-0 mt-0.5 opacity-0 group-hover/row:opacity-100 transition-opacity cursor-grab active:cursor-grabbing text-[color:var(--fg-subtle)]"
             title="drag to reorder"
             aria-hidden
           >
@@ -481,15 +458,13 @@ function TaskRow({
             <div className={`mt-1 flex items-center gap-1.5 text-[10px] font-mono ${subColor}`}>
               {streamingPhase ? (
                 <span
-                  className={`inline-flex items-center gap-1 px-1 py-px rounded text-[9px] ${
-                    isDark ? 'bg-white/[0.05] text-white/65' : 'bg-black/[0.05] text-black/65'
-                  }`}
+                  className="inline-flex items-center gap-1 px-1 py-px rounded text-[9px] bg-[color:var(--bg-hover)] text-[color:var(--fg-default)]"
                   title={t(`phase.${streamingPhase}`)}
                 >
                   <span className="inline-flex items-center gap-px">
-                    <span className={`w-0.5 h-0.5 rounded-full coding-breath ${isDark ? 'bg-white/65' : 'bg-black/55'}`} />
-                    <span className={`w-0.5 h-0.5 rounded-full coding-breath ${isDark ? 'bg-white/65' : 'bg-black/55'}`} style={{ animationDelay: '180ms' }} />
-                    <span className={`w-0.5 h-0.5 rounded-full coding-breath ${isDark ? 'bg-white/65' : 'bg-black/55'}`} style={{ animationDelay: '360ms' }} />
+                    <span className="w-0.5 h-0.5 rounded-full coding-breath bg-[color:var(--fg-muted)]" />
+                    <span className="w-0.5 h-0.5 rounded-full coding-breath bg-[color:var(--fg-muted)]" style={{ animationDelay: '180ms' }} />
+                    <span className="w-0.5 h-0.5 rounded-full coding-breath bg-[color:var(--fg-muted)]" style={{ animationDelay: '360ms' }} />
                   </span>
                   {t(`phase.${streamingPhase}`)}
                 </span>
@@ -544,7 +519,7 @@ function StatusDot({ status, className = '' }: { status: TaskStatus; className?:
   if (status === 'running') {
     return (
       <span
-        className={`${base} rounded-full bg-zinc-400/80 coding-breath ${className}`}
+        className={`${base} rounded-full bg-[color:var(--fg-muted)] coding-breath ${className}`}
         aria-label="running"
       />
     );
@@ -553,7 +528,7 @@ function StatusDot({ status, className = '' }: { status: TaskStatus; className?:
     return (
       <span
         className={`${base} rounded-full ${className}`}
-        style={{ boxShadow: 'inset 0 0 0 1.5px rgb(161 161 170 / 0.85)' }}
+        style={{ boxShadow: 'inset 0 0 0 1.5px var(--fg-muted)' }}
         aria-label="review"
       />
     );
@@ -561,7 +536,7 @@ function StatusDot({ status, className = '' }: { status: TaskStatus; className?:
   if (status === 'merged') {
     return (
       <span
-        className={`${base} rounded-full bg-zinc-500/85 ${className}`}
+        className={`${base} rounded-full bg-[color:var(--fg-muted)] ${className}`}
         aria-label="merged"
       />
     );
@@ -572,15 +547,15 @@ function StatusDot({ status, className = '' }: { status: TaskStatus; className?:
         className={`inline-flex items-center justify-center shrink-0 w-2 h-2 ${className}`}
         aria-label="failed"
       >
-        <span className="block w-2 h-px bg-zinc-400/80 rotate-45" />
-        <span className="block w-2 h-px bg-zinc-400/80 -rotate-45 -ml-2" />
+        <span className="block w-2 h-px bg-[color:var(--fg-muted)] rotate-45" />
+        <span className="block w-2 h-px bg-[color:var(--fg-muted)] -rotate-45 -ml-2" />
       </span>
     );
   }
   return (
     <span
       className={`${base} rounded-full ${className}`}
-      style={{ boxShadow: 'inset 0 0 0 1px rgb(161 161 170 / 0.55)' }}
+      style={{ boxShadow: 'inset 0 0 0 1px var(--fg-subtle)' }}
       aria-label="open"
     />
   );

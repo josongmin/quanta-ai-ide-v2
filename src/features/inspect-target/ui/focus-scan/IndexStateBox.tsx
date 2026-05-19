@@ -61,7 +61,7 @@ export function IndexStateBox({ file }: { file: FileRecord }) {
       <div className="flex items-center gap-1.5">
         <Activity className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('indexState.title', { defaultValue: 'Index state' })}
@@ -72,7 +72,7 @@ export function IndexStateBox({ file }: { file: FileRecord }) {
             style={{ background: stateColor }}
           />
           <span
-            className="text-[10px] font-black uppercase tracking-[0.16em]"
+            className="text-[10px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: stateColor }}
           >
             {stateLabel}
@@ -113,7 +113,7 @@ function Cell({
   return (
     <div>
       <div
-        className="flex items-center gap-1 text-[8.5px] font-black uppercase tracking-[0.16em]"
+        className="flex items-center gap-1 text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {icon}

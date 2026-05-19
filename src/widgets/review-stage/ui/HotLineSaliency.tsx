@@ -130,11 +130,11 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <Mountain className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <Mountain className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Change saliency
         </span>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {skylines.length} {skylines.length === 1 ? 'file' : 'files'} · density per line range
         </span>
       </div>
@@ -144,33 +144,33 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
           // Concentration tone: tight (low scatter) = focused = read first;
           // wide scatter = spread changes = harder to review.
           const focusTone = s.scatter < 0.4
-            ? '#5fa86c'  // focused
+            ? 'var(--intent-success-fg)'  // focused
             : s.scatter < 0.65
-              ? '#a8893a'  // mixed
-              : '#c25a55'; // scattered
+              ? 'var(--intent-warn-fg)'  // mixed
+              : 'var(--intent-danger-fg)'; // scattered
           const focusLabel = s.scatter < 0.4 ? 'focused'
             : s.scatter < 0.65 ? 'mixed' : 'scattered';
           return (
             <div
               key={s.path}
-              className="grid grid-cols-[1fr_auto] items-center gap-3 px-2 py-1.5 rounded-md hover:bg-white/[0.02]"
+              className="grid grid-cols-[1fr_auto] items-center gap-3 px-2 py-1.5 rounded-md hover:bg-[var(--bg-surface-muted)]"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] font-mono text-white/80 truncate" title={s.path}>
+                  <span className="text-[11px] font-mono text-[var(--fg-default)] truncate" title={s.path}>
                     {s.path}
                   </span>
                   <span
-                    className="shrink-0 inline-flex px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-[0.14em]"
+                    className="shrink-0 inline-flex px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
                     style={{
-                      background: `${focusTone}22`,
+                      background: `color-mix(in srgb, ${focusTone} 13%, transparent)`,
                       color: focusTone,
-                      border: `1px solid ${focusTone}45`,
+                      border: `1px solid color-mix(in srgb, ${focusTone} 27%, transparent)`,
                     }}
                   >
                     {focusLabel}
                   </span>
-                  <span className="text-[10px] font-mono text-white/35 ml-auto tabular-nums">
+                  <span className="text-[10px] font-mono text-[var(--fg-subtle)] ml-auto tabular-nums">
                     L{s.rangeStart}–{s.rangeEnd}
                   </span>
                 </div>
@@ -200,7 +200,7 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
                           <div
                             style={{
                               height: addedSlice,
-                              background: isHot ? '#7fc78f' : '#5fa86c',
+                              background: isHot ? 'var(--intent-success-fg)' : 'var(--intent-success-fg)',
                               opacity: v === 0 ? 0.15 : 1,
                             }}
                           />
@@ -209,7 +209,7 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
                           <div
                             style={{
                               height: removedSlice,
-                              background: isHot ? '#e88a85' : '#c25a55',
+                              background: isHot ? 'var(--intent-danger-fg)' : 'var(--intent-danger-fg)',
                               opacity: v === 0 ? 0.15 : 1,
                             }}
                           />
@@ -220,8 +220,8 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
                 </div>
               </div>
               <div className="shrink-0 text-right tabular-nums">
-                <div className="text-[14px] font-bold text-white/85 leading-none">{s.total}</div>
-                <div className="text-[9px] font-mono text-white/35 mt-1 uppercase tracking-[0.10em]">lines</div>
+                <div className="text-[14px] font-bold text-[var(--fg-default)] leading-none">{s.total}</div>
+                <div className="text-[9px] font-mono text-[var(--fg-subtle)] mt-1 uppercase tracking-[var(--track-eyebrow)]">lines</div>
               </div>
             </div>
           );

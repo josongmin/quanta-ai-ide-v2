@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { ChevronsDownUp, ChevronsUpDown } from 'lucide-react';
 import { GlassCard, SectionHeader } from '@shared/ui';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import FolderTree, { type FolderTreeHandle } from './FolderTree';
 import StatusFacet from './StatusFacet';
@@ -21,7 +20,6 @@ export type FilterBarProps = {
 
 export default function FilterBar({ onOpenFolder, onOpenFile, activeKey }: FilterBarProps = {}) {
   const { t } = useTranslation('filter');
-  const { isDark } = useTheme();
   const treeRef = useRef<FolderTreeHandle>(null);
 
   return (
@@ -35,11 +33,10 @@ export default function FilterBar({ onOpenFolder, onOpenFile, activeKey }: Filte
             all / collapse all). */}
         <GlassCard className="px-3 py-2.5" style={{ boxShadow: 'none' }}>
           <div className="flex items-center justify-between gap-2 mb-1.5 px-0.5">
-            <h3 className={`text-[10px] font-black uppercase tracking-[0.18em] ${isDark ? 'text-white/70' : 'text-black/55'}`}>
+            <h3 className="text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-muted)]">
               {t('section.files')}
             </h3>
             <TreeToolbar
-              isDark={isDark}
               onExpandAll={() => treeRef.current?.expandAll()}
               onCollapseAll={() => treeRef.current?.collapseAll()}
             />
@@ -73,14 +70,10 @@ export default function FilterBar({ onOpenFolder, onOpenFile, activeKey }: Filte
 }
 
 function TreeToolbar({
-  isDark, onExpandAll, onCollapseAll,
-}: { isDark: boolean; onExpandAll: () => void; onCollapseAll: () => void }) {
+  onExpandAll, onCollapseAll,
+}: { onExpandAll: () => void; onCollapseAll: () => void }) {
   const { t } = useTranslation('filter');
-  const btn = (
-    isDark
-      ? 'text-white/40 hover:text-white/85 hover:bg-white/5'
-      : 'text-black/40 hover:text-black/70 hover:bg-black/5'
-  );
+  const btn = 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-hover)]';
   return (
     <div className="flex items-center gap-0.5">
       <button

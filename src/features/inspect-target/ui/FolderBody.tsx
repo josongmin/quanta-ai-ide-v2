@@ -26,7 +26,7 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
 
   if (!folder || !stats) {
     return (
-      <div className={`p-6 text-[12px] ${isDark ? 'text-white/55' : 'text-black/55'}`}>
+      <div className="p-6 text-[12px] text-[var(--fg-muted)]">
         {t('empty.folderNotFound')}
       </div>
     );
@@ -69,7 +69,7 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
         <div className="flex items-start gap-2 min-w-0">
           <div className="min-w-0 flex-1">
             <div
-              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em]"
+              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
               style={{ color: 'var(--fg-subtle)' }}
             >
               <Folder className="w-3 h-3" /> {t('header.folder')}
@@ -87,13 +87,13 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
         </div>
         <div className="flex items-center gap-1.5 mt-2.5 mb-3 flex-wrap">
           <span
-            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em] tabular-nums"
+            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] tabular-nums"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             {stats.totalFiles.toLocaleString()} {t('focus.filesUnit')}
           </span>
           <span
-            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em] tabular-nums"
+            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] tabular-nums"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             {stats.totalLoc.toLocaleString()} {t('stat.loc')}
@@ -111,7 +111,7 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
                   type="button"
                   key={id}
                   onClick={() => { setTab(id); }}
-                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] whitespace-nowrap transition-colors"
+                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] whitespace-nowrap transition-colors"
                   style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                 >
                   <Icon className="w-3 h-3 shrink-0" />
@@ -154,7 +154,7 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
 
       <GlassCard
         tone="inner"
-        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[0.18em]"
+        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {folderTabFooter(tab, stats.totalFiles, t)}
@@ -190,7 +190,7 @@ function SubCard({
     >
       <div className="flex items-baseline gap-2">
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {title}
@@ -285,13 +285,11 @@ const FolderOverviewTab = memo(function FolderOverviewTab({
               {langEntries.map(([lang, n]) => (
                 <span
                   key={lang}
-                  className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] ${
-                    isDark ? 'bg-white/[0.04]' : 'bg-black/[0.03]'
-                  }`}
+                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] bg-[var(--bg-hover)]"
                 >
-                  <span className={`font-mono font-bold ${isDark ? 'text-white/85' : 'text-black/85'}`}>{lang}</span>
-                  <span className={`tabular-nums ${isDark ? 'text-white/55' : 'text-black/55'}`}>{n}</span>
-                  <span className={`tabular-nums text-[9px] ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+                  <span className="font-mono font-bold text-[var(--fg-strong)]">{lang}</span>
+                  <span className="tabular-nums text-[var(--fg-muted)]">{n}</span>
+                  <span className="tabular-nums text-[9px] text-[var(--fg-subtle)]">
                     {Math.round((n / langTotal) * 100)}%
                   </span>
                 </span>
@@ -308,9 +306,9 @@ const FolderOverviewTab = memo(function FolderOverviewTab({
                 {langEntries.map(([lang, n]) => (
                   <div key={lang} className="flex items-center gap-1.5 text-[10px]">
                     <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: languageHue(lang, isDark) }} />
-                    <span className={`flex-1 ${isDark ? 'text-white/55' : 'text-black/55'}`}>{lang}</span>
-                    <span className={`tabular-nums font-bold ${isDark ? 'text-white/85' : 'text-black/85'}`}>{n}</span>
-                    <span className={`tabular-nums text-[9px] w-7 text-right ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+                    <span className="flex-1 text-[var(--fg-muted)]">{lang}</span>
+                    <span className="tabular-nums font-bold text-[var(--fg-strong)]">{n}</span>
+                    <span className="tabular-nums text-[9px] w-7 text-right text-[var(--fg-subtle)]">
                       {Math.round((n / langTotal) * 100)}%
                     </span>
                   </div>
@@ -344,7 +342,7 @@ const FolderActivityTab = memo(function FolderActivityTab({
           <Stat label={t('stat.busFactor1')} value={stats.busFactor1} isDark={isDark}
                 tone={stats.busFactor1 > stats.totalFiles * 0.3 ? 'warn' : 'neutral'} />
         </div>
-        <div className={`mt-2 pt-2 border-t border-dashed ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'} space-y-1.5`}>
+        <div className="mt-2 pt-2 border-t border-dashed border-[var(--border-default)] space-y-1.5">
           <Stat label={t('stat.activeFiles')} sublabel={t('stat.activeFilesSub')} value={stats.activeRecent} suffix={`${activePct}%`}
                 isDark={isDark} />
           <Stat label={t('stat.staleFiles')} sublabel={t('stat.staleFilesSub')} value={stats.staleFiles} suffix={`${stalePct}%`}
@@ -412,7 +410,7 @@ const FolderRiskTab = memo(function FolderRiskTab({
                 tone={stats.layerViolations > 0 ? 'critical' : 'neutral'} />
         </div>
         {totalRisk === 0 && (
-          <div className={`mt-1.5 text-[10px] italic ${isDark ? 'text-white/30' : 'text-black/30'}`}>
+          <div className="mt-1.5 text-[10px] italic text-[var(--fg-subtle)]">
             {t('empty.noStructuralDefects')}
           </div>
         )}
@@ -482,25 +480,23 @@ const FolderDepsTab = memo(function FolderDepsTab({
             {/* Two-direction ratio bar — shows at a glance whether this
                 folder is a sink (mostly inbound) or a leaf (mostly outbound).
                 Neutral grays so the viewer reads *direction*, not severity. */}
-            <div className={`flex w-full h-1.5 rounded-full overflow-hidden ${
-              isDark ? 'bg-white/[0.04]' : 'bg-black/[0.04]'
-            }`}>
+            <div className="flex w-full h-1.5 rounded-full overflow-hidden bg-[var(--bg-hover)]">
               <div
                 style={{
                   width: `${(stats.inboundEdges / totalEdges) * 100}%`,
-                  background: isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.55)',
+                  background: 'var(--fg-muted)',
                 }}
                 className="h-full"
               />
               <div
                 style={{
                   width: `${(stats.outboundEdges / totalEdges) * 100}%`,
-                  background: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.22)',
+                  background: 'var(--fg-subtle)',
                 }}
                 className="h-full"
               />
             </div>
-            <div className={`flex justify-between text-[9px] font-mono mt-1 ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+            <div className="flex justify-between text-[9px] font-mono mt-1 text-[var(--fg-subtle)]">
               <span>{t('deps.inboundArrow')}</span>
               <span>{t('deps.outboundArrow')}</span>
             </div>
@@ -514,7 +510,7 @@ const FolderDepsTab = memo(function FolderDepsTab({
         ) : (
           <div className="space-y-1">
             {stats.depFolders.map((d) => (
-              <DepRow key={d.path} path={d.path} n={d.n} isDark={isDark} dir="out" />
+              <DepRow key={d.path} path={d.path} n={d.n} dir="out" />
             ))}
           </div>
         )}
@@ -526,7 +522,7 @@ const FolderDepsTab = memo(function FolderDepsTab({
         ) : (
           <div className="space-y-1">
             {stats.inboundFolders.map((d) => (
-              <DepRow key={d.path} path={d.path} n={d.n} isDark={isDark} dir="in" />
+              <DepRow key={d.path} path={d.path} n={d.n} dir="in" />
             ))}
           </div>
         )}
@@ -547,19 +543,19 @@ const FolderDepsTab = memo(function FolderDepsTab({
   );
 });
 
-function DepRow({ path, n, isDark, dir }: { path: string; n: number; isDark: boolean; dir: 'in' | 'out' }) {
+function DepRow({ path, n, dir }: { path: string; n: number; dir: 'in' | 'out' }) {
   const { t } = useTranslation('inspect');
   return (
     <div className="flex items-center gap-2 py-0.5">
       <GitBranch
-        className={`w-2.5 h-2.5 shrink-0 ${isDark ? 'text-white/30' : 'text-black/30'} ${
+        className={`w-2.5 h-2.5 shrink-0 text-[var(--fg-subtle)] ${
           dir === 'in' ? 'rotate-180' : ''
         }`}
       />
-      <span className={`flex-1 text-[11px] font-mono truncate ${isDark ? 'text-white/55' : 'text-black/55'}`}>
+      <span className="flex-1 text-[11px] font-mono truncate text-[var(--fg-muted)]">
         {path ? path.split('.').join('/') : t('deps.rootLabel')}
       </span>
-      <span className={`text-[10px] tabular-nums font-bold ${isDark ? 'text-white/85' : 'text-black/85'}`}>
+      <span className="text-[10px] tabular-nums font-bold text-[var(--fg-strong)]">
         {n}
       </span>
     </div>

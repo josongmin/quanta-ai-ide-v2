@@ -38,10 +38,10 @@ type Tier = 'fresh' | 'focused' | 'strained' | 'overload';
 type Snapshot = { ms: number };
 
 const TIER_TONE: Record<Tier, string> = {
-  fresh:    '#5fa86c',
-  focused:  '#7aa7d4',
-  strained: '#a8893a',
-  overload: '#c25a55',
+  fresh:    'var(--intent-success-fg)',
+  focused:  'var(--fg-link)',
+  strained: 'var(--intent-warn-fg)',
+  overload: 'var(--intent-danger-fg)',
 };
 const TIER_LABEL: Record<Tier, string> = {
   fresh:    'Fresh',
@@ -142,33 +142,33 @@ export default function FatigueMeter({ pr }: { pr: PullRequest }) {
     <span
       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md"
       style={{
-        background: 'rgba(255,255,255,0.04)',
-        border: `1px solid ${tone}55`,
+        background: 'var(--bg-hover)',
+        border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)`,
       }}
       title={`Cognitive-load estimate based on ${formatMinutes(minutes)} on this PR (Cohen 2006: defect-find rate halves past 60 min).`}
     >
       <Brain className="w-3 h-3" style={{ color: tone }} strokeWidth={2.5} />
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: tone }}>
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color: tone }}>
         {TIER_LABEL[tier]}
       </span>
       {/* Mini progress bar — visualises remaining budget within the
           current tier so the chip is informative even at fixed label. */}
       <span
         className="inline-block w-8 h-1 rounded-full overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.06)' }}
+        style={{ background: 'var(--bg-elevated)' }}
       >
         <span
           className="block h-full"
           style={{ width: `${String(Math.round(progress * 100))}%`, background: tone }}
         />
       </span>
-      <span className="text-[10px] font-mono tabular-nums text-white/55">
+      <span className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)]">
         {formatMinutes(minutes)}
       </span>
       {showBreakNudge && (
         <span
           className="inline-flex items-center gap-1 ml-0.5 pl-1.5 text-[10px] font-mono"
-          style={{ borderLeft: `1px solid ${tone}55`, color: tone }}
+          style={{ borderLeft: `1px solid color-mix(in srgb, ${tone} 33%, transparent)`, color: tone }}
         >
           <Coffee className="w-2.5 h-2.5" />
           break

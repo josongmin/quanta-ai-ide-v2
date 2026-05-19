@@ -71,7 +71,7 @@ export function DecisionHeadsUp({
         : 'ready';
   const accent = verdict === 'block' ? severityColors.blocker
     : verdict === 'review' ? severityColors.medium
-      : '#5fa86c';
+      : 'var(--intent-success-fg)';
   const verdictLabel = verdict === 'ready' ? 'READY'
     : verdict === 'review' ? 'REVIEW' : 'BLOCKED';
 
@@ -103,28 +103,28 @@ export function DecisionHeadsUp({
           backdropFilter: 'blur(12px) saturate(160%)',
           WebkitBackdropFilter: 'blur(12px) saturate(160%)',
         } : {}),
-        borderColor: `${accent}24`,
-        boxShadow: `inset 0 -1px 0 0 ${accent}10`,
+        borderColor: `color-mix(in srgb, ${accent} 14%, transparent)`,
+        boxShadow: `inset 0 -1px 0 0 color-mix(in srgb, ${accent} 6%, transparent)`,
       }}
     >
       <span className="inline-flex items-center gap-2 shrink-0">
         <span
           aria-hidden
           className="inline-block w-2 h-2 rounded-sm"
-          style={{ background: accent, boxShadow: `0 0 0 3px ${accent}1f` }}
+          style={{ background: accent, boxShadow: `0 0 0 3px color-mix(in srgb, ${accent} 12%, transparent)` }}
         />
         <span
-          className="text-[10.5px] font-black uppercase tracking-[0.2em]"
+          className="text-[var(--fs-sm)] font-black uppercase tracking-[var(--track-widest)]"
           style={{ color: accent }}
         >
           {verdictLabel}
         </span>
-        <span className="text-[10px] font-mono text-white/30 tabular-nums">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)] tabular-nums">
           #{pr.number}
         </span>
       </span>
 
-      <span aria-hidden className="hidden lg:block w-px h-4 bg-white/[0.08] shrink-0" />
+      <span aria-hidden className="hidden lg:block w-px h-4 bg-[var(--border-default)] shrink-0" />
 
       <span className="hidden xl:inline-flex items-center gap-2 min-w-0 shrink">
         <CopilotTake pr={pr} repo={repo} />
@@ -145,25 +145,25 @@ export function DecisionHeadsUp({
         ))}
         {pr.hasConflicts && (
           <span
-            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-[9.5px] font-bold uppercase tracking-[0.18em]"
-            style={{ background: `${severityColors.blocker}1c`, color: severityColors.blocker, border: `1px solid ${severityColors.blocker}55` }}
+            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-[var(--fs-xs)] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            style={{ background: `color-mix(in srgb, ${severityColors.blocker} 11%, transparent)`, color: severityColors.blocker, border: `1px solid color-mix(in srgb, ${severityColors.blocker} 33%, transparent)` }}
           >
             conflict
           </span>
         )}
       </div>
 
-      <span aria-hidden className="w-px h-4 bg-white/[0.08] shrink-0" />
+      <span aria-hidden className="w-px h-4 bg-[var(--border-default)] shrink-0" />
       <div className="shrink-0 flex items-center gap-1.5">
         <button
           type="button"
           disabled={!canDecide}
           onClick={() => { submitReview(pr.number, 'approve', 'Looks good!', viewerLogin); }}
-          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[10.5px] font-bold uppercase tracking-[0.14em] transition-colors disabled:opacity-40 hover:brightness-110"
+          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[var(--fs-sm)] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
           style={{
-            background: 'rgba(79,154,92,0.16)',
-            color: '#a4d4ad',
-            border: '1px solid rgba(79,154,92,0.50)',
+            background: 'var(--intent-success-bg)',
+            color: 'var(--intent-success-fg)',
+            border: '1px solid color-mix(in srgb, var(--intent-success-fg) 50%, transparent)',
           }}
         >
           <CheckCircle2 className="w-3 h-3" strokeWidth={2.5} />
@@ -173,11 +173,11 @@ export function DecisionHeadsUp({
           type="button"
           disabled={!canDecide}
           onClick={() => { submitReview(pr.number, 'request-changes', 'Please address findings.', viewerLogin); }}
-          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[10.5px] font-bold uppercase tracking-[0.14em] transition-colors disabled:opacity-40 hover:brightness-110"
+          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[var(--fs-sm)] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
           style={{
-            background: 'rgba(194,90,85,0.12)',
-            color: '#eab1ad',
-            border: '1px solid rgba(194,90,85,0.45)',
+            background: 'var(--intent-danger-bg)',
+            color: 'var(--intent-danger-fg)',
+            border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 45%, transparent)',
           }}
         >
           <X className="w-3 h-3" strokeWidth={2.5} />
@@ -207,7 +207,7 @@ function HeadsUpStat({
       >
         {value}{unit ?? ''}
       </span>
-      <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/35">
+      <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {label}
       </span>
     </span>
@@ -243,7 +243,7 @@ export function VerdictHero({
         : 'ready';
   const accent = verdict === 'block' ? severityColors.blocker
     : verdict === 'review' ? severityColors.medium
-      : '#5fa86c';
+      : 'var(--intent-success-fg)';
   const Icon = verdict === 'ready' ? ShieldCheck
     : verdict === 'review' ? ShieldAlert : ShieldX;
   const verdictLabel = verdict === 'ready' ? 'READY'
@@ -259,13 +259,13 @@ export function VerdictHero({
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `linear-gradient(90deg, ${accent}1a 0%, ${accent}08 18%, transparent 32%)`,
+          background: `linear-gradient(90deg, color-mix(in srgb, ${accent} 10%, transparent) 0%, color-mix(in srgb, ${accent} 3%, transparent) 18%, transparent 32%)`,
         }}
       />
       <div
         aria-hidden
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: `linear-gradient(90deg, ${accent}cc 0%, ${accent}33 40%, transparent 100%)` }}
+        style={{ background: `linear-gradient(90deg, color-mix(in srgb, ${accent} 80%, transparent) 0%, color-mix(in srgb, ${accent} 20%, transparent) 40%, transparent 100%)` }}
       />
 
       <div className="relative p-6 flex flex-col gap-5">
@@ -273,9 +273,9 @@ export function VerdictHero({
           <div
             className="shrink-0 w-14 h-14 rounded-xl flex items-center justify-center"
             style={{
-              background: `${accent}1f`,
-              border: `1px solid ${accent}5c`,
-              boxShadow: `inset 0 0 0 1px ${accent}14, 0 6px 20px -8px ${accent}40`,
+              background: `color-mix(in srgb, ${accent} 12%, transparent)`,
+              border: `1px solid color-mix(in srgb, ${accent} 36%, transparent)`,
+              boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${accent} 8%, transparent), 0 6px 20px -8px color-mix(in srgb, ${accent} 25%, transparent)`,
             }}
           >
             <Icon className="w-6 h-6" style={{ color: accent }} strokeWidth={2.25} />
@@ -283,13 +283,13 @@ export function VerdictHero({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-2 h-4">
-              <span className="text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/45">
+              <span className="text-[var(--fs-xs)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
                 pull request
               </span>
-              <span className="text-[9.5px] font-mono text-white/35 tabular-nums">
+              <span className="text-[var(--fs-xs)] font-mono text-[var(--fg-subtle)] tabular-nums">
                 #{pr.number}
               </span>
-              <span className="w-px h-3 bg-white/[0.10]" />
+              <span className="w-px h-3 bg-[var(--border-default)]" />
               <PrStatusPill status={pr.status} />
             </div>
             <div className="flex items-baseline gap-3 flex-wrap">
@@ -300,18 +300,18 @@ export function VerdictHero({
                 {verdictLabel}
               </span>
               <span
-                className="text-[14px] font-semibold text-white/90 truncate max-w-[480px] leading-tight"
+                className="text-[14px] font-semibold text-[var(--fg-strong)] truncate max-w-[480px] leading-tight"
                 title={pr.title}
               >
                 {pr.title}
               </span>
             </div>
-            <div className="text-[10.5px] font-mono text-white/40 mt-2 flex items-center gap-1.5">
+            <div className="text-[var(--fs-sm)] font-mono text-[var(--fg-subtle)] mt-2 flex items-center gap-1.5">
               <GitBranch className="w-3 h-3" />
-              <span className="text-white/55">{pr.baseBranch}</span>
-              <span className="text-white/25">←</span>
-              <span className="text-white/55">{pr.headBranch}</span>
-              <span className="text-white/20 mx-1">·</span>
+              <span className="text-[var(--fg-muted)]">{pr.baseBranch}</span>
+              <span className="text-[var(--fg-subtle)]">←</span>
+              <span className="text-[var(--fg-muted)]">{pr.headBranch}</span>
+              <span className="text-[var(--fg-subtle)] mx-1">·</span>
               <span>@{pr.author}</span>
             </div>
           </div>
@@ -321,11 +321,11 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'approve', 'Looks good!', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-10 rounded-lg text-[11.5px] font-bold uppercase tracking-[0.16em] text-white transition-all hover:brightness-115 active:brightness-95 disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-10 rounded-lg text-[var(--fs-base)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)] transition-all hover:brightness-115 active:brightness-95 disabled:opacity-40"
               style={{
-                background: 'linear-gradient(180deg, rgba(95,168,108,0.22) 0%, rgba(79,154,92,0.14) 100%)',
-                border: '1px solid rgba(95,168,108,0.55)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 2px rgba(0,0,0,0.2)',
+                background: 'linear-gradient(180deg, color-mix(in srgb, var(--intent-success-fg) 22%, transparent) 0%, color-mix(in srgb, var(--intent-success-fg) 14%, transparent) 100%)',
+                border: '1px solid color-mix(in srgb, var(--intent-success-fg) 55%, transparent)',
+                boxShadow: 'var(--shadow-sm)',
               }}
             >
               <CheckCircle2 className="w-3.5 h-3.5" strokeWidth={2.5} />
@@ -335,10 +335,10 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'request-changes', 'Please address findings.', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-9 rounded-lg text-[11px] font-bold uppercase tracking-[0.16em] text-white/85 hover:text-white transition-colors disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-9 rounded-lg text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)] hover:text-[var(--fg-strong)] transition-colors disabled:opacity-40"
               style={{
-                background: 'rgba(194,90,85,0.10)',
-                border: '1px solid rgba(194,90,85,0.40)',
+                background: 'var(--intent-danger-bg)',
+                border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 40%, transparent)',
               }}
             >
               <X className="w-3 h-3" strokeWidth={2.5} />
@@ -348,7 +348,7 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'comment', 'Comment.', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-8 rounded-md text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white/50 hover:text-white/85 hover:bg-white/[0.04] transition-colors disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-8 rounded-md text-[var(--fs-sm)] font-semibold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)] transition-colors disabled:opacity-40"
             >
               <MessageSquare className="w-3 h-3" strokeWidth={2.25} />
               Comment
@@ -368,11 +368,11 @@ export function VerdictHero({
           <HeroStatCell label="high" value={summary.high} color={summary.high > 0 ? severityColors.high : undefined} />
           <HeroStatCell label="ci fail" value={ci.required.failed} color={ci.required.failed > 0 ? severityColors.blocker : undefined} />
           <HeroStatCell label="threads" value={threads.length} color={threads.length > 0 ? severityColors.medium : undefined} />
-          <HeroStatCell label="auto-fix" value={summary.autoFix} color={summary.autoFix > 0 ? '#5a8fce' : undefined} />
+          <HeroStatCell label="auto-fix" value={summary.autoFix} color={summary.autoFix > 0 ? 'var(--intent-info-fg)' : undefined} />
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/35 shrink-0">
+          <span className="text-[var(--fs-xs)] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] shrink-0">
             pace
           </span>
           <EffortMeter effort={effort} />
@@ -392,8 +392,8 @@ export function VerdictHero({
             <span
               className="inline-flex items-center px-2.5 h-7 rounded-md"
               style={{
-                background: 'rgba(149,131,184,0.10)',
-                border: '1px solid rgba(149,131,184,0.35)',
+                background: 'color-mix(in srgb, var(--fg-accent) 10%, transparent)',
+                border: '1px solid color-mix(in srgb, var(--fg-accent) 35%, transparent)',
               }}
             >
               <StackChip info={stack} />
@@ -420,10 +420,10 @@ function HeroStatCell({
     <div
       className="flex flex-col gap-1 px-3 py-2.5"
       style={{
-        background: isLive ? `${color}0e` : 'var(--bg-surface-muted)',
+        background: isLive ? `color-mix(in srgb, ${color} 6%, transparent)` : 'var(--bg-surface-muted)',
       }}
     >
-      <span className="text-[9px] font-bold uppercase tracking-[0.16em] text-white/40 leading-none">
+      <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] leading-none">
         {label}
       </span>
       <span
@@ -438,18 +438,18 @@ function HeroStatCell({
 
 function PrStatusPill({ status }: { status: PrStatus }) {
   const map: Record<PrStatus, { label: string; color: string }> = {
-    draft: { label: 'Draft', color: '#8b949e' },
-    open: { label: 'Open', color: '#5fa86c' },
-    'changes-requested': { label: 'Changes', color: '#c25a55' },
-    approved: { label: 'Approved', color: '#5fa86c' },
-    merged: { label: 'Merged', color: '#9583b8' },
-    closed: { label: 'Closed', color: '#8b949e' },
+    draft: { label: 'Draft', color: 'var(--fg-muted)' },
+    open: { label: 'Open', color: 'var(--intent-success-fg)' },
+    'changes-requested': { label: 'Changes', color: 'var(--intent-danger-fg)' },
+    approved: { label: 'Approved', color: 'var(--intent-success-fg)' },
+    merged: { label: 'Merged', color: 'var(--fg-accent)' },
+    closed: { label: 'Closed', color: 'var(--fg-muted)' },
   };
   const m = map[status];
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[0.18em]"
-      style={{ background: `${m.color}22`, color: m.color }}
+      className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+      style={{ background: `color-mix(in srgb, ${m.color} 13%, transparent)`, color: m.color }}
     >
       {m.label}
     </span>
@@ -467,7 +467,6 @@ export function DecisionPipeline({
   severityColors: SeverityColors;
   tierLabels: TierLabels;
 }) {
-  const { isDark } = useTheme();
   const ci = summariseChecks(pr.checks);
   const findings = engineFindings(pr, repo);
   const summary = engineSummary(findings);
@@ -522,13 +521,13 @@ export function DecisionPipeline({
   const stateColor = (s: GateState): string =>
     s === 'fail' ? severityColors.blocker
       : s === 'warn' ? severityColors.medium
-        : s === 'pass' ? '#5fa86c'
-          : s === 'pending' ? '#5a8fce'
-            : '#8b949e';
+        : s === 'pass' ? 'var(--intent-success-fg)'
+          : s === 'pending' ? 'var(--intent-info-fg)'
+            : 'var(--fg-muted)';
 
   return (
     <V2Card className="px-4 py-3">
-      <div className="flex items-center gap-1.5 mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
+      <div className="flex items-center gap-1.5 mb-3 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
         <Activity className="w-3 h-3" />
         Merge pipeline
         {autoMerge.eligible && (
@@ -536,12 +535,12 @@ export function DecisionPipeline({
             type="button"
             onClick={() => { setAutoMergeArmed((v) => !v); }}
             aria-pressed={autoMergeArmed}
-            className="ml-2 inline-flex items-center gap-1 px-2 h-5 rounded-full text-[9px] font-bold uppercase tracking-[0.18em] transition-colors"
+            className="ml-2 inline-flex items-center gap-1 px-2 h-5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
             style={{
-              background: autoMergeArmed ? 'rgba(95,168,108,0.18)' : 'var(--bg-hover)',
-              color: autoMergeArmed ? '#9ee2a4' : 'var(--fg-muted)',
+              background: autoMergeArmed ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)' : 'var(--bg-hover)',
+              color: autoMergeArmed ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
               border: autoMergeArmed
-                ? '1px solid rgba(95,168,108,0.55)'
+                ? '1px solid color-mix(in srgb, var(--intent-success-fg) 55%, transparent)'
                 : '1px solid var(--border-strong)',
             }}
             title={autoMergeArmed
@@ -551,7 +550,7 @@ export function DecisionPipeline({
             {autoMergeArmed ? '✓ auto-merge armed' : 'arm auto-merge'}
           </button>
         )}
-        <span className="ml-auto text-[10px] font-mono text-white/40">
+        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
           {gates.filter((g) => g.state === 'pass').length}/{gates.length} gates clear
         </span>
       </div>
@@ -566,15 +565,13 @@ export function DecisionPipeline({
                 title={explainer}
                 aria-label={explainer}
                 style={{
-                  background: isDark
-                    ? `linear-gradient(140deg, ${c}1a, ${c}06)`
-                    : `linear-gradient(140deg, ${c}26, ${c}10)`,
-                  border: `1px solid ${c}${isDark ? '40' : '66'}`,
+                  background: `linear-gradient(140deg, color-mix(in srgb, ${c} 12%, transparent), color-mix(in srgb, ${c} 4%, transparent))`,
+                  border: `1px solid color-mix(in srgb, ${c} 30%, transparent)`,
                 }}
               >
                 <div className="flex items-center gap-1.5">
                   <GateGlyph state={g.state} color={c} />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/85">
+                  <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)]">
                     {g.label}
                   </span>
                 </div>
@@ -584,7 +581,7 @@ export function DecisionPipeline({
               </div>
               {i < gates.length - 1 && (
                 <div className="shrink-0 w-3 flex items-center justify-center">
-                  <span className="block w-2 h-px bg-white/15" />
+                  <span className="block w-2 h-px bg-[var(--border-strong)]" />
                 </div>
               )}
             </div>

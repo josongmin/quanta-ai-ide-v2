@@ -80,7 +80,7 @@ function Field({
       <Icon className="w-3 h-3 mt-0.5 shrink-0" style={{ color: t.textFaint }} />
       <div className="min-w-0 flex-1">
         <div
-          className="text-[8.5px] font-bold uppercase tracking-[0.16em]"
+          className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.16em]"
           style={{ color: t.textFaint }}
         >
           {label}

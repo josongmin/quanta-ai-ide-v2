@@ -61,8 +61,8 @@ export default function QueueBurndown({ prs }: Props) {
     .join(' ');
   const lastPoint = xy(DAYS - 1, points[DAYS - 1]);
 
-  const tone = trend === 'rising' ? '#d3b264'
-    : trend === 'falling' ? '#5fa86c'
+  const tone = trend === 'rising' ? 'var(--intent-warn-fg)'
+    : trend === 'falling' ? 'var(--intent-success-fg)'
     : 'var(--fg-muted)';
   const TrendIcon = trend === 'rising' ? TrendingUp
     : trend === 'falling' ? TrendingDown : Minus;

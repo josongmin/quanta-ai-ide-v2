@@ -41,13 +41,13 @@ export function HotspotSummaryCard({ file }: { file: FileRecord }) {
       <div className="flex items-center gap-2">
         <Flame className="w-3 h-3" style={{ color: chipColor }} />
         <span
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('hotspot.title')}
         </span>
         <span
-          className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.18em]"
+          className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: chipColor, borderColor: 'currentColor' }}
         >
           {t('hotspot.topPercent', { pct: pctText })}
@@ -58,7 +58,7 @@ export function HotspotSummaryCard({ file }: { file: FileRecord }) {
         {top3.map((c) => (
           <div key={c.key} className="flex items-center gap-2">
             <span
-              className="text-[9px] font-mono uppercase tracking-[0.14em] w-[88px] shrink-0 truncate"
+              className="text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)] w-[88px] shrink-0 truncate"
               style={{ color: 'var(--fg-muted)' }}
             >
               {t(SIGNAL_LABEL_KEY[c.key])}

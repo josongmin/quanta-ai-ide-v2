@@ -67,13 +67,13 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
       <div className="flex items-center gap-1.5 px-3 py-2.5">
         <History className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('timeMachine.title', { defaultValue: 'Symbol time machine' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[0.16em]"
+          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: trendColor }}
         >
           {delta > 0 ? '+' : ''}{delta} cyc · {trendLabel}
@@ -147,7 +147,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
                 defaultValue: 'Complexity jump',
               })}
             </div>
-            <div className="mt-0.5 text-[9.5px] font-mono"
+            <div className="mt-0.5 text-[var(--fs-xs)] font-mono"
                  style={{ color: 'var(--fg-subtle)' }}>
               #{jump.prId} · {jump.author} · {jump.daysAgo}d ago
               <span className="opacity-60"> · </span>
@@ -156,7 +156,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
               </span>
             </div>
             <div
-              className="mt-0.5 text-[9.5px] truncate italic"
+              className="mt-0.5 text-[var(--fs-xs)] truncate italic"
               style={{ color: 'var(--fg-muted)' }}
             >
               {`“${jump.message}”`}
@@ -164,7 +164,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
           </div>
           <button
             type="button"
-            className="shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[0.18em] transition-colors hover-surface"
+            className="shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
             style={{
               background: 'var(--bg-elevated)',
               color: 'var(--fg-muted)',
@@ -181,7 +181,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
         style={{ borderColor: 'var(--border-muted)' }}
       >
         <div
-          className="text-[8.5px] font-black uppercase tracking-[0.16em]"
+          className="text-[var(--fs-2xs)] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('timeMachine.recent', { defaultValue: 'Recent commits' })}
@@ -189,7 +189,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
         {ticks.slice(-3).reverse().map((tk) => (
           <div
             key={tk.prId}
-            className="flex items-center gap-1.5 text-[9.5px] font-mono"
+            className="flex items-center gap-1.5 text-[var(--fs-xs)] font-mono"
             style={{ color: 'var(--fg-muted)' }}
           >
             <GitCommit className="w-2.5 h-2.5 shrink-0"

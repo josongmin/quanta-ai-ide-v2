@@ -28,7 +28,7 @@ type RowStat = {
   worstCount: number;
 };
 
-export default function LayeredBoxDiagram({ repo, isDark, size = 280 }: Props) {
+export default function LayeredBoxDiagram({ repo, size = 280 }: Props) {
   const { t } = useTranslation('inspect');
 
   const data = useMemo(() => {
@@ -99,19 +99,17 @@ export default function LayeredBoxDiagram({ repo, isDark, size = 280 }: Props) {
   // Color tokens — desaturated to keep the row reading typographic, not
   // emoji-like. Status is carried by *position* (left of label) and a
   // single hue shift on bad rows; clean rows are silent.
-  const okDot = isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.28)';
-  const badDot = isDark ? '#d98a85' : '#a83a3f';
-  const neutralDot = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.14)';
-  const rowBgClean = isDark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.022)';
-  const rowBgBad = isDark
-    ? 'rgba(217,138,133,0.085)'
-    : 'rgba(168,58,63,0.07)';
-  const rowBgVendor = isDark ? 'rgba(255,255,255,0.012)' : 'rgba(0,0,0,0.012)';
-  const rowBorderBad = isDark ? 'rgba(217,138,133,0.30)' : 'rgba(168,58,63,0.28)';
-  const labelColor = isDark ? 'rgba(255,255,255,0.92)' : 'rgba(0,0,0,0.84)';
-  const labelMuted = isDark ? 'rgba(255,255,255,0.50)' : 'rgba(0,0,0,0.46)';
-  const subColor = isDark ? 'rgba(255,255,255,0.40)' : 'rgba(0,0,0,0.40)';
-  const badText = isDark ? '#d98a85' : '#a83a3f';
+  const okDot = 'var(--fg-subtle)';
+  const badDot = 'var(--intent-danger-fg)';
+  const neutralDot = 'var(--fg-subtle)';
+  const rowBgClean = 'var(--bg-surface-muted)';
+  const rowBgBad = 'var(--intent-danger-bg)';
+  const rowBgVendor = 'var(--bg-surface-muted)';
+  const rowBorderBad = 'var(--intent-danger-fg)';
+  const labelColor = 'var(--fg-strong)';
+  const labelMuted = 'var(--fg-muted)';
+  const subColor = 'var(--fg-subtle)';
+  const badText = 'var(--intent-danger-fg)';
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -230,9 +228,7 @@ export default function LayeredBoxDiagram({ repo, isDark, size = 280 }: Props) {
         })}
       </svg>
 
-      <div className={`mt-1 text-[9px] uppercase tracking-[0.18em] ${
-        isDark ? 'text-white/40' : 'text-black/40'
-      }`}>
+      <div className="mt-1 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {t('deps.layeredSummary', {
           edges: formatNumber(data.total),
           violations: data.totalViolations,

@@ -23,7 +23,7 @@ export function LiveFeed({
     <V2Card className="p-4 relative overflow-hidden">
       <div className="flex items-center gap-2 mb-3">
         <SectionTitle icon={Clock}>{tA('section.livePrFeed')}</SectionTitle>
-        <span className="ml-1 inline-flex items-center gap-1 text-[9px] font-mono text-white/40">
+        <span className="ml-1 inline-flex items-center gap-1 text-[9px] font-mono text-[var(--fg-subtle)]">
           <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--intent-success-vivid)] admv2-blink" />
           live
         </span>
@@ -33,7 +33,7 @@ export function LiveFeed({
           <FeedRow key={r.seed} index={i} seed={r.seed} diff={r.diff} decision={r.decision} />
         ))}
       </div>
-      <div className="mt-3 pt-3 border-t border-white/5 text-[10px] font-mono text-white/40 leading-relaxed">
+      <div className="mt-3 pt-3 border-t border-[var(--border-muted)] text-[10px] font-mono text-[var(--fg-subtle)] leading-relaxed">
         Synthetic stream · current ruleset replayed against deterministic seeds.
       </div>
     </V2Card>
@@ -68,9 +68,9 @@ function FeedRow({
 
   return (
     <div
-      className="px-3 py-2 rounded-lg flex items-center gap-3 group transition-all hover:bg-white/[0.04] hover:translate-x-0.5"
+      className="px-3 py-2 rounded-lg flex items-center gap-3 group transition-all hover:bg-[var(--bg-hover)] hover:translate-x-0.5"
       style={{
-        border: '1px solid rgba(255,255,255,0.05)',
+        border: '1px solid var(--border-muted)',
         animationDelay: `${index * 35}ms`,
       }}
     >
@@ -96,37 +96,37 @@ function FeedRow({
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-white/85">#{seed}</span>
+          <span className="text-[11px] font-mono text-[var(--fg-default)]">#{seed}</span>
           <span
-            className="text-[9px] font-mono uppercase tracking-[0.18em]"
+            className="text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: accent }}
           >
             {decision.outcome}
           </span>
-          <span className="ml-auto text-[9px] font-mono text-white/35 tabular-nums">
+          <span className="ml-auto text-[9px] font-mono text-[var(--fg-subtle)] tabular-nums">
             {ageLabel} ago
           </span>
         </div>
-        <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono text-white/55 truncate">
+        <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono text-[var(--fg-muted)] truncate">
           <span className="tabular-nums shrink-0">
             {filesChanged} files
           </span>
-          <span className="text-white/25">·</span>
+          <span className="text-[var(--fg-subtle)]">·</span>
           <span className="tabular-nums shrink-0">
             {rippleCount} ripple
           </span>
-          <span className="text-white/25">·</span>
-          <span className="tabular-nums shrink-0" style={{ color: fired.length > 0 ? accent : 'rgba(255,255,255,0.35)' }}>
+          <span className="text-[var(--fg-subtle)]">·</span>
+          <span className="tabular-nums shrink-0" style={{ color: fired.length > 0 ? accent : 'var(--fg-subtle)' }}>
             {fired.length} fired
           </span>
         </div>
         {topRule && (
-          <div className="mt-0.5 text-[10px] font-mono text-white/35 truncate">
+          <div className="mt-0.5 text-[10px] font-mono text-[var(--fg-subtle)] truncate">
             {topRule}{fired.length > 1 ? ` +${fired.length - 1}` : ''}
           </div>
         )}
       </div>
-      <ArrowUpRight className="w-3 h-3 text-white/30 group-hover:text-white/85 group-hover:rotate-12 shrink-0 transition-all" />
+      <ArrowUpRight className="w-3 h-3 text-[var(--fg-subtle)] group-hover:text-[var(--fg-default)] group-hover:rotate-12 shrink-0 transition-all" />
     </div>
   );
 }

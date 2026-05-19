@@ -42,13 +42,13 @@ export function SemanticConflictCard({ file }: { file: FileRecord }) {
           <ShieldCheck className="w-3 h-3"
                        style={{ color: 'var(--intent-success-fg)' }} />
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('semanticConflict.title', { defaultValue: 'Semantic conflict' })}
           </div>
           <span
-            className="ml-auto text-[9px] font-black uppercase tracking-[0.16em]"
+            className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--intent-success-fg)' }}
           >
             {t('semanticConflict.clear', { defaultValue: 'Clear' })}
@@ -85,13 +85,13 @@ export function SemanticConflictCard({ file }: { file: FileRecord }) {
       >
         <GitMerge className="w-3 h-3" style={{ color: headerAccent }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('semanticConflict.title', { defaultValue: 'Semantic conflict' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[0.16em]"
+          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: headerAccent }}
         >
           {t('semanticConflict.summary', {
@@ -143,13 +143,13 @@ function ConflictRow({ c }: { c: ConflictCandidate }) {
           <GitPullRequest className="w-2.5 h-2.5 shrink-0"
                           style={{ color: 'var(--fg-subtle)' }} />
           <span
-            className="text-[10.5px] font-mono font-bold truncate"
+            className="text-[var(--fs-sm)] font-mono font-bold truncate"
             style={{ color: 'var(--fg-default)' }}
           >
             #{c.prId}
           </span>
           <span
-            className="text-[9.5px] truncate"
+            className="text-[var(--fs-xs)] truncate"
             style={{ color: 'var(--fg-muted)' }}
           >
             {c.prTitle}
@@ -162,7 +162,7 @@ function ConflictRow({ c }: { c: ConflictCandidate }) {
           {c.author} · {c.branch}
         </div>
         <div
-          className="mt-0.5 text-[9.5px]"
+          className="mt-0.5 text-[var(--fs-xs)]"
           style={{ color: 'var(--fg-muted)' }}
         >
           {REASON_LABEL[c.reason]} ·
@@ -173,7 +173,7 @@ function ConflictRow({ c }: { c: ConflictCandidate }) {
         </div>
       </div>
       <span
-        className="shrink-0 text-[9px] font-black uppercase tracking-[0.16em]"
+        className="shrink-0 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: sevColor }}
       >
         {sevLabel}

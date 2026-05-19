@@ -90,23 +90,21 @@ export function ContextRail({
     Object.keys(successRate.byTool).length > 0 ||
     Object.keys(successRate.byModel).length > 0;
 
-  const panel = isDark ? 'bg-[#11161e]' : 'bg-white';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
+  const panel = 'bg-[var(--bg-surface)]';
+  const border = 'border-[color:var(--border-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
 
   return (
     <aside className={`shrink-0 w-[268px] flex flex-col ${panel} border-l ${border}`}>
       <div className={`shrink-0 h-12 flex items-center px-4 border-b ${border}`}>
-        <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+        <span className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
           {t('context.title')}
         </span>
       </div>
 
       <div className="flex-1 min-h-0 overflow-auto scrollbar-thin p-4 space-y-5">
-        <ContextSection label={t('context.project')} isDark={isDark}>
-          <div className={`flex items-center gap-2 p-2 rounded-lg ${
-            isDark ? 'bg-white/[0.025] border border-white/[0.06]' : 'bg-black/[0.02] border border-black/[0.06]'
-          }`}>
+        <ContextSection label={t('context.project')}>
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-[color:var(--bg-surface-muted)] border border-[color:var(--border-muted)]">
             <span
               className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md font-mono text-[12px] font-bold"
               style={{
@@ -118,7 +116,7 @@ export function ContextRail({
               {project.initial}
             </span>
             <div className="min-w-0">
-              <div className={`text-[12px] font-semibold truncate ${isDark ? 'text-white/85' : 'text-black/85'}`}>
+              <div className="text-[12px] font-semibold truncate text-[color:var(--fg-strong)]">
                 {project.name}
               </div>
               <div className={`text-[10px] font-mono truncate ${textFaint}`}>
@@ -128,54 +126,52 @@ export function ContextRail({
           </div>
         </ContextSection>
 
-        <ContextSection label={t('context.environment')} isDark={isDark}>
-          <Field label={t('context.branch')} value={task.branch} mono isDark={isDark} />
-          <Field label={t('context.base')} value={task.baseBranch} mono isDark={isDark} />
-          <Field label={t('context.runtime')} value="node 20.11" mono isDark={isDark} />
+        <ContextSection label={t('context.environment')}>
+          <Field label={t('context.branch')} value={task.branch} mono />
+          <Field label={t('context.base')} value={task.baseBranch} mono />
+          <Field label={t('context.runtime')} value="node 20.11" mono />
         </ContextSection>
 
-        <ContextSection label={t('context.activity')} isDark={isDark}>
-          <ActivityRow icon={Clock} text={t('context.activityStarted')} time="2m" isDark={isDark} />
-          <ActivityRow icon={Sparkles} text={t('context.activityPlanned')} time="2m" isDark={isDark} />
-          <ActivityRow icon={FileCode} text={t('context.activityEdited')} time="1m" isDark={isDark} />
-          <ActivityRow icon={CheckCircle2} text={t('context.activityTests')} time="now" isDark={isDark} />
+        <ContextSection label={t('context.activity')}>
+          <ActivityRow icon={Clock} text={t('context.activityStarted')} time="2m" />
+          <ActivityRow icon={Sparkles} text={t('context.activityPlanned')} time="2m" />
+          <ActivityRow icon={FileCode} text={t('context.activityEdited')} time="1m" />
+          <ActivityRow icon={CheckCircle2} text={t('context.activityTests')} time="now" />
         </ContextSection>
 
         {drift.kind !== 'idle' && (
-          <ContextSection label={t('drift.label')} isDark={isDark}>
+          <ContextSection label={t('drift.label')}>
             <DriftRow drift={drift} isDark={isDark} t={t} />
           </ContextSection>
         )}
 
         {hasSuccessData && (
-          <ContextSection label={t('successRate.label')} isDark={isDark}>
-            <SuccessRatePanel data={successRate} isDark={isDark} t={t} />
+          <ContextSection label={t('successRate.label')}>
+            <SuccessRatePanel data={successRate} t={t} />
           </ContextSection>
         )}
 
         {(task.branchState != null || task.prState != null) && (
-          <ContextSection label={t('prCi.branchTitle')} isDark={isDark}>
+          <ContextSection label={t('prCi.branchTitle')}>
             <PrCiPanel
               branchState={task.branchState}
               prState={task.prState}
-              isDark={isDark}
+             
               t={t}
             />
           </ContextSection>
         )}
 
         {project.integrations && project.integrations.length > 0 && (
-          <ContextSection label={t('integrations.title')} isDark={isDark}>
+          <ContextSection label={t('integrations.title')}>
             {project.integrations.map((it, i) => (
-              <IntegrationRow key={`${it.kind}:${i}`} integration={it} isDark={isDark} t={t} />
+              <IntegrationRow key={`${it.kind}:${i}`} integration={it} t={t} />
             ))}
           </ContextSection>
         )}
 
-        <ContextSection label={t('density.label')} isDark={isDark}>
-          <div className={`flex items-center gap-px rounded-md p-px ${
-            isDark ? 'bg-white/[0.04]' : 'bg-black/[0.04]'
-          }`}>
+        <ContextSection label={t('density.label')}>
+          <div className="flex items-center gap-px rounded-md p-px bg-[color:var(--bg-surface-muted)]">
             {(['compact', 'comfortable', 'spacious'] as const).map((d) => (
               <button
                 key={d}
@@ -184,8 +180,8 @@ export function ContextRail({
                 aria-pressed={density === d}
                 className={`flex-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
                   density === d
-                    ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black')
-                    : (isDark ? 'text-white/45 hover:text-white/75' : 'text-black/45 hover:text-black/75')
+                    ? 'bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]'
+                    : 'text-[color:var(--fg-muted)] hover:text-[color:var(--fg-default)]'
                 }`}
               >
                 {t(`density.${d}`)}
@@ -194,16 +190,14 @@ export function ContextRail({
           </div>
         </ContextSection>
 
-        <ContextSection label={t('a11y.highContrast')} isDark={isDark}>
+        <ContextSection label={t('a11y.highContrast')}>
           <button
             type="button"
             onClick={() => { onHighContrastChange(!highContrast); }}
             aria-pressed={highContrast}
-            className={`flex items-center justify-between w-full px-2 py-1.5 rounded-md text-[11px] transition-colors ${
-              isDark ? 'hover:bg-white/[0.04]' : 'hover:bg-black/[0.025]'
-            }`}
+            className="flex items-center justify-between w-full px-2 py-1.5 rounded-md text-[11px] transition-colors hover:bg-[color:var(--bg-hover)]"
           >
-            <span className={isDark ? 'text-white/70' : 'text-black/70'}>
+            <span className="text-[color:var(--fg-default)]">
               {t('a11y.highContrast')}
             </span>
             <span
@@ -211,11 +205,11 @@ export function ContextRail({
               className={`shrink-0 inline-flex items-center w-7 h-3.5 rounded-full transition-colors ${
                 highContrast
                   ? ''
-                  : (isDark ? 'bg-white/[0.15]' : 'bg-black/[0.15]')
+                  : 'bg-[color:var(--bg-active-strong)]'
               }`}
             >
               <span
-                className={`block w-3 h-3 rounded-full bg-white transition-transform ${
+                className={`block w-3 h-3 rounded-full bg-[color:var(--fg-on-active-strong)] transition-transform ${
                   highContrast ? 'translate-x-[14px]' : 'translate-x-px'
                 }`}
               />
@@ -232,15 +226,14 @@ export function ContextRail({
 }
 
 function SuccessRatePanel({
-  data, isDark, t,
+  data, t,
 }: {
   data: SuccessRateData;
-  isDark: boolean;
   t: TranslateFn;
 }) {
-  const muted = isDark ? 'text-white/45' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
-  const trackBg = isDark ? 'bg-white/[0.06]' : 'bg-black/[0.05]';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
+  const trackBg = 'bg-[color:var(--bg-elevated)]';
 
   function rateRow(label: string, ok: number, total: number, key: string) {
     const pct = total > 0 ? (ok / total) * 100 : 0;
@@ -270,7 +263,7 @@ function SuccessRatePanel({
     <div className="space-y-2">
       {toolEntries.length > 0 && (
         <div className="space-y-1">
-          <div className={`text-[9px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+          <div className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
             {t('successRate.byTool')}
           </div>
           {toolEntries.map(([tool, { ok, total }]) => rateRow(tool, ok, total, `t:${tool}`))}
@@ -278,7 +271,7 @@ function SuccessRatePanel({
       )}
       {modelEntries.length > 0 && (
         <div className="space-y-1">
-          <div className={`text-[9px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+          <div className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
             {t('successRate.byModel')}
           </div>
           {modelEntries.map(([model, { ok, total }]) => {
@@ -335,17 +328,16 @@ const INTEGRATION_ICON: Record<Integration['kind'], ComponentType<{ className?: 
 };
 
 function PrCiPanel({
-  branchState, prState, isDark, t,
+  branchState, prState, t,
 }: {
   branchState?: BranchState;
   prState?: PrState;
-  isDark: boolean;
   t: TranslateFn;
 }) {
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/35' : 'text-black/40';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
+  const heading = 'text-[color:var(--fg-strong)]';
+  const border = 'border-[color:var(--border-muted)]';
 
   function checkTone(status: CiCheck['status']): { style: React.CSSProperties; running: boolean } {
     if (status === 'success') return { style: { background: 'var(--intent-success-vivid)' }, running: false };
@@ -400,7 +392,7 @@ function PrCiPanel({
 
           {prState.reviewers.length > 0 && (
             <div className="space-y-0.5">
-              <div className={`text-[9px] uppercase tracking-[0.18em] ${faint}`}>
+              <div className={`text-[9px] uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
                 {t('prCi.reviewers')}
               </div>
               <div className="flex flex-wrap gap-1">
@@ -412,7 +404,7 @@ function PrCiPanel({
                       : {};
                   const toneClass = r.state === 'approved' || r.state === 'changes_requested'
                     ? ''
-                    : (isDark ? 'text-white/55 border-white/[0.10]' : 'text-black/55 border-black/[0.10]');
+                    : 'text-[color:var(--fg-muted)] border-[color:var(--border-default)]';
                   return (
                     <span
                       key={r.handle}
@@ -430,7 +422,7 @@ function PrCiPanel({
 
           {prState.checks.length > 0 && (
             <div className="space-y-0.5">
-              <div className={`text-[9px] uppercase tracking-[0.18em] ${faint}`}>
+              <div className={`text-[9px] uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
                 {t('prCi.checks')}
               </div>
               <div className="space-y-px">
@@ -466,24 +458,21 @@ function PrCiPanel({
 }
 
 function IntegrationRow({
-  integration, isDark, t,
+  integration, t,
 }: {
   integration: Integration;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   const Icon = INTEGRATION_ICON[integration.kind];
-  const labelColor = isDark ? 'text-white/85' : 'text-black/85';
-  const subColor = isDark ? 'text-white/40' : 'text-black/45';
+  const labelColor = 'text-[color:var(--fg-strong)]';
+  const subColor = 'text-[color:var(--fg-subtle)]';
   const dotStyle: React.CSSProperties | undefined = integration.connected
     ? { background: 'var(--intent-success-vivid)' }
     : undefined;
-  const dotTone = integration.connected ? '' : (isDark ? 'bg-white/20' : 'bg-black/20');
+  const dotTone = integration.connected ? '' : 'bg-[color:var(--bg-active-strong)]';
 
   return (
-    <div className={`flex items-center gap-2 px-2 py-1.5 rounded-md ${
-      isDark ? 'hover:bg-white/[0.025]' : 'hover:bg-black/[0.025]'
-    } transition-colors`}>
+    <div className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-[color:var(--bg-hover)] transition-colors">
       <Icon className={`w-3 h-3 shrink-0 ${subColor}`} />
       <div className="flex-1 min-w-0">
         <div className={`text-[11px] font-semibold truncate ${labelColor}`}>
@@ -503,16 +492,15 @@ function IntegrationRow({
 }
 
 function ContextSection({
-  label, isDark, children,
+  label, children,
 }: {
   label: string;
-  isDark: boolean;
   children: ReactNode;
 }) {
-  const color = isDark ? 'text-white/40' : 'text-black/40';
+  const color = 'text-[color:var(--fg-subtle)]';
   return (
     <div>
-      <div className={`mb-2.5 text-[10px] font-bold uppercase tracking-[0.18em] ${color}`}>
+      <div className={`mb-2.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${color}`}>
         {label}
       </div>
       <div className="space-y-1.5">{children}</div>
@@ -521,15 +509,14 @@ function ContextSection({
 }
 
 function Field({
-  label, value, mono, isDark,
+  label, value, mono,
 }: {
   label: string;
   value: string;
   mono?: boolean;
-  isDark: boolean;
 }) {
-  const labelColor = isDark ? 'text-white/40' : 'text-black/40';
-  const valueColor = isDark ? 'text-white/85' : 'text-black/85';
+  const labelColor = 'text-[color:var(--fg-subtle)]';
+  const valueColor = 'text-[color:var(--fg-strong)]';
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -542,16 +529,15 @@ function Field({
 }
 
 function ActivityRow({
-  icon: Icon, text, time, isDark,
+  icon: Icon, text, time,
 }: {
   icon: ComponentType<{ className?: string }>;
   text: string;
   time: string;
-  isDark: boolean;
 }) {
-  const iconColor = isDark ? 'text-white/40' : 'text-black/40';
-  const textColor = isDark ? 'text-white/70' : 'text-black/70';
-  const timeColor = isDark ? 'text-white/30' : 'text-black/30';
+  const iconColor = 'text-[color:var(--fg-subtle)]';
+  const textColor = 'text-[color:var(--fg-default)]';
+  const timeColor = 'text-[color:var(--fg-subtle)]';
 
   return (
     <div className="flex items-center gap-2">

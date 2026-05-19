@@ -24,6 +24,7 @@ type Props = {
   onChange: (next: number) => void;
   /** Reset target for double-click / Home key. Defaults to current width. */
   defaultWidth?: number;
+  /** @deprecated Grip colours now derive from theme tokens; prop accepted for API compat but ignored. */
   isDark?: boolean;
   ariaLabel?: string;
   className?: string;
@@ -39,7 +40,6 @@ export function ResizeHandle({
   max,
   onChange,
   defaultWidth,
-  isDark = false,
   ariaLabel = 'Resize panel',
   className = '',
   offset = -5,
@@ -118,8 +118,8 @@ export function ResizeHandle({
     ? { left: offset }
     : { right: offset };
 
-  const lineColor = isDark ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.16)';
-  const dotColor = isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.45)';
+  const lineColor = 'var(--border-strong)';
+  const dotColor = 'var(--fg-muted)';
 
   return (
     // Resize-handle WAI-ARIA pattern uses role="separator" with interactive

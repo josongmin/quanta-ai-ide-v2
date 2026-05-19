@@ -18,18 +18,18 @@ export default function CounterEvidencePanel({ suspect }: Props) {
   const items = suspect.whyNot;
 
   return (
-    <div className="rounded-2xl px-4 py-3 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5">
+    <div className="rounded-2xl px-4 py-3 bg-[var(--bg-elevated)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)]">
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-700 dark:text-zinc-300">
+        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-default)]">
           Why not this suspect
         </span>
-        <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-500">
+        <span className="font-mono text-[10px] text-[var(--fg-muted)]">
           {suspect.commitSha.slice(0, 7)}
         </span>
       </div>
 
       {items.length === 0 ? (
-        <p className="text-[11px] text-zinc-500 dark:text-zinc-500 italic">
+        <p className="text-[11px] text-[var(--fg-muted)] italic">
           No counter-evidence surfaced — review the supporting signals.
         </p>
       ) : (
@@ -37,9 +37,9 @@ export default function CounterEvidencePanel({ suspect }: Props) {
           {items.map((line) => (
             <li
               key={line}
-              className="text-[11px] leading-snug text-zinc-600 dark:text-zinc-400 flex gap-2"
+              className="text-[11px] leading-snug text-[var(--fg-muted)] flex gap-2"
             >
-              <span aria-hidden className="text-zinc-400 dark:text-zinc-600 select-none">
+              <span aria-hidden className="text-[var(--fg-subtle)] select-none">
                 ·
               </span>
               <span>{line}</span>

@@ -1,6 +1,5 @@
 import { Lock } from 'lucide-react';
 import { useFilter, useFilterStore } from '@entities/filter-state';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { usePrefs } from '@features/tweak-prefs';
 import MetricRangeSlider from './MetricRangeSlider';
@@ -8,27 +7,32 @@ import type { Facet, RangeFacet, BoolFacet, ToggleFacet, EnumFacet } from '@enti
 
 type Props = { facet: Facet };
 
+// Selected/active affordance — brand-tinted fill + ring + accent text.
+// Per project convention this keeps the existing visual treatment; the
+// accent hue is theme-aware via --fg-accent (not a flat grey fill).
+const SELECTED_CLASS =
+  'border-[color:var(--fg-accent)] text-[color:var(--fg-strong)] [background:color-mix(in_srgb,var(--fg-accent)_15%,transparent)]';
+const IDLE_CLASS =
+  'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]';
+
 export default function FacetRenderer({ facet }: Props) {
   const prefs = usePrefs();
-  const { isDark: dark } = useTheme();
 
   const unlocked = prefs.isUnlocked(facet);
-  if (!unlocked) return <LockedRow facet={facet} dark={dark} />;
+  if (!unlocked) return <LockedRow facet={facet} />;
 
   if (facet.kind === 'range') return <RangeRow facet={facet} />;
-  if (facet.kind === 'bool') return <BoolRow facet={facet} dark={dark} />;
-  if (facet.kind === 'toggle') return <TriToggleRow facet={facet} dark={dark} />;
-  if (facet.kind === 'enum') return <EnumRow facet={facet} dark={dark} />;
+  if (facet.kind === 'bool') return <BoolRow facet={facet} />;
+  if (facet.kind === 'toggle') return <TriToggleRow facet={facet} />;
+  if (facet.kind === 'enum') return <EnumRow facet={facet} />;
   return null;
 }
 
-function LockedRow({ facet, dark }: { facet: Facet; dark: boolean }) {
+function LockedRow({ facet }: { facet: Facet }) {
   return (
-    <div className={`flex items-center gap-2 p-2 rounded-xl mb-2 ${
-      dark ? 'bg-white/[0.03] text-white/30' : 'bg-black/[0.03] text-black/30'
-    }`}>
+    <div className="flex items-center gap-2 p-2 rounded-xl mb-2 bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-subtle)]">
       <Lock className="w-3 h-3" />
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em] truncate">{facet.label}</span>
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] truncate">{facet.label}</span>
       <span className="ml-auto text-[8px] px-1.5 py-0.5 rounded-md uppercase font-black bg-[color:var(--bg-surface)] text-[color:var(--fg-muted)]">{facet.requiredPlan}</span>
     </div>
   );
@@ -54,7 +58,7 @@ function RangeRow({ facet }: { facet: RangeFacet }) {
   );
 }
 
-function BoolRow({ facet, dark }: { facet: BoolFacet; dark: boolean }) {
+function BoolRow({ facet }: { facet: BoolFacet }) {
   const { t } = useTranslation('filter');
   // Narrow selectors — each toggle subscribes only to its own bool slice.
   const v = useFilterStore((s) => s.state[facet.boolKey]);
@@ -63,18 +67,16 @@ function BoolRow({ facet, dark }: { facet: BoolFacet; dark: boolean }) {
     <button type="button"
       onClick={() => { setBool(facet.boolKey, !v); }}
       className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border transition-colors ${
-        v
-          ? (dark ? 'bg-[#4f9a5c]/15 border-[#4f9a5c]/40 text-white' : 'bg-[#4f9a5c]/15 border-[#4f9a5c]/50 text-black')
-          : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'
+        v ? SELECTED_CLASS : IDLE_CLASS
       }`}
     >
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em] truncate">{facet.label}</span>
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] truncate">{facet.label}</span>
       <span className={`text-[9px] font-mono ${v ? '' : 'opacity-50'}`}>{v ? t('toggle.on') : t('toggle.off')}</span>
     </button>
   );
 }
 
-function TriToggleRow({ facet, dark }: { facet: ToggleFacet; dark: boolean }) {
+function TriToggleRow({ facet }: { facet: ToggleFacet }) {
   const { t } = useTranslation('filter');
   const f = useFilter();
   // publicApiOnly is bool; others are tri-state (null/true/false)
@@ -84,11 +86,12 @@ function TriToggleRow({ facet, dark }: { facet: ToggleFacet; dark: boolean }) {
       <button type="button"
         onClick={() => { f.setPublicApiOnly(!v); }}
         className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border ${
-          v ? (dark ? 'bg-[#4f9a5c]/15 border-[#4f9a5c]/40 text-white' : 'bg-[#4f9a5c]/15 border-[#4f9a5c]/50 text-black')
+          v
+            ? SELECTED_CLASS
             : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)]'
         }`}
       >
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em]">{facet.label}</span>
+        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]">{facet.label}</span>
         <span className="text-[9px] font-mono">{v ? t('toggle.on') : t('toggle.off')}</span>
       </button>
     );
@@ -112,17 +115,17 @@ function TriToggleRow({ facet, dark }: { facet: ToggleFacet; dark: boolean }) {
       onClick={cycle}
       className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border transition-colors ${
         styleOn
-          ? (dark ? 'bg-white text-black border-white' : 'bg-black text-white border-black')
+          ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] border-[color:var(--fg-strong)]'
           : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'
       }`}
     >
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em] truncate">{facet.label}</span>
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] truncate">{facet.label}</span>
       <span className={`text-[9px] font-mono uppercase ${styleOn ? '' : 'opacity-50'}`}>{labelFor}</span>
     </button>
   );
 }
 
-function EnumRow({ facet, dark }: { facet: EnumFacet; dark: boolean }) {
+function EnumRow({ facet }: { facet: EnumFacet }) {
   const f = useFilter();
   const options =
     facet.enumKey === 'owners' ? f.repo.owners
@@ -139,7 +142,7 @@ function EnumRow({ facet, dark }: { facet: EnumFacet; dark: boolean }) {
   };
   return (
     <div className="mb-2">
-      <div className="text-[9px] font-bold uppercase tracking-[0.18em] mb-1.5 text-[color:var(--fg-subtle)]">
+      <div className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[color:var(--fg-subtle)]">
         {facet.label}
       </div>
       <div className="flex flex-wrap gap-1.5">
@@ -149,9 +152,9 @@ function EnumRow({ facet, dark }: { facet: EnumFacet; dark: boolean }) {
             <button type="button"
               key={o}
               onClick={() => { toggle(o); }}
-              className={`text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-1 rounded-md border transition-colors ${
+              className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] px-2 py-1 rounded-md border transition-colors ${
                 active
-                  ? (dark ? 'bg-white text-black border-white' : 'bg-black text-white border-black')
+                  ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] border-[color:var(--fg-strong)]'
                   : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'
               }`}
             >

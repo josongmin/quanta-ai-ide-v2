@@ -50,25 +50,25 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
     <div
       className="mt-2 rounded-md border overflow-hidden"
       style={{
-        borderColor: 'rgba(149,131,184,0.30)',
-        background: 'rgba(149,131,184,0.05)',
+        borderColor: 'color-mix(in srgb, var(--fg-accent) 30%, transparent)',
+        background: 'color-mix(in srgb, var(--fg-accent) 5%, transparent)',
       }}
     >
       <button
         type="button"
         onClick={() => { setOpen((v) => !v); }}
         aria-expanded={open}
-        className="w-full flex items-center gap-2 px-3 py-1.5 text-left hover:bg-white/[0.02] transition-colors"
+        className="w-full flex items-center gap-2 px-3 py-1.5 text-left hover:bg-[var(--bg-surface-muted)] transition-colors"
       >
         {open
-          ? <ChevronDown className="w-3 h-3 text-white/55" />
-          : <ChevronRight className="w-3 h-3 text-white/55" />}
-        <Wand2 className="w-3 h-3" style={{ color: '#c2b3e0' }} />
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/65">
+          ? <ChevronDown className="w-3 h-3 text-[var(--fg-muted)]" />
+          : <ChevronRight className="w-3 h-3 text-[var(--fg-muted)]" />}
+        <Wand2 className="w-3 h-3" style={{ color: 'var(--fg-accent)' }} />
+        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Suggested fix
         </span>
         <ProvenanceBadge kind={provenance} />
-        <span className="ml-auto text-[10px] font-mono text-white/35 tabular-nums">
+        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)] tabular-nums">
           {patch.added} +  ·  {patch.removed} −
         </span>
       </button>
@@ -78,22 +78,22 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
           {/* Patch body — monospace 2-column-ish layout: left gutter for line
               status, right area for code text. We don't use a real diff
               parser since the patch is already a structured array. */}
-          <div className="font-mono text-[11px] leading-[1.5] border-t border-white/[0.06]">
-            <div className="px-3 py-1 text-[10px] font-mono text-white/35 bg-white/[0.02]">
+          <div className="font-mono text-[11px] leading-[1.5] border-t border-[var(--border-default)]">
+            <div className="px-3 py-1 text-[10px] font-mono text-[var(--fg-subtle)] bg-[var(--bg-surface-muted)]">
               {finding.filePath}{finding.line !== null ? `:${String(finding.line)}` : ''}
             </div>
             {patch.lines.map((ln, i) => {
-              const tone = ln.kind === 'add' ? '#5fa86c'
-                : ln.kind === 'del' ? '#c25a55'
+              const tone = ln.kind === 'add' ? 'var(--intent-success-fg)'
+                : ln.kind === 'del' ? 'var(--intent-danger-fg)'
                 : 'transparent';
               const sign = ln.kind === 'add' ? '+'
                 : ln.kind === 'del' ? '-'
                 : ' ';
-              const textTone = ln.kind === 'add' ? '#9fd0a8'
-                : ln.kind === 'del' ? '#e8a8a4'
-                : 'rgba(255,255,255,0.55)';
-              const bg = ln.kind === 'add' ? 'rgba(95,168,108,0.06)'
-                : ln.kind === 'del' ? 'rgba(194,90,85,0.06)'
+              const textTone = ln.kind === 'add' ? 'var(--intent-success-fg)'
+                : ln.kind === 'del' ? 'var(--intent-danger-fg)'
+                : 'var(--fg-muted)';
+              const bg = ln.kind === 'add' ? 'var(--intent-success-bg)'
+                : ln.kind === 'del' ? 'var(--intent-danger-bg)'
                 : 'transparent';
               return (
                 <div key={i} className="flex items-stretch" style={{ background: bg }}>
@@ -112,22 +112,22 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
           {/* Why-safe rationale — pulled from finding.fixRationale when
               present, otherwise a generic note. We never invent rationales. */}
           {finding.fixRationale !== null && (
-            <div className="px-3 py-2 text-[11px] italic text-white/55 border-t border-white/[0.06]">
-              <span className="text-white/35 mr-1">why safe —</span>
+            <div className="px-3 py-2 text-[11px] italic text-[var(--fg-muted)] border-t border-[var(--border-default)]">
+              <span className="text-[var(--fg-subtle)] mr-1">why safe —</span>
               {finding.fixRationale}
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-2 px-3 py-2 border-t border-white/[0.06] bg-white/[0.015]">
+          <div className="flex items-center gap-2 px-3 py-2 border-t border-[var(--border-default)] bg-[var(--bg-surface-muted)]">
             <button
               type="button"
               onClick={() => { onApply?.(finding.id); }}
-              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[0.14em]"
+              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
               style={{
-                background: 'rgba(95,168,108,0.18)',
-                color: '#9fd0a8',
-                border: '1px solid rgba(95,168,108,0.45)',
+                background: 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)',
+                color: 'var(--intent-success-fg)',
+                border: '1px solid color-mix(in srgb, var(--intent-success-fg) 45%, transparent)',
               }}
             >
               <Check className="w-2.5 h-2.5" />
@@ -136,13 +136,13 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
             <button
               type="button"
               onClick={() => { onDismiss?.(finding.id); }}
-              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] text-white/55 hover:text-white/85 transition-colors"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }}
+              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-default)] transition-colors"
+              style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}
             >
               <X className="w-2.5 h-2.5" />
               Dismiss
             </button>
-            <span className="ml-auto text-[10px] font-mono text-white/30">
+            <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
               {finding.category}/{finding.rule}
             </span>
           </div>

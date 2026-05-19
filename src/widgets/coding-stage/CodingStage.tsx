@@ -1,30 +1,27 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { TaskRail } from './parts/chrome/TaskRail';
 import { type ComposerModelId } from './parts/Composer';
-import { sliceToHead } from './parts/timeline/TimelineScrubber';
 import { CommandPalette, type PaletteAction } from './parts/palette/CommandPalette';
 import { TurnContextMenu } from './parts/turn/TurnContextMenu';
 import { ACCENT_HEX, ThreadPane } from './parts/chrome/ThreadPane';
 import { ContextRail } from './parts/chrome/ContextRail';
-import { SAMPLE_PROJECTS, getSampleTasks } from './parts/data';
 import {
   buildTurnMenuItems,
-  deriveTitle,
   isModelId,
-  MODEL_PRICING,
   pickKeyword,
 } from './lib/codingStageHelpers';
+import { useTaskThread } from './lib/useTaskThread';
+import { useComposerState } from './lib/useComposerState';
+import { useBudgetChallenge } from './lib/useBudgetChallenge';
+import { useCommandPalette } from './lib/useCommandPalette';
 import type {
-  AgentBlock, AgentTurn, DiffBlock, Project, Task, Turn, UserTurn, ReactionKind,
+  AgentBlock, AgentTurn, Project, Task, UserTurn, ReactionKind,
 } from './parts/types';
 import {
-  candidatesFromFinding,
-  seedFromFinding,
   useVerifiedFixStore,
 } from '@features/verified-fix';
-import type { EngineFinding } from '@entities/pr';
 
 // Stable empty array so the `promptHistory[id] ?? []` fallback doesn't
 // allocate a fresh array reference on every render.
@@ -43,69 +40,48 @@ export default function CodingStage() {
   // case so the review-stage card has something to pick up.
   const seedVerifiedFix = useVerifiedFixStore((s) => s.seed);
 
-  // Demo fixtures live in coding.json under `demo.*`. Resolve once on mount
-  // so the rail title / chat thread / plans use the user's chosen locale.
-  const initialTasks = useMemo(() => getSampleTasks(t), [t]);
-  const [projects, setProjects] = useState<Project[]>(() => SAMPLE_PROJECTS);
-  const [tasks, setTasks] = useState<Task[]>(() => initialTasks);
-  const [activeId, setActiveId] = useState<string>(initialTasks[1]?.id ?? initialTasks[0]?.id ?? '');
-  const [intent, setIntent] = useState<'code' | 'ask'>('code');
-  const [draft, setDraft] = useState('');
+  // Thread / task / turn cluster — tasks, projects, active selection,
+  // derived view memos, the synthetic-stream registry and every thread
+  // mutation. The model-persist effect lives in useComposerState; this
+  // hook has no effects so it is order-neutral here.
+  const {
+    projects, setProjects,
+    tasks, setTasks,
+    activeId, setActiveId,
+    scrubHead, setScrubHead,
+    active,
+    activeProject,
+    isStreaming,
+    saveProjectDefaultModel,
+    applyInverseOf,
+    forkFrom,
+    toggleReaction,
+    visibleThread,
+    isScrubbed,
+    cost,
+    appendTurns,
+    stopStream,
+    runSyntheticAgent,
+  } = useTaskThread(t, seedVerifiedFix);
 
-  // Soft-cap modal state. null = no challenge; set = block-or-choose.
-  // The modal is shown when the user attempts to submit while cost
-  // already exceeds the project's soft cap. Pattern: ATM "you're about
-  // to overdraft" challenge — present 3 paths, never silent failure.
-  const [budgetChallenge, setBudgetChallenge] = useState<null | { used: number; cap: number; primary: ComposerModelId; downgrade: ComposerModelId }>(null);
-  // Per-task soft-cap override — once raised, that task's threshold is
-  // bumped to hardCap so the user can finish the work without being
-  // re-prompted on every turn.
-  const [softCapOverridden, setSoftCapOverridden] = useState<Record<string, boolean>>({});
+  // Composer-side input state: intent, draft, lifted+persisted model,
+  // side-by-side comparison model, and per-task prompt history. The
+  // model-persist `useEffect` fires from inside this hook.
+  const {
+    intent, setIntent,
+    draft, setDraft,
+    sideBySideModel,
+    model, setModel,
+    promptHistory, pushPromptHistory,
+  } = useComposerState();
 
-  // Side-by-side comparison model. null = single-model run; set =
-  // every onSubmit fires both `model` and `sideBySideModel` in parallel
-  // and the renderer pairs the two outputs in a 2-column grid so the
-  // user can pick the winner.
-  const [sideBySideModel] = useState<ComposerModelId | null>(null);
-
-  // Lifted model selection. Persists across task switches; per-project
-  // default applies on project change unless the user has overridden in
-  // the current session.
-  const [model, setModel] = useState<ComposerModelId>(() => {
-    if (typeof window === 'undefined') return 'claude-opus-4-7';
-    const raw = window.localStorage.getItem('coding:model');
-    if (isModelId(raw)) return raw;
-    return 'claude-opus-4-7';
-  });
-  useEffect(() => { window.localStorage.setItem('coding:model', model); }, [model]);
-
-  // Per-task prompt history for shell-style ↑↓ recall.
-  const [promptHistory, setPromptHistory] = useState<Record<string, string[]>>(() => {
-    if (typeof window === 'undefined') return {};
-    try {
-      const raw = window.localStorage.getItem('coding:prompt-history');
-      return raw != null ? JSON.parse(raw) as Record<string, string[]> : {};
-    } catch { return {}; }
-  });
-  const pushPromptHistory = useCallback((taskId: string, prompt: string) => {
-    setPromptHistory((cur) => {
-      const list = cur[taskId] ?? [];
-      if (list[list.length - 1] === prompt) return cur;
-      const next = [...list, prompt].slice(-50);
-      const merged = { ...cur, [taskId]: next };
-      try { window.localStorage.setItem('coding:prompt-history', JSON.stringify(merged)); } catch { /* fine */ }
-      return merged;
-    });
-  }, []);
-
-  // Time-travel scrubber preview state. null = live; otherwise the
-  // index of the turn the user has scrubbed back to. Composer locks
-  // while scrubbed (handled below).
-  const [scrubHead, setScrubHead] = useState<number | null>(null);
-
-  // Command palette + per-turn context menu state.
-  const [paletteOpen, setPaletteOpen] = useState(false);
-  const [turnMenu, setTurnMenu] = useState<{ x: number; y: number; turn: Turn } | null>(null);
+  // Soft-cap budget challenge + per-task override state. The
+  // submit-intercept and the 3-choice handlers stay below as composition
+  // glue (they close over onSubmitComposer / cost / model).
+  const {
+    budgetChallenge, setBudgetChallenge,
+    softCapOverridden, setSoftCapOverridden,
+  } = useBudgetChallenge();
 
   // A11y / density preferences. `prefers-contrast: more` hydrates the
   // initial value so OS pref users get high contrast for free. Density
@@ -124,20 +100,6 @@ export default function CodingStage() {
   useEffect(() => { window.localStorage.setItem('coding:highContrast', highContrast ? '1' : '0'); }, [highContrast]);
   useEffect(() => { window.localStorage.setItem('coding:density', density); }, [density]);
 
-  const active = useMemo(
-    () => tasks.find((task) => task.id === activeId) ?? tasks[0],
-    [tasks, activeId],
-  );
-  const activeProject = useMemo(
-    () => projects.find((p) => p.id === active?.projectId) ?? projects[0],
-    [projects, active],
-  );
-
-  const isStreaming = useMemo(
-    () => active?.thread.some((tn) => tn.role === 'agent' && tn.streaming) ?? false,
-    [active],
-  );
-
   // When the active project changes, mirror its `defaultModel` into the
   // lifted model state — unless the user has set a per-project override
   // in this session, which wins over the static project default.
@@ -154,151 +116,15 @@ export default function CodingStage() {
   }, [active?.projectId, active, projects]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  // Save the active model as a per-project default. Clicked from the
-  // Composer's model dropdown footer.
-  const saveProjectDefaultModel = useCallback((projectId: string, next: ComposerModelId) => {
-    window.localStorage.setItem(`coding:project-default-model:${projectId}`, next);
-    setProjects((cur) => cur.map((p) =>
-      p.id === projectId ? { ...p, defaultModel: next } : p,
-    ));
-  }, []);
-
-  // Recovery-engine: append a synthetic agent turn that *describes* the
-  // inverse of the targeted turn. History is preserved (audit trail),
-  // working state is what the user actually wanted. Replaces the old
-  // destructive `rewindTo`.
-  const applyInverseOf = useCallback((taskId: string, turnId: string) => {
-    // If a stream is in flight for this task, stop it first — appending
-    // an inverse while the targeted turn is still mid-stream would race.
-    // streamRef is keyed by turnId; iterate to find any entry that
-    // belongs to this task and clear it.
-    for (const [tid, entry] of streamRef.current) {
-      if (entry.taskId === taskId) {
-        window.clearTimeout(entry.timer);
-        streamRef.current.delete(tid);
-      }
-    }
-    setTasks((cur) => cur.map((task) => {
-      if (task.id !== taskId) return task;
-      const target = task.thread.find((tn) => tn.id === turnId);
-      if (target == null) return task;
-      if (target.role !== 'agent') return task;
-       
-      const invId = `inv-${Date.now().toString(36)}`;
-      const inverseTurn: AgentTurn = {
-        id: invId,
-        role: 'agent',
-        at: 'now',
-        streaming: false,
-        // Tag the inverse turn with the target id so the scrubber can
-        // draw an arrow back and the AgentTurnView can show an "inverse
-        // of …" anchor chip. Audit trail at-a-glance.
-        inverseOf: turnId,
-        blocks: [
-          { kind: 'text', text: `Inverse of turn #${task.thread.indexOf(target) + 1}.` },
-        ],
-      };
-      return { ...task, thread: [...task.thread, inverseTurn], timeAgo: 'now' };
-    }));
-  }, []);
-
-  // Fork creates a new task seeded with the thread up through `turnId`.
-  const forkFrom = useCallback((taskId: string, turnId: string) => {
-    const src = tasks.find((task) => task.id === taskId);
-    if (src == null) return;
-    const idx = src.thread.findIndex((tn) => tn.id === turnId);
-    if (idx < 0) return;
-
-    const id = `t-${Date.now().toString(36)}`;
-    const fork: Task = {
-      ...src, id,
-      title: `${src.title} · fork`,
-      branch: `${src.branch}-fork`,
-      timeAgo: 'now', status: 'open',
-      thread: src.thread.slice(0, idx + 1),
-    };
-    setTasks((cur) => [fork, ...cur]);
-    setActiveId(id);
-  }, [tasks]);
-
-  // Toggle a reaction on a specific agent turn. Reactions live on the
-  // turn so they persist across task switches.
-  const toggleReaction = useCallback((taskId: string, turnId: string, kind: ReactionKind) => {
-    setTasks((cur) => cur.map((task) => {
-      if (task.id !== taskId) return task;
-      return {
-        ...task,
-        thread: task.thread.map((tn) => {
-          if (tn.role !== 'agent' || tn.id !== turnId) return tn;
-          const curR = tn.reactions ?? {};
-          const reactions: NonNullable<AgentTurn['reactions']> = {};
-          for (const k of Object.keys(curR) as ReactionKind[]) {
-            if (k !== kind && curR[k]) reactions[k] = true;
-          }
-          if (!curR[kind]) reactions[kind] = true;
-          return { ...tn, reactions };
-        }),
-      };
-    }));
-  }, []);
-
-  // Annotate citations with `staleAfterTurn` so the renderer can flag
-  // citations whose file has been touched by a *later* turn.
-  const annotatedThread = useMemo(() => {
-    if (!active) return [];
-    const filesAfter = new Map<number, Set<string>>();
-    for (let i = 0; i < active.thread.length; i++) {
-      const accum = new Set<string>();
-      for (let j = i + 1; j < active.thread.length; j++) {
-        const tn = active.thread[j];
-        if (tn.role !== 'agent') continue;
-        for (const block of tn.blocks) {
-          if (block.kind === 'tool' && block.tool === 'edit') accum.add(block.label);
-          if (block.kind === 'diff') for (const f of block.files) accum.add(f.path);
-        }
-      }
-      filesAfter.set(i, accum);
-    }
-    return active.thread.map((tn, i) => {
-      if (tn.role !== 'agent' || !tn.citations) return tn;
-      const after = filesAfter.get(i) ?? new Set<string>();
-      const annotated = tn.citations.map((c) => {
-        if (after.has(c.path)) {
-          for (let j = i + 1; j < active.thread.length; j++) {
-            const lt = active.thread[j];
-            if (lt.role !== 'agent') continue;
-            const touches = lt.blocks.some((b) =>
-              (b.kind === 'tool' && b.tool === 'edit' && b.label === c.path)
-              || (b.kind === 'diff' && b.files.some((f) => f.path === c.path))
-            );
-            if (touches) return { ...c, staleAfterTurn: j };
-          }
-        }
-        return c;
-      });
-      return { ...tn, citations: annotated };
-    });
-  }, [active]);
-
-  const visibleThread = useMemo(
-    () => sliceToHead(annotatedThread, scrubHead),
-    [annotatedThread, scrubHead],
-  );
-  const isScrubbed = scrubHead !== null;
-
-  // Cumulative cost rollup with per-turn projection + budget escalation.
-  const cost = useMemo(() => {
-    if (!active) return { inTok: 0, outTok: 0, usd: 0, avgUsd: 0 };
-    let inTok = 0; let outTok = 0; let usd = 0; let agentTurnCount = 0;
-    for (const tn of active.thread) {
-      if (tn.role !== 'agent' || !tn.tokens) continue;
-      inTok += tn.tokens.in; outTok += tn.tokens.out;
-      const rate = MODEL_PRICING[tn.model ?? 'claude-opus-4-7'] ?? MODEL_PRICING['claude-opus-4-7'];
-      usd += (tn.tokens.in / 1_000_000) * rate.in + (tn.tokens.out / 1_000_000) * rate.out;
-      agentTurnCount += 1;
-    }
-    return { inTok, outTok, usd, avgUsd: agentTurnCount > 0 ? usd / agentTurnCount : 0 };
-  }, [active]);
+  // Command palette + per-turn context menu open state. The ⌘K
+  // capture-phase listener fires from inside this hook.
+  const {
+    paletteOpen,
+    turnMenu,
+    handleOpenTurnMenu,
+    handlePaletteClose,
+    handleTurnMenuClose,
+  } = useCommandPalette();
 
   // Window event bridge from Blocks (plan auto-advance + inline line edit).
   useEffect(() => {
@@ -321,145 +147,8 @@ export default function CodingStage() {
     };
   }, []);
 
-  // ⌘K toggles palette — capture phase so it wins over chat-agent's ⌘K.
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      const meta = e.metaKey || e.ctrlKey;
-      if (meta && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        e.stopPropagation();
-        setPaletteOpen((v) => !v);
-      }
-    }
-    window.addEventListener('keydown', onKey, true);
-    return () => { window.removeEventListener('keydown', onKey, true); };
-  }, []);
-
   // Compose new turn into the active thread. If the thread is empty we
   // also flip the task title so the rail shows something useful.
-  const appendTurns = useCallback((taskId: string, ...turns: Turn[]) => {
-    setTasks((cur) => cur.map((task) => {
-      if (task.id !== taskId) return task;
-      const titled = task.thread.length === 0 && turns[0]?.role === 'user'
-        ? deriveTitle((turns[0]).text)
-        : task.title;
-      return {
-        ...task,
-        thread: [...task.thread, ...turns],
-        title: titled,
-        timeAgo: 'now',
-        status: 'running',
-      };
-    }));
-  }, []);
-
-  // Build a synthetic EngineFinding from the agent's diff block and
-  // funnel it through the same fixtures pipeline the demo seeds use.
-  // The `rule` we pick determines which validation outcome bucket the
-  // mock engine will produce — so we choose deterministically based on
-  // diff size: tiny → console-usage (first-pass success), medium →
-  // edit-safety (post-critique success), large/api → public-surface
-  // (human checkpoint). That way a long agent run *feels* like a
-  // human-checkpoint candidate without us hard-coding it.
-  const seedVerifiedFixFromDiff = useCallback((taskId: string, diff: DiffBlock) => {
-    const totalChanged = diff.added + diff.removed;
-    const firstFile = diff.files[0];
-    if (firstFile === undefined) return;
-
-    const isApi = firstFile.path.includes('/api/') || firstFile.path.endsWith(".d.ts");
-    const rule = isApi ? 'public-surface'
-      : totalChanged > 80 ? 'edit-safety'
-      : 'console-usage';
-    const finding: EngineFinding = {
-      id: `coding-${taskId}-${String(Date.now())}`,
-      severity: rule === 'public-surface' ? 'medium' : rule === 'edit-safety' ? 'high' : 'low',
-      category: rule === 'public-surface' ? 'API' : rule === 'edit-safety' ? 'STRUCT-INTEGRITY' : 'STYLE',
-      rule,
-      title: `Agent edits to ${firstFile.path.split('/').pop() ?? firstFile.path}`,
-      body: `${String(diff.added)} additions, ${String(diff.removed)} removals across ${String(diff.files.length)} file${diff.files.length === 1 ? '' : 's'}.`,
-      filePath: firstFile.path,
-      fileId: null,
-      line: firstFile.hunks[0]?.startLine ?? null,
-      autoFixable: true,
-      fixRationale: rule === 'console-usage'
-        ? 'Mechanical replacement; tests cover all callsites.'
-        : null,
-    };
-    const seed = seedFromFinding(finding);
-    const candidates = candidatesFromFinding(seed, finding);
-    seedVerifiedFix(seed, candidates);
-  }, [seedVerifiedFix]);
-
-  const patchTurn = useCallback((taskId: string, turnId: string, patch: Partial<AgentTurn>) => {
-    setTasks((cur) => cur.map((task) => {
-      if (task.id !== taskId) return task;
-      return {
-        ...task,
-        thread: task.thread.map((tn) =>
-          tn.role === 'agent' && tn.id === turnId ? { ...tn, ...patch } : tn,
-        ),
-      };
-    }));
-  }, []);
-
-  // Synthesised streaming. Drops blocks into the agent turn over time so
-  // the demo "looks alive" without a real model. Cancellable via the stop
-  // button, which clears the pending interval and freezes the turn.
-  // Keyed by turnId so multiple in-flight turns (follow-up sent while a
-  // prior turn is still streaming) coexist without clobbering each other.
-  const streamRef = useRef<Map<string, { taskId: string; timer: number }>>(new Map());
-
-  const stopStream = useCallback(() => {
-    if (!active) return;
-    for (const [turnId, entry] of streamRef.current) {
-      if (entry.taskId !== active.id) continue;
-      window.clearTimeout(entry.timer);
-      patchTurn(entry.taskId, turnId, { streaming: false });
-      streamRef.current.delete(turnId);
-    }
-  }, [active, patchTurn]);
-
-  const runSyntheticAgent = useCallback((taskId: string, turnId: string, blocks: AgentBlock[]) => {
-    let i = 0;
-    const tick = () => {
-      if (i >= blocks.length) {
-        patchTurn(taskId, turnId, { streaming: false, elapsed: `${(blocks.length * 0.7).toFixed(1)}s`, tokens: { in: 1200 + blocks.length * 320, out: 300 + blocks.length * 110 } });
-        streamRef.current.delete(turnId);
-        // Mark task as review when stream ends with a diff, else open
-        const last = blocks[blocks.length - 1];
-        setTasks((cur) => cur.map((task) =>
-          task.id === taskId
-            ? { ...task, status: last?.kind === 'diff' ? 'review' : 'open' }
-            : task,
-        ));
-        // Verified-fix handoff: when the agent's last block is a diff,
-        // seed a fix case so the review-stage card has something to
-        // pick up. We don't blow away the curated demo fixtures — we
-        // just make the freshly-seeded case the active one.
-        if (last?.kind === 'diff') {
-          seedVerifiedFixFromDiff(taskId, last);
-        }
-        return;
-      }
-      const block = blocks[i++];
-      setTasks((cur) => cur.map((task) => {
-        if (task.id !== taskId) return task;
-        return {
-          ...task,
-          thread: task.thread.map((tn) =>
-            tn.role === 'agent' && tn.id === turnId
-              ? { ...tn, blocks: [...tn.blocks, block] }
-              : tn,
-          ),
-        };
-      }));
-      const delay = block.kind === 'thinking' ? 900 : block.kind === 'tool' ? 600 : 500;
-      const timer = window.setTimeout(tick, delay);
-      streamRef.current.set(turnId, { taskId, timer });
-    };
-    tick();
-  }, [patchTurn, seedVerifiedFixFromDiff]);
-
   // Synthetic agent response — extracted so single-model and
   // side-by-side paths share the same block sequence.
   function buildSyntheticResponse(trimmed: string): AgentBlock[] {
@@ -623,14 +312,9 @@ export default function CodingStage() {
   const handleReact = useCallback((turnId: string, kind: ReactionKind) => {
     if (activeId_ != null) toggleReaction(activeId_, turnId, kind);
   }, [activeId_, toggleReaction]);
-  const handleOpenTurnMenu = useCallback((x: number, y: number, turn: Turn) => {
-    setTurnMenu({ x, y, turn });
-  }, []);
-  const handlePaletteClose = useCallback(() => { setPaletteOpen(false); }, []);
   const handleJumpTask = useCallback((id: string) => { setActiveId(id); }, []);
   const handleInsertSlash = useCallback((cmd: string) => { setDraft(`${cmd} `); }, []);
   const handleTaskRailWidthChange = useCallback(() => { /* width control wiring pending */ }, []);
-  const handleTurnMenuClose = useCallback(() => { setTurnMenu(null); }, []);
   const handleBudgetStop = useCallback(() => { setBudgetChallenge(null); }, []);
   const handleBudgetAutoDowngrade = useCallback(() => {
     if (budgetChallenge == null) return;
@@ -679,7 +363,7 @@ export default function CodingStage() {
   // Match the Intelligence DotField canvas background (#0d1117) so the
   // coding workspace reads as the same blueprint surface, not a separate
   // black sheet. Light mode keeps the cool off-white pair.
-  const surface = isDark ? 'bg-[#0d1117]' : 'bg-[#f7f8fa]';
+  const surface = 'bg-[var(--bg-stage)]';
 
   return (
     <div
@@ -757,7 +441,6 @@ export default function CodingStage() {
           cap={budgetChallenge.cap}
           primary={budgetChallenge.primary}
           downgrade={budgetChallenge.downgrade}
-          isDark={isDark}
           t={t}
           onAutoDowngrade={handleBudgetAutoDowngrade}
           onOverride={handleBudgetOverride}
@@ -787,14 +470,13 @@ export default function CodingStage() {
 // default), raise cap (expert override), stop (no spend). Pattern:
 // AWS Budget threshold action + ATM overdraft warning.
 function BudgetSoftCapModal({
-  used, cap, primary, downgrade, isDark, t,
+  used, cap, primary, downgrade, t,
   onAutoDowngrade, onOverride, onStop,
 }: {
   used: number;
   cap: number;
   primary: ComposerModelId;
   downgrade: ComposerModelId;
-  isDark: boolean;
   t: (k: string, opts?: Record<string, unknown>) => string;
   onAutoDowngrade: () => void;
   onOverride: () => void;
@@ -807,9 +489,9 @@ function BudgetSoftCapModal({
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('keydown', onKey); };
   }, [onStop]);
-  const surface = isDark ? 'bg-[#11141a] border-white/[0.10]' : 'bg-white border-black/[0.10]';
-  const heading = isDark ? 'text-white/90' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
+  const surface = 'bg-[var(--bg-elevated)] border-[color:var(--border-default)]';
+  const heading = 'text-[color:var(--fg-strong)]';
+  const muted = 'text-[color:var(--fg-muted)]';
   const newCap = (cap * 2).toFixed(2);
   const estDown = (used + 0.18).toFixed(2);
   // Prettify model id for display.
@@ -819,7 +501,7 @@ function BudgetSoftCapModal({
       <button
         type="button"
         aria-label="Close dialog"
-        className={`absolute inset-0 cursor-default ${isDark ? 'bg-black/40' : 'bg-black/20'} backdrop-blur-sm`}
+        className="absolute inset-0 cursor-default bg-[color:var(--bg-scrim)] backdrop-blur-sm"
         onClick={onStop}
         onKeyDown={(e) => { if (e.key === 'Escape') onStop(); }}
       />
@@ -871,11 +553,7 @@ function BudgetSoftCapModal({
             <button
               type="button"
               onClick={onStop}
-              className={`w-full text-left px-3 py-2.5 rounded-md border transition-colors ${
-                isDark
-                  ? 'border-white/[0.10] hover:bg-white/[0.04] text-white/85'
-                  : 'border-black/[0.10] hover:bg-black/[0.04] text-black/85'
-              }`}
+              className="w-full text-left px-3 py-2.5 rounded-md border transition-colors border-[color:var(--border-default)] hover:bg-[color:var(--bg-hover)] text-[color:var(--fg-strong)]"
             >
               <div className="text-[12px] font-semibold">{t('budgetV2.softCapStop')}</div>
             </button>

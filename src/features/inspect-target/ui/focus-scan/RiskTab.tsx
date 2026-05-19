@@ -69,7 +69,7 @@ export function RiskTab({ file }: { file: FileRecord }) {
               {total}
             </div>
             <div
-              className="mt-1 text-[8px] font-black uppercase tracking-[0.18em]"
+              className="mt-1 text-[8px] font-black uppercase tracking-[var(--track-eyebrow)]"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {t('focus.filesUnit')}
@@ -85,7 +85,7 @@ export function RiskTab({ file }: { file: FileRecord }) {
 
         <div>
           <div
-            className="flex items-center gap-1.5 mb-1.5 text-[9px] font-black uppercase tracking-[0.18em]"
+            className="flex items-center gap-1.5 mb-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             <Radio className="w-2.5 h-2.5" />
@@ -201,7 +201,7 @@ function ChannelRow({
         ...(active ? { boxShadow: '0 0 0 1px var(--border-strong)' } : null),
       }}
     >
-      <span className="font-bold uppercase tracking-[0.18em] text-[9px]">{t(CHANNEL_LABEL_KEY[ch.key])}</span>
+      <span className="font-bold uppercase tracking-[var(--track-eyebrow)] text-[9px]">{t(CHANNEL_LABEL_KEY[ch.key])}</span>
       <div className="flex items-center gap-1.5">
         {ch.count > 0 ? (
           <>
@@ -274,7 +274,7 @@ function SeverityChip({ severity }: { severity: number }) {
       : { background: 'rgb(from var(--intent-success-fg) r g b / 0.20)', color: 'var(--intent-success-fg)' };
   return (
     <span
-      className="px-1.5 py-0.5 rounded-md font-mono text-[9px] uppercase tracking-[0.18em]"
+      className="px-1.5 py-0.5 rounded-md font-mono text-[9px] uppercase tracking-[var(--track-eyebrow)]"
       style={style}
     >
       {band} · {(severity * 100).toFixed(0)}%

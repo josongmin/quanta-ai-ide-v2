@@ -85,7 +85,7 @@ export function DismissModal({
             <div className="text-[12px] font-semibold" style={{ color: t.textHi }}>
               {candidate.title}
             </div>
-            <div className="text-[10.5px] mt-1" style={{ color: t.textFaint }}>
+            <div className="text-[var(--fs-sm)] mt-1" style={{ color: t.textFaint }}>
               {tr('dismissModal.feedbackHint')}
             </div>
           </div>
@@ -151,7 +151,7 @@ export function DismissModal({
               type="button"
               onClick={() => { onConfirm(reason, note); }}
               className="rounded px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-90 inline-flex items-center gap-1.5"
-              style={{ background: t.bad, color: t.isDark ? '#0d1117' : '#fff' }}
+              style={{ background: t.bad, color: 'var(--fg-on-accent)' }}
             >
               <Trash2 className="w-3 h-3" /> {tr('dismissModal.dismiss')}
             </button>

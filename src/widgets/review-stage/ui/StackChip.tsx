@@ -20,7 +20,7 @@ export default function StackChip({ info, dense = false }: { info: StackInfo; de
 
   return (
     <span
-      className="inline-flex items-center gap-1 font-mono tabular-nums text-[#9583b8]"
+      className="inline-flex items-center gap-1 font-mono tabular-nums text-[var(--fg-accent)]"
       style={{ fontSize: dense ? 10 : 11 }}
       title={`${info.stackKey} · ${String(info.position)} of ${String(info.total)}\n${tooltip}`}
     >

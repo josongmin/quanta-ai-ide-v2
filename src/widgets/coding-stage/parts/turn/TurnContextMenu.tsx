@@ -68,9 +68,7 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
     <div
       ref={ref}
       role="menu"
-      className={`fixed z-[60] min-w-[200px] py-1 rounded-md border shadow-2xl ${
-        isDark ? 'bg-[#11141a] border-white/[0.10]' : 'bg-white border-black/[0.10]'
-      }`}
+      className="fixed z-[60] min-w-[200px] py-1 rounded-md border shadow-2xl bg-[var(--bg-elevated)] border-[color:var(--border-default)]"
       style={isDark ? {
         left, top,
         backdropFilter: 'blur(22px) saturate(160%)',
@@ -85,13 +83,9 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
             type="button"
             role="menuitem"
             onClick={() => { item.onSelect(); onClose(); }}
-            className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left text-[12px] transition-colors ${
-              isDark
-                ? 'text-white/85 hover:bg-white/[0.06]'
-                : 'text-black/85 hover:bg-black/[0.04]'
-            }`}
+            className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left text-[12px] transition-colors text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
           >
-            <Icon className={`w-3 h-3 ${isDark ? 'text-white/45' : 'text-black/45'}`} />
+            <Icon className="w-3 h-3 text-[color:var(--fg-muted)]" />
             {item.label}
           </button>
         );

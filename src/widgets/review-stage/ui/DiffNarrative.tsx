@@ -62,9 +62,9 @@ export default function DiffNarrative({
     mismatch.detected ? 'mismatch'
     : summary.confidence < 0.55 ? 'uncertain'
     : 'aligned';
-  const verdictTone = verdict === 'mismatch' ? '#c25a55'
-    : verdict === 'uncertain' ? '#a8893a'
-    : '#5fa86c';
+  const verdictTone = verdict === 'mismatch' ? 'var(--intent-danger-fg)'
+    : verdict === 'uncertain' ? 'var(--intent-warn-fg)'
+    : 'var(--intent-success-fg)';
   const verdictLabel = verdict === 'mismatch' ? 'Description disagrees'
     : verdict === 'uncertain' ? 'Light description'
     : 'Description matches';
@@ -76,18 +76,18 @@ export default function DiffNarrative({
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(60% 100% at 100% 50%, ${verdictTone}1a 0%, transparent 65%)`,
+          background: `radial-gradient(60% 100% at 100% 50%, color-mix(in srgb, ${verdictTone} 10%, transparent) 0%, transparent 65%)`,
         }}
       />
       <div className="relative flex items-center gap-2 mb-3">
-        <GitCompare className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <GitCompare className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Claimed vs observed
         </span>
         <ProvenanceBadge kind="static" />
         <span
-          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
-          style={{ background: `${verdictTone}22`, color: verdictTone, border: `1px solid ${verdictTone}55` }}
+          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+          style={{ background: `color-mix(in srgb, ${verdictTone} 13%, transparent)`, color: verdictTone, border: `1px solid color-mix(in srgb, ${verdictTone} 33%, transparent)` }}
         >
           <VerdictIcon className="w-2.5 h-2.5" />
           {verdictLabel}
@@ -96,24 +96,24 @@ export default function DiffNarrative({
 
       <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Claimed column — author's intent */}
-        <div className="rounded-md border border-white/[0.06] p-3">
+        <div className="rounded-md border border-[var(--border-default)] p-3">
           <div className="flex items-center gap-1.5 mb-2">
-            <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45">
+            <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
               Claimed
             </span>
-            <span className="text-[9px] font-mono text-white/30">
+            <span className="text-[9px] font-mono text-[var(--fg-subtle)]">
               · from description
             </span>
           </div>
           {claimed.length === 0 ? (
-            <div className="text-[11px] italic text-white/35">
+            <div className="text-[11px] italic text-[var(--fg-subtle)]">
               No description provided — only the diff to go on.
             </div>
           ) : (
             <ul className="space-y-1">
               {claimed.map((c, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-[12px] text-white/70 leading-snug">
-                  <span className="shrink-0 text-white/30 mt-0.5">·</span>
+                <li key={i} className="flex items-start gap-1.5 text-[12px] text-[var(--fg-muted)] leading-snug">
+                  <span className="shrink-0 text-[var(--fg-subtle)] mt-0.5">·</span>
                   <span>{c}</span>
                 </li>
               ))}
@@ -122,18 +122,18 @@ export default function DiffNarrative({
         </div>
 
         {/* Observed column — derived from diff facts */}
-        <div className="rounded-md border border-white/[0.06] p-3">
+        <div className="rounded-md border border-[var(--border-default)] p-3">
           <div className="flex items-center gap-1.5 mb-2">
-            <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45">
+            <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
               Observed
             </span>
-            <span className="text-[9px] font-mono text-white/30">
+            <span className="text-[9px] font-mono text-[var(--fg-subtle)]">
               · derived from diff
             </span>
           </div>
           <ul className="space-y-1">
             {observed.map((o, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-[12px] text-white/70 leading-snug">
+              <li key={i} className="flex items-start gap-1.5 text-[12px] text-[var(--fg-muted)] leading-snug">
                 <span className="shrink-0 mt-0.5" style={{ color: verdictTone }}>▸</span>
                 <span dangerouslySetInnerHTML={{ __html: highlightInlineCode(o) }} />
               </li>
@@ -146,12 +146,12 @@ export default function DiffNarrative({
         <div
           className="relative mt-3 px-3 py-2 rounded-md text-[12px]"
           style={{
-            background: 'rgba(194,90,85,0.10)',
-            color: '#e88a85',
-            border: '1px solid rgba(194,90,85,0.40)',
+            background: 'var(--intent-danger-bg)',
+            color: 'var(--intent-danger-fg)',
+            border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 40%, transparent)',
           }}
         >
-          <span className="text-white/45 mr-1">heads up —</span>
+          <span className="text-[var(--fg-muted)] mr-1">heads up —</span>
           {mismatch.reason}
         </div>
       )}
@@ -191,7 +191,7 @@ function extractClaims(description: string): string[] {
 function highlightInlineCode(s: string): string {
   return escapeHtml(s).replace(
     /`([^`]+)`/g,
-    '<code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:rgba(255,255,255,0.06);padding:0 4px;border-radius:3px;color:rgba(255,255,255,0.85)">$1</code>',
+    '<code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:var(--bg-elevated);padding:0 4px;border-radius:3px;color:var(--fg-strong)">$1</code>',
   );
 }
 

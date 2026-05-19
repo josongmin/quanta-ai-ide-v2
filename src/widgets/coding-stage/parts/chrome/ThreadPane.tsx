@@ -71,10 +71,10 @@ export function ThreadPane({
   onOpenTurnMenu: (x: number, y: number, turn: Turn) => void;
   cost: { inTok: number; outTok: number; usd: number; avgUsd: number };
 }) {
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
-  const textMuted = isDark ? 'text-white/40' : 'text-black/55';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
+  const border = 'border-[color:var(--border-muted)]';
+  const textPrimary = 'text-[color:var(--fg-strong)]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const tailLen = task.thread[task.thread.length - 1]?.role === 'agent'
@@ -107,9 +107,9 @@ export function ThreadPane({
     <section className="flex-1 min-w-0 flex flex-col">
       <div className={`shrink-0 h-12 flex items-center justify-between px-5 border-b ${border}`}>
         <div className="flex items-center gap-2 min-w-0">
-          <ProjectChip project={project} isDark={isDark} />
+          <ProjectChip project={project} />
           <span className={textFaint}>/</span>
-          <StatusBadge status={task.status} isDark={isDark} />
+          <StatusBadge status={task.status} />
           <span className={`text-[13px] font-semibold truncate ${textPrimary}`}>
             {task.title}
           </span>
@@ -157,7 +157,7 @@ export function ThreadPane({
                     style={badge === t('budget.exceeded')
                       ? { borderColor: 'color-mix(in srgb, var(--intent-danger-vivid) 40%, transparent)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 10%, transparent)' }
                       : { borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 40%, transparent)', background: 'color-mix(in srgb, var(--intent-warn-vivid) 10%, transparent)' }}
-                    className="px-1 py-px rounded-sm text-[9px] font-bold uppercase tracking-[0.16em] border"
+                    className="px-1 py-px rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] border"
                   >{badge}</span>
                 )}
                 {cost.avgUsd > 0 && (
@@ -178,18 +178,14 @@ export function ThreadPane({
             <span className={textFaint}>← {task.baseBranch}</span>
           </span>
           <span className={textFaint}>·</span>
-          <button type="button" className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-mono transition-colors ${
-            isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
-          }`}>
+          <button type="button" className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]">
             <GitPullRequest className="w-3 h-3" />
             {t('header.openPr')}
           </button>
           <button
             type="button"
             aria-label="More options"
-            className={`p-1 rounded-md transition-colors ${
-              isDark ? 'text-white/40 hover:text-white/85 hover:bg-white/[0.05]' : 'text-black/40 hover:text-black/85 hover:bg-black/[0.05]'
-            }`}
+            className="p-1 rounded-md transition-colors text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
           >
             <MoreHorizontal className="w-3.5 h-3.5" />
           </button>
@@ -198,7 +194,7 @@ export function ThreadPane({
 
       <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto scrollbar-thin">
         {task.thread.length === 0 ? (
-          <EmptyState project={project} isDark={isDark} t={t} />
+          <EmptyState project={project} t={t} />
         ) : (
           <div className="max-w-[760px] mx-auto px-6 py-6 space-y-6">
             {visibleThread.map((turn) => (
@@ -245,7 +241,7 @@ export function ThreadPane({
 
       <div
         id="coding-composer"
-        className={`shrink-0 border-t ${border} ${isDark ? 'bg-[#0b0d10]/85 backdrop-blur' : 'bg-white'} ${
+        className={`shrink-0 border-t ${border} bg-[var(--bg-surface)] ${isDark ? 'backdrop-blur' : ''} ${
           isScrubbed ? 'opacity-60 pointer-events-none' : ''
         }`}
       >
@@ -273,7 +269,7 @@ export function ThreadPane({
   );
 }
 
-function ProjectChip({ project, isDark }: { project: Project; isDark: boolean }) {
+function ProjectChip({ project }: { project: Project }) {
   const accent = ACCENT_HEX[project.accent];
   return (
     <div className="flex items-center gap-1.5">
@@ -287,20 +283,18 @@ function ProjectChip({ project, isDark }: { project: Project; isDark: boolean })
       >
         {project.initial}
       </span>
-      <span className={`text-[12px] font-semibold ${isDark ? 'text-white/70' : 'text-black/70'}`}>
+      <span className="text-[12px] font-semibold text-[color:var(--fg-default)]">
         {project.name}
       </span>
     </div>
   );
 }
 
-function StatusBadge({ status, isDark }: { status: Task['status']; isDark: boolean }) {
-  const tone = isDark
-    ? 'text-white/70 bg-white/[0.06] border-white/[0.10]'
-    : 'text-black/65 bg-black/[0.05] border-black/[0.10]';
-  const dot = `${isDark ? 'bg-white/55' : 'bg-black/50'}${status === 'running' ? ' animate-pulse' : ''}`;
+function StatusBadge({ status }: { status: Task['status'] }) {
+  const tone = 'text-[color:var(--fg-default)] bg-[color:var(--bg-elevated)] border-[color:var(--border-default)]';
+  const dot = `bg-[color:var(--fg-muted)]${status === 'running' ? ' animate-pulse' : ''}`;
   return (
-    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-[10px] font-bold uppercase tracking-[0.18em] border ${tone}`}>
+    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] border ${tone}`}>
       <span className={`w-1 h-1 rounded-full ${dot}`} />
       {status}
     </span>
@@ -309,20 +303,16 @@ function StatusBadge({ status, isDark }: { status: Task['status']; isDark: boole
 
 function EmptyState({
   project,
-  isDark,
   t,
 }: {
   project: Project;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   const accent = ACCENT_HEX[project.accent];
-  const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
-  const textMuted = isDark ? 'text-white/40' : 'text-black/55';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
-  const card = isDark
-    ? 'bg-white/[0.02] hover:bg-white/[0.04] border-white/[0.06] hover:border-white/[0.12]'
-    : 'bg-black/[0.015] hover:bg-black/[0.03] border-black/[0.06] hover:border-black/[0.14]';
+  const textPrimary = 'text-[color:var(--fg-strong)]';
+  const textMuted = 'text-[color:var(--fg-muted)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
+  const card = 'bg-[color:var(--bg-surface-muted)] hover:bg-[color:var(--bg-hover)] border-[color:var(--border-muted)] hover:border-[color:var(--border-strong)]';
 
   const presets = [
     { key: 'fixFlaky', icon: Activity },

@@ -96,12 +96,12 @@ export function TimelineScrubber({
 
   if (turns.length < 2) return null;
 
-  const muted = isDark ? 'text-white/45' : 'text-black/50';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const bg = isDark ? 'bg-[#0b0d10]/85 backdrop-blur' : 'bg-white';
-  const trackBg = isDark ? 'bg-white/[0.05]' : 'bg-black/[0.05]';
-  const fillBg = isDark ? 'bg-white/35' : 'bg-black/45';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
+  const border = 'border-[color:var(--border-muted)]';
+  const bg = `bg-[var(--bg-surface)] ${isDark ? 'backdrop-blur' : ''}`;
+  const trackBg = 'bg-[color:var(--bg-hover)]';
+  const fillBg = 'bg-[color:var(--fg-subtle)]';
 
   const targetMeta = inverse ? metas[headSafe] : null;
   const canInverse = !!inverse && inverse.risk !== 'noop' && targetMeta?.role === 'agent';
@@ -109,7 +109,7 @@ export function TimelineScrubber({
   return (
     <div className={`flex flex-col gap-1 px-3 py-1.5 border-t ${border} ${bg}`}>
       <div className="flex items-center gap-2">
-        <span className={`shrink-0 text-[9px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+        <span className={`shrink-0 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
           {t('scrubber.label')}
         </span>
 
@@ -127,7 +127,6 @@ export function TimelineScrubber({
             <InverseArrows
               metas={metas}
               total={total}
-              isDark={isDark}
             />
             <div className="absolute inset-0 flex items-center justify-between">
               {metas.map((meta) => {
@@ -137,7 +136,6 @@ export function TimelineScrubber({
                   <Notch
                     key={meta.index}
                     meta={meta}
-                    isDark={isDark}
                     isHead={isHead}
                     past={past}
                     total={total}
@@ -163,9 +161,7 @@ export function TimelineScrubber({
           <button
             type="button"
             onClick={() => { onScrub(null); }}
-            className={`shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
-              isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.06]' : 'text-black/55 hover:text-black hover:bg-black/[0.06]'
-            }`}
+            className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
             title={t('scrubber.back')}
           >
             <ArrowLeft className="w-2.5 h-2.5" />
@@ -173,26 +169,24 @@ export function TimelineScrubber({
           </button>
         )}
 
-        <span className={`shrink-0 text-[8.5px] font-mono uppercase tracking-[0.18em] ${faint}`}>
+        <span className={`shrink-0 text-[length:var(--fs-2xs)] font-mono uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
           {t('scrubber.kbHint')}
         </span>
       </div>
 
       {canInverse && inverse && targetMeta && onApplyInverse && (
         <div
-          className={`flex items-center gap-2 px-2 py-1 rounded-md ${
-            isDark ? 'bg-white/[0.04]' : 'bg-black/[0.03]'
-          }`}
+          className="flex items-center gap-2 px-2 py-1 rounded-md bg-[color:var(--bg-surface-muted)]"
         >
           {inverse.risk === 'safe' ? (
-            <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.16em]"
-                  style={{ color: isDark ? '#5fc27a' : '#2f8a4a' }}>
+            <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+                  style={{ color: 'var(--intent-success-fg)' }}>
               <ShieldCheck className="w-2.5 h-2.5" />
               {t('scrubber.inverse.safe')}
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.16em]"
-                  style={{ color: isDark ? '#fde047' : '#a8893a' }}>
+            <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+                  style={{ color: 'var(--intent-warn-fg)' }}>
               <ShieldAlert className="w-2.5 h-2.5" />
               {t('scrubber.inverse.risky')}
             </span>
@@ -208,7 +202,7 @@ export function TimelineScrubber({
           {inverse.risk === 'risky' && (
             <span
               className="text-[9px] font-mono truncate"
-              style={{ color: isDark ? 'rgba(253,224,71,0.85)' : '#a8893a' }}
+              style={{ color: 'var(--intent-warn-fg)' }}
               title={inverse.overlappedFiles.join('\n')}
             >
               {t('scrubber.inverse.overlap', { n: inverse.overlappedFiles.length })}
@@ -227,7 +221,7 @@ export function TimelineScrubber({
                   background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)',
                   color: 'var(--intent-warn-fg)',
                 }}
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] transition-colors"
+            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
             title={t(
               inverse.risk === 'safe'
                 ? 'scrubber.inverse.applyTooltipSafe'
@@ -247,7 +241,6 @@ export function TimelineScrubber({
 
 type NotchProps = {
   meta: TurnMeta;
-  isDark: boolean;
   isHead: boolean;
   past: boolean;
   total: number;
@@ -256,7 +249,7 @@ type NotchProps = {
   t: (k: string, opts?: Record<string, unknown>) => string;
 };
 
-function Notch({ meta, isDark, isHead, past, total, maxCost, onClick, t }: NotchProps) {
+function Notch({ meta, isHead, past, total, maxCost, onClick, t }: NotchProps) {
   const [hover, setHover] = useState(false);
 
   const cost = approxCost(meta);
@@ -264,7 +257,7 @@ function Notch({ meta, isDark, isHead, past, total, maxCost, onClick, t }: Notch
     ? 6
     : 6 + Math.round((cost / maxCost) * 6);
 
-  const { fill, ring, glow } = dotStyle(meta.status, isHead, past, isDark);
+  const { fill, ring, glow } = dotStyle(meta.status, isHead, past);
   const showDiff = meta.added + meta.removed > 0;
   const isInverse = meta.inverseOfId != null;
 
@@ -298,14 +291,14 @@ function Notch({ meta, isDark, isHead, past, total, maxCost, onClick, t }: Notch
         <span
           className="absolute left-1/2 -translate-x-1/2 -top-1 px-1 rounded-sm text-[8px] font-mono leading-none whitespace-nowrap"
           style={{
-            background: isDark ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)',
-            color: isDark ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.85)',
-            border: `1px solid ${isDark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.10)'}`,
+            background: 'var(--bg-elevated)',
+            color: 'var(--fg-strong)',
+            border: '1px solid var(--border-default)',
           }}
         >
-          {meta.added > 0 && <span style={{ color: '#5fa86c' }}>+{meta.added}</span>}
+          {meta.added > 0 && <span style={{ color: 'var(--intent-success-fg)' }}>+{meta.added}</span>}
           {meta.added > 0 && meta.removed > 0 && ' '}
-          {meta.removed > 0 && <span style={{ color: '#d98a85' }}>−{meta.removed}</span>}
+          {meta.removed > 0 && <span style={{ color: 'var(--intent-danger-fg)' }}>−{meta.removed}</span>}
         </span>
       )}
 
@@ -316,7 +309,7 @@ function Notch({ meta, isDark, isHead, past, total, maxCost, onClick, t }: Notch
         <span
           className="absolute left-1/2 -translate-x-1/2 -bottom-2 text-[8px] leading-none"
           style={{
-            color: isDark ? '#fde047' : '#a8893a',
+            color: 'var(--intent-warn-fg)',
           }}
           aria-hidden
         >
@@ -324,7 +317,7 @@ function Notch({ meta, isDark, isHead, past, total, maxCost, onClick, t }: Notch
         </span>
       )}
 
-      {hover && <HoverCard meta={meta} isDark={isDark} t={t} />}
+      {hover && <HoverCard meta={meta} t={t} />}
     </button>
   );
 }
@@ -336,11 +329,10 @@ function Notch({ meta, isDark, isHead, past, total, maxCost, onClick, t }: Notch
 // that already sit above the dots. Stroke uses an amber tone consistent
 // with the inverse marker glyph rendered on the notch.
 function InverseArrows({
-  metas, total, isDark,
+  metas, total,
 }: {
   metas: TurnMeta[];
   total: number;
-  isDark: boolean;
 }) {
   // Build id→index lookup once. Anchored to metas identity so we don't
   // recompute on hover events that don't touch the array.
@@ -359,7 +351,7 @@ function InverseArrows({
   }, [metas]);
   void idToIndex;
 
-  const stroke = isDark ? '#fde047cc' : '#a8893acc';
+  const stroke = 'color-mix(in srgb, var(--intent-warn-fg) 80%, transparent)';
 
   // Resolve each inverse turn's target via inverseOfId. Look it up in
   // the master metas array by matching against the turn id stored in
@@ -463,12 +455,12 @@ function InverseArrows({
 }
 
 function HoverCard({
-  meta, isDark, t,
-}: { meta: TurnMeta; isDark: boolean; t: (k: string, opts?: Record<string, unknown>) => string }) {
-  const cardBg = isDark ? 'bg-[#11141a] border-white/[0.10]' : 'bg-white border-black/[0.10]';
-  const subText = isDark ? 'text-white/55' : 'text-black/55';
-  const headText = isDark ? 'text-white/85' : 'text-black/85';
-  const statusColor = statusFgColor(meta.status, isDark);
+  meta, t,
+}: { meta: TurnMeta; t: (k: string, opts?: Record<string, unknown>) => string }) {
+  const cardBg = 'bg-[var(--bg-elevated)] border-[color:var(--border-default)]';
+  const subText = 'text-[color:var(--fg-muted)]';
+  const headText = 'text-[color:var(--fg-strong)]';
+  const statusColor = statusFgColor(meta.status);
 
   const elapsedLabel = meta.elapsedMs == null
     ? null
@@ -483,7 +475,7 @@ function HoverCard({
       className={`pointer-events-none absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full px-2 py-1.5 rounded-md text-left whitespace-normal ${cardBg} border z-10 shadow-lg`}
       style={{ width: 220 }}
     >
-      <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.18em]" style={{ color: statusColor }}>
+      <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]" style={{ color: statusColor }}>
         {meta.role === 'user'
           ? <User className="w-2.5 h-2.5" />
           : <StatusIconFor status={meta.status} />}
@@ -495,7 +487,7 @@ function HoverCard({
         <span className={`ml-auto font-mono ${subText}`}>#{meta.index + 1}</span>
       </span>
 
-      <span className={`block mt-0.5 text-[10.5px] font-bold leading-snug ${headText}`}>
+      <span className={`block mt-0.5 text-[length:var(--fs-sm)] font-bold leading-snug ${headText}`}>
         {meta.shortTitle}
       </span>
 
@@ -504,7 +496,7 @@ function HoverCard({
           {meta.files.slice(0, 3).map((f) => (
             <span
               key={f}
-              className={`flex items-center gap-1 text-[9.5px] font-mono ${subText}`}
+              className={`flex items-center gap-1 text-[length:var(--fs-xs)] font-mono ${subText}`}
             >
               <FileText className="w-2.5 h-2.5 shrink-0" />
               <span className="truncate">{f}</span>
@@ -519,8 +511,7 @@ function HoverCard({
       )}
 
       {meta.role === 'agent' && (
-        <span className={`mt-1 pt-1 border-t flex items-center gap-1.5 text-[9px] font-mono ${subText}`}
-              style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }}>
+        <span className={`mt-1 pt-1 border-t border-[color:var(--border-default)] flex items-center gap-1.5 text-[9px] font-mono ${subText}`}>
           {meta.model && <span className="truncate">{meta.model}</span>}
           {elapsedLabel && (
             <>
@@ -556,28 +547,28 @@ function StatusIconFor({ status }: { status: TurnStatus }) {
   }
 }
 
-function statusFgColor(status: TurnStatus, isDark: boolean): string {
+function statusFgColor(status: TurnStatus): string {
   switch (status) {
-    case 'applied':   return isDark ? '#5fc27a' : '#2f8a4a';
-    case 'rejected':  return isDark ? '#d98a85' : '#a83a3f';
-    case 'failed':    return isDark ? '#d98a85' : '#a83a3f';
-    case 'planned':   return isDark ? '#7aa9d9' : '#3d7aae';
-    case 'suggested': return isDark ? '#fde047' : '#a8893a';
-    case 'streaming': return isDark ? '#22d3ee' : '#0e7490';
-    case 'thinking':  return isDark ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.55)';
-    case 'user':      return isDark ? 'rgba(255,255,255,0.78)' : 'rgba(0,0,0,0.78)';
+    case 'applied':   return 'var(--intent-success-fg)';
+    case 'rejected':  return 'var(--intent-danger-fg)';
+    case 'failed':    return 'var(--intent-danger-fg)';
+    case 'planned':   return 'var(--intent-info-fg)';
+    case 'suggested': return 'var(--intent-warn-fg)';
+    case 'streaming': return 'var(--intent-info-fg)';
+    case 'thinking':  return 'var(--fg-muted)';
+    case 'user':      return 'var(--fg-default)';
   }
 }
 
 function dotStyle(
-  status: TurnStatus, isHead: boolean, past: boolean, isDark: boolean,
+  status: TurnStatus, isHead: boolean, past: boolean,
 ): { fill: string; ring: string | null; glow: string | null } {
-  const baseFg = statusFgColor(status, isDark);
+  const baseFg = statusFgColor(status);
   const ring = isHead ? baseFg : null;
   const glow = isHead ? `0 0 8px ${baseFg}` : null;
   const fill = past
     ? baseFg
-    : (isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.16)');
+    : 'var(--fg-subtle)';
   return { fill, ring, glow };
 }
 

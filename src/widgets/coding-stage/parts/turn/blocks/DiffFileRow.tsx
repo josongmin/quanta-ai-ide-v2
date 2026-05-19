@@ -97,8 +97,8 @@ function FileRowImpl({
     }));
   }
   const expandable = file.hunks.length > 0;
-  const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
+  const textPrimary = 'text-[color:var(--fg-strong)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
 
   const acceptedCount = Object.values(decisions).filter((d) => d === 'accepted').length;
   const total = file.hunks.length;
@@ -109,7 +109,7 @@ function FileRowImpl({
         onClick={() => { if (expandable) setOpen((v) => !v); }}
         className={`w-full flex items-center justify-between gap-2 px-3 py-1.5 text-left transition-colors ${
           expandable
-            ? (isDark ? 'hover:bg-white/[0.025]' : 'hover:bg-black/[0.025]')
+            ? 'hover:bg-[color:var(--bg-hover)]'
             : ''
         }`}
       >
@@ -140,7 +140,7 @@ function FileRowImpl({
         <div className="flex items-center gap-2 text-[10px] font-mono shrink-0">
           <span style={{ color: 'var(--intent-success-vivid)' }}>+{file.added}</span>
           <span style={{ color: 'var(--intent-danger-vivid)' }}>−{file.removed}</span>
-          <DiffBar added={file.added} removed={file.removed} isDark={isDark} />
+          <DiffBar added={file.added} removed={file.removed} />
         </div>
       </button>
       {open && expandable && (
@@ -160,13 +160,9 @@ function FileRowImpl({
               : file.drift?.state === 'gone' ? '✕'
               : null;
             return (
-              <div key={key} className={`mt-1 rounded-md overflow-hidden border transition-opacity relative ${
-                isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'
-              } ${isRejected ? 'opacity-45' : ''}`}>
+              <div key={key} className={`mt-1 rounded-md overflow-hidden border transition-opacity relative border-[color:var(--border-muted)] ${isRejected ? 'opacity-45' : ''}`}>
                 <div
-                  className={`sticky top-0 z-10 flex items-center gap-2 px-2 py-1 text-[10px] font-mono ${
-                    isDark ? 'bg-[#0b0d10]/90 text-white/40 backdrop-blur' : 'bg-white text-black/55'
-                  }`}
+                  className={`sticky top-0 z-10 flex items-center gap-2 px-2 py-1 text-[10px] font-mono bg-[var(--bg-surface)] text-[color:var(--fg-muted)] ${isDark ? 'backdrop-blur' : ''}`}
                 >
                   {hunkDrifted && driftGlyph && (
                     <span
@@ -200,7 +196,7 @@ function FileRowImpl({
                     className={`p-0.5 rounded transition-colors ${
                       isAccepted
                         ? ''
-                        : (isDark ? 'text-white/30 hover:text-[var(--intent-success-fg)]' : 'text-black/30 hover:text-[var(--intent-success-fg)]')
+                        : 'text-[color:var(--fg-subtle)] hover:text-[var(--intent-success-fg)]'
                     }`}
                   >
                     <Check className="w-3 h-3" />
@@ -217,7 +213,7 @@ function FileRowImpl({
                     className={`p-0.5 rounded transition-colors ${
                       isRejected
                         ? ''
-                        : (isDark ? 'text-white/30 hover:text-[var(--intent-danger-fg)]' : 'text-black/30 hover:text-[var(--intent-danger-fg)]')
+                        : 'text-[color:var(--fg-subtle)] hover:text-[var(--intent-danger-fg)]'
                     }`}
                   >
                     <XCircle className="w-3 h-3" />
@@ -236,8 +232,8 @@ function FileRowImpl({
                     />
                   )}
                   {viewMode === 'unified'
-                    ? <UnifiedHunkBody hunk={hunk} isDark={isDark} />
-                    : <SplitHunkBody hunk={hunk} isDark={isDark} />
+                    ? <UnifiedHunkBody hunk={hunk} />
+                    : <SplitHunkBody hunk={hunk} />
                   }
                 </div>
                 <HunkCommentThread
@@ -249,7 +245,6 @@ function FileRowImpl({
                   onSubmit={(text, kind) => { addComment(key, text, kind); }}
                   onReply={(parentId, text) => { replyToComment(key, parentId, text); }}
                   onToggleResolve={(commentId) => { toggleResolve(key, commentId); }}
-                  isDark={isDark}
                   t={t}
                 />
               </div>

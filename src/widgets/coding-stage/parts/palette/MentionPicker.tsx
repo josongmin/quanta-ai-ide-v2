@@ -89,9 +89,7 @@ export function MentionPicker({
 
   return (
     <div
-      className={`absolute bottom-[calc(100%+8px)] left-0 right-0 rounded-xl border shadow-2xl overflow-hidden ${
-        isDark ? 'border-white/[0.10] bg-[#0f1218]/95' : 'border-black/[0.10] bg-white/95'
-      }`}
+      className="absolute bottom-[calc(100%+8px)] left-0 right-0 rounded-xl border shadow-2xl overflow-hidden border-[color:var(--border-default)] bg-[var(--bg-elevated)]"
       style={isDark ? {
         backdropFilter: 'blur(22px) saturate(160%)',
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
@@ -99,33 +97,29 @@ export function MentionPicker({
       role="listbox"
       aria-label={headerLabel}
     >
-      <div className={`flex items-center justify-between px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] ${
-        isDark ? 'text-white/40 bg-white/[0.02]' : 'text-black/40 bg-black/[0.02]'
-      }`}>
+      <div className="flex items-center justify-between px-3 py-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-subtle)] bg-[color:var(--bg-surface-muted)]">
         <span className="flex items-center gap-1">
           <HeaderIcon className="w-2.5 h-2.5" />
           {headerLabel}
         </span>
-        <span className={`font-mono normal-case tracking-normal ${
-          isDark ? 'text-white/30' : 'text-black/35'
-        }`}>
+        <span className="font-mono normal-case tracking-normal text-[color:var(--fg-subtle)]">
           {t('mention.hint')}
         </span>
       </div>
       {items.length === 0 ? (
-        <div className={`px-3 py-3 text-[11px] ${isDark ? 'text-white/40' : 'text-black/45'}`}>
+        <div className="px-3 py-3 text-[11px] text-[color:var(--fg-subtle)]">
           {t('mention.empty')}
           <button
             type="button"
             onClick={onClose}
-            className={`ml-2 underline ${isDark ? 'text-white/55' : 'text-black/55'}`}
+            className="ml-2 underline text-[color:var(--fg-muted)]"
           >
             esc
           </button>
         </div>
       ) : (
         <div
-          className={isDark ? 'divide-y divide-white/[0.04]' : 'divide-y divide-black/[0.04]'}
+          className="divide-y divide-[color:var(--border-muted)]"
         >
           {items.map((item, i) => {
             const active = i === index;
@@ -143,24 +137,20 @@ export function MentionPicker({
                 onClick={() => { onPick(item); }}
                 className={`w-full text-left px-3 py-1.5 flex items-center gap-2.5 transition-colors ${
                   active
-                    ? (isDark ? 'bg-white/[0.06]' : 'bg-black/[0.04]')
-                    : (isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-black/[0.02]')
+                    ? 'bg-[color:var(--bg-hover)]'
+                    : 'hover:bg-[color:var(--bg-surface-muted)]'
                 }`}
               >
-                <span className={`shrink-0 ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+                <span className="shrink-0 text-[color:var(--fg-subtle)]">
                   {item.kind === 'file'
                     ? <FileCode className="w-3 h-3" />
                     : <AtSign className="w-3 h-3" />}
                 </span>
-                <span className={`font-mono text-[12px] truncate ${
-                  isDark ? 'text-white/85' : 'text-black/85'
-                }`}>
+                <span className="font-mono text-[12px] truncate text-[color:var(--fg-strong)]">
                   {label}
                 </span>
                 {sub && (
-                  <span className={`ml-auto font-mono text-[10px] truncate max-w-[55%] ${
-                    isDark ? 'text-white/35' : 'text-black/40'
-                  }`}>
+                  <span className="ml-auto font-mono text-[10px] truncate max-w-[55%] text-[color:var(--fg-subtle)]">
                     {sub}
                   </span>
                 )}

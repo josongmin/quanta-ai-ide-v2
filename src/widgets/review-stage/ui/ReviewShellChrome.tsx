@@ -36,20 +36,20 @@ export function EngineFindingsPanel({
   const accentTone = summary.blocker > 0 ? severityColors.blocker
     : summary.high > 0 ? severityColors.high
       : summary.medium > 0 ? severityColors.medium
-        : '#5fa86c';
+        : 'var(--intent-success-fg)';
 
   return (
-    <div className="shrink-0 border-b border-white/[0.06]">
+    <div className="shrink-0 border-b border-[var(--border-default)]">
       <button
         type="button"
         onClick={() => { setExpanded((v) => !v); }}
-        className="w-full px-3 py-2 flex items-center gap-2 text-left hover:bg-white/[0.02] transition-colors"
+        className="w-full px-3 py-2 flex items-center gap-2 text-left hover:bg-[var(--bg-surface-muted)] transition-colors"
       >
         <ShieldAlert
           className="w-3.5 h-3.5 shrink-0"
           style={{ color: accentTone }}
         />
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 shrink-0">
+        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] shrink-0">
           Engine
         </span>
         <span className="flex items-center gap-1.5 ml-auto text-[10px] font-mono">
@@ -59,13 +59,13 @@ export function EngineFindingsPanel({
           <SevCount n={summary.low} color={severityColors.low} />
         </span>
         <ChevronRight
-          className={`w-3 h-3 shrink-0 text-white/40 transition-transform ${expanded ? 'rotate-90' : ''}`}
+          className={`w-3 h-3 shrink-0 text-[var(--fg-subtle)] transition-transform ${expanded ? 'rotate-90' : ''}`}
         />
       </button>
       {expanded && (
         <div className="max-h-[260px] overflow-auto px-2 pb-2 space-y-1">
           {findings.length === 0 ? (
-            <div className="px-2 py-3 text-[11px] italic text-white/35">
+            <div className="px-2 py-3 text-[11px] italic text-[var(--fg-subtle)]">
               No findings.
             </div>
           ) : (
@@ -74,17 +74,17 @@ export function EngineFindingsPanel({
                 key={f.id}
                 type="button"
                 onClick={onJumpToFinding}
-                className="w-full text-left px-2 py-1.5 rounded hover:bg-white/[0.04] transition-colors flex items-start gap-2"
+                className="w-full text-left px-2 py-1.5 rounded hover:bg-[var(--bg-hover)] transition-colors flex items-start gap-2"
               >
                 <span
                   className="shrink-0 mt-0.5 inline-block w-1.5 h-1.5 rounded-full"
                   style={{ background: severityColors[f.severity] }}
                 />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[11px] font-bold text-white/80 leading-snug truncate">
+                  <span className="block text-[11px] font-bold text-[var(--fg-default)] leading-snug truncate">
                     {f.title}
                   </span>
-                  <span className="block text-[10px] font-mono text-white/35 truncate">
+                  <span className="block text-[10px] font-mono text-[var(--fg-subtle)] truncate">
                     {f.category}/{f.rule}
                   </span>
                 </span>
@@ -95,7 +95,7 @@ export function EngineFindingsPanel({
             <button
               type="button"
               onClick={onJumpToFinding}
-              className="w-full mt-1 px-2 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] rounded text-white/55 hover:text-white/85 hover:bg-white/[0.04] transition-colors flex items-center justify-center gap-1"
+              className="w-full mt-1 px-2 py-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] rounded text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors flex items-center justify-center gap-1"
             >
               View in spine
               <ArrowUpRight className="w-2.5 h-2.5" />
@@ -109,7 +109,7 @@ export function EngineFindingsPanel({
 
 function SevCount({ n, color }: { n: number; color: string }) {
   if (n === 0) {
-    return <span className="text-white/20">·</span>;
+    return <span className="text-[var(--fg-subtle)]">·</span>;
   }
   return (
     <span
@@ -128,8 +128,8 @@ export function AmbientLayer() {
       className="absolute inset-0 pointer-events-none"
       style={{
         background: `
-          radial-gradient(1200px 700px at -10% -10%, rgba(79,154,92,0.04), transparent 60%),
-          radial-gradient(1100px 600px at 110% 0%, rgba(122,167,212,0.03), transparent 60%)
+          radial-gradient(1200px 700px at -10% -10%, color-mix(in srgb, var(--intent-success-fg) 4%, transparent), transparent 60%),
+          radial-gradient(1100px 600px at 110% 0%, color-mix(in srgb, var(--fg-link) 3%, transparent), transparent 60%)
         `,
       }}
     />
@@ -175,15 +175,15 @@ export function StatusBar({
   const toneColor = (tone?: 'block' | 'warn' | 'ok'): string =>
     tone === 'block' ? severityColors.blocker
       : tone === 'warn' ? severityColors.medium
-        : tone === 'ok' ? '#5fa86c'
+        : tone === 'ok' ? 'var(--intent-success-fg)'
           : 'var(--fg-default)';
 
   return (
     <div
-      className="shrink-0 h-7 flex items-center gap-4 px-3 border-b border-white/[0.06]"
+      className="shrink-0 h-7 flex items-center gap-4 px-3 border-b border-[var(--border-default)]"
       style={{ backgroundColor: 'var(--bg-surface)' }}
     >
-      <span className="text-[10px] font-semibold tracking-[0.08em] uppercase text-white/70">
+      <span className="text-[10px] font-semibold tracking-[0.08em] uppercase text-[var(--fg-muted)]">
         Review
       </span>
       {items.map((it) => (
@@ -194,12 +194,12 @@ export function StatusBar({
           >
             {it.value}
           </span>
-          <span className="text-[10px] text-white/45 lowercase">
+          <span className="text-[10px] text-[var(--fg-muted)] lowercase">
             {it.label}
           </span>
         </span>
       ))}
-      <span className="ml-auto text-[10px] font-mono text-white/35">@{viewerLogin}</span>
+      <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">@{viewerLogin}</span>
     </div>
   );
 }

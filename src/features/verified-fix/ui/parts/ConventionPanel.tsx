@@ -46,17 +46,17 @@ export function ConventionPanel({ candidate }: { candidate: CandidateFix }) {
                 <Icon className="w-3 h-3 mt-0.5 shrink-0" style={{ color: c.fg }} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10.5px] font-bold" style={{ color: t.textHi }}>
+                    <span className="text-[var(--fs-sm)] font-bold" style={{ color: t.textHi }}>
                       {o.label}
                     </span>
                     <span
-                      className="text-[8.5px] font-bold uppercase tracking-[0.14em] px-1 py-px rounded"
+                      className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.14em] px-1 py-px rounded"
                       style={{ background: c.bg, color: c.fg }}
                     >
                       {tr(`proof.status.${o.status}`)}
                     </span>
                   </div>
-                  <div className="text-[10.5px] mt-0.5" style={{ color: t.textMuted }}>
+                  <div className="text-[var(--fs-sm)] mt-0.5" style={{ color: t.textMuted }}>
                     {o.detail}
                   </div>
                 </div>
@@ -70,7 +70,7 @@ export function ConventionPanel({ candidate }: { candidate: CandidateFix }) {
         className="mt-3 pt-3 border-t flex flex-wrap gap-1.5"
         style={{ borderColor: t.borderHair }}
       >
-        <span className="text-[8.5px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
+        <span className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
           {tr('convention.benchmarkedAgainst')}
         </span>
         {(['neighboringImports', 'siblingErrorPatterns', 'namingConvention', 'lintFormatRules'] as const).map((src) => (

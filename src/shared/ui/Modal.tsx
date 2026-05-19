@@ -47,7 +47,7 @@ export function Modal({
   return createPortal(
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-[var(--z-modal)] flex justify-center p-4 sm:p-6 bg-black/40 backdrop-blur-sm ${justify}`}
+      className={`fixed inset-0 z-[var(--z-modal)] flex justify-center p-4 sm:p-6 bg-[var(--bg-scrim)] backdrop-blur-sm ${justify}`}
       onClick={onClose}
     >
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- stops propagation so backdrop click does not dismiss; dialog focus/keyboard handled by useDialogA11y */}

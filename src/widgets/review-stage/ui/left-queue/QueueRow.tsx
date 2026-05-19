@@ -1,5 +1,17 @@
-// QueueRow — refined row matching the screenshot.
-//
+import { useEffect, useState, type DragEvent } from 'react';
+import {
+  AlertTriangle, Check, GitMerge, GripVertical, MessageSquare, Pin,
+} from 'lucide-react';
+import { findPerson } from '@entities/pr';
+import { authorAvatarColor, shortAge } from './styling';
+import { StateLabel } from './StateLabel';
+import { SignalChip, CiChip } from './SignalChip';
+import type { Annotated } from './types';
+
+// ─────────────────────────────────────────────────────────────────────────
+// 5. QueueRow — refined row matching the screenshot
+// ─────────────────────────────────────────────────────────────────────────
+
 // Information design grounded in PR-review research:
 //
 //   • Sadowski et al. (Google ICSE 2018) — "Modern Code Review at Google":
@@ -25,16 +37,6 @@
 //     필요" / "approved" / "draft" / "팀 대기" — telling the reviewer
 //     in plain language what the PR wants from them.
 //   • Signal chips render only when non-zero (low noise floor).
-
-import { useEffect, useState, type DragEvent } from 'react';
-import { AlertTriangle, Check, GitMerge, GripVertical, MessageSquare, Pin } from 'lucide-react';
-import { findPerson } from '@entities/pr';
-import { authorAvatarColor } from './repo-color';
-import { shortAge } from './helpers';
-import { SignalChip, CiChip } from './SignalChip';
-import { StateLabel } from './StateLabel';
-import type { Annotated } from './types';
-
 export function QueueRow({
   ann, active, pinned,
   isDragging = false, isDropTarget = false,
@@ -84,15 +86,15 @@ export function QueueRow({
   let railTone: string | null = null;
   if (pr.status === 'closed' || pr.status === 'merged' || pr.status === 'draft') {
     railTone = null;
-  } else if (engine.blocker > 0)        railTone = '#c25a55';
-  else if (ci.required.failed > 0)      railTone = '#c25a55';
-  else if (pr.hasConflicts)             railTone = '#c25a55';
-  else if (ageBucket === 'stale')       railTone = '#c25a55';
-  else if (risk.tier === 'critical')    railTone = '#c25a55';
-  else if (needsReReview)               railTone = '#a8893a';
-  else if (engine.high > 0)             railTone = '#a8893a';
-  else if (risk.tier === 'attention')   railTone = '#a8893a';
-  else if (ageBucket === 'aging')       railTone = '#a8893a';
+  } else if (engine.blocker > 0)        railTone = 'var(--intent-danger-fg)';
+  else if (ci.required.failed > 0)      railTone = 'var(--intent-danger-fg)';
+  else if (pr.hasConflicts)             railTone = 'var(--intent-danger-fg)';
+  else if (ageBucket === 'stale')       railTone = 'var(--intent-danger-fg)';
+  else if (risk.tier === 'critical')    railTone = 'var(--intent-danger-fg)';
+  else if (needsReReview)               railTone = 'var(--intent-warn-fg)';
+  else if (engine.high > 0)             railTone = 'var(--intent-warn-fg)';
+  else if (risk.tier === 'attention')   railTone = 'var(--intent-warn-fg)';
+  else if (ageBucket === 'aging')       railTone = 'var(--intent-warn-fg)';
 
   // CI rollup. running > failed > passed > none. Reviewers want to
   // see "fail" loudly, "pass" quietly (default expectation), and
@@ -176,7 +178,7 @@ export function QueueRow({
         {/* Row 1: title #N · age (right) */}
         <div className="flex items-baseline gap-1.5 min-w-0">
           <span
-            className={`text-[12.5px] leading-snug truncate ${active ? 'font-semibold' : 'font-medium'}`}
+            className={`text-[var(--fs-md)] leading-snug truncate ${active ? 'font-semibold' : 'font-medium'}`}
             style={{ color: 'var(--fg-default)' }}
           >
             {pr.title}
@@ -190,8 +192,8 @@ export function QueueRow({
           <span
             className="ml-auto shrink-0 text-[10px] font-mono tabular-nums"
             style={{
-              color: ageBucket === 'stale' ? '#c25a55'
-                : ageBucket === 'aging' ? '#a8893a'
+              color: ageBucket === 'stale' ? 'var(--intent-danger-fg)'
+                : ageBucket === 'aging' ? 'var(--intent-warn-fg)'
                 : 'var(--fg-subtle)',
             }}
             title={ageBucket === 'stale'
@@ -207,7 +209,7 @@ export function QueueRow({
             Order = decision priority. State chip uses tier+myState
             to render the clearest "what does this want from me?" word. */}
         <div
-          className="mt-1 flex items-center gap-2 text-[10.5px] min-w-0"
+          className="mt-1 flex items-center gap-2 text-[var(--fs-sm)] min-w-0"
           style={{ color: 'var(--fg-subtle)' }}
         >
           <StateLabel
@@ -218,7 +220,7 @@ export function QueueRow({
           />
           {engine.blocker > 0 && (
             <SignalChip
-              tone="#c25a55"
+              tone="var(--intent-danger-fg)"
               icon={<AlertTriangle className="w-2.5 h-2.5" strokeWidth={2.5} />}
               label={String(engine.blocker)}
               title={`${String(engine.blocker)} blocker finding${engine.blocker === 1 ? '' : 's'}`}
@@ -227,7 +229,7 @@ export function QueueRow({
           {ciState !== 'none' && <CiChip state={ciState} ci={ci} />}
           {pr.hasConflicts && (
             <SignalChip
-              tone="#c25a55"
+              tone="var(--intent-danger-fg)"
               icon={<GitMerge className="w-2.5 h-2.5" strokeWidth={2.5} />}
               label="conflict"
               title="merge conflicts — resolve before review"
@@ -240,7 +242,7 @@ export function QueueRow({
           {reviewerCount >= 2 && approvedCount > 0 && (
             <span
               className="inline-flex items-center gap-1 font-mono tabular-nums"
-              style={{ color: approvedCount === reviewerCount ? '#5fa86c' : 'var(--fg-muted)' }}
+              style={{ color: approvedCount === reviewerCount ? 'var(--intent-success-fg)' : 'var(--fg-muted)' }}
               title={`${String(approvedCount)} of ${String(reviewerCount)} reviewers approved`}
             >
               <Check className="w-2.5 h-2.5" strokeWidth={2.5} />
@@ -270,7 +272,7 @@ export function QueueRow({
             <Pin
               className="w-2.5 h-2.5"
               strokeWidth={2}
-              style={pinned ? { color: '#7d6db5', fill: '#7d6db5' } : { color: 'var(--fg-muted)' }}
+              style={pinned ? { color: 'var(--fg-accent)', fill: 'var(--fg-accent)' } : { color: 'var(--fg-muted)' }}
             />
           </button>
         </div>
@@ -278,7 +280,3 @@ export function QueueRow({
     </div>
   );
 }
-
-// Re-export risk type so users can use `useState` annotations.
-// (Originally defined inline in LeftQueue.tsx; kept here for type narrowing
-// the same way QueueRow's `ann.risk` flows out.)

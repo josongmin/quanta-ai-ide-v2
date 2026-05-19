@@ -82,21 +82,19 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <Activity className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <Activity className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Review timeline
         </span>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {events.length} events · {fmtFromTo}
         </span>
         <span
-          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
+          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
           style={{
-            background: isStuck.tone === '#5fa86c' ? 'rgba(95,168,108,0.16)'
-              : isStuck.tone === '#a8893a' ? 'rgba(168,137,58,0.18)'
-              : 'rgba(194,90,85,0.16)',
+            background: `color-mix(in srgb, ${isStuck.tone} 16%, transparent)`,
             color: isStuck.tone,
-            border: `1px solid ${isStuck.tone}55`,
+            border: `1px solid color-mix(in srgb, ${isStuck.tone} 33%, transparent)`,
           }}
         >
           {isStuck.label}
@@ -104,8 +102,8 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
       </div>
 
       <div
-        className="rounded-md border border-white/[0.06] overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.015)' }}
+        className="rounded-md border border-[var(--border-default)] overflow-hidden"
+        style={{ background: 'var(--bg-surface-muted)' }}
       >
         <svg
           viewBox={`0 0 ${String(PANEL_W)} ${String(PANEL_H)}`}
@@ -125,14 +123,14 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
                   y={yTop}
                   width={PANEL_W}
                   height={LANE_H}
-                  fill={idx % 2 === 0 ? 'rgba(255,255,255,0.015)' : 'transparent'}
+                  fill={idx % 2 === 0 ? 'var(--bg-surface-muted)' : 'transparent'}
                 />
                 <line
                   x1={LEFT_PAD - 6}
                   y1={yTop + LANE_H}
                   x2={PANEL_W - RIGHT_PAD}
                   y2={yTop + LANE_H}
-                  stroke="rgba(255,255,255,0.04)"
+                  stroke="var(--border-muted)"
                   strokeWidth={1}
                 />
                 <text
@@ -144,7 +142,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
                   fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
                   fontWeight={700}
                   letterSpacing="0.14em"
-                  fill={dim ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.55)'}
+                  fill={dim ? 'var(--fg-subtle)' : 'var(--fg-muted)'}
                 >
                   {lane.label.toUpperCase()}
                 </text>
@@ -158,7 +156,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
             y1={TOP_PAD - 4}
             x2={PANEL_W - RIGHT_PAD}
             y2={PANEL_H - BOT_PAD + 4}
-            stroke="rgba(255,255,255,0.10)"
+            stroke="var(--border-strong)"
             strokeWidth={1}
             strokeDasharray="2 3"
           />
@@ -168,7 +166,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
             textAnchor="end"
             fontSize={8.5}
             fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
-            fill="rgba(255,255,255,0.35)"
+            fill="var(--fg-subtle)"
           >
             now
           </text>
@@ -205,7 +203,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
             y={PANEL_H - BOT_PAD + 12}
             fontSize={8.5}
             fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
-            fill="rgba(255,255,255,0.35)"
+            fill="var(--fg-subtle)"
           >
             {fmtDate(t0)}
           </text>
@@ -215,7 +213,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
             textAnchor="middle"
             fontSize={8.5}
             fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
-            fill="rgba(255,255,255,0.35)"
+            fill="var(--fg-subtle)"
           >
             {fmtDate((t0 + t1) / 2)}
           </text>
@@ -225,7 +223,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
             textAnchor="end"
             fontSize={8.5}
             fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
-            fill="rgba(255,255,255,0.35)"
+            fill="var(--fg-subtle)"
           >
             {fmtDate(t1)}
           </text>
@@ -233,7 +231,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
       </div>
 
       {/* Legend — lane density chips */}
-      <div className="mt-3 flex items-center gap-3 flex-wrap text-[10px] font-mono text-white/45">
+      <div className="mt-3 flex items-center gap-3 flex-wrap text-[10px] font-mono text-[var(--fg-muted)]">
         {LANE_DEF.map((lane) => {
           const c = densityByLane[lane.key];
           const dim = c === 0;
@@ -241,7 +239,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
             <span
               key={lane.key}
               className="inline-flex items-center gap-1.5"
-              style={{ color: dim ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.55)' }}
+              style={{ color: dim ? 'var(--fg-subtle)' : 'var(--fg-muted)' }}
             >
               <lane.icon className="w-2.5 h-2.5" />
               {lane.label} · {c}
@@ -275,7 +273,7 @@ function buildEvents(pr: PullRequest): { events: TimelineEvent[]; t0: number; t1
         lane: 'threads',
         at,
         weight: 0.5,
-        tone: t.resolved ? '#5fa86c' : '#a8893a',
+        tone: t.resolved ? 'var(--intent-success-fg)' : 'var(--intent-warn-fg)',
         title: `${c.authorLogin} on ${t.filePath}:${String(t.line)}`,
       });
     }
@@ -289,10 +287,10 @@ function buildEvents(pr: PullRequest): { events: TimelineEvent[]; t0: number; t1
   const prEnd = Date.parse(pr.updatedAt);
   if (!Number.isNaN(prStart) && !Number.isNaN(prEnd)) {
     for (const c of pr.checks) {
-      const tone = c.status === 'failure' ? '#c25a55'
-        : c.status === 'success' ? '#5fa86c'
-        : c.status === 'running' || c.status === 'pending' ? '#a8893a'
-        : '#8b949e';
+      const tone = c.status === 'failure' ? 'var(--intent-danger-fg)'
+        : c.status === 'success' ? 'var(--intent-success-fg)'
+        : c.status === 'running' || c.status === 'pending' ? 'var(--intent-warn-fg)'
+        : 'var(--fg-muted)';
       const weight = c.required ? 0.85 : 0.45;
       // Spread checks across the PR window using their id-derived seed
       // so they don't pile on one x. Stable, deterministic.
@@ -326,21 +324,21 @@ function buildEvents(pr: PullRequest): { events: TimelineEvent[]; t0: number; t1
 function mapConversation(it: ConversationItem, at: number): TimelineEvent | null {
   if (it.kind === 'event') {
     if (it.eventType === 'commit') {
-      return { lane: 'commits', at, weight: 0.7, tone: '#7aa7d4', title: `commit · ${it.detail}` };
+      return { lane: 'commits', at, weight: 0.7, tone: 'var(--fg-link)', title: `commit · ${it.detail}` };
     }
     if (it.eventType === 'merged') {
-      return { lane: 'reviews', at, weight: 1, tone: '#9583b8', title: `merged · ${it.detail}` };
+      return { lane: 'reviews', at, weight: 1, tone: 'var(--fg-accent)', title: `merged · ${it.detail}` };
     }
     if (it.eventType === 'closed') {
-      return { lane: 'reviews', at, weight: 0.85, tone: '#8b949e', title: `closed · ${it.detail}` };
+      return { lane: 'reviews', at, weight: 0.85, tone: 'var(--fg-muted)', title: `closed · ${it.detail}` };
     }
     // status-change / review-requested → minor commits-lane dots
-    return { lane: 'commits', at, weight: 0.35, tone: 'rgba(255,255,255,0.45)', title: it.detail };
+    return { lane: 'commits', at, weight: 0.35, tone: 'var(--fg-subtle)', title: it.detail };
   }
   if (it.kind === 'review') {
-    const tone = it.verdict === 'approve' ? '#5fa86c'
-      : it.verdict === 'request-changes' ? '#c25a55'
-      : '#7aa7d4';
+    const tone = it.verdict === 'approve' ? 'var(--intent-success-fg)'
+      : it.verdict === 'request-changes' ? 'var(--intent-danger-fg)'
+      : 'var(--fg-link)';
     return {
       lane: 'reviews', at, weight: 1, tone,
       title: `review · ${it.verdict} by ${it.authorLogin}`,
@@ -348,7 +346,7 @@ function mapConversation(it: ConversationItem, at: number): TimelineEvent | null
   }
   // generic comment → threads lane (low weight)
   return {
-    lane: 'threads', at, weight: 0.4, tone: 'rgba(255,255,255,0.55)',
+    lane: 'threads', at, weight: 0.4, tone: 'var(--fg-muted)',
     title: `comment · ${it.authorLogin}`,
   };
 }
@@ -363,11 +361,11 @@ function fmtDate(ms: number): string {
 function computeStuckState(
   events: TimelineEvent[], now: number,
 ): { label: string; tone: string } {
-  if (events.length === 0) return { label: 'no events', tone: '#8b949e' };
+  if (events.length === 0) return { label: 'no events', tone: 'var(--fg-muted)' };
   const lastAt = Math.max(...events.map((e) => e.at));
   const idleHours = (now - lastAt) / 3_600_000;
-  if (idleHours < 6)   return { label: 'active', tone: '#5fa86c' };
-  if (idleHours < 48)  return { label: 'cooling', tone: '#a8893a' };
-  return { label: `stalled ${Math.round(idleHours / 24)}d`, tone: '#c25a55' };
+  if (idleHours < 6)   return { label: 'active', tone: 'var(--intent-success-fg)' };
+  if (idleHours < 48)  return { label: 'cooling', tone: 'var(--intent-warn-fg)' };
+  return { label: `stalled ${Math.round(idleHours / 24)}d`, tone: 'var(--intent-danger-fg)' };
 }
 

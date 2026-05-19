@@ -205,7 +205,7 @@ export function RefactorActionsBox({ file }: { file: FileRecord }) {
         <div className="flex items-center gap-1.5">
           <Wand2 className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('refactor.title', { defaultValue: 'Refactor actions' })}
@@ -233,13 +233,13 @@ export function RefactorActionsBox({ file }: { file: FileRecord }) {
            style={{ borderColor: 'var(--border-muted)' }}>
         <Wand2 className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('refactor.title', { defaultValue: 'Refactor actions' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[0.16em]"
+          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('refactor.summary', {
@@ -308,7 +308,7 @@ function ActionRow({ action }: { action: Action }) {
               style={{ color: 'var(--fg-subtle)' }}
             />
           </div>
-          <div className="mt-0.5 flex items-center gap-2 text-[9.5px] font-mono"
+          <div className="mt-0.5 flex items-center gap-2 text-[var(--fs-xs)] font-mono"
                style={{ color: 'var(--fg-subtle)' }}>
             <span>{action.delta}</span>
             <span className="opacity-50">·</span>
@@ -332,7 +332,7 @@ function ActionRow({ action }: { action: Action }) {
         </button>
         <button
           type="button"
-          className="shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[0.18em] transition-colors hover-surface"
+          className="shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
           style={{
             background: isAuto
               ? 'rgb(from var(--intent-success-vivid) r g b / 0.15)'

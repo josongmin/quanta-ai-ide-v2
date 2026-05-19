@@ -236,9 +236,9 @@ function CrestTab({
   //              opaque rgba fill here — that visibly desyncs the tab from
   //              the card body.
   // Inactive   : darker, sunken fill + full border → closed folder behind.
-  const inactiveBg = isDark ? 'rgba(0, 0, 0, 0.55)' : 'rgba(0, 0, 0, 0.06)';
-  const activeBorder = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
-  const inactiveBorder = isDark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.10)';
+  const inactiveBg = 'var(--bg-active)';
+  const activeBorder = 'var(--border-strong)';
+  const inactiveBorder = 'var(--border-default)';
 
   // Coordinate mapping under rotate(-90deg):
   //   pre-rotation right  → post-rotation TOP    (the tab's outer/free end)
@@ -289,20 +289,20 @@ function CrestTab({
         className={`shrink-0 text-[9px] font-mono tabular-nums ${
         isActive
           ? ''
-          : (isDark ? 'text-white/40' : 'text-black/40')
+          : 'text-[var(--fg-subtle)]'
       }`}>
         {index}
       </span>
       <Icon className={`shrink-0 w-3 h-3 ${
         isActive
-          ? (isDark ? 'text-white/85' : 'text-black/85')
-          : (isDark ? 'text-white/40' : 'text-black/40')
+          ? 'text-[var(--fg-strong)]'
+          : 'text-[var(--fg-subtle)]'
       }`} />
       <span
         className={`min-w-0 truncate font-bold tracking-tight ${
           isActive
-            ? (isDark ? 'text-white' : 'text-black')
-            : (isDark ? 'text-white/55' : 'text-black/55')
+            ? 'text-[var(--fg-strong)]'
+            : 'text-[var(--fg-muted)]'
         }`}
         style={{ fontSize, lineHeight: 1 }}
       >
@@ -348,9 +348,7 @@ function HistoryButton({
         title={t('stack_axis.openTabs')}
         aria-label={t('stack_axis.openTabsHistory')}
         aria-expanded={open}
-        className={`flex items-center justify-center transition-colors ${
-          isDark ? 'text-white/55 hover:text-white' : 'text-black/55 hover:text-black'
-        }`}
+        className="flex items-center justify-center transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)]"
         style={{ width: thickness, height: thickness }}
       >
         <History className="w-3.5 h-3.5" />
@@ -358,20 +356,16 @@ function HistoryButton({
 
       {open && (
         <div
-          className={`absolute top-0 left-full ml-1 w-[240px] max-h-[60vh] overflow-y-auto scrollbar-hide rounded-xl border shadow-2xl ${
-            isDark ? 'border-white/10' : 'border-black/10'
-          }`}
+          className="absolute top-0 left-full ml-1 w-[240px] max-h-[60vh] overflow-y-auto scrollbar-hide rounded-xl border border-[var(--border-default)] shadow-2xl"
           style={{
-            background: isDark ? 'rgba(13,17,23,0.96)' : 'rgba(255,255,255,1)',
+            background: 'var(--bg-panel-strong)',
             ...(isDark ? {
               backdropFilter: 'blur(22px) saturate(160%)',
               WebkitBackdropFilter: 'blur(22px) saturate(160%)',
             } : {}),
           }}
         >
-          <div className={`px-3 py-2 text-[9px] font-black uppercase tracking-[0.18em] border-b ${
-            isDark ? 'text-white/40 border-white/10' : 'text-black/40 border-black/10'
-          }`}>
+          <div className="px-3 py-2 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] border-b text-[var(--fg-subtle)] border-[var(--border-default)]">
             {t('stack_axis.openTabsCount', { count: items.length })}
           </div>
           <div className="py-1">
@@ -395,37 +389,35 @@ function HistoryButton({
                   }}
                   className={`group relative flex items-center gap-2 px-3 py-1.5 cursor-pointer transition-colors ${
                     a
-                      ? (isDark ? 'bg-white/[0.08]' : 'bg-black/[0.05]')
-                      : (isDark ? 'hover:bg-white/[0.04]' : 'hover:bg-black/[0.03]')
+                      ? 'bg-[var(--bg-active)]'
+                      : 'hover:bg-[var(--bg-hover)]'
                   }`}
                 >
-                  {a && <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[#4f9a5c] rounded-r" />}
+                  {a && <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[var(--fg-accent)] rounded-r" />}
                   <span
                     style={a ? { color: 'var(--intent-success-fg)' } : undefined}
                     className={`shrink-0 w-4 text-[9px] font-mono tabular-nums text-right ${
-                    a ? '' : (isDark ? 'text-white/30' : 'text-black/30')
+                    a ? '' : 'text-[var(--fg-subtle)]'
                   }`}>
                     {i + 1}
                   </span>
                   <Icon className={`shrink-0 w-3 h-3 ${
-                    a ? (isDark ? 'text-white/85' : 'text-black/85') : (isDark ? 'text-white/40' : 'text-black/40')
+                    a ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-subtle)]'
                   }`} />
                   <div className="min-w-0 flex-1">
                     <div className={`text-[11px] font-bold truncate ${
-                      a ? (isDark ? 'text-white' : 'text-black') : (isDark ? 'text-white/55' : 'text-black/55')
+                      a ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-muted)]'
                     }`}>
                       {name}
                     </div>
-                    <div className={`text-[9px] font-mono truncate ${isDark ? 'text-white/30' : 'text-black/30'}`}>
+                    <div className="text-[9px] font-mono truncate text-[var(--fg-subtle)]">
                       {sub}
                     </div>
                   </div>
                   {it.kind !== 'workspace' && (
                     <button type="button"
                       onClick={(e) => { e.stopPropagation(); onClose(k); }}
-                      className={`shrink-0 p-0.5 rounded-md transition-colors opacity-0 group-hover:opacity-100 ${
-                        isDark ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-black/40 hover:text-black hover:bg-black/10'
-                      }`}
+                      className="shrink-0 p-0.5 rounded-md transition-colors opacity-0 group-hover:opacity-100 text-[var(--fg-subtle)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-active)]"
                       title={t('stack_axis.closeTab')}
                     >
                       <X className="w-2.5 h-2.5" />

@@ -88,10 +88,10 @@ export function DismissFeedback() {
         </div>
         <ul className="space-y-1.5">
           {DISMISSED_FEEDBACK.slice(0, 4).map((r) => (
-            <li key={r.candidateId} className="text-[10.5px]">
+            <li key={r.candidateId} className="text-[var(--fs-sm)]">
               <div className="flex items-center gap-2">
                 <span
-                  className="text-[8.5px] font-mono px-1 py-px rounded uppercase tracking-[0.06em]"
+                  className="text-[var(--fs-2xs)] font-mono px-1 py-px rounded uppercase tracking-[0.06em]"
                   style={{ background: t.badgeBg, color: t.textMuted }}
                 >
                   {tr(`dismissModal.reason.${r.reasonTag}`)}

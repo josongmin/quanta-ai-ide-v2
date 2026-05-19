@@ -131,16 +131,16 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
     <div
       className="shrink-0 mx-3 mb-2 rounded-md overflow-hidden"
       style={{
-        background: 'rgba(194,90,85,0.07)',
-        border: '1px solid rgba(194,90,85,0.30)',
+        background: 'var(--intent-danger-bg)',
+        border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 30%, transparent)',
       }}
     >
-      <div className="flex items-center gap-2 px-2.5 py-1.5 border-b border-white/[0.04]">
-        <AlertOctagon className="w-3 h-3" style={{ color: '#e88a85' }} strokeWidth={2.5} />
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: '#e88a85' }}>
+      <div className="flex items-center gap-2 px-2.5 py-1.5 border-b border-[var(--border-muted)]">
+        <AlertOctagon className="w-3 h-3" style={{ color: 'var(--intent-danger-fg)' }} strokeWidth={2.5} />
+        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color: 'var(--intent-danger-fg)' }}>
           SLA 만료
         </span>
-        <span className="ml-auto text-[10px] font-mono tabular-nums text-white/40">
+        <span className="ml-auto text-[10px] font-mono tabular-nums text-[var(--fg-subtle)]">
           {stalled.length}개 · 7일+
         </span>
       </div>
@@ -153,25 +153,25 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
           return (
             <li
               key={s.pr.number}
-              className="flex items-center gap-2 px-2.5 py-1.5 text-[11px] hover:bg-white/[0.02] transition-colors"
+              className="flex items-center gap-2 px-2.5 py-1.5 text-[11px] hover:bg-[var(--bg-surface-muted)] transition-colors"
             >
               <button
                 type="button"
                 onClick={() => { onJumpToPr(s.pr.number); }}
                 className="min-w-0 flex-1 text-left"
               >
-                <div className="text-white/85 truncate font-medium">
+                <div className="text-[var(--fg-default)] truncate font-medium">
                   {s.pr.title}
                 </div>
-                <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono text-white/45">
+                <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono text-[var(--fg-muted)]">
                   <span className="tabular-nums">#{s.pr.number}</span>
-                  <span className="text-white/25">·</span>
-                  <span className="tabular-nums" style={{ color: '#e88a85' }}>
+                  <span className="text-[var(--fg-subtle)]">·</span>
+                  <span className="tabular-nums" style={{ color: 'var(--intent-danger-fg)' }}>
                     {days}d 정체
                   </span>
                   {s.pendingReviewers.length > 0 && (
                     <>
-                      <span className="text-white/25">·</span>
+                      <span className="text-[var(--fg-subtle)]">·</span>
                       <span className="truncate">
                         @{s.pendingReviewers[0]}{s.pendingReviewers.length > 1 ? `+${String(s.pendingReviewers.length - 1)}` : ''} 대기
                       </span>
@@ -186,21 +186,21 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
                 title={cooledDown
                   ? '최근 30분 내 ping 발송됨 (cooldown)'
                   : '대기 중 reviewer에게 ping (PR 코멘트로 발송)'}
-                className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded text-[10px] font-bold uppercase tracking-[0.14em] transition-colors disabled:opacity-60"
+                className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-60"
                 style={{
-                  background: wasPinged && result === 'sent' ? 'rgba(95,168,108,0.18)'
-                    : wasPinged && result === 'cooldown' ? 'rgba(168,137,58,0.16)'
-                    : cooledDown ? 'rgba(168,137,58,0.10)'
-                    : 'rgba(255,255,255,0.04)',
-                  color: wasPinged && result === 'sent' ? '#9fd0a8'
-                    : wasPinged && result === 'cooldown' ? '#d3b264'
-                    : cooledDown ? '#d3b264'
-                    : 'rgba(255,255,255,0.65)',
+                  background: wasPinged && result === 'sent' ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)'
+                    : wasPinged && result === 'cooldown' ? 'color-mix(in srgb, var(--intent-warn-fg) 16%, transparent)'
+                    : cooledDown ? 'var(--intent-warn-bg)'
+                    : 'var(--bg-hover)',
+                  color: wasPinged && result === 'sent' ? 'var(--intent-success-fg)'
+                    : wasPinged && result === 'cooldown' ? 'var(--intent-warn-fg)'
+                    : cooledDown ? 'var(--intent-warn-fg)'
+                    : 'var(--fg-muted)',
                   border: wasPinged && result === 'sent'
-                    ? '1px solid rgba(95,168,108,0.45)'
+                    ? '1px solid color-mix(in srgb, var(--intent-success-fg) 45%, transparent)'
                     : (wasPinged && result === 'cooldown') || cooledDown
-                      ? '1px solid rgba(168,137,58,0.40)'
-                      : '1px solid rgba(255,255,255,0.10)',
+                      ? '1px solid color-mix(in srgb, var(--intent-warn-fg) 40%, transparent)'
+                      : '1px solid var(--border-default)',
                 }}
               >
                 <Send className="w-2.5 h-2.5" strokeWidth={2.5} />
@@ -214,7 +214,7 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
                 type="button"
                 onClick={() => { dismiss(s.pr.number); }}
                 aria-label="이 알림 무시"
-                className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded text-white/30 hover:text-white/85 hover:bg-white/[0.04] transition-colors"
+                className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors"
               >
                 <X className="w-2.5 h-2.5" strokeWidth={2.5} />
               </button>

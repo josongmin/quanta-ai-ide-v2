@@ -30,7 +30,7 @@ export function CandidateCards({
         <div className="text-[11px] font-bold uppercase tracking-[0.16em]">
           {tr('candidates.noViableTitle')}
         </div>
-        <div className="text-[10.5px] mt-1.5" style={{ color: t.textMuted }}>
+        <div className="text-[var(--fs-sm)] mt-1.5" style={{ color: t.textMuted }}>
           {tr('candidates.noViableBody')}
         </div>
       </div>
@@ -90,14 +90,14 @@ export function CandidateCards({
                 </div>
 
                 <div
-                  className="text-[12.5px] leading-snug font-semibold mb-1.5"
+                  className="text-[var(--fs-md)] leading-snug font-semibold mb-1.5"
                   style={{ color: t.textHi }}
                 >
                   {c.title}
                 </div>
 
                 <div
-                  className="text-[10.5px] leading-snug mb-2.5"
+                  className="text-[var(--fs-sm)] leading-snug mb-2.5"
                   style={{ color: t.textMuted }}
                 >
                   {c.rationale}
@@ -111,13 +111,13 @@ export function CandidateCards({
 
                 <div className="space-y-1">
                   {c.pros.slice(0, 2).map((p, i) => (
-                    <div key={i} className="flex items-start gap-1.5 text-[10.5px]">
+                    <div key={i} className="flex items-start gap-1.5 text-[var(--fs-sm)]">
                       <Check className="w-2.5 h-2.5 shrink-0 mt-0.5" style={{ color: t.ok }} />
                       <span style={{ color: t.textBody }}>{p}</span>
                     </div>
                   ))}
                   {c.cons.slice(0, 1).map((p, i) => (
-                    <div key={i} className="flex items-start gap-1.5 text-[10.5px]">
+                    <div key={i} className="flex items-start gap-1.5 text-[var(--fs-sm)]">
                       <X className="w-2.5 h-2.5 shrink-0 mt-0.5" style={{ color: t.bad }} />
                       <span style={{ color: t.textMuted }}>{p}</span>
                     </div>
@@ -159,7 +159,7 @@ function Stat({ icon: Icon, label, value }: {
       <div className="flex items-center gap-1 mb-0.5">
         <Icon className="w-2.5 h-2.5" style={{ color: t.textFaint }} />
         <span
-          className="text-[8.5px] font-bold uppercase tracking-[0.14em]"
+          className="text-[var(--fs-2xs)] font-bold uppercase tracking-[0.14em]"
           style={{ color: t.textFaint }}
         >
           {label}

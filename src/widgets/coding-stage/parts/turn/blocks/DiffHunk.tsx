@@ -8,11 +8,11 @@ import type { CodingDiffHunk } from '../../types';
 // rewrite a *specific* line without nuking the whole diff. Real impl
 // would dispatch the rewrite back to the agent; the demo just dispatches
 // a window event the parent (CodingStage) listens for.
-export function UnifiedHunkBody({ hunk, isDark }: { hunk: CodingDiffHunk; isDark: boolean }) {
+export function UnifiedHunkBody({ hunk }: { hunk: CodingDiffHunk }) {
   return (
     <div className="font-mono text-[11px] leading-[1.55]">
       {hunk.lines.map((line, j) => (
-        <DiffLine key={j} line={line} isDark={isDark} />
+        <DiffLine key={j} line={line} />
       ))}
     </div>
   );
@@ -22,19 +22,19 @@ export function UnifiedHunkBody({ hunk, isDark }: { hunk: CodingDiffHunk; isDark
 // lines. Anything unpaired (pure context, lone del or add) takes a
 // single side and leaves the other blank. Real GitHub-style splitter
 // uses LCS; for the demo this naive pairing is good enough.
-export function SplitHunkBody({ hunk, isDark }: { hunk: CodingDiffHunk; isDark: boolean }) {
+export function SplitHunkBody({ hunk }: { hunk: CodingDiffHunk }) {
   const rows = useMemo(() => buildSplitRows(hunk.lines), [hunk.lines]);
-  const divider = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
+  const divider = 'border-[color:var(--border-muted)]';
   return (
     <div className={`grid grid-cols-2 divide-x ${divider} font-mono text-[11px] leading-[1.55]`}>
       <div>
         {rows.map((r, i) => (
-          <DiffSplitCell key={`L${i}`} side="left" line={r.left} isDark={isDark} />
+          <DiffSplitCell key={`L${i}`} side="left" line={r.left} />
         ))}
       </div>
       <div>
         {rows.map((r, i) => (
-          <DiffSplitCell key={`R${i}`} side="right" line={r.right} isDark={isDark} />
+          <DiffSplitCell key={`R${i}`} side="right" line={r.right} />
         ))}
       </div>
     </div>
@@ -79,26 +79,24 @@ function buildSplitRows(lines: CodingDiffHunk['lines']): SplitRow[] {
 }
 
 function DiffSplitCell({
-  side, line, isDark,
+  side, line,
 }: {
   side: 'left' | 'right';
   line: CodingDiffHunk['lines'][number] | null;
-  isDark: boolean;
 }) {
   if (line == null) {
-    return <div className={`px-2 py-px ${isDark ? 'bg-white/[0.015]' : 'bg-black/[0.015]'}`}>&nbsp;</div>;
+    return <div className="px-2 py-px bg-[color:var(--bg-surface-muted)]">&nbsp;</div>;
   }
-  return <DiffLine line={line} isDark={isDark} sideHint={side} />;
+  return <DiffLine line={line} sideHint={side} />;
 }
 
 // Single diff line with hover inline-edit affordance. `sideHint` is
 // only used for split-view to suppress the gutter glyph on context rows
 // since the equality is already obvious from alignment.
 function DiffLine({
-  line, isDark, sideHint,
+  line, sideHint,
 }: {
   line: CodingDiffHunk['lines'][number];
-  isDark: boolean;
   sideHint?: 'left' | 'right';
 }) {
   const { t } = useTranslation('coding');
@@ -113,14 +111,14 @@ function DiffLine({
       : undefined;
   const tone = line.kind === 'add' || line.kind === 'del'
     ? ''
-    : (isDark ? 'text-white/55' : 'text-black/55');
+    : 'text-[color:var(--fg-muted)]';
   const gutterStyle: React.CSSProperties | undefined =
     line.kind === 'add' ? { color: 'var(--intent-success-vivid)' }
     : line.kind === 'del' ? { color: 'var(--intent-danger-vivid)' }
     : undefined;
   const gutterTone = line.kind === 'add' || line.kind === 'del'
     ? ''
-    : (isDark ? 'text-white/30' : 'text-black/30');
+    : 'text-[color:var(--fg-subtle)]';
 
   function dispatchRewrite() {
     if (!text.trim()) return;
@@ -145,18 +143,14 @@ function DiffLine({
           onClick={() => { setEditing(true); }}
           title={t('lineEdit.rewrite')}
           aria-label={t('lineEdit.rewrite')}
-          className={`absolute right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover/line:opacity-100 transition-opacity p-0.5 rounded ${
-            isDark ? 'bg-[#11141a] text-white/55 hover:text-white border border-white/[0.10]' : 'bg-white text-black/55 hover:text-black border border-black/[0.10]'
-          }`}
+          className="absolute right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover/line:opacity-100 transition-opacity p-0.5 rounded bg-[var(--bg-elevated)] text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] border border-[color:var(--border-default)]"
         >
           <Wand2 className="w-2.5 h-2.5" />
         </button>
       )}
       {editing && (
-        <div className={`mt-1 flex items-center gap-1 px-1.5 py-1 rounded ${
-          isDark ? 'bg-[#11141a] border border-white/[0.10]' : 'bg-white border border-black/[0.10]'
-        }`}>
-          <Wand2 className={`w-2.5 h-2.5 shrink-0 ${isDark ? 'text-white/45' : 'text-black/45'}`} />
+        <div className="mt-1 flex items-center gap-1 px-1.5 py-1 rounded bg-[var(--bg-elevated)] border border-[color:var(--border-default)]">
+          <Wand2 className="w-2.5 h-2.5 shrink-0 text-[color:var(--fg-subtle)]" />
           <input
             autoFocus
             value={text}
@@ -168,14 +162,12 @@ function DiffLine({
               if (e.key === 'Escape') { e.preventDefault(); setEditing(false); setText(''); return; }
               if (e.key === 'Enter') { e.preventDefault(); dispatchRewrite(); }
             }}
-            className={`flex-1 bg-transparent outline-none text-[11px] ${
-              isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
-            }`}
+            className="flex-1 bg-transparent outline-none text-[11px] text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
           />
           <button
             type="button"
             onClick={() => { setEditing(false); setText(''); }}
-            className={`px-1.5 py-0.5 rounded text-[10px] ${isDark ? 'text-white/55' : 'text-black/55'}`}
+            className="px-1.5 py-0.5 rounded text-[10px] text-[color:var(--fg-muted)]"
           >
             {t('lineEdit.cancel')}
           </button>
@@ -185,8 +177,8 @@ function DiffLine({
             disabled={!text.trim()}
             className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
               text.trim()
-                ? (isDark ? 'bg-white text-black hover:bg-white/90' : 'bg-black text-white hover:bg-black/90')
-                : (isDark ? 'bg-white/[0.05] text-white/30 cursor-not-allowed' : 'bg-black/[0.04] text-black/30 cursor-not-allowed')
+                ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] hover:opacity-90'
+                : 'bg-[color:var(--bg-elevated)] text-[color:var(--fg-subtle)] cursor-not-allowed'
             }`}
           >
             {t('lineEdit.submit')}

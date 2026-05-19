@@ -50,19 +50,19 @@ export default function AuthorVelocity({ pr, allPrs }: Props) {
   // Cycle-time tone: fast median = green, slow = amber, stale-tail
   // = rose. Keys off median, not z; the z is the *secondary* tag.
   const tone = stats.medianHours >= 24
-    ? '#c25a55'
+    ? 'var(--intent-danger-fg)'
     : stats.medianHours >= 8
-      ? '#d3b264'
-      : '#5fa86c';
+      ? 'var(--intent-warn-fg)'
+      : 'var(--intent-success-fg)';
 
   // Z-tag: only render when |z| ≥ 1. Keeps the chip terse for
   // average-shape PRs by the author.
   const zTag = (() => {
     if (z === null) return null;
     if (Math.abs(z) < 1) return null;
-    const tone2 = Math.abs(z) >= 2.5 ? '#c25a55'
-      : Math.abs(z) >= 1.5 ? '#d3b264'
-      : '#7aa7d4';
+    const tone2 = Math.abs(z) >= 2.5 ? 'var(--intent-danger-fg)'
+      : Math.abs(z) >= 1.5 ? 'var(--intent-warn-fg)'
+      : 'var(--fg-link)';
     const sign = z > 0 ? '+' : '';
     return { text: `${sign}${z.toFixed(1)}σ vs 본인`, tone: tone2 };
   })();
@@ -71,14 +71,14 @@ export default function AuthorVelocity({ pr, allPrs }: Props) {
     <span
       className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono"
       style={{
-        background: `${tone}1a`,
-        border: `1px solid ${tone}55`,
+        background: `color-mix(in srgb, ${tone} 10%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)`,
         color: tone,
       }}
       title={`@${pr.author} · 중앙값 ${formatHoursCompact(stats.medianHours)} · p95 ${formatHoursCompact(stats.p95Hours)} · 평균 ${String(Math.round(stats.meanLoc))} LOC (n=${String(stats.prCount)})`}
     >
       <Gauge className="w-2.5 h-2.5" strokeWidth={2.5} />
-      <span className="font-bold uppercase tracking-[0.14em]">
+      <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">
         @{pr.author}
       </span>
       <span className="tabular-nums">
@@ -87,7 +87,7 @@ export default function AuthorVelocity({ pr, allPrs }: Props) {
       {zTag !== null && (
         <span
           className="tabular-nums pl-1.5 ml-0.5"
-          style={{ borderLeft: `1px solid ${tone}33`, color: zTag.tone }}
+          style={{ borderLeft: `1px solid color-mix(in srgb, ${tone} 20%, transparent)`, color: zTag.tone }}
         >
           {zTag.text}
         </span>

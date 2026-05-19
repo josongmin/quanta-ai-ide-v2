@@ -48,10 +48,10 @@ type ReviewerScope = {
 };
 
 const STATE_TONE: Record<ReviewerScope['state'], string> = {
-  pending:             '#a8893a',
-  approved:            '#5fa86c',
-  'changes-requested': '#c25a55',
-  commented:           '#7aa7d4',
+  pending:             'var(--intent-warn-fg)',
+  approved:            'var(--intent-success-fg)',
+  'changes-requested': 'var(--intent-danger-fg)',
+  commented:           'var(--fg-link)',
 };
 const STATE_LABEL: Record<ReviewerScope['state'], string> = {
   pending:             'Pending',
@@ -69,12 +69,12 @@ export default function ReviewerExpectations({
   return (
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
-        <Users className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <Users className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Per-reviewer expectations
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {scopes.length} {scopes.length === 1 ? 'reviewer' : 'reviewers'} · division of labour
         </span>
       </div>
@@ -94,22 +94,22 @@ function ReviewerScopeRow({ scope }: { scope: ReviewerScope }) {
     <li
       className="rounded-md p-3"
       style={{
-        background: 'rgba(255,255,255,0.025)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: 'var(--bg-surface-muted)',
+        border: '1px solid var(--bg-elevated)',
       }}
     >
       <div className="flex items-center gap-2">
         <Avatar login={scope.login} size={22} />
-        <span className="text-[12px] font-bold text-white/85">
+        <span className="text-[12px] font-bold text-[var(--fg-default)]">
           @{scope.login}
         </span>
         <span
-          className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[0.18em]"
-          style={{ background: `${tone}22`, color: tone, border: `1px solid ${tone}55` }}
+          className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+          style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone, border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)` }}
         >
           {STATE_LABEL[scope.state]}
         </span>
-        <span className="ml-auto inline-flex items-center gap-3 text-[10px] font-mono text-white/55">
+        <span className="ml-auto inline-flex items-center gap-3 text-[10px] font-mono text-[var(--fg-muted)]">
           <span className="inline-flex items-center gap-1" title="Files this reviewer owns in this PR">
             <FileCode className="w-2.5 h-2.5" />
             {scope.ownedPaths.length}
@@ -127,7 +127,7 @@ function ReviewerScopeRow({ scope }: { scope: ReviewerScope }) {
       {scope.reasons.length > 0 && (
         <ul className="mt-2 space-y-0.5">
           {scope.reasons.slice(0, 3).map((r, i) => (
-            <li key={i} className="flex items-start gap-1.5 text-[11px] leading-snug text-white/65">
+            <li key={i} className="flex items-start gap-1.5 text-[11px] leading-snug text-[var(--fg-muted)]">
               <span className="shrink-0 mt-0.5" style={{ color: tone }}>▸</span>
               <span>{r}</span>
             </li>
@@ -135,7 +135,7 @@ function ReviewerScopeRow({ scope }: { scope: ReviewerScope }) {
         </ul>
       )}
       {scope.findings.length === 0 && scope.ownedPaths.length === 0 && (
-        <div className="mt-2 text-[11px] italic text-white/35">
+        <div className="mt-2 text-[11px] italic text-[var(--fg-subtle)]">
           No specific scope — generalist review of high-severity findings.
         </div>
       )}

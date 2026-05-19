@@ -96,17 +96,17 @@ export default function ReviewTimer({ prNumber }: { prNumber: number }) {
         ? 'Foreground review time accumulates while this tab is visible'
         : 'Timer paused — switch to this tab to resume'}
       style={{
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'var(--bg-hover)',
+        border: '1px solid var(--border-default)',
       }}
     >
-      <Timer className="w-3 h-3 text-white/55" strokeWidth={2} />
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
+      <Timer className="w-3 h-3 text-[var(--fg-muted)]" strokeWidth={2} />
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
         Spent
       </span>
       <span
         className="text-[11px] font-mono tabular-nums"
-        style={{ color: display.foreground ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.45)' }}
+        style={{ color: display.foreground ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
       >
         {label}
       </span>

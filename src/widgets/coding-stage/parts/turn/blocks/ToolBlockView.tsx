@@ -10,19 +10,19 @@ const TOOL_META = {
   read:   { Icon: FileCode, label: 'read',   color: 'var(--fg-link)' },
   edit:   { Icon: FileCode, label: 'edit',   color: 'var(--intent-success-fg)' },
   run:    { Icon: Terminal, label: 'run',    color: 'var(--intent-warn-fg)' },
-  search: { Icon: Search,   label: 'search', color: 'var(--brand-fg)' },
+  search: { Icon: Search,   label: 'search', color: 'var(--fg-accent)' },
   plan:   { Icon: Sparkles, label: 'plan',   color: 'var(--intent-danger-fg)' },
   web:    { Icon: Globe,    label: 'web',    color: 'var(--fg-link)' },
 } as const;
 
-function ToolBlockViewImpl({ block, isDark }: { block: ToolBlock; isDark: boolean }) {
+function ToolBlockViewImpl({ block }: { block: ToolBlock }) {
   const [open, setOpen] = useState(false);
   const meta = TOOL_META[block.tool];
   const Icon = meta.Icon;
   const toneStyle: React.CSSProperties = { color: meta.color };
-  const card = isDark ? 'bg-white/[0.025] border-white/[0.06] hover:border-white/[0.12]' : 'bg-white border-black/[0.06] hover:border-black/[0.12]';
-  const textPrimary = isDark ? 'text-white/85' : 'text-black/85';
-  const textFaint = isDark ? 'text-white/40' : 'text-black/40';
+  const card = 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] hover:border-[color:var(--border-strong)]';
+  const textPrimary = 'text-[color:var(--fg-strong)]';
+  const textFaint = 'text-[color:var(--fg-subtle)]';
   const StatusIcon = block.status === 'fail' ? XCircle : block.status === 'running' ? Loader2 : CheckCircle2;
   const statusStyle: React.CSSProperties = block.status === 'fail'
     ? { color: 'var(--intent-danger-fg)' }
@@ -38,7 +38,7 @@ function ToolBlockViewImpl({ block, isDark }: { block: ToolBlock; isDark: boolea
         className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left"
       >
         <Icon style={toneStyle} className="w-3 h-3 shrink-0" />
-        <span style={toneStyle} className="uppercase tracking-[0.18em] text-[9px] font-bold shrink-0">
+        <span style={toneStyle} className="uppercase tracking-[var(--track-eyebrow)] text-[9px] font-bold shrink-0">
           {meta.label}
         </span>
         <span className={`flex-1 truncate font-mono text-[12px] ${textPrimary}`}>{block.label}</span>
@@ -53,10 +53,8 @@ function ToolBlockViewImpl({ block, isDark }: { block: ToolBlock; isDark: boolea
         )}
       </button>
       {open && block.output && (
-        <div className={`border-t ${isDark ? 'border-white/[0.06] bg-black/40' : 'border-black/[0.05] bg-black/[0.92]'}`}>
-          <pre className={`px-3 py-2 text-[11px] leading-[1.55] font-mono overflow-x-auto whitespace-pre ${
-            isDark ? 'text-white/70' : 'text-white/85'
-          } scrollbar-thin`}>
+        <div className="border-t border-[color:var(--border-muted)] bg-[color:var(--bg-elevated)]">
+          <pre className="px-3 py-2 text-[11px] leading-[1.55] font-mono overflow-x-auto whitespace-pre text-[color:var(--fg-default)] scrollbar-thin">
             {block.output}
           </pre>
         </div>
@@ -67,7 +65,7 @@ function ToolBlockViewImpl({ block, isDark }: { block: ToolBlock; isDark: boolea
           dispatches a window event for the parent to scroll the diff.
           Pattern: Sentry stack-trace link to source. */}
       {block.testResults && block.testResults.failures.length > 0 && (
-        <TestFailuresCard run={block.testResults} isDark={isDark} />
+        <TestFailuresCard run={block.testResults} />
       )}
     </div>
   );
@@ -79,16 +77,15 @@ export const ToolBlockView = memo(ToolBlockViewImpl);
 // drops down toward the next sibling (the diff) so the visual reads as
 // "this failure points there" without requiring a real DOM connection.
 function TestFailuresCard({
-  run, isDark,
+  run,
 }: {
   run: NonNullable<ToolBlock['testResults']>;
-  isDark: boolean;
 }) {
   const { t } = useTranslation('coding');
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/35' : 'text-black/40';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
+  const muted = 'text-[color:var(--fg-muted)]';
+  const faint = 'text-[color:var(--fg-subtle)]';
+  const heading = 'text-[color:var(--fg-strong)]';
+  const border = 'border-[color:var(--border-muted)]';
   return (
     <div
       style={{ background: 'color-mix(in srgb, var(--intent-danger-vivid) 6%, transparent)' }}
@@ -96,7 +93,7 @@ function TestFailuresCard({
     >
       <div
         style={{ color: 'var(--intent-danger-fg)' }}
-        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
+        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
       >
         <XCircle className="w-2.5 h-2.5" />
         {t('testMap.linkedFailures')} · {run.failed} / {run.failed + run.passed}
@@ -104,7 +101,7 @@ function TestFailuresCard({
       {run.failures.map((f, i) => (
         <div
           key={i}
-          className={`coding-test-link rounded-md border ${border} ${isDark ? 'bg-[#11141a]' : 'bg-white'} px-2 py-1.5`}
+          className={`coding-test-link rounded-md border ${border} bg-[var(--bg-elevated)] px-2 py-1.5`}
         >
           <div className={`flex items-center gap-1.5 mb-0.5`}>
             <span className={`text-[11px] font-semibold truncate ${heading}`}>{f.name}</span>
@@ -125,11 +122,7 @@ function TestFailuresCard({
                       detail: { file: h.file, line: h.line, hunkId: h.hunkId },
                     }));
                   }}
-                  className={`inline-flex items-center gap-1 px-1.5 py-px rounded text-[9.5px] font-mono transition-colors ${
-                    isDark
-                      ? 'bg-white/[0.05] text-white/70 hover:text-[var(--intent-danger-fg)]'
-                      : 'bg-black/[0.04] text-black/70 hover:text-[var(--intent-danger-fg)]'
-                  }`}
+                  className="inline-flex items-center gap-1 px-1.5 py-px rounded text-[length:var(--fs-xs)] font-mono transition-colors bg-[color:var(--bg-hover)] text-[color:var(--fg-default)] hover:text-[var(--intent-danger-fg)]"
                   title={t('testMap.jumpToHunk')}
                 >
                   <ArrowRight className="w-2.5 h-2.5" />

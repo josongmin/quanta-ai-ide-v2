@@ -51,19 +51,19 @@ const AXES: { key: keyof InspectionWeights; label: string; tone: string; help: s
   {
     key: 'severity',
     label: 'Severity',
-    tone: '#c25a55',
+    tone: 'var(--intent-danger-fg)',
     help: 'Engine-finding severity (blocker / high / medium / low). Pull right when reviewing for safety/security.',
   },
   {
     key: 'surface',
     label: 'Surface',
-    tone: '#7aa7d4',
+    tone: 'var(--fg-link)',
     help: 'Public API + blast radius. Pull right when worried about consumer breakage.',
   },
   {
     key: 'hotness',
     label: 'Hotness',
-    tone: '#a8893a',
+    tone: 'var(--intent-warn-fg)',
     help: 'Recent churn + scattered hunks. Pull right when worried about regression-prone areas.',
   },
 ];
@@ -85,30 +85,30 @@ export default function InspectionWeightsPanel({ weights, onChange }: Props) {
         aria-expanded={open}
         className="w-full flex items-center gap-2 text-left"
       >
-        <Sliders className="w-3.5 h-3.5 text-white/55" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">
+        <Sliders className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
+        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Why this order
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           adjust ranking weights
         </span>
         {!isDefault && (
           <span
-            className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-[0.14em]"
-            style={{ background: 'rgba(122,167,212,0.18)', color: '#7aa7d4', border: '1px solid rgba(122,167,212,0.40)' }}
+            className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            style={{ background: 'color-mix(in srgb, var(--fg-link) 18%, transparent)', color: 'var(--fg-link)', border: '1px solid color-mix(in srgb, var(--fg-link) 40%, transparent)' }}
           >
             tuned
           </span>
         )}
-        <span className="ml-auto text-[10px] font-mono text-white/35">
+        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
           {open ? 'collapse' : 'expand'}
         </span>
       </button>
 
       {open && (
         <div className="mt-3 space-y-3">
-          <p className="text-[11px] leading-relaxed text-white/55">
+          <p className="text-[11px] leading-relaxed text-[var(--fg-muted)]">
             The recommended path above is ranked by combining these axes.
             Pull a slider to nudge what you read first — the model defers
             to you when you do.
@@ -119,7 +119,7 @@ export default function InspectionWeightsPanel({ weights, onChange }: Props) {
               <div key={axis.key} className="grid grid-cols-[80px_1fr_44px] items-center gap-3">
                 <label
                   htmlFor={`weight-${axis.key}`}
-                  className="text-[10px] font-bold uppercase tracking-[0.18em]"
+                  className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
                   style={{ color: axis.tone }}
                   title={axis.help}
                 >
@@ -140,22 +140,22 @@ export default function InspectionWeightsPanel({ weights, onChange }: Props) {
                   className="w-full"
                   style={{ accentColor: axis.tone }}
                 />
-                <span className="text-[10px] font-mono tabular-nums text-white/55 text-right">
+                <span className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)] text-right">
                   {Math.round(value * 100)}%
                 </span>
               </div>
             );
           })}
-          <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
-            <span className="text-[10px] italic text-white/35">
+          <div className="flex items-center justify-between pt-2 border-t border-[var(--border-default)]">
+            <span className="text-[10px] italic text-[var(--fg-subtle)]">
               Greenberg &amp; Buxton (2008): surfacing the model builds trust even before retraining it.
             </span>
             <button
               type="button"
               onClick={reset}
               disabled={isDefault}
-              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[0.14em] text-white/55 hover:text-white/85 hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }}
+              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}
             >
               <RotateCcw className="w-2.5 h-2.5" />
               Reset

@@ -139,7 +139,7 @@ export default function Treemap({ repo, isDark, size = 280 }: Props) {
               style={{ background: palette[i % palette.length] }}
             />
             <span
-              className="font-bold uppercase tracking-[0.14em] truncate"
+              className="font-bold uppercase tracking-[var(--track-eyebrow)] truncate"
               style={{ color: 'var(--fg-default)' }}
             >
               {b}
@@ -148,9 +148,7 @@ export default function Treemap({ repo, isDark, size = 280 }: Props) {
         ))}
       </div>
 
-      <div className={`mt-2 text-[9px] uppercase tracking-[0.18em] ${
-        isDark ? 'text-white/40' : 'text-black/40'
-      }`}>
+      <div className="mt-2 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {t('deps.treemapSummary', {
           n: cells.length,
           loc: totalLoc.toLocaleString(),

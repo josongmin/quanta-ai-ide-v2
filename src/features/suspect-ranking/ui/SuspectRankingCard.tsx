@@ -9,9 +9,9 @@
 //      a small inline pill, not by a column rule.
 //   4. Top 3 only — anything beyond that is fallback noise.
 //
-// Style: presentational, no store. Glass surface uses
-// `bg-white/40 dark:bg-white/[0.04]` so the panel can sit on either the
-// light or dark review chrome without alpha bumps.
+// Style: presentational, no store. Glass surface uses the
+// `--bg-elevated` token (opaque white in light, low-alpha glass + blur
+// in dark) so the panel sits on either review chrome via the theme.
 
 import type { ReactNode } from 'react';
 import type { Suspect, SuspectConfidence, SuspectRanking } from '@entities/suspect';
@@ -38,7 +38,7 @@ function ConfidencePill({ confidence }: { confidence: SuspectConfidence }) {
   return (
     <span
       style={style}
-      className="inline-flex items-center px-1.5 h-5 rounded-md text-[9px] font-bold uppercase tracking-[0.14em] bg-white/30 dark:bg-white/[0.03]"
+      className="inline-flex items-center px-1.5 h-5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] bg-[var(--bg-surface-muted)]"
     >
       {CONFIDENCE_LABEL[confidence]}
     </span>
@@ -65,22 +65,22 @@ function Row({
   const content = (
     <>
       <div className="flex items-center gap-2 min-w-0">
-        <span className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-md text-[10px] font-mono font-bold tabular-nums bg-black/5 dark:bg-white/[0.05] text-zinc-700 dark:text-zinc-300">
+        <span className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-md text-[10px] font-mono font-bold tabular-nums bg-[var(--bg-elevated)] text-[var(--fg-default)]">
           {String(index + 1)}
         </span>
-        <span className="font-mono text-[11px] text-zinc-700 dark:text-zinc-200 tabular-nums">
+        <span className="font-mono text-[11px] text-[var(--fg-default)] tabular-nums">
           {shortSha(suspect.commitSha)}
         </span>
         {typeof suspect.prNumber === 'number' && (
-          <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400">
+          <span className="font-mono text-[10px] text-[var(--fg-muted)]">
             #{String(suspect.prNumber)}
           </span>
         )}
-        <span className="text-[11px] text-zinc-600 dark:text-zinc-300 truncate">
+        <span className="text-[11px] text-[var(--fg-default)] truncate">
           {suspect.authorId}
         </span>
         {suspect.suspectSymbol && (
-          <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-500 truncate">
+          <span className="font-mono text-[10px] text-[var(--fg-muted)] truncate">
             {suspect.suspectSymbol}
           </span>
         )}
@@ -93,7 +93,7 @@ function Row({
           {reasons.map((r) => (
             <li
               key={r}
-              className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-snug"
+              className="text-[11px] text-[var(--fg-muted)] leading-snug"
             >
               {r}
             </li>
@@ -104,7 +104,7 @@ function Row({
   );
 
   const baseClass =
-    'block w-full text-left px-3 py-2 rounded-lg transition-colors hover:bg-black/[0.03] dark:hover:bg-white/[0.03]';
+    'block w-full text-left px-3 py-2 rounded-lg transition-colors hover:bg-[var(--bg-hover)]';
 
   if (isInteractive) {
     return (
@@ -124,8 +124,8 @@ export default function SuspectRankingCard({ ranking, onSelect }: Props) {
   const suspects = ranking.suspects.slice(0, 3);
   if (suspects.length === 0) {
     return (
-      <div className="rounded-2xl px-4 py-4 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5">
-        <div className="text-[11px] text-zinc-600 dark:text-zinc-400">
+      <div className="rounded-2xl px-4 py-4 bg-[var(--bg-elevated)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)]">
+        <div className="text-[11px] text-[var(--fg-muted)]">
           No suspects ranked above the inference threshold for {ranking.incidentId}.
         </div>
       </div>
@@ -133,15 +133,15 @@ export default function SuspectRankingCard({ ranking, onSelect }: Props) {
   }
 
   return (
-    <div className="rounded-2xl px-3 py-3 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5">
+    <div className="rounded-2xl px-3 py-3 bg-[var(--bg-elevated)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)]">
       <div className="flex items-center gap-2 px-1 mb-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-700 dark:text-zinc-300">
+        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-default)]">
           Suspect ranking
         </span>
-        <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-500">
+        <span className="font-mono text-[10px] text-[var(--fg-muted)]">
           {ranking.incidentId}
         </span>
-        <span className="ml-auto font-mono text-[10px] text-zinc-400 dark:text-zinc-500">
+        <span className="ml-auto font-mono text-[10px] text-[var(--fg-muted)]">
           top {String(suspects.length)}
         </span>
       </div>

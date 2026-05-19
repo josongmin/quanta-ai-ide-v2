@@ -120,7 +120,7 @@ export default function EdgeBundlingMap({
   return (
     <div className="flex flex-col items-center">
       <canvas ref={canvasRef} />
-      <div className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[color:var(--fg-subtle)]">
+      <div className="mt-1 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-subtle)]">
         {t('deps.edgesSummary', { n: formatNumber(layout.edges.length) })}
       </div>
     </div>

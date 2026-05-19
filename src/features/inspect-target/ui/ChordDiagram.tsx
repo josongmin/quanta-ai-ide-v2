@@ -30,7 +30,7 @@ type Pair = { from: string; to: string; n: number };
 
 const TOP_N = 8;
 
-export default function ChordDiagram({ repo, isDark, size = 280 }: Props) {
+export default function ChordDiagram({ repo, size = 280 }: Props) {
   const { t } = useTranslation('inspect');
 
   const data = useMemo(() => {
@@ -85,7 +85,7 @@ export default function ChordDiagram({ repo, isDark, size = 280 }: Props) {
     <div className="flex flex-col items-stretch w-full" style={{ width: size }}>
       {/* Column header */}
       <div
-        className="flex items-center text-[8px] font-black uppercase tracking-[0.18em] pb-1 border-b"
+        className="flex items-center text-[8px] font-black uppercase tracking-[var(--track-eyebrow)] pb-1 border-b"
         style={{
           color: 'var(--fg-subtle)',
           borderColor: 'var(--border-muted)',
@@ -120,13 +120,11 @@ export default function ChordDiagram({ repo, isDark, size = 280 }: Props) {
                 className="absolute inset-y-1 left-0 rounded-sm pointer-events-none"
                 style={{
                   width: `${Math.max(2, ratio * 100)}%`,
-                  background: isDark
-                    ? 'rgba(170,190,210,0.10)'
-                    : 'rgba(40,60,80,0.07)',
+                  background: 'var(--bg-active)',
                 }}
               />
               <span
-                className="relative w-[42%] text-[10.5px] font-mono font-semibold truncate pl-1"
+                className="relative w-[42%] text-[var(--fs-sm)] font-mono font-semibold truncate pl-1"
                 style={{ color: 'var(--fg-default)' }}
                 title={p.from}
               >
@@ -139,7 +137,7 @@ export default function ChordDiagram({ repo, isDark, size = 280 }: Props) {
                 →
               </span>
               <span
-                className="relative w-[42%] text-[10.5px] font-mono font-semibold truncate"
+                className="relative w-[42%] text-[var(--fs-sm)] font-mono font-semibold truncate"
                 style={{ color: 'var(--fg-default)' }}
                 title={p.to}
               >
@@ -170,7 +168,7 @@ export default function ChordDiagram({ repo, isDark, size = 280 }: Props) {
       )}
 
       <div
-        className="text-[9px] uppercase tracking-[0.18em] mt-2 text-center"
+        className="text-[9px] uppercase tracking-[var(--track-eyebrow)] mt-2 text-center"
         style={{ color: 'var(--fg-subtle)', minHeight: Math.max(0, size - totalH) }}
       >
         {t('deps.couplingSummary', {

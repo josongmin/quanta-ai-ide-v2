@@ -3,7 +3,7 @@ import { Check, Sparkles, Zap } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import type { PlanBlock } from '../../types';
 
-function PlanBlockViewImpl({ block, isDark }: { block: PlanBlock; isDark: boolean }) {
+function PlanBlockViewImpl({ block }: { block: PlanBlock }) {
   const { t } = useTranslation('coding');
   // Local-only checkbox state. Real impl would dispatch to the agent
   // and the agent would echo it back as a plan-block patch. We mirror
@@ -21,17 +21,15 @@ function PlanBlockViewImpl({ block, isDark }: { block: PlanBlock; isDark: boolea
 
   const doneCount = block.items.filter((it) => done[it.id]).length;
   const total = block.items.length;
-  const card = isDark
-    ? 'bg-gradient-to-b from-white/[0.04] to-white/[0.015] border-white/[0.08]'
-    : 'bg-gradient-to-b from-black/[0.025] to-transparent border-black/[0.08]';
-  const labelColor = isDark ? 'text-white/85' : 'text-black/85';
-  const sub = isDark ? 'text-white/40' : 'text-black/55';
-  const checkOff = isDark ? 'border-white/15 hover:border-white/40' : 'border-black/15 hover:border-black/40';
+  const card = 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-default)]';
+  const labelColor = 'text-[color:var(--fg-strong)]';
+  const sub = 'text-[color:var(--fg-muted)]';
+  const checkOff = 'border-[color:var(--border-strong)] hover:border-[color:var(--fg-muted)]';
   const checkOnStyle: React.CSSProperties = {
     background: 'var(--intent-success-vivid)',
     borderColor: 'var(--intent-success-vivid)',
   };
-  const dotIdle = isDark ? 'bg-white/[0.10]' : 'bg-black/[0.10]';
+  const dotIdle = 'bg-[color:var(--bg-active-strong)]';
   const dotOnStyle: React.CSSProperties = { background: 'var(--intent-success-vivid)' };
 
   function toggle(id: string) {
@@ -56,7 +54,7 @@ function PlanBlockViewImpl({ block, isDark }: { block: PlanBlock; isDark: boolea
     <div className={`rounded-lg border ${card} p-3`}>
       <div className="flex items-center gap-2 mb-2.5">
         <Sparkles className={`w-3 h-3 ${sub}`} />
-        <span className={`text-[11px] font-bold uppercase tracking-[0.18em] ${sub}`}>plan</span>
+        <span className={`text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] ${sub}`}>plan</span>
         <span className={`text-[12px] font-semibold ${labelColor}`}>{block.title}</span>
         <div className="flex-1" />
         <button
@@ -71,7 +69,7 @@ function PlanBlockViewImpl({ block, isDark }: { block: PlanBlock; isDark: boolea
           className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
             autoAdvance
               ? ''
-              : (isDark ? 'text-white/40 hover:text-white/70 hover:bg-white/[0.04]' : 'text-black/40 hover:text-black/70 hover:bg-black/[0.04]')
+              : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-hover)]'
           }`}
         >
           <Zap className="w-2.5 h-2.5" />
@@ -116,12 +114,12 @@ function PlanBlockViewImpl({ block, isDark }: { block: PlanBlock; isDark: boolea
                   done[item.id] ? '' : checkOff
                 }`}
               >
-                {done[item.id] && <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />}
+                {done[item.id] && <Check className="w-2.5 h-2.5 text-[color:var(--fg-on-accent)]" strokeWidth={3} />}
               </button>
               <div className="flex-1 min-w-0">
                 <span className={`text-[12px] leading-relaxed ${
                   done[item.id]
-                    ? (isDark ? 'text-white/40 line-through' : 'text-black/40 line-through')
+                    ? 'text-[color:var(--fg-subtle)] line-through'
                     : labelColor
                 }`}>
                   <span className={`mr-1.5 font-mono text-[11px] ${sub}`}>{i + 1}.</span>
