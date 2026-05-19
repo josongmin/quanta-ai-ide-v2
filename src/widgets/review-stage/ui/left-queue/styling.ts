@@ -1,6 +1,6 @@
 import type {
   engineSummary, summariseChecks,
-  type PullRequest,
+  PullRequest,
 } from '@entities/pr';
 import type { TriageTier } from './types';
 

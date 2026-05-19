@@ -18,8 +18,7 @@ import {
   type NotebookQuestion,
   type QuestionType,
 } from '@entities/investigation';
-import { gatherContext, rankEvidence } from '../planner/gatherContext';
-import { composeAnswer, enrichBundle } from '../planner/answerComposer';
+import { gatherContext, rankEvidence, composeAnswer, enrichBundle } from '../planner';
 
 type NotebookCtx = {
   notebook: NotebookEntry[];

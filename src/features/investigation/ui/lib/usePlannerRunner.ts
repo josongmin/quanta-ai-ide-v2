@@ -8,7 +8,7 @@ import {
   runPlanner,
   type PlannerStep,
   type PlannerTrace as PlannerTraceData,
-} from '../../planner/runPlanner';
+} from '../../planner';
 
 export function usePlannerRunner(opts: {
   activeTarget: InvestigationTarget | null;

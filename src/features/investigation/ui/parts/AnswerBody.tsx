@@ -6,12 +6,11 @@ import type {
   InvestigationAnswer,
   UnknownTag,
 } from '@entities/investigation';
-import { AnswerView } from '../../evidence/AnswerView';
-import { GatheringIndicator } from '../../evidence/GatheringIndicator';
+import { AnswerView, GatheringIndicator } from '../../evidence';
 import { SimilarStrip } from '../../similarity';
 import { FollowUpStrip, type FollowUp } from '../../followup';
 import { PlannerLauncher, PlannerTrace } from '../../planner-ui';
-import type { PlannerStep, PlannerTrace as PlannerTraceData } from '../../planner/runPlanner';
+import type { PlannerStep, PlannerTrace as PlannerTraceData } from '../../planner';
 import { AllEvidenceSection } from './AllEvidenceSection';
 import { SkeletonBlock } from './SkeletonBlock';
 

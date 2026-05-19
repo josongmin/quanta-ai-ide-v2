@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { EvidenceItem } from '@entities/investigation';
-import { EvidenceCard } from '../../evidence/EvidenceCard';
+import { EvidenceCard } from '../../evidence';
 
 export function AllEvidenceSection({
   evidence,

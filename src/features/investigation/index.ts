@@ -23,9 +23,7 @@ export type {
   JobStatus,
 } from '@entities/investigation';
 
-export { default as InvestigatePanel } from './ui/InvestigatePanel';
-export { default as InvestigateCTA } from './ui/InvestigateCTA';
-export { default as InvestigateLauncher } from './ui/InvestigateLauncher';
+export { InvestigatePanel, InvestigateCTA, InvestigateLauncher } from './ui';
 
 export { Notebook } from './notebook';
 export { JobsProvider, useJobs, JobsTray } from './jobs';

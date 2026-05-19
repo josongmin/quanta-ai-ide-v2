@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { ContextBundle, EvidenceItem } from '@entities/investigation';
 import { EvidenceStrip } from '../evidence';
-import type { PlannerStep, PlannerTrace as PlannerTraceData } from '../planner/runPlanner';
+import type { PlannerStep, PlannerTrace as PlannerTraceData } from '../planner';
 
 type Props = {
   trace: PlannerTraceData | null;

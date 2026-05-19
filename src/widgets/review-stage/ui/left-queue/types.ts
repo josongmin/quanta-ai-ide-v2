@@ -1,6 +1,6 @@
 import type {
   computePrRisk, engineSummary, summariseChecks,
-  type PullRequest,
+  PullRequest,
 } from '@entities/pr';
 
 // ── Annotated PR — pre-computed signals consumed by sort + render ────────

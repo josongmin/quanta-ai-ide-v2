@@ -31,14 +31,14 @@ export function SectionHeader({ title, sub, badge, actions, children }: Props) {
   const titleBlock = (
     <div>
       <h3
-        className="text-[10px] font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="text-xs font-black uppercase tracking-[var(--track-eyebrow)]"
         style={{ color: 'var(--fg-muted)' }}
       >
         {title}
       </h3>
       {sub && (
         <div
-          className="text-[9px] mt-0.5"
+          className="text-2xs mt-0.5"
           style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
         >
           {sub}

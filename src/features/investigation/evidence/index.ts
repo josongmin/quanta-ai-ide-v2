@@ -7,3 +7,6 @@ export { SourceToolBadge } from './SourceToolBadge';
 export { EvidenceStrip } from './EvidenceStrip';
 export { HypothesisBlock } from './HypothesisBlock';
 export { ActionButton } from './ActionButton';
+export { EvidenceCard } from './EvidenceCard';
+export { AnswerView } from './AnswerView';
+export { GatheringIndicator } from './GatheringIndicator';

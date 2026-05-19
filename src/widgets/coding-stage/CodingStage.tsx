@@ -116,17 +116,9 @@ export default function CodingStage() {
   }, [active?.projectId, active, projects]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  // Command palette + per-turn context menu open state. The ⌘K
-  // capture-phase listener fires from inside this hook.
-  const {
-    paletteOpen,
-    turnMenu,
-    handleOpenTurnMenu,
-    handlePaletteClose,
-    handleTurnMenuClose,
-  } = useCommandPalette();
-
   // Window event bridge from Blocks (plan auto-advance + inline line edit).
+  // Registered before useCommandPalette()'s ⌘K listener to preserve the
+  // original effect mount order from the pre-split monolith.
   useEffect(() => {
     function onPlanAdvance(e: Event) {
       const detail = (e as CustomEvent<{ nextText: string }>).detail;
@@ -146,6 +138,16 @@ export default function CodingStage() {
       window.removeEventListener('coding:line-rewrite', onLineRewrite);
     };
   }, []);
+
+  // Command palette + per-turn context menu open state. The ⌘K
+  // capture-phase listener fires from inside this hook.
+  const {
+    paletteOpen,
+    turnMenu,
+    handleOpenTurnMenu,
+    handlePaletteClose,
+    handleTurnMenuClose,
+  } = useCommandPalette();
 
   // Compose new turn into the active thread. If the thread is empty we
   // also flip the task title so the rail shows something useful.
