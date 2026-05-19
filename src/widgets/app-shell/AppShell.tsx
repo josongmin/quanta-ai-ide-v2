@@ -2,11 +2,10 @@ import { lazy, Suspense, useCallback, useMemo, useRef, useState, type ReactNode 
 import StatusBar, { STATUS_BAR_HEIGHT } from './StatusBar';
 import {
   Bell, ChevronDown, Palette,
-  Sun, Moon, RotateCcw,
+  RotateCcw,
   Search,
 } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { useTheme } from '@shared/theme';
 import { WorkspaceTabsStrip, WorkspaceTabsHost } from '@features/workspace-tabs';
 import { isMacOS, isTauri, useMenuEvent, useShortcut } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
@@ -51,10 +50,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const [helpOpen, setHelpOpen] = useState(false);
   const navigate = useNavigate();
   const setActivityOpen = useCallback((_open: boolean) => { /* see note above import block */ }, []);
-  // `isDark` is still needed to swap between Sun/Moon icons and to drive the
-  // theme-toggle accent colour. All other surface/text styling now flows
-  // through the semantic-token CSS variables (theme-aware automatically).
-  const { isDark, toggle: toggleTheme } = useTheme();
+  // Surface/text styling all flows through the semantic-token CSS
+  // variables (theme-aware automatically); no isDark needed here.
   // Narrow selector: action setters are reference-stable in zustand, so this
   // never re-renders due to filter/search churn elsewhere in the store.
   const resetAll = useFilterStore((s) => s.resetAll);
@@ -175,15 +172,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
           <span ref={settingsSlotRef} className="contents">
             <SettingsPanel compact />
           </span>
-          <IconButton
-            icon={isDark ? Sun : Moon}
-            label={t('action.toggleTheme')}
-            onClick={toggleTheme}
-            tone="accent"
-          />
-          {/* `isDark` is intentionally read above so the icon swaps; tone is
-              kept on the muted/accent token spectrum to align with the rest
-              of the GNB rail. */}
+          {/* Light/dark toggle removed — theme is driven entirely from
+              the palette (TokensPanel) so the chrome follows the active
+              preset; a separate mode button was redundant/confusing. */}
 
           {/* Control palette trigger — visible affordance for the same
               Cmd-K binding registered in useGlobalShortcuts. Cosmetic ⌘K
