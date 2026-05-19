@@ -11,7 +11,7 @@ export const glass = {
   border: 1,                          // px
   shadow: shadow.lg,
   // alpha values; concrete fills come from semantic.bgOverlay
-  fillAlphaDark: 0.04,
+  fillAlphaDark: 0.5,
   fillAlphaLight: 0.85,
 } as const;
 

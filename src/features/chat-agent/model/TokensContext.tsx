@@ -153,7 +153,7 @@ function createDefaults(): Tokens {
       glass: {
         radius: '24px',
         blur: components.glass.blur,
-        fillAlphaDark: 0.04,
+        fillAlphaDark: 0.5,
         fillAlphaLight: 0.8,
         borderDark: 0.1,
         borderLight: 0.4,
