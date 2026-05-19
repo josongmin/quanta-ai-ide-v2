@@ -356,9 +356,14 @@ function applyGlassTints(allSemantic: { dark: SemanticTokens; light: SemanticTok
   // Use the SOLID surface, not bgElevated: in this token set bgElevated
   // is a white-alpha overlay (`rgba(255,255,255,0.06)`), so deriving the
   // tint from it always yields white — the panels would never follow the
-  // palette. bgSurface is a solid hex per theme/preset, so the chrome
-  // tint tracks the active palette (Tokyo Night, Dracula, …).
-  const darkSource = allSemantic.dark.bgSurface;
+  // palette. NOTE: every dark theme's bgSurface is a near-identical
+  // near-black (#21252b / #16161e / #161b22 …), so tinting from it is
+  // visually indistinguishable between presets. The colour that actually
+  // *characterises* a theme is the accent (Tokyo=purple, Dracula=pink,
+  // Nord=blue), so dark pulls its tint from fgAccent — that makes the
+  // chrome visibly track the palette. Light stays on bgSurface (light
+  // surfaces vary and an accent at alpha-1 would be far too loud).
+  const darkSource = allSemantic.dark.fgAccent ?? allSemantic.dark.bgSurface;
   const lightSource = allSemantic.light.bgSurface;
   const darkTriplet = colorToRgbTriplet(darkSource);
   const lightTriplet = colorToRgbTriplet(lightSource);
