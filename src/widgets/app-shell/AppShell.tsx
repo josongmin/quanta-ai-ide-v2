@@ -10,6 +10,20 @@ import { IconButton } from '@shared/ui';
 import { useFilterStore } from '@features/filter-files';
 import { usePrefs, SettingsPanel } from '@features/tweak-prefs';
 import { WorkspaceTabsStrip } from '@features/workspace-tabs';
+// Hooks must be static (can't lazy-load a hook); the palette UI itself
+// is lazy below to match the sibling modals' chunking.
+import {
+  useControlPaletteStore,
+  useGlobalShortcuts,
+  useTrackRecents,
+} from '@features/control-palette';
+
+// Cmd/Ctrl+K global browse palette. Lazy — the heavy command UI is only
+// paid for once the user actually opens it; the Cmd-K binding lives in
+// useGlobalShortcuts (static) so the shortcut works before this loads.
+const ControlPalette = lazy(() =>
+  import('@features/control-palette').then((m) => ({ default: m.ControlPalette })),
+);
 
 // Heavy modal — only paid for once the user actually opens it. Keeps the
 // chat-agent slice (and its TokensContext deps) out of the initial chunk.
@@ -85,6 +99,13 @@ export default function AppShell({ children }: { children: ReactNode }) {
     { key: '/', ctrl: true, ignoreInputs: false },
     useCallback(() => { setHelpOpen((v) => !v); }, []),
   );
+
+  // Global browse palette (Cmd/Ctrl+K) + Cmd+1..7 tab jumps + `?` help.
+  // The feature shipped unmounted, so the shortcut did nothing — wiring
+  // the hook here is what actually makes Cmd-K open it.
+  useGlobalShortcuts({ onOpenHelp: useCallback(() => { setHelpOpen(true); }, []) });
+  useTrackRecents();
+  const paletteOpen = useControlPaletteStore((s) => s.open);
 
   return (
     <div
@@ -246,6 +267,16 @@ export default function AppShell({ children }: { children: ReactNode }) {
           <ShortcutsModal
             open={helpOpen}
             onClose={() => { setHelpOpen(false); }}
+          />
+        </Suspense>
+      )}
+
+      {paletteOpen && (
+        <Suspense fallback={null}>
+          <ControlPalette
+            onOpenHelp={() => { setHelpOpen(true); }}
+            onOpenTokens={() => { setTokensOpen(true); }}
+            onOpenActivity={() => { setActivityOpen(true); }}
           />
         </Suspense>
       )}
