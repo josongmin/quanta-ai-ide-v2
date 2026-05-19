@@ -349,7 +349,12 @@ function colorToRgbTriplet(input: string): string | null {
 // the glass reads as a tinted highlight; light uses bgSurface directly.
 function applyGlassTints(allSemantic: { dark: SemanticTokens; light: SemanticTokens }) {
   const root = document.documentElement;
-  const darkSource = allSemantic.dark.bgElevated ?? allSemantic.dark.bgSurface;
+  // Use the SOLID surface, not bgElevated: in this token set bgElevated
+  // is a white-alpha overlay (`rgba(255,255,255,0.06)`), so deriving the
+  // tint from it always yields white — the panels would never follow the
+  // palette. bgSurface is a solid hex per theme/preset, so the chrome
+  // tint tracks the active palette (Tokyo Night, Dracula, …).
+  const darkSource = allSemantic.dark.bgSurface;
   const lightSource = allSemantic.light.bgSurface;
   const darkTriplet = colorToRgbTriplet(darkSource);
   const lightTriplet = colorToRgbTriplet(lightSource);
