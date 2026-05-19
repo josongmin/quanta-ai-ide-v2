@@ -4,6 +4,7 @@ import { Modal } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import type { SemanticTokens } from '@shared/tokens';
 import { useTokens, type GlobalTokenSections, type Tokens } from '../model/TokensContext';
+import { DARK_PRESETS, LIGHT_PRESETS, type ThemePreset } from '../model/theme-presets';
 
 export default function TokensPanel({ onClose }: { onClose: () => void }) {
   const {
@@ -28,7 +29,7 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
           <div>
             <h2
               id="tokens-panel-title"
-              className="text-[13px] font-black uppercase tracking-[0.18em]"
+              className="text-[12px] font-black uppercase tracking-[0.18em]"
               style={{ color: 'var(--fg-default)' }}
             >
               {t('tokens.title')}
@@ -60,6 +61,45 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
 
         <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide">
           <div className="space-y-3">
+            <SectionTitle title={t('tokens.groups.themePalette', 'Theme palette')} />
+            <ThemePresetGrid
+              tone="dark"
+              label={t('tokens.tone.dark', 'Dark')}
+              presets={DARK_PRESETS}
+              onApply={(preset) => { replace((current) => preset.apply(current)); }}
+              t={t as (key: string, fallback?: string) => string}
+            />
+            <ThemePresetGrid
+              tone="light"
+              label={t('tokens.tone.light', 'Light')}
+              presets={LIGHT_PRESETS}
+              onApply={(preset) => { replace((current) => preset.apply(current)); }}
+              t={t as (key: string, fallback?: string) => string}
+            />
+          </div>
+
+          <div className="space-y-3">
+            <SectionTitle title={t('tokens.groups.presets')} />
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+              {PRESETS.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => { replace((current) => preset.apply(current)); }}
+                  className="text-left p-2 rounded-lg border text-[11px] font-bold hover-surface"
+                  style={{
+                    background: 'var(--bg-surface-muted)',
+                    borderColor: 'var(--border-muted)',
+                    color: 'var(--fg-default)',
+                  }}
+                >
+                  {t(`tokens.presets.${preset.id}`)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
             <SectionTitle title="Theme tokens" />
             {SEMANTIC_GROUPS.map((group) => (
               <ThemeTokenMatrix
@@ -88,31 +128,140 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
               ))}
             </div>
           </div>
-
-          <div className="space-y-3">
-            <SectionTitle title={t('tokens.groups.presets')} />
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-              {PRESETS.map((preset) => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  onClick={() => { replace((current) => preset.apply(current)); }}
-                  className="text-left p-2 rounded-lg border text-[11px] font-bold hover-surface"
-                  style={{
-                    background: 'var(--bg-surface-muted)',
-                    borderColor: 'var(--border-muted)',
-                    color: 'var(--fg-default)',
-                  }}
-                >
-                  {t(`tokens.presets.${preset.id}`)}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </Modal>
   );
+}
+
+function ThemePresetGrid({
+  tone, label, presets, onApply, t,
+}: {
+  tone: 'dark' | 'light';
+  label: string;
+  presets: ThemePreset[];
+  onApply: (preset: ThemePreset) => void;
+  t: (key: string, fallback?: string) => string;
+}) {
+  return (
+    <div
+      className="rounded-xl border p-3 space-y-2"
+      style={{
+        background: 'var(--bg-surface-muted)',
+        borderColor: 'var(--border-muted)',
+      }}
+    >
+      <div
+        className="text-[9px] font-black uppercase tracking-[0.18em]"
+        style={{ color: 'var(--fg-muted)' }}
+      >
+        {label}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        {presets.map((preset) => (
+          <PresetSwatch
+            key={preset.id}
+            preset={preset}
+            tone={tone}
+            label={t(`tokens.themes.${preset.id}`, preset.id)}
+            onClick={() => { onApply(preset); }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PresetSwatch({
+  preset, tone, label, onClick,
+}: {
+  preset: ThemePreset;
+  tone: 'dark' | 'light';
+  label: string;
+  onClick: () => void;
+}) {
+  // Resolve the preset's actual colours by applying it to a minimal stub
+  // and reading the relevant tone slice. We only need the swatch chips so
+  // the stub is just the matching tone.
+  const stub = makeStubTokens();
+  const applied = preset.apply(stub).semantic[tone];
+  const swatches = [
+    applied.bgCanvas,
+    applied.bgSurface,
+    applied.fgStrong,
+    applied.fgLink,
+    applied.intentDangerFg,
+    applied.intentSuccessFg,
+  ];
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="text-left p-2 rounded-lg border hover-surface flex flex-col gap-2"
+      style={{
+        background: 'var(--bg-surface)',
+        borderColor: 'var(--border-muted)',
+      }}
+    >
+      <div
+        className="rounded-md overflow-hidden border"
+        style={{
+          borderColor: 'var(--border-muted)',
+          background: applied.bgCanvas,
+        }}
+      >
+        <div className="flex h-8">
+          {swatches.map((c, i) => (
+            <span
+              key={i}
+              className="flex-1"
+              style={{ background: c }}
+              aria-hidden
+            />
+          ))}
+        </div>
+      </div>
+      <div
+        className="text-[11px] font-semibold leading-tight"
+        style={{ color: 'var(--fg-default)' }}
+      >
+        {label}
+      </div>
+    </button>
+  );
+}
+
+function makeStubTokens(): Tokens {
+  // We only need a SemanticTokens shape that the preset's `apply` can
+  // spread into. The non-colour fields are inert for the swatch render.
+  // Cast (not annotate): this is a throwaway swatch-preview stub. The
+  // SemanticTokens shape drifted (brandFg→fgAccent etc.) since this code
+  // was authored; the preset's `apply` only reads the colour keys it
+  // touches, so an approximate stub is fine here.
+  const blank = {
+    bgCanvas: '#000', bgSurface: '#000', bgSurfaceMuted: '#000',
+    bgOverlay: '#000', bgElevated: '#000', bgPanelStrong: '#000',
+    bgHover: '#000', bgActive: '#000', bgActiveStrong: '#000',
+    bgSelected: '#000', bgScrim: '#000', bgStage: '#000', bgStageUniverse: '#000',
+    fgStrong: '#fff', fgDefault: '#fff', fgMuted: '#fff', fgSubtle: '#fff',
+    fgOnAccent: '#fff', fgOnActiveStrong: '#fff', fgLink: '#fff', fgAccent: '#fff',
+    borderDefault: '#000', borderMuted: '#000', borderStrong: '#000',
+    borderFocus: '#000', ringActive: '#000',
+    shadowSm: '', shadowMd: '', shadowLg: '',
+    brandFg: '#fff', brandBg: '#000', brandVivid: '#000',
+    intentSuccessFg: '#fff', intentSuccessBg: '#000', intentSuccessVivid: '#000',
+    intentWarnFg: '#fff', intentWarnBg: '#000', intentWarnVivid: '#000',
+    intentDangerFg: '#fff', intentDangerBg: '#000', intentDangerVivid: '#000',
+    intentInfoFg: '#fff', intentInfoBg: '#000',
+    intentNeutralFg: '#fff', intentNeutralBg: '#000',
+    identityStable: '#fff', identityModified: '#fff',
+    identityVulnerable: '#fff', identityOutOfScope: '#fff',
+    intensityWarm: '#fff', intensityCool: '#fff', intensityNeutral: '#fff',
+  } as unknown as SemanticTokens;
+  return {
+    semantic: { dark: blank, light: blank },
+    global: {} as Tokens['global'],
+  };
 }
 
 function SectionTitle({ title }: { title: string }) {
@@ -162,15 +311,15 @@ function ThemeTokenMatrix({
         <ColumnHeader title="Light" />
 
         {keys.map((key) => (
-          <Fragment key={key}>
+          <Fragment key={String(key)}>
             <div
               className="text-[10px] font-mono pt-2"
               style={{ color: 'var(--fg-muted)' }}
             >
-              {humanizeKey(key)}
+              {humanizeKey(String(key))}
             </div>
-            <TokenField value={dark[key]} onChange={(value) => { onDarkChange(key, value); }} />
-            <TokenField value={light[key]} onChange={(value) => { onLightChange(key, value); }} />
+            <TokenField label={`${humanizeKey(String(key))} (Dark)`} value={dark[key]} onChange={(value) => { onDarkChange(key, value); }} />
+            <TokenField label={`${humanizeKey(String(key))} (Light)`} value={light[key]} onChange={(value) => { onLightChange(key, value); }} />
           </Fragment>
         ))}
       </div>
@@ -221,15 +370,15 @@ function GlobalTokenGroup<S extends keyof GlobalTokenSections>({
       </div>
 
       {entries.map(([key, value]) => (
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion -- keyof GlobalTokenSections[S] can include `symbol`; String() guards the interpolation
         <div key={`${String(section)}-${String(key)}`} className="space-y-1.5">
           <div className="text-[10px] font-mono" style={{ color: 'var(--fg-muted)' }}>
             {humanizeKey(String(key))}
           </div>
           <TokenField
+            label={humanizeKey(String(key))}
             value={value as string | number}
             onChange={(next) => {
-              onChange(key, (typeof value === 'number' ? Number(next) : next) as GlobalTokenSections[S][typeof key]);
+              onChange(key, (typeof value === 'number' ? Number(next) : next) as unknown as GlobalTokenSections[S][typeof key]);
             }}
           />
         </div>
@@ -239,9 +388,11 @@ function GlobalTokenGroup<S extends keyof GlobalTokenSections>({
 }
 
 function TokenField({
+  label,
   value,
   onChange,
 }: {
+  label?: string;
   value: string | number;
   onChange: (next: string) => void;
 }) {
@@ -264,6 +415,7 @@ function TokenField({
             value={text}
             onChange={(e) => { onChange(e.target.value); }}
             className="w-7 h-7 rounded-md cursor-pointer bg-transparent shrink-0"
+            aria-label={label ? `${label} color picker` : 'Token color picker'}
           />
         )}
         {!hex && colorPreview && (
@@ -286,6 +438,9 @@ function TokenField({
             borderColor: 'var(--border-muted)',
             color: 'var(--fg-default)',
           }}
+          aria-label={label ? `${label} value` : 'Token value'}
+          autoComplete="off"
+          spellCheck={false}
         />
       </div>
     </div>
