@@ -167,7 +167,7 @@ export default function AuditLogPage() {
                   <div
                     className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0"
                     style={{
-                      backgroundImage: 'linear-gradient(135deg, var(--brand-vivid), var(--fg-link))',
+                      backgroundImage: 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
                       color: 'var(--bg-canvas)',
                     }}
                   >

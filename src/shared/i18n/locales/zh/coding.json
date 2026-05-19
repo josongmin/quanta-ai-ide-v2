@@ -137,7 +137,8 @@
       "toggleScrubber": "切换时间线",
       "switchModelCapable": "切换模型: opus 4.7",
       "switchModelBalanced": "切换模型: sonnet 4.6",
-      "switchModelFast": "切换模型: haiku 4.5"
+      "switchModelFast": "切换模型: haiku 4.5",
+      "openCatalog": "打开 SaaS 功能目录"
     }
   },
   "activityV2": {

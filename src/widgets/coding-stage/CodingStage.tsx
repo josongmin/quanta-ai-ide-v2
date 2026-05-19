@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { TaskRail } from './parts/chrome/TaskRail';
@@ -36,6 +37,7 @@ const EMPTY_PROMPT_HISTORY: string[] = [];
 export default function CodingStage() {
   const { isDark } = useTheme();
   const { t } = useTranslation('coding');
+  const navigate = useNavigate();
   // Verified-fix store action — used at agent-turn-end to seed a fix
   // case so the review-stage card has something to pick up.
   const seedVerifiedFix = useVerifiedFixStore((s) => s.seed);
@@ -347,7 +349,10 @@ export default function CodingStage() {
     { id: 'modelOpus',   label: t('palette.actions.switchModelCapable'),  keywords: ['opus'],   onRun: () => { setModel('claude-opus-4-7'); } },
     { id: 'modelSonnet', label: t('palette.actions.switchModelBalanced'), keywords: ['sonnet'], onRun: () => { setModel('claude-sonnet-4-6'); } },
     { id: 'modelHaiku',  label: t('palette.actions.switchModelFast'),     keywords: ['haiku'],  onRun: () => { setModel('claude-haiku-4-5'); } },
-  ], [t, startNewTask, startNewProject, active, applyInverseOf]);
+    { id: 'openCatalog', label: t('palette.actions.openCatalog'),
+      keywords: ['catalog', '카탈로그', 'saas', 'pages', 'index', 'directory', 'scaffold'],
+      onRun: () => { void navigate({ to: '/catalog' as never }); } },
+  ], [t, startNewTask, startNewProject, active, applyInverseOf, navigate]);
 
   // Turn-menu items: only built when the menu is open, but the builder
   // gets fresh closures anyway — fine because TurnContextMenu only

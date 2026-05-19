@@ -208,7 +208,8 @@
       "toggleScrubber": "타임라인 토글",
       "switchModelCapable": "모델: opus 4.7로 전환",
       "switchModelBalanced": "모델: sonnet 4.6로 전환",
-      "switchModelFast": "모델: haiku 4.5로 전환"
+      "switchModelFast": "모델: haiku 4.5로 전환",
+      "openCatalog": "SaaS 기능 카탈로그 열기"
     }
   },
   "activityV2": {

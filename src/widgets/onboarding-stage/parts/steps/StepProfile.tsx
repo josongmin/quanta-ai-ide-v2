@@ -125,7 +125,7 @@ function AvatarBlock({ value, onChange }: Props) {
           style={{
             background: value.avatarUrl
               ? 'transparent'
-              : 'linear-gradient(135deg, var(--brand-vivid), var(--fg-link))',
+              : 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
             color: 'var(--bg-canvas)',
             outline: dragging ? '2px solid var(--brand-vivid)' : '2px solid transparent',
             outlineOffset: '2px',

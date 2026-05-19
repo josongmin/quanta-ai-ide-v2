@@ -137,7 +137,8 @@
       "toggleScrubber": "タイムライン切替",
       "switchModelCapable": "モデル: opus 4.7 に切替",
       "switchModelBalanced": "モデル: sonnet 4.6 に切替",
-      "switchModelFast": "モデル: haiku 4.5 に切替"
+      "switchModelFast": "モデル: haiku 4.5 に切替",
+      "openCatalog": "SaaS 機能カタログを開く"
     }
   },
   "activityV2": {

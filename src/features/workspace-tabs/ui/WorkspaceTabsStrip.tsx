@@ -284,39 +284,20 @@ export default function WorkspaceTabsStrip() {
         role="tablist"
         aria-label="Workspace tabs"
       >
-        <div
-          ref={scrollRef}
-          className="relative flex min-w-0 max-w-full shrink overflow-x-auto scrollbar-hide"
-          onPointerMove={(e) => {
-            pointerRef.current = { inside: true, clientX: e.clientX, clientY: e.clientY };
-            if (closeCarry) setCloseCarry(null);
-          }}
-          onPointerLeave={() => {
-            pointerRef.current.inside = false;
-            setHoveredId(null);
-            setCloseCarry(null);
-          }}
-        >
-          {tabsOverflow ? (
-            <>
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 left-0 z-[3] w-8 transition-opacity"
-                style={{
-                  opacity: canScrollLeft ? 1 : 0,
-                  background: 'linear-gradient(to right, color-mix(in srgb, var(--bg-overlay) 92%, transparent), transparent)',
-                }}
-              />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 right-0 z-[3] w-8 transition-opacity"
-                style={{
-                  opacity: canScrollRight ? 1 : 0,
-                  background: 'linear-gradient(to left, color-mix(in srgb, var(--bg-overlay) 92%, transparent), transparent)',
-                }}
-              />
-            </>
-          ) : null}
+        <div className="relative flex min-w-0 max-w-full shrink">
+          <div
+            ref={scrollRef}
+            className="flex min-w-0 w-full overflow-x-auto scrollbar-hide"
+            onPointerMove={(e) => {
+              pointerRef.current = { inside: true, clientX: e.clientX, clientY: e.clientY };
+              if (closeCarry) setCloseCarry(null);
+            }}
+            onPointerLeave={() => {
+              pointerRef.current.inside = false;
+              setHoveredId(null);
+              setCloseCarry(null);
+            }}
+          >
           <div ref={rowRef} className="relative flex min-w-max items-stretch gap-0.5 pl-2 pr-1">
             {tabs.map((tab, i) => (
               <TabChip
@@ -350,6 +331,27 @@ export default function WorkspaceTabsStrip() {
               />
             ))}
           </div>
+          </div>
+          {tabsOverflow ? (
+            <>
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 left-0 z-[3] w-8 transition-opacity"
+                style={{
+                  opacity: canScrollLeft ? 1 : 0,
+                  background: 'linear-gradient(to right, color-mix(in srgb, var(--bg-overlay) 92%, transparent), transparent)',
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 right-0 z-[3] w-8 transition-opacity"
+                style={{
+                  opacity: canScrollRight ? 1 : 0,
+                  background: 'linear-gradient(to left, color-mix(in srgb, var(--bg-overlay) 92%, transparent), transparent)',
+                }}
+              />
+            </>
+          ) : null}
         </div>
 
         <button

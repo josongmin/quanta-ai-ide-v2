@@ -137,7 +137,8 @@
       "toggleScrubber": "Toggle timeline",
       "switchModelCapable": "Model: switch to opus 4.7",
       "switchModelBalanced": "Model: switch to sonnet 4.6",
-      "switchModelFast": "Model: switch to haiku 4.5"
+      "switchModelFast": "Model: switch to haiku 4.5",
+      "openCatalog": "Open SaaS feature catalog"
     }
   },
   "activityV2": {

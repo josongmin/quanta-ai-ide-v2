@@ -120,7 +120,7 @@ function Sidebar({ orgSlug, wsName, wsSlug }: { orgSlug: string; wsName: string;
           <div
             className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-black"
             style={{
-              backgroundImage: 'linear-gradient(to bottom right, var(--brand-vivid), var(--fg-link))',
+              backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
               color: 'var(--bg-canvas)',
             }}
           >

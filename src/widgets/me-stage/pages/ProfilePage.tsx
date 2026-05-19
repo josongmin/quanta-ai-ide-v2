@@ -238,7 +238,7 @@ function AvatarBig({ data, setDraft }: { data: ProfileData; setDraft: (v: Profil
         onDrop={(e) => { e.preventDefault(); accept(e.dataTransfer.files[0]); }}
         className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-[24px] font-bold tracking-tight transition-colors"
         style={{
-          background: data.avatarUrl ? 'transparent' : 'linear-gradient(135deg, var(--brand-vivid), var(--fg-link))',
+          background: data.avatarUrl ? 'transparent' : 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
           color: 'var(--bg-canvas)',
         }}
         aria-label="Upload avatar"
@@ -333,7 +333,7 @@ function PublicPreview({ data }: { data: ProfileData }) {
         <div
           className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-[20px] font-bold shrink-0"
           style={{
-            background: data.avatarUrl ? 'transparent' : 'linear-gradient(135deg, var(--brand-vivid), var(--fg-link))',
+            background: data.avatarUrl ? 'transparent' : 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
             color: 'var(--bg-canvas)',
           }}
         >

@@ -1,5 +1,6 @@
 import { useRef, type ReactNode, type ComponentType } from 'react';
 import { useScrollRestoration } from '@shared/lib';
+import { useTheme } from '@shared/theme';
 
 // SideNavShell — generic two-pane layout shared by every settings-style
 // surface (MeShell, AdmissionShell, future WsShell/OrgShell). Renders a
@@ -63,6 +64,10 @@ export function SideNavShell<K extends string>({
 }: Props<K>) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   useScrollRestoration(scrollKey, scrollerRef);
+  // Match the Catalog page (the intended reference): light = bg-surface
+  // (pure white), dark = bg-canvas. Plain --bg-canvas in light is the
+  // slightly-grey off-white that read as "off" against the rest.
+  const { isDark } = useTheme();
 
   const bodyMaxClass = contentMaxWidth === null ? 'max-w-none' : '';
   const bodyMaxStyle = contentMaxWidth === null
@@ -72,7 +77,7 @@ export function SideNavShell<K extends string>({
   return (
     <div
       className="absolute inset-0 flex"
-      style={{ background: 'var(--bg-canvas)' }}
+      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
       <Sidebar
         groups={groups}

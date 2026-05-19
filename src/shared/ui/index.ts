@@ -8,6 +8,7 @@
 
 // ── Layout / surfaces ──
 export { GlassCard } from './GlassCard';
+export { ScrollPane } from './ScrollPane';
 export { SectionHeader } from './SectionHeader';
 export { Section } from './Section';
 

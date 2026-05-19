@@ -296,7 +296,7 @@ function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OAuthApp)
             <div
               className="w-8 h-8 rounded-md flex items-center justify-center text-[11px] font-black shrink-0"
               style={{
-                backgroundImage: 'linear-gradient(135deg, var(--brand-vivid), var(--fg-link))',
+                backgroundImage: 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
                 color: 'var(--bg-canvas)',
               }}
             >

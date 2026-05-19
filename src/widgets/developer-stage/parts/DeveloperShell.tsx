@@ -109,7 +109,7 @@ function Sidebar() {
           <div
             className="w-7 h-7 rounded-md flex items-center justify-center"
             style={{
-              backgroundImage: 'linear-gradient(135deg, var(--brand-vivid), var(--fg-link))',
+              backgroundImage: 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
               color: 'var(--bg-canvas)',
             }}
           >

@@ -55,7 +55,7 @@ export function QueueRow({
   onDrop?: (e: DragEvent<HTMLDivElement>) => void;
   onDragEnd?: () => void;
 }) {
-  const { pr, risk, engine, ci, myState, needsReReview, approvedCount, reviewerCount, tier } = ann;
+  const { pr, engine, ci, myState, needsReReview, approvedCount, reviewerCount, tier } = ann;
   const author = findPerson(pr.author);
   const avatarTone = authorAvatarColor(author.hue);
 
@@ -77,24 +77,6 @@ export function QueueRow({
     const id = window.setInterval(compute, 60_000);
     return () => { window.clearInterval(id); };
   }, [pr.status, pr.updatedAt]);
-
-  // Verdict rail tone — single source of truth for the row's left
-  // accent. Priority: blocker findings > CI fail > conflict > stale
-  // SLA > critical risk > re-review > high finding > attention risk
-  // > aging SLA. Drafts and terminal PRs get no rail (they belong
-  // outside the active triage flow).
-  let railTone: string | null = null;
-  if (pr.status === 'closed' || pr.status === 'merged' || pr.status === 'draft') {
-    railTone = null;
-  } else if (engine.blocker > 0)        railTone = 'var(--intent-danger-fg)';
-  else if (ci.required.failed > 0)      railTone = 'var(--intent-danger-fg)';
-  else if (pr.hasConflicts)             railTone = 'var(--intent-danger-fg)';
-  else if (ageBucket === 'stale')       railTone = 'var(--intent-danger-fg)';
-  else if (risk.tier === 'critical')    railTone = 'var(--intent-danger-fg)';
-  else if (needsReReview)               railTone = 'var(--intent-warn-fg)';
-  else if (engine.high > 0)             railTone = 'var(--intent-warn-fg)';
-  else if (risk.tier === 'attention')   railTone = 'var(--intent-warn-fg)';
-  else if (ageBucket === 'aging')       railTone = 'var(--intent-warn-fg)';
 
   // CI rollup. running > failed > passed > none. Reviewers want to
   // see "fail" loudly, "pass" quietly (default expectation), and
@@ -129,29 +111,16 @@ export function QueueRow({
       onDrop={onDrop}
       onDragEnd={onDragEnd}
       style={{
-        // Active row uses a token-driven surface, not bg-white/X — so
-        // the selection works on both dark and light without depending
-        // on the inversion CSS rules.
-        background: active ? 'var(--bg-selected)' : undefined,
-        ...(isDropTarget && { boxShadow: 'inset 0 2px 0 0 var(--border-focus)' }),
+        // Selection = brand-fg inset ring. House rules: never a grey
+        // /--bg-* surface fill for selected state, never a coloured
+        // left-edge bar. Priority (blocker/CI/conflict/SLA) is conveyed
+        // by the StateLabel + signal chips below, not an edge rail.
+        boxShadow: [
+          active && 'inset 0 0 0 1px var(--fg-accent)',
+          isDropTarget && 'inset 0 2px 0 0 var(--border-focus)',
+        ].filter(Boolean).join(', ') || undefined,
       }}
     >
-      {/* Verdict rail — 2px left edge. */}
-      {railTone !== null && (
-        <div
-          aria-hidden
-          className="absolute left-0 top-0 bottom-0 w-[2px]"
-          style={{ background: railTone }}
-        />
-      )}
-      {/* Active indicator — punches through any rail tone. */}
-      {active && (
-        <div
-          aria-hidden
-          className="absolute left-0 top-0 bottom-0 w-[2px]"
-          style={{ background: 'var(--fg-strong)' }}
-        />
-      )}
       {/* Drag handle — only on pinned rows, hover-revealed. */}
       {pinned && onDragStart && (
         <span
