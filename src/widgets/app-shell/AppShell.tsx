@@ -1,16 +1,15 @@
 import { lazy, Suspense, useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  Brain, GitPullRequest, Code2, Bell, ChevronDown, Palette,
-  Sun, Moon, RotateCcw, ShieldCheck, Bot, Radar, Wand2,
-  Search,
+  Bell, ChevronDown, Palette,
+  Sun, Moon, RotateCcw, Radar,
 } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
 import { useTheme } from '@shared/theme';
 import { isMacOS, isTauri, useMenuEvent, useShortcut } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
 import { IconButton } from '@shared/ui';
 import { useFilterStore } from '@features/filter-files';
 import { usePrefs, SettingsPanel } from '@features/tweak-prefs';
+import { WorkspaceTabsStrip } from '@features/workspace-tabs';
 
 // Heavy modal — only paid for once the user actually opens it. Keeps the
 // chat-agent slice (and its TokensContext deps) out of the initial chunk.
@@ -39,31 +38,10 @@ const ShortcutsModal = lazy(() =>
 // is purely the chrome and renders whichever route content TanStack hands
 // it via `children` (the root route's <Outlet/> output).
 
-type TabId = 'intelligence' | 'investigate' | 'coding' | 'agents' | 'reviews' | 'admission' | 'fixes';
-
-// `to` is typed against the registered router instance, so routes added
-// to the tree become available here automatically.
-const TAB_TO: Record<TabId, '/intelligence' | '/investigate' | '/coding' | '/agents' | '/reviews' | '/admission' | '/fixes'> = {
-  intelligence: '/intelligence',
-  investigate:  '/investigate',
-  coding:       '/coding',
-  agents:       '/agents',
-  reviews:      '/reviews',
-  admission:    '/admission',
-  fixes:        '/fixes',
-};
-
-// Order follows the product flow: discover → investigate → edit → delegate → review → gate → ship-fix.
-// Labels are resolved via i18n at render time, so we only key by id here.
-const TABS: { id: TabId; icon: React.ComponentType<{ className?: string }> }[] = [
-  { id: 'intelligence', icon: Brain },
-  { id: 'investigate',  icon: Search },
-  { id: 'coding',       icon: Code2 },
-  { id: 'agents',       icon: Bot },
-  { id: 'reviews',      icon: GitPullRequest },
-  { id: 'admission',    icon: ShieldCheck },
-  { id: 'fixes',        icon: Wand2 },
-];
+// The workspace tab strip (mode tabs) is now owned by the
+// `@features/workspace-tabs` feature — kind→route mapping, icons and
+// labels live in its registry (`@app/router/workspaceTabsRegistry`), so
+// AppShell no longer keeps a parallel TABS/TAB_TO table here.
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const [tokensOpen, setTokensOpen] = useState(false);
@@ -152,38 +130,16 @@ export default function AppShell({ children }: { children: ReactNode }) {
           <ChevronDown className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         </button>
 
-        <nav data-tauri-drag-region="false" className="flex items-stretch">
-          {TABS.map(({ id, icon: Icon }) => (
-            <Link
-              key={id}
-              to={TAB_TO[id]}
-              // TanStack injects `activeProps` only when the route matches.
-              // We use `inactiveProps` for the idle state so styling stays
-              // declarative — no `useMatchRoute` boilerplate per nav item.
-              activeProps={{
-                className: 'relative flex items-center gap-2 px-4 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors',
-                style: { color: 'var(--fg-strong)' },
-              }}
-              inactiveProps={{
-                className: 'relative flex items-center gap-2 px-4 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors',
-                style: { color: 'var(--fg-subtle)' },
-              }}
-            >
-              {({ isActive }) => (
-                <>
-                  <Icon className="w-3.5 h-3.5" />
-                  {t(`tab.${id}`)}
-                  {isActive && (
-                    <span
-                      className="absolute left-3 right-3 bottom-0 h-[2px]"
-                      style={{ background: 'var(--intent-success-vivid)' }}
-                    />
-                  )}
-                </>
-              )}
-            </Link>
-          ))}
-        </nav>
+        {/* Chrome-style workspace tab strip. Owns its own navigation
+            (clicking a tab pushes the kind's canonical route), so the
+            existing router/<Outlet> still renders the active content —
+            no WorkspaceTabsHost / route refactor required here. */}
+        <div
+          data-tauri-drag-region="false"
+          className="flex min-w-0 flex-1 items-stretch"
+        >
+          <WorkspaceTabsStrip />
+        </div>
 
         {/* Flexible drag handle: dominates the empty middle area so users can
             grab anywhere between the nav and the right-side controls. */}
