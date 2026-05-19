@@ -181,6 +181,49 @@ const investigateRoute = createRoute({
   },
 });
 
+// ─────────────────────────────────────────────────────────────────────────
+// /me/* — the per-user settings area (profile, account, appearance/theme
+// presets, …). Each page self-wraps in MeShell (side-nav + AppShell
+// chrome stays visible), so a route only needs to render the page. The
+// page set used to be unreachable — present in `@widgets/me-stage` but
+// never wired into the tree, which is why the theme/appearance picker
+// "disappeared". Data-driven so the 11 paths stay in one place.
+// ─────────────────────────────────────────────────────────────────────────
+const meStage = () => import('@widgets/me-stage');
+const ME_ROUTES: { path: string; load: Parameters<typeof lazy>[0] }[] = [
+  { path: '/me/profile',        load: () => meStage().then((m) => ({ default: m.ProfilePage })) },
+  { path: '/me/account',        load: () => meStage().then((m) => ({ default: m.AccountPage })) },
+  { path: '/me/security',       load: () => meStage().then((m) => ({ default: m.SecurityPage })) },
+  { path: '/me/connected-apps', load: () => meStage().then((m) => ({ default: m.ConnectedAppsPage })) },
+  { path: '/me/api-tokens',     load: () => meStage().then((m) => ({ default: m.ApiTokensPage })) },
+  { path: '/me/notifications',  load: () => meStage().then((m) => ({ default: m.NotificationsPage })) },
+  { path: '/me/appearance',     load: () => meStage().then((m) => ({ default: m.AppearancePage })) },
+  { path: '/me/preferences',    load: () => meStage().then((m) => ({ default: m.PreferencesPage })) },
+  { path: '/me/keyboard',       load: () => meStage().then((m) => ({ default: m.KeyboardPage })) },
+  { path: '/me/ai',             load: () => meStage().then((m) => ({ default: m.AiPage })) },
+  { path: '/me/inbox',          load: () => meStage().then((m) => ({ default: m.InboxPage })) },
+];
+const meRoutes = ME_ROUTES.map(({ path, load }) => {
+  const Page = lazy(load);
+  return createRoute({
+    getParentRoute: () => rootRoute,
+    path,
+    component: function MeRouteComponent() {
+      return (
+        <Suspense fallback={null}>
+          <Page />
+        </Suspense>
+      );
+    },
+  });
+});
+// Bare /me → first settings page.
+const meIndexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/me',
+  beforeLoad: () => { redirect({ to: '/me/profile', throw: true }); },
+});
+
 // 404 — anything else lands back on intelligence. Cheaper than a real
 // not-found page for an internal app and keeps copy-pasted bad URLs from
 // looking broken.
@@ -219,6 +262,8 @@ const routeTree = rootRoute.addChildren([
   fixesRoute,
   fixPipelineRoute,
   investigateRoute,
+  meIndexRoute,
+  ...meRoutes,
   catchAllRoute,
 ]);
 
