@@ -1351,7 +1351,7 @@ function Retroactive({
           );
         })}
       </div>
-      <div className="mt-2 flex items-center justify-between text-[9px] font-mono text-white/30">
+      <div className="mt-2 flex items-center justify-between text-[9px] font-mono" style={{ color: t.textFaint }}>
         <span>30d ago</span>
         <span>{hovered ? `#${hovered.seed} · ${hovered.decision.outcome.toUpperCase()}` : 'height = rules fired'}</span>
         <span>now</span>
@@ -1361,17 +1361,19 @@ function Retroactive({
 }
 
 function SmallStat({ label, value, color }: { label: string; value: number; color: string }) {
+  const t = useV2();
   return (
     <div className="flex items-baseline gap-1.5">
       <span className="text-[16px] font-black tabular-nums" style={{ color }}>{value}</span>
-      <span className="text-[9px] font-mono uppercase tracking-[0.18em] text-white/40">{label}</span>
+      <span className="text-[9px] font-mono uppercase tracking-[0.18em]" style={{ color: t.textSubtle }}>{label}</span>
     </div>
   );
 }
 
 function Footer() {
+  const t = useV2();
   return (
-    <div className="text-center text-[10px] font-mono text-white/30 pt-2">
+    <div className="text-center text-[10px] font-mono pt-2" style={{ color: t.textFaint }}>
       admission · v2 · all data synthetic
     </div>
   );

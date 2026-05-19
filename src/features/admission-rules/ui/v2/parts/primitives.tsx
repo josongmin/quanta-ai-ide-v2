@@ -127,10 +127,13 @@ export function NavItem({
 export function SectionTitle({
   icon: Icon, children,
 }: { icon: React.ComponentType<{ className?: string }>; children: React.ReactNode }) {
+  const t = useV2();
   return (
     <div className="flex items-center gap-2">
-      <Icon className="w-3.5 h-3.5 text-white/55" />
-      <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/70">
+      <span className="inline-flex" style={{ color: t.textMuted }}>
+        <Icon className="w-3.5 h-3.5" />
+      </span>
+      <h3 className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textBody }}>
         {children}
       </h3>
     </div>
@@ -146,12 +149,13 @@ export function Stat({
   value: number | string;
   tone?: 'mute' | 'critical' | 'warn';
 }) {
+  const t = useV2();
   const color = tone === 'critical' ? SEVERITY_COLOR.block
     : tone === 'warn' ? SEVERITY_COLOR.warn
-    : 'rgba(255,255,255,0.85)';
+    : t.textBody;
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <span className="text-[10px] font-mono text-white/40">{label}</span>
+      <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>{label}</span>
       <span
         className="text-[18px] font-bold tabular-nums leading-none"
         style={{
