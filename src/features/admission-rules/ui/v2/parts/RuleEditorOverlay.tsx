@@ -14,7 +14,7 @@ import {
 } from '@entities/admission';
 import { useAdmissionStore } from '../../../model/store';
 import { usesHint } from '../../sourceStyle';
-import { SEVERITY_COLOR } from './tokens';
+import { SEVERITY_COLOR, useV2, type V2Theme } from './tokens';
 import { V2Card } from './primitives';
 import { timeAgo } from './retrospective';
 
@@ -27,6 +27,7 @@ export function RuleEditorOverlay({
   onClose: () => void;
 }) {
   const { t: tA } = useTranslation('admission');
+  const t = useV2();
   const draft = useAdmissionStore((s) => s.draft);
   const updateDraft = useAdmissionStore((s) => s.updateDraft);
   const saveDraft = useAdmissionStore((s) => s.saveDraft);
@@ -102,20 +103,26 @@ export function RuleEditorOverlay({
         className="fixed right-0 top-0 bottom-0 z-[201] flex flex-col overflow-hidden admv2-rise outline-none"
         style={{
           width: 520,
-          background: '#0d1117',
-          borderLeft: '1px solid rgba(255,255,255,0.10)',
+          background: t.cardBacking,
+          borderLeft: `1px solid ${t.border}`,
           boxShadow: '-24px 0 60px rgba(0,0,0,0.6)',
         }}
       >
-        <div className="shrink-0 px-5 py-4 flex items-center gap-2 border-b border-white/5">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+        <div
+          className="shrink-0 px-5 py-4 flex items-center gap-2 border-b"
+          style={{ borderColor: t.borderSoft }}
+        >
+          <h2
+            className="text-[11px] font-bold uppercase tracking-[0.18em]"
+            style={{ color: t.textHi }}
+          >
             {editingId === null ? 'New rule' : 'Edit rule'}
           </h2>
           <span
             className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
             style={{
-              color: 'rgba(255,255,255,0.65)',
-              background: 'rgba(255,255,255,0.05)',
+              color: t.textMuted,
+              background: t.inset,
             }}
           >
             {cost}
@@ -124,9 +131,9 @@ export function RuleEditorOverlay({
             <span
               className="text-[9px] font-mono px-1.5 py-px rounded-md"
               style={{
-                color: '#7aa7d4',
-                background: '#7aa7d415',
-                border: '1px solid #7aa7d433',
+                color: t.accent,
+                background: `${t.accent}15`,
+                border: `1px solid ${t.accent}33`,
               }}
             >
               v{versions.length}
@@ -135,7 +142,8 @@ export function RuleEditorOverlay({
           <div className="flex-1" />
           <button type="button"
             onClick={() => saveDraft()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] bg-white text-black hover:bg-white/90"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em]"
+            style={{ background: t.textHi, color: t.page }}
           >
             <Save className="w-3 h-3" />
             Save
@@ -144,7 +152,16 @@ export function RuleEditorOverlay({
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="p-1.5 rounded-md text-white/55 hover:text-white hover:bg-white/5"
+            className="p-1.5 rounded-md transition-colors"
+            style={{ color: t.textMuted }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = t.textHi;
+              e.currentTarget.style.background = t.hoverSubtle;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = t.textMuted;
+              e.currentTarget.style.background = 'transparent';
+            }}
           >
             <XIcon className="w-3.5 h-3.5" />
           </button>
@@ -152,53 +169,68 @@ export function RuleEditorOverlay({
 
         <div className="flex-1 min-h-0 overflow-auto p-5 space-y-5">
           {/* Identity */}
-          <Field label="Name">
+          <Field label="Name" t={t}>
             <DrawerInput
               value={draft.name}
               onChange={(v) => { updateDraft({ name: v }); }}
               placeholder="Public-API touched without test"
+              t={t}
             />
           </Field>
-          <Field label="Description">
+          <Field label="Description" t={t}>
             <DrawerInput
               value={draft.description}
               onChange={(v) => { updateDraft({ description: v }); }}
               placeholder={tA('rule.whyExistsPlaceholder')}
               multiline
+              t={t}
             />
           </Field>
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Source">
+            <Field label="Source" t={t}>
               <DrawerSelect
                 value={draft.source}
                 onChange={(v) => { updateDraft({ source: v as RuleSource }); }}
                 options={['native', 'eslint', 'semgrep', 'codeql', 'custom']}
+                t={t}
               />
             </Field>
-            <Field label="Severity">
+            <Field label="Severity" t={t}>
               <DrawerSelect
                 value={draft.severity}
                 onChange={(v) => { updateDraft({ severity: v as RuleSeverity }); }}
                 options={['block', 'warn', 'info']}
                 accent={draft.severity === 'block' ? SEVERITY_COLOR.block
                   : draft.severity === 'warn' ? SEVERITY_COLOR.warn : undefined}
+                t={t}
               />
             </Field>
           </div>
 
           {/* Signal */}
-          <Field label="Signal">
-            <div className="flex items-center gap-px rounded-md overflow-hidden bg-white/[0.04] border border-white/5">
+          <Field label="Signal" t={t}>
+            <div
+              className="flex items-center gap-px rounded-md overflow-hidden border"
+              style={{ background: t.inset, borderColor: t.borderSoft }}
+            >
               {(['metric', 'graph', 'taint', 'dsl', 'external'] as const).map((k) => {
                 const active = draft.signal.kind === k;
                 return (
                   <button type="button"
                     key={k}
                     onClick={() => { updateDraft({ signal: defaultSignalFor(k) }); }}
-                    className={`flex-1 px-2 py-1 text-[10px] font-mono transition-colors ${
-                      active ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/85'
-                    }`}
+                    className="flex-1 px-2 py-1 text-[10px] font-mono transition-colors"
+                    style={{
+                      background: active ? t.hoverActive : 'transparent',
+                      color: active ? t.textHi : t.textSubtle,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!active) e.currentTarget.style.color = t.textBody;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active) e.currentTarget.style.color = t.textSubtle;
+                    }}
                   >
                     {k}
                   </button>
@@ -209,26 +241,32 @@ export function RuleEditorOverlay({
               <SignalEditor
                 signal={draft.signal}
                 onChange={(s) => { updateDraft({ signal: s }); }}
+                t={t}
               />
             </div>
-            <div className="mt-2 text-[10px] font-mono text-white/40">
+            <div
+              className="mt-2 text-[10px] font-mono"
+              style={{ color: t.textSubtle }}
+            >
               uses {usesHint(draft.signal)}
             </div>
           </Field>
 
-          <Field label="Scope">
+          <Field label="Scope" t={t}>
             <div className="grid grid-cols-2 gap-3">
               <DrawerInput
                 value={draft.pathIncludes}
                 onChange={(v) => { updateDraft({ pathIncludes: v }); }}
                 placeholder="includes (csv)"
                 mono
+                t={t}
               />
               <DrawerInput
                 value={draft.pathExcludes}
                 onChange={(v) => { updateDraft({ pathExcludes: v }); }}
                 placeholder="excludes (csv)"
                 mono
+                t={t}
               />
             </div>
           </Field>
@@ -236,27 +274,45 @@ export function RuleEditorOverlay({
           {/* Live preview */}
           <V2Card className="p-4">
             <div className="flex items-center gap-2 mb-3">
-              <Eye className="w-3 h-3 text-white/55" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
+              <Eye className="w-3 h-3" style={{ color: t.textMuted }} />
+              <span
+                className="text-[10px] font-bold uppercase tracking-[0.18em]"
+                style={{ color: t.textBody }}
+              >
                 live preview
               </span>
-              <span className="ml-auto text-[9px] font-mono text-white/40">
+              <span
+                className="ml-auto text-[9px] font-mono"
+                style={{ color: t.textSubtle }}
+              >
                 {preview.elapsedMs.toFixed(1)}ms · {preview.cost}
               </span>
             </div>
             <div className="flex items-baseline gap-3 mb-2">
-              <span className="text-[24px] font-black tabular-nums text-white leading-none">
+              <span
+                className="text-[24px] font-black tabular-nums leading-none"
+                style={{ color: t.textHi }}
+              >
                 {preview.matches.length}
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+              <span
+                className="text-[10px] font-bold uppercase tracking-[0.18em]"
+                style={{ color: t.textSubtle }}
+              >
                 matches{preview.truncated ? ' (capped)' : ''}
               </span>
             </div>
-            <div className="text-[10px] font-mono text-white/40 mb-2">
+            <div
+              className="text-[10px] font-mono mb-2"
+              style={{ color: t.textSubtle }}
+            >
               exact {preview.confidenceMix.exact} · over {preview.confidenceMix.overapprox} · unk {preview.confidenceMix.unknown}
             </div>
             {preview.matches.length === 0 ? (
-              <div className="text-[11px] font-mono text-white/40">
+              <div
+                className="text-[11px] font-mono"
+                style={{ color: t.textSubtle }}
+              >
                 No files match. Rule is ready to enable.
               </div>
             ) : (
@@ -266,20 +322,33 @@ export function RuleEditorOverlay({
                   return (
                     <li
                       key={m.fileId}
-                      className="flex items-center gap-2 text-[10px] font-mono px-2 py-1 rounded-md bg-white/[0.025]"
+                      className="flex items-center gap-2 text-[10px] font-mono px-2 py-1 rounded-md"
+                      style={{ background: t.inset }}
                     >
-                      <span className="w-1 h-1 rounded-full bg-white/55" />
-                      <span className="truncate flex-1 text-white/85">
+                      <span
+                        className="w-1 h-1 rounded-full"
+                        style={{ background: t.textMuted }}
+                      />
+                      <span
+                        className="truncate flex-1"
+                        style={{ color: t.textBody }}
+                      >
                         {f ? `${f.folderPath}.${f.name}` : `#${m.fileId}`}
                       </span>
-                      <span className="text-white/40 truncate max-w-[10rem]">
+                      <span
+                        className="truncate max-w-[10rem]"
+                        style={{ color: t.textSubtle }}
+                      >
                         {m.evidenceText}
                       </span>
                     </li>
                   );
                 })}
                 {preview.matches.length > 6 && (
-                  <li className="text-[10px] font-mono text-white/40 px-2">
+                  <li
+                    className="text-[10px] font-mono px-2"
+                    style={{ color: t.textSubtle }}
+                  >
                     … {preview.matches.length - 6} more
                   </li>
                 )}
@@ -290,15 +359,18 @@ export function RuleEditorOverlay({
           {/* Retroactive impact */}
           <V2Card className="p-4">
             <div className="flex items-center gap-2 mb-3">
-              <Activity className="w-3 h-3 text-white/55" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
+              <Activity className="w-3 h-3" style={{ color: t.textMuted }} />
+              <span
+                className="text-[10px] font-bold uppercase tracking-[0.18em]"
+                style={{ color: t.textBody }}
+              >
                 if enabled (last 30d sim)
               </span>
             </div>
             <div className="grid grid-cols-3 gap-3">
-              <RetroBadge label="block" value={retroImpact.block} color={SEVERITY_COLOR.block} />
-              <RetroBadge label="warn"  value={retroImpact.warn}  color={SEVERITY_COLOR.warn} />
-              <RetroBadge label="pass"  value={retroImpact.pass}  color="#5fa86c" />
+              <RetroBadge label="block" value={retroImpact.block} color={SEVERITY_COLOR.block} t={t} />
+              <RetroBadge label="warn"  value={retroImpact.warn}  color={SEVERITY_COLOR.warn} t={t} />
+              <RetroBadge label="pass"  value={retroImpact.pass}  color={t.ok} t={t} />
             </div>
           </V2Card>
 
@@ -306,11 +378,17 @@ export function RuleEditorOverlay({
           {versions && versions.length > 0 && (
             <V2Card className="p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Clock className="w-3 h-3 text-white/55" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
+                <Clock className="w-3 h-3" style={{ color: t.textMuted }} />
+                <span
+                  className="text-[10px] font-bold uppercase tracking-[0.18em]"
+                  style={{ color: t.textBody }}
+                >
                   history
                 </span>
-                <span className="ml-auto text-[9px] font-mono text-white/40">
+                <span
+                  className="ml-auto text-[9px] font-mono"
+                  style={{ color: t.textSubtle }}
+                >
                   {versions.length} revision{versions.length === 1 ? '' : 's'}
                 </span>
               </div>
@@ -318,13 +396,22 @@ export function RuleEditorOverlay({
                 {versions.slice().reverse().slice(0, 6).map((v) => (
                   <li key={v.version} className="flex items-center gap-2 text-[10px] font-mono">
                     <span
-                      className="px-1.5 py-px rounded-md text-[#7aa7d4]"
-                      style={{ background: '#7aa7d415', border: '1px solid #7aa7d433' }}
+                      className="px-1.5 py-px rounded-md"
+                      style={{
+                        color: t.accent,
+                        background: `${t.accent}15`,
+                        border: `1px solid ${t.accent}33`,
+                      }}
                     >
                       v{v.version}
                     </span>
-                    <span className="text-white/55 truncate flex-1">{v.summary}</span>
-                    <span className="text-white/30">{timeAgo(v.changedAt)}</span>
+                    <span
+                      className="truncate flex-1"
+                      style={{ color: t.textMuted }}
+                    >
+                      {v.summary}
+                    </span>
+                    <span style={{ color: t.textFaint }}>{timeAgo(v.changedAt)}</span>
                   </li>
                 ))}
               </ul>
@@ -338,10 +425,15 @@ export function RuleEditorOverlay({
 
 // ── Field + drawer inputs (also used by the override modal in GatePage)
 
-export function Field({ label, children }: { label: string; children: React.ReactNode }) {
+export function Field({ label, children, t }: { label: string; children: React.ReactNode; t?: V2Theme }) {
+  const tv = useV2();
+  const tt = t ?? tv;
   return (
     <div>
-      <div className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.18em] text-white/40">
+      <div
+        className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.18em]"
+        style={{ color: tt.textSubtle }}
+      >
         {label}
       </div>
       {children}
@@ -350,7 +442,7 @@ export function Field({ label, children }: { label: string; children: React.Reac
 }
 
 export function DrawerInput({
-  value, onChange, placeholder, multiline, mono, numeric,
+  value, onChange, placeholder, multiline, mono, numeric, t,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -358,11 +450,15 @@ export function DrawerInput({
   multiline?: boolean;
   mono?: boolean;
   numeric?: boolean;
+  t?: V2Theme;
 }) {
-  const cls = `w-full px-3 py-2 rounded-md text-[11px] outline-none transition-colors ${mono ? 'font-mono' : ''} text-white/85 placeholder:text-white/30`;
+  const tv = useV2();
+  const tt = t ?? tv;
+  const cls = `w-full px-3 py-2 rounded-md text-[11px] outline-none transition-colors ${mono ? 'font-mono' : ''}`;
   const style: React.CSSProperties = {
-    background: 'rgba(0,0,0,0.30)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: tt.inset,
+    border: `1px solid ${tt.border}`,
+    color: tt.textBody,
   };
   if (multiline) {
     return (
@@ -389,20 +485,23 @@ export function DrawerInput({
 }
 
 function DrawerSelect({
-  value, onChange, options, accent,
+  value, onChange, options, accent, t,
 }: {
   value: string;
   onChange: (v: string) => void;
   options: readonly string[];
   accent?: string;
+  t?: V2Theme;
 }) {
+  const tv = useV2();
+  const tt = t ?? tv;
   return (
     <select
-      className="w-full px-3 py-2 rounded-md text-[11px] font-mono outline-none text-white/85"
+      className="w-full px-3 py-2 rounded-md text-[11px] font-mono outline-none"
       style={{
-        background: 'rgba(0,0,0,0.30)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        color: accent,
+        background: tt.inset,
+        border: `1px solid ${tt.border}`,
+        color: accent ?? tt.textBody,
       }}
       value={value}
       onChange={(e) => { onChange(e.currentTarget.value); }}
@@ -413,8 +512,8 @@ function DrawerSelect({
 }
 
 function SignalEditor({
-  signal, onChange,
-}: { signal: RuleSignal; onChange: (s: RuleSignal) => void }) {
+  signal, onChange, t,
+}: { signal: RuleSignal; onChange: (s: RuleSignal) => void; t: V2Theme }) {
   if (signal.kind === 'metric') {
     return (
       <div className="grid grid-cols-3 gap-2">
@@ -424,16 +523,19 @@ function SignalEditor({
           options={['blastRadius', 'editSafety', 'sastFindings', 'cognitive', 'cyclomatic',
             'loc', 'fanIn', 'fanOut', 'churn', 'lineCoverage', 'maintainability',
             'eslintErrors', 'todoCount']}
+          t={t}
         />
         <DrawerSelect
           value={signal.op}
           onChange={(v) => { onChange({ ...signal, op: v as CompareOp }); }}
           options={['>', '>=', '<', '<=', '=', '!=']}
+          t={t}
         />
         <DrawerInput
           value={String(signal.value)}
           onChange={(v) => { onChange({ ...signal, value: Number(v) || 0 }); }}
           numeric
+          t={t}
         />
       </div>
     );
@@ -445,6 +547,7 @@ function SignalEditor({
         onChange={(v) => { onChange({ kind: 'graph', pattern: v as GraphPattern }); }}
         options={['import-cycle', 'public-api-touched', 'public-api-without-test',
           'orphan-edit', 'blast-radius-spike', 'unknown-region-creep', 'layer-violation']}
+        t={t}
       />
     );
   }
@@ -455,11 +558,13 @@ function SignalEditor({
           value={signal.source}
           onChange={(v) => { onChange({ ...signal, source: v as TaintSource }); }}
           options={['env', 'http', 'user-input', 'config', 'secret']}
+          t={t}
         />
         <DrawerSelect
           value={signal.sink}
           onChange={(v) => { onChange({ ...signal, sink: v as TaintSink }); }}
           options={['fs.write', 'exec', 'sql', 'network', 'log']}
+          t={t}
         />
       </div>
     );
@@ -471,6 +576,7 @@ function SignalEditor({
         onChange={(v) => { onChange({ kind: 'dsl', expr: v }); }}
         placeholder="safety:<40 +publicApi !test"
         mono
+        t={t}
       />
     );
   }
@@ -480,12 +586,14 @@ function SignalEditor({
         value={signal.tool}
         onChange={(v) => { onChange({ ...signal, tool: v as 'eslint' | 'semgrep' | 'codeql' | 'bandit' | 'ruff' }); }}
         options={['eslint', 'semgrep', 'codeql', 'bandit', 'ruff']}
+        t={t}
       />
       <DrawerInput
         value={signal.ruleId}
         onChange={(v) => { onChange({ ...signal, ruleId: v }); }}
         placeholder="rule id"
         mono
+        t={t}
       />
     </div>
   );
@@ -501,7 +609,7 @@ function defaultSignalFor(kind: RuleSignal['kind']): RuleSignal {
   }
 }
 
-function RetroBadge({ label, value, color }: { label: string; value: number; color: string }) {
+function RetroBadge({ label, value, color, t }: { label: string; value: number; color: string; t: V2Theme }) {
   return (
     <div
       className="px-3 py-2 rounded-md"
@@ -513,7 +621,10 @@ function RetroBadge({ label, value, color }: { label: string; value: number; col
       <div className="text-[20px] font-black tabular-nums leading-none" style={{ color }}>
         {value}
       </div>
-      <div className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/40 mt-1">
+      <div
+        className="text-[9px] font-bold uppercase tracking-[0.18em] mt-1"
+        style={{ color: t.textSubtle }}
+      >
         {label}
       </div>
     </div>

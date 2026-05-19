@@ -304,7 +304,7 @@ export function Hero({
   const outcome = decision.outcome;
   const accent = outcome === 'block' ? SEVERITY_COLOR.block
     : outcome === 'warn' ? SEVERITY_COLOR.warn
-    : '#5fa86c';
+    : t.ok;
   const Icon = outcome === 'allow' ? ShieldCheck : outcome === 'warn' ? ShieldAlert : ShieldX;
 
   // Hero is a structural status card. Single accent stripe on the left
@@ -424,6 +424,7 @@ function Cockpit({
   previews: Map<string, ReturnType<typeof previewRule>>;
 }) {
   const { t: tA } = useTranslation('admission');
+  const t = useV2();
   const fired = decision.ruleResults.filter((r) => r.status === 'block' || r.status === 'warn');
   const totalMatched = useMemo(() => {
     let n = 0;
@@ -474,17 +475,17 @@ function Cockpit({
             const isNative = s === 'native';
             return (
               <div key={s} className="flex items-center gap-2 text-[11px] font-mono">
-                <span className={`w-3 text-center ${isNative ? 'text-white/85' : 'text-white/40'}`}>
+                <span className="w-3 text-center" style={{ color: isNative ? t.textBody : t.textSubtle }}>
                   {SOURCE_GLYPH[s]}
                 </span>
-                <span className={isNative ? 'text-white/85 font-bold' : 'text-white/55'}>{s}</span>
-                <div className="flex-1 h-px bg-white/5" />
-                <span className="text-white/55 tabular-nums">{enabled}/{total}</span>
+                <span className={isNative ? 'font-bold' : ''} style={{ color: isNative ? t.textBody : t.textMuted }}>{s}</span>
+                <div className="flex-1 h-px" style={{ background: t.inset }} />
+                <span className="tabular-nums" style={{ color: t.textMuted }}>{enabled}/{total}</span>
               </div>
             );
           })}
         </div>
-        <div className="mt-3 pt-3 border-t border-white/5 text-[10px] font-mono text-white/40 leading-relaxed">
+        <div className="mt-3 pt-3 border-t text-[10px] font-mono leading-relaxed" style={{ borderColor: t.borderSoft, color: t.textSubtle }}>
           ★ native = engine-only signals. lint/semgrep can&apos;t see graph,
           taint, or PR-shape predicates.
         </div>
@@ -503,6 +504,7 @@ function Cockpit({
 function VerdictDonut({
   block, warn, pass,
 }: { block: number; warn: number; pass: number }) {
+  const t = useV2();
   const total = block + warn + pass;
   const r = 28;
   const c = 2 * Math.PI * r;
@@ -521,7 +523,7 @@ function VerdictDonut({
           </filter>
         </defs>
         {/* track */}
-        <circle cx={40} cy={40} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={6} />
+        <circle cx={40} cy={40} r={r} fill="none" stroke={t.inset} strokeWidth={6} />
         {total > 0 && (
           <g transform="rotate(-90 40 40)">
             <circle
@@ -546,7 +548,7 @@ function VerdictDonut({
             <circle
               cx={40} cy={40} r={r}
               fill="none"
-              stroke="#5fa86c"
+              stroke={t.ok}
               strokeWidth={6}
               strokeDasharray={`${seg(pass)} ${c}`}
               strokeDashoffset={-offsets.pass}
@@ -556,10 +558,10 @@ function VerdictDonut({
         )}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-[18px] font-black text-white tabular-nums leading-none">
+        <span className="text-[18px] font-black tabular-nums leading-none" style={{ color: t.textHi }}>
           {total}
         </span>
-        <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/40 mt-0.5">
+        <span className="text-[8px] font-bold uppercase tracking-[0.18em] mt-0.5" style={{ color: t.textSubtle }}>
           rules
         </span>
       </div>
@@ -568,6 +570,7 @@ function VerdictDonut({
 }
 
 function CostLedger({ rules }: { rules: AdmissionRule[] }) {
+  const t = useV2();
   const order: CostClass[] = ['instant', 'fast', 'medium', 'slow', 'background'];
   const counts = useMemo(() => {
     const out: Record<CostClass, number> = {
@@ -585,21 +588,21 @@ function CostLedger({ rules }: { rules: AdmissionRule[] }) {
         const heavy = c === 'slow' || c === 'background';
         return (
           <div key={c} className="flex items-center gap-2 text-[11px] font-mono">
-            <span className={heavy ? 'text-white/85 font-bold' : 'text-white/55'}>{c}</span>
-            <div className="flex-1 h-px bg-white/5" />
+            <span className={heavy ? 'font-bold' : ''} style={{ color: heavy ? t.textBody : t.textMuted }}>{c}</span>
+            <div className="flex-1 h-px" style={{ background: t.inset }} />
             <div
               className="h-1.5 rounded-full relative overflow-hidden"
-              style={{ width: 80, background: 'rgba(255,255,255,0.05)' }}
+              style={{ width: 80, background: t.inset }}
             >
               <span
                 className="absolute inset-y-0 left-0 rounded-full"
                 style={{
                   width: `${(n / total) * 100}%`,
-                  background: heavy ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.45)',
+                  background: heavy ? t.textBody : t.textSubtle,
                 }}
               />
             </div>
-            <span className="text-white/70 tabular-nums w-6 text-right">{n}</span>
+            <span className="tabular-nums w-6 text-right" style={{ color: t.textBody }}>{n}</span>
           </div>
         );
       })}
@@ -621,6 +624,7 @@ function Constellation({
   decision: ReturnType<typeof evaluateAdmission>;
 }) {
   const { t: tA } = useTranslation('admission');
+  const t = useV2();
   const [hovered, setHovered] = useState<string | null>(null);
   const [filter, setFilter] = useState<RuleSource | 'all'>('all');
 
@@ -658,12 +662,15 @@ function Constellation({
     <V2Card className="p-5 relative overflow-hidden">
       <div className="flex items-center gap-3 mb-4">
         <SectionTitle icon={Zap}>{tA('section.ruleConstellation')}</SectionTitle>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
           {visible.length} nodes · severity = hue · matches = glow · dashed = fired
         </span>
         <div className="flex-1" />
         <FilterChips value={filter} onChange={setFilter} rules={rules} />
-        <button type="button" className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] bg-white text-black hover:bg-white/90">
+        <button type="button"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
+          style={{ background: t.textHi, color: t.page }}
+        >
           <Plus className="w-3 h-3" />
           New rule
         </button>
@@ -673,9 +680,9 @@ function Constellation({
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-[360px]">
           <defs>
             <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"  stopColor="#7aa7d4" stopOpacity="0.55" />
-              <stop offset="60%" stopColor="#7aa7d4" stopOpacity="0.10" />
-              <stop offset="100%" stopColor="#7aa7d4" stopOpacity="0" />
+              <stop offset="0%"  stopColor={t.accent} stopOpacity="0.55" />
+              <stop offset="60%" stopColor={t.accent} stopOpacity="0.10" />
+              <stop offset="100%" stopColor={t.accent} stopOpacity="0" />
             </radialGradient>
           </defs>
 
@@ -685,7 +692,7 @@ function Constellation({
               <text
                 x={12}
                 y={bandY(s) + 3}
-                fill="rgba(255,255,255,0.30)"
+                fill={t.textFaint}
                 fontSize={9}
                 fontFamily="ui-monospace, SFMono-Regular, monospace"
                 style={{ letterSpacing: '0.18em', textTransform: 'uppercase' }}
@@ -697,7 +704,7 @@ function Constellation({
                 x2={W - 20}
                 y1={bandY(s)}
                 y2={bandY(s)}
-                stroke="rgba(255,255,255,0.05)"
+                stroke={t.borderSoft}
                 strokeDasharray="2 4"
               />
             </g>
@@ -714,7 +721,7 @@ function Constellation({
               cy={H / 2}
               r={r}
               fill="none"
-              stroke="#7aa7d4"
+              stroke={t.accent}
               strokeOpacity={0.18}
               strokeWidth={0.5}
               strokeDasharray="2 4"
@@ -723,9 +730,9 @@ function Constellation({
           {/* radar sweep cone — rotating linear gradient triangle */}
           <defs>
             <linearGradient id="sweep-grad" x1="0%" y1="50%" x2="100%" y2="50%">
-              <stop offset="0%"  stopColor="#7aa7d4" stopOpacity="0" />
-              <stop offset="80%" stopColor="#7aa7d4" stopOpacity="0" />
-              <stop offset="100%" stopColor="#7aa7d4" stopOpacity="0.55" />
+              <stop offset="0%"  stopColor={t.accent} stopOpacity="0" />
+              <stop offset="80%" stopColor={t.accent} stopOpacity="0" />
+              <stop offset="100%" stopColor={t.accent} stopOpacity="0.55" />
             </linearGradient>
           </defs>
           <g
@@ -747,23 +754,23 @@ function Constellation({
               cy={H / 2}
               r={48}
               fill="none"
-              stroke="#7aa7d4"
+              stroke={t.accent}
               strokeOpacity={0.45}
               strokeWidth={0.8}
               strokeDasharray="3 6"
             />
           </g>
           {/* core pulse */}
-          <circle cx={W - 40} cy={H / 2} r={10} fill="#7aa7d4" opacity={0.95}>
+          <circle cx={W - 40} cy={H / 2} r={10} fill={t.accent} opacity={0.95}>
             <animate attributeName="r" values="10;13;10" dur="2.4s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="0.95;0.55;0.95" dur="2.4s" repeatCount="indefinite" />
           </circle>
-          <circle cx={W - 40} cy={H / 2} r={4} fill="#fff" opacity={0.95} />
+          <circle cx={W - 40} cy={H / 2} r={4} fill={t.accent} opacity={0.95} />
           <text
             x={W - 40}
             y={H / 2 + 64}
             textAnchor="middle"
-            fill="rgba(255,255,255,0.55)"
+            fill={t.textMuted}
             fontSize={9}
             fontFamily="ui-monospace, SFMono-Regular, monospace"
             style={{ letterSpacing: '0.22em', textTransform: 'uppercase' }}
@@ -795,7 +802,7 @@ function Constellation({
             const fired = firedIds.has(rule.id);
             const sev = rule.severity === 'block' ? SEVERITY_COLOR.block
               : rule.severity === 'warn' ? SEVERITY_COLOR.warn
-              : 'rgba(255,255,255,0.55)';
+              : t.textMuted;
             const radius = 6 + Math.min(8, matches / 5);
             const isHover = hovered === rule.id;
             const opacity = !rule.enabled ? 0.25 : isHover || hovered === null ? 1 : 0.5;
@@ -822,7 +829,7 @@ function Constellation({
                   cx={x}
                   cy={y}
                   r={radius}
-                  fill={rule.enabled ? sev : 'rgba(255,255,255,0.2)'}
+                  fill={rule.enabled ? sev : t.textFaint}
                   opacity={rule.enabled ? 0.95 : 0.4}
                   style={{
                     filter: rule.enabled
@@ -845,7 +852,7 @@ function Constellation({
                   x={x}
                   y={y - radius - 6}
                   textAnchor="middle"
-                  fill={isHover ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.45)'}
+                  fill={isHover ? t.textHi : t.textSubtle}
                   fontSize={9}
                   fontFamily="ui-monospace, SFMono-Regular, monospace"
                 >
@@ -858,7 +865,7 @@ function Constellation({
       </div>
 
       {/* Inspector */}
-      <div className="mt-2 pt-4 border-t border-white/5 min-h-[88px]">
+      <div className="mt-2 pt-4 border-t min-h-[88px]" style={{ borderColor: t.borderSoft }}>
         {hoveredRule ? (
           <RuleInspector rule={hoveredRule} preview={hoveredPreview} evalResult={hoveredEval} />
         ) : (
@@ -876,11 +883,12 @@ function RuleInspector({
   preview: ReturnType<typeof previewRule> | null;
   evalResult: ReturnType<typeof evaluateAdmission>['ruleResults'][number] | null;
 }) {
+  const t = useV2();
   const cost = estimateCost(rule);
   const sevColor = rule.severity === 'block' ? SEVERITY_COLOR.block
-    : rule.severity === 'warn' ? SEVERITY_COLOR.warn : 'rgba(255,255,255,0.55)';
+    : rule.severity === 'warn' ? SEVERITY_COLOR.warn : t.textMuted;
   const fired = evalResult && (evalResult.status === 'block' || evalResult.status === 'warn');
-  const dotColor = rule.enabled ? sevColor : 'rgba(255,255,255,0.25)';
+  const dotColor = rule.enabled ? sevColor : t.textFaint;
   return (
     <div className="flex items-start gap-3 admv2-rise">
       <span className="relative shrink-0 mt-1 inline-flex items-center justify-center w-3 h-3">
@@ -900,18 +908,18 @@ function RuleInspector({
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-mono text-white/40">
+          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
             {SOURCE_GLYPH[rule.source]} {rule.source}
           </span>
-          <span className="text-white/30">·</span>
+          <span style={{ color: t.textFaint }}>·</span>
           <span
             className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
             style={{ color: sevColor, background: `${sevColor}1a` }}
           >
             {rule.severity}
           </span>
-          <span className="text-white/30">·</span>
-          <span className="text-[10px] font-mono text-white/55">{cost}</span>
+          <span style={{ color: t.textFaint }}>·</span>
+          <span className="text-[10px] font-mono" style={{ color: t.textMuted }}>{cost}</span>
           {fired && (
             <span
               className="ml-auto text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
@@ -921,19 +929,19 @@ function RuleInspector({
             </span>
           )}
         </div>
-        <div className="mt-1 text-[14px] font-bold text-white/85 truncate">
+        <div className="mt-1 text-[14px] font-bold truncate" style={{ color: t.textBody }}>
           {rule.name}
         </div>
-        <div className="mt-0.5 text-[11px] font-mono text-white/40 truncate">
+        <div className="mt-0.5 text-[11px] font-mono truncate" style={{ color: t.textSubtle }}>
           uses {usesHint(rule.signal)} · {describeSignal(rule.signal)}
         </div>
         {preview && (
-          <div className="mt-2 flex items-center gap-3 text-[10px] font-mono text-white/55">
+          <div className="mt-2 flex items-center gap-3 text-[10px] font-mono" style={{ color: t.textMuted }}>
             <span>{preview.matches.length} repo-wide</span>
-            <span className="text-white/30">·</span>
-            <span className="text-white/85">{preview.confidenceMix.exact} exact</span>
+            <span style={{ color: t.textFaint }}>·</span>
+            <span style={{ color: t.textBody }}>{preview.confidenceMix.exact} exact</span>
             <span>{preview.confidenceMix.overapprox} over</span>
-            <span className="text-white/40">{preview.confidenceMix.unknown} unk</span>
+            <span style={{ color: t.textSubtle }}>{preview.confidenceMix.unknown} unk</span>
           </div>
         )}
       </div>
@@ -942,8 +950,9 @@ function RuleInspector({
 }
 
 function EmptyInspector() {
+  const t = useV2();
   return (
-    <div className="flex items-center gap-3 text-[11px] font-mono text-white/40">
+    <div className="flex items-center gap-3 text-[11px] font-mono" style={{ color: t.textSubtle }}>
       <Eye className="w-3.5 h-3.5" />
       Hover a node to inspect signal, cost, and evidence.
     </div>
@@ -957,9 +966,10 @@ function FilterChips({
   onChange: (v: RuleSource | 'all') => void;
   rules: AdmissionRule[];
 }) {
+  const t = useV2();
   const opts: (RuleSource | 'all')[] = ['all', 'native', 'eslint', 'semgrep', 'codeql', 'custom'];
   return (
-    <div className="flex items-center gap-px rounded-md overflow-hidden bg-white/[0.04]">
+    <div className="flex items-center gap-px rounded-md overflow-hidden" style={{ background: t.inset }}>
       {opts.map((o) => {
         const active = value === o;
         const count = o === 'all' ? rules.length : rules.filter((r) => r.source === o).length;
@@ -967,9 +977,13 @@ function FilterChips({
           <button type="button"
             key={o}
             onClick={() => { onChange(o); }}
-            className={`px-2 py-1 text-[10px] font-mono transition-colors ${
-              active ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'
-            }`}
+            className="px-2 py-1 text-[10px] font-mono transition-colors"
+            style={{
+              background: active ? t.hoverActive : 'transparent',
+              color: active ? t.textHi : t.textSubtle,
+            }}
+            onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = t.textBody; }}
+            onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = t.textSubtle; }}
           >
             {o}
             <span className="ml-1 opacity-60 tabular-nums">{count}</span>
@@ -990,14 +1004,15 @@ function LiveFeed({
   retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
 }) {
   const { t: tA } = useTranslation('admission');
+  const t = useV2();
   // Newest first — synthetic stream reads top-down.
   const ordered = useMemo(() => [...retro].reverse(), [retro]);
   return (
     <V2Card className="p-4 relative overflow-hidden">
       <div className="flex items-center gap-2 mb-3">
         <SectionTitle icon={Clock}>{tA('section.livePrFeed')}</SectionTitle>
-        <span className="ml-1 inline-flex items-center gap-1 text-[9px] font-mono text-white/40">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#5fa86c] admv2-blink" />
+        <span className="ml-1 inline-flex items-center gap-1 text-[9px] font-mono" style={{ color: t.textSubtle }}>
+          <span className="w-1.5 h-1.5 rounded-full admv2-blink" style={{ background: t.ok }} />
           live
         </span>
       </div>
@@ -1006,7 +1021,7 @@ function LiveFeed({
           <FeedRow key={r.seed} index={i} seed={r.seed} diff={r.diff} decision={r.decision} />
         ))}
       </div>
-      <div className="mt-3 pt-3 border-t border-white/5 text-[10px] font-mono text-white/40 leading-relaxed">
+      <div className="mt-3 pt-3 border-t text-[10px] font-mono leading-relaxed" style={{ borderColor: t.borderSoft, color: t.textSubtle }}>
         Synthetic stream · current ruleset replayed against deterministic seeds.
       </div>
     </V2Card>
@@ -1021,9 +1036,10 @@ function FeedRow({
   decision: ReturnType<typeof evaluateAdmission>;
   index: number;
 }) {
+  const t = useV2();
   const accent = decision.outcome === 'block' ? SEVERITY_COLOR.block
     : decision.outcome === 'warn' ? SEVERITY_COLOR.warn
-    : '#5fa86c';
+    : t.ok;
 
   const fired = decision.ruleResults.filter((r) => r.status === 'block' || r.status === 'warn');
   const topRule = fired.length > 0 ? fired[0].ruleName : null;
@@ -1043,11 +1059,13 @@ function FeedRow({
 
   return (
     <div
-      className="px-3 py-2 rounded-lg flex items-center gap-3 group transition-all hover:bg-white/[0.04] hover:translate-x-0.5"
+      className="px-3 py-2 rounded-lg flex items-center gap-3 group transition-all hover:translate-x-0.5"
       style={{
-        border: '1px solid rgba(255,255,255,0.05)',
+        border: `1px solid ${t.borderSoft}`,
         animationDelay: `${index * 35}ms`,
       }}
+      onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; }}
+      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       {/* Status dot — replaces the old left strip. The outer ring is a
           soft halo (only visible for block/warn) so the severity reads at
@@ -1073,37 +1091,37 @@ function FeedRow({
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-white/85">#{seed}</span>
+          <span className="text-[11px] font-mono" style={{ color: t.textBody }}>#{seed}</span>
           <span
             className="text-[9px] font-mono uppercase tracking-[0.18em]"
             style={{ color: accent }}
           >
             {decision.outcome}
           </span>
-          <span className="ml-auto text-[9px] font-mono text-white/35 tabular-nums">
+          <span className="ml-auto text-[9px] font-mono tabular-nums" style={{ color: t.textFaint }}>
             {ageLabel} ago
           </span>
         </div>
-        <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono text-white/55 truncate">
+        <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono truncate" style={{ color: t.textMuted }}>
           <span className="tabular-nums shrink-0">
             {filesChanged} files
           </span>
-          <span className="text-white/25">·</span>
+          <span style={{ color: t.textFaint }}>·</span>
           <span className="tabular-nums shrink-0">
             {rippleCount} ripple
           </span>
-          <span className="text-white/25">·</span>
-          <span className="tabular-nums shrink-0" style={{ color: fired.length > 0 ? accent : 'rgba(255,255,255,0.35)' }}>
+          <span style={{ color: t.textFaint }}>·</span>
+          <span className="tabular-nums shrink-0" style={{ color: fired.length > 0 ? accent : t.textFaint }}>
             {fired.length} fired
           </span>
         </div>
         {topRule && (
-          <div className="mt-0.5 text-[10px] font-mono text-white/35 truncate">
+          <div className="mt-0.5 text-[10px] font-mono truncate" style={{ color: t.textFaint }}>
             {topRule}{fired.length > 1 ? ` +${fired.length - 1}` : ''}
           </div>
         )}
       </div>
-      <ArrowUpRight className="w-3 h-3 text-white/30 group-hover:text-white/85 group-hover:rotate-12 shrink-0 transition-all" />
+      <ArrowUpRight className="w-3 h-3 group-hover:rotate-12 shrink-0 transition-all" style={{ color: t.textFaint }} />
     </div>
   );
 }
@@ -1119,6 +1137,7 @@ function DecisionRibbon({
   diff: PRDiff;
 }) {
   const { t: tr } = useTranslation('app');
+  const t = useV2();
   const lanes = decision.ruleResults
     .filter((r) => r.status !== 'skip')
     .sort((a, b) => statusRank(b.status) - statusRank(a.status))
@@ -1126,13 +1145,13 @@ function DecisionRibbon({
 
   const accent = decision.outcome === 'block' ? SEVERITY_COLOR.block
     : decision.outcome === 'warn' ? SEVERITY_COLOR.warn
-    : '#5fa86c';
+    : t.ok;
 
   return (
     <V2Card className="p-5 relative overflow-hidden">
       <div className="flex items-center gap-3 mb-4">
         <SectionTitle icon={Filter}>{tr('admission.decisionFlow.title')}</SectionTitle>
-        <span className="text-[10px] font-mono text-white/40">
+        <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
           {tr('admission.decisionFlow.subtitle', { count: lanes.length })}
         </span>
       </div>
@@ -1142,16 +1161,16 @@ function DecisionRibbon({
         <div
           className="rounded-xl p-4 text-center"
           style={{
-            background: 'linear-gradient(140deg, rgba(122,167,212,0.18), rgba(122,167,212,0.04))',
-            border: '1px solid rgba(122,167,212,0.45)',
-            boxShadow: '0 0 24px rgba(122,167,212,0.20), inset 0 0 12px rgba(122,167,212,0.10)',
+            background: `linear-gradient(140deg, ${t.accent}2e, ${t.accent}0a)`,
+            border: `1px solid ${t.accent}73`,
+            boxShadow: `0 0 24px ${t.accent}33, inset 0 0 12px ${t.accent}1a`,
           }}
         >
-          <GitPullRequest className="w-5 h-5 mx-auto mb-1.5 text-[#7aa7d4]" />
-          <div className="text-[20px] font-black text-white tabular-nums leading-none">
+          <GitPullRequest className="w-5 h-5 mx-auto mb-1.5" style={{ color: t.accent }} />
+          <div className="text-[20px] font-black tabular-nums leading-none" style={{ color: t.textHi }}>
             {diff.changes.length}
           </div>
-          <div className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-white/55">
+          <div className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
             files
           </div>
         </div>
@@ -1159,7 +1178,7 @@ function DecisionRibbon({
         {/* Lanes */}
         <div className="relative">
           <div className="absolute inset-0 flex flex-col justify-center pointer-events-none">
-            <div className="h-px bg-gradient-to-r from-[#7aa7d466] via-white/[0.10] to-[#5fa86c66]" />
+            <div className="h-px" style={{ background: `linear-gradient(to right, ${t.accent}66, ${t.border}, ${t.ok}66)` }} />
           </div>
           {/* Flowing particles along the central line */}
           <div className="absolute inset-0 flex items-center pointer-events-none overflow-hidden">
@@ -1180,7 +1199,7 @@ function DecisionRibbon({
           <div className="relative flex items-center gap-1.5">
             {lanes.map((r) => {
               const sev = r.status === 'block' ? SEVERITY_COLOR.block
-                : r.status === 'warn' ? SEVERITY_COLOR.warn : 'rgba(255,255,255,0.45)';
+                : r.status === 'warn' ? SEVERITY_COLOR.warn : t.textSubtle;
               const fired = r.status === 'block' || r.status === 'warn';
               return (
                 <div
@@ -1193,12 +1212,15 @@ function DecisionRibbon({
                     style={{
                       background: fired
                         ? `linear-gradient(180deg, ${sev}, ${sev}55)`
-                        : 'linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06))',
+                        : `linear-gradient(180deg, ${t.hoverActive}, ${t.inset})`,
                       boxShadow: fired ? `0 0 10px ${sev}66` : 'none',
                     }}
                   />
                   {/* tooltip-ish label, only on hover via group */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute left-1/2 -translate-x-1/2 -top-7 text-[9px] font-mono whitespace-nowrap px-2 py-0.5 rounded-md bg-black/90 text-white/85 border border-white/10 z-10">
+                  <div
+                    className="opacity-0 group-hover:opacity-100 transition-opacity absolute left-1/2 -translate-x-1/2 -top-7 text-[9px] font-mono whitespace-nowrap px-2 py-0.5 rounded-md border z-10"
+                    style={{ background: t.cardBacking, color: t.textBody, borderColor: t.border }}
+                  >
                     {r.ruleName}
                   </div>
                   {fired && (
@@ -1228,7 +1250,7 @@ function DecisionRibbon({
           >
             {decision.outcome}
           </div>
-          <div className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-white/55">
+          <div className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
             verdict
           </div>
         </div>
@@ -1247,6 +1269,7 @@ function Retroactive({
   retro: { seed: number; diff: PRDiff; decision: ReturnType<typeof evaluateAdmission> }[];
 }) {
   const { t: tA } = useTranslation('admission');
+  const t = useV2();
   const [hover, setHover] = useState<number | null>(null);
   const summary = useMemo(() => {
     let block = 0, warn = 0, pass = 0;
@@ -1267,14 +1290,14 @@ function Retroactive({
         <div className="flex-1" />
         <SmallStat label="block" value={summary.block} color={SEVERITY_COLOR.block} />
         <SmallStat label="warn"  value={summary.warn}  color={SEVERITY_COLOR.warn} />
-        <SmallStat label="pass"  value={summary.pass}  color="#5fa86c" />
+        <SmallStat label="pass"  value={summary.pass}  color={t.ok} />
       </div>
 
       <div className="relative mt-4 flex items-end gap-px h-16">
         {retro.map((r, i) => {
           const accent = r.decision.outcome === 'block' ? SEVERITY_COLOR.block
             : r.decision.outcome === 'warn' ? SEVERITY_COLOR.warn
-            : '#5fa86c';
+            : t.ok;
           const fired = r.decision.ruleResults.filter((rr) => rr.status === 'block' || rr.status === 'warn').length;
           const h = 18 + Math.min(82, fired * 12);
           const isHover = hover === i;
@@ -1298,26 +1321,26 @@ function Retroactive({
                 <div
                   className="absolute -top-16 left-1/2 -translate-x-1/2 z-20 px-3 py-1.5 rounded-lg whitespace-nowrap admv2-rise"
                   style={{
-                    background: 'rgba(13,17,23,0.95)',
+                    background: t.cardBacking,
                     border: `1px solid ${accent}88`,
                     boxShadow: `0 8px 24px rgba(0,0,0,0.6), 0 0 16px ${accent}44`,
                   }}
                 >
-                  <div className="text-[10px] font-mono text-white/85">#{r.seed}</div>
+                  <div className="text-[10px] font-mono" style={{ color: t.textBody }}>#{r.seed}</div>
                   <div
                     className="text-[10px] font-bold uppercase tracking-[0.18em]"
                     style={{ color: accent }}
                   >
                     {r.decision.outcome}
                   </div>
-                  <div className="text-[9px] font-mono text-white/40 mt-0.5">
+                  <div className="text-[9px] font-mono mt-0.5" style={{ color: t.textSubtle }}>
                     {fired} rules fired
                   </div>
                   <div
                     aria-hidden
                     className="absolute left-1/2 -bottom-[5px] -translate-x-1/2 w-2 h-2 rotate-45"
                     style={{
-                      background: 'rgba(13,17,23,0.95)',
+                      background: t.cardBacking,
                       borderRight: `1px solid ${accent}88`,
                       borderBottom: `1px solid ${accent}88`,
                     }}

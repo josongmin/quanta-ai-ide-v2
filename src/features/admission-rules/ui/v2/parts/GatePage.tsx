@@ -9,7 +9,7 @@ import type { PRDiff } from '@entities/repo';
 import type { evaluateAdmission, RuleSeverity } from '@entities/admission';
 import { useAdmissionStore } from '../../../model/store';
 import { SOURCE_GLYPH, usesHint, describeSignal } from '../../sourceStyle';
-import { SEVERITY_COLOR } from './tokens';
+import { SEVERITY_COLOR, useV2 } from './tokens';
 import { V2Card, SectionTitle } from './primitives';
 import { Hero } from './HealthPage';
 import { Field, DrawerInput } from './RuleEditorOverlay';
@@ -32,6 +32,7 @@ export function GatePage({
   const rules = useAdmissionStore((s) => s.rules);
   const { t: tr } = useTranslation('app');
   const { t: tA } = useTranslation('admission');
+  const t = useV2();
 
   const [overrideTarget, setOverrideTarget] = useState<{ ruleId: string; ruleName: string; severity: RuleSeverity } | null>(null);
   const [overrideReason, setOverrideReason] = useState('');
@@ -64,13 +65,14 @@ export function GatePage({
       <div className="grid gap-5" style={{ gridTemplateColumns: 'minmax(0,360px) minmax(0,1fr)' }}>
         {/* Left — files */}
         <V2Card className="p-0 admv2-rise admv2-rise-1 overflow-hidden">
-          <div className="px-5 py-3 border-b border-white/5">
+          <div className="px-5 py-3 border-b" style={{ borderColor: t.borderSoft }}>
             <SectionTitle icon={FileText}>{tA('section.filesInPr')}</SectionTitle>
-            <div className="mt-1 text-[10px] font-mono text-white/40">
+            <div className="mt-1 text-[10px] font-mono" style={{ color: t.textSubtle }}>
               {diff.changes.length} files · {diff.affected.length} ripple
             </div>
           </div>
-          <div className="max-h-[600px] overflow-auto divide-y divide-white/5">
+          <div className="max-h-[600px] overflow-auto admv2-gate-filelist">
+            <style>{`.admv2-gate-filelist > * + * { border-top: 1px solid ${t.borderSoft}; }`}</style>
             {diff.changes.map((c) => {
               const f = repo.files[c.id];
               if (!f) return null;
@@ -92,22 +94,22 @@ export function GatePage({
                     <span
                       className="relative w-1.5 h-1.5 rounded-full"
                       style={{
-                        background: stripeColor ?? 'rgba(255,255,255,0.35)',
+                        background: stripeColor ?? t.textFaint,
                         boxShadow: stripeColor && worst?.status === 'block' ? `0 0 0 2px ${stripeColor}33` : 'none',
                       }}
                     />
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-white/85 truncate">
+                      <span className="text-[11px] font-mono truncate" style={{ color: t.textBody }}>
                         {f.folderPath}.{f.name}
                       </span>
-                      <span className="ml-auto text-[9px] font-mono uppercase tracking-[0.18em] text-white/40">
+                      <span className="ml-auto text-[9px] font-mono uppercase tracking-[0.18em]" style={{ color: t.textSubtle }}>
                         {c.kind}
                       </span>
                     </div>
                     {fileFired.length > 0 && (
-                      <div className="mt-1 text-[10px] font-mono text-white/40 truncate">
+                      <div className="mt-1 text-[10px] font-mono truncate" style={{ color: t.textSubtle }}>
                         {fileFired.map((r) => r.ruleName).join(' · ')}
                       </div>
                     )}
@@ -122,9 +124,9 @@ export function GatePage({
         <div className="flex flex-col gap-4 admv2-rise admv2-rise-2">
           {fired.length === 0 ? (
             <V2Card className="p-8 text-center">
-              <ShieldCheck className="w-10 h-10 mx-auto mb-3" style={{ color: '#5fa86c' }} />
-              <div className="text-[14px] font-bold text-white/85">{tr('admission.gate.allChecksPassed')}</div>
-              <div className="mt-1 text-[11px] font-mono text-white/40">
+              <ShieldCheck className="w-10 h-10 mx-auto mb-3" style={{ color: t.ok }} />
+              <div className="text-[14px] font-bold" style={{ color: t.textBody }}>{tr('admission.gate.allChecksPassed')}</div>
+              <div className="mt-1 text-[11px] font-mono" style={{ color: t.textSubtle }}>
                 {passed.length} rules evaluated · 0 blocking · 0 warning
               </div>
             </V2Card>
@@ -138,7 +140,7 @@ export function GatePage({
                   </span>
                   <div className="flex-1" />
                   {prOverrides.length > 0 && (
-                    <span className="text-[10px] font-mono text-white/40">
+                    <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
                       {prOverrides.length} override{prOverrides.length === 1 ? '' : 's'} on this PR
                     </span>
                   )}
@@ -167,10 +169,10 @@ export function GatePage({
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[10px] font-mono text-white/40">
+                          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
                             {SOURCE_GLYPH[r.source]} {r.source}
                           </span>
-                          <span className="text-white/30">·</span>
+                          <span style={{ color: t.textFaint }}>·</span>
                           <span
                             className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
                             style={{ color: sevColor, background: `${sevColor}1a` }}
@@ -181,24 +183,24 @@ export function GatePage({
                             <span
                               className="ml-auto text-[9px] font-mono uppercase tracking-[0.18em] px-2 py-px rounded-md"
                               style={{
-                                color: '#7aa7d4',
-                                background: '#7aa7d415',
-                                border: '1px solid #7aa7d444',
+                                color: t.accent,
+                                background: `${t.accent}15`,
+                                border: `1px solid ${t.accent}44`,
                               }}
                             >
                               overridden
                             </span>
                           )}
                         </div>
-                        <div className="mt-1 text-[14px] font-bold text-white/85">
+                        <div className="mt-1 text-[14px] font-bold" style={{ color: t.textBody }}>
                           {r.ruleName}
                         </div>
                         {rule && (
-                          <div className="mt-0.5 text-[11px] font-mono text-white/40">
+                          <div className="mt-0.5 text-[11px] font-mono" style={{ color: t.textSubtle }}>
                             uses {usesHint(rule.signal)} · {describeSignal(rule.signal)}
                           </div>
                         )}
-                        <div className="mt-2 text-[11px] font-mono text-white/55">
+                        <div className="mt-2 text-[11px] font-mono" style={{ color: t.textMuted }}>
                           {r.reason}
                         </div>
 
@@ -207,19 +209,19 @@ export function GatePage({
                             {r.hits.slice(0, 5).map((h) => {
                               const f = repo.files[h.fileId];
                               return (
-                                <div key={h.fileId} className="flex items-center gap-2 text-[10px] font-mono px-2 py-1 rounded-md bg-white/[0.03]">
-                                  <span className="w-1 h-1 rounded-full bg-white/45" />
-                                  <span className="text-white/85 truncate flex-1">
+                                <div key={h.fileId} className="flex items-center gap-2 text-[10px] font-mono px-2 py-1 rounded-md" style={{ background: t.inset }}>
+                                  <span className="w-1 h-1 rounded-full" style={{ background: t.textSubtle }} />
+                                  <span className="truncate flex-1" style={{ color: t.textBody }}>
                                     {f ? `${f.folderPath}.${f.name}` : `#${h.fileId}`}
                                   </span>
-                                  <span className="text-white/40 truncate max-w-[14rem]">
+                                  <span className="truncate max-w-[14rem]" style={{ color: t.textSubtle }}>
                                     {h.evidenceText}
                                   </span>
                                 </div>
                               );
                             })}
                             {r.hits.length > 5 && (
-                              <div className="text-[10px] font-mono text-white/40 px-2">
+                              <div className="text-[10px] font-mono px-2" style={{ color: t.textSubtle }}>
                                 … {r.hits.length - 5} more
                               </div>
                             )}
@@ -231,11 +233,20 @@ export function GatePage({
                             <button
                               type="button"
                               onClick={() => { setOverrideTarget({ ruleId: r.ruleId, ruleName: r.ruleName, severity: r.severity }); }}
-                              className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md hover:bg-white/5 text-white/55 hover:text-white border border-white/10"
+                              className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md border transition-colors"
+                              style={{ background: 'transparent', borderColor: t.border, color: t.textMuted }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; e.currentTarget.style.color = t.textHi; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = t.textMuted; }}
                             >
                               override with reason
                             </button>
-                            <button type="button" className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md hover:bg-white/5 text-white/55 hover:text-white border border-white/10">
+                            <button
+                              type="button"
+                              className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md border transition-colors"
+                              style={{ background: 'transparent', borderColor: t.border, color: t.textMuted }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; e.currentTarget.style.color = t.textHi; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = t.textMuted; }}
+                            >
                               request escalation
                             </button>
                           </div>
@@ -252,12 +263,12 @@ export function GatePage({
           {passed.length > 0 && (
             <V2Card className="p-4">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#5fa86c]" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
+                <ShieldCheck className="w-3.5 h-3.5" style={{ color: t.ok }} />
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
                   {passed.length} rule{passed.length === 1 ? '' : 's'} passed
                 </span>
                 <div className="flex-1" />
-                <span className="text-[10px] font-mono text-white/40">
+                <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
                   {passed.map((r) => r.ruleName).slice(0, 4).join(' · ')}
                   {passed.length > 4 && ` +${passed.length - 4}`}
                 </span>
@@ -285,15 +296,15 @@ export function GatePage({
           <V2Card className="p-6 w-[480px] admv2-rise" >
             <div role="presentation" onClick={(e) => { e.stopPropagation(); }}>
               <div className="flex items-center gap-2 mb-4">
-                <Gavel className="w-4 h-4 text-white/55" />
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+                <Gavel className="w-4 h-4" style={{ color: t.textMuted }} />
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textHi }}>
                   {tr('admission.override.title')}
                 </h3>
               </div>
-              <div className="text-[12px] font-bold text-white/85 mb-1">
+              <div className="text-[12px] font-bold mb-1" style={{ color: t.textBody }}>
                 {overrideTarget.ruleName}
               </div>
-              <div className="text-[11px] font-mono text-white/55 mb-4">
+              <div className="text-[11px] font-mono mb-4" style={{ color: t.textMuted }}>
                 {tr('admission.override.notice')}
               </div>
               <Field label="Reason (required)">
@@ -308,7 +319,10 @@ export function GatePage({
                 <button
                   type="button"
                   onClick={() => { setOverrideTarget(null); setOverrideReason(''); }}
-                  className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1.5 rounded-md text-white/55 hover:text-white border border-white/10 hover:bg-white/5"
+                  className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1.5 rounded-md border transition-colors"
+                  style={{ background: 'transparent', borderColor: t.border, color: t.textMuted }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; e.currentTarget.style.color = t.textHi; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = t.textMuted; }}
                 >
                   cancel
                 </button>
@@ -328,7 +342,8 @@ export function GatePage({
                     setOverrideTarget(null);
                     setOverrideReason('');
                   }}
-                  className="px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] bg-white text-black hover:bg-white/90 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] disabled:opacity-30 disabled:cursor-not-allowed"
+                  style={{ background: t.textHi, color: t.page }}
                 >
                   record override
                 </button>

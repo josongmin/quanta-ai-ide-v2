@@ -319,6 +319,46 @@ function applySemanticTheme(theme: Theme, tokens: SemanticTokens) {
   }
 }
 
+// Parse a hex / rgb() colour into the "r, g, b" triplet form the glass
+// CSS vars expect. Returns null for anything unparseable so callers can
+// fall back to the default white tint.
+function colorToRgbTriplet(input: string): string | null {
+  const value = input.trim();
+  if (value.startsWith('#')) {
+    let hex = value.slice(1);
+    if (hex.length === 3) hex = hex.split('').map((c) => c + c).join('');
+    if (hex.length !== 6) return null;
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    if ([r, g, b].some(Number.isNaN)) return null;
+    return `${r}, ${g}, ${b}`;
+  }
+  const rgbMatch = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/i.exec(value);
+  if (rgbMatch) {
+    return `${Math.round(Number(rgbMatch[1]))}, ${Math.round(Number(rgbMatch[2]))}, ${Math.round(Number(rgbMatch[3]))}`;
+  }
+  return null;
+}
+
+// Emit the glass tint triplets for both themes whenever tokens change.
+// `--glass-tint-dark` / `--glass-tint-light` feed the chrome (FilterBar,
+// InspectPanel, SearchBar, all GlassCard surfaces) so applying a palette
+// preset (Tokyo Night, Dracula, …) propagates the panel hue — instead of
+// the panels being hardcoded white. Dark pulls from a lighter surface so
+// the glass reads as a tinted highlight; light uses bgSurface directly.
+function applyGlassTints(allSemantic: { dark: SemanticTokens; light: SemanticTokens }) {
+  const root = document.documentElement;
+  const darkSource = allSemantic.dark.bgElevated ?? allSemantic.dark.bgSurface;
+  const lightSource = allSemantic.light.bgSurface;
+  const darkTriplet = colorToRgbTriplet(darkSource);
+  const lightTriplet = colorToRgbTriplet(lightSource);
+  if (darkTriplet) root.style.setProperty('--glass-tint-dark', darkTriplet);
+  else root.style.removeProperty('--glass-tint-dark');
+  if (lightTriplet) root.style.setProperty('--glass-tint-light', lightTriplet);
+  else root.style.removeProperty('--glass-tint-light');
+}
+
 function applyGlobalTokens(
   tokens: GlobalTokenSections,
   semanticTokens: Tokens['semantic'],
@@ -389,6 +429,7 @@ export function TokensProvider({ children }: { children: ReactNode }) {
     applyTokens(theme);
     applySemanticTheme(theme, tokens.semantic[theme]);
     applyGlobalTokens(tokens.global, tokens.semantic, theme);
+    applyGlassTints(tokens.semantic);
     try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens)); } catch { /* ignore */ }
   }, [theme, tokens]);
 

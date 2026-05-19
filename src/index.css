@@ -40,10 +40,12 @@
   box-shadow: var(--glass-shadow, var(--shadow-lg));
 }
 .glass-light {
-  /* Light theme: glass effect disabled — solid white panel. No alpha, no
-     backdrop-blur (it has nothing to refract at alpha=1 anyway). The
-     translucent glass look stays dark-theme-only. */
-  background-color: #ffffff;
+  /* Light theme: opaque (alpha 1, no backdrop-blur) but the fill comes
+     from the active theme's surface token (--glass-tint-light, emitted
+     by applyGlassTints) instead of a hardcoded white — so picking a
+     palette (Tokyo Night light, etc.) recolours the left/right panels.
+     Fallback 255,255,255 keeps it white pre-theme-init. */
+  background-color: rgb(var(--glass-tint-light, 255, 255, 255) / 1);
   border-color: rgb(var(--glass-tint-light, 255, 255, 255) / var(--glass-border-light));
   border-width: var(--glass-border-width, 1px);
   border-radius: var(--radius);
@@ -63,8 +65,8 @@
   box-shadow: var(--glass-shadow, var(--shadow-lg));
 }
 html[data-theme="light"] .glass {
-  /* Light theme: glass effect disabled — see `.glass-light` above. */
-  background-color: #ffffff;
+  /* Light theme: opaque, theme-tinted — see `.glass-light` above. */
+  background-color: rgb(var(--glass-tint-light, 255, 255, 255) / 1);
   border-color: rgb(var(--glass-tint-light, 255, 255, 255) / var(--glass-border-light));
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
