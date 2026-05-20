@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ViewMode } from '@entities/viz-mode';
 import { useFilterStore } from '@features/filter-files';
+import { useTabVisibility } from '@features/workspace-tabs';
 import { useActivityStore } from '../model/activityStore';
 
 // Per-tick projected positions for every (chatId, fileId) pair. Recomputed
@@ -32,6 +33,12 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
   const speed = useActivityStore((s) => s.prefs.speed);
   const intensity = useActivityStore((s) => s.prefs.intensity);
   const repo = useFilterStore((s) => s.repo);
+  const visible = useTabVisibility();
+  // Latest visibility read each frame from the rAF tick without restarting
+  // the loop on every flip. Assigned via effect to keep refs out of the
+  // render body (react-hooks/refs lint rule).
+  const visibleRef = useRef(visible);
+  useEffect(() => { visibleRef.current = visible; }, [visible]);
   const [pins, setPins] = useState<Pin[]>([]);
 
   const rafRef = useRef<number>(0);
@@ -61,6 +68,12 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
     let cancelled = false;
     const tick = () => {
       if (cancelled) return;
+      // Tab hidden behind another — projector and DOM don't need refresh.
+      // Keep the rAF chain alive so resume is one tick away.
+      if (!visibleRef.current) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
       const acts = useActivityStore.getState().activities;
       const out: Pin[] = [];
       for (const a of acts) {
