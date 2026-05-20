@@ -203,8 +203,8 @@ function HostCard({
       onClick={onClick}
       className="flex flex-col items-start gap-2 p-3 rounded-md text-left transition-colors"
       style={{
-        background: active ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-        border: `1px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+        background: active ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+        border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
         color: 'var(--fg-strong)',
       }}
       onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'var(--bg-hover)'; }}
@@ -213,9 +213,9 @@ function HostCard({
       <div
         className="w-8 h-8 rounded-md flex items-center justify-center"
         style={{
-          background: active ? 'var(--brand-vivid)' : 'var(--bg-canvas)',
+          background: active ? 'var(--fg-accent)' : 'var(--bg-canvas)',
           color: active ? 'var(--bg-canvas)' : 'var(--fg-default)',
-          border: `1px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+          border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
         }}
       >
         {Logo ? (
@@ -264,9 +264,9 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
           <div className="flex items-start gap-3">
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-              style={{ background: 'var(--brand-bg)' }}
+              style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
             >
-              <Key className="w-4 h-4" style={{ color: 'var(--brand-fg)' }} />
+              <Key className="w-4 h-4" style={{ color: 'var(--fg-accent)' }} />
             </div>
             <div className="flex flex-col gap-1">
               <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>

@@ -139,11 +139,11 @@ function DraftsCard({
         <span
           className="w-7 h-7 rounded-md flex items-center justify-center"
           style={{
-            background: 'var(--brand-bg)',
-            border: '1px solid var(--brand-vivid)',
+            background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+            border: '1px solid var(--fg-accent)',
           }}
         >
-          <FileText className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />
+          <FileText className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
         </span>
         <div className="flex flex-col flex-1 min-w-0 text-left">
           <span className="text-[11px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
@@ -155,7 +155,7 @@ function DraftsCard({
         </div>
         <span
           className="text-[10px] uppercase tracking-[0.14em] font-semibold"
-          style={{ color: 'var(--brand-fg)' }}
+          style={{ color: 'var(--fg-accent)' }}
         >
           {showing ? 'Hide' : 'Show'}
         </span>

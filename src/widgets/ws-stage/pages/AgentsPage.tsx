@@ -162,7 +162,7 @@ function Stat({ label, value, accent = false, last = false }: { label: string; v
       </span>
       <span
         className="text-[18px] font-semibold tabular-nums"
-        style={{ color: accent ? 'var(--brand-fg)' : 'var(--fg-strong)' }}
+        style={{ color: accent ? 'var(--fg-accent)' : 'var(--fg-strong)' }}
       >
         {value}
       </span>
@@ -270,7 +270,7 @@ function Sparkbars({ data, dim }: { data: number[]; dim: boolean }) {
         // Pick a semantic colour by relative magnitude so bars read at-a-glance.
         const color =
           pct > 75 ? 'var(--intent-success-fg)'
-          : pct > 35 ? 'var(--brand-vivid)'
+          : pct > 35 ? 'var(--fg-accent)'
           :            'var(--fg-subtle)';
         return (
           <div

@@ -85,8 +85,8 @@ function AppRow({ app, last }: { app: App; last: boolean }) {
         <div
           className="w-8 h-8 rounded-md flex items-center justify-center shrink-0 text-[10px] font-bold"
           style={{
-            background: 'color-mix(in srgb, var(--brand-vivid) 14%, transparent)',
-            color: 'var(--brand-fg)',
+            background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+            color: 'var(--fg-accent)',
           }}
         >
           {app.name.slice(0, 2).toUpperCase()}

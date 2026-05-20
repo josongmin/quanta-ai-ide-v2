@@ -126,7 +126,7 @@ function CycleToggle({
                 Annual
                 <span
                   className="text-[8px] uppercase tracking-[0.14em] font-semibold px-1 py-0.5 rounded"
-                  style={{ background: 'var(--brand-vivid)', color: 'var(--bg-canvas)' }}
+                  style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
                 >
                   −17%
                 </span>
@@ -168,7 +168,7 @@ function PlanCard({
       {plan.recommended && !selected && (
         <span
           className="absolute top-3 right-3 text-[8px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
-          style={{ background: 'var(--brand-vivid)', color: 'var(--bg-canvas)' }}
+          style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
         >
           Recommended
         </span>
@@ -181,7 +181,7 @@ function PlanCard({
         {selected && (
           <span
             className="inline-flex items-center justify-center w-4 h-4 rounded-full onb-tick"
-            style={{ background: 'var(--brand-vivid)', color: 'var(--bg-canvas)' }}
+            style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
           >
             <Check className="w-2.5 h-2.5" />
           </span>
@@ -189,7 +189,7 @@ function PlanCard({
         {plan.trial && (
           <span
             className="ml-auto text-[9px] uppercase tracking-[0.14em] font-semibold inline-flex items-center gap-1"
-            style={{ color: 'var(--brand-fg)' }}
+            style={{ color: 'var(--fg-accent)' }}
           >
             <Clock className="w-2.5 h-2.5" />
             {plan.trial}d trial
@@ -301,7 +301,7 @@ function SeatPicker({
         onChange={(e) => { onChange(Number(e.target.value)); }}
         className="onb-seat-range"
         style={{
-          accentColor: 'var(--brand-vivid)',
+          accentColor: 'var(--fg-accent)',
           width: '100%',
         }}
         aria-label="Seats"
@@ -343,8 +343,8 @@ function AddOns({
               onClick={() => { onChange({ ...addons, [a.id]: !enabled }); }}
               className="flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors text-left"
               style={{
-                background: enabled && available ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-                border: `1px solid ${enabled && available ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+                background: enabled && available ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+                border: `1px solid ${enabled && available ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
                 opacity: available ? 1 : 0.5,
                 cursor: available ? 'pointer' : 'not-allowed',
               }}
@@ -352,8 +352,8 @@ function AddOns({
               <span
                 className="w-4 h-4 rounded shrink-0 inline-flex items-center justify-center transition-colors"
                 style={{
-                  background: enabled && available ? 'var(--brand-vivid)' : 'transparent',
-                  border: `1.5px solid ${enabled && available ? 'var(--brand-vivid)' : 'var(--border-strong)'}`,
+                  background: enabled && available ? 'var(--fg-accent)' : 'transparent',
+                  border: `1.5px solid ${enabled && available ? 'var(--fg-accent)' : 'var(--border-strong)'}`,
                 }}
               >
                 {enabled && available && <Check className="w-2.5 h-2.5" style={{ color: 'var(--bg-canvas)' }} />}
@@ -412,9 +412,9 @@ function Summary({
     return (
       <div
         className="flex items-start gap-3 px-3 py-3 rounded-md"
-        style={{ background: 'var(--brand-bg)', border: '1px solid var(--brand-vivid)' }}
+        style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
       >
-        <Sparkles className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+        <Sparkles className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
         <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
             Enterprise — let&apos;s talk
@@ -463,7 +463,7 @@ function Summary({
         {plan.trial && (
           <span
             className="ml-auto text-[9px] uppercase tracking-[0.14em] font-semibold inline-flex items-center gap-1"
-            style={{ color: 'var(--brand-fg)' }}
+            style={{ color: 'var(--fg-accent)' }}
           >
             <Clock className="w-2.5 h-2.5" />
             {plan.trial}-day free trial · charge starts on day {plan.trial + 1}

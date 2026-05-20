@@ -121,7 +121,7 @@ export default function PrivacyPage() {
                 style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}
               >
                 <div className="flex items-center gap-2 mb-1" style={{ color: 'var(--fg-strong)' }}>
-                  <r.icon size={14} style={{ color: 'var(--brand-vivid)' }} />
+                  <r.icon size={14} style={{ color: 'var(--fg-accent)' }} />
                   <span className="text-[12px] font-semibold">{r.label}</span>
                 </div>
                 <p className="text-[12px] leading-5" style={{ color: 'var(--fg-muted)' }}>{r.desc}</p>
@@ -183,7 +183,7 @@ function DocHeader() {
     <div className="mb-10">
       <div
         className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-medium mb-4"
-        style={{ background: 'var(--brand-bg)', color: 'var(--brand-fg)' }}
+        style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
       >
         <ShieldCheck size={12} />
         Legal · Privacy Policy
@@ -241,7 +241,7 @@ function Tldr({ children }: { children: ReactNode }) {
       <div className="flex items-start gap-2.5">
         <span
           className="inline-flex items-center px-1.5 h-[18px] rounded text-[10px] font-bold tracking-wide flex-shrink-0 mt-0.5"
-          style={{ background: 'var(--brand-bg)', color: 'var(--brand-fg)' }}
+          style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
         >
           TL;DR
         </span>

@@ -21,7 +21,7 @@ export function HeroBackdrop({
       style={{
         // Layer order: mesh gradient (animated) → dot grid → bottom fade
         background: `
-          radial-gradient(ellipse 80% 60% at 18% 28%, color-mix(in srgb, var(--brand-vivid) ${(parseFloat(a(0.42)) * 100).toFixed(1)}%, transparent), transparent 60%),
+          radial-gradient(ellipse 80% 60% at 18% 28%, color-mix(in srgb, var(--fg-accent) ${(parseFloat(a(0.42)) * 100).toFixed(1)}%, transparent), transparent 60%),
           radial-gradient(ellipse 60% 50% at 85% 12%, color-mix(in srgb, var(--fg-link) ${(parseFloat(a(0.34)) * 100).toFixed(1)}%, transparent), transparent 65%),
           radial-gradient(ellipse 70% 55% at 60% 80%, color-mix(in srgb, var(--intent-info-fg) ${(parseFloat(a(0.22)) * 100).toFixed(1)}%, transparent), transparent 70%)
         `,
@@ -59,12 +59,12 @@ export function Eyebrow({
     tone === 'success' ? 'var(--intent-success-fg)'
     : tone === 'warn'  ? 'var(--intent-warn-fg)'
     : tone === 'info'  ? 'var(--intent-info-fg)'
-    : 'var(--brand-fg)';
+    : 'var(--fg-accent)';
   const bg =
     tone === 'success' ? 'var(--intent-success-bg)'
     : tone === 'warn'  ? 'var(--intent-warn-bg)'
     : tone === 'info'  ? 'var(--intent-info-bg)'
-    : 'var(--brand-bg)';
+    : 'color-mix(in srgb, var(--fg-accent) 14%, transparent)';
   return (
     <span
       className="inline-flex items-center gap-1.5 px-2.5 h-6 text-[10px] uppercase tracking-[0.18em] font-semibold rounded-full"
@@ -100,7 +100,7 @@ export function HeadlineGradient({
             className="inline bg-clip-text"
             style={{
               backgroundImage:
-                'linear-gradient(95deg, var(--brand-vivid), var(--fg-link) 60%, var(--intent-info-fg))',
+                'linear-gradient(95deg, var(--fg-accent), var(--fg-link) 60%, var(--intent-info-fg))',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
@@ -266,10 +266,10 @@ export function LiftCard({
     const el = ref.current;
     if (!el) return;
     const baseShadow = featured
-      ? '0 12px 40px -16px color-mix(in srgb, var(--brand-vivid) 40%, transparent)'
+      ? '0 12px 40px -16px color-mix(in srgb, var(--fg-accent) 40%, transparent)'
       : '0 1px 0 0 color-mix(in srgb, var(--fg-strong) 4%, transparent)';
     const hoverShadow = featured
-      ? '0 18px 50px -16px color-mix(in srgb, var(--brand-vivid) 50%, transparent)'
+      ? '0 18px 50px -16px color-mix(in srgb, var(--fg-accent) 50%, transparent)'
       : '0 8px 24px -10px color-mix(in srgb, var(--fg-strong) 18%, transparent)';
     const onEnter = () => {
       el.style.transform = 'translateY(-2px)';
@@ -293,10 +293,10 @@ export function LiftCard({
       style={{
         background: 'var(--bg-canvas)',
         border: featured
-          ? '2px solid var(--brand-vivid)'
+          ? '2px solid var(--fg-accent)'
           : '1px solid var(--border-default)',
         boxShadow: featured
-          ? '0 12px 40px -16px color-mix(in srgb, var(--brand-vivid) 40%, transparent)'
+          ? '0 12px 40px -16px color-mix(in srgb, var(--fg-accent) 40%, transparent)'
           : '0 1px 0 0 color-mix(in srgb, var(--fg-strong) 4%, transparent)',
         ...style,
       }}

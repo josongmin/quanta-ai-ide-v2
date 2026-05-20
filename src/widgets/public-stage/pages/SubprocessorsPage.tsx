@@ -85,7 +85,7 @@ export default function SubprocessorsPage() {
         }}
       >
         <div className="flex items-center gap-2 mb-2" style={{ color: 'var(--fg-strong)' }}>
-          <Bell size={14} style={{ color: 'var(--brand-vivid)' }} />
+          <Bell size={14} style={{ color: 'var(--fg-accent)' }} />
           <span className="text-[12px] font-semibold">Get notified of changes</span>
         </div>
         <p className="text-[12px] leading-5 mb-3" style={{ color: 'var(--fg-muted)' }}>
@@ -220,7 +220,7 @@ export default function SubprocessorsPage() {
               style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}
             >
               <div className="flex items-center gap-2 mb-1">
-                <c.icon size={14} style={{ color: 'var(--brand-vivid)' }} />
+                <c.icon size={14} style={{ color: 'var(--fg-accent)' }} />
                 <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
               </div>
               <p className="text-[12px] leading-5" style={{ color: 'var(--fg-muted)' }}>{c.desc}</p>

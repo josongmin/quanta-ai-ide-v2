@@ -639,7 +639,7 @@ const TabChip = forwardRef<HTMLDivElement, TabChipProps>(function TabChip({
           aria-hidden="true"
           className="absolute top-1 bottom-1 w-[2px]"
           style={{
-            background: 'var(--brand-vivid)',
+            background: 'var(--fg-accent)',
             [dropSide === 'left' ? 'left' : 'right']: -1,
           }}
         />

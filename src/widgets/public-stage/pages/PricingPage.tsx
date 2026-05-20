@@ -248,7 +248,7 @@ export default function PricingPage() {
           className="relative overflow-hidden rounded-2xl px-10 py-12 flex flex-col items-center text-center gap-5"
           style={{
             background:
-              'radial-gradient(ellipse 80% 100% at 50% 0%, color-mix(in srgb, var(--brand-vivid) 22%, transparent), transparent 70%), var(--bg-canvas)',
+              'radial-gradient(ellipse 80% 100% at 50% 0%, color-mix(in srgb, var(--fg-accent) 22%, transparent), transparent 70%), var(--bg-canvas)',
             border: '1px solid var(--border-default)',
           }}
         >
@@ -339,9 +339,9 @@ function PlanCard({ plan, cycle }: { plan: Plan; cycle: Cycle }) {
           <span
             className="inline-flex items-center gap-1 px-2.5 h-6 text-[10px] uppercase tracking-[0.18em] font-semibold rounded-full"
             style={{
-              background: 'var(--brand-vivid)',
+              background: 'var(--fg-accent)',
               color: 'var(--bg-canvas)',
-              boxShadow: '0 6px 18px -4px color-mix(in srgb, var(--brand-vivid) 65%, transparent)',
+              boxShadow: '0 6px 18px -4px color-mix(in srgb, var(--fg-accent) 65%, transparent)',
             }}
           >
             <Sparkles className="w-3 h-3" />
@@ -416,7 +416,7 @@ function FeatureMatrix() {
       >
         <span>Feature</span>
         {PLANS.map((p) => (
-          <span key={p.id} className="text-center" style={{ color: p.featured ? 'var(--brand-fg)' : 'var(--fg-default)' }}>
+          <span key={p.id} className="text-center" style={{ color: p.featured ? 'var(--fg-accent)' : 'var(--fg-default)' }}>
             {p.name}
           </span>
         ))}

@@ -266,11 +266,11 @@ function WebAuthnPrompt({ phase, onActivate }: { phase: Phase; onActivate: () =>
       <div
         className="relative w-16 h-16 rounded-full flex items-center justify-center"
         style={{
-          background: 'var(--brand-bg)',
-          border: '1.5px solid var(--brand-vivid)',
+          background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+          border: '1.5px solid var(--fg-accent)',
         }}
       >
-        <Fingerprint className="w-7 h-7" style={{ color: 'var(--brand-fg)' }} />
+        <Fingerprint className="w-7 h-7" style={{ color: 'var(--fg-accent)' }} />
         {phase === 'challenge' && (
           <span
             className="absolute inset-0 rounded-full onb-pulse-ring"
@@ -352,8 +352,8 @@ function TrustDevice({ checked, onChange }: { checked: boolean; onChange: (v: bo
       <span
         className="relative w-4 h-4 rounded shrink-0 mt-0.5 transition-colors"
         style={{
-          background: checked ? 'var(--brand-vivid)' : 'transparent',
-          border: `1.5px solid ${checked ? 'var(--brand-vivid)' : 'var(--border-strong)'}`,
+          background: checked ? 'var(--fg-accent)' : 'transparent',
+          border: `1.5px solid ${checked ? 'var(--fg-accent)' : 'var(--border-strong)'}`,
         }}
       >
         <input

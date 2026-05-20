@@ -124,7 +124,7 @@ export default function DpaPage() {
                 style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <c.icon size={14} style={{ color: 'var(--brand-vivid)' }} />
+                  <c.icon size={14} style={{ color: 'var(--fg-accent)' }} />
                   <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
                 </div>
                 <p className="text-[12px] leading-5" style={{ color: 'var(--fg-muted)' }}>{c.desc}</p>
@@ -208,7 +208,7 @@ function DocHeader() {
     <div className="mb-8">
       <div
         className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-medium mb-4"
-        style={{ background: 'var(--brand-bg)', color: 'var(--brand-fg)' }}
+        style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
       >
         <Scale size={12} />
         Legal · Data Processing Addendum

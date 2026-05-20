@@ -95,7 +95,7 @@ function ModeToggle({
               {active && (
                 <span
                   className="ml-auto w-1.5 h-1.5 rounded-full onb-tick"
-                  style={{ background: 'var(--brand-vivid)' }}
+                  style={{ background: 'var(--fg-accent)' }}
                   aria-hidden
                 />
               )}
@@ -190,9 +190,9 @@ function RecognizedOrg({ code }: { code: string }) {
   return (
     <div
       className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
-      style={{ background: 'var(--brand-bg)', border: '1px solid var(--brand-vivid)' }}
+      style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
     >
-      <Sparkles className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+      <Sparkles className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
       <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           You&apos;ll join {meta.name}
@@ -448,7 +448,7 @@ function IndustryGrid({
               style={{
                 background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
                 color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
-                border: `1px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+                border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
               }}
               onMouseEnter={(e) => {
                 if (!active) e.currentTarget.style.background = 'var(--bg-hover)';
@@ -488,7 +488,7 @@ function SizeRow({
               className="flex flex-col items-start gap-0.5 px-2.5 py-2 rounded-md text-left transition-colors"
               style={{
                 background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
-                border: `1px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+                border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
               }}
               onMouseEnter={(e) => {
                 if (!active) e.currentTarget.style.background = 'var(--bg-hover)';

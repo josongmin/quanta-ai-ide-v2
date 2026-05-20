@@ -94,7 +94,7 @@ export default function PlaygroundPage() {
           disabled={running}
           className="inline-flex items-center gap-2 px-5 text-[12px] font-semibold transition-colors"
           style={{
-            background: running ? 'var(--bg-active)' : 'var(--brand-vivid)',
+            background: running ? 'var(--bg-active)' : 'var(--fg-accent)',
             color: '#fff',
           }}
         >

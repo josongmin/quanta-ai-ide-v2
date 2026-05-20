@@ -29,7 +29,8 @@ import {
   MOCK_SEEDS,
 } from '@features/change-planner';
 import { useInvestigation } from '@features/investigation';
-import { GlassCard } from '@shared/ui';
+import { useTabVisibility } from '@features/workspace-tabs';
+import { GlassCard, ScrollPane } from '@shared/ui';
 import { QuickInvestigateSection } from './parts';
 
 function deriveCouplingsFromRepo(repo: RepoData) {
@@ -54,6 +55,7 @@ function deriveCouplingsFromRepo(repo: RepoData) {
 }
 
 export default function InvestigateStage() {
+  const visible = useTabVisibility();
   const repo = useMemo(() => buildRepo(), []);
   const hotspots = useMemo(() => {
     const map = computeHotspots(repo);
@@ -92,7 +94,9 @@ export default function InvestigateStage() {
   }, [seed]);
 
   return (
-    <div
+    <ScrollPane
+      scope="investigate"
+      visible={visible}
       className="absolute inset-0 overflow-y-auto"
       style={{ background: 'var(--bg-canvas)' }}
     >
@@ -181,7 +185,7 @@ export default function InvestigateStage() {
           </div>
         </Section>
       </div>
-    </div>
+    </ScrollPane>
   );
 }
 

@@ -418,7 +418,7 @@ function ClockPreview({ from, to }: { from: string; to: string }) {
           <path
             key={i}
             d={describeArc(28, 28, 24, a.start / dayMin * 360, a.end / dayMin * 360)}
-            stroke="var(--brand-vivid)"
+            stroke="var(--fg-accent)"
             strokeWidth="3"
             fill="none"
             strokeLinecap="round"
@@ -426,7 +426,7 @@ function ClockPreview({ from, to }: { from: string; to: string }) {
         ))}
         <Moon
           x="22" y="22" width="12" height="12"
-          color="var(--brand-fg)"
+          color="var(--fg-accent)"
         />
       </svg>
       <div className="flex flex-col text-[11px]" style={{ color: 'var(--fg-muted)' }}>

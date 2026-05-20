@@ -153,7 +153,7 @@ export default function SecurityDisclosurePage() {
           >
             <span
               className="text-[12px] font-bold tabular-nums shrink-0"
-              style={{ color: 'var(--brand-fg)', minWidth: 70 }}
+              style={{ color: 'var(--fg-accent)', minWidth: 70 }}
             >
               {s.t}
             </span>

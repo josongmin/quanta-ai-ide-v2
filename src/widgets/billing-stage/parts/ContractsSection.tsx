@@ -140,8 +140,8 @@ function SalesCta() {
       <span
         className="w-8 h-8 rounded inline-flex items-center justify-center shrink-0"
         style={{
-          background: 'var(--brand-bg)',
-          color: 'var(--brand-fg)',
+          background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+          color: 'var(--fg-accent)',
         }}
         aria-hidden
       >
@@ -162,7 +162,7 @@ function SalesCta() {
         type="button"
         className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-medium transition-colors shrink-0"
         style={{
-          background: 'var(--brand-vivid)',
+          background: 'var(--fg-accent)',
           color: 'white',
           border: '1px solid transparent',
         }}

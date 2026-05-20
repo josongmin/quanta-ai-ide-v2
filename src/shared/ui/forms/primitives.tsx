@@ -166,8 +166,8 @@ export function Toggle({
       onClick={() => { onChange(!checked); }}
       className="relative w-9 h-5 rounded-full transition-colors shrink-0"
       style={{
-        background: checked ? 'var(--brand-vivid)' : 'var(--bg-surface-muted)',
-        border: `1px solid ${checked ? 'var(--brand-vivid)' : 'var(--border-default)'}`,
+        background: checked ? 'var(--fg-accent)' : 'var(--bg-surface-muted)',
+        border: `1px solid ${checked ? 'var(--fg-accent)' : 'var(--border-default)'}`,
         opacity: disabled ? 0.5 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
@@ -207,8 +207,8 @@ export function Checkbox({
       onClick={() => { onChange(!checked); }}
       className="w-4 h-4 rounded shrink-0 inline-flex items-center justify-center transition-colors"
       style={{
-        background: checked ? 'var(--brand-vivid)' : 'transparent',
-        border: `1.5px solid ${checked ? 'var(--brand-vivid)' : 'var(--border-strong)'}`,
+        background: checked ? 'var(--fg-accent)' : 'transparent',
+        border: `1.5px solid ${checked ? 'var(--fg-accent)' : 'var(--border-strong)'}`,
         opacity: disabled ? 0.5 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}

@@ -23,7 +23,7 @@ function curve(seed: number, base: number, slope: number) {
 const METRICS = [
   {
     key: 'seats',     icon: Users,    label: 'Active seats',   value: 184, delta: 6,    unit: '/ 200',  cap: true,
-    series: curve(1, 170, 0.5), tone: 'var(--brand-vivid)',
+    series: curve(1, 170, 0.5), tone: 'var(--fg-accent)',
   },
   {
     key: 'agents',    icon: Bot,      label: 'Agent runs',     value: 12482, delta: 14, unit: '/ mo',
@@ -43,7 +43,7 @@ const METRICS = [
   },
   {
     key: 'requests',  icon: Activity, label: 'API requests',   value: 184_209_111, delta: 18, unit: '/ mo', format: 'compact' as const,
-    series: curve(6, 6_000_000, 30_000), tone: 'var(--brand-fg)',
+    series: curve(6, 6_000_000, 30_000), tone: 'var(--fg-accent)',
   },
 ];
 
@@ -192,7 +192,7 @@ export default function UsagePage() {
                       className="h-full rounded-full"
                       style={{
                         width: `${pct}%`,
-                        background: 'linear-gradient(to right, var(--brand-vivid), var(--fg-link))',
+                        background: 'linear-gradient(to right, var(--fg-accent), var(--fg-link))',
                       }}
                     />
                   </div>

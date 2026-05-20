@@ -34,7 +34,7 @@ export function LegalSubNav({ active }: { active: LegalKey }) {
               <span
                 aria-hidden
                 className="absolute left-2 right-2 -bottom-px h-[2px] rounded-full"
-                style={{ background: 'var(--brand-vivid)' }}
+                style={{ background: 'var(--fg-accent)' }}
               />
             )}
           </Link>

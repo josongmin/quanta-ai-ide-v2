@@ -472,8 +472,8 @@ function BulkCheckbox({
       onClick={onChange}
       className="w-4 h-4 rounded shrink-0 inline-flex items-center justify-center transition-colors"
       style={{
-        background: checked || indeterminate ? 'var(--brand-vivid)' : 'transparent',
-        border: `1.5px solid ${checked || indeterminate ? 'var(--brand-vivid)' : 'var(--border-strong)'}`,
+        background: checked || indeterminate ? 'var(--fg-accent)' : 'transparent',
+        border: `1.5px solid ${checked || indeterminate ? 'var(--fg-accent)' : 'var(--border-strong)'}`,
         opacity: disabled ? 0.35 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}

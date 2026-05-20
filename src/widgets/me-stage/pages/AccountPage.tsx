@@ -106,7 +106,7 @@ function EmailSection() {
               className="flex items-start gap-3"
               style={{ color: 'var(--fg-muted)' }}
             >
-              <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+              <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
               <div className="flex flex-col gap-1.5 text-[11px] leading-snug">
                 <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   Verification email sent to {newEmail}

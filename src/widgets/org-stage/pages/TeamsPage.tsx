@@ -323,7 +323,7 @@ function TeamDetail({
                 {m.role === 'lead' ? (
                   <span
                     className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
-                    style={{ background: 'var(--brand-bg)', color: 'var(--brand-fg)', border: '1px solid var(--brand-fg)' }}
+                    style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)', border: '1px solid var(--fg-accent)' }}
                   >
                     Lead
                   </span>

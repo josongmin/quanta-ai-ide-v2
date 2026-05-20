@@ -1,6 +1,7 @@
-import { useRef, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
-import { useScrollRestoration } from '@shared/lib';
+import { ScrollPane } from '@shared/ui';
+import { useTabVisibility } from '@features/workspace-tabs';
 import {
   SlidersHorizontal, GitBranch, Users, ShieldCheck, Eye, Wrench,
   Bot, Lock, Layers, Webhook, Tag, Trash2, ChevronRight,
@@ -71,8 +72,7 @@ type Props = {
 // workspace. The path template uses both $org and $ws params.
 export function WsShell({ orgName, orgSlug, wsName, wsSlug, title, subtitle, topRight, children }: Props) {
   const { isDark } = useTheme();
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  useScrollRestoration('ws', scrollerRef);
+  const visible = useTabVisibility();
 
   return (
     <div
@@ -81,7 +81,7 @@ export function WsShell({ orgName, orgSlug, wsName, wsSlug, title, subtitle, top
     >
       <Sidebar orgSlug={orgSlug} wsName={wsName} wsSlug={wsSlug} />
 
-      <div ref={scrollerRef} className="flex-1 min-w-0 overflow-y-auto">
+      <ScrollPane scope="ws" visible={visible} className="flex-1 min-w-0 overflow-y-auto">
         <div className="max-w-[920px] mx-auto px-10 pt-10 pb-32">
           <header className="flex items-end justify-between gap-4 mb-8">
             <div className="flex flex-col gap-1.5 min-w-0">
@@ -103,7 +103,7 @@ export function WsShell({ orgName, orgSlug, wsName, wsSlug, title, subtitle, top
 
           {children}
         </div>
-      </div>
+      </ScrollPane>
     </div>
   );
 }

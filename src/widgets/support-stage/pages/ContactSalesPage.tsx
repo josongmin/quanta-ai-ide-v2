@@ -57,8 +57,8 @@ export default function ContactSalesPage() {
                   <div
                     className="w-8 h-8 rounded-md flex items-center justify-center shrink-0 mt-0.5"
                     style={{
-                      background: 'color-mix(in srgb, var(--brand-vivid) 14%, transparent)',
-                      color: 'var(--brand-fg)',
+                      background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+                      color: 'var(--fg-accent)',
                     }}
                   >
                     <b.icon className="w-3.5 h-3.5" />
@@ -78,7 +78,7 @@ export default function ContactSalesPage() {
             style={{
               background: 'var(--bg-canvas)',
               border: '1px solid var(--border-default)',
-              boxShadow: '0 12px 40px -16px color-mix(in srgb, var(--brand-vivid) 22%, transparent)',
+              boxShadow: '0 12px 40px -16px color-mix(in srgb, var(--fg-accent) 22%, transparent)',
             }}
           >
             <div className="flex flex-col gap-1">

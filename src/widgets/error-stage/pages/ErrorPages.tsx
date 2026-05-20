@@ -32,7 +32,7 @@ function ErrorScene({
         style={{
           background: `
             radial-gradient(ellipse 60% 50% at 30% 30%, color-mix(in srgb, ${accent} 32%, transparent), transparent 60%),
-            radial-gradient(ellipse 55% 45% at 75% 70%, color-mix(in srgb, var(--brand-vivid) 18%, transparent), transparent 65%)
+            radial-gradient(ellipse 55% 45% at 75% 70%, color-mix(in srgb, var(--fg-accent) 18%, transparent), transparent 65%)
           `,
         }}
       />

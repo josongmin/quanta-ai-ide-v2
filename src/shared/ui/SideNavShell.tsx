@@ -1,5 +1,5 @@
-import { useRef, type ReactNode, type ComponentType } from 'react';
-import { useScrollRestoration } from '@shared/lib';
+import { type ReactNode, type ComponentType } from 'react';
+import { ScrollPane } from './ScrollPane';
 import { useTheme } from '@shared/theme';
 
 // SideNavShell — generic two-pane layout shared by every settings-style
@@ -62,8 +62,6 @@ export function SideNavShell<K extends string>({
   scrollKey = 'side-nav-shell',
   contentMaxWidth = 820,
 }: Props<K>) {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  useScrollRestoration(scrollKey, scrollerRef);
   // Match the Catalog page (the intended reference): light = bg-surface
   // (pure white), dark = bg-canvas. Plain --bg-canvas in light is the
   // slightly-grey off-white that read as "off" against the rest.
@@ -87,7 +85,7 @@ export function SideNavShell<K extends string>({
         footer={sidebarFooter}
       />
 
-      <div ref={scrollerRef} className="flex-1 min-w-0 overflow-y-auto">
+      <ScrollPane scope={scrollKey} className="flex-1 min-w-0 overflow-y-auto">
         <div
           className={`mx-auto px-10 pt-10 pb-32 ${bodyMaxClass}`}
           style={bodyMaxStyle}
@@ -112,7 +110,7 @@ export function SideNavShell<K extends string>({
 
           {children}
         </div>
-      </div>
+      </ScrollPane>
     </div>
   );
 }

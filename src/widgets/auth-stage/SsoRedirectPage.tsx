@@ -147,12 +147,12 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
       <div
         className="flex flex-col gap-3 px-3 py-3 rounded-md onb-stagger"
         style={{
-          background: 'var(--brand-bg)',
-          border: '1px solid var(--brand-vivid)',
+          background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+          border: '1px solid var(--fg-accent)',
         }}
       >
         <div className="flex items-start gap-3">
-          <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+          <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
           <div className="flex flex-col gap-0.5 text-[11px] leading-snug flex-1">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               {idp.org} · {PROVIDER_LABEL[idp.provider]}

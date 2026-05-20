@@ -15,7 +15,7 @@ const TICKETS: { id: string; subject: string; status: TicketStatus; updatedAt: s
 ];
 
 const STATUS_META: Record<TicketStatus, { label: string; fg: string; bg: string; icon: React.ComponentType<{ className?: string }> }> = {
-  open:     { label: 'Open',     fg: 'var(--brand-fg)',           bg: 'var(--brand-bg)',           icon: MessageCircle },
+  open:     { label: 'Open',     fg: 'var(--fg-accent)',           bg: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',           icon: MessageCircle },
   waiting:  { label: 'Waiting',  fg: 'var(--intent-warn-fg)',     bg: 'var(--intent-warn-bg)',     icon: Clock },
   resolved: { label: 'Resolved', fg: 'var(--intent-success-fg)',  bg: 'var(--intent-success-bg)',  icon: CheckCircle2 },
 };
@@ -60,7 +60,7 @@ export default function SupportPage() {
             blurb="Searchable articles and guides."
             cta="Browse"
             href="/help"
-            tone={{ from: 'var(--brand-vivid)', to: 'var(--fg-link)' }}
+            tone={{ from: 'var(--fg-accent)', to: 'var(--fg-link)' }}
           />
           <ChannelCard
             icon={MessageCircle}
@@ -75,7 +75,7 @@ export default function SupportPage() {
             title="Email"
             blurb="support@acme.dev · 24 hr SLA"
             cta="Compose"
-            tone={{ from: 'var(--intent-info-fg)', to: 'var(--brand-vivid)' }}
+            tone={{ from: 'var(--intent-info-fg)', to: 'var(--fg-accent)' }}
           />
         </div>
 
@@ -185,7 +185,7 @@ export default function SupportPage() {
                 <button
                   type="button"
                   className="ml-auto inline-flex items-center gap-1.5 h-9 px-5 rounded-md text-[12px] font-semibold transition-colors"
-                  style={{ background: 'var(--brand-vivid)', color: '#fff' }}
+                  style={{ background: 'var(--fg-accent)', color: '#fff' }}
                 >
                   <Send className="w-3.5 h-3.5" />
                   Send
@@ -297,7 +297,7 @@ function ChannelCard({
   };
   const onEnter = (e: React.MouseEvent<HTMLElement>) => {
     e.currentTarget.style.transform = 'translateY(-2px)';
-    e.currentTarget.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--brand-vivid) 22%, transparent)';
+    e.currentTarget.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--fg-accent) 22%, transparent)';
   };
   const onLeave = (e: React.MouseEvent<HTMLElement>) => {
     e.currentTarget.style.transform = 'translateY(0)';
@@ -361,7 +361,7 @@ function ChannelCardDiv({
     if (!el) return;
     const onEnter = () => {
       el.style.transform = 'translateY(-2px)';
-      el.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--brand-vivid) 22%, transparent)';
+      el.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--fg-accent) 22%, transparent)';
     };
     const onLeave = () => {
       el.style.transform = 'translateY(0)';

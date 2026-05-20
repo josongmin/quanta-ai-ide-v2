@@ -295,11 +295,11 @@ function WorkbenchSection({
         <span
           className="w-7 h-7 rounded-md flex items-center justify-center"
           style={{
-            background: 'var(--brand-bg)',
-            border: '1px solid var(--brand-vivid)',
+            background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+            border: '1px solid var(--fg-accent)',
           }}
         >
-          <Icon className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />
+          <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
         </span>
       }
     >

@@ -546,7 +546,7 @@ function SubscribeBand() {
       className="relative overflow-hidden rounded-2xl px-8 py-10 grid gap-6"
       style={{
         background:
-          'radial-gradient(ellipse 70% 100% at 100% 0%, color-mix(in srgb, var(--brand-vivid) 18%, transparent), transparent 70%), var(--bg-canvas)',
+          'radial-gradient(ellipse 70% 100% at 100% 0%, color-mix(in srgb, var(--fg-accent) 18%, transparent), transparent 70%), var(--bg-canvas)',
         border: '1px solid var(--border-default)',
         gridTemplateColumns: '1fr 360px',
       }}

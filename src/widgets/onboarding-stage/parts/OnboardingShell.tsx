@@ -177,7 +177,7 @@ function Stepper({ steps, current }: { steps: OnboardingStep[]; current: number 
               className="relative w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold tabular-nums transition-colors"
               style={{
                 background: done
-                  ? 'var(--brand-vivid)'
+                  ? 'var(--fg-accent)'
                   : active
                     ? 'var(--fg-strong)'
                     : 'var(--bg-surface-muted)',
@@ -213,7 +213,7 @@ function Stepper({ steps, current }: { steps: OnboardingStep[]; current: number 
               <span
                 className="hidden sm:block w-6 h-px"
                 style={{
-                  background: done ? 'var(--brand-vivid)' : 'var(--border-muted)',
+                  background: done ? 'var(--fg-accent)' : 'var(--border-muted)',
                   transition: 'background 320ms ease',
                 }}
                 aria-hidden

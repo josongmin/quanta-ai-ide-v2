@@ -87,7 +87,7 @@ export default function CliPage() {
                   <span
                     aria-hidden
                     className="absolute left-0 right-0 -bottom-px h-px"
-                    style={{ background: 'var(--brand-vivid)' }}
+                    style={{ background: 'var(--fg-accent)' }}
                   />
                 )}
               </button>

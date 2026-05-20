@@ -253,8 +253,8 @@ function ConnectionRow({
         <span
           className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
           style={{
-            background: conn.primary ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-            border: `1px solid ${conn.primary ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+            background: conn.primary ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+            border: `1px solid ${conn.primary ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
           }}
         >
           <Icon className="w-4 h-4" />
@@ -267,7 +267,7 @@ function ConnectionRow({
             {conn.primary && (
               <span
                 className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
-                style={{ color: 'var(--brand-fg)', background: 'var(--brand-bg)', border: '1px solid var(--brand-vivid)' }}
+                style={{ color: 'var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
               >
                 Primary
               </span>

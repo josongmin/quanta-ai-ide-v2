@@ -50,7 +50,7 @@ export function CurrentPlanRow({
         <Cell label="Next invoice" value={next} sub="Auto-charge" />
         <Cell
           label="Status"
-          value={<span style={{ color: 'var(--brand-fg)' }}>Active</span>}
+          value={<span style={{ color: 'var(--fg-accent)' }}>Active</span>}
           sub="No issues"
         />
       </dl>

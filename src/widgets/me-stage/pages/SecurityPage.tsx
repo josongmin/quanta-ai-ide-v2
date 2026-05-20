@@ -199,11 +199,11 @@ function MethodRow({
       <span
         className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
         style={{
-          background: method.primary ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-          border: `1px solid ${method.primary ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+          background: method.primary ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+          border: `1px solid ${method.primary ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
         }}
       >
-        <Icon className="w-4 h-4" style={{ color: method.primary ? 'var(--brand-fg)' : 'var(--fg-muted)' }} />
+        <Icon className="w-4 h-4" style={{ color: method.primary ? 'var(--fg-accent)' : 'var(--fg-muted)' }} />
       </span>
       <div className="flex flex-col min-w-0 flex-1">
         <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ function MethodRow({
           {method.primary && (
             <span
               className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
-              style={{ color: 'var(--brand-fg)', border: '1px solid var(--brand-vivid)', background: 'var(--brand-bg)' }}
+              style={{ color: 'var(--fg-accent)', border: '1px solid var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
             >
               Primary
             </span>
@@ -399,12 +399,12 @@ function AddMfaModal({
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center"
               style={{
-                background: 'var(--brand-bg)',
-                border: '1.5px solid var(--brand-vivid)',
+                background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+                border: '1.5px solid var(--fg-accent)',
               }}
             >
               <span className="absolute rounded-full onb-pulse-ring" style={{ width: 56, height: 56 }} aria-hidden />
-              <ShieldCheck className="w-6 h-6" style={{ color: 'var(--brand-fg)' }} />
+              <ShieldCheck className="w-6 h-6" style={{ color: 'var(--fg-accent)' }} />
             </div>
             <p className="text-[11px] leading-snug text-center" style={{ color: 'var(--fg-muted)' }}>
               Touch your security key or use Touch ID / Windows Hello to register.
@@ -525,11 +525,11 @@ function SessionRow({
       <span
         className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
         style={{
-          background: session.current ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-          border: `1px solid ${session.current ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+          background: session.current ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+          border: `1px solid ${session.current ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
         }}
       >
-        <Monitor className="w-4 h-4" style={{ color: session.current ? 'var(--brand-fg)' : 'var(--fg-muted)' }} />
+        <Monitor className="w-4 h-4" style={{ color: session.current ? 'var(--fg-accent)' : 'var(--fg-muted)' }} />
       </span>
       <div className="flex flex-col min-w-0 flex-1">
         <div className="flex items-center gap-2">
@@ -539,7 +539,7 @@ function SessionRow({
           {session.current && (
             <span
               className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
-              style={{ color: 'var(--brand-fg)', border: '1px solid var(--brand-vivid)', background: 'var(--brand-bg)' }}
+              style={{ color: 'var(--fg-accent)', border: '1px solid var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
             >
               This device
             </span>
@@ -584,7 +584,7 @@ function HistoryRow({ event, top }: { event: LogEvent; top: boolean }) {
     switch (event.type) {
       case 'success': return { icon: Check,        fg: 'var(--intent-success-fg)' };
       case 'fail':    return { icon: AlertCircle,  fg: 'var(--intent-danger-fg)'  };
-      case 'mfa':     return { icon: ShieldCheck,  fg: 'var(--brand-fg)'          };
+      case 'mfa':     return { icon: ShieldCheck,  fg: 'var(--fg-accent)'          };
       case 'reset':   return { icon: RefreshCw,    fg: 'var(--intent-warn-fg)'    };
       case 'logout':  return { icon: X,            fg: 'var(--fg-subtle)'         };
     }

@@ -164,9 +164,9 @@ export default function RetentionPolicyPage() {
                 <span
                   className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded w-fit ml-auto"
                   style={{
-                    background: inh ? 'var(--bg-surface-muted)' : 'var(--brand-bg)',
-                    color: inh ? 'var(--fg-subtle)' : 'var(--brand-fg)',
-                    border: `1px solid ${inh ? 'var(--border-muted)' : 'var(--brand-vivid)'}`,
+                    background: inh ? 'var(--bg-surface-muted)' : 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+                    color: inh ? 'var(--fg-subtle)' : 'var(--fg-accent)',
+                    border: `1px solid ${inh ? 'var(--border-muted)' : 'var(--fg-accent)'}`,
                   }}
                 >
                   {inh ? 'inherit' : 'override'}

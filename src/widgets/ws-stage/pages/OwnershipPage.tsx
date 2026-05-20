@@ -283,9 +283,9 @@ function RuleRow({
             key={o}
             className="inline-flex items-center gap-1 h-6 pl-2 pr-1 rounded-full text-[11px] font-medium"
             style={{
-              background: 'var(--brand-bg)',
-              color: 'var(--brand-fg)',
-              border: '1px solid var(--brand-vivid)',
+              background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+              color: 'var(--fg-accent)',
+              border: '1px solid var(--fg-accent)',
             }}
           >
             {o}
@@ -293,7 +293,7 @@ function RuleRow({
               type="button"
               onClick={() => { onToggleOwner(o); }}
               className="w-4 h-4 inline-flex items-center justify-center rounded-full"
-              style={{ color: 'var(--brand-fg)' }}
+              style={{ color: 'var(--fg-accent)' }}
               aria-label={`Remove ${o}`}
             >
               <X className="w-2.5 h-2.5" />

@@ -95,9 +95,9 @@ export default function WebhooksLogPage() {
               onClick={() => { setFilter(f.id); }}
               className="h-7 px-3 rounded-full text-[11px] font-medium transition-colors"
               style={{
-                background: active ? 'color-mix(in srgb, var(--brand-vivid) 12%, transparent)' : 'transparent',
-                color: active ? 'var(--brand-fg)' : 'var(--fg-muted)',
-                border: `1px solid ${active ? 'color-mix(in srgb, var(--brand-vivid) 40%, transparent)' : 'var(--border-default)'}`,
+                background: active ? 'color-mix(in srgb, var(--fg-accent) 12%, transparent)' : 'transparent',
+                color: active ? 'var(--fg-accent)' : 'var(--fg-muted)',
+                border: `1px solid ${active ? 'color-mix(in srgb, var(--fg-accent) 40%, transparent)' : 'var(--border-default)'}`,
               }}
             >
               {f.label}
@@ -178,8 +178,8 @@ function DeliveryRow({
       style={{
         gridTemplateColumns: '0.5fr 1.6fr 1.4fr 0.6fr 0.4fr 0.6fr',
         borderBottom: last ? 'none' : '1px solid var(--border-muted)',
-        background: active ? 'color-mix(in srgb, var(--brand-vivid) 7%, transparent)' : 'transparent',
-        boxShadow: active ? 'inset 0 0 0 1px color-mix(in srgb, var(--brand-vivid) 40%, transparent)' : 'none',
+        background: active ? 'color-mix(in srgb, var(--fg-accent) 7%, transparent)' : 'transparent',
+        boxShadow: active ? 'inset 0 0 0 1px color-mix(in srgb, var(--fg-accent) 40%, transparent)' : 'none',
       }}
       onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'var(--bg-hover)'; }}
       onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'transparent'; }}

@@ -1,6 +1,7 @@
-import { useRef, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
-import { useScrollRestoration } from '@shared/lib';
+import { ScrollPane } from '@shared/ui';
+import { useTabVisibility } from '@features/workspace-tabs';
 import {
   Building2, Users, UsersRound, Shield, Lock, Plug, Webhook,
   KeySquare, ScrollText, Sparkles, ChevronRight,
@@ -81,8 +82,7 @@ type Props = {
 // every Organization-scoped surface; planned ones render as disabled.
 export function OrgShell({ orgName, orgSlug, title, subtitle, topRight, children }: Props) {
   const { isDark } = useTheme();
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  useScrollRestoration('org', scrollerRef);
+  const visible = useTabVisibility();
 
   return (
     <div
@@ -91,7 +91,7 @@ export function OrgShell({ orgName, orgSlug, title, subtitle, topRight, children
     >
       <Sidebar orgName={orgName} orgSlug={orgSlug} />
 
-      <div ref={scrollerRef} className="flex-1 min-w-0 overflow-y-auto">
+      <ScrollPane scope="org" visible={visible} className="flex-1 min-w-0 overflow-y-auto">
         <div className="max-w-[920px] mx-auto px-10 pt-10 pb-32">
           <header className="flex items-end justify-between gap-4 mb-8">
             <div className="flex flex-col gap-1.5 min-w-0">
@@ -113,7 +113,7 @@ export function OrgShell({ orgName, orgSlug, title, subtitle, topRight, children
 
           {children}
         </div>
-      </div>
+      </ScrollPane>
     </div>
   );
 }

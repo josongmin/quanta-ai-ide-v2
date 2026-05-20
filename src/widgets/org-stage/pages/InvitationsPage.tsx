@@ -71,9 +71,9 @@ export default function InvitationsPage() {
               onClick={() => { setFilter(f); }}
               className="h-7 px-3 rounded-full text-[11px] font-medium capitalize transition-colors"
               style={{
-                background: active ? 'color-mix(in srgb, var(--brand-vivid) 12%, transparent)' : 'transparent',
-                color: active ? 'var(--brand-fg)' : 'var(--fg-muted)',
-                border: `1px solid ${active ? 'color-mix(in srgb, var(--brand-vivid) 40%, transparent)' : 'var(--border-default)'}`,
+                background: active ? 'color-mix(in srgb, var(--fg-accent) 12%, transparent)' : 'transparent',
+                color: active ? 'var(--fg-accent)' : 'var(--fg-muted)',
+                border: `1px solid ${active ? 'color-mix(in srgb, var(--fg-accent) 40%, transparent)' : 'var(--border-default)'}`,
               }}
             >
               {f}

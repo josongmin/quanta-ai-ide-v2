@@ -320,7 +320,7 @@ function CreateModal({
                   style={{
                     background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
                     color: active ? 'var(--fg-strong)' : 'var(--fg-default)',
-                    border: `1px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+                    border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
                   }}
                 >
                   {d === 'never' ? 'Never (not recommended)' : `${d} days`}
@@ -445,16 +445,16 @@ function RevealModal({ token, onClose }: { token: Token; onClose: () => void }) 
         className="w-full max-w-[520px] rounded-md p-5 popover-panel-in flex flex-col gap-4"
         style={{
           background: 'var(--bg-elevated)',
-          border: '1px solid var(--brand-vivid)',
+          border: '1px solid var(--fg-accent)',
           boxShadow: 'var(--shadow-lg)',
         }}
       >
         <div className="flex items-start gap-3">
           <div
             className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-            style={{ background: 'var(--brand-bg)' }}
+            style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
           >
-            <Key className="w-4 h-4" style={{ color: 'var(--brand-fg)' }} />
+            <Key className="w-4 h-4" style={{ color: 'var(--fg-accent)' }} />
           </div>
           <div className="flex flex-col gap-1">
             <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>

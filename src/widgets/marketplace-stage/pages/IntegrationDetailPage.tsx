@@ -43,8 +43,8 @@ export default function IntegrationDetailPage() {
               <span
                 className="inline-flex items-center gap-1 px-2.5 h-6 rounded-full text-[10px] font-semibold"
                 style={{
-                  color: 'var(--brand-fg)',
-                  background: 'var(--brand-bg)',
+                  color: 'var(--fg-accent)',
+                  background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
                 }}
               >
                 <ShieldCheck className="w-3 h-3" />

@@ -399,8 +399,8 @@ function NewSecretModal({
                     key={s}
                     className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors"
                     style={{
-                      background: on ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-                      border: `1px solid ${on ? 'color-mix(in srgb, var(--brand-fg) 40%, transparent)' : 'var(--border-muted)'}`,
+                      background: on ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+                      border: `1px solid ${on ? 'color-mix(in srgb, var(--fg-accent) 40%, transparent)' : 'var(--border-muted)'}`,
                     }}
                   >
                     <input

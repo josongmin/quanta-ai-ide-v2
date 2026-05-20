@@ -249,8 +249,8 @@ function FilterBar({
               <span
                 className="text-[10px] tabular-nums px-1.5 py-0.5 rounded font-mono"
                 style={{
-                  background: id === 'unread' && count > 0 ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-                  color: id === 'unread' && count > 0 ? 'var(--brand-fg)' : 'var(--fg-muted)',
+                  background: id === 'unread' && count > 0 ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+                  color: id === 'unread' && count > 0 ? 'var(--fg-accent)' : 'var(--fg-muted)',
                 }}
               >
                 {count}
@@ -315,8 +315,8 @@ function ListItem({
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onToggleBulk(); } }}
         className="w-4 h-4 rounded shrink-0 mt-0.5 inline-flex items-center justify-center transition-all"
         style={{
-          background: bulkOn ? 'var(--brand-vivid)' : 'transparent',
-          border: `1.5px solid ${bulkOn ? 'var(--brand-vivid)' : 'var(--border-strong)'}`,
+          background: bulkOn ? 'var(--fg-accent)' : 'transparent',
+          border: `1.5px solid ${bulkOn ? 'var(--fg-accent)' : 'var(--border-strong)'}`,
           opacity: bulkOn || active ? 1 : 0,
         }}
       >
@@ -333,7 +333,7 @@ function ListItem({
           {item.status === 'unread' && (
             <span
               className="w-1.5 h-1.5 rounded-full shrink-0"
-              style={{ background: 'var(--brand-vivid)' }}
+              style={{ background: 'var(--fg-accent)' }}
               aria-label="Unread"
             />
           )}
@@ -370,7 +370,7 @@ function ListItem({
 }
 
 function tintFor(t: ItemType) {
-  return t === 'mention' ? 'var(--brand-fg)'
+  return t === 'mention' ? 'var(--fg-accent)'
     : t === 'review' ? 'var(--fg-link)'
     : t === 'admission' ? 'var(--intent-warn-fg)'
     : t === 'fix' ? 'var(--intent-success-fg)'

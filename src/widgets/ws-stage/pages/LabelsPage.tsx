@@ -15,7 +15,7 @@ const COLORS: ColorChoice[] = [
   { id: 'success', label: 'Success', value: 'var(--intent-success-fg)' },
   { id: 'warn',    label: 'Warn',    value: 'var(--intent-warn-fg)' },
   { id: 'danger',  label: 'Danger',  value: 'var(--intent-danger-fg)' },
-  { id: 'brand',   label: 'Brand',   value: 'var(--brand-vivid)' },
+  { id: 'brand',   label: 'Brand',   value: 'var(--fg-accent)' },
   { id: 'indigo',  label: 'Indigo',  value: '#6366f1' },
   { id: 'amber',   label: 'Amber',   value: '#f59e0b' },
   { id: 'teal',    label: 'Teal',    value: '#14b8a6' },

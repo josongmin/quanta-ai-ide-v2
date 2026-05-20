@@ -73,9 +73,9 @@ export default function SignUpPage() {
       >
         <div
           className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
-          style={{ background: 'var(--brand-bg)', border: '1px solid var(--brand-vivid)' }}
+          style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
         >
-          <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+          <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
           <div className="flex flex-col gap-0.5 text-[12px] leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Identity provider: {PROVIDER_LABEL[idp.provider]}
@@ -119,9 +119,9 @@ export default function SignUpPage() {
         >
           <div
             className="w-12 h-12 rounded-full flex items-center justify-center"
-            style={{ background: 'var(--brand-bg)' }}
+            style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
           >
-            <Mail className="w-5 h-5" style={{ color: 'var(--brand-fg)' }} />
+            <Mail className="w-5 h-5" style={{ color: 'var(--fg-accent)' }} />
           </div>
           <div
             className="text-[11px] font-mono tabular-nums px-3 py-1.5 rounded"
@@ -270,8 +270,8 @@ function TermsCheck({
       <span
         className="relative w-4 h-4 rounded shrink-0 mt-0.5 transition-colors"
         style={{
-          background: checked ? 'var(--brand-vivid)' : 'transparent',
-          border: `1.5px solid ${checked ? 'var(--brand-vivid)' : 'var(--border-strong)'}`,
+          background: checked ? 'var(--fg-accent)' : 'transparent',
+          border: `1.5px solid ${checked ? 'var(--fg-accent)' : 'var(--border-strong)'}`,
         }}
       >
         <input

@@ -99,7 +99,7 @@ function TaxRow({
           type="button"
           onClick={onVerify}
           className="text-[11px] font-medium transition-opacity"
-          style={{ color: 'var(--brand-fg)' }}
+          style={{ color: 'var(--fg-accent)' }}
         >
           Verify
         </button>

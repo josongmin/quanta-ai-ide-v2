@@ -85,9 +85,9 @@ export default function ForgotPasswordPage() {
       >
         <div
           className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
-          style={{ background: 'var(--brand-bg)', border: '1px solid var(--brand-vivid)' }}
+          style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
         >
-          <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+          <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
           <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Reset your {idp.org} password

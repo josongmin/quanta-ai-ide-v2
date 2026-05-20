@@ -10,7 +10,7 @@ import { PublicShell , HeroBackdrop, Eyebrow, HeadlineGradient, SectionHead, Sea
 const CERTS = [
   { id: 'soc2',  label: 'SOC 2 Type II', sub: 'Audited annually', tone: 'var(--intent-success-fg)' },
   { id: 'iso',   label: 'ISO 27001',     sub: 'Certified 2024',   tone: 'var(--intent-info-fg)' },
-  { id: 'iso2',  label: 'ISO 27701',     sub: 'Privacy extension',tone: 'var(--brand-vivid)' },
+  { id: 'iso2',  label: 'ISO 27701',     sub: 'Privacy extension',tone: 'var(--fg-accent)' },
   { id: 'gdpr',  label: 'GDPR',          sub: 'EU + UK compliant',tone: 'var(--fg-link)' },
   { id: 'ccpa',  label: 'CCPA',          sub: 'California',       tone: 'var(--intent-warn-fg)' },
   { id: 'hipaa', label: 'HIPAA BAA',     sub: 'On request',       tone: 'var(--intent-danger-fg)' },
@@ -107,8 +107,8 @@ export default function TrustCenterPage() {
                 <div
                   className="w-9 h-9 rounded-lg flex items-center justify-center"
                   style={{
-                    background: 'color-mix(in srgb, var(--brand-vivid) 14%, transparent)',
-                    color: 'var(--brand-fg)',
+                    background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+                    color: 'var(--fg-accent)',
                   }}
                 >
                   <p.icon className="w-4 h-4" />

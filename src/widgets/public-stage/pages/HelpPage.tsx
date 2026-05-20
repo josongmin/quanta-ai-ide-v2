@@ -27,11 +27,11 @@ const CATEGORIES: {
   from: string;
   to: string;
 }[] = [
-  { id: 'getting-started', title: 'Getting started', description: 'Install, connect a repo, ship your first admission rule.', icon: Rocket,        count: 18, from: 'var(--brand-vivid)',         to: 'var(--fg-link)' },
+  { id: 'getting-started', title: 'Getting started', description: 'Install, connect a repo, ship your first admission rule.', icon: Rocket,        count: 18, from: 'var(--fg-accent)',         to: 'var(--fg-link)' },
   { id: 'admission',       title: 'Admission gates', description: 'Author rules, debug failures, propagate to workspaces.', icon: ShieldCheck,    count: 24, from: 'var(--intent-success-fg)',   to: 'var(--intent-info-fg)' },
-  { id: 'agents',          title: 'Agents',          description: 'Configure, throttle, audit, and kill autonomous runs.',  icon: Bot,            count: 31, from: 'var(--fg-link)',             to: 'var(--brand-vivid)' },
-  { id: 'workspaces',      title: 'Workspaces',      description: 'Source connection, ownership, environments, secrets.',   icon: Layers,         count: 19, from: 'var(--intent-info-fg)',      to: 'var(--brand-vivid)' },
-  { id: 'billing',         title: 'Billing',         description: 'Plans, seats, invoices, tax IDs, contracts.',            icon: CreditCard,     count: 12, from: 'var(--intent-warn-fg)',      to: 'var(--brand-vivid)' },
+  { id: 'agents',          title: 'Agents',          description: 'Configure, throttle, audit, and kill autonomous runs.',  icon: Bot,            count: 31, from: 'var(--fg-link)',             to: 'var(--fg-accent)' },
+  { id: 'workspaces',      title: 'Workspaces',      description: 'Source connection, ownership, environments, secrets.',   icon: Layers,         count: 19, from: 'var(--intent-info-fg)',      to: 'var(--fg-accent)' },
+  { id: 'billing',         title: 'Billing',         description: 'Plans, seats, invoices, tax IDs, contracts.',            icon: CreditCard,     count: 12, from: 'var(--intent-warn-fg)',      to: 'var(--fg-accent)' },
   { id: 'troubleshooting', title: 'Troubleshooting', description: '5xx, webhook delivery, SSO loops, agent timeouts.',      icon: AlertTriangle,  count: 22, from: 'var(--intent-danger-fg)',    to: 'var(--intent-warn-fg)' },
 ];
 
@@ -392,11 +392,11 @@ function ContactCard({
   const fg =
     tone === 'success' ? 'var(--intent-success-fg)'
     : tone === 'info'  ? 'var(--intent-info-fg)'
-    : 'var(--brand-fg)';
+    : 'var(--fg-accent)';
   const bg =
     tone === 'success' ? 'var(--intent-success-bg)'
     : tone === 'info'  ? 'var(--intent-info-bg)'
-    : 'var(--brand-bg)';
+    : 'color-mix(in srgb, var(--fg-accent) 14%, transparent)';
   return (
     <LiftCard className="p-6 gap-3">
       <div

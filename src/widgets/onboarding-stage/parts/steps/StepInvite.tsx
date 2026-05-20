@@ -377,7 +377,7 @@ function EmailChip({
                     {ROLE_META[r].sub}
                   </span>
                 </span>
-                {active && <Check className="w-3 h-3" style={{ color: 'var(--brand-fg)' }} />}
+                {active && <Check className="w-3 h-3" style={{ color: 'var(--fg-accent)' }} />}
               </button>
             );
           })}
@@ -484,15 +484,15 @@ function SendButton({
       <div
         className="flex flex-col gap-2 px-3 py-3 rounded-md onb-stagger"
         style={{
-          background: 'var(--brand-bg)',
-          border: '1px solid var(--brand-vivid)',
+          background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+          border: '1px solid var(--fg-accent)',
         }}
       >
         <div className="flex items-center justify-between text-[11px]">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
             Sending invitations…
           </span>
-          <span className="font-mono tabular-nums" style={{ color: 'var(--brand-fg)' }}>
+          <span className="font-mono tabular-nums" style={{ color: 'var(--fg-accent)' }}>
             {progress}/{count}
           </span>
         </div>
@@ -503,7 +503,7 @@ function SendButton({
             className="absolute inset-y-0 left-0 rounded-full"
             style={{
               width: `${pct}%`,
-              background: 'var(--brand-vivid)',
+              background: 'var(--fg-accent)',
               transition: 'width 240ms linear',
             }}
           />

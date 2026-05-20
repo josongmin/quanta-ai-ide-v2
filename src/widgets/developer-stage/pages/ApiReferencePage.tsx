@@ -152,7 +152,7 @@ export default function ApiReferencePage() {
                         className="w-full text-left flex items-center gap-2 px-2 h-7 rounded-md transition-colors"
                         style={{
                           background: 'transparent',
-                          boxShadow: active ? 'inset 0 0 0 1px var(--brand-vivid)' : 'none',
+                          boxShadow: active ? 'inset 0 0 0 1px var(--fg-accent)' : 'none',
                         }}
                         onMouseEnter={(e2) => {
                           if (!active) e2.currentTarget.style.background = 'var(--bg-hover)';

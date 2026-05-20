@@ -364,7 +364,7 @@ function Slider({
         value={value}
         onChange={(e) => { onChange(Number(e.target.value)); }}
         className="flex-1"
-        style={{ accentColor: 'var(--brand-vivid)' }}
+        style={{ accentColor: 'var(--fg-accent)' }}
       />
       <span
         className="text-[12px] tabular-nums font-medium w-6 text-right"

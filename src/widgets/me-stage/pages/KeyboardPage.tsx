@@ -237,9 +237,9 @@ function KeyChip({ combo, conflict, customized }: { combo: string; conflict: boo
     <span
       className="inline-flex items-center gap-0.5 h-7 px-2 rounded text-[11px] font-mono tabular-nums shrink-0"
       style={{
-        background: conflict ? 'var(--intent-warn-bg)' : customized ? 'var(--brand-bg)' : 'var(--bg-surface-muted)',
-        color: conflict ? 'var(--intent-warn-fg)' : customized ? 'var(--brand-fg)' : 'var(--fg-default)',
-        border: `1px solid ${conflict ? 'var(--intent-warn-fg)' : customized ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+        background: conflict ? 'var(--intent-warn-bg)' : customized ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
+        color: conflict ? 'var(--intent-warn-fg)' : customized ? 'var(--fg-accent)' : 'var(--fg-default)',
+        border: `1px solid ${conflict ? 'var(--intent-warn-fg)' : customized ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
         minWidth: 60,
         justifyContent: 'center',
       }}
@@ -305,8 +305,8 @@ function RecordModal({
           className="flex items-center justify-center h-20 rounded-md font-mono text-[18px] tabular-nums onb-stagger"
           style={{
             background: 'var(--bg-canvas)',
-            border: `1.5px ${recorded ? 'solid' : 'dashed'} ${recorded ? 'var(--brand-vivid)' : 'var(--border-default)'}`,
-            color: recorded ? 'var(--brand-fg)' : 'var(--fg-subtle)',
+            border: `1.5px ${recorded ? 'solid' : 'dashed'} ${recorded ? 'var(--fg-accent)' : 'var(--border-default)'}`,
+            color: recorded ? 'var(--fg-accent)' : 'var(--fg-subtle)',
           }}
         >
           {recorded ?? 'Listening…'}

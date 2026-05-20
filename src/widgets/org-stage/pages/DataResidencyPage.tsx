@@ -45,7 +45,7 @@ export default function DataResidencyPage() {
         className="px-5 py-4 rounded-lg mb-6 flex items-start gap-3"
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
-        <Globe2 className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--brand-vivid)' }} />
+        <Globe2 className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
         <div className="flex flex-col gap-1">
           <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
             What residency controls
@@ -70,7 +70,7 @@ export default function DataResidencyPage() {
                 className="flex flex-col gap-2.5 p-4 rounded-lg text-left transition-colors"
                 style={{
                   background: isActive ? 'var(--bg-active)' : 'var(--bg-canvas)',
-                  border: `1px solid ${isActive ? 'var(--brand-vivid)' : 'var(--border-default)'}`,
+                  border: `1px solid ${isActive ? 'var(--fg-accent)' : 'var(--border-default)'}`,
                   cursor: isActive ? 'default' : 'pointer',
                 }}
                 onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'var(--bg-hover)'; }}

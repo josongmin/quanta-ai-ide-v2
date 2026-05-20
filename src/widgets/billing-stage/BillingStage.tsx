@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTheme } from '@shared/theme';
-import { useScrollRestoration } from '@shared/lib';
+import { ScrollPane } from '@shared/ui';
+import { useTabVisibility } from '@features/workspace-tabs';
 import {
   PLANS, USAGE, INVOICES, PAYMENT_METHODS, BILLING_PROFILE,
   type PlanId,
@@ -23,8 +24,7 @@ export default function BillingStage() {
   const { isDark } = useTheme();
   const [cycle, setCycle] = useState<'monthly' | 'annual'>('annual');
   const [planId, setPlanId] = useState<PlanId>('team');
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  useScrollRestoration('billing', scrollerRef);
+  const visible = useTabVisibility();
 
   const plan = PLANS.find((p) => p.id === planId)!;
   const seats = USAGE.find((u) => u.key === 'seats')!;
@@ -34,8 +34,9 @@ export default function BillingStage() {
     : (cycle === 'annual' ? plan.annual! : plan.monthly) * seatCount;
 
   return (
-    <div
-      ref={scrollerRef}
+    <ScrollPane
+      scope="billing"
+      visible={visible}
       className="absolute inset-0 overflow-y-auto"
       style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
@@ -114,7 +115,7 @@ export default function BillingStage() {
           <ContractsSection />
         </Section>
       </div>
-    </div>
+    </ScrollPane>
   );
 }
 

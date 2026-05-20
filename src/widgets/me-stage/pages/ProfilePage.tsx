@@ -321,7 +321,7 @@ function PublicPreview({ data }: { data: ProfileData }) {
     >
       <div
         className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-3 inline-flex items-center gap-1.5"
-        style={{ color: 'var(--brand-fg)' }}
+        style={{ color: 'var(--fg-accent)' }}
       >
         <Eye className="w-3 h-3" />
         Public preview · how others see you

@@ -119,7 +119,7 @@ function ThemePicker({ value, onChange }: { value: ThemeMode; onChange: (v: Them
             className="flex flex-col gap-2 p-3 rounded-md transition-colors"
             style={{
               background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
-              border: `1px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+              border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
             }}
           >
             <ThemeMockup mode={o.id} />
@@ -130,7 +130,7 @@ function ThemePicker({ value, onChange }: { value: ThemeMode; onChange: (v: Them
                 <Icon className="w-3.5 h-3.5" />
                 {o.label}
               </span>
-              {active && <Check className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />}
+              {active && <Check className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />}
             </div>
           </button>
         );
@@ -235,7 +235,7 @@ function DensityPicker({ value, onChange }: { value: Density; onChange: (v: Dens
             className="flex flex-col gap-2 p-3 rounded-md transition-colors"
             style={{
               background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
-              border: `1px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
+              border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
             }}
           >
             <div
@@ -260,7 +260,7 @@ function DensityPicker({ value, onChange }: { value: Density; onChange: (v: Dens
               >
                 {o.label}
               </span>
-              {active && <Check className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />}
+              {active && <Check className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />}
             </div>
           </button>
         );
@@ -375,13 +375,13 @@ function LivePreview({ settings }: { settings: Appearance }) {
       }}
     >
       <div className="flex items-center gap-2 onb-stagger">
-        <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />
+        <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           PR #4821 · Add admission rule for SSO-only prod
         </span>
         <span
           className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded ml-auto"
-          style={{ background: 'var(--brand-bg)', color: 'var(--brand-fg)' }}
+          style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
         >
           Approved
         </span>

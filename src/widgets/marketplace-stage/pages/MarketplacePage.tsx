@@ -37,17 +37,17 @@ const CATEGORIES: { id: Category; label: string }[] = [
 ];
 
 const INTEGRATIONS: Integration[] = [
-  { slug: 'slack',     name: 'Slack',      vendor: 'Slack',      category: 'chat',           blurb: 'Channel routing, threaded alerts, and slash commands.',     installs: 12480, rating: 4.8, verified: true, featured: true, icon: MessageSquare, tone: { from: 'var(--brand-vivid)', to: 'var(--fg-link)' } },
+  { slug: 'slack',     name: 'Slack',      vendor: 'Slack',      category: 'chat',           blurb: 'Channel routing, threaded alerts, and slash commands.',     installs: 12480, rating: 4.8, verified: true, featured: true, icon: MessageSquare, tone: { from: 'var(--fg-accent)', to: 'var(--fg-link)' } },
   { slug: 'linear',    name: 'Linear',     vendor: 'Linear',     category: 'ticketing',      blurb: 'Sync admission failures and fix PRs to Linear issues.',     installs: 6420,  rating: 4.9, verified: true, featured: true, icon: Briefcase, tone: { from: 'var(--fg-link)', to: 'var(--intent-info-fg)' } },
-  { slug: 'jira',      name: 'Jira',       vendor: 'Atlassian',  category: 'ticketing',      blurb: 'Bi-directional issue sync. Auto-create from agent runs.',  installs: 4810,  rating: 4.5, verified: true, icon: Briefcase, tone: { from: 'var(--intent-info-fg)', to: 'var(--brand-vivid)' } },
+  { slug: 'jira',      name: 'Jira',       vendor: 'Atlassian',  category: 'ticketing',      blurb: 'Bi-directional issue sync. Auto-create from agent runs.',  installs: 4810,  rating: 4.5, verified: true, icon: Briefcase, tone: { from: 'var(--intent-info-fg)', to: 'var(--fg-accent)' } },
   { slug: 'datadog',   name: 'Datadog',    vendor: 'Datadog',    category: 'observability',  blurb: 'Push metrics and admission events to a Datadog dashboard.', installs: 3210,  rating: 4.6, verified: true, icon: BarChart3, tone: { from: 'var(--intent-warn-fg)', to: 'var(--intent-danger-fg)' } },
-  { slug: 'pagerduty', name: 'PagerDuty',  vendor: 'PagerDuty',  category: 'observability',  blurb: 'Page oncall on agent failures or admission outages.',       installs: 2840,  rating: 4.7, verified: true, icon: Bell, tone: { from: 'var(--intent-success-fg)', to: 'var(--brand-vivid)' } },
+  { slug: 'pagerduty', name: 'PagerDuty',  vendor: 'PagerDuty',  category: 'observability',  blurb: 'Page oncall on agent failures or admission outages.',       installs: 2840,  rating: 4.7, verified: true, icon: Bell, tone: { from: 'var(--intent-success-fg)', to: 'var(--fg-accent)' } },
   { slug: 'okta',      name: 'Okta',       vendor: 'Okta',       category: 'identity',       blurb: 'SAML SSO + SCIM provisioning. Enterprise plan.',            installs: 1820,  rating: 4.8, verified: true, icon: Lock, tone: { from: 'var(--intent-info-fg)', to: 'var(--fg-link)' } },
-  { slug: 'github',    name: 'GitHub',     vendor: 'GitHub',     category: 'devtools',       blurb: 'Repo connection, status checks, PR comments.',              installs: 18900, rating: 4.9, verified: true, featured: true, icon: GitBranch, tone: { from: 'var(--fg-strong)', to: 'var(--brand-vivid)' } },
+  { slug: 'github',    name: 'GitHub',     vendor: 'GitHub',     category: 'devtools',       blurb: 'Repo connection, status checks, PR comments.',              installs: 18900, rating: 4.9, verified: true, featured: true, icon: GitBranch, tone: { from: 'var(--fg-strong)', to: 'var(--fg-accent)' } },
   { slug: 'gitlab',    name: 'GitLab',     vendor: 'GitLab',     category: 'devtools',       blurb: 'MR pipelines and merge checks, self-hosted-compatible.',    installs: 2410,  rating: 4.4, verified: true, icon: GitBranch, tone: { from: 'var(--intent-warn-fg)', to: 'var(--intent-danger-fg)' } },
-  { slug: 'amplitude', name: 'Amplitude',  vendor: 'Amplitude',  category: 'analytics',      blurb: 'Stream usage events for product analytics.',                installs: 1120,  rating: 4.3, verified: false, icon: BarChart3, tone: { from: 'var(--fg-link)', to: 'var(--brand-vivid)' } },
+  { slug: 'amplitude', name: 'Amplitude',  vendor: 'Amplitude',  category: 'analytics',      blurb: 'Stream usage events for product analytics.',                installs: 1120,  rating: 4.3, verified: false, icon: BarChart3, tone: { from: 'var(--fg-link)', to: 'var(--fg-accent)' } },
   { slug: 'openai',    name: 'OpenAI',     vendor: 'OpenAI',     category: 'ai',             blurb: 'Bring-your-own model key for the autonomous fix agents.',   installs: 5320,  rating: 4.7, verified: true, icon: Bot, tone: { from: 'var(--intent-success-fg)', to: 'var(--intent-info-fg)' } },
-  { slug: 'anthropic', name: 'Anthropic',  vendor: 'Anthropic',  category: 'ai',             blurb: 'Use Claude as the reasoning engine for review + fix.',      installs: 4210,  rating: 4.8, verified: true, featured: true, icon: Bot, tone: { from: 'var(--brand-vivid)', to: 'var(--intent-warn-fg)' } },
+  { slug: 'anthropic', name: 'Anthropic',  vendor: 'Anthropic',  category: 'ai',             blurb: 'Use Claude as the reasoning engine for review + fix.',      installs: 4210,  rating: 4.8, verified: true, featured: true, icon: Bot, tone: { from: 'var(--fg-accent)', to: 'var(--intent-warn-fg)' } },
   { slug: 'sentry',    name: 'Sentry',     vendor: 'Sentry',     category: 'observability',  blurb: 'Pull live errors into admission context.',                  installs: 2010,  rating: 4.5, verified: true, icon: Code2, tone: { from: 'var(--intent-danger-fg)', to: 'var(--fg-link)' } },
 ];
 
@@ -130,9 +130,9 @@ export default function MarketplacePage() {
                 onClick={() => { setCat(c.id); }}
                 className="h-8 px-3 rounded-full text-[11px] font-medium transition-colors"
                 style={{
-                  background: active ? 'color-mix(in srgb, var(--brand-vivid) 12%, transparent)' : 'transparent',
-                  color: active ? 'var(--brand-fg)' : 'var(--fg-muted)',
-                  border: `1px solid ${active ? 'color-mix(in srgb, var(--brand-vivid) 40%, transparent)' : 'var(--border-default)'}`,
+                  background: active ? 'color-mix(in srgb, var(--fg-accent) 12%, transparent)' : 'transparent',
+                  color: active ? 'var(--fg-accent)' : 'var(--fg-muted)',
+                  border: `1px solid ${active ? 'color-mix(in srgb, var(--fg-accent) 40%, transparent)' : 'var(--border-default)'}`,
                 }}
               >
                 {c.label}
@@ -166,7 +166,7 @@ export default function MarketplacePage() {
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                'radial-gradient(ellipse 70% 60% at 90% 50%, color-mix(in srgb, var(--brand-vivid) 16%, transparent), transparent 70%)',
+                'radial-gradient(ellipse 70% 60% at 90% 50%, color-mix(in srgb, var(--fg-accent) 16%, transparent), transparent 70%)',
             }}
           />
           <div className="relative flex flex-col gap-1">
@@ -210,7 +210,7 @@ function SectionLabel({
   return (
     <div className="flex items-baseline justify-between mt-12 mb-4">
       <div className="flex items-center gap-2">
-        <Icon className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />
+        <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
         <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           {label}
         </h2>
@@ -235,8 +235,8 @@ function FeaturedCard({ integration }: { integration: Integration }) {
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--brand-vivid) 22%, transparent)';
-        e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--brand-vivid) 60%, var(--border-default))';
+        e.currentTarget.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--fg-accent) 22%, transparent)';
+        e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--fg-accent) 60%, var(--border-default))';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
@@ -258,7 +258,7 @@ function FeaturedCard({ integration }: { integration: Integration }) {
             {integration.name}
           </h3>
           {integration.verified && (
-            <CheckCircle2 className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />
+            <CheckCircle2 className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
           )}
         </div>
         <p className="text-[12px] leading-snug truncate" style={{ color: 'var(--fg-muted)' }}>
@@ -308,7 +308,7 @@ function IntegrationCard({ integration }: { integration: Integration }) {
             <span
               title="Verified"
               className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.14em] font-semibold"
-              style={{ color: 'var(--brand-fg)' }}
+              style={{ color: 'var(--fg-accent)' }}
             >
               <ShieldCheck className="w-3 h-3" />
               verified

@@ -168,7 +168,7 @@ export default function RolesPage() {
         <div className="flex flex-col" style={{ borderRight: '1px solid var(--border-muted)' }}>
           {roles.map((r, i) => {
             const active = selectedId === r.id;
-            const idleBg = active ? 'var(--brand-bg)' : 'transparent';
+            const idleBg = active ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'transparent';
             return (
               <button
                 key={r.id}
@@ -185,7 +185,7 @@ export default function RolesPage() {
                 onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'var(--bg-hover)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = idleBg; }}
               >
-                <Shield className="w-3.5 h-3.5 shrink-0" style={{ color: r.builtIn ? 'var(--fg-subtle)' : 'var(--brand-fg)' }} />
+                <Shield className="w-3.5 h-3.5 shrink-0" style={{ color: r.builtIn ? 'var(--fg-subtle)' : 'var(--fg-accent)' }} />
                 <div className="flex flex-col min-w-0 flex-1 gap-0.5">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>

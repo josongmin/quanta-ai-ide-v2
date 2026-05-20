@@ -77,7 +77,7 @@ function PaymentRow({
       {method.default && (
         <span
           className="text-[10px] uppercase tracking-[0.14em] font-semibold"
-          style={{ color: 'var(--brand-fg)' }}
+          style={{ color: 'var(--fg-accent)' }}
         >
           Default
         </span>

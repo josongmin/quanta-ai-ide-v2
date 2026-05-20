@@ -284,7 +284,7 @@ export default function FixPipelinePage() {
                 className="flex items-start gap-3 px-3 py-3 cursor-pointer transition-colors"
                 style={{
                   borderTop: i === 0 ? 'none' : '1px solid var(--border-muted)',
-                  background: on ? 'var(--brand-bg)' : 'transparent',
+                  background: on ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'transparent',
                 }}
               >
                 <input

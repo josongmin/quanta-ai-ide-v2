@@ -271,7 +271,7 @@ function TierBadge({ tier }: { tier: Tier }) {
       ? { label: 'production', bg: 'var(--intent-warn-bg)', fg: 'var(--intent-warn-fg)' }
       : tier === 'staging'
       ? { label: 'staging',    bg: 'var(--bg-surface-muted)', fg: 'var(--fg-muted)' }
-      : { label: 'dev',        bg: 'var(--brand-bg)', fg: 'var(--brand-fg)' };
+      : { label: 'dev',        bg: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', fg: 'var(--fg-accent)' };
   return (
     <span
       className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
@@ -465,7 +465,7 @@ function DeployStatusIcon({ status }: { status: DeployStatus }) {
   return (
     <span
       className="w-2 h-2 rounded-full shrink-0 ml-[3px] mr-[3px]"
-      style={{ background: 'var(--brand-vivid)', boxShadow: '0 0 6px var(--brand-vivid)' }}
+      style={{ background: 'var(--fg-accent)', boxShadow: '0 0 6px var(--fg-accent)' }}
       title="in progress"
     />
   );

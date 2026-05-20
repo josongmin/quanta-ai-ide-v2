@@ -233,8 +233,8 @@ function OauthButton({
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-strong)',
-        border: `1px solid ${highlight ? 'var(--brand-vivid)' : 'var(--border-default)'}`,
-        boxShadow: highlight ? '0 0 0 3px var(--brand-bg)' : 'none',
+        border: `1px solid ${highlight ? 'var(--fg-accent)' : 'var(--border-default)'}`,
+        boxShadow: highlight ? '0 0 0 3px color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'none',
       }}
       onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
       onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface-muted)'; }}
@@ -261,7 +261,7 @@ function LastBadge() {
   return (
     <span
       className="ml-auto text-[8px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
-      style={{ background: 'var(--brand-vivid)', color: 'var(--bg-canvas)' }}
+      style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
     >
       Last used
     </span>
@@ -312,9 +312,9 @@ function SsoEnforcedBanner({ orgName, provider }: { orgName: string; provider: I
   return (
     <div
       className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
-      style={{ background: 'var(--brand-bg)', border: '1px solid var(--brand-vivid)' }}
+      style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
     >
-      <KeyRound className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--brand-fg)' }} />
+      <KeyRound className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
       <div className="flex flex-col gap-0.5 text-[11px] leading-snug flex-1">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {orgName} requires SSO

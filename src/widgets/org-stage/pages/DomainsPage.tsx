@@ -76,7 +76,7 @@ function DomainCard({ domain }: { domain: Domain }) {
               {domain.primary && (
                 <span
                   className="text-[9px] uppercase tracking-[0.14em] font-bold px-1.5 h-4.5 inline-flex items-center rounded"
-                  style={{ color: 'var(--brand-fg)', background: 'var(--brand-bg)' }}
+                  style={{ color: 'var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
                 >
                   Primary
                 </span>
@@ -148,7 +148,7 @@ function Toggle({ label, sub, on, disabled }: { label: string; sub: string; on: 
         aria-pressed={v}
         className="relative w-9 h-5 rounded-full shrink-0 ml-3 transition-colors"
         style={{
-          background: v ? 'var(--brand-vivid)' : 'var(--bg-active)',
+          background: v ? 'var(--fg-accent)' : 'var(--bg-active)',
           cursor: disabled ? 'not-allowed' : 'pointer',
         }}
       >

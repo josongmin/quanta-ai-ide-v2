@@ -108,7 +108,7 @@ function DotFieldPreview() {
     const delay = (i * 47) % 1800;
     const size = 1.3 + ((i * 13) % 7) * 0.25;
     const palette = [
-      'var(--brand-vivid)',
+      'var(--fg-accent)',
       'var(--intent-success-vivid)',
       'var(--fg-link)',
       'var(--fg-strong)',
@@ -131,9 +131,9 @@ function DotFieldPreview() {
         {/* Soft halo at center */}
         <defs>
           <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"  stopColor="var(--brand-vivid)" stopOpacity="0.25" />
-            <stop offset="60%" stopColor="var(--brand-vivid)" stopOpacity="0.05" />
-            <stop offset="100%" stopColor="var(--brand-vivid)" stopOpacity="0" />
+            <stop offset="0%"  stopColor="var(--fg-accent)" stopOpacity="0.25" />
+            <stop offset="60%" stopColor="var(--fg-accent)" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="var(--fg-accent)" stopOpacity="0" />
           </radialGradient>
         </defs>
         <rect x="0" y="0" width="100" height="100" fill="url(#halo)" />
@@ -347,11 +347,11 @@ function NextActions({ data }: Props) {
               <span
                 className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 mt-0.5"
                 style={{
-                  background: 'var(--brand-bg)',
-                  border: '1px solid var(--brand-vivid)',
+                  background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+                  border: '1px solid var(--fg-accent)',
                 }}
               >
-                <it.icon className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />
+                <it.icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
               </span>
               <div className="flex flex-col gap-0.5 min-w-0">
                 <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>

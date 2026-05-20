@@ -5,7 +5,7 @@ const STRENGTH_FG: Record<PasswordReport['score'], string> = {
   0: 'var(--fg-subtle)',
   1: 'var(--intent-danger-fg)',
   2: 'var(--intent-warn-fg)',
-  3: 'var(--brand-fg)',
+  3: 'var(--fg-accent)',
   4: 'var(--intent-success-fg)',
 };
 

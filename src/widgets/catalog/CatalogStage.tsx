@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Search, ArrowUpRight, Lock } from 'lucide-react';
 import { useTheme } from '@shared/theme';
-import { useScrollRestoration } from '@shared/lib';
+import { ScrollPane } from '@shared/ui';
+import { useTabVisibility } from '@features/workspace-tabs';
 import {
   CATALOG, GROUP_META, GROUP_ORDER, catalogStats,
   type CatalogEntry, type CatalogStatus,
@@ -15,8 +16,7 @@ import {
 export default function CatalogStage() {
   const { isDark } = useTheme();
   const [q, setQ] = useState('');
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  useScrollRestoration('catalog', scrollerRef);
+  const visible = useTabVisibility();
 
   const stats = useMemo(() => catalogStats(), []);
   const filtered = useMemo(() => {
@@ -41,8 +41,9 @@ export default function CatalogStage() {
   }, [filtered]);
 
   return (
-    <div
-      ref={scrollerRef}
+    <ScrollPane
+      scope="catalog"
+      visible={visible}
       className="absolute inset-0 overflow-y-auto"
       style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
     >
@@ -149,7 +150,7 @@ export default function CatalogStage() {
           )}
         </div>
       </div>
-    </div>
+    </ScrollPane>
   );
 }
 

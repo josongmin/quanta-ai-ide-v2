@@ -713,7 +713,7 @@ function RolloutBar({ pct, dim }: { pct: number; dim: boolean }) {
           style={{
             width: `${pct}%`,
             background: pct >= 75 ? 'var(--intent-success-fg)'
-              : pct >= 25 ? 'var(--brand-vivid)'
+              : pct >= 25 ? 'var(--fg-accent)'
               :             'var(--fg-subtle)',
             opacity: dim ? 0.4 : 0.9,
           }}

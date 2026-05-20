@@ -23,7 +23,7 @@ const SDKS: SDK[] = [
     version: '2.4.1',
     stars: '1.2k',
     downloads: '420k/mo',
-    tone: { from: 'var(--intent-info-fg)', to: 'var(--brand-vivid)' },
+    tone: { from: 'var(--intent-info-fg)', to: 'var(--fg-accent)' },
     example: `import { Acme } from "@acme/sdk";\n\nconst acme = new Acme(process.env.ACME_TOKEN);\nconst workspaces = await acme.workspaces.list();\nfor await (const ws of workspaces) {\n  console.log(ws.id);\n}`,
   },
   {
@@ -56,7 +56,7 @@ const SDKS: SDK[] = [
     version: '1.6.2',
     stars: '180',
     downloads: '8k/mo',
-    tone: { from: 'var(--intent-danger-fg)', to: 'var(--brand-vivid)' },
+    tone: { from: 'var(--intent-danger-fg)', to: 'var(--fg-accent)' },
     example: `require "acme"\n\nacme = Acme.new(ENV["ACME_TOKEN"])\nacme.workspaces.each { |ws| puts ws.id }`,
   },
 ];
@@ -83,8 +83,8 @@ export default function SdksPage() {
         <div
           className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
           style={{
-            background: 'color-mix(in srgb, var(--brand-vivid) 14%, transparent)',
-            color: 'var(--brand-fg)',
+            background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+            color: 'var(--fg-accent)',
           }}
         >
           <Package className="w-4 h-4" />

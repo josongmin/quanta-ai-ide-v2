@@ -60,7 +60,7 @@ export function CookiesPage() {
                 aria-pressed={on}
                 className="relative w-10 h-6 rounded-full shrink-0 transition-colors"
                 style={{
-                  background: on ? 'var(--brand-vivid)' : 'var(--bg-active)',
+                  background: on ? 'var(--fg-accent)' : 'var(--bg-active)',
                   opacity: g.required ? 0.55 : 1,
                   cursor: g.required ? 'not-allowed' : 'pointer',
                 }}
@@ -135,8 +135,8 @@ export function AccessibilityPage() {
             <div
               className="w-9 h-9 rounded-lg flex items-center justify-center"
               style={{
-                background: 'color-mix(in srgb, var(--brand-vivid) 14%, transparent)',
-                color: 'var(--brand-fg)',
+                background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+                color: 'var(--fg-accent)',
               }}
             >
               <a.icon className="w-4 h-4" />
@@ -215,7 +215,7 @@ const WHATS_NEW = [
 
 const TAG_TONE: Record<string, { fg: string; bg: string }> = {
   new:      { fg: 'var(--intent-success-fg)', bg: 'var(--intent-success-bg)' },
-  improved: { fg: 'var(--brand-fg)',          bg: 'var(--brand-bg)' },
+  improved: { fg: 'var(--fg-accent)',          bg: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' },
   fix:      { fg: 'var(--intent-warn-fg)',    bg: 'var(--intent-warn-bg)' },
 };
 
@@ -294,7 +294,7 @@ const ROADMAP: Record<string, { title: string; votes: number; eta?: string; tag:
 
 const COLUMN_TONE: Record<string, string> = {
   Now:   'var(--intent-success-fg)',
-  Next:  'var(--brand-vivid)',
+  Next:  'var(--fg-accent)',
   Later: 'var(--fg-link)',
 };
 

@@ -54,7 +54,7 @@ function PlanCell({
       className="flex flex-col gap-4 p-5 transition-colors relative"
       style={{
         background: pageBg,
-        boxShadow: current ? 'inset 0 0 0 1px var(--brand-fg)' : undefined,
+        boxShadow: current ? 'inset 0 0 0 1px var(--fg-accent)' : undefined,
       }}
     >
       <div className="flex items-center justify-between">
@@ -67,7 +67,7 @@ function PlanCell({
         {current && (
           <span
             className="text-[9px] font-semibold uppercase tracking-[0.14em]"
-            style={{ color: 'var(--brand-fg)' }}
+            style={{ color: 'var(--fg-accent)' }}
           >
             Current
           </span>

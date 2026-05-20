@@ -219,7 +219,7 @@ function ExpiryRow({ expiresAt, remainingSec }: { expiresAt: number; remainingSe
           className="absolute inset-y-0 left-0 rounded-full"
           style={{
             width: `${pct}%`,
-            background: pct < 10 ? 'var(--intent-danger-fg)' : pct < 30 ? 'var(--intent-warn-fg)' : 'var(--brand-vivid)',
+            background: pct < 10 ? 'var(--intent-danger-fg)' : pct < 30 ? 'var(--intent-warn-fg)' : 'var(--fg-accent)',
             transition: 'width 600ms linear, background 220ms ease',
           }}
         />

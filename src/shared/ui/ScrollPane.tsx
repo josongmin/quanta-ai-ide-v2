@@ -39,7 +39,7 @@ export const ScrollPane = forwardRef<HTMLDivElement, Props>(function ScrollPane(
   forwarded,
 ) {
   const ref = useRef<HTMLDivElement>(null);
-  useImperativeHandle(forwarded, () => ref.current as HTMLDivElement, []);
+  useImperativeHandle(forwarded, () => ref.current!, []);
   useScrollRestoration(scope, ref, { visible });
 
   return (

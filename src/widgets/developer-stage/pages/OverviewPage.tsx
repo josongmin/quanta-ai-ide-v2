@@ -122,8 +122,8 @@ function BigCard({ card }: { card: Card }) {
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--brand-vivid) 22%, transparent)';
-        e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--brand-vivid) 60%, var(--border-default))';
+        e.currentTarget.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--fg-accent) 22%, transparent)';
+        e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--fg-accent) 60%, var(--border-default))';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
@@ -135,8 +135,8 @@ function BigCard({ card }: { card: Card }) {
         <div
           className="w-9 h-9 rounded-lg flex items-center justify-center"
           style={{
-            background: 'color-mix(in srgb, var(--brand-vivid) 12%, transparent)',
-            color: 'var(--brand-fg)',
+            background: 'color-mix(in srgb, var(--fg-accent) 12%, transparent)',
+            color: 'var(--fg-accent)',
           }}
         >
           <Icon className="w-4.5 h-4.5" />
@@ -226,7 +226,7 @@ function Quickstart() {
                 <span
                   aria-hidden
                   className="absolute left-0 right-0 -bottom-px h-px"
-                  style={{ background: 'var(--brand-vivid)' }}
+                  style={{ background: 'var(--fg-accent)' }}
                 />
               )}
             </button>
@@ -305,7 +305,7 @@ function HealthStrip() {
             className="flex-1 rounded-sm"
             style={{
               height: `${Math.max(8, (b.p99 / max) * 100)}%`,
-              background: `linear-gradient(to top, color-mix(in srgb, var(--brand-vivid) ${20 + (b.p99 / max) * 50}%, transparent), var(--brand-vivid))`,
+              background: `linear-gradient(to top, color-mix(in srgb, var(--fg-accent) ${20 + (b.p99 / max) * 50}%, transparent), var(--fg-accent))`,
             }}
           />
         ))}

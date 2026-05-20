@@ -227,11 +227,11 @@ function ModelRow({
       <span
         className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
         style={{
-          background: 'var(--brand-bg)',
-          border: '1px solid var(--brand-vivid)',
+          background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
+          border: '1px solid var(--fg-accent)',
         }}
       >
-        <Icon className="w-3.5 h-3.5" style={{ color: 'var(--brand-fg)' }} />
+        <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
       </span>
       <div className="flex flex-col flex-1 min-w-0">
         <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
@@ -263,7 +263,7 @@ function ModelRow({
 
 function ModelMeta({ model }: { model: Model }) {
   const tierColor = model.tier === 'best'
-    ? 'var(--brand-fg)'
+    ? 'var(--fg-accent)'
     : model.tier === 'balanced'
       ? 'var(--fg-default)'
       : 'var(--fg-muted)';
@@ -320,7 +320,7 @@ function SpendMeter({
   const fill =
     pct >= 100 ? 'var(--intent-danger-fg)'
     : pct >= alertAt ? 'var(--intent-warn-fg)'
-    : 'var(--brand-vivid)';
+    : 'var(--fg-accent)';
   const triggered = pct >= alertAt;
 
   return (

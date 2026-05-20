@@ -1,11 +1,12 @@
-import { useRef, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import {
   BookOpen, PlayCircle, KeyRound, Webhook, Terminal, Package,
   ChevronRight, Sparkles,
 } from 'lucide-react';
 import { useTheme } from '@shared/theme';
-import { useScrollRestoration } from '@shared/lib';
+import { ScrollPane } from '@shared/ui';
+import { useTabVisibility } from '@features/workspace-tabs';
 
 export type DevPath =
   | '/developers'
@@ -58,8 +59,7 @@ type Props = {
 
 export function DeveloperShell({ title, subtitle, topRight, children, bleed }: Props) {
   const { isDark } = useTheme();
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  useScrollRestoration('developers', scrollerRef);
+  const visible = useTabVisibility();
 
   return (
     <div
@@ -68,7 +68,7 @@ export function DeveloperShell({ title, subtitle, topRight, children, bleed }: P
     >
       <Sidebar />
 
-      <div ref={scrollerRef} className="flex-1 min-w-0 overflow-y-auto">
+      <ScrollPane scope="developers" visible={visible} className="flex-1 min-w-0 overflow-y-auto">
         <div className={bleed ? 'px-0' : 'max-w-[960px] mx-auto px-10 pt-10 pb-32'}>
           {!bleed && (
             <header className="flex items-end justify-between gap-4 mb-8">
@@ -92,7 +92,7 @@ export function DeveloperShell({ title, subtitle, topRight, children, bleed }: P
 
           {children}
         </div>
-      </div>
+      </ScrollPane>
     </div>
   );
 }
@@ -144,7 +144,7 @@ function Sidebar() {
                     background: 'transparent',
                     color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
                     boxShadow: active
-                      ? 'inset 0 0 0 1px var(--brand-vivid)'
+                      ? 'inset 0 0 0 1px var(--fg-accent)'
                       : 'none',
                   }}
                   onMouseEnter={(e) => {

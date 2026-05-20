@@ -97,8 +97,8 @@ function ProviderGlyph({ provider, active }: { provider: Provider; active: boole
       className="w-12 h-12 rounded-full flex items-center justify-center transition-all"
       style={{
         background: 'var(--bg-surface-muted)',
-        border: `1.5px solid ${active ? 'var(--brand-vivid)' : 'var(--border-muted)'}`,
-        boxShadow: active ? '0 0 0 4px var(--brand-bg)' : 'none',
+        border: `1.5px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
+        boxShadow: active ? '0 0 0 4px color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'none',
       }}
     >
       {Icon
@@ -115,8 +115,8 @@ function BrandGlyph({ active }: { active: boolean }) {
       style={{
         background: 'var(--fg-strong)',
         color: 'var(--bg-canvas)',
-        border: `1.5px solid ${active ? 'var(--brand-vivid)' : 'transparent'}`,
-        boxShadow: active ? '0 0 0 4px var(--brand-bg)' : 'none',
+        border: `1.5px solid ${active ? 'var(--fg-accent)' : 'transparent'}`,
+        boxShadow: active ? '0 0 0 4px color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'none',
       }}
     >
       SE
@@ -130,7 +130,7 @@ function Connector({ phase }: { phase: 'redirecting' | 'on-provider' | 'returnin
   return (
     <svg width="60" height="12" viewBox="0 0 60 12" aria-hidden>
       <line x1="0" y1="6" x2="60" y2="6" stroke="var(--border-default)" strokeWidth="1.5" strokeDasharray="2 3" />
-      <circle r="3" cy="6" fill="var(--brand-vivid)">
+      <circle r="3" cy="6" fill="var(--fg-accent)">
         <animate
           attributeName="cx"
           from={direction === 1 ? 0 : 60}

@@ -127,7 +127,7 @@ function AvatarBlock({ value, onChange }: Props) {
               ? 'transparent'
               : 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
             color: 'var(--bg-canvas)',
-            outline: dragging ? '2px solid var(--brand-vivid)' : '2px solid transparent',
+            outline: dragging ? '2px solid var(--fg-accent)' : '2px solid transparent',
             outlineOffset: '2px',
             font: 'inherit',
           }}
@@ -296,7 +296,7 @@ function TimezoneSelect({
         style={{ color: 'var(--fg-subtle)' }}>
         <span>Time zone</span>
         {value === detected && (
-          <span className="lowercase tracking-normal" style={{ color: 'var(--brand-fg)' }}>
+          <span className="lowercase tracking-normal" style={{ color: 'var(--fg-accent)' }}>
             detected
           </span>
         )}

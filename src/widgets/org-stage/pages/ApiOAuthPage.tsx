@@ -117,7 +117,7 @@ export default function ApiOAuthPage() {
               className="inline-flex items-center gap-2 h-9 px-3 text-[12px] font-medium transition-colors -mb-px"
               style={{
                 color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
-                borderBottom: `2px solid ${active ? 'var(--brand-vivid)' : 'transparent'}`,
+                borderBottom: `2px solid ${active ? 'var(--fg-accent)' : 'transparent'}`,
               }}
             >
               <Icon className="w-3.5 h-3.5" />

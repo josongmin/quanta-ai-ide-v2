@@ -26,11 +26,11 @@ type Model = {
 // and made the table look like dead data.
 function tierBadgeStyle(tier: Model['tier']): CSSProperties {
   const fgVar =
-    tier === 'frontier' ? 'var(--brand-fg)'
+    tier === 'frontier' ? 'var(--fg-accent)'
     : tier === 'fast'   ? 'var(--intent-info-fg)'
     :                     'var(--intent-success-fg)';
   const bgVar =
-    tier === 'frontier' ? 'var(--brand-bg)'
+    tier === 'frontier' ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)'
     : tier === 'fast'   ? 'var(--intent-info-bg)'
     :                     'var(--intent-success-bg)';
   return {
@@ -164,7 +164,7 @@ export default function AiPoliciesPage() {
                   // white-alpha that came out muddy grey in light theme).
                   // `brand-bg` is already alpha-baked so it sits softly on
                   // both light and dark canvases.
-                  background: on ? 'var(--brand-bg)' : 'transparent',
+                  background: on ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'transparent',
                   opacity: 1,
                 }}
               >
