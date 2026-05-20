@@ -24,13 +24,33 @@ export function repoHue(name: string): number {
   }
   return ((h % 360) + 360) % 360;
 }
+// Color allocation cache. Both colour helpers run once per queue row
+// render — 100-row queues × multiple renders = thousands of template-
+// literal allocations per second. Hue is the only varying input, so a
+// tiny per-hue LRU memoises the entire object.
+const REPO_BADGE_CACHE = new Map<number, { bg: string; fg: string; line: string }>();
+const AUTHOR_AVATAR_CACHE = new Map<number, { bg: string; fg: string }>();
+const COLOR_CACHE_MAX = 128; // covers ~360 hues comfortably with FIFO
+
+function cacheGet<V>(cache: Map<number, V>, key: number, build: () => V): V {
+  const hit = cache.get(key);
+  if (hit !== undefined) return hit;
+  const v = build();
+  if (cache.size >= COLOR_CACHE_MAX) {
+    const oldest = cache.keys().next().value;
+    if (oldest !== undefined) cache.delete(oldest);
+  }
+  cache.set(key, v);
+  return v;
+}
+
 export function repoBadgeColor(name: string): { bg: string; fg: string; line: string } {
   const h = repoHue(name);
-  return {
+  return cacheGet(REPO_BADGE_CACHE, h, () => ({
     bg:   `hsla(${String(h)}, 35%, 55%, 0.18)`,
     fg:   `hsla(${String(h)}, 50%, 80%, 1)`,
     line: `hsla(${String(h)}, 35%, 60%, 0.30)`,
-  };
+  }));
 }
 
 // ── Author avatar ────────────────────────────────────────────────────────
@@ -38,10 +58,10 @@ export function repoBadgeColor(name: string): { bg: string; fg: string; line: st
 // brighter so the eye reads "person" before "category". 16×16 — same
 // height as the row's status glyph, so the two read as a paired column.
 export function authorAvatarColor(hue: number): { bg: string; fg: string } {
-  return {
+  return cacheGet(AUTHOR_AVATAR_CACHE, hue, () => ({
     bg: `hsla(${String(hue)}, 55%, 55%, 0.22)`,
     fg: `hsla(${String(hue)}, 60%, 38%, 1)`,
-  };
+  }));
 }
 
 export function triageTier(

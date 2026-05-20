@@ -28,6 +28,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AlertOctagon, Send, X } from 'lucide-react';
 import type { PullRequest } from '@entities/pr';
 import { viewerLogin } from '@features/review-pr';
+import { useTabVisibility } from '@features/workspace-tabs';
 import { dispatchPing, canPing, type PingResult } from '../lib/notifyDispatcher';
 
 const ESCALATION_HOURS = 24 * 7;  // 7 days
@@ -78,10 +79,12 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
   // refresh as PRs cross the threshold while the queue is open.
   // React 19 Date.now-in-render rule: read the wall clock in an
   // effect-driven setState rather than during render.
+  const visible = useTabVisibility();
   useEffect(() => {
+    if (!visible) return;
     const id = window.setInterval(() => { setNow(Date.now()); }, 60_000);
     return () => { window.clearInterval(id); };
-  }, []);
+  }, [visible]);
 
   const stalled = useMemo<Stalled[]>(() => {
     const out: Stalled[] = [];

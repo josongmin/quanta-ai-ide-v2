@@ -32,6 +32,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Brain, Coffee } from 'lucide-react';
 import type { PullRequest } from '@entities/pr';
+import { useTabVisibility } from '@features/workspace-tabs';
 import { getSession, bumpCumulative } from '../lib/sota';
 
 type Tier = 'fresh' | 'focused' | 'strained' | 'overload';
@@ -62,6 +63,7 @@ export default function FatigueMeter({ pr }: { pr: PullRequest }) {
   const [snap, setSnap] = useState<Snapshot>({ ms: 0 });
   const persistedMsRef = useRef<number>(0);
   const sessionStartRef = useRef<number | null>(null);
+  const tabVisible = useTabVisibility();
 
   // Hydrate persisted session ms when PR changes; mirror ReviewTimer's
   // foreground-only model so the two chips never disagree.
@@ -76,13 +78,14 @@ export default function FatigueMeter({ pr }: { pr: PullRequest }) {
   // 5s display tick — the meter doesn't need second-precision; coarser
   // ticks cut re-render churn on the heaviest spine card.
   useEffect(() => {
+    if (!tabVisible) return;
     const id = window.setInterval(() => {
       const start = sessionStartRef.current;
       const live = start === null ? 0 : Date.now() - start;
       setSnap({ ms: persistedMsRef.current + live });
     }, TICK_MS);
     return () => { window.clearInterval(id); };
-  }, []);
+  }, [tabVisible]);
 
   // Visibility + flush. Mirrors ReviewTimer; both write to the same
   // session ms so duplicating writes is safe (additive, deterministic).
@@ -108,13 +111,13 @@ export default function FatigueMeter({ pr }: { pr: PullRequest }) {
       }
     }
     document.addEventListener('visibilitychange', onVis);
-    const flushId = window.setInterval(flushNow, FLUSH_EVERY_MS);
+    const flushId = tabVisible ? window.setInterval(flushNow, FLUSH_EVERY_MS) : 0;
     return () => {
       document.removeEventListener('visibilitychange', onVis);
-      window.clearInterval(flushId);
+      if (flushId !== 0) window.clearInterval(flushId);
       flushNow();
     };
-  }, [pr.number]);
+  }, [pr.number, tabVisible]);
 
   const minutes = snap.ms / 60_000;
 

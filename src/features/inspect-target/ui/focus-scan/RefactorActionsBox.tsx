@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Wand2, Check, ShieldAlert, ChevronRight, ChevronDown } from 'lucide-react';
 import type { FileRecord } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
@@ -109,89 +109,96 @@ export function RefactorActionsBox({ file }: { file: FileRecord }) {
   // Heuristic action catalog. In production this comes from the engine's
   // patch proposer; here we synthesize stable suggestions per file based
   // on the metrics already present so the demo reads coherently.
-  const actions: Action[] = [];
+  //
+  // Memoised on `m` and `file.layer` so the 6 conditional pushes + sort +
+  // filter-count below don't fire on every parent re-render (e.g. when
+  // the panel's collapsed-state state changes).
+  const { actions, autoCount, totalCount } = useMemo(() => {
+    const out: Action[] = [];
 
-  if (m.complexity >= 25 && m.fnCount > 0) {
-    const target = Math.max(8, Math.round(m.complexity / 3));
-    actions.push({
-      id: 'extract',
-      title: t('refactor.extract.title', { defaultValue: 'Extract function' }),
-      delta: `cyc ${m.complexity} → ${target}`,
-      confidence: m.editSafety >= 70 ? 95 : 78,
-      blast: m.fanIn,
-      tone: m.editSafety >= 70 && m.fanIn <= 2 ? 'auto' : 'review',
-      diff: DIFF_EXTRACT,
+    if (m.complexity >= 25 && m.fnCount > 0) {
+      const target = Math.max(8, Math.round(m.complexity / 3));
+      out.push({
+        id: 'extract',
+        title: t('refactor.extract.title', { defaultValue: 'Extract function' }),
+        delta: `cyc ${m.complexity} → ${target}`,
+        confidence: m.editSafety >= 70 ? 95 : 78,
+        blast: m.fanIn,
+        tone: m.editSafety >= 70 && m.fanIn <= 2 ? 'auto' : 'review',
+        diff: DIFF_EXTRACT,
+      });
+    }
+
+    if (m.anyCount > 0) {
+      out.push({
+        id: 'types',
+        title: t('refactor.types.title', { defaultValue: 'Add explicit types' }),
+        delta: `any ${m.anyCount} → 0`,
+        confidence: 98,
+        blast: 0,
+        tone: 'auto',
+        diff: DIFF_TYPES,
+      });
+    }
+
+    if (m.tsIgnoreCount > 0) {
+      out.push({
+        id: 'tsignore',
+        title: t('refactor.tsignore.title', { defaultValue: 'Resolve @ts-ignore' }),
+        delta: `${m.tsIgnoreCount} → 0`,
+        confidence: 72,
+        blast: 0,
+        tone: 'review',
+        diff: DIFF_TSIGNORE,
+      });
+    }
+
+    if (m.dead) {
+      out.push({
+        id: 'dead',
+        title: t('refactor.dead.title', { defaultValue: 'Remove dead code' }),
+        delta: t('refactor.dead.delta', { loc: m.loc, defaultValue: `−${Math.round(m.loc * 0.15)} LOC` }),
+        confidence: 92,
+        blast: 0,
+        tone: 'auto',
+        diff: DIFF_DEAD,
+      });
+    }
+
+    if (!m.hasTestFile && file.layer !== 'vendor') {
+      out.push({
+        id: 'addtest',
+        title: t('refactor.addtest.title', { defaultValue: 'Generate test scaffold' }),
+        delta: t('refactor.addtest.delta', { defaultValue: '+1 test file' }),
+        confidence: m.editSafety >= 60 ? 88 : 65,
+        blast: 1,
+        tone: m.editSafety >= 60 ? 'auto' : 'review',
+        diff: DIFF_ADDTEST,
+      });
+    }
+
+    if (m.eslintErrors > 0) {
+      out.push({
+        id: 'lint',
+        title: t('refactor.lint.title', { defaultValue: 'Auto-fix lint errors' }),
+        delta: `${m.eslintErrors} → 0`,
+        confidence: 99,
+        blast: 0,
+        tone: 'auto',
+        diff: DIFF_LINT,
+      });
+    }
+
+    // Sort: auto first (confidence desc), then review (confidence desc).
+    out.sort((a, b) => {
+      if (a.tone !== b.tone) return a.tone === 'auto' ? -1 : 1;
+      return b.confidence - a.confidence;
     });
-  }
 
-  if (m.anyCount > 0) {
-    actions.push({
-      id: 'types',
-      title: t('refactor.types.title', { defaultValue: 'Add explicit types' }),
-      delta: `any ${m.anyCount} → 0`,
-      confidence: 98,
-      blast: 0,
-      tone: 'auto',
-      diff: DIFF_TYPES,
-    });
-  }
-
-  if (m.tsIgnoreCount > 0) {
-    actions.push({
-      id: 'tsignore',
-      title: t('refactor.tsignore.title', { defaultValue: 'Resolve @ts-ignore' }),
-      delta: `${m.tsIgnoreCount} → 0`,
-      confidence: 72,
-      blast: 0,
-      tone: 'review',
-      diff: DIFF_TSIGNORE,
-    });
-  }
-
-  if (m.dead) {
-    actions.push({
-      id: 'dead',
-      title: t('refactor.dead.title', { defaultValue: 'Remove dead code' }),
-      delta: t('refactor.dead.delta', { loc: m.loc, defaultValue: `−${Math.round(m.loc * 0.15)} LOC` }),
-      confidence: 92,
-      blast: 0,
-      tone: 'auto',
-      diff: DIFF_DEAD,
-    });
-  }
-
-  if (!m.hasTestFile && file.layer !== 'vendor') {
-    actions.push({
-      id: 'addtest',
-      title: t('refactor.addtest.title', { defaultValue: 'Generate test scaffold' }),
-      delta: t('refactor.addtest.delta', { defaultValue: '+1 test file' }),
-      confidence: m.editSafety >= 60 ? 88 : 65,
-      blast: 1,
-      tone: m.editSafety >= 60 ? 'auto' : 'review',
-      diff: DIFF_ADDTEST,
-    });
-  }
-
-  if (m.eslintErrors > 0) {
-    actions.push({
-      id: 'lint',
-      title: t('refactor.lint.title', { defaultValue: 'Auto-fix lint errors' }),
-      delta: `${m.eslintErrors} → 0`,
-      confidence: 99,
-      blast: 0,
-      tone: 'auto',
-      diff: DIFF_LINT,
-    });
-  }
-
-  // Sort: auto first (confidence desc), then review (confidence desc).
-  actions.sort((a, b) => {
-    if (a.tone !== b.tone) return a.tone === 'auto' ? -1 : 1;
-    return b.confidence - a.confidence;
-  });
-
-  const autoCount = actions.filter((a) => a.tone === 'auto').length;
-  const totalCount = actions.length;
+    let auto = 0;
+    for (const a of out) if (a.tone === 'auto') auto += 1;
+    return { actions: out, autoCount: auto, totalCount: out.length };
+  }, [m, file.layer, t]);
 
   if (totalCount === 0) {
     return (

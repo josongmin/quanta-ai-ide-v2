@@ -9,45 +9,81 @@ import type { Verdict } from '../model';
 // stay aligned automatically; before, the folder version omitted `churn`
 // from the riskFiles projection — a real divergence that would have grown.
 
+// Both ranking helpers used to walk `[...files].filter().sort().slice(0,5).map()` —
+// four intermediate arrays per call, each O(N) over ~600-1000 files. Replaced
+// with a single-pass top-K window: O(N · K) for K=5 stays under O(N·log N)
+// of the original sort, and we allocate exactly TOP_K result objects + one
+// reused FileRecord slot, no `[...files]` copy.
+const TOP_K = 5;
+
 function rankRiskFiles(files: readonly FileRecord[]): {
   id: number; name: string; path: string;
   safety: number; blast: number; churn: number; vulnerable: boolean;
 }[] {
-  return [...files]
-    .filter((f) => !f.isGenerated && !f.isTest)
-    .sort((a, b) => {
-      const s = a.metrics.editSafety - b.metrics.editSafety;
-      if (s !== 0) return s;
-      return b.metrics.blastRadius - a.metrics.blastRadius;
-    })
-    .slice(0, 5)
-    .map((f) => ({
-      id: f.id,
-      name: f.name,
-      path: f.folderPath,
-      safety: f.metrics.editSafety,
-      blast: f.metrics.blastRadius,
-      churn: f.metrics.churn,
-      vulnerable: f.status === 'SECURITY_ALERT',
-    }));
+  // Comparator: lower safety wins; tie-break on higher blast.
+  const lt = (a: FileRecord, b: FileRecord): boolean => {
+    const s = a.metrics.editSafety - b.metrics.editSafety;
+    if (s !== 0) return s < 0;
+    return a.metrics.blastRadius > b.metrics.blastRadius;
+  };
+  const window: FileRecord[] = [];
+  for (const f of files) {
+    if (f.isGenerated || f.isTest) continue;
+    if (window.length < TOP_K) {
+      window.push(f);
+      // Insertion sort the new entry up to its place — window stays sorted desc-by-comparator-wins
+      for (let i = window.length - 1; i > 0 && lt(window[i], window[i - 1]); i--) {
+        const tmp = window[i]; window[i] = window[i - 1]; window[i - 1] = tmp;
+      }
+    } else if (lt(f, window[TOP_K - 1])) {
+      // Replace worst, sift up.
+      window[TOP_K - 1] = f;
+      for (let i = TOP_K - 1; i > 0 && lt(window[i], window[i - 1]); i--) {
+        const tmp = window[i]; window[i] = window[i - 1]; window[i - 1] = tmp;
+      }
+    }
+  }
+  return window.map((f) => ({
+    id: f.id,
+    name: f.name,
+    path: f.folderPath,
+    safety: f.metrics.editSafety,
+    blast: f.metrics.blastRadius,
+    churn: f.metrics.churn,
+    vulnerable: f.status === 'SECURITY_ALERT',
+  }));
 }
 
 function rankChurnHotspots(files: readonly FileRecord[]): {
   id: number; name: string; path: string;
   churn: number; complexity: number; authors: number;
 }[] {
-  return [...files]
-    .filter((f) => !f.isGenerated && !f.isTest)
-    .sort((a, b) => (b.metrics.churn * b.metrics.complexity) - (a.metrics.churn * a.metrics.complexity))
-    .slice(0, 5)
-    .map((f) => ({
-      id: f.id,
-      name: f.name,
-      path: f.folderPath,
-      churn: f.metrics.churn,
-      complexity: f.metrics.complexity,
-      authors: f.metrics.authors,
-    }));
+  // Score = churn × complexity. Higher wins.
+  const score = (f: FileRecord): number => f.metrics.churn * f.metrics.complexity;
+  const lt = (a: FileRecord, b: FileRecord): boolean => score(a) > score(b);
+  const window: FileRecord[] = [];
+  for (const f of files) {
+    if (f.isGenerated || f.isTest) continue;
+    if (window.length < TOP_K) {
+      window.push(f);
+      for (let i = window.length - 1; i > 0 && lt(window[i], window[i - 1]); i--) {
+        const tmp = window[i]; window[i] = window[i - 1]; window[i - 1] = tmp;
+      }
+    } else if (lt(f, window[TOP_K - 1])) {
+      window[TOP_K - 1] = f;
+      for (let i = TOP_K - 1; i > 0 && lt(window[i], window[i - 1]); i--) {
+        const tmp = window[i]; window[i] = window[i - 1]; window[i - 1] = tmp;
+      }
+    }
+  }
+  return window.map((f) => ({
+    id: f.id,
+    name: f.name,
+    path: f.folderPath,
+    churn: f.metrics.churn,
+    complexity: f.metrics.complexity,
+    authors: f.metrics.authors,
+  }));
 }
 
 export function computeRepoStats(repo: RepoData) {

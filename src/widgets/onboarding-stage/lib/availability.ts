@@ -57,9 +57,16 @@ export function useAvailability(
     }
 
     setState('checking');
+    // Flatten the two-stage delay into independent timers so BOTH ids
+    // are reachable from the effect cleanup. The previous shape returned
+    // a cleanup function from inside the outer setTimeout callback —
+    // that return value was discarded by setTimeout, so an unmount after
+    // t1 fired but before t2 fired left a dangling timer (and a stale
+    // setState landing on an unmounted component).
+    let t2: ReturnType<typeof setTimeout> | undefined;
     const t1 = setTimeout(() => {
       setState('checking');
-      const t2 = setTimeout(() => {
+      t2 = setTimeout(() => {
         if (kind === 'handle') {
           setState(TAKEN_HANDLES.has(v) ? 'taken' : 'available');
         } else if (kind === 'slug') {
@@ -69,9 +76,11 @@ export function useAvailability(
           setState(TAKEN_INVITE_CODES.has(v) ? 'available' : 'taken');
         }
       }, 500);
-      return () => { clearTimeout(t2); };
     }, debounceMs);
-    return () => { clearTimeout(t1); };
+    return () => {
+      clearTimeout(t1);
+      if (t2 !== undefined) clearTimeout(t2);
+    };
   }, [value, kind, debounceMs]);
   /* eslint-enable react-hooks/set-state-in-effect */
 

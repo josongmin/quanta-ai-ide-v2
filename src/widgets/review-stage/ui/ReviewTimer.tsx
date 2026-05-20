@@ -17,6 +17,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Timer } from 'lucide-react';
+import { useTabVisibility } from '@features/workspace-tabs';
 import { bumpCumulative, getSession } from '../lib/sota';
 
 const TICK_MS = 1000;
@@ -31,6 +32,9 @@ export default function ReviewTimer({ prNumber }: { prNumber: number }) {
   // Rolling foreground state, ref-only (no re-renders when these flip).
   const persistedMsRef = useRef<number>(0);
   const sessionStartRef = useRef<number | null>(null);
+  // Workspace-tab visibility (display:none host). The two intervals
+  // below only need to run while this PR's tab is the visible one.
+  const tabVisible = useTabVisibility();
 
   // Initial mount + PR-change effect: pull persisted ms, kick off the
   // foreground session if the tab is visible.
@@ -44,13 +48,14 @@ export default function ReviewTimer({ prNumber }: { prNumber: number }) {
 
   // Display tick — recompute the chip's snapshot once per second.
   useEffect(() => {
+    if (!tabVisible) return;
     const id = window.setInterval(() => {
       const start = sessionStartRef.current;
       const live = start === null ? 0 : Date.now() - start;
       setDisplay({ ms: persistedMsRef.current + live, foreground: start !== null });
     }, TICK_MS);
     return () => { window.clearInterval(id); };
-  }, []);
+  }, [tabVisible]);
 
   // Visibility — pause/resume + flush.
   useEffect(() => {
@@ -75,13 +80,13 @@ export default function ReviewTimer({ prNumber }: { prNumber: number }) {
       }
     }
     document.addEventListener('visibilitychange', onVis);
-    const flushId = window.setInterval(flushNow, FLUSH_EVERY_MS);
+    const flushId = tabVisible ? window.setInterval(flushNow, FLUSH_EVERY_MS) : 0;
     return () => {
       document.removeEventListener('visibilitychange', onVis);
-      window.clearInterval(flushId);
+      if (flushId !== 0) window.clearInterval(flushId);
       flushNow();
     };
-  }, [prNumber]);
+  }, [prNumber, tabVisible]);
 
   const minutes = Math.floor(display.ms / 60_000);
   const seconds = Math.floor((display.ms % 60_000) / 1000);

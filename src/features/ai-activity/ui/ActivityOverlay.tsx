@@ -26,19 +26,14 @@ const INTENSITY_OPACITY: Record<'subtle' | 'normal' | 'loud', number> = {
 };
 
 export function ActivityOverlay({ mode }: { mode: ViewMode }) {
-  const enabled = useActivityStore((s) => s.prefs.enabled);
-  const showRing = useActivityStore((s) => s.prefs.showRing);
-  const showLine = useActivityStore((s) => s.prefs.showLine);
-  const showZone = useActivityStore((s) => s.prefs.showZone);
-  const speed = useActivityStore((s) => s.prefs.speed);
-  const intensity = useActivityStore((s) => s.prefs.intensity);
+  // One subscription instead of six: `prefs` is replaced as a unit by
+  // the store, so a single selector reads exactly the same set of
+  // fields without registering 6 separate subscribers (and 6 separate
+  // equality comparisons per mutation).
+  const { enabled, showRing, showLine, showZone, speed, intensity } =
+    useActivityStore((s) => s.prefs);
   const repo = useFilterStore((s) => s.repo);
   const visible = useTabVisibility();
-  // Latest visibility read each frame from the rAF tick without restarting
-  // the loop on every flip. Assigned via effect to keep refs out of the
-  // render body (react-hooks/refs lint rule).
-  const visibleRef = useRef(visible);
-  useEffect(() => { visibleRef.current = visible; }, [visible]);
   const [pins, setPins] = useState<Pin[]>([]);
 
   const rafRef = useRef<number>(0);
@@ -59,7 +54,7 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
    * effect body, so the rule's cascading-render concern does not apply.
    */
   useEffect(() => {
-    if (!enabled || !projectFn) {
+    if (!enabled || !projectFn || !visible) {
       setPins((prev) => (prev.length === 0 ? prev : []));
       return;
     }
@@ -68,12 +63,6 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
     let cancelled = false;
     const tick = () => {
       if (cancelled) return;
-      // Tab hidden behind another — projector and DOM don't need refresh.
-      // Keep the rAF chain alive so resume is one tick away.
-      if (!visibleRef.current) {
-        rafRef.current = requestAnimationFrame(tick);
-        return;
-      }
       const acts = useActivityStore.getState().activities;
       const out: Pin[] = [];
       for (const a of acts) {
@@ -102,7 +91,11 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
       cancelled = true;
       cancelAnimationFrame(rafRef.current);
     };
-  }, [enabled, projectFn, repo]);
+    // Including `visible` in deps means hiding the host tab tears the rAF
+    // chain down cleanly (cleanup runs, cancelAnimationFrame fires) and
+    // showing it re-creates a fresh loop on the next render — strictly
+    // simpler than polling visibleRef inside `tick` every frame.
+  }, [enabled, projectFn, repo, visible]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   if (!enabled || pins.length === 0) return null;

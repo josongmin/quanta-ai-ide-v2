@@ -225,11 +225,19 @@ export default function ReviewStage() {
     }
   }, []);
 
+  // Materialise once per active PR — `useReviewKeyboard` keys cache off
+  // this array's identity, so a fresh `.map()` on every render thrashes
+  // the cache and dispatches stale keystrokes against rebuilt indices.
+  const visibleFilePaths = useMemo(
+    () => activePr?.files.map((f) => f.path) ?? [],
+    [activePr?.files],
+  );
+
   useReviewKeyboard({
     visiblePrNumbersRef: visibleNumbersRef,
     activePrNumber: activePr?.number ?? null,
     setActivePrNumber: setActivePr,
-    visibleFilePaths: activePr?.files.map((f) => f.path) ?? [],
+    visibleFilePaths,
     activeFilePath,
     setActiveFilePath: (p) => { setActiveFilePath(p); },
     tab: section,

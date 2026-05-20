@@ -6,6 +6,7 @@ import {
   ThumbsDown, ThumbsUp, Zap,
 } from 'lucide-react';
 import { formatNumber } from '@shared/lib';
+import { useTabVisibility } from '@features/workspace-tabs';
 import { BlockView } from './Blocks';
 import type { AgentTurn, ReactionKind, Turn, UserTurn } from '../types';
 
@@ -253,14 +254,16 @@ function TpsLiveMeter({
 }) {
   const [startedAt, setStartedAt] = useState<number>(0);
   const [now, setNow] = useState<number>(0);
+  const visible = useTabVisibility();
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
+    if (!visible) return;
     setStartedAt(Date.now());
     setNow(Date.now());
     const id = window.setInterval(() => { setNow(Date.now()); }, 900);
     return () => { window.clearInterval(id); };
-  }, []);
+  }, [visible]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const elapsedMs = Math.max(1, now - startedAt);

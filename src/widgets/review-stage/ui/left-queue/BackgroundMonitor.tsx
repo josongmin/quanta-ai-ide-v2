@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { summariseChecks, type PullRequest } from '@entities/pr';
+import { useTabVisibility } from '@features/workspace-tabs';
 
 // ── BackgroundMonitor ─────────────────────────────────────────────────
 // Popover content: list of PRs with running CI, the specific check
@@ -12,10 +13,12 @@ export function BackgroundMonitor({
   // Soft tick — used purely as a tie-breaker so the progress reads
   // as "moving" while a check is in `running` state.
   const [tick, setTick] = useState(0);
+  const visible = useTabVisibility();
   useEffect(() => {
+    if (!visible) return;
     const id = window.setInterval(() => { setTick((n) => n + 1); }, 1500);
     return () => { window.clearInterval(id); };
-  }, []);
+  }, [visible]);
 
   const items = useMemo(() => {
     const out: {

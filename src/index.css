@@ -385,11 +385,16 @@ canvas {
   animation: admv2-sweep 6s linear infinite;
 }
 
+/* Animating `left` triggers full layout reflow each frame; switched to
+ * `transform: translateX(...)` so the animation runs on the compositor.
+ * Visually identical, GPU-cheap. Anchor element must already be in its
+ * resting (left: 0) position via static CSS — this keyframe only owns
+ * the moving offset now. */
 @keyframes admv2-flow {
-  0%   { left: -10%;  opacity: 0; }
-  10%  {              opacity: 1; }
-  90%  {              opacity: 1; }
-  100% { left: 100%;  opacity: 0; }
+  0%   { transform: translateX(-110%); opacity: 0; }
+  10%  {                                opacity: 1; }
+  90%  {                                opacity: 1; }
+  100% { transform: translateX(110%);  opacity: 0; }
 }
 
 /* ─────── Admission v2 light-theme inversion ───────

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTabVisibility } from '@features/workspace-tabs';
 import type { CodingFileChange } from '../../types';
 
 type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
@@ -43,13 +44,15 @@ export function DriftBadge({
   // in state so render is pure (the lint rule rejects Date.now in
   // render); the timestamp ticks in an effect once a minute.
   const [now, setNow] = useState<number>(0);
+  const visible = useTabVisibility();
   /* eslint-disable react-hooks/set-state-in-effect --
    * Mirroring the wall clock into render state. Documented pattern. */
   useEffect(() => {
+    if (!visible) return;
     setNow(Date.now());
     const id = window.setInterval(() => { setNow(Date.now()); }, 60_000);
     return () => { window.clearInterval(id); };
-  }, []);
+  }, [visible]);
   /* eslint-enable react-hooks/set-state-in-effect */
   const ms = drift.workingShaLastTouchedAtMs;
   const ago = ms != null && now > 0

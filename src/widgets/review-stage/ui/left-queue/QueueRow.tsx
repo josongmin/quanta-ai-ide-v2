@@ -1,4 +1,5 @@
 import { useEffect, useState, type DragEvent } from 'react';
+import { useTabVisibility } from '@features/workspace-tabs';
 import {
   AlertTriangle, Check, GitMerge, GripVertical, MessageSquare, Pin,
 } from 'lucide-react';
@@ -62,6 +63,7 @@ export function QueueRow({
   // SLA bucket (DORA leading indicator). 24h aging, 72h stale. Date.now
   // would be impure under React 19 — read via effect into state.
   const [ageBucket, setAgeBucket] = useState<'fresh' | 'aging' | 'stale'>('fresh');
+  const visible = useTabVisibility();
   useEffect(() => {
     const compute = (): void => {
       if (pr.status === 'closed' || pr.status === 'merged' || pr.status === 'draft') {
@@ -74,9 +76,13 @@ export function QueueRow({
       else setAgeBucket('fresh');
     };
     compute();
+    // 30-row queues × 1 tick/min compounded across hidden tabs. Gate per
+    // row — when the review tab comes back, the next render re-runs the
+    // effect and compute() fires immediately, so the bucket stays fresh.
+    if (!visible) return;
     const id = window.setInterval(compute, 60_000);
     return () => { window.clearInterval(id); };
-  }, [pr.status, pr.updatedAt]);
+  }, [pr.status, pr.updatedAt, visible]);
 
   // CI rollup. running > failed > passed > none. Reviewers want to
   // see "fail" loudly, "pass" quietly (default expectation), and

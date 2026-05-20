@@ -82,7 +82,13 @@ export default function Stage() {
     };
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('keydown', onKey); };
-  }, [overlay]);
+    // Narrow deps to the two fields actually consumed. `[overlay]` was
+    // re-running this every time ANY overlay field flipped (metric /
+    // intensity / radius / etc.), thrashing the keydown listener while
+    // the user dragged a slider. blastSeed gates the effect; clearBlast
+    // is stable but kept in deps to satisfy exhaustive-deps and document
+    // the closure contract.
+  }, [overlay.blastSeed, overlay.clearBlast]);
 
   // Mode factories live in a registry keyed by ViewModeId — adding a new
   // mode is now a one-line edit in switch-mode/lib/registry.ts; this widget

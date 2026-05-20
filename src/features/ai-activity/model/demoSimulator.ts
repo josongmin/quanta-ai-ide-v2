@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from '@shared/i18n';
 import { useFilterStore } from '@features/filter-files';
+import { useTabVisibility } from '@features/workspace-tabs';
 import {
   useActivityStore, pickHue,
   type AiActivity, type ActivityAction, type ActivityTarget,
@@ -50,9 +51,14 @@ function buildTasks(t: ActivityT): readonly string[] {
 export function ActivityDemo() {
   const repo = useFilterStore((s) => s.repo);
   const { t: tr } = useTranslation('chat');
+  const visible = useTabVisibility();
 
   useEffect(() => {
     if (!repo || repo.files.length === 0) return;
+    // Skip the 1.25Hz synthesis loop while the host tab is hidden behind
+    // another. Cleanup will tear the interval down; flipping visible back
+    // re-creates a fresh session set.
+    if (!visible) return;
     const store = useActivityStore;
     const TASKS = buildTasks(tr);
 
@@ -138,7 +144,7 @@ export function ActivityDemo() {
       window.clearInterval(id);
       store.getState().clearActivities();
     };
-  }, [repo, tr]);
+  }, [repo, tr, visible]);
 
   return null;
 }

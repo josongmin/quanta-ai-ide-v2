@@ -182,6 +182,22 @@ export function createDotFieldMode(): ViewMode {
 
   let fileMeshes: Mesh<BoxGeometry, MeshBasicMaterial>[] = [];
   let fileLabels: HTMLDivElement[] = [];
+  // Dirty-check buffers for label DOM mutation. The label loop in
+  // animate() used to write 9 style properties per file every frame
+  // (≈9000 DOM writes for a 1000-file repo at 60fps). Only a handful of
+  // labels actually change frame-to-frame — selection toggles, the few
+  // moving with the camera, opacity fades — so we cache the last value
+  // applied and skip the assignment if it matches. Flat typed arrays
+  // instead of per-label objects to avoid N closures' worth of GC.
+  let prevLabelLeft   = new Float32Array(0);
+  let prevLabelTop    = new Float32Array(0);
+  let prevLabelOpac   = new Float32Array(0); // 0..1; -1 means "never written"
+  // packed display state: 0 = hidden, 1 = visible
+  let prevLabelShown  = new Uint8Array(0);
+  // packed mode: 0 = default, 1 = danger, 2 = selected/glow. drives
+  // (color, fontSize, fontWeight) — they always co-vary so one byte
+  // covers all three.
+  let prevLabelMode   = new Uint8Array(0);
   // Heat overlay halos. One plane per file, sitting just below the box. Off
   // (opacity 0) by default; animate() raises opacity/scale per chosen metric.
   let haloMeshes: Mesh<PlaneGeometry, MeshBasicMaterial>[] = [];
@@ -1370,27 +1386,64 @@ export function createDotFieldMode(): ViewMode {
 
       const div = fileLabels[id];
       const showLabel = (labelOpacity > 0.01 && (isMatched || !filterActive)) || isSel || isDep || isGlow;
+      // Dirty-check every style property before touching the DOM. Most
+      // labels are stationary frame-to-frame; the old loop wrote 9
+      // properties unconditionally, so 1000 files × 60fps was ~540K
+      // DOM writes/sec. Now: write only what changed.
       if (showLabel) {
         const v = _v3.setFromMatrixPosition(m.matrixWorld);
         v.y = m.scale.y * UNIFORM_HEIGHT + 0.5;
         v.project(camera);
-        div.style.left = `${(v.x * 0.5 + 0.5) * rect.width + rect.left}px`;
-        div.style.top = `${(v.y * -0.5 + 0.5) * rect.height + rect.top}px`;
-        div.style.transform = 'translate(-50%, -100%)';
-        div.style.opacity = String(isSel || isDep || isGlow ? 1 : labelOpacity * (isMatched ? 1 : 0.2));
-        div.style.display = v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1 ? 'none' : 'block';
-        // Highlight is conveyed by *weight + size + selected-state color*,
-        // not by a separate hue. Vulnerable still keeps the danger hue
-        // because that's identity, not highlight.
-        div.style.color = isSel || isGlow
-          ? pal.labelSelected
-          : f.metrics.security
-            ? pal.labelDanger
-            : pal.labelDefault;
-        div.style.fontSize = isGlow || isSel ? '10px' : '8px';
-        div.style.fontWeight = isGlow || isSel ? '800' : '500';
-      } else {
+        const left = (v.x * 0.5 + 0.5) * rect.width + rect.left;
+        const top  = (v.y * -0.5 + 0.5) * rect.height + rect.top;
+        const opac = isSel || isDep || isGlow ? 1 : labelOpacity * (isMatched ? 1 : 0.2);
+        const offscreen = v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1;
+        const shownByte = offscreen ? 0 : 1;
+        // Mode = (selected/glow > danger > default).
+        const mode = isSel || isGlow ? 2 : f.metrics.security ? 1 : 0;
+
+        if (prevLabelShown[id] !== shownByte) {
+          div.style.display = offscreen ? 'none' : 'block';
+          prevLabelShown[id] = shownByte;
+        }
+        if (!offscreen) {
+          // Position changes every camera tick for visible labels; round
+          // to integer pixels so sub-pixel jitter doesn't defeat the
+          // cache. The browser snaps to whole pixels anyway.
+          const li = Math.round(left);
+          const ti = Math.round(top);
+          if (prevLabelLeft[id] !== li) {
+            div.style.left = `${String(li)}px`;
+            prevLabelLeft[id] = li;
+          }
+          if (prevLabelTop[id] !== ti) {
+            div.style.top = `${String(ti)}px`;
+            prevLabelTop[id] = ti;
+          }
+          // Opacity comparison rounded to 2-decimal precision matches
+          // visible step size and saves writes on micro-lerps.
+          const oq = Math.round(opac * 100) / 100;
+          if (prevLabelOpac[id] !== oq) {
+            div.style.opacity = String(oq);
+            prevLabelOpac[id] = oq;
+          }
+          if (prevLabelMode[id] !== mode) {
+            // Highlight is conveyed by *weight + size + selected-state
+            // color*, not by a separate hue. Vulnerable keeps the danger
+            // hue because that's identity, not highlight.
+            div.style.color = mode === 2
+              ? pal.labelSelected
+              : mode === 1
+                ? pal.labelDanger
+                : pal.labelDefault;
+            div.style.fontSize   = mode === 2 ? '10px' : '8px';
+            div.style.fontWeight = mode === 2 ? '800'  : '500';
+            prevLabelMode[id] = mode;
+          }
+        }
+      } else if (prevLabelShown[id] !== 0) {
         div.style.display = 'none';
+        prevLabelShown[id] = 0;
       }
     }
 
@@ -1494,6 +1547,11 @@ export function createDotFieldMode(): ViewMode {
       // sitting just below each box; size+alpha are driven by score in animate().
       fileMeshes = new Array<Mesh<BoxGeometry, MeshBasicMaterial>>(c.repo.files.length);
       fileLabels = new Array<HTMLDivElement>(c.repo.files.length);
+      prevLabelLeft  = new Float32Array(c.repo.files.length);
+      prevLabelTop   = new Float32Array(c.repo.files.length);
+      prevLabelOpac  = new Float32Array(c.repo.files.length).fill(-1);
+      prevLabelShown = new Uint8Array(c.repo.files.length);
+      prevLabelMode  = new Uint8Array(c.repo.files.length).fill(255); // sentinel
       haloMeshes = new Array<Mesh<PlaneGeometry, MeshBasicMaterial>>(c.repo.files.length);
       const haloGeo = new PlaneGeometry(CELL_SIZE * 1.4, CELL_SIZE * 1.4);
       for (const f of c.repo.files) {
@@ -1510,6 +1568,9 @@ export function createDotFieldMode(): ViewMode {
         const label = document.createElement('div');
         label.className = 'file-floating-label';
         label.innerText = f.name;
+        // transform never varies — set once at creation rather than each
+        // frame in the dirty-check loop.
+        label.style.transform = 'translate(-50%, -100%)';
         c.fileLabelsEl.appendChild(label);
 
         // halo
