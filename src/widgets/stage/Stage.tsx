@@ -85,9 +85,10 @@ export default function Stage() {
     // Narrow deps to the two fields actually consumed. `[overlay]` was
     // re-running this every time ANY overlay field flipped (metric /
     // intensity / radius / etc.), thrashing the keydown listener while
-    // the user dragged a slider. blastSeed gates the effect; clearBlast
-    // is stable but kept in deps to satisfy exhaustive-deps and document
-    // the closure contract.
+    // the user dragged a slider. The effect closes over the live
+    // `overlay` ref but only reads .blastSeed (as guard) and .clearBlast
+    // (in the handler), both of which are stable getters from context.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional narrowing; see comment
   }, [overlay.blastSeed, overlay.clearBlast]);
 
   // Mode factories live in a registry keyed by ViewModeId — adding a new
