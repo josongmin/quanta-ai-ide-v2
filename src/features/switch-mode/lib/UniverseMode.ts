@@ -341,7 +341,10 @@ export function createUniverseMode(): ViewMode {
   }
 
   function onMouseMove(e: MouseEvent) {
-    if (!ctx) return;
+    // Window-scoped: fires on every mounted UniverseMode, including the
+    // hidden ones. Bail early when the host tab is behind `display:none`
+    // so raycasts and React onHover dispatches don't fan out N-way.
+    if (!ctx?.getVisible()) return;
     if (!inViewport(e)) { ctx.onHover(null); return; }
     const rect = getRect();
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -360,7 +363,7 @@ export function createUniverseMode(): ViewMode {
     ctx.onHover(null);
   }
   function onClick(e: MouseEvent) {
-    if (!ctx) return;
+    if (!ctx?.getVisible()) return;
     if (!inViewport(e)) return;
     const rect = getRect();
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -974,6 +977,11 @@ export function createUniverseMode(): ViewMode {
   function animate() {
     rafId = requestAnimationFrame(animate);
     if (!ctx) return;
+    // Skip the full frame when the host tab is hidden behind another
+    // (`display:none`). Spares us renderer.render + OrbitControls damping
+    // + per-star color/size updates + folder-label DOM positioning. Loop
+    // stays scheduled so a switch back resumes immediately on next tick.
+    if (!ctx.getVisible()) return;
 
     const theme = ctx.getTheme();
     const pal = universePalette(theme);

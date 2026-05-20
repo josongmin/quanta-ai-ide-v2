@@ -324,7 +324,16 @@ export function createDotFieldMode(): ViewMode {
     cachedRect.width = r.width;
     cachedRect.height = r.height;
   }
-  function onScroll() { refreshCachedRect(); }
+  // Window-scoped listeners. The mode lives inside a keep-mounted tab,
+  // so every event below fires on EVERY mounted mode — including ones
+  // hidden behind `display:none`. We gate each handler on
+  // `ctx.getVisible()` so hidden modes early-return rather than walking
+  // raycasters, dispatching React state, or (in onContextMenu's case)
+  // suppressing the default page right-click globally.
+  function onScroll() {
+    if (!ctx?.getVisible()) return;
+    refreshCachedRect();
+  }
 
   const panOffset = new Vector3();
   const panTarget = new Vector3();
@@ -350,34 +359,77 @@ export function createDotFieldMode(): ViewMode {
     return false;
   }
 
+  // Bezier sampling resolution — 30 segments = 31 points per dep line.
+  const LINE_SEGMENTS = 30;
+  const LINE_POINTS = LINE_SEGMENTS + 1;
+
+  function disposeLineAt(i: number) {
+    const l = lineObjects[i];
+    scene.remove(l);
+    l.geometry.dispose();
+    (l.material as LineBasicMaterial).dispose();
+  }
+
   function updateLines() {
-    lineObjects.forEach((l) => scene.remove(l));
-    lineObjects = [];
-    if (selectedId === null || !ctx) return;
+    if (selectedId === null || !ctx) {
+      // Selection cleared — fully drain the pool and release GPU buffers.
+      // Previously the per-frame churn allocated a fresh BufferGeometry +
+      // LineBasicMaterial per dep and dropped them without `.dispose()` —
+      // those are GPU resources, not GC-collected, so VRAM leaked every
+      // frame while a node was selected. The pool below keeps a stable
+      // geometry per dep and mutates its position attribute in place.
+      for (let i = 0; i < lineObjects.length; i++) disposeLineAt(i);
+      lineObjects = [];
+      return;
+    }
     const main = fileMeshes[selectedId];
     if (!main) return;
     const pal = paletteFor(ctx.getTheme());
-    // Reuse pooled vectors — updateLines runs every frame while a node is
-    // selected. start/end/mid are consumed synchronously by QuadraticBezierCurve3
-    // (which copies the vectors internally), so reusing _v3a/_v3b/_v3c is safe.
     const start = _v3a.copy(main.position);
     start.y = main.scale.y * UNIFORM_HEIGHT;
     const f = ctx.repo.files[selectedId];
-    f.deps.forEach((id) => {
-      const t = fileMeshes[id];
-      if (!t) return;
+    // Filter once so the pool size matches what we'll actually render.
+    const liveDeps: number[] = [];
+    for (const id of f.deps) {
+      if (fileMeshes[id]) liveDeps.push(id);
+    }
+    // Grow pool: create stable geometry + material per slot, kept alive
+    // across frames until the dep count shrinks or selection clears.
+    while (lineObjects.length < liveDeps.length) {
+      const geom = new BufferGeometry();
+      geom.setAttribute('position', new BufferAttribute(new Float32Array(LINE_POINTS * 3), 3));
+      const mat = new LineBasicMaterial({ color: pal.accent, transparent: true, opacity: 0.6 });
+      const line = new Line(geom, mat);
+      lineObjects.push(line);
+      scene.add(line);
+    }
+    // Shrink pool: pop tail entries and dispose their GPU buffers.
+    while (lineObjects.length > liveDeps.length) {
+      disposeLineAt(lineObjects.length - 1);
+      lineObjects.pop();
+    }
+    // In-place update of each line's curve sample.
+    for (let i = 0; i < liveDeps.length; i++) {
+      const t = fileMeshes[liveDeps[i]];
       const end = _v3b.copy(t.position);
       end.y = t.scale.y * UNIFORM_HEIGHT;
       const mid = _v3c.addVectors(start, end).multiplyScalar(0.5);
       mid.y += Math.min(start.distanceTo(end) * 0.5, 50);
       const curve = new QuadraticBezierCurve3(start, mid, end);
-      const line = new Line(
-        new BufferGeometry().setFromPoints(curve.getPoints(30)),
-        new LineBasicMaterial({ color: pal.accent, transparent: true, opacity: 0.6 }),
-      );
-      lineObjects.push(line);
-      scene.add(line);
-    });
+      const pts = curve.getPoints(LINE_SEGMENTS);
+      const line = lineObjects[i];
+      const attr = line.geometry.attributes.position as BufferAttribute;
+      const arr = attr.array as Float32Array;
+      for (let p = 0; p < pts.length; p++) {
+        const v = pts[p];
+        arr[p * 3]     = v.x;
+        arr[p * 3 + 1] = v.y;
+        arr[p * 3 + 2] = v.z;
+      }
+      attr.needsUpdate = true;
+      // Recolor in case the theme toggled this frame — cheap, idempotent.
+      (line.material as LineBasicMaterial).color.setHex(pal.accent);
+    }
   }
 
   function resetView() {
@@ -385,7 +437,9 @@ export function createDotFieldMode(): ViewMode {
     rotTarget.x = FLAT.x; rotTarget.y = FLAT.y;
     zoomTarget = FLAT.dist;
     panTarget.set(0, 0, 0);
-    lineObjects.forEach((l) => scene.remove(l));
+    // Same drain path as `updateLines()` when selection clears — disposes
+    // the pool's GPU buffers rather than just unhooking from the scene.
+    for (let i = 0; i < lineObjects.length; i++) disposeLineAt(i);
     lineObjects = [];
     ctx?.onSelect(null);
   }
@@ -406,6 +460,7 @@ export function createDotFieldMode(): ViewMode {
   }
 
   function onMouseDown(e: MouseEvent) {
+    if (!ctx?.getVisible()) return;
     if (!inViewport(e)) return;
     isDragging = true;
     downButton = e.button;
@@ -413,7 +468,7 @@ export function createDotFieldMode(): ViewMode {
     totalMovement = 0;
   }
   function onMouseMove(e: MouseEvent) {
-    if (!ctx) return;
+    if (!ctx?.getVisible()) return;
     if (!isDragging) {
       if (!inViewport(e)) { ctx.onHover(null); return; }
       eventToNDC(e);
@@ -446,15 +501,19 @@ export function createDotFieldMode(): ViewMode {
     }
     lastMouse = { x: e.clientX, y: e.clientY };
   }
-  function onMouseUp() { isDragging = false; }
+  function onMouseUp() {
+    if (!ctx?.getVisible()) return;
+    isDragging = false;
+  }
   function onWheel(e: WheelEvent) {
+    if (!ctx?.getVisible()) return;
     if (!inViewport(e)) return;
     e.preventDefault();
     zoomTarget += e.deltaY * 0.6;
     zoomTarget = Math.max(40, Math.min(1200, zoomTarget));
   }
   function onClick(e: MouseEvent) {
-    if (!ctx) return;
+    if (!ctx?.getVisible()) return;
     if (!inViewport(e)) return;
     if (totalMovement > 12) return;
     eventToNDC(e);
@@ -478,8 +537,19 @@ export function createDotFieldMode(): ViewMode {
       resetView();
     }
   }
-  function onContextMenu(e: MouseEvent) { e.preventDefault(); }
-  function onKeyDown(e: KeyboardEvent) { if (e.key === 'Escape') resetView(); }
+  function onContextMenu(e: MouseEvent) {
+    // Was unconditional `e.preventDefault()` — meaning every keep-mounted
+    // DotFieldMode suppressed the browser's right-click menu across the
+    // *entire page*, including overlay UI and other tabs. Now bails when
+    // hidden or when the right-click happened outside our canvas.
+    if (!ctx?.getVisible()) return;
+    if (!inViewport(e)) return;
+    e.preventDefault();
+  }
+  function onKeyDown(e: KeyboardEvent) {
+    if (!ctx?.getVisible()) return;
+    if (e.key === 'Escape') resetView();
+  }
 
   function applyThemeStatics(pal: Palette, theme: 'dark' | 'light') {
     scene.background = new Color(pal.bg);
@@ -1044,6 +1114,12 @@ export function createDotFieldMode(): ViewMode {
   function animate() {
     rafId = requestAnimationFrame(animate);
     if (!ctx) return;
+    // Tab is hidden behind another workspace tab (`display:none`). Keep
+    // the rAF reschedule so resume is seamless, but skip every expensive
+    // op: render, raycasts, per-file DOM label positioning, theme diff.
+    // The lerps below (rotCurrent / zoomCurrent / panOffset) just resume
+    // their convergence on the next visible frame.
+    if (!ctx.getVisible()) return;
 
     const theme = ctx.getTheme();
     const pal = paletteFor(theme);
