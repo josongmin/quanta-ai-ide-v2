@@ -54,6 +54,12 @@ export type ViewModeContext = {
   onSelect: (fileId: number | null) => void;
   // Latest theme. Modes read each frame for live recoloring on toggle.
   getTheme: () => 'dark' | 'light';
+  // Tab-host visibility. When the panel hosting this mode is hidden behind
+  // another tab (`display:none`), the mode should skip the expensive part
+  // of its rAF loop (renderer.render, DOM label updates, controls damping)
+  // — keep the rAF reschedule cheap so resume is seamless when shown again.
+  // Defaults to `true` if the caller has no visibility signal.
+  getVisible: () => boolean;
 };
 
 export type ViewMode = {

@@ -3,6 +3,7 @@ import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { useFilterStore } from '@features/filter-files';
 import { useViewMode, createMode } from '@features/switch-mode';
+import { useTabVisibility } from '@features/workspace-tabs';
 // Deep-import the hooks rather than the slice barrels — those re-export
 // heavy UI (OverlayPopover, FocusScanStack) that would otherwise ride into
 // the initial chunk through this stage.
@@ -21,6 +22,7 @@ export default function Stage() {
   const overlay = useOverlay();
   const boundaries = useBoundaries();
   const stack = useStack();
+  const visible = useTabVisibility();
 
   const mountRef = useRef<HTMLDivElement>(null);
   const labelsRef = useRef<HTMLDivElement>(null);
@@ -33,6 +35,7 @@ export default function Stage() {
   const setActiveMode: (m: ViewMode | null) => void = () => { /* overlay disabled */ };
 
   const themeRef = useRef<'dark' | 'light'>(isDark ? 'dark' : 'light');
+  const visibleRef = useRef(visible);
   const stackRef = useRef(stack);
   const overlayRef = useRef<OverlaySnapshot>({
     metric: overlay.metric, intensity: overlay.intensity, radius: overlay.radius, threshold: overlay.threshold,
@@ -53,6 +56,7 @@ export default function Stage() {
   // matches the previous 16-key dependency list without the bookkeeping.
   useLayoutEffect(() => {
     themeRef.current = isDark ? 'dark' : 'light';
+    visibleRef.current = visible;
     stackRef.current = stack;
     overlayRef.current = {
       metric: overlay.metric, intensity: overlay.intensity, radius: overlay.radius, threshold: overlay.threshold,
@@ -124,6 +128,7 @@ export default function Stage() {
         },
         getOverlay: () => overlayRef.current,
         getTheme: () => themeRef.current,
+        getVisible: () => visibleRef.current,
         onHover: (id, x = 0, y = 0) => {
           if (id === null) {
             setTooltip((t) => (t.open ? { ...t, open: false } : t));
