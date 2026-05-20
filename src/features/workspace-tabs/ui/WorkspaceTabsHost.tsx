@@ -10,6 +10,18 @@ import {
 } from '@app/router/workspaceTabsRegistry';
 import { TabVisibilityProvider } from './TabVisibilityContext';
 
+// Cap on simultaneously-mounted tab panels. Each WebGL-bearing tab
+// (intelligence/explore) holds a renderer + scene graph + window
+// listeners + DOM label tree — without a cap, opening 15 tabs means 15
+// live WebGL contexts even with only one visible. We bound it via LRU:
+// the active tab is always mounted, and the least-recently-active
+// inactive tab is evicted (unmounted) when a new activation would push
+// us over the cap. An evicted tab re-mounts fresh next time it is
+// activated (zoom/pan/selection within the mode resets — acceptable
+// tradeoff for the memory ceiling). 6 chosen to comfortably cover a
+// typical 3-5 tab session with headroom.
+const MAX_MOUNTED_TABS = 6;
+
 // Renders every *activated* tab as a sibling in the DOM, with only the
 // active tab visible. Inactive tabs stay mounted so per-tab state (scroll
 // position, uncommitted form input, locally-derived UI flags) survives a
@@ -59,46 +71,47 @@ export default function WorkspaceTabsHost() {
   // path.
   const onTabPath = resolveTabKindFromPath(pathname) !== null;
 
-  // Track which tab ids have ever been the active id during this
-  // session. Once a tab is in the set it stays — that's the keep-mounted
-  // contract. Bootstrapped with `activeId` so the very first paint shows
-  // the initial active tab without an extra render pass.
-  const [everActive, setEverActive] = useState<Set<string>>(
-    () => new Set([activeId]),
-  );
+  // LRU of currently-mounted tab ids (oldest → newest). The active tab
+  // is always at the back; eviction removes from the front when length
+  // exceeds MAX_MOUNTED_TABS. This replaces the unbounded "everActive"
+  // set: keep-mounted survives a tab switch, but doesn't survive being
+  // pushed out of the LRU. Bootstrapped with `activeId` so the first
+  // paint shows the initial active tab without an extra render pass.
+  const [mountedOrder, setMountedOrder] = useState<string[]>(() => [activeId]);
 
-  if (!everActive.has(activeId)) {
-    setEverActive((prev) => {
-      if (prev.has(activeId)) return prev;
-      const next = new Set(prev);
-      next.add(activeId);
+  // On activeId change, promote it to the back (most-recently-active)
+  // and evict from the front if we're now over cap.
+  if (mountedOrder.length === 0 || mountedOrder[mountedOrder.length - 1] !== activeId) {
+    setMountedOrder((prev) => {
+      const without = prev.filter((id) => id !== activeId);
+      const next = [...without, activeId];
+      while (next.length > MAX_MOUNTED_TABS) next.shift();
       return next;
     });
   }
 
   // Prune ids for tabs the user has closed. Without this, a long session
   // that opens/closes the same tab kind repeatedly would accumulate dead
-  // ids in the set — small, but unbounded.
+  // ids — small with the cap, but still pointless retention.
   const [prevTabsLen, setPrevTabsLen] = useState(tabs.length);
   if (prevTabsLen !== tabs.length) {
     setPrevTabsLen(tabs.length);
-    setEverActive((prev) => {
-      const next = new Set<string>();
-      for (const t of tabs) {
-        if (prev.has(t.id)) next.add(t.id);
-      }
-      // Same size = no closures happened = bail without a setState.
-      if (next.size === prev.size) return prev;
+    setMountedOrder((prev) => {
+      const alive = new Set(tabs.map((t) => t.id));
+      const next = prev.filter((id) => alive.has(id));
+      if (next.length === prev.length) return prev;
       return next;
     });
   }
+
+  const mounted = useMemo(() => new Set(mountedOrder), [mountedOrder]);
 
   if (!onTabPath) return null;
 
   return (
     <div className="absolute inset-0">
       {tabs.map((tab) => {
-        if (!everActive.has(tab.id)) return null;
+        if (!mounted.has(tab.id)) return null;
         return (
           <TabPanel
             key={tab.id}
