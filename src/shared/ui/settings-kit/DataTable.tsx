@@ -33,12 +33,17 @@ type Props<T> = {
   empty?: ReactNode;
   /** Column gap in px. Defaults to 12. */
   gap?: number;
+  /** Body row height in px. Defaults to 48 (h-12). */
+  rowHeight?: number;
+  /** Keep a top border on the first row too. Defaults to false (row 0 is borderless under the header). */
+  firstRowBorder?: boolean;
   /** Extra per-row inline style (e.g. dimming deactivated rows). */
   rowStyle?: (row: T, index: number) => CSSProperties | undefined;
 };
 
 export function DataTable<T>({
-  columns, headers, rows, rowKey, renderRow, empty, gap = 12, rowStyle,
+  columns, headers, rows, rowKey, renderRow, empty, gap = 12,
+  rowHeight = 48, firstRowBorder = false, rowStyle,
 }: Props<T>) {
   return (
     <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
@@ -66,11 +71,12 @@ export function DataTable<T>({
           <div
             key={rowKey(row, i)}
             role="row"
-            className="grid items-center px-3 h-12 text-[12px] transition-colors"
+            className="grid items-center px-3 text-[12px] transition-colors"
             style={{
+              height: rowHeight,
               gridTemplateColumns: columns,
               gap,
-              borderTop: i === 0 ? 'none' : '1px solid var(--border-muted)',
+              borderTop: i === 0 && !firstRowBorder ? 'none' : '1px solid var(--border-muted)',
               ...rowStyle?.(row, i),
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}

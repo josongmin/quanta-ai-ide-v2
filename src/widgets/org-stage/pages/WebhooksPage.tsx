@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Button, Toggle } from '@shared/ui/forms';
-import { ModalBackdrop, ConfirmDialog } from '@shared/ui';
+import { SettingsModal, ConfirmDialog, DataTable } from '@shared/ui';
 
 type Endpoint = {
   id: string;
@@ -118,32 +118,28 @@ export default function WebhooksPage() {
         <Activity className="w-3 h-3" />
         Recent deliveries
       </h2>
-      <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
-        <div
-          className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
-          style={{
-            gridTemplateColumns: '20px 1fr 90px 80px 90px 90px 90px',
-            gap: 12,
-            background: 'var(--bg-surface-muted)',
-            color: 'var(--fg-subtle)',
-            borderBottom: '1px solid var(--border-muted)',
-          }}
-        >
-          <span />
-          <span>Event · Endpoint</span>
-          <span>HTTP</span>
-          <span>Latency</span>
-          <span>When</span>
-          <span />
-          <span />
-        </div>
-        {deliveries.map((d) => {
+      <DataTable
+        columns="20px 1fr 90px 80px 90px 90px 90px"
+        headers={[
+          { header: '' },
+          { header: 'Event · Endpoint' },
+          { header: 'HTTP' },
+          { header: 'Latency' },
+          { header: 'When' },
+          { header: '' },
+          { header: '' },
+        ]}
+        rows={deliveries}
+        rowKey={(d) => d.id}
+        rowHeight={44}
+        firstRowBorder
+        renderRow={(d) => {
           const ep = endpoints.find((e) => e.id === d.endpointId);
           return (
-            <DeliveryRow key={d.id} delivery={d} endpointUrl={ep?.url ?? '(deleted)'} onRedeliver={() => { redeliver(d.id); }} />
+            <DeliveryCells delivery={d} endpointUrl={ep?.url ?? '(deleted)'} onRedeliver={() => { redeliver(d.id); }} />
           );
-        })}
-      </div>
+        }}
+      />
 
       {createOpen && (
         <CreateEndpointModal
@@ -271,22 +267,12 @@ function EndpointRow({
   );
 }
 
-function DeliveryRow({
+function DeliveryCells({
   delivery, endpointUrl, onRedeliver,
 }: { delivery: Delivery; endpointUrl: string; onRedeliver: () => void }) {
   const ok = delivery.status === 'success';
   return (
-    <div
-      role="row"
-      className="grid items-center px-3 h-11 text-[12px] transition-colors"
-      style={{
-        gridTemplateColumns: '20px 1fr 90px 80px 90px 90px 90px',
-        gap: 12,
-        borderTop: '1px solid var(--border-muted)',
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-    >
+    <>
       {ok
         ? <Check className="w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />
         : <X className="w-3.5 h-3.5" style={{ color: 'var(--intent-danger-fg)' }} />}
@@ -310,7 +296,7 @@ function DeliveryRow({
           Redeliver
         </Button>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -331,77 +317,71 @@ function CreateEndpointModal({
   };
 
   return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] max-h-[80vh] flex flex-col rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>New webhook endpoint</span>
-          <button type="button" onClick={onCancel} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-        <div className="p-4 flex flex-col gap-4 overflow-y-auto">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>URL</span>
-            <input
-              value={url}
-              onChange={(e) => { setUrl(e.target.value); }}
-              placeholder="https://hooks.example.com/se-events"
-              className="h-9 rounded-md px-3 text-[12px] font-mono outline-none"
-              style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>Description</span>
-            <input
-              value={desc}
-              onChange={(e) => { setDesc(e.target.value); }}
-              placeholder="e.g. Internal warehouse mirror"
-              className="h-9 rounded-md px-3 text-[12px] outline-none"
-              style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
-            />
-          </label>
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
-              <span>Events</span>
-              <span className="lowercase tracking-normal tabular-nums">{events.size} selected</span>
-            </span>
-            <div className="rounded-md overflow-hidden flex flex-col" style={{ border: '1px solid var(--border-muted)' }}>
-              {EVENT_CATALOG.map((e) => {
-                const on = events.has(e.id);
-                return (
-                  <label
-                    key={e.id}
-                    className="flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors"
-                    style={{
-                      borderTop: '1px solid var(--border-muted)',
-                      background: on ? 'var(--bg-active)' : 'transparent',
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={on}
-                      onChange={() => { toggle(e.id); }}
-                      className="w-3.5 h-3.5 cursor-pointer"
-                    />
-                    <span className="font-mono text-[11px] flex-1" style={{ color: 'var(--fg-default)' }}>{e.id}</span>
-                    <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{e.label}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
+    <SettingsModal
+      open
+      onClose={onCancel}
+      title="New webhook endpoint"
+      size="lg"
+      maxHeightVh={80}
+      footer={(
+        <>
           <Button variant="ghost" onClick={onCancel}>Cancel</Button>
           <Button variant="primary" size="md" disabled={!valid} onClick={() => { onCreate(url, desc, Array.from(events)); }}>
             Create endpoint
           </Button>
+        </>
+      )}
+    >
+      <label className="flex flex-col gap-1.5">
+        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>URL</span>
+        <input
+          value={url}
+          onChange={(e) => { setUrl(e.target.value); }}
+          placeholder="https://hooks.example.com/se-events"
+          className="h-9 rounded-md px-3 text-[12px] font-mono outline-none"
+          style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
+        />
+      </label>
+      <label className="flex flex-col gap-1.5">
+        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>Description</span>
+        <input
+          value={desc}
+          onChange={(e) => { setDesc(e.target.value); }}
+          placeholder="e.g. Internal warehouse mirror"
+          className="h-9 rounded-md px-3 text-[12px] outline-none"
+          style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
+        />
+      </label>
+      <div className="flex flex-col gap-2">
+        <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
+          <span>Events</span>
+          <span className="lowercase tracking-normal tabular-nums">{events.size} selected</span>
+        </span>
+        <div className="rounded-md overflow-hidden flex flex-col" style={{ border: '1px solid var(--border-muted)' }}>
+          {EVENT_CATALOG.map((e) => {
+            const on = events.has(e.id);
+            return (
+              <label
+                key={e.id}
+                className="flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors"
+                style={{
+                  borderTop: '1px solid var(--border-muted)',
+                  background: on ? 'var(--bg-active)' : 'transparent',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={on}
+                  onChange={() => { toggle(e.id); }}
+                  className="w-3.5 h-3.5 cursor-pointer"
+                />
+                <span className="font-mono text-[11px] flex-1" style={{ color: 'var(--fg-default)' }}>{e.id}</span>
+                <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{e.label}</span>
+              </label>
+            );
+          })}
         </div>
       </div>
-    </>
+    </SettingsModal>
   );
 }

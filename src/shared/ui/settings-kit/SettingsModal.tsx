@@ -39,11 +39,16 @@ type Props = {
   footer?: ReactNode;
   /** Override the panel width (number = px). Wins over `size`. */
   width?: number;
+  /** Max panel height as a vh fraction. Defaults to 85 (max-h-[85vh]). */
+  maxHeightVh?: number;
+  /** Override the body wrapper classes (padding/gap). Defaults to `p-4 flex flex-col gap-4`. */
+  bodyClassName?: string;
   ariaLabel?: string;
 };
 
 export function SettingsModal({
-  open, onClose, title, icon, size = 'md', children, footer, width, ariaLabel,
+  open, onClose, title, icon, size = 'md', children, footer, width,
+  maxHeightVh = 85, bodyClassName = 'p-4 flex flex-col gap-4', ariaLabel,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, open, onClose);
@@ -62,9 +67,10 @@ export function SettingsModal({
         aria-modal="true"
         aria-label={typeof title === 'string' ? title : (ariaLabel ?? 'Dialog')}
         tabIndex={-1}
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 max-h-[85vh] flex flex-col rounded-lg overflow-hidden outline-none"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex flex-col rounded-lg overflow-hidden outline-none"
         style={{
           width: w,
+          maxHeight: `${maxHeightVh}vh`,
           background: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)',
           boxShadow: 'var(--shadow-md)',
@@ -91,7 +97,7 @@ export function SettingsModal({
           </button>
         </div>
 
-        <div className="p-4 flex flex-col gap-4 overflow-y-auto">
+        <div className={`${bodyClassName} overflow-y-auto`}>
           {children}
         </div>
 

@@ -2,9 +2,10 @@ import { Trash2 } from 'lucide-react';
 import type { Pat } from './types';
 
 // NOTE: kept hand-rolled (not DataTable): the header strip has NO
-// `--bg-surface-muted` background, rows are h-14 (DataTable hardcodes h-12),
-// and the first row keeps its top border (DataTable drops it). Migrating would
-// change the rendered table.
+// `--bg-surface-muted` background — DataTable always paints the header with it,
+// so migrating would add a fill that isn't here. (The h-14 rows and kept
+// first-row border are now expressible via DataTable's rowHeight/firstRowBorder
+// props, but the header-bg mismatch alone blocks migration.)
 export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) => void }) {
   if (pats.length === 0) {
     return (

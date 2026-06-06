@@ -21,6 +21,8 @@ type Props = {
   minWidth?: number;
   /** Stretch to fill the parent instead of using minWidth. */
   fullWidth?: boolean;
+  /** Show the trailing clear-X when there's a value. Defaults to true. */
+  clearable?: boolean;
   ariaLabel?: string;
 };
 
@@ -32,6 +34,7 @@ export function SearchInput({
   height = 32,
   minWidth = 240,
   fullWidth = false,
+  clearable = true,
   ariaLabel = 'Clear search',
 }: Props) {
   return (
@@ -52,7 +55,7 @@ export function SearchInput({
         className="flex-1 bg-transparent outline-none text-[12px] min-w-0"
         style={{ color: 'var(--fg-strong)' }}
       />
-      {value && (
+      {clearable && value && (
         <button
           type="button"
           onClick={() => { (onClear ?? (() => { onChange(''); }))(); }}

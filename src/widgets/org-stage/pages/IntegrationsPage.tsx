@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
-import { Search, Check, ExternalLink, Settings2, X, Link2, AlertCircle } from 'lucide-react';
+import { Check, ExternalLink, Settings2, X, Link2, AlertCircle } from 'lucide-react';
 import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 import { Button, Toggle } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import { ModalBackdrop, SearchInput } from '@shared/ui';
 
 type Category = 'chat' | 'tracker' | 'pager' | 'observability' | 'sourcecontrol' | 'docs';
 
@@ -136,19 +136,13 @@ export default function IntegrationsPage() {
             <Toggle checked={installedOnly} onChange={setInstalledOnly} label="Installed only" />
             Installed only
           </label>
-          <div
-            className="flex items-center gap-2 h-8 px-2.5 rounded-md"
-            style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', minWidth: 220 }}
-          >
-            <Search className="w-3.5 h-3.5" style={{ color: 'var(--fg-subtle)' }} />
-            <input
-              value={q}
-              onChange={(e) => { setQ(e.target.value); }}
-              placeholder="Search apps…"
-              className="flex-1 bg-transparent outline-none text-[12px]"
-              style={{ color: 'var(--fg-strong)' }}
-            />
-          </div>
+          <SearchInput
+            value={q}
+            onChange={setQ}
+            placeholder="Search apps…"
+            minWidth={220}
+            clearable={false}
+          />
         </div>
       </div>
 
