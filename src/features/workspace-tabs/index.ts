@@ -1,19 +1,24 @@
-// Public surface of the workspace-tabs feature. AppShell consumes the
-// strip; the router consumes the host (one host instance per renderable
-// route). The store is exported for the control palette and other
-// places that want to drive tab state programmatically.
+// Public surface of the workspace-tabs feature. App composes the tab
+// registry at the app layer and mounts WorkspaceTabsRegistryProvider.
 
 export { useWorkspaceTabsStore, useActiveTab, type WorkspaceTab } from './model/store';
 export {
-  TAB_REGISTRY,
-  TAB_KINDS_ORDERED,
-  DEFAULT_TAB_KINDS,
-  resolveTabKindFromPath,
-  getKindDef,
-  getKindsByGroup,
-  type TabKind,
+  WorkspaceTabsRegistryProvider,
+  useWorkspaceTabsRegistry,
+  useTabKindDef,
   type TabKindDef,
-} from '@app/router/workspaceTabsRegistry';
+} from './model/RegistryContext';
+export {
+  DEFAULT_TAB_KINDS,
+  TAB_KINDS_ORDERED,
+  resolveTabKindFromPath,
+  getKindsByGroup,
+  getTabMeta,
+  isTabKind,
+  type TabKind,
+  type TabKindGroup,
+  type TabMeta,
+} from '@shared/config/workspaceTabs';
 
 export { default as WorkspaceTabsStrip } from './ui/WorkspaceTabsStrip';
 export { default as WorkspaceTabsHost } from './ui/WorkspaceTabsHost';

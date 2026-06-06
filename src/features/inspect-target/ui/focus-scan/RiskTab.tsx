@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Radio } from 'lucide-react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import { useOverlay } from '@features/apply-overlay';
 import {
   computeBlast, riskChannels, severityBand, aggregateRiskScore,

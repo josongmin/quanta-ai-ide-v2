@@ -1,3 +1,4 @@
+import type { CSSProperties, ReactNode } from 'react';
 import { AlertTriangle, Trash2, Sparkles, Send, ShieldCheck, FlaskConical, Loader2 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import type { CandidateFix, CounterEvidence, DeliveryTier, FixCase } from '../../model/types';
@@ -44,6 +45,62 @@ export function TrustPanel({
     ? candidate.obligations.find((o) => o.id === candidate.weakestObligationId)
     : null;
   const counter = candidate.counterEvidence;
+
+  const actionBtnBase =
+    'w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5';
+  const actionButtons: {
+    key: string;
+    when: boolean;
+    className: string;
+    style: CSSProperties;
+    icon: ReactNode;
+    label: ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
+  }[] = [
+    {
+      key: 'validate',
+      when: canValidate || validating,
+      className: `${actionBtnBase} border transition-colors disabled:opacity-70`,
+      style: {
+        background: validating ? t.infoSoft : t.accentSoft,
+        borderColor: validating ? t.info + '60' : t.accent + '60',
+        color: validating ? t.info : t.accent,
+      },
+      onClick: () => { if (canValidate) startValidation(fixCase.id); },
+      disabled: !canValidate,
+      icon: validating
+        ? <Loader2 className="w-3 h-3 animate-spin" />
+        : <FlaskConical className="w-3 h-3" />,
+      label: validating
+        ? tr('trust.action.running', { stage: tr(`loop.stage.${stage}`) })
+        : tr('trust.action.runValidation'),
+    },
+    {
+      key: 'auto-submit',
+      when: draft?.gateDecision === 'auto-submit',
+      className: `${actionBtnBase} transition-opacity hover:opacity-90`,
+      style: { background: t.ok, color: 'var(--fg-on-accent)' },
+      icon: <Sparkles className="w-3 h-3" />,
+      label: tr('trust.action.oneClick'),
+    },
+    {
+      key: 'needs-review',
+      when: draft?.gateDecision === 'needs-review',
+      className: `${actionBtnBase} border transition-colors`,
+      style: { borderColor: t.info + '60', color: t.info, background: t.infoSoft },
+      icon: <Send className="w-3 h-3" />,
+      label: tr('trust.action.openDraft'),
+    },
+    {
+      key: 'blocked',
+      when: draft?.gateDecision === 'blocked',
+      className: `${actionBtnBase} border`,
+      style: { borderColor: t.warn + '60', color: t.warn, background: t.warnSoft },
+      icon: <ShieldCheck className="w-3 h-3" />,
+      label: tr('trust.action.routeHuman'),
+    },
+  ];
 
   return (
     <aside
@@ -151,62 +208,31 @@ export function TrustPanel({
           </div>
         )}
 
-        {/* actions */}
+        {/* actions — data-driven so each affordance is one table row instead
+            of four near-identical conditional <button> blocks. `when` gates
+            visibility; `className`/`style` carry the per-variant treatment so
+            the rendered markup is byte-identical to the prior hand-rolled set.
+            The dismiss button is always-on and rendered after the .map(). */}
         <div className="space-y-1.5 pt-1">
           {/* Validation trigger — present until a draft package exists.
               Without it, swapping candidates would leave the gate panel
               empty and unrecoverable. While running, the button degrades
               into a status pill so the user knows the loop is alive. */}
-          {(canValidate || validating) && (
-            <button
-              type="button"
-              onClick={() => { if (canValidate) startValidation(fixCase.id); }}
-              disabled={!canValidate}
-              className="w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5 border transition-colors disabled:opacity-70"
-              style={{
-                background: validating ? t.infoSoft : t.accentSoft,
-                borderColor: validating ? t.info + '60' : t.accent + '60',
-                color: validating ? t.info : t.accent,
-              }}
-            >
-              {validating
-                ? <Loader2 className="w-3 h-3 animate-spin" />
-                : <FlaskConical className="w-3 h-3" />}
-              {validating
-                ? tr('trust.action.running', { stage: tr(`loop.stage.${stage}`) })
-                : tr('trust.action.runValidation')}
-            </button>
-          )}
-          {draft?.gateDecision === 'auto-submit' && (
-            <button
-              type="button"
-              className="w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5 transition-opacity hover:opacity-90"
-              style={{ background: t.ok, color: 'var(--fg-on-accent)' }}
-            >
-              <Sparkles className="w-3 h-3" />
-              {tr('trust.action.oneClick')}
-            </button>
-          )}
-          {draft?.gateDecision === 'needs-review' && (
-            <button
-              type="button"
-              className="w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5 border transition-colors"
-              style={{ borderColor: t.info + '60', color: t.info, background: t.infoSoft }}
-            >
-              <Send className="w-3 h-3" />
-              {tr('trust.action.openDraft')}
-            </button>
-          )}
-          {draft?.gateDecision === 'blocked' && (
-            <button
-              type="button"
-              className="w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5 border"
-              style={{ borderColor: t.warn + '60', color: t.warn, background: t.warnSoft }}
-            >
-              <ShieldCheck className="w-3 h-3" />
-              {tr('trust.action.routeHuman')}
-            </button>
-          )}
+          {actionButtons
+            .filter((b) => b.when)
+            .map((b) => (
+              <button
+                key={b.key}
+                type="button"
+                onClick={b.onClick}
+                disabled={b.disabled}
+                className={b.className}
+                style={b.style}
+              >
+                {b.icon}
+                {b.label}
+              </button>
+            ))}
           <button
             type="button"
             onClick={() => { onDismiss(candidate.id); }}
@@ -355,20 +381,26 @@ function TierRuleChecklist({ candidate }: { candidate: CandidateFix }) {
   );
 }
 
+// tier → i18n-key lookups. Replace the parallel switches; the keys are
+// identical to the prior switch arms so the rendered copy is unchanged.
+const TIER_KEY: Record<DeliveryTier, string> = {
+  'safe-mechanical': 'tier.safeMechanical',
+  'guarded':         'tier.guarded',
+  'human-required':  'tier.humanRequired',
+};
+
+const TIER_EXPLAIN_KEY: Record<DeliveryTier, string> = {
+  'safe-mechanical': 'tier.explainSafe',
+  'guarded':         'tier.explainGuarded',
+  'human-required':  'tier.explainHuman',
+};
+
 function tierKey(tier: DeliveryTier): string {
-  switch (tier) {
-    case 'safe-mechanical': return 'tier.safeMechanical';
-    case 'guarded':         return 'tier.guarded';
-    case 'human-required':  return 'tier.humanRequired';
-  }
+  return TIER_KEY[tier];
 }
 
 function tierExplainKey(tier: DeliveryTier): string {
-  switch (tier) {
-    case 'safe-mechanical': return 'tier.explainSafe';
-    case 'guarded':         return 'tier.explainGuarded';
-    case 'human-required':  return 'tier.explainHuman';
-  }
+  return TIER_EXPLAIN_KEY[tier];
 }
 
 function confidenceKey(v: number): string {

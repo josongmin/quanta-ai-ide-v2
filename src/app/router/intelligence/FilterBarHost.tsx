@@ -9,10 +9,9 @@ import { LEFT_PANEL } from './panelLayout';
 type Props = {
   width: number;
   onWidthChange: (next: number) => void;
-  isDark: boolean;
 };
 
-export default function FilterBarHost({ width, onWidthChange, isDark }: Props) {
+export default function FilterBarHost({ width, onWidthChange }: Props) {
   const { open, activeKey } = useStack();
 
   return (
@@ -29,7 +28,6 @@ export default function FilterBarHost({ width, onWidthChange, isDark }: Props) {
         max={LEFT_PANEL.max}
         defaultWidth={LEFT_PANEL.defaultWidth}
         onChange={onWidthChange}
-        isDark={isDark}
         ariaLabel="Resize left panel"
       />
     </div>

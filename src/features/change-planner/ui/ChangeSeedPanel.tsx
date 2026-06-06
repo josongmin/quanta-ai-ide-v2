@@ -6,6 +6,7 @@
 // seed is shown via background tone + bold label.
 
 import { FileCode2, Hash, Route, Plug, Flag } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { ChangeSeed, SeedKind } from '../model/types';
 
 type Props = {
@@ -26,13 +27,17 @@ const KIND_LABEL: Record<SeedKind, string> = {
 // seed kind, config last because it's the rarest.
 const KIND_ORDER: SeedKind[] = ['file', 'symbol', 'api', 'route', 'config_key'];
 
+const KIND_ICON_MAP: Record<SeedKind, LucideIcon> = {
+  file: FileCode2,
+  symbol: Hash,
+  route: Route,
+  api: Plug,
+  config_key: Flag,
+};
+
 function KindIcon({ kind }: { kind: SeedKind }) {
-  const className = 'w-2.5 h-2.5';
-  if (kind === 'file') return <FileCode2 className={className} />;
-  if (kind === 'symbol') return <Hash className={className} />;
-  if (kind === 'route') return <Route className={className} />;
-  if (kind === 'api') return <Plug className={className} />;
-  return <Flag className={className} />;
+  const Icon = KIND_ICON_MAP[kind];
+  return <Icon className="w-2.5 h-2.5" />;
 }
 
 export function ChangeSeedPanel({ seeds, selectedId, onSelect }: Props) {

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Sparkles, Check, X, AlertTriangle } from 'lucide-react';
-import { Portal } from '@shared/ui';
+import { Portal, ModalBackdrop, useDialogA11y } from '@shared/ui';
 import type { FileRecord } from '@entities/repo';
 import type { ConsensusFinding } from './consensus';
 import { lowSignalCount } from './consensus';
@@ -20,11 +20,65 @@ import { lowSignalCount } from './consensus';
 // surrounding code) to a verifier service. The interface is small enough
 // that swapping the simulator for a real call is one function change.
 
+type VerdictKind = 'evaluating' | 'kept' | 'dismissed' | 'promoted';
+
 type Verdict =
   | { kind: 'evaluating' }
   | { kind: 'kept' }
   | { kind: 'dismissed';   reason: string }
   | { kind: 'promoted';    reason: string };
+
+// Single per-kind config (OCP): color, row icon, the description shown when a
+// verdict carries no inline reason, and whether the kind contributes to the
+// summary tally. Adding a verdict kind is one entry here, not edits across
+// VerdictIcon / verdictColor / summarise / the row JSX.
+const VERDICT_CONFIG: Record<VerdictKind, {
+  color: string;
+  icon: React.ReactNode;
+  /** Fallback description when the verdict carries no `reason`. */
+  fallbackText: string;
+  /** Summary bucket this kind counts toward, if any. */
+  countKey: 'dismissed' | 'promoted' | 'kept' | null;
+}> = {
+  evaluating: {
+    color: 'var(--fg-subtle)',
+    icon: (
+      <span
+        aria-hidden
+        className="shrink-0 mt-1 inline-flex items-center justify-center w-4 h-4"
+      >
+        <span className="w-1 h-1 rounded-full" style={{ background: 'var(--fg-subtle)' }} />
+        <span className="w-1 h-1 rounded-full mx-0.5" style={{ background: 'var(--fg-subtle)', opacity: 0.7 }} />
+        <span className="w-1 h-1 rounded-full" style={{ background: 'var(--fg-subtle)', opacity: 0.4 }} />
+      </span>
+    ),
+    fallbackText: 'Evaluating…',
+    countKey: null,
+  },
+  dismissed: {
+    color: 'var(--intent-success-fg)',
+    icon: <Check className="shrink-0 mt-1 w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />,
+    fallbackText: '',
+    countKey: 'dismissed',
+  },
+  promoted: {
+    color: 'var(--intent-warn-fg)',
+    icon: <AlertTriangle className="shrink-0 mt-1 w-3.5 h-3.5" style={{ color: 'var(--intent-warn-fg)' }} />,
+    fallbackText: '',
+    countKey: 'promoted',
+  },
+  kept: {
+    color: 'var(--fg-subtle)',
+    icon: <X className="shrink-0 mt-1 w-3.5 h-3.5" style={{ color: 'var(--fg-subtle)' }} />,
+    fallbackText: 'Verifier could not increase confidence — kept as-is.',
+    countKey: 'kept',
+  },
+};
+
+function verdictText(v: Verdict): string {
+  if (v.kind === 'dismissed' || v.kind === 'promoted') return v.reason;
+  return VERDICT_CONFIG[v.kind].fallbackText;
+}
 
 function djb2(s: string): number {
   let h = 5381;
@@ -75,6 +129,8 @@ export function TriageModal({
     () => new Map(candidates.map((f) => [f.fileId, { kind: 'evaluating' as const }])),
   );
   const [done, setDone] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
 
   useEffect(() => {
     let cancelled = false;
@@ -103,15 +159,13 @@ export function TriageModal({
   return (
     <Portal>
       <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <button
-          type="button"
-          aria-label="Dismiss"
-          className="absolute inset-0 border-0 p-0 cursor-default"
-          style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
-          onClick={onClose}
-        />
+        <ModalBackdrop onClick={onClose} z="z-50" blur="sm" alpha={0.55} />
         <div
-          className="relative w-[640px] max-w-[94vw] max-h-[80vh] flex flex-col rounded-md overflow-hidden"
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          tabIndex={-1}
+          className="relative w-[640px] max-w-[94vw] max-h-[80vh] flex flex-col rounded-md overflow-hidden outline-none"
           style={{
             background: 'var(--bg-canvas)',
             border: '1px solid var(--border-default)',
@@ -162,6 +216,7 @@ export function TriageModal({
                 ? (file.folderPath ? `${file.folderPath}/${file.name}` : file.name)
                 : `#${String(f.fileId)}`;
               const v = verdicts.get(f.fileId) ?? { kind: 'evaluating' };
+              const cfg = VERDICT_CONFIG[v.kind];
               return (
                 <li
                   key={f.fileId}
@@ -171,7 +226,7 @@ export function TriageModal({
                     background: v.kind === 'evaluating' ? 'var(--bg-surface-muted)' : 'transparent',
                   }}
                 >
-                  <VerdictIcon v={v} />
+                  {cfg.icon}
                   <div className="flex-1 min-w-0">
                     <code
                       className="text-[11px] font-mono truncate"
@@ -180,15 +235,12 @@ export function TriageModal({
                       {path}
                     </code>
                     <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
-                      {v.kind === 'evaluating' && 'Evaluating…'}
-                      {v.kind === 'kept' && 'Verifier could not increase confidence — kept as-is.'}
-                      {v.kind === 'dismissed' && v.reason}
-                      {v.kind === 'promoted' && v.reason}
+                      {verdictText(v)}
                     </div>
                   </div>
                   <span
                     className="text-[10px] uppercase tracking-[0.14em] font-mono shrink-0"
-                    style={{ color: verdictColor(v) }}
+                    style={{ color: cfg.color }}
                   >
                     {v.kind}
                   </span>
@@ -256,41 +308,11 @@ export function triageCandidateCount(findings: ConsensusFinding[]): number {
   return lowSignalCount(findings);
 }
 
-function VerdictIcon({ v }: { v: Verdict }) {
-  if (v.kind === 'evaluating') {
-    return (
-      <span
-        aria-hidden
-        className="shrink-0 mt-1 inline-flex items-center justify-center w-4 h-4"
-      >
-        <span className="w-1 h-1 rounded-full" style={{ background: 'var(--fg-subtle)' }} />
-        <span className="w-1 h-1 rounded-full mx-0.5" style={{ background: 'var(--fg-subtle)', opacity: 0.7 }} />
-        <span className="w-1 h-1 rounded-full" style={{ background: 'var(--fg-subtle)', opacity: 0.4 }} />
-      </span>
-    );
-  }
-  if (v.kind === 'dismissed') {
-    return <Check className="shrink-0 mt-1 w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />;
-  }
-  if (v.kind === 'promoted') {
-    return <AlertTriangle className="shrink-0 mt-1 w-3.5 h-3.5" style={{ color: 'var(--intent-warn-fg)' }} />;
-  }
-  return <X className="shrink-0 mt-1 w-3.5 h-3.5" style={{ color: 'var(--fg-subtle)' }} />;
-}
-
-function verdictColor(v: Verdict): string {
-  if (v.kind === 'dismissed') return 'var(--intent-success-fg)';
-  if (v.kind === 'promoted')  return 'var(--intent-warn-fg)';
-  if (v.kind === 'kept')      return 'var(--fg-subtle)';
-  return 'var(--fg-subtle)';
-}
-
 function summarise(verdicts: Map<number, Verdict>): { dismissed: number; promoted: number; kept: number } {
-  let dismissed = 0, promoted = 0, kept = 0;
+  const counts = { dismissed: 0, promoted: 0, kept: 0 };
   for (const v of verdicts.values()) {
-    if (v.kind === 'dismissed') dismissed += 1;
-    else if (v.kind === 'promoted') promoted += 1;
-    else if (v.kind === 'kept') kept += 1;
+    const key = VERDICT_CONFIG[v.kind].countKey;
+    if (key) counts[key] += 1;
   }
-  return { dismissed, promoted, kept };
+  return counts;
 }

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useOverlay } from '@features/apply-overlay';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { simulateBranchDiff, type PRDiff } from '@entities/repo';
 
 // Random seed in a comfortable display range (6-digit-ish). The simulator

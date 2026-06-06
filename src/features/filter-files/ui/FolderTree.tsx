@@ -1,8 +1,9 @@
-import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
 import { ChevronRight, Folder, FolderOpen, FileCode } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import type { FileRecord, FolderRecord } from '@entities/repo';
 import { useFilterStore } from '@entities/filter-state';
+import { useRowHandlers, type RowHandlers } from '../lib/useRowHandlers';
 
 type Tree = { folder: FolderRecord; children: Tree[] };
 
@@ -28,17 +29,16 @@ function build(folders: FolderRecord[]): Tree {
 }
 
 function Row({
-  node, depth, expanded, toggle, counts, files, onOpenFolder, onOpenFile, activeKey,
+  node, depth, expanded, handlers, counts, files, activeKey,
 }: {
   node: Tree; depth: number;
   expanded: Set<string>;
-  toggle: (p: string) => void;
+  handlers: RowHandlers;
   counts: { matched: Map<string, number>; total: Map<string, number> };
   files: FileRecord[];
-  onOpenFolder?: (path: string) => void;
-  onOpenFile?: (id: number) => void;
   activeKey?: string | null;
 }) {
+  const { toggle, onOpenFolder, onOpenFile } = handlers;
   const { t: tr } = useTranslation('inspect');
   // Narrow selectors. Each row in a deep tree subscribes only to the slices
   // it actually reads, so a slider tweak elsewhere won't re-render every row.
@@ -115,11 +115,9 @@ function Row({
               node={c}
               depth={depth + 1}
               expanded={expanded}
-              toggle={toggle}
+              handlers={handlers}
               counts={counts}
               files={files}
-              onOpenFolder={onOpenFolder}
-              onOpenFile={onOpenFile}
               activeKey={activeKey}
             />
           ))}
@@ -204,17 +202,21 @@ const FolderTree = forwardRef<FolderTreeHandle, FolderTreeProps>(function Folder
   const repo = useFilterStore((s) => s.repo);
   const matched = useFilterStore((s) => s.matched);
   const tree = useMemo(() => build(repo.folders), [repo.folders]);
+  // Expanded-folder paths. Bounded by the repo's folder count (every entry
+  // is an existing folder path, deduped by Set semantics), so this grows at
+  // most to one entry per folder and never unboundedly — no LRU/eviction
+  // needed even for large trees.
   const [expanded, setExpanded] = useState<Set<string>>(() => {
     const s = new Set<string>();
     s.add('');
     for (const f of repo.folders) if (f.depth === 1) s.add(f.path);
     return s;
   });
-  const toggle = (p: string) => { setExpanded((cur) => {
+  const toggle = useCallback((p: string) => { setExpanded((cur) => {
     const next = new Set(cur);
     next.has(p) ? next.delete(p) : next.add(p);
     return next;
-  }); };
+  }); }, []);
 
   useImperativeHandle(ref, () => ({
     expandAll: () => {
@@ -247,16 +249,16 @@ const FolderTree = forwardRef<FolderTreeHandle, FolderTreeProps>(function Folder
     return { matched: m, total };
   }, [repo, matched]);
 
+  const handlers = useRowHandlers({ toggle, onOpenFolder, onOpenFile });
+
   return (
     <Row
       node={tree}
       depth={0}
       expanded={expanded}
-      toggle={toggle}
+      handlers={handlers}
       counts={counts}
       files={repo.files}
-      onOpenFolder={onOpenFolder}
-      onOpenFile={onOpenFile}
       activeKey={activeKey}
     />
   );

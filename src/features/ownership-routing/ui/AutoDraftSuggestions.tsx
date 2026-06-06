@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { CSSProperties, JSX } from 'react';
 import type { AutoDraftSuggestion } from '@entities/ownership';
 import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
+import { confidenceTone } from '../lib';
 
 export type AutoDraftSuggestionsProps = {
   suggestions: AutoDraftSuggestion[];
@@ -45,16 +46,6 @@ function actionTone(action: ActionKey): { bg: string; fg: string } {
         fg: 'var(--fg-default)',
       };
   }
-}
-
-function confidenceTone(value: number): { fg: string; vivid: string } {
-  if (value >= 0.7) {
-    return { fg: 'var(--intent-success-fg)', vivid: 'var(--intent-success-vivid)' };
-  }
-  if (value >= 0.4) {
-    return { fg: 'var(--intent-warn-fg)', vivid: 'var(--intent-warn-vivid)' };
-  }
-  return { fg: 'var(--intent-danger-fg)', vivid: 'var(--intent-danger-vivid)' };
 }
 
 function formatRelative(iso: string): string {

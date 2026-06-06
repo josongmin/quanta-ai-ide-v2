@@ -7,19 +7,20 @@
 // contained — it owns its tab state, its stats memo, and its tab-specific
 // renderers — and InspectPanel becomes a thin dispatcher.
 
-import { memo, useMemo, useState, type ReactNode } from 'react';
+import { memo, useMemo } from 'react';
 import { Activity, Boxes, LayoutGrid, Network, ShieldAlert, Users } from 'lucide-react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import type { RepoData } from '@entities/repo';
-import { C, type Tone, languageHue, pct } from '@shared/lib';
+import { C, type Tone, languageHue, pct, toneToColors } from '@shared/lib';
 import { computeRepoStats, type Verdict } from '@entities/metric';
 import DepsCarousel from './DepsCarousel';
 import {
-  BarRow, ConfidenceMeter, EmptyHint, FileRow, GlassCard,
+  BarRow, ConfidenceMeter, EmptyHint, FileRow,
   Score, StackedRatioBar, Stat,
 } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import { OwnershipPanel } from '@features/ownership-routing';
+import { SubCard, TabPanel, type TabDef } from './parts/TabPanel';
 
 type WorkspaceTab = 'overview' | 'activity' | 'risk' | 'deps' | 'ownership';
 
@@ -29,7 +30,6 @@ type WorkspaceTab = 'overview' | 'activity' | 'risk' | 'deps' | 'ownership';
 // follow-up. All inline color/surface/border below is now token-based.
 function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
   const stats = useMemo(() => computeRepoStats(repo), [repo]);
-  const [tab, setTab] = useState<WorkspaceTab>('overview');
   const { t } = useTranslation('inspect');
 
   // Risk badge: split into two counts so the *kind* of risk is visible
@@ -38,12 +38,7 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
   const riskCritical = stats.vulnerable;
   const riskWarn = stats.cyclic + stats.layerViolations;
 
-  const tabs: {
-    id: WorkspaceTab;
-    label: string;
-    icon: typeof Activity;
-    badges?: { n: number; tone: Tone }[];
-  }[] = [
+  const tabs: TabDef<WorkspaceTab>[] = [
     { id: 'overview', label: t('tab.overview'), icon: LayoutGrid },
     { id: 'activity', label: t('tab.activity'), icon: Activity },
     {
@@ -63,32 +58,14 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
     { id: 'ownership', label: 'Ownership', icon: Users },
   ];
 
-  // The outer InspectPanel shell is the top card. Header / badges / tab strip
-  // are flush with that shell — same shape as FocusScanPanel — so a workspace
-  // selection and a file selection read as the same chrome.
   return (
-    <>
-      <div className="-mx-2 px-5 pt-4 pb-0">
-        <div className="flex items-start gap-2 min-w-0">
-          <div className="min-w-0 flex-1">
-            <div
-              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
-              style={{ color: 'var(--fg-subtle)' }}
-            >
-              <Boxes className="w-3 h-3" /> {t('header.workspace')}
-            </div>
-            <h2 className="font-black text-[13px] truncate tracking-tight mt-1">
-              {t('header.workspaceName')}
-            </h2>
-            <p
-              className="text-[10px] font-mono truncate mt-0.5"
-              style={{ color: 'var(--fg-subtle)' }}
-            >
-              {stats.files.toLocaleString()} {t('focus.filesUnit')} · {stats.totalLoc.toLocaleString()} {t('stat.loc')}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 mt-2.5 mb-3 flex-wrap">
+    <TabPanel
+      eyebrowIcon={Boxes}
+      eyebrowLabel={t('header.workspace')}
+      title={t('header.workspaceName')}
+      subtitle={`${stats.files.toLocaleString()} ${t('focus.filesUnit')} · ${stats.totalLoc.toLocaleString()} ${t('stat.loc')}`}
+      chips={
+        <>
           <span
             className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
@@ -105,112 +82,21 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
             />
             {t('header.fresh')}
           </span>
-        </div>
-        <nav
-          className="-mx-5 overflow-x-auto scrollbar-hide border-t"
-          style={{ borderColor: 'var(--border-default)' }}
-        >
-          <div className="flex items-stretch gap-3 px-4 min-w-max">
-            {tabs.map(({ id, label, icon: Icon, badges }) => {
-              const active = tab === id;
-              return (
-                <button
-                  type="button"
-                  key={id}
-                  onClick={() => { setTab(id); }}
-                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] whitespace-nowrap transition-colors"
-                  style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
-                >
-                  <Icon className="w-3 h-3 shrink-0" />
-                  <span>{label}</span>
-                  {badges && badges.length > 0 && (
-                    <span className="ml-0.5 inline-flex items-center gap-0.5">
-                      {badges.map((b, i) => {
-                        const c = b.tone === 'critical' ? C.critical : b.tone === 'warn' ? C.warning : C.ok;
-                        return (
-                          <span
-                            key={i}
-                            className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-black tabular-nums"
-                            style={{ background: `${c}22`, color: c }}
-                          >
-                            {b.n}
-                          </span>
-                        );
-                      })}
-                    </span>
-                  )}
-                  {active && (
-                    <span
-                      className="absolute left-0 right-0 -bottom-px h-[1.5px]"
-                      style={{ background: 'var(--fg-strong)' }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-      </div>
-
-      <div className="text-[11px]">
-        {tab === 'overview' && <OverviewTab stats={stats} isDark={isDark} />}
-        {tab === 'activity' && <ActivityTab stats={stats} isDark={isDark} />}
-        {tab === 'risk' && <RiskTab stats={stats} isDark={isDark} />}
-        {tab === 'deps' && <DepsTab stats={stats} isDark={isDark} />}
-        {tab === 'ownership' && <OwnershipPanel />}
-      </div>
-
-      <GlassCard
-        tone="inner"
-        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
-        style={{ color: 'var(--fg-subtle)' }}
-      >
-        {tabFooter(tab, t)}
-      </GlassCard>
-
-      <div className="h-2" aria-hidden />
-    </>
-  );
-}
-
-// Subcard used by the inspect panel's tab body — mirrors the FocusScanPanel
-// box style (IndexStateBox / AiContextBox / BlastRadiusBox): a flat
-// `rounded-xl border` block on `bg-surface-muted`, with the eyebrow label
-// living *inside* the card rather than floating above it. Keeps the visual
-// grouping the user wanted while matching the file-panel chrome.
-function SubCard({
-  title, subtitle, children,
-}: {
-  title: string;
-  subtitle?: string;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className="rounded-xl border px-3 py-2.5"
-      style={{
-        background: 'var(--bg-surface-muted)',
-        borderColor: 'var(--border-default)',
-      }}
-    >
-      <div className="flex items-baseline gap-2">
-        <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
-          style={{ color: 'var(--fg-subtle)' }}
-        >
-          {title}
-        </div>
-        {subtitle && (
-          <div
-            className="text-[9px] font-mono truncate"
-            style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
-          >
-            {subtitle}
-          </div>
-        )}
-      </div>
-      <div className="mt-2 space-y-1">{children}</div>
-    </div>
+        </>
+      }
+      tabs={tabs}
+      initialTab="overview"
+      renderTab={(tab) => (
+        <>
+          {tab === 'overview' && <OverviewTab stats={stats} isDark={isDark} />}
+          {tab === 'activity' && <ActivityTab stats={stats} isDark={isDark} />}
+          {tab === 'risk' && <RiskTab stats={stats} isDark={isDark} />}
+          {tab === 'deps' && <DepsTab stats={stats} isDark={isDark} />}
+          {tab === 'ownership' && <OwnershipPanel />}
+        </>
+      )}
+      footer={(tab) => tabFooter(tab, t)}
+    />
   );
 }
 
@@ -397,28 +283,12 @@ const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats: Return
 function VerdictStrip({ verdict }: { verdict: Verdict }) {
   const { t } = useTranslation('inspect');
   const tone = verdict.tone;
-  const palette = (() => {
-    if (tone === 'ok') return {
-      dot: 'var(--intent-success-vivid)',
-      bg: 'rgb(from var(--intent-success-vivid) r g b / 0.10)',
-      text: 'var(--intent-success-fg)',
-    };
-    if (tone === 'warn') return {
-      dot: C.warning,
-      bg: 'rgb(from var(--intent-warn-vivid) r g b / 0.12)',
-      text: 'var(--intent-warn-fg)',
-    };
-    if (tone === 'critical') return {
-      dot: C.critical,
-      bg: 'rgb(from var(--intent-danger-vivid) r g b / 0.10)',
-      text: 'var(--intent-danger-fg)',
-    };
-    return {
-      dot: 'var(--fg-link)',
-      bg: 'rgb(from var(--fg-link) r g b / 0.10)',
-      text: 'var(--fg-link)',
-    };
-  })();
+  // Tone → palette via the shared SSOT. Unknown tones (the old default branch)
+  // fall through to 'info', which resolves dot/bg/fg to --fg-link — matching
+  // the previous inline default. Keys map: dot→dot, bg→bg, text→fg.
+  const palette = toneToColors(
+    tone === 'ok' || tone === 'warn' || tone === 'critical' ? tone : 'info',
+  );
   // Translate at the UI boundary — entity layer emits a key + params only.
   const title = t(`verdict.${verdict.key}.title`, verdict.params ?? {});
   const hint  = t(`verdict.${verdict.key}.hint`,  verdict.params ?? {});
@@ -433,7 +303,7 @@ function VerdictStrip({ verdict }: { verdict: Verdict }) {
         <span className="block w-2 h-2 rounded-full relative" style={{ background: palette.dot }} />
       </span>
       <div className="flex-1 min-w-0">
-        <div className="text-[11px] font-bold leading-tight" style={{ color: palette.text }}>
+        <div className="text-[11px] font-bold leading-tight" style={{ color: palette.fg }}>
           {title}
         </div>
         <div className="text-[9px] truncate" style={{ color: 'var(--fg-subtle)' }}>
@@ -442,7 +312,7 @@ function VerdictStrip({ verdict }: { verdict: Verdict }) {
       </div>
       <span
         className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)]"
-        style={{ color: palette.text, opacity: 0.75 }}
+        style={{ color: palette.fg, opacity: 0.75 }}
       >
         {tone === 'ok' ? t('verdict.ready') : tone === 'critical' ? t('verdict.block') : tone === 'warn' ? t('verdict.review') : t('verdict.info')}
       </span>
@@ -478,20 +348,19 @@ function TopOffenders({
 }
 
 // ─── AI Efficiency: 5-bin safety histogram ────────────────────────────
+// Sequential warm → cool hue ramp, low → high, indexed by bin:
+//   0 = "don't touch" (critical) … 4 = "safe". Single-hue progression mirrors
+// the Heat overlay's principle. Mid-tones (#9a8537 / #4f9a5c) are intentional
+// between-step values with no semantic token, so they stay literal here.
+const HISTOGRAM_HUES = [C.critical, C.warning, '#9a8537', C.ok, '#4f9a5c'];
+
 function SafetyHistogram({
   bins, total,
 }: { bins: number[]; total: number }) {
   const { t } = useTranslation('inspect');
   const max = Math.max(1, ...bins);
   const labels = ['0–20', '21–40', '41–60', '61–80', '81–100'];
-  // Sequential warm hue, low → high (matching Heat overlay's single-hue principle)
-  const hueAt = (i: number) => {
-    if (i === 0) return C.critical; // don't touch
-    if (i === 1) return C.warning;
-    if (i === 2) return '#9a8537';
-    if (i === 3) return C.ok;
-    return '#4f9a5c'; // safe
-  };
+  const hueAt = (i: number) => HISTOGRAM_HUES[i];
   return (
     <div className="mt-2">
       <div

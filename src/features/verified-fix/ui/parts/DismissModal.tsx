@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { X, Trash2 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
+import { ModalBackdrop, useDialogA11y } from '@shared/ui';
 import type { CandidateFix } from '../../model/types';
 import { useVfx } from './tokens';
 
@@ -22,8 +23,13 @@ export function DismissModal({
 }) {
   const t = useVfx();
   const { t: tr } = useTranslation('verified-fix');
+  const dialogRef = useRef<HTMLDivElement>(null);
   const [reason, setReason] = useState<string>(REASONS[0]);
   const [note, setNote] = useState<string>('');
+
+  // Escape-to-close + focus trap/restore now come from the shared dialog
+  // a11y hook instead of an inline onKeyDown on the backdrop button.
+  useDialogA11y(dialogRef, open, onCancel);
 
   useEffect(() => {
     // Reset form fields when the modal opens; safe because `open` is the
@@ -37,19 +43,19 @@ export function DismissModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <button
-        type="button"
-        aria-label="Close dialog"
-        className="absolute inset-0 cursor-default"
-        style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
+      <ModalBackdrop
         onClick={onCancel}
-        onKeyDown={(e) => { if (e.key === 'Escape') onCancel(); }}
+        z="z-40"
+        blur="sm"
+        alpha={0.55}
+        label="Close dialog"
       />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Dismiss candidate fix"
-        className="relative w-[480px] max-w-[92vw] rounded-lg border overflow-hidden"
+        className="relative z-50 w-[480px] max-w-[92vw] rounded-lg border overflow-hidden"
         style={{
           background: t.cardBacking,
           borderColor: t.border,

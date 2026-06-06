@@ -8,6 +8,7 @@ export { makeRng } from './rng';
 export { useShortcut, type Shortcut } from './useShortcut';
 export { useClickOutside } from './useClickOutside';
 export { useHoverStyle } from './useHoverStyle';
+export { toneToColors, type SemanticTone, type ToneColors } from './toneToColors';
 export { shallowEqual } from './shallowEqual';
 export { useScrollRestoration } from './useScrollRestoration';
 export {

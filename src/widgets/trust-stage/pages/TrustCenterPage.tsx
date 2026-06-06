@@ -5,7 +5,25 @@ import {
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { useHoverStyle } from '@shared/lib';
-import { PublicShell , HeroBackdrop, Eyebrow, HeadlineGradient, SectionHead, SeamDivider } from '@shared/ui/marketing';
+import { PublicShell, HeroBackdrop, Eyebrow, HeadlineGradient, SectionHead, SeamDivider } from '@shared/ui/marketing';
+
+function HoverCard({
+  children, className, style, hover, rest,
+}: {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  hover: CSSProperties;
+  rest: CSSProperties;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHoverStyle(ref, { ...rest, ...hover }, { ...rest, ...style });
+  return (
+    <div ref={ref} className={className} style={{ ...rest, ...style }}>
+      {children}
+    </div>
+  );
+}
 
 const CERTS = [
   { id: 'soc2',  label: 'SOC 2 Type II', sub: 'Audited annually', tone: 'var(--intent-success-fg)' },

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ScrollText, Sparkles, Network, FileSearch, ShieldAlert } from 'lucide-react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import type { FileRecord } from '@entities/repo';
 // Intelligence layout constants — duplicated here to avoid features → app
 // boundary violation. Source of truth is @app/router/intelligence/panelLayout.

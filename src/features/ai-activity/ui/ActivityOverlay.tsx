@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ViewMode } from '@entities/viz-mode';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { useTabVisibility } from '@features/workspace-tabs';
 import { useActivityStore } from '../model/activityStore';
 
@@ -24,6 +24,24 @@ const SPEED_MS: Record<'slow' | 'normal' | 'fast', number> = {
 const INTENSITY_OPACITY: Record<'subtle' | 'normal' | 'loud', number> = {
   subtle: 0.45, normal: 0.75, loud: 1,
 };
+
+// Static root style — width/height never change, so hoist it to module scope
+// and merge the only dynamic bit (`--pin-period`) per render.
+const SVG_ROOT_STYLE = { width: '100%', height: '100%' } as const;
+
+// The core dot's drop-shadow filter depends only on the pin hue, and hues
+// come from a small curated palette that repeats across pins. Memoise the
+// computed filter string per hue so identical hues don't reallocate the
+// template literal (and the wrapping style object) every frame.
+const dotFilterCache = new Map<string, { filter: string }>();
+function dotFilterStyle(hue: string): { filter: string } {
+  let style = dotFilterCache.get(hue);
+  if (!style) {
+    style = { filter: `drop-shadow(0 0 4px ${hue})` };
+    dotFilterCache.set(hue, style);
+  }
+  return style;
+}
 
 export function ActivityOverlay({ mode }: { mode: ViewMode }) {
   // One subscription instead of six: `prefs` is replaced as a unit by
@@ -102,6 +120,10 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
 
   const period = SPEED_MS[speed];
   const baseOpacity = INTENSITY_OPACITY[intensity];
+  // Precompute the two possible ring opacities once per render instead of
+  // recomputing the multiply for every pin.
+  const ringOpacityDone = baseOpacity * 0.3;
+  const rootStyle = { ...SVG_ROOT_STYLE, '--pin-period': `${period}ms` } as React.CSSProperties;
 
   // Group pins by chat to draw connection lines + folder zone hulls.
   const byChat = new Map<string, Pin[]>();
@@ -114,7 +136,7 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
   return (
     <svg
       className="absolute inset-0 pointer-events-none overflow-visible"
-      style={{ width: '100%', height: '100%' }}
+      style={rootStyle}
       aria-hidden
     >
       <defs>
@@ -126,7 +148,11 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
             0%   { transform: scale(0.6); opacity: 1; }
             100% { transform: scale(2.4); opacity: 0; }
           }
-          .ai-ring { transform-box: fill-box; transform-origin: center; }
+          .ai-ring {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: ai-ring-pulse var(--pin-period) ease-out infinite;
+          }
         `}</style>
       </defs>
 
@@ -145,24 +171,24 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
       {/* Pulsing rings — one per pin. */}
       {showRing && pins.map((p) => (
         <g key={`${p.chatId}:${p.fileId}`} transform={`translate(${p.x}, ${p.y})`}>
-          {/* Outer ripple — endless animation, opacity carries the state */}
+          {/* Outer ripple — endless animation (driven by the static .ai-ring
+              class + the --pin-period custom property on the root <svg>), so
+              the only per-pin variation left is opacity, carried on the DOM
+              attribute rather than a freshly-allocated style object. */}
           <circle
             className="ai-ring"
             r={9}
             fill="none"
             stroke={p.hue}
             strokeWidth={1.5}
-            style={{
-              animation: `ai-ring-pulse ${period}ms ease-out infinite`,
-              opacity: baseOpacity * (p.state === 'done' ? 0.3 : 1),
-            }}
+            opacity={p.state === 'done' ? ringOpacityDone : baseOpacity}
           />
           {/* Static core dot for clarity at small scales */}
           <circle
             r={2.5}
             fill={p.hue}
             opacity={baseOpacity}
-            style={{ filter: `drop-shadow(0 0 4px ${p.hue})` }}
+            style={dotFilterStyle(p.hue)}
           />
         </g>
       ))}

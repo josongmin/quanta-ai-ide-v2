@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Flame } from 'lucide-react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import { computeHotspots, explainHotspot, type SignalKey } from '@entities/hotspot';
 import type { FileRecord } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';

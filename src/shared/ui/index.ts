@@ -7,6 +7,7 @@
 //   • carry no business logic
 
 // ── Layout / surfaces ──
+export { ErrorBoundary } from './ErrorBoundary';
 export { GlassCard } from './GlassCard';
 export { ScrollPane } from './ScrollPane';
 export { SectionHeader } from './SectionHeader';
@@ -15,6 +16,7 @@ export { Section } from './Section';
 // ── Primitives ──
 export { Portal } from './Portal';
 export { Modal } from './Modal';
+export { ModalBackdrop, type ModalBackdropProps } from './ModalBackdrop';
 export { Popover } from './Popover';
 export { useDialogA11y } from './useDialogA11y';
 export { IconButton } from './IconButton';

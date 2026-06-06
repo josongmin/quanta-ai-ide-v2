@@ -92,11 +92,13 @@ export function FeedRow({
       : `${Math.floor(ageMin / 1440)}d`;
 
   return (
-    <div
-      className="px-3 py-2 rounded-lg flex items-center gap-3 group transition-all hover:translate-x-0.5"
+    <button
+      type="button"
+      className="w-full px-3 py-2 rounded-lg flex items-center gap-3 group transition-all hover:translate-x-0.5 text-left"
       style={{
         border: `1px solid ${t.borderSoft}`,
         animationDelay: `${index * 35}ms`,
+        background: 'transparent',
       }}
       onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; }}
       onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -156,7 +158,7 @@ export function FeedRow({
         )}
       </div>
       <ArrowUpRight className="w-3 h-3 group-hover:rotate-12 shrink-0 transition-all" style={{ color: t.textFaint }} />
-    </div>
+    </button>
   );
 }
 

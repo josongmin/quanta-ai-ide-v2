@@ -9,9 +9,10 @@ import {
   type DragEvent,
 } from 'react';
 import { Pin, Plus, X } from 'lucide-react';
+import { getTabMeta } from '@shared/config/workspaceTabs';
 import { useTheme } from '@shared/theme';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
-import { TAB_REGISTRY } from '@app/router/workspaceTabsRegistry';
+import { useWorkspaceTabsRegistry } from '../model/RegistryContext';
 import { useNavigateToTab } from './WorkspaceTabsHost';
 import AddTabModal from './AddTabModal';
 
@@ -31,7 +32,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 }
 
 function getResolvedLabel(tab: WorkspaceTab, tabs: WorkspaceTab[]): string {
-  const base = tab.label ?? TAB_REGISTRY[tab.kind].label;
+  const base = tab.label ?? getTabMeta(tab.kind).label;
   if (tab.label) return base;
   const peers = tabs.filter((t) => t.kind === tab.kind);
   if (peers.length <= 1) return base;
@@ -304,7 +305,7 @@ export default function WorkspaceTabsStrip() {
                 key={tab.id}
                 ref={(el) => { itemRefs.current[tab.id] = el; }}
                 tab={tab}
-                label={labelMap.get(tab.id) ?? TAB_REGISTRY[tab.kind].label}
+                label={labelMap.get(tab.id) ?? getTabMeta(tab.kind).label}
                 index={i}
                 active={tab.id === activeId}
                 focused={tab.id === focusId}
@@ -416,7 +417,8 @@ const TabChip = forwardRef<HTMLDivElement, TabChipProps>(function TabChip({
   onMoveFocus,
   onMoveEdge,
 }, ref) {
-  const Icon = TAB_REGISTRY[tab.kind].icon;
+  const tabRegistry = useWorkspaceTabsRegistry();
+  const Icon = tabRegistry[tab.kind].icon;
   const { isDark } = useTheme();
   const [dropSide, setDropSide] = useState<'left' | 'right' | null>(null);
   const resolvedWidth = width;

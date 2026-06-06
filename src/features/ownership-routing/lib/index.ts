@@ -13,3 +13,11 @@ export {
   suggestMergeStrategy,
 } from './stackPlanner';
 export type { RefactorStackInput } from './stackPlanner';
+
+export { createAvatarStyle } from './personAvatar';
+
+export { riskTone } from './riskTheme';
+export type { RiskTone } from './riskTheme';
+
+export { confidenceTone } from './confidenceTheme';
+export type { ConfidenceTone } from './confidenceTheme';

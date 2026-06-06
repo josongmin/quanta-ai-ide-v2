@@ -49,7 +49,11 @@ export function usePersistedPanelWidth(config: PanelWidthConfig): [number, (next
   const [width, setWidth] = useState<number>(() => readStoredWidth(config));
 
   useEffect(() => {
-    try { window.localStorage.setItem(config.storageKey, String(width)); } catch { /* ignore */ }
+    try {
+      window.localStorage.setItem(config.storageKey, String(width));
+    } catch (e) {
+      if (import.meta.env.DEV) console.warn('[panelLayout] failed to persist width', e);
+    }
   }, [config.storageKey, width]);
 
   return [width, (next: number) => { setWidth(clampWidth(next, config)); }];

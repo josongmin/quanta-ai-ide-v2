@@ -44,30 +44,32 @@ const CONF_LABEL: Record<ConfidenceState, string> = {
 // Edge wrapper styling per confidence. We use border-style + opacity rather
 // than colour fills because the team has called out (3+ times) that left-
 // edge / accent stripes are off-limits anywhere in the app.
-function edgeRowStyle(conf: ConfidenceState): {
+type EdgeRowStyle = {
   className: string;
   borderColor: string;
   opacity: number;
-} {
-  if (conf === 'exact') {
-    return {
-      className: 'border',
-      borderColor: 'var(--border-default)',
-      opacity: 1,
-    };
-  }
-  if (conf === 'overapprox') {
-    return {
-      className: 'border border-dashed',
-      borderColor: 'var(--border-default)',
-      opacity: 1,
-    };
-  }
-  return {
+};
+
+const EDGE_ROW_STYLE: Record<ConfidenceState, EdgeRowStyle> = {
+  exact: {
+    className: 'border',
+    borderColor: 'var(--border-default)',
+    opacity: 1,
+  },
+  overapprox: {
+    className: 'border border-dashed',
+    borderColor: 'var(--border-default)',
+    opacity: 1,
+  },
+  unknown: {
     className: 'border border-dashed',
     borderColor: 'var(--border-muted)',
     opacity: 0.5,
-  };
+  },
+};
+
+function edgeRowStyle(conf: ConfidenceState): EdgeRowStyle {
+  return EDGE_ROW_STYLE[conf];
 }
 
 function NodeChip({ node }: { node: ImpactNode }) {

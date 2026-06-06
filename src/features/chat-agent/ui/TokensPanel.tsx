@@ -1,7 +1,8 @@
-import { Fragment } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import { X, RotateCcw } from 'lucide-react';
 import { Modal } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
+import { useTheme } from '@shared/theme';
 import type { SemanticTokens } from '@shared/tokens';
 import { useTokens, type GlobalTokenSections, type Tokens } from '../model/TokensContext';
 import { DARK_PRESETS, LIGHT_PRESETS, type ThemePreset } from '../model/theme-presets';
@@ -10,6 +11,17 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
   const {
     tokens, setSemantic, setGlobal, replace, reset,
   } = useTokens();
+  const { theme, setTheme } = useTheme();
+  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
+  const applyThemePreset = useCallback((preset: ThemePreset) => {
+    // Palette presets edit semantic.dark / semantic.light in storage, but
+    // only the *active* theme slice is painted onto CSS variables. Switch
+    // the app theme to match the row the user clicked so the choice is
+    // visible immediately.
+    setTheme(preset.tone);
+    replace((current) => preset.apply(current));
+    setSelectedPresetId(preset.id);
+  }, [replace, setTheme]);
   const { t } = useTranslation('chat');
   const tCommon = useTranslation('common').t;
 
@@ -66,14 +78,18 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
               tone="dark"
               label={t('tokens.tone.dark', 'Dark')}
               presets={DARK_PRESETS}
-              onApply={(preset) => { replace((current) => preset.apply(current)); }}
+              activeTheme={theme}
+              selectedPresetId={selectedPresetId}
+              onApply={applyThemePreset}
               t={t as (key: string, fallback?: string) => string}
             />
             <ThemePresetGrid
               tone="light"
               label={t('tokens.tone.light', 'Light')}
               presets={LIGHT_PRESETS}
-              onApply={(preset) => { replace((current) => preset.apply(current)); }}
+              activeTheme={theme}
+              selectedPresetId={selectedPresetId}
+              onApply={applyThemePreset}
               t={t as (key: string, fallback?: string) => string}
             />
           </div>
@@ -135,11 +151,13 @@ export default function TokensPanel({ onClose }: { onClose: () => void }) {
 }
 
 function ThemePresetGrid({
-  tone, label, presets, onApply, t,
+  tone, label, presets, activeTheme, selectedPresetId, onApply, t,
 }: {
   tone: 'dark' | 'light';
   label: string;
   presets: ThemePreset[];
+  activeTheme: 'dark' | 'light';
+  selectedPresetId: string | null;
   onApply: (preset: ThemePreset) => void;
   t: (key: string, fallback?: string) => string;
 }) {
@@ -164,6 +182,7 @@ function ThemePresetGrid({
             preset={preset}
             tone={tone}
             label={t(`tokens.themes.${preset.id}`, preset.id)}
+            selected={activeTheme === tone && selectedPresetId === preset.id}
             onClick={() => { onApply(preset); }}
           />
         ))}
@@ -173,11 +192,12 @@ function ThemePresetGrid({
 }
 
 function PresetSwatch({
-  preset, tone, label, onClick,
+  preset, tone, label, selected, onClick,
 }: {
   preset: ThemePreset;
   tone: 'dark' | 'light';
   label: string;
+  selected: boolean;
   onClick: () => void;
 }) {
   // Resolve the preset's actual colours by applying it to a minimal stub
@@ -197,10 +217,12 @@ function PresetSwatch({
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={selected}
       className="text-left p-2 rounded-lg border hover-surface flex flex-col gap-2"
       style={{
         background: 'var(--bg-surface)',
-        borderColor: 'var(--border-muted)',
+        borderColor: selected ? 'var(--fg-accent)' : 'var(--border-muted)',
+        boxShadow: selected ? '0 0 0 1px var(--fg-accent)' : undefined,
       }}
     >
       <div
@@ -311,15 +333,15 @@ function ThemeTokenMatrix({
         <ColumnHeader title="Light" />
 
         {keys.map((key) => (
-          <Fragment key={String(key)}>
+          <Fragment key={key}>
             <div
               className="text-[10px] font-mono pt-2"
               style={{ color: 'var(--fg-muted)' }}
             >
-              {humanizeKey(String(key))}
+              {humanizeKey(key)}
             </div>
-            <TokenField label={`${humanizeKey(String(key))} (Dark)`} value={dark[key]} onChange={(value) => { onDarkChange(key, value); }} />
-            <TokenField label={`${humanizeKey(String(key))} (Light)`} value={light[key]} onChange={(value) => { onLightChange(key, value); }} />
+            <TokenField label={`${humanizeKey(key)} (Dark)`} value={dark[key]} onChange={(value) => { onDarkChange(key, value); }} />
+            <TokenField label={`${humanizeKey(key)} (Light)`} value={light[key]} onChange={(value) => { onLightChange(key, value); }} />
           </Fragment>
         ))}
       </div>
@@ -370,7 +392,7 @@ function GlobalTokenGroup<S extends keyof GlobalTokenSections>({
       </div>
 
       {entries.map(([key, value]) => (
-        <div key={`${String(section)}-${String(key)}`} className="space-y-1.5">
+        <div key={`${section}-${String(key)}`} className="space-y-1.5">
           <div className="text-[10px] font-mono" style={{ color: 'var(--fg-muted)' }}>
             {humanizeKey(String(key))}
           </div>

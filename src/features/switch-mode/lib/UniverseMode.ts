@@ -20,6 +20,7 @@ import type {
   SCC,
 } from '@entities/repo';
 import type { FilterSnapshot, ViewMode, ViewModeContext } from '@entities/viz-mode';
+import { disposeMesh, disposeMeshes } from './disposeMeshes';
 
 const HEIGHT_GAP = 90;
 
@@ -556,6 +557,11 @@ export function createUniverseMode(): ViewMode {
   }
 
   // ── Risk lens (recolor existing color/alpha attribs in-place) ──
+  // NOTE: unlike DotFieldMode.buildRiskLensVisuals (which spawns standalone
+  // additive halo meshes per hit), this mode recolors the per-star color/alpha
+  // buffer attributes already on `points`/`lines`. The two implementations are
+  // intentionally NOT shared — different geometry/material models — so there is
+  // nothing here to dispose beyond clearing the cached hit list.
   function recomputeRiskLensHits(repo: RepoData, lens: RiskLensKey) {
     cachedRiskHits = topRiskLens(repo, lens, 30);
   }
@@ -609,22 +615,12 @@ export function createUniverseMode(): ViewMode {
   // ── Blast radius ──
   function disposeBlastVisuals() {
     if (blastSeedMesh) {
-      if (overlayGroup) overlayGroup.remove(blastSeedMesh);
-      blastSeedMesh.geometry.dispose();
-      blastSeedMesh.material.dispose();
+      disposeMesh(overlayGroup, blastSeedMesh);
       blastSeedMesh = null;
     }
-    for (const m of blastHopMeshes) {
-      if (overlayGroup) overlayGroup.remove(m);
-      m.geometry.dispose();
-      m.material.dispose();
-    }
+    disposeMeshes(overlayGroup, blastHopMeshes);
     blastHopMeshes = [];
-    for (const l of blastEdgeLines) {
-      if (overlayGroup) overlayGroup.remove(l);
-      l.geometry.dispose();
-      l.material.dispose();
-    }
+    disposeMeshes(overlayGroup, blastEdgeLines);
     blastEdgeLines = [];
   }
 
@@ -695,16 +691,10 @@ export function createUniverseMode(): ViewMode {
   // ── Path witness ──
   function disposePathVisuals() {
     if (pathLineSegments) {
-      if (overlayGroup) overlayGroup.remove(pathLineSegments);
-      pathLineSegments.geometry.dispose();
-      pathLineSegments.material.dispose();
+      disposeMesh(overlayGroup, pathLineSegments);
       pathLineSegments = null;
     }
-    for (const m of pathWaypointMeshes) {
-      if (overlayGroup) overlayGroup.remove(m);
-      m.geometry.dispose();
-      m.material.dispose();
-    }
+    disposeMeshes(overlayGroup, pathWaypointMeshes);
     pathWaypointMeshes = [];
   }
 
@@ -762,11 +752,7 @@ export function createUniverseMode(): ViewMode {
 
   // ── Public-API ring ──
   function disposeApiRingVisuals() {
-    for (const r of apiRingMeshes) {
-      if (overlayGroup) overlayGroup.remove(r);
-      r.geometry.dispose();
-      r.material.dispose();
-    }
+    disposeMeshes(overlayGroup, apiRingMeshes);
     apiRingMeshes = [];
   }
 
@@ -820,17 +806,9 @@ export function createUniverseMode(): ViewMode {
 
   // ── PR diff ──
   function disposePrDiffVisuals() {
-    for (const c of prChangeMeshes) {
-      if (overlayGroup) overlayGroup.remove(c.mesh);
-      c.mesh.geometry.dispose();
-      c.mesh.material.dispose();
-    }
+    disposeMeshes(overlayGroup, prChangeMeshes.map((c) => c.mesh));
     prChangeMeshes = [];
-    for (const m of prAffectedMeshes) {
-      if (overlayGroup) overlayGroup.remove(m);
-      m.geometry.dispose();
-      m.material.dispose();
-    }
+    disposeMeshes(overlayGroup, prAffectedMeshes);
     prAffectedMeshes = [];
   }
 
@@ -872,17 +850,9 @@ export function createUniverseMode(): ViewMode {
 
   // ── SCC cycles ──
   function disposeCycleVisuals() {
-    for (const l of cycleHulls) {
-      if (overlayGroup) overlayGroup.remove(l);
-      l.geometry.dispose();
-      l.material.dispose();
-    }
+    disposeMeshes(overlayGroup, cycleHulls);
     cycleHulls = [];
-    for (const l of cycleEdges) {
-      if (overlayGroup) overlayGroup.remove(l);
-      l.geometry.dispose();
-      l.material.dispose();
-    }
+    disposeMeshes(overlayGroup, cycleEdges);
     cycleEdges = [];
   }
 

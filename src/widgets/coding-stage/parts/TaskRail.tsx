@@ -121,7 +121,6 @@ export function TaskRail({
         max={TASK_RAIL_MAX_WIDTH}
         defaultWidth={TASK_RAIL_DEFAULT_WIDTH}
         onChange={onWidthChange}
-        isDark={isDark}
         ariaLabel={t('rail.resize')}
         offset={-5}
       />

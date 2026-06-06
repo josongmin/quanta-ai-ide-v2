@@ -3,7 +3,7 @@ import {
 } from 'react';
 import {
 } from 'lucide-react';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { VerifiedFixCardActive } from '@features/verified-fix';
 import { useTheme } from '@shared/theme/ThemeContext';
 import {

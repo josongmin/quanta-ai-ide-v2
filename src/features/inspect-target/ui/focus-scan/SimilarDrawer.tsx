@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import { findSimilar, type FileRecord, type SimilarHit } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
 import { useStack } from '../../model/StackContext';

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { History, X, Boxes, Folder, FileCode } from 'lucide-react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import type { RepoData } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
-import { ResizeHandle } from '@shared/ui';
+import { ResizeHandle, useDialogA11y } from '@shared/ui';
+import { useClickOutside } from '@shared/lib';
 // Intelligence layout constants — duplicated here to avoid features → app
 // boundary violation. Source of truth is @app/router/intelligence/panelLayout.
 const INTELLIGENCE_LAYOUT = {
@@ -140,7 +141,6 @@ export default function FocusScanStack({
         max={maxWidth}
         defaultWidth={defaultWidth}
         onChange={onWidthChange}
-        isDark={isDark}
         ariaLabel="Resize right panel"
       />
       {items.length > 1 && (
@@ -324,21 +324,12 @@ function HistoryButton({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!open) return;
-    const onDoc = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    window.addEventListener('mousedown', onDoc);
-    window.addEventListener('keydown', onKey);
-    return () => {
-      window.removeEventListener('mousedown', onDoc);
-      window.removeEventListener('keydown', onKey);
-    };
-  }, [open]);
+  // Escape-to-close + focus trap (shared dialog a11y) and mousedown-outside
+  // dismissal (shared hook). `close` is stable across renders so the hooks'
+  // effect deps stay quiet.
+  const close = useCallback(() => { setOpen(false); }, []);
+  useDialogA11y(ref, open, close);
+  useClickOutside(ref, open, close);
 
   return (
     <div ref={ref} className="relative pointer-events-auto shrink-0" style={{ height: thickness }}>

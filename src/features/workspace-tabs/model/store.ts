@@ -4,7 +4,7 @@ import {
   createJSONStorage,
   type StateStorage,
 } from 'zustand/middleware';
-import { DEFAULT_TAB_KINDS, type TabKind, TAB_REGISTRY } from '@app/router/workspaceTabsRegistry';
+import { DEFAULT_TAB_KINDS, isTabKind, type TabKind } from '@shared/config/workspaceTabs';
 
 // Throttle window for localStorage writes. Tab activations cluster (e.g.
 // the user cycles through tabs with Cmd+Alt+Arrow) — without throttling,
@@ -172,18 +172,18 @@ function sanitizeTab(raw: WorkspaceTab): WorkspaceTab {
   };
 }
 
-function moveIntoPinnedSection(tabs: WorkspaceTab[], id: string): WorkspaceTab[] {
-  const from = tabs.findIndex((t) => t.id === id);
-  if (from === -1) return tabs;
-  const next = [...tabs];
-  const [moved] = next.splice(from, 1);
-  const firstUnpinned = next.findIndex((t) => !t.pinned);
-  const insertAt = firstUnpinned === -1 ? next.length : firstUnpinned;
-  next.splice(insertAt, 0, moved);
-  return next;
-}
-
-function moveIntoUnpinnedSection(tabs: WorkspaceTab[], id: string): WorkspaceTab[] {
+// Relocate `id` to the pinned/unpinned boundary. Callers pass `tabs` with the
+// moved tab's `pinned` flag already updated, so both directions insert at the
+// same spot — the first unpinned tab (or the end when everything is pinned):
+//   • pinning   → the tab lands at the tail of the pinned run
+//   • unpinning → the tab lands at the head of the unpinned run
+// `targetPinned` is kept for call-site clarity even though the insertion math
+// is identical in both cases.
+function moveIntoSection(
+  tabs: WorkspaceTab[],
+  id: string,
+  _targetPinned: boolean,
+): WorkspaceTab[] {
   const from = tabs.findIndex((t) => t.id === id);
   if (from === -1) return tabs;
   const next = [...tabs];
@@ -301,9 +301,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
             if (!current || current.pinned === pinned) return s;
             const updated = s.tabs.map((t) => (t.id === id ? { ...t, pinned } : t));
             return {
-              tabs: pinned
-                ? moveIntoPinnedSection(updated, id)
-                : moveIntoUnpinnedSection(updated, id),
+              tabs: moveIntoSection(updated, id, pinned),
             };
           });
         },
@@ -311,7 +309,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
         setAll: (tabs, activeId) => {
           if (tabs.length === 0) return;
           const sanitized = tabs
-            .filter((t) => t.kind in TAB_REGISTRY)
+            .filter((t) => isTabKind(t.kind))
             .map((t) => sanitizeTab(t));
           if (sanitized.length === 0) return;
           const ensuredActive =
@@ -339,7 +337,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
         // after a kind rename) so the UI doesn't render nothing for them.
         const tabs = p.tabs
           .filter((t): t is WorkspaceTab =>
-            t != null && typeof t.id === 'string' && typeof t.kind === 'string' && (t.kind in TAB_REGISTRY),
+            t != null && typeof t.id === 'string' && typeof t.kind === 'string' && isTabKind(t.kind),
           )
           .map((t) => sanitizeTab(t));
         if (tabs.length === 0) return current;

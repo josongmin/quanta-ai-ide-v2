@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ArrowDownToLine, ArrowUpFromLine } from 'lucide-react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import {
   projectEdges, type FileRecord, type GraphEdgeMode,
 } from '@entities/repo';

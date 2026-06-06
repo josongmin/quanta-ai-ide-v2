@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Button, Toggle } from '@shared/ui/forms';
+import { ModalBackdrop } from '@shared/ui';
 
 type Endpoint = {
   id: string;
@@ -324,7 +325,7 @@ function CreateEndpointModal({
 
   return (
     <>
-      <button type="button" aria-label="Dismiss" className="fixed inset-0 z-40 border-0 p-0 cursor-default" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onCancel} />
+      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] max-h-[80vh] flex flex-col rounded-lg overflow-hidden"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
@@ -403,7 +404,7 @@ function ConfirmDelete({
 }: { url: string; onCancel: () => void; onConfirm: () => void }) {
   return (
     <>
-      <button type="button" aria-label="Dismiss" className="fixed inset-0 z-40 border-0 p-0 cursor-default" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onCancel} />
+      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[420px] rounded-lg overflow-hidden"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}

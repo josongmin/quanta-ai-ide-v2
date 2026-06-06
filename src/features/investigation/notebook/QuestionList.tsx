@@ -118,12 +118,11 @@ export function QuestionList({ questions, selectedId, onSelect, onArchive }: Pro
         };
         return (
           <li key={q.id} style={rowStyle}>
-            <div
-              role={onSelect ? 'button' : undefined}
-              tabIndex={onSelect ? 0 : undefined}
-              className="flex items-start gap-2 px-2 py-2"
+            <button
+              type="button"
+              disabled={!onSelect}
+              className="flex w-full items-start gap-2 px-2 py-2 text-left disabled:cursor-default"
               onClick={onSelect ? () => { onSelect(q.id); } : undefined}
-              onKeyDown={onSelect ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(q.id); } } : undefined}
             >
               <div className="flex flex-col items-start gap-1 pt-0.5">
                 <StatusPill status={q.status} />
@@ -155,7 +154,7 @@ export function QuestionList({ questions, selectedId, onSelect, onArchive }: Pro
                   <X size={12} aria-hidden="true" />
                 </button>
               ) : null}
-            </div>
+            </button>
           </li>
         );
       })}

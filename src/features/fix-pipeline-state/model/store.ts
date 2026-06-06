@@ -25,28 +25,33 @@ import {
   type SubmissionRecord,
   type ValidationResult,
 } from '@entities/fix-pipeline';
-import { simulateGenerate } from '@features/fix-candidate-generator';
 import {
-  buildObligations,
-  simulateRunValidation,
-  summariseObligations,
-} from '@features/verification-checklist';
-import { decideTier } from '@features/delivery-gate';
-import { computeConfidence } from '@features/trust-signal';
-import { addCost, estimateCycleCost, ZERO_COST } from '@features/fix-pipeline-cost';
-import { currentFailureKey, decideTermination, INITIAL_LOOP } from '@features/fix-pipeline-loop';
-import { INITIAL_LEDGER, recordSuccess } from '@features/fix-pipeline-permissions';
-import { buildReanalysis, markRan } from '@features/fix-pipeline-reanalysis';
-import { critiqueAndRepatch } from '@features/fix-pipeline-self-critique';
-import { suggestReviewer } from '@features/fix-pipeline-routing';
-import { buildRollback } from '@features/fix-pipeline-rollback';
-import {
+  addCost,
+  applyPartialAccept,
   blockedRecord,
+  buildObligations,
+  buildReanalysis,
+  buildRollback,
+  computeConfidence,
+  critiqueAndRepatch,
+  currentFailureKey,
   decideSubmissionAction,
+  decideTermination,
+  decideTier,
+  estimateCycleCost,
+  INITIAL_LEDGER,
+  INITIAL_LOOP,
+  markRan,
+  recordSuccess,
+  simulateGenerate,
+  simulateRunValidation,
   submit,
+  suggestReviewer,
+  summariseObligations,
+  toggleHunk,
   unsubmittedRecord,
-} from '@features/fix-pipeline-submit';
-import { applyPartialAccept, toggleHunk } from '@features/fix-pipeline-partial-accept';
+  ZERO_COST,
+} from '../lib/pipelineIntegrations';
 
 // Single store. The whole point of feature 06 is keeping every sub-feature
 // in lock-step: candidate / verification / gate / trust-signal / cost /

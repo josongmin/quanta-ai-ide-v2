@@ -22,7 +22,6 @@ type Props = {
   // let the parent splice. Cross-project drops are rejected (different
   // base branch + project context — needs a confirm dialog, out of v1).
   onReorder?: (srcId: string, dstId: string) => void;
-  isDark: boolean;
   t: (k: string, opts?: Record<string, unknown>) => string;
   width: number;
   onWidthChange: (next: number) => void;
@@ -45,7 +44,7 @@ const ACCENT_HEX = {
 void NEUTRAL_ACCENT_LIGHT;
 
 export function TaskRail({
-  projects, tasks, activeId, onSelect, onNewTask, onNewProject, onReorder, isDark, t,
+  projects, tasks, activeId, onSelect, onNewTask, onNewProject, onReorder, t,
   width, onWidthChange,
 }: Props) {
   const [query, setQuery] = useState('');
@@ -121,7 +120,6 @@ export function TaskRail({
         max={TASK_RAIL_MAX_WIDTH}
         defaultWidth={TASK_RAIL_DEFAULT_WIDTH}
         onChange={onWidthChange}
-        isDark={isDark}
         ariaLabel={t('rail.resize')}
         offset={-5}
       />

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Bot, ChevronRight, X, Activity } from 'lucide-react';
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import { GlassCard } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import { useActivityStore, type AiActivity } from '../model/activityStore';

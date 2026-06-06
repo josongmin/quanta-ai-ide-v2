@@ -1,8 +1,16 @@
 import { Lock } from 'lucide-react';
-import { useFilter, useFilterStore } from '@entities/filter-state';
+import { useFilterStore } from '@entities/filter-state';
 import { useTranslation } from '@shared/i18n';
 import { usePrefs } from '@features/tweak-prefs';
 import MetricRangeSlider from './MetricRangeSlider';
+import {
+  isBinaryToggle,
+  useBinaryToggle,
+  useTriToggle,
+  useEnumFacet,
+  type BinaryToggleFacet,
+  type TriToggleFacet,
+} from '../lib/facetAccessors';
 import type { Facet, RangeFacet, BoolFacet, ToggleFacet, EnumFacet } from '@entities/facet';
 
 type Props = { facet: Facet };
@@ -23,9 +31,20 @@ export default function FacetRenderer({ facet }: Props) {
 
   if (facet.kind === 'range') return <RangeRow facet={facet} />;
   if (facet.kind === 'bool') return <BoolRow facet={facet} />;
-  if (facet.kind === 'toggle') return <TriToggleRow facet={facet} />;
+  if (facet.kind === 'toggle') return <ToggleRow facet={facet} />;
   if (facet.kind === 'enum') return <EnumRow facet={facet} />;
   return null;
+}
+
+// Toggle dispatcher — narrows the shared ToggleFacet into the binary vs
+// tri-state variants so each row component only sees the facet shape it
+// can render. Replaces the old in-row `if (toggleKey === 'publicApiOnly')`
+// branch + getter/setter ternaries.
+function ToggleRow({ facet }: { facet: ToggleFacet }) {
+  if (isBinaryToggle(facet)) return <BinaryToggleRow facet={facet} />;
+  // `ToggleFacet` is a single interface (not a discriminated object union), so
+  // TS can't auto-narrow the negative branch — assert it after the guard.
+  return <TriToggleRow facet={facet as TriToggleFacet} />;
 }
 
 function LockedRow({ facet }: { facet: Facet }) {
@@ -76,40 +95,38 @@ function BoolRow({ facet }: { facet: BoolFacet }) {
   );
 }
 
-function TriToggleRow({ facet }: { facet: ToggleFacet }) {
+// Binary toggle (publicApiOnly): on/off, brand-tinted when on.
+function BinaryToggleRow({ facet }: { facet: BinaryToggleFacet }) {
   const { t } = useTranslation('filter');
-  const f = useFilter();
-  // publicApiOnly is bool; others are tri-state (null/true/false)
-  if (facet.toggleKey === 'publicApiOnly') {
-    const v = f.state.publicApiOnly;
-    return (
-      <button type="button"
-        onClick={() => { f.setPublicApiOnly(!v); }}
-        className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border ${
-          v
-            ? SELECTED_CLASS
-            : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)]'
-        }`}
-      >
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]">{facet.label}</span>
-        <span className="text-[9px] font-mono">{v ? t('toggle.on') : t('toggle.off')}</span>
-      </button>
-    );
-  }
-  const stateGetter = facet.toggleKey === 'isTest' ? f.state.isTest
-    : facet.toggleKey === 'isGenerated' ? f.state.isGenerated
-    : f.state.isDeprecated;
-  const setter = facet.toggleKey === 'isTest' ? f.setIsTest
-    : facet.toggleKey === 'isGenerated' ? f.setIsGenerated
-    : f.setIsDeprecated;
+  const { value: v, setValue } = useBinaryToggle(facet);
+  return (
+    <button type="button"
+      onClick={() => { setValue(!v); }}
+      className={`w-full flex items-center justify-between p-2.5 rounded-xl mb-2 border ${
+        v
+          ? SELECTED_CLASS
+          : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)]'
+      }`}
+    >
+      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]">{facet.label}</span>
+      <span className="text-[9px] font-mono">{v ? t('toggle.on') : t('toggle.off')}</span>
+    </button>
+  );
+}
+
+// Tri-state toggle (isTest/isGenerated/isDeprecated): null → any → only →
+// exclude, cycling through true/false/null.
+function TriToggleRow({ facet }: { facet: TriToggleFacet }) {
+  const { t } = useTranslation('filter');
+  const { value, setValue } = useTriToggle(facet);
 
   const cycle = () => {
-    if (stateGetter === null) setter(true);
-    else if (stateGetter) setter(false);
-    else setter(null);
+    if (value === null) setValue(true);
+    else if (value) setValue(false);
+    else setValue(null);
   };
-  const labelFor = stateGetter === null ? t('toggle.any') : stateGetter ? t('toggle.only') : t('toggle.exclude');
-  const styleOn = stateGetter !== null;
+  const labelFor = value === null ? t('toggle.any') : value ? t('toggle.only') : t('toggle.exclude');
+  const styleOn = value !== null;
   return (
     <button type="button"
       onClick={cycle}
@@ -126,20 +143,9 @@ function TriToggleRow({ facet }: { facet: ToggleFacet }) {
 }
 
 function EnumRow({ facet }: { facet: EnumFacet }) {
-  const f = useFilter();
-  const options =
-    facet.enumKey === 'owners' ? f.repo.owners
-    : facet.enumKey === 'languages' ? (facet.options ?? ['ts', 'tsx', 'js'])
-    : (facet.options ?? ['view', 'controller', 'service', 'repository', 'util', 'test', 'vendor']);
-  const selected =
-    facet.enumKey === 'languages' ? (f.state.languages as Set<string>)
-    : facet.enumKey === 'layers' ? (f.state.layers as Set<string>)
-    : f.state.owners;
-  const toggle = (v: string) => {
-    if (facet.enumKey === 'languages') f.toggleLanguage(v as never);
-    else if (facet.enumKey === 'layers') f.toggleLayer(v as never);
-    else f.toggleOwner(v);
-  };
+  // options / selection / toggle resolve through the enum registry keyed by
+  // facet.enumKey — no per-enum getter/setter ternary chains here.
+  const { options, selected, toggle } = useEnumFacet(facet);
   return (
     <div className="mb-2">
       <div className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[color:var(--fg-subtle)]">

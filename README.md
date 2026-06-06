@@ -78,7 +78,9 @@ Layer responsibilities:
 
 ## Features
 
-- `filter-files` - filter the visible file set via the Zustand filter store.
+- `filter-files` - FilterBar UI for the repo filter sidebar.
+- `entities/filter-state` - global Zustand filter store (`FilterProvider`, hooks).
+- `shared/config/workspaceTabs` - tab route metadata (paths, labels); app composes lazy stages into `TAB_REGISTRY`.
 - `inspect-target` - inspect details of a focused file or cluster.
 - `switch-mode` - swap between 3D visualization modes (registry-driven).
 - `apply-overlay` - overlay metrics on top of the active mode.

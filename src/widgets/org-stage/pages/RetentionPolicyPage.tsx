@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Gavel, X, Archive, Clock, ShieldAlert } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Field, Toggle, Button, SaveBar } from '@shared/ui/forms';
+import { ModalBackdrop } from '@shared/ui';
 import { shallowEqual } from '@shared/lib';
 
 type RetentionDays = 30 | 60 | 90 | 180 | 365 | 730 | -1;
@@ -284,13 +285,7 @@ function ConfirmRelease({
 }: { hold: LegalHold; onCancel: () => void; onConfirm: () => void }) {
   return (
     <>
-      <button
-        type="button"
-        aria-label="Close dialog"
-        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
-        style={{ background: 'rgba(0,0,0,0.45)' }}
-        onClick={onCancel}
-      />
+      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} label="Close dialog" />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[440px] rounded-lg overflow-hidden"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}

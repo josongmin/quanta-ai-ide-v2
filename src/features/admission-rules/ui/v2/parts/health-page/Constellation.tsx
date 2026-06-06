@@ -1,3 +1,8 @@
+// TODO(orphan-check): possible dead duplicate of health/Constellation
+// Nothing in the wired tree imports this file (the live HealthPage uses
+// parts/health/Constellation). This is an older self-contained variant
+// (raw CSS-var colors, inlined RuleInspector/EmptyInspector/FilterChips).
+// Confirm before deleting — see report.
 import { useState } from 'react';
 import { useTranslation } from '@shared/i18n';
 import { Eye, Plus, Zap } from 'lucide-react';

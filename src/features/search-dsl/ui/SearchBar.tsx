@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, X, Code2, Regex, CaseSensitive, ChevronDown, History, SlidersHorizontal } from 'lucide-react';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { useTranslation } from '@shared/i18n';
 import { GlassCard } from '@shared/ui';
 import { useShortcut } from '@shared/lib';

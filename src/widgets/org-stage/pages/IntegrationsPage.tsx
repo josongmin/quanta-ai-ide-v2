@@ -3,6 +3,7 @@ import { Search, Check, ExternalLink, Settings2, X, Link2, AlertCircle } from 'l
 import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 import { Button, Toggle } from '@shared/ui/forms';
+import { ModalBackdrop } from '@shared/ui';
 
 type Category = 'chat' | 'tracker' | 'pager' | 'observability' | 'sourcecontrol' | 'docs';
 
@@ -277,13 +278,7 @@ function ConfigDrawer({
 }: { item: Integration; onClose: () => void; onUninstall: () => void }) {
   return (
     <>
-      <button
-        type="button"
-        aria-label="Close drawer"
-        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
-        style={{ background: 'rgba(0,0,0,0.45)' }}
-        onClick={onClose}
-      />
+      <ModalBackdrop onClick={onClose} z="z-40" alpha={0.45} label="Close drawer" />
       <aside
         className="fixed right-0 top-0 bottom-0 z-50 w-[440px] flex flex-col"
         style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}

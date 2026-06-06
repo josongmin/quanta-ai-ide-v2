@@ -1,5 +1,5 @@
 import { useTheme } from '@shared/theme';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import {
   useActivityStore,
   type AiActivity, type ActivityState, type ActivityTarget, type ActivityAction,

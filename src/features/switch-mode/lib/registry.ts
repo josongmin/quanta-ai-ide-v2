@@ -16,7 +16,7 @@
 // kept off the initial critical path. Stage awaits `createMode(id)` and
 // only then mounts the scene; switching modes triggers another small
 // dynamic import (which Vite resolves to a single shared `viz-modes`
-// chunk because all four files live next to each other).
+// chunk because both mode factories live next to each other).
 
 import type { ViewMode, ViewModeId } from '@entities/viz-mode';
 

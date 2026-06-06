@@ -10,7 +10,7 @@ import { WorkspaceTabsStrip, WorkspaceTabsHost } from '@features/workspace-tabs'
 import { isMacOS, isTauri, useMenuEvent, useShortcut } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
 import { IconButton } from '@shared/ui';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { SettingsPanel } from '@features/tweak-prefs';
 // NOTE: the dedicated activity-panel open/close store was removed after
 // this chrome was authored (f301417). The panel now lives inside the

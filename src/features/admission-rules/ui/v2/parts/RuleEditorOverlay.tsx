@@ -3,20 +3,19 @@ import {
   Activity, Eye, Clock, Save, X as XIcon,
 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
-import { Portal, useDialogA11y } from '@shared/ui';
-import { useFilterStore } from '@features/filter-files';
+import { Portal, ModalBackdrop, useDialogA11y } from '@shared/ui';
+import { useFilterStore } from '@entities/filter-state';
 import { simulateBranchDiff } from '@entities/repo';
 import {
   previewRule, evaluateAdmission, estimateCost,
-  type AdmissionRule, type RuleSource, type RuleSeverity, type RuleSignal,
-  type MetricField, type CompareOp, type GraphPattern,
-  type TaintSource, type TaintSink,
+  type AdmissionRule, type RuleSource, type RuleSeverity,
 } from '@entities/admission';
 import { useAdmissionStore } from '../../../model/store';
 import { usesHint } from '../../sourceStyle';
 import { SEVERITY_COLOR, useV2, type V2Theme } from './tokens';
 import { V2Card } from './primitives';
 import { timeAgo } from './retrospective';
+import { SignalEditor, defaultSignalFor } from './SignalEditor';
 
 // ── Rule editor (drawer) ─────────────────────────────────────────────
 
@@ -85,14 +84,8 @@ export function RuleEditorOverlay({
 
   return (
     <Portal>
-      {/* Backdrop */}
-      <div
-        role="presentation"
-        className="fixed inset-0 z-[200]"
-        style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
-        onClick={onClose}
-        onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
-      />
+      {/* Backdrop — click-to-dismiss; Escape handled by useDialogA11y. */}
+      <ModalBackdrop onClick={onClose} z="z-[200]" alpha={0.55} blur="sm" label="Close" />
       {/* Drawer */}
       <aside
         ref={dialogRef}
@@ -484,7 +477,7 @@ export function DrawerInput({
   );
 }
 
-function DrawerSelect({
+export function DrawerSelect({
   value, onChange, options, accent, t,
 }: {
   value: string;
@@ -509,104 +502,6 @@ function DrawerSelect({
       {options.map((o) => <option key={o} value={o}>{o}</option>)}
     </select>
   );
-}
-
-function SignalEditor({
-  signal, onChange, t,
-}: { signal: RuleSignal; onChange: (s: RuleSignal) => void; t: V2Theme }) {
-  if (signal.kind === 'metric') {
-    return (
-      <div className="grid grid-cols-3 gap-2">
-        <DrawerSelect
-          value={signal.field}
-          onChange={(v) => { onChange({ ...signal, field: v as MetricField }); }}
-          options={['blastRadius', 'editSafety', 'sastFindings', 'cognitive', 'cyclomatic',
-            'loc', 'fanIn', 'fanOut', 'churn', 'lineCoverage', 'maintainability',
-            'eslintErrors', 'todoCount']}
-          t={t}
-        />
-        <DrawerSelect
-          value={signal.op}
-          onChange={(v) => { onChange({ ...signal, op: v as CompareOp }); }}
-          options={['>', '>=', '<', '<=', '=', '!=']}
-          t={t}
-        />
-        <DrawerInput
-          value={String(signal.value)}
-          onChange={(v) => { onChange({ ...signal, value: Number(v) || 0 }); }}
-          numeric
-          t={t}
-        />
-      </div>
-    );
-  }
-  if (signal.kind === 'graph') {
-    return (
-      <DrawerSelect
-        value={signal.pattern}
-        onChange={(v) => { onChange({ kind: 'graph', pattern: v as GraphPattern }); }}
-        options={['import-cycle', 'public-api-touched', 'public-api-without-test',
-          'orphan-edit', 'blast-radius-spike', 'unknown-region-creep', 'layer-violation']}
-        t={t}
-      />
-    );
-  }
-  if (signal.kind === 'taint') {
-    return (
-      <div className="grid grid-cols-2 gap-2">
-        <DrawerSelect
-          value={signal.source}
-          onChange={(v) => { onChange({ ...signal, source: v as TaintSource }); }}
-          options={['env', 'http', 'user-input', 'config', 'secret']}
-          t={t}
-        />
-        <DrawerSelect
-          value={signal.sink}
-          onChange={(v) => { onChange({ ...signal, sink: v as TaintSink }); }}
-          options={['fs.write', 'exec', 'sql', 'network', 'log']}
-          t={t}
-        />
-      </div>
-    );
-  }
-  if (signal.kind === 'dsl') {
-    return (
-      <DrawerInput
-        value={signal.expr}
-        onChange={(v) => { onChange({ kind: 'dsl', expr: v }); }}
-        placeholder="safety:<40 +publicApi !test"
-        mono
-        t={t}
-      />
-    );
-  }
-  return (
-    <div className="grid grid-cols-2 gap-2">
-      <DrawerSelect
-        value={signal.tool}
-        onChange={(v) => { onChange({ ...signal, tool: v as 'eslint' | 'semgrep' | 'codeql' | 'bandit' | 'ruff' }); }}
-        options={['eslint', 'semgrep', 'codeql', 'bandit', 'ruff']}
-        t={t}
-      />
-      <DrawerInput
-        value={signal.ruleId}
-        onChange={(v) => { onChange({ ...signal, ruleId: v }); }}
-        placeholder="rule id"
-        mono
-        t={t}
-      />
-    </div>
-  );
-}
-
-function defaultSignalFor(kind: RuleSignal['kind']): RuleSignal {
-  switch (kind) {
-    case 'metric':   return { kind: 'metric', field: 'blastRadius', op: '>', value: 25 };
-    case 'graph':    return { kind: 'graph', pattern: 'public-api-without-test' };
-    case 'taint':    return { kind: 'taint', source: 'env', sink: 'fs.write', requireSanitizer: true };
-    case 'dsl':      return { kind: 'dsl', expr: 'safety:<40 +publicApi' };
-    case 'external': return { kind: 'external', tool: 'eslint', ruleId: 'no-eval' };
-  }
 }
 
 function RetroBadge({ label, value, color, t }: { label: string; value: number; color: string; t: V2Theme }) {

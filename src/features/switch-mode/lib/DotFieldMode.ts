@@ -52,6 +52,7 @@ import type {
 import { findMetric } from '@entities/metric';
 import type { FilterSnapshot, ViewMode, ViewModeContext } from '@entities/viz-mode';
 import { C } from '@shared/lib';
+import { disposeMesh, disposeMeshes } from './disposeMeshes';
 
 const UNIFORM_HEIGHT = 0.05;
 const MAX_PILLAR_HEIGHT = 35.0;
@@ -434,7 +435,7 @@ export function createDotFieldMode(): ViewMode {
       const curve = new QuadraticBezierCurve3(start, mid, end);
       const pts = curve.getPoints(LINE_SEGMENTS);
       const line = lineObjects[i];
-      const attr = line.geometry.attributes.position as BufferAttribute;
+      const attr = line.geometry.attributes['position'] as BufferAttribute;
       const arr = attr.array as Float32Array;
       for (let p = 0; p < pts.length; p++) {
         const v = pts[p];
@@ -594,22 +595,12 @@ export function createDotFieldMode(): ViewMode {
 
   function disposeBlastVisuals() {
     if (blastSeedHalo) {
-      scene.remove(blastSeedHalo);
-      blastSeedHalo.geometry.dispose();
-      blastSeedHalo.material.dispose();
+      disposeMesh(scene, blastSeedHalo);
       blastSeedHalo = null;
     }
-    for (const h of blastHopHalos) {
-      scene.remove(h);
-      h.geometry.dispose();
-      h.material.dispose();
-    }
+    disposeMeshes(scene, blastHopHalos);
     blastHopHalos = [];
-    for (const l of blastEdgeLines) {
-      scene.remove(l);
-      l.geometry.dispose();
-      (l.material as Material).dispose();
-    }
+    disposeMeshes(scene, blastEdgeLines);
     blastEdgeLines = [];
   }
 
@@ -684,16 +675,10 @@ export function createDotFieldMode(): ViewMode {
   // ── Path witness visuals ──
   function disposePathVisuals() {
     if (pathLineSegments) {
-      scene.remove(pathLineSegments);
-      pathLineSegments.geometry.dispose();
-      (pathLineSegments.material as Material).dispose();
+      disposeMesh(scene, pathLineSegments);
       pathLineSegments = null;
     }
-    for (const h of pathWaypointHalos) {
-      scene.remove(h);
-      h.geometry.dispose();
-      h.material.dispose();
-    }
+    disposeMeshes(scene, pathWaypointHalos);
     pathWaypointHalos = [];
   }
 
@@ -756,12 +741,13 @@ export function createDotFieldMode(): ViewMode {
   }
 
   // ── Risk lens visuals ──
+  // NOTE: this dot-field implementation paints standalone additive halo+plane
+  // meshes per hit. UniverseMode.applyRiskLensTint takes a different approach —
+  // it recolors the existing per-star color/alpha buffer attributes in place —
+  // so the build logic is NOT shared between the two modes. Only the dispose
+  // bookkeeping below is mechanical (and uses the shared disposeMeshes helper).
   function disposeRiskLensVisuals() {
-    for (const h of riskLensHalos) {
-      scene.remove(h);
-      h.geometry.dispose();
-      h.material.dispose();
-    }
+    disposeMeshes(scene, riskLensHalos);
     riskLensHalos = [];
   }
 
@@ -793,11 +779,7 @@ export function createDotFieldMode(): ViewMode {
 
   // ── Public-API ring visuals ──
   function disposeApiRingVisuals() {
-    for (const r of apiRingMeshes) {
-      scene.remove(r);
-      r.geometry.dispose();
-      r.material.dispose();
-    }
+    disposeMeshes(scene, apiRingMeshes);
     apiRingMeshes = [];
   }
 
@@ -830,17 +812,9 @@ export function createDotFieldMode(): ViewMode {
 
   // ── PR diff visuals ──
   function disposePrDiffVisuals() {
-    for (const c of prChangeHalos) {
-      scene.remove(c.mesh);
-      c.mesh.geometry.dispose();
-      c.mesh.material.dispose();
-    }
+    disposeMeshes(scene, prChangeHalos.map((c) => c.mesh));
     prChangeHalos = [];
-    for (const r of prAffectedHalos) {
-      scene.remove(r);
-      r.geometry.dispose();
-      r.material.dispose();
-    }
+    disposeMeshes(scene, prAffectedHalos);
     prAffectedHalos = [];
   }
 
@@ -888,17 +862,9 @@ export function createDotFieldMode(): ViewMode {
 
   // ── SCC cycle visuals ──
   function disposeCycleVisuals() {
-    for (const l of cycleHulls) {
-      scene.remove(l);
-      l.geometry.dispose();
-      (l.material as Material).dispose();
-    }
+    disposeMeshes(scene, cycleHulls);
     cycleHulls = [];
-    for (const l of cycleEdges) {
-      scene.remove(l);
-      l.geometry.dispose();
-      (l.material as Material).dispose();
-    }
+    disposeMeshes(scene, cycleEdges);
     cycleEdges = [];
     cycleMembership = new Uint8Array(0);
   }

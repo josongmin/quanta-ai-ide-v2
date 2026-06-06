@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { useViewMode, createMode } from '@features/switch-mode';
 import { useTabVisibility } from '@features/workspace-tabs';
 // Deep-import the hooks rather than the slice barrels — those re-export
@@ -157,11 +157,16 @@ export default function Stage() {
         if (r.width > 0 && r.height > 0) instance.onResize(r.width, r.height);
       };
       window.addEventListener('resize', onResize);
-      // Defer the first measurement one frame so the layout has settled,
-      // but track the id so teardown can cancel it on rapid unmount.
-      resizeRafId = requestAnimationFrame(onResize);
       ro = new ResizeObserver(onResize);
       ro.observe(mount);
+      // Measure synchronously now so the renderer always gets real
+      // dimensions, even if the deferred rAF below is cancelled by a rapid
+      // mode toggle before it fires (otherwise dimensions stay stale until
+      // the next native resize). `onResize` guards against zero-size mounts.
+      onResize();
+      // Still defer a second measurement one frame so any post-mount layout
+      // settling is picked up; track the id so teardown can cancel it.
+      resizeRafId = requestAnimationFrame(onResize);
     });
 
     return () => {

@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   ShieldCheck, ShieldAlert, ShieldX, Gavel, FileText,
 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
-import { Portal } from '@shared/ui';
-import { useFilterStore } from '@features/filter-files';
+import { Portal, ModalBackdrop, useDialogA11y } from '@shared/ui';
+import { useFilterStore } from '@entities/filter-state';
 import type { PRDiff } from '@entities/repo';
 import type { evaluateAdmission, RuleSeverity } from '@entities/admission';
 import { useAdmissionStore } from '../../../model/store';
@@ -36,6 +36,15 @@ export function GatePage({
 
   const [overrideTarget, setOverrideTarget] = useState<{ ruleId: string; ruleName: string; severity: RuleSeverity } | null>(null);
   const [overrideReason, setOverrideReason] = useState('');
+
+  // Override modal a11y: ESC closes, Tab cycles within the dialog, autofocus
+  // first field on open, restore focus to the opener on close.
+  const overrideDialogRef = useRef<HTMLDivElement>(null);
+  const closeOverride = useCallback(() => {
+    setOverrideTarget(null);
+    setOverrideReason('');
+  }, []);
+  useDialogA11y(overrideDialogRef, overrideTarget !== null, closeOverride);
 
   const fired = decision.ruleResults.filter((r) => r.status === 'block' || r.status === 'warn');
   const passed = decision.ruleResults.filter((r) => r.status === 'pass');
@@ -281,20 +290,24 @@ export function GatePage({
       {/* Override modal */}
       {overrideTarget && (
         <Portal>
-        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- backdrop click-to-dismiss with paired Escape onKeyDown */}
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Override admission rule"
-          className="fixed inset-0 z-[210] flex items-center justify-center"
-          style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(6px)' }}
-          onClick={() => { setOverrideTarget(null); setOverrideReason(''); }}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') { setOverrideTarget(null); setOverrideReason(''); }
-          }}
-        >
-          <V2Card className="p-6 w-[480px] admv2-rise" >
-            <div role="presentation" onClick={(e) => { e.stopPropagation(); }}>
+        {/* Backdrop — click-to-dismiss; Escape/focus-trap via useDialogA11y. */}
+        <ModalBackdrop
+          onClick={closeOverride}
+          z="z-[210]"
+          alpha={0.65}
+          label="Close"
+          style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+        />
+        <div className="fixed inset-0 z-[211] flex items-center justify-center pointer-events-none">
+          <V2Card className="p-6 w-[480px] admv2-rise pointer-events-auto">
+            <div
+              ref={overrideDialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Override admission rule"
+              tabIndex={-1}
+              className="outline-none"
+            >
               <div className="flex items-center gap-2 mb-4">
                 <Gavel className="w-4 h-4" style={{ color: t.textMuted }} />
                 <h3 className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textHi }}>
@@ -318,7 +331,7 @@ export function GatePage({
               <div className="mt-5 flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => { setOverrideTarget(null); setOverrideReason(''); }}
+                  onClick={closeOverride}
                   className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1.5 rounded-md border transition-colors"
                   style={{ background: 'transparent', borderColor: t.border, color: t.textMuted }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; e.currentTarget.style.color = t.textHi; }}
@@ -339,8 +352,7 @@ export function GatePage({
                       severity: overrideTarget.severity,
                       reason: overrideReason.trim(),
                     });
-                    setOverrideTarget(null);
-                    setOverrideReason('');
+                    closeOverride();
                   }}
                   className="px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] disabled:opacity-30 disabled:cursor-not-allowed"
                   style={{ background: t.textHi, color: t.page }}

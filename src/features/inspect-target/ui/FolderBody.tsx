@@ -5,23 +5,23 @@
 // than repo-wide topology. Self-contained: owns its tab state, its memoized
 // stats, and its tab renderers.
 
-import { memo, useMemo, useState, type ReactNode } from 'react';
+import { memo, useMemo } from 'react';
 import { Activity, Folder, GitBranch, LayoutGrid, Network, ShieldAlert } from 'lucide-react';
 import type { FolderRecord, RepoData } from '@entities/repo';
-import { C, type Tone, languageHue, pct } from '@shared/lib';
+import { type Tone, languageHue, pct } from '@shared/lib';
 import { computeFolderStats } from '@entities/metric';
 import {
-  BarRow, ConfidenceMeter, EmptyHint, FileRow, GlassCard,
+  BarRow, ConfidenceMeter, EmptyHint, FileRow,
   Score, StackedRatioBar, Stat,
 } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
+import { SubCard, TabPanel, type TabDef } from './parts/TabPanel';
 
 type FolderTab = 'overview' | 'activity' | 'risk' | 'deps';
 
 function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDark: boolean }) {
   const folder = repo.foldersByPath.get(path);
   const stats = useMemo(() => folder ? computeFolderStats(repo, folder) : null, [repo, folder]);
-  const [tab, setTab] = useState<FolderTab>('overview');
   const { t } = useTranslation('inspect');
 
   if (!folder || !stats) {
@@ -35,12 +35,7 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
   const riskCritical = stats.vulnerable;
   const riskWarn = stats.cyclic + stats.layerViolations;
 
-  const tabs: {
-    id: FolderTab;
-    label: string;
-    icon: typeof Activity;
-    badges?: { n: number; tone: Tone }[];
-  }[] = [
+  const tabs: TabDef<FolderTab>[] = [
     { id: 'overview', label: t('tab.overview'), icon: LayoutGrid },
     { id: 'activity', label: t('tab.activity'), icon: Activity },
     {
@@ -59,33 +54,15 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
     { id: 'deps', label: t('tab.deps'), icon: Network },
   ];
 
-  // The outer InspectPanel shell is the top card. Header / chips / tab strip
-  // are flush with that shell — same shape as FocusScanPanel — so workspace,
-  // folder, and file selections all read as the same chrome.
   const folderPath = folder.parts.length === 0 ? '/' : '/' + folder.parts.join('/');
   return (
-    <>
-      <div className="-mx-2 px-5 pt-4 pb-0">
-        <div className="flex items-start gap-2 min-w-0">
-          <div className="min-w-0 flex-1">
-            <div
-              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
-              style={{ color: 'var(--fg-subtle)' }}
-            >
-              <Folder className="w-3 h-3" /> {t('header.folder')}
-            </div>
-            <h2 className="font-black text-[13px] truncate tracking-tight mt-1">
-              {folder.name || t('tree.repo')}
-            </h2>
-            <p
-              className="text-[10px] font-mono truncate mt-0.5"
-              style={{ color: 'var(--fg-subtle)' }}
-            >
-              {folderPath}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 mt-2.5 mb-3 flex-wrap">
+    <TabPanel
+      eyebrowIcon={Folder}
+      eyebrowLabel={t('header.folder')}
+      title={folder.name || t('tree.repo')}
+      subtitle={folderPath}
+      chips={
+        <>
           <span
             className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] tabular-nums"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
@@ -98,116 +75,26 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
           >
             {stats.totalLoc.toLocaleString()} {t('stat.loc')}
           </span>
-        </div>
-        <nav
-          className="-mx-5 overflow-x-auto scrollbar-hide border-t"
-          style={{ borderColor: 'var(--border-default)' }}
-        >
-          <div className="flex items-stretch gap-3 px-4 min-w-max">
-            {tabs.map(({ id, label, icon: Icon, badges }) => {
-              const active = tab === id;
-              return (
-                <button
-                  type="button"
-                  key={id}
-                  onClick={() => { setTab(id); }}
-                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] whitespace-nowrap transition-colors"
-                  style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
-                >
-                  <Icon className="w-3 h-3 shrink-0" />
-                  <span>{label}</span>
-                  {badges && badges.length > 0 && (
-                    <span className="ml-0.5 inline-flex items-center gap-0.5">
-                      {badges.map((b, i) => {
-                        const c = b.tone === 'critical' ? C.critical : b.tone === 'warn' ? C.warning : C.ok;
-                        return (
-                          <span
-                            key={i}
-                            className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-black tabular-nums"
-                            style={{ background: `${c}22`, color: c }}
-                          >
-                            {b.n}
-                          </span>
-                        );
-                      })}
-                    </span>
-                  )}
-                  {active && (
-                    <span
-                      className="absolute left-0 right-0 -bottom-px h-[1.5px]"
-                      style={{ background: 'var(--fg-strong)' }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-      </div>
-
-      <div className="text-[11px]">
-        {tab === 'overview' && <FolderOverviewTab stats={stats} folder={folder} isDark={isDark} />}
-        {tab === 'activity' && <FolderActivityTab stats={stats} isDark={isDark} />}
-        {tab === 'risk' && <FolderRiskTab stats={stats} isDark={isDark} />}
-        {tab === 'deps' && <FolderDepsTab stats={stats} isDark={isDark} />}
-      </div>
-
-      <GlassCard
-        tone="inner"
-        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
-        style={{ color: 'var(--fg-subtle)' }}
-      >
-        {folderTabFooter(tab, stats.totalFiles, t)}
-      </GlassCard>
-
-      <div className="h-2" aria-hidden />
-    </>
+        </>
+      }
+      tabs={tabs}
+      initialTab="overview"
+      renderTab={(tab) => (
+        <>
+          {tab === 'overview' && <FolderOverviewTab stats={stats} folder={folder} isDark={isDark} />}
+          {tab === 'activity' && <FolderActivityTab stats={stats} isDark={isDark} />}
+          {tab === 'risk' && <FolderRiskTab stats={stats} isDark={isDark} />}
+          {tab === 'deps' && <FolderDepsTab stats={stats} isDark={isDark} />}
+        </>
+      )}
+      footer={(tab) => folderTabFooter(tab, stats.totalFiles, t)}
+    />
   );
 }
 
 // Memoized for the same reason as WorkspaceBody: stable primitive/store
 // props mean we can short-circuit re-renders triggered by sibling state.
 export default memo(FolderBody);
-
-// Subcard mirrors the FocusScanPanel box style — `rounded-xl border` block on
-// `bg-surface-muted` with the eyebrow living *inside* the card. Keeps the
-// visual grouping while matching file-panel chrome across all three inspect
-// modes (workspace / folder / file).
-function SubCard({
-  title, subtitle, children,
-}: {
-  title: string;
-  subtitle?: string;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className="rounded-xl border px-3 py-2.5"
-      style={{
-        background: 'var(--bg-surface-muted)',
-        borderColor: 'var(--border-default)',
-      }}
-    >
-      <div className="flex items-baseline gap-2">
-        <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
-          style={{ color: 'var(--fg-subtle)' }}
-        >
-          {title}
-        </div>
-        {subtitle && (
-          <div
-            className="text-[9px] font-mono truncate"
-            style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
-          >
-            {subtitle}
-          </div>
-        )}
-      </div>
-      <div className="mt-2 space-y-1">{children}</div>
-    </div>
-  );
-}
 
 function folderTabFooter(tab: FolderTab, files: number, t: (k: string, opts?: Record<string, unknown>) => string): string {
   switch (tab) {

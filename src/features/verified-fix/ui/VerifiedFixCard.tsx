@@ -19,6 +19,7 @@ import {
   ShieldCheck, AlertTriangle, AlertOctagon, FileCode, GitPullRequestArrow,
   Wand2, RotateCcw, Check, Hourglass, X as XIcon, ArrowRight, BadgeAlert,
 } from 'lucide-react';
+import { toneToColors } from '@shared/lib';
 import { useVerifiedFixStore } from '../model/store';
 import type {
   CandidateFix, CounterEvidence, FixCase, ProofObligation, Seed,
@@ -33,16 +34,27 @@ type Props = { caseId: string };
 // the local vfxTokens SSOT — it has no useTheme/useVfx). Forked hex hues
 // map to intent / accent tokens; alpha tints use color-mix so a CSS var
 // can still be lightened to a fill / border.
+//
+// The three severity tones resolve through the shared `toneToColors` SSOT
+// (its `.fg` field is the same `--intent-*-fg` var this card already used,
+// so the rendered color is unchanged). ACCENT/INFO/NEUTRAL stay as local
+// tokens: they are not severity tones (or, for info, map to a different
+// semantic var than `toneToColors('info')` would), so migrating them would
+// alter the rendered hue.
 const ACCENT = 'var(--fg-accent)';            // purple #c2b3e0 / 149,131,184
-const SUCCESS = 'var(--intent-success-fg)';   // green #5fa86c / #9fd0a8
-const DANGER = 'var(--intent-danger-fg)';     // red #c25a55
-const WARN = 'var(--intent-warn-fg)';         // amber #a8893a
+const SUCCESS = toneToColors('ok').fg;        // var(--intent-success-fg)
+const DANGER = toneToColors('critical').fg;   // var(--intent-danger-fg)
+const WARN = toneToColors('warn').fg;         // var(--intent-warn-fg)
 const INFO = 'var(--intent-info-fg)';         // blue #7aa7d4
 const NEUTRAL = 'var(--fg-muted)';            // grey #8b949e
 const mix = (c: string, pct: number) =>
   `color-mix(in srgb, ${c} ${String(pct)}%, transparent)`;
 
 export function VerifiedFixCard({ caseId }: Props) {
+  // DIP: this is the *only* component in the card tree that touches the
+  // store. It resolves the case/seed/selected-candidate once and hands
+  // concrete data + bound callbacks down to the panes, which are pure
+  // presentational components decoupled from the store shape.
   const fixCase = useVerifiedFixStore((s) => s.cases[caseId]);
   const seed = useVerifiedFixStore((s) =>
     fixCase ? s.seeds[fixCase.seedId] : undefined,
@@ -55,6 +67,9 @@ export function VerifiedFixCard({ caseId }: Props) {
     ?? fixCase.candidates[0];
   if (!candidate) return null;
 
+  const onSelectCandidate = (id: string) => { selectCandidate(caseId, id); };
+  const onValidate = () => { startValidation(caseId); };
+
   return (
     <div
       className="rounded-lg border overflow-hidden"
@@ -63,15 +78,20 @@ export function VerifiedFixCard({ caseId }: Props) {
         background: `linear-gradient(180deg, ${mix(ACCENT, 7)} 0%, ${mix(ACCENT, 3)} 100%)`,
       }}
     >
-      <Header fixCase={fixCase} />
-      <RootCausePane seed={seed} fixCase={fixCase} />
-      <CandidatesPane fixCase={fixCase} onSelect={(id) => { selectCandidate(caseId, id); }} />
+      <Header stage={fixCase.loop.currentStage} />
+      <RootCausePane seed={seed} rootCause={fixCase.rootCause} />
+      <CandidatesPane
+        candidates={fixCase.candidates}
+        selectedCandidateId={fixCase.selectedCandidateId}
+        onSelectCandidate={onSelectCandidate}
+      />
       <ProofPane candidate={candidate} validations={fixCase.validations} />
-      <LoopTimelinePane fixCase={fixCase} />
+      <LoopTimelinePane iterations={fixCase.loop.iterations} />
       <DeliveryPane
-        fixCase={fixCase}
+        draft={fixCase.draft}
+        stage={fixCase.loop.currentStage}
         candidate={candidate}
-        onValidate={() => { startValidation(caseId); }}
+        onValidate={onValidate}
       />
     </div>
   );
@@ -79,8 +99,7 @@ export function VerifiedFixCard({ caseId }: Props) {
 
 // ─── header ────────────────────────────────────────────────────────────
 
-function Header({ fixCase }: { fixCase: FixCase }) {
-  const stage = fixCase.loop.currentStage;
+function Header({ stage }: { stage: FixCase['loop']['currentStage'] }) {
   const stageLabel: Record<string, string> = {
     investigate: 'Investigating',
     patch: 'Drafting candidates',
@@ -116,7 +135,7 @@ function Header({ fixCase }: { fixCase: FixCase }) {
 
 // ─── 1. root cause ─────────────────────────────────────────────────────
 
-function RootCausePane({ seed, fixCase }: { seed: Seed; fixCase: FixCase }) {
+function RootCausePane({ seed, rootCause }: { seed: Seed; rootCause: string }) {
   const sevColor = seed.severity === 'crit' ? DANGER
     : seed.severity === 'high' ? WARN
     : seed.severity === 'med'  ? INFO : NEUTRAL;
@@ -145,7 +164,7 @@ function RootCausePane({ seed, fixCase }: { seed: Seed; fixCase: FixCase }) {
             {seed.title}
           </div>
           <div className="text-[11px] text-[var(--fg-muted)] leading-relaxed mt-1">
-            <span className="text-[var(--fg-subtle)] mr-1">root cause —</span>{fixCase.rootCause}
+            <span className="text-[var(--fg-subtle)] mr-1">root cause —</span>{rootCause}
           </div>
           {seed.evidenceRefs.length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5 mt-2">
@@ -171,18 +190,22 @@ function RootCausePane({ seed, fixCase }: { seed: Seed; fixCase: FixCase }) {
 // ─── 2. candidates ─────────────────────────────────────────────────────
 
 function CandidatesPane({
-  fixCase, onSelect,
-}: { fixCase: FixCase; onSelect: (id: string) => void }) {
+  candidates, selectedCandidateId, onSelectCandidate,
+}: {
+  candidates: CandidateFix[];
+  selectedCandidateId: string | null;
+  onSelectCandidate: (id: string) => void;
+}) {
   return (
     <div className="px-4 py-3 border-b border-[var(--border-muted)]">
-      <PaneHeader label={`Candidates · ${String(fixCase.candidates.length)}`} />
+      <PaneHeader label={`Candidates · ${String(candidates.length)}`} />
       <div className="space-y-1.5">
-        {fixCase.candidates.slice(0, 3).map((c) => (
+        {candidates.slice(0, 3).map((c) => (
           <CandidateRow
             key={c.id}
             cand={c}
-            selected={c.id === fixCase.selectedCandidateId}
-            onClick={() => { onSelect(c.id); }}
+            selected={c.id === selectedCandidateId}
+            onClick={() => { onSelectCandidate(c.id); }}
           />
         ))}
       </div>
@@ -309,25 +332,33 @@ function CounterRow({ c }: { c: CounterEvidence }) {
   );
 }
 
-function obligationVisual(s: ProofObligation['status']) {
-  switch (s) {
-    case 'pass':    return { color: SUCCESS, Icon: Check, label: 'pass' };
-    case 'fail':    return { color: DANGER, Icon: XIcon, label: 'fail' };
-    case 'partial': return { color: WARN, Icon: AlertTriangle, label: 'partial' };
-    case 'unknown': return { color: INFO, Icon: AlertTriangle, label: 'unknown' };
-    default:        return { color: 'var(--fg-subtle)', Icon: Hourglass, label: 'pending' };
-  }
+type ObligationVisual = { color: string; Icon: typeof Check; label: string };
+
+// status → { color, icon, label } lookup. Replaces the prior switch so a
+// new status is one table entry (Open/Closed). Colors are unchanged from
+// the switch: pass/fail/partial reuse the severity tones, unknown stays on
+// the info token, pending on `--fg-subtle`.
+const OBLIGATION_VISUAL: Record<ProofObligation['status'], ObligationVisual> = {
+  pass:    { color: SUCCESS, Icon: Check, label: 'pass' },
+  fail:    { color: DANGER, Icon: XIcon, label: 'fail' },
+  partial: { color: WARN, Icon: AlertTriangle, label: 'partial' },
+  unknown: { color: INFO, Icon: AlertTriangle, label: 'unknown' },
+  pending: { color: 'var(--fg-subtle)', Icon: Hourglass, label: 'pending' },
+};
+
+function obligationVisual(s: ProofObligation['status']): ObligationVisual {
+  return OBLIGATION_VISUAL[s] ?? OBLIGATION_VISUAL.pending;
 }
 
 // ─── 4. loop timeline ──────────────────────────────────────────────────
 
-function LoopTimelinePane({ fixCase }: { fixCase: FixCase }) {
-  if (fixCase.loop.iterations.length === 0) return null;
+function LoopTimelinePane({ iterations }: { iterations: FixCase['loop']['iterations'] }) {
+  if (iterations.length === 0) return null;
   return (
     <div className="px-4 py-3 border-b border-[var(--border-muted)]">
       <PaneHeader label="Self-check loop" />
       <ol className="space-y-1">
-        {fixCase.loop.iterations.map((it) => (
+        {iterations.map((it) => (
           <li key={it.index} className="flex items-center gap-2 text-[10px]">
             <span
               className="w-4 h-4 shrink-0 rounded-full flex items-center justify-center text-[8px] font-mono"
@@ -356,14 +387,13 @@ function LoopTimelinePane({ fixCase }: { fixCase: FixCase }) {
 // ─── 5. delivery gate + draft package ─────────────────────────────────
 
 function DeliveryPane({
-  fixCase, candidate, onValidate,
+  draft, stage, candidate, onValidate,
 }: {
-  fixCase: FixCase;
+  draft: FixCase['draft'];
+  stage: FixCase['loop']['currentStage'];
   candidate: CandidateFix;
   onValidate: () => void;
 }) {
-  const draft = fixCase.draft;
-  const stage = fixCase.loop.currentStage;
   const validating = stage === 'validate' || stage === 'critique';
   const canValidate = !validating && stage !== 'done' && stage !== 'aborted';
 

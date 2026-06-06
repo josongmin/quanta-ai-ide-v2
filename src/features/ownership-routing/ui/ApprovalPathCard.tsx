@@ -1,32 +1,11 @@
-import type { CSSProperties, JSX } from 'react';
+import type { JSX } from 'react';
 import type { ApprovalPath, ApprovalStep, Person } from '@entities/ownership';
 import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
+import { createAvatarStyle } from '../lib';
 
 export type ApprovalPathCardProps = {
   path: ApprovalPath | undefined;
   people: Person[];
-}
-
-function avatarStyle(person: Person | undefined, size: number): CSSProperties {
-  if (!person) {
-    return {
-      width: size,
-      height: size,
-      background: 'var(--bg-surface-muted)',
-      border: '1px solid var(--border-muted)',
-      color: 'var(--fg-subtle)',
-    };
-  }
-  const stale = !person.active;
-  const sat = stale ? 14 : 58;
-  const lightDark = stale ? 36 : 44;
-  return {
-    width: size,
-    height: size,
-    background: `hsl(${person.avatarHue} ${sat}% ${lightDark}% / ${stale ? 0.55 : 0.92})`,
-    border: '1px solid var(--border-muted)',
-    color: 'rgba(255,255,255,0.94)',
-  };
 }
 
 function PersonAvatar({ person, size }: { person: Person | undefined; size: number }) {
@@ -35,7 +14,7 @@ function PersonAvatar({ person, size }: { person: Person | undefined; size: numb
   return (
     <span
       className="inline-flex items-center justify-center rounded-full font-bold tracking-[0.04em] shrink-0"
-      style={{ ...avatarStyle(person, size), fontSize }}
+      style={{ ...createAvatarStyle(person, size), fontSize }}
       aria-hidden="true"
     >
       {initials}

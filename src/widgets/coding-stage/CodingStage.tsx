@@ -105,8 +105,6 @@ export default function CodingStage() {
   // When the active project changes, mirror its `defaultModel` into the
   // lifted model state — unless the user has set a per-project override
   // in this session, which wins over the static project default.
-  /* eslint-disable react-hooks/set-state-in-effect --
-   * External-trigger sync: project switch updates a UI-side preference. */
   useEffect(() => {
     if (!active) return;
     const proj = projects.find((p) => p.id === active.projectId);
@@ -115,8 +113,7 @@ export default function CodingStage() {
     if (proj?.defaultModel != null && isModelId(proj.defaultModel)) {
       setModel(proj.defaultModel);
     }
-  }, [active?.projectId, active, projects]);
-  /* eslint-enable react-hooks/set-state-in-effect */
+  }, [active?.projectId, active, projects, setModel]);
 
   // Window event bridge from Blocks (plan auto-advance + inline line edit).
   // Registered before useCommandPalette()'s ⌘K listener to preserve the
@@ -139,7 +136,7 @@ export default function CodingStage() {
       window.removeEventListener('coding:plan-advance', onPlanAdvance);
       window.removeEventListener('coding:line-rewrite', onLineRewrite);
     };
-  }, []);
+  }, [setDraft]);
 
   // Command palette + per-turn context menu open state. The ⌘K
   // capture-phase listener fires from inside this hook.
@@ -246,6 +243,7 @@ export default function CodingStage() {
   }, [
     draft, active, activeProject, softCapOverridden, cost.usd, model,
     sideBySideModel, appendTurns, pushPromptHistory, runSyntheticAgent,
+    setBudgetChallenge, setDraft,
   ]);
 
   const startNewTask = useCallback((projectId?: string) => {
@@ -265,7 +263,7 @@ export default function CodingStage() {
     setTasks((cur) => [task, ...cur]);
     setActiveId(id);
     setDraft('');
-  }, [active?.projectId, projects, t]);
+  }, [active?.projectId, projects, t, setActiveId, setDraft, setTasks]);
 
   // Demo: "create project" prepends a new project with rotated accent
   // colour. No persistence; a real impl would prompt for repo URL.
@@ -283,7 +281,7 @@ export default function CodingStage() {
     };
     setProjects((cur) => [project, ...cur]);
     startNewTask(id);
-  }, [projects.length, startNewTask]);
+  }, [projects.length, startNewTask, setProjects]);
 
   // ⌘N → new task in current project
   useEffect(() => {
@@ -316,22 +314,22 @@ export default function CodingStage() {
   const handleReact = useCallback((turnId: string, kind: ReactionKind) => {
     if (activeId_ != null) toggleReaction(activeId_, turnId, kind);
   }, [activeId_, toggleReaction]);
-  const handleJumpTask = useCallback((id: string) => { setActiveId(id); }, []);
-  const handleInsertSlash = useCallback((cmd: string) => { setDraft(`${cmd} `); }, []);
+  const handleJumpTask = useCallback((id: string) => { setActiveId(id); }, [setActiveId]);
+  const handleInsertSlash = useCallback((cmd: string) => { setDraft(`${cmd} `); }, [setDraft]);
   const handleTaskRailWidthChange = useCallback(() => { /* width control wiring pending */ }, []);
-  const handleBudgetStop = useCallback(() => { setBudgetChallenge(null); }, []);
+  const handleBudgetStop = useCallback(() => { setBudgetChallenge(null); }, [setBudgetChallenge]);
   const handleBudgetAutoDowngrade = useCallback(() => {
     if (budgetChallenge == null) return;
     setModel(budgetChallenge.downgrade);
     setBudgetChallenge(null);
     requestAnimationFrame(() => { onSubmitComposer(); });
-  }, [budgetChallenge, onSubmitComposer]);
+  }, [budgetChallenge, onSubmitComposer, setBudgetChallenge, setModel]);
   const handleBudgetOverride = useCallback(() => {
     if (activeId_ == null) return;
     setSoftCapOverridden((cur) => ({ ...cur, [activeId_]: true }));
     setBudgetChallenge(null);
     requestAnimationFrame(() => { onSubmitComposer(); });
-  }, [activeId_, onSubmitComposer]);
+  }, [activeId_, onSubmitComposer, setBudgetChallenge, setSoftCapOverridden]);
 
   // Build palette actions. Memoized so a re-render caused by an
   // unrelated state change doesn't rebuild the action array and force
@@ -351,8 +349,8 @@ export default function CodingStage() {
     { id: 'modelHaiku',  label: t('palette.actions.switchModelFast'),     keywords: ['haiku'],  onRun: () => { setModel('claude-haiku-4-5'); } },
     { id: 'openCatalog', label: t('palette.actions.openCatalog'),
       keywords: ['catalog', '카탈로그', 'saas', 'pages', 'index', 'directory', 'scaffold'],
-      onRun: () => { void navigate({ to: '/catalog' as never }); } },
-  ], [t, startNewTask, startNewProject, active, applyInverseOf, navigate]);
+      onRun: () => { void navigate({ to: '/catalog' }); } },
+  ], [t, startNewTask, startNewProject, active, applyInverseOf, navigate, setModel]);
 
   // Turn-menu items: only built when the menu is open, but the builder
   // gets fresh closures anyway — fine because TurnContextMenu only
@@ -363,7 +361,7 @@ export default function CodingStage() {
   const handleTurnMenuOpenInNew = useCallback((text: string) => {
     if (activeProjectId_ != null) startNewTask(activeProjectId_);
     setDraft(text);
-  }, [activeProjectId_, startNewTask]);
+  }, [activeProjectId_, startNewTask, setDraft]);
 
   if (!active || !activeProject) return null;
 
@@ -386,7 +384,6 @@ export default function CodingStage() {
         onSelect={setActiveId}
         onNewTask={startNewTask}
         onNewProject={startNewProject}
-        isDark={isDark}
         t={t}
         width={284}
         onWidthChange={handleTaskRailWidthChange}

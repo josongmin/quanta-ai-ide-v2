@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button } from '@shared/ui/forms';
+import { ModalBackdrop } from '@shared/ui';
 
 type ColorChoice = {
   id: string;
@@ -377,7 +378,7 @@ function ConfirmDelete({
 }: { label: Label; onCancel: () => void; onConfirm: () => void }) {
   return (
     <>
-      <button type="button" aria-label="Dismiss" className="fixed inset-0 z-40 border-0 p-0 cursor-default" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onCancel} />
+      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[420px] rounded-lg overflow-hidden"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}

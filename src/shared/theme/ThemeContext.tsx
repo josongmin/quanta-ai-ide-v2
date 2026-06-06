@@ -3,8 +3,8 @@ import {
 } from 'react';
 
 
-type Theme = 'dark' | 'light';
-type ThemeCtx = { theme: Theme; isDark: boolean; toggle: () => void };
+export type Theme = 'dark' | 'light';
+type ThemeCtx = { theme: Theme; isDark: boolean; toggle: () => void; setTheme: (theme: Theme) => void };
 
 const Ctx = createContext<ThemeCtx | null>(null);
 
@@ -63,11 +63,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
   }, []);
 
+  const setThemeExplicit = useCallback((next: Theme) => {
+    setTheme(next);
+  }, []);
+
   const value = useMemo<ThemeCtx>(() => ({
     theme,
     isDark: theme === 'dark',
     toggle,
-  }), [theme, toggle]);
+    setTheme: setThemeExplicit,
+  }), [theme, toggle, setThemeExplicit]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

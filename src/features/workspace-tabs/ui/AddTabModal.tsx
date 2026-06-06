@@ -3,11 +3,8 @@ import { ArrowRight, FolderClosed, Search } from 'lucide-react';
 import { Modal } from '@shared/ui';
 import { useWorkspaceTabsStore } from '../model/store';
 import { useNavigateToTab } from './WorkspaceTabsHost';
-import {
-  TAB_REGISTRY,
-  TAB_KINDS_ORDERED,
-  type TabKind,
-} from '@app/router/workspaceTabsRegistry';
+import { TAB_KINDS_ORDERED, type TabKind } from '@shared/config/workspaceTabs';
+import { useWorkspaceTabsRegistry } from '../model/RegistryContext';
 
 type Props = {
   open: boolean;
@@ -96,6 +93,7 @@ const HERO_COPY: Partial<Record<TabKind, { title: string; sub: string }>> = {
 // then a "more capabilities" row, then a recent repos list. Compact: all
 // three sections live inside one ~720px dialog.
 export default function AddTabModal({ open, onClose }: Props) {
+  const tabRegistry = useWorkspaceTabsRegistry();
   const openTab = useWorkspaceTabsStore((s) => s.open);
   const navigateToTab = useNavigateToTab();
   const [query, setQuery] = useState('');
@@ -164,7 +162,7 @@ export default function AddTabModal({ open, onClose }: Props) {
         {/* Hero tiles */}
         <div className="grid grid-cols-3 gap-2.5 px-6 pb-5">
           {HERO_KINDS.map((kind) => (
-            <HeroTile key={kind} kind={kind} onPick={handlePick} />
+            <HeroTile key={kind} kind={kind} onPick={handlePick} tabRegistry={tabRegistry} />
           ))}
         </div>
 
@@ -181,7 +179,7 @@ export default function AddTabModal({ open, onClose }: Props) {
           </div>
           <div className="flex-1 flex flex-wrap gap-x-4 gap-y-1.5">
             {moreKinds.map((kind) => {
-              const def = TAB_REGISTRY[kind];
+              const def = tabRegistry[kind];
               return (
                 <button
                   key={kind}
@@ -256,8 +254,16 @@ export default function AddTabModal({ open, onClose }: Props) {
   );
 }
 
-function HeroTile({ kind, onPick }: { kind: TabKind; onPick: (k: TabKind) => void }) {
-  const def = TAB_REGISTRY[kind];
+function HeroTile({
+  kind,
+  onPick,
+  tabRegistry,
+}: {
+  kind: TabKind;
+  onPick: (k: TabKind) => void;
+  tabRegistry: ReturnType<typeof useWorkspaceTabsRegistry>;
+}) {
+  const def = tabRegistry[kind];
   const copy = HERO_COPY[kind] ?? { title: def.label, sub: def.description };
   return (
     <button

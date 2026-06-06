@@ -13,9 +13,10 @@ import {
 } from '@tanstack/react-router';
 
 import { buildRepo } from '@entities/repo';
-import { FilterProvider } from '@features/filter-files';
+import { FilterProvider } from '@entities/filter-state';
 import { AppShell } from '@widgets/app-shell';
 import { ErrorBoundary } from '@app/providers';
+import { isChromeless } from './routeChrome';
 
 // Tab-kind routes are now rendered by WorkspaceTabsHost — the host keeps
 // every open tab mounted in parallel and only paints the active one. The
@@ -116,40 +117,16 @@ const OrgUsagePage            = lazy(() => import('@widgets/org-stage').then((m)
 
 const rootRoute = createRootRoute({
   component: function RootLayout() {
-    // Auth pages render full-bleed, without the AppShell chrome (header,
-    // GNB, modals). We branch here so the auth stage owns the whole
-    // viewport — same pattern Linear / Vercel use for /login.
+    // Auth, onboarding, public/marketing/legal, and the super-admin console
+    // render full-bleed, without the AppShell chrome (header, GNB, modals).
+    // We branch here so each stage owns the whole viewport — same pattern
+    // Linear / Vercel use for /login. The pathname rule set lives in
+    // routeChrome.ts so it stays testable and declarative.
     const pathname = useRouterState({ select: (s) => s.location.pathname });
-    // Both /auth/* and /onboarding render full-bleed without GNB chrome.
-    const isAuth = pathname.startsWith('/auth') || pathname.startsWith('/onboarding');
-    // Public/marketing/legal pages and the super-admin internal console all
-    // render full-bleed without the AppShell chrome — each owns its own
-    // shell (PublicShell / AdminShell).
-    const isPublic =
-      pathname === '/pricing'
-      || pathname === '/changelog'
-      || pathname === '/help'
-      || pathname === '/status'
-      || pathname === '/integrations'
-      || pathname.startsWith('/integrations/')
-      || pathname === '/trust'
-      || pathname === '/security'
-      || pathname === '/support'
-      || pathname === '/contact-sales'
-      || pathname === '/feedback'
-      || pathname === '/whats-new'
-      || pathname === '/roadmap'
-      || pathname === '/accessibility'
-      || pathname === '/maintenance'
-      || pathname === '/offline'
-      || pathname === '/_errors/404'
-      || pathname === '/_errors/500'
-      || pathname.startsWith('/legal/')
-      || pathname.startsWith('/_admin');
 
     return (
       <ErrorBoundary label="App">
-        {isAuth || isPublic ? (
+        {isChromeless(pathname) ? (
           <Outlet />
         ) : (
           <FilterProviderRoot>
@@ -244,11 +221,19 @@ const billingRoute = createRoute({
   },
 });
 
-function makeOrg(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
+// Every page route shares the same shape: a lazy component wrapped in a
+// null-fallback Suspense, parented to the root route. One factory covers all
+// of them (org / ws / me / auth / public) — the only thing that ever varied
+// was the wrapper's display name, which has no runtime effect.
+function makeLazyRoute(
+  parentRoute: typeof rootRoute,
+  path: string,
+  Component: React.LazyExoticComponent<React.ComponentType>,
+) {
   return createRoute({
-    getParentRoute: () => rootRoute,
+    getParentRoute: () => parentRoute,
     path,
-    component: function OrgRouteComponent() {
+    component: function LazyRouteComponent() {
       return (
         <Suspense fallback={null}>
           <Component />
@@ -257,6 +242,8 @@ function makeOrg(path: string, Component: React.LazyExoticComponent<React.Compon
     },
   });
 }
+const makeOrg = (path: string, Component: React.LazyExoticComponent<React.ComponentType>) =>
+  makeLazyRoute(rootRoute, path, Component);
 const orgGeneralRoute      = makeOrg('/org/$org/general',      OrgGeneralPage);
 const orgMembersRoute      = makeOrg('/org/$org/members',      OrgMembersPage);
 const orgTeamsRoute        = makeOrg('/org/$org/teams',        OrgTeamsPage);
@@ -273,19 +260,8 @@ const orgAuditRoute        = makeOrg('/org/$org/audit',          OrgAuditLogPage
 const orgResidencyRoute    = makeOrg('/org/$org/data-residency', OrgDataResidencyPage);
 const orgRetentionRoute    = makeOrg('/org/$org/retention',      OrgRetentionPage);
 
-function makeWs(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
-  return createRoute({
-    getParentRoute: () => rootRoute,
-    path,
-    component: function WsRouteComponent() {
-      return (
-        <Suspense fallback={null}>
-          <Component />
-        </Suspense>
-      );
-    },
-  });
-}
+const makeWs = (path: string, Component: React.LazyExoticComponent<React.ComponentType>) =>
+  makeLazyRoute(rootRoute, path, Component);
 const wsGeneralRoute      = makeWs('/$org/$ws/settings/general',      WsGeneralPage);
 const wsSourceRoute       = makeWs('/$org/$ws/settings/source',       WsSourcePage);
 const wsOwnershipRoute    = makeWs('/$org/$ws/settings/ownership',    WsOwnershipPage);
@@ -308,19 +284,8 @@ const catalogRoute = createRoute({
 // Personal account pages (/me/*). These render INSIDE the AppShell chrome
 // (the GNB tabs stay visible). Each page mounts its own MeShell which adds
 // the left-side settings sidebar.
-function makeMe(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
-  return createRoute({
-    getParentRoute: () => rootRoute,
-    path,
-    component: function MeRouteComponent() {
-      return (
-        <Suspense fallback={null}>
-          <Component />
-        </Suspense>
-      );
-    },
-  });
-}
+const makeMe = (path: string, Component: React.LazyExoticComponent<React.ComponentType>) =>
+  makeLazyRoute(rootRoute, path, Component);
 const meProfileRoute        = makeMe('/me/profile',        ProfilePage);
 const meAccountRoute        = makeMe('/me/account',        AccountPage);
 const meSecurityRoute       = makeMe('/me/security',       SecurityPage);
@@ -342,19 +307,8 @@ const meInboxRoute = createRoute({
 
 // Auth surfaces (sign-in flow). Mount under /auth/* so the root layout
 // can drop the AppShell chrome for the entire branch.
-function makeAuth(path: string, Component: React.LazyExoticComponent<React.ComponentType>) {
-  return createRoute({
-    getParentRoute: () => rootRoute,
-    path,
-    component: function AuthRouteComponent() {
-      return (
-        <Suspense fallback={null}>
-          <Component />
-        </Suspense>
-      );
-    },
-  });
-}
+const makeAuth = (path: string, Component: React.LazyExoticComponent<React.ComponentType>) =>
+  makeLazyRoute(rootRoute, path, Component);
 const onboardingRoute   = makeAuth('/onboarding',           OnboardingStage);
 const authLoginRoute    = makeAuth('/auth/login',           SignInPage);
 const authSignupRoute   = makeAuth('/auth/signup',          SignUpPage);

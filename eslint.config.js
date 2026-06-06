@@ -188,19 +188,6 @@ export default tseslint.config(
     },
   },
 
-  // workspace-tabs feature — exceptional dependency on app-layer route
-  // registry. The registry composes stage widgets across many slices
-  // (cross-slice glue), which is an app-layer concern. The workspace-tabs
-  // feature is the UI that reflects that registry as tabs, so it
-  // legitimately reads from app. Documented FSD-violation override; do
-  // not copy this pattern to new features.
-  {
-    files: ['src/features/workspace-tabs/**/*.{ts,tsx}'],
-    rules: {
-      'boundaries/dependencies': 'off',
-    },
-  },
-
   // Tests — relax
   {
     files: ['**/*.test.ts', '**/*.test.tsx', '**/__tests__/**'],

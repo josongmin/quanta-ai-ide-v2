@@ -36,10 +36,14 @@ function ringForHop(hop: number): ImpactRing {
   return 'L3';
 }
 
+const CONFIDENCE_BY_RING: Record<ImpactRing, ConfidenceState> = {
+  L1: 'exact',
+  L2: 'overapprox',
+  L3: 'unknown',
+};
+
 function confidenceForRing(ring: ImpactRing): ConfidenceState {
-  if (ring === 'L1') return 'exact';
-  if (ring === 'L2') return 'overapprox';
-  return 'unknown';
+  return CONFIDENCE_BY_RING[ring];
 }
 
 // Heuristic layer assignment from the id alone — production wires this to a

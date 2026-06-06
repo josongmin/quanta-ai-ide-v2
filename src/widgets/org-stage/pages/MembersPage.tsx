@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Button } from '@shared/ui/forms';
+import { ModalBackdrop } from '@shared/ui';
 
 type Role = 'owner' | 'admin' | 'member' | 'billing' | 'guest';
 type Status = 'active' | 'invited' | 'deactivated';
@@ -593,13 +594,7 @@ function InviteModal({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      <button
-        type="button"
-        aria-label="Close dialog"
-        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
-        style={{ background: 'rgba(0,0,0,0.45)' }}
-        onClick={onClose}
-      />
+      <ModalBackdrop onClick={onClose} z="z-40" alpha={0.45} label="Close dialog" />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] rounded-lg overflow-hidden"
         style={{
@@ -762,13 +757,7 @@ function ConfirmRemove({
 }: { member: Member; onCancel: () => void; onConfirm: () => void }) {
   return (
     <>
-      <button
-        type="button"
-        aria-label="Close dialog"
-        className="fixed inset-0 z-40 bg-transparent border-0 p-0 cursor-default"
-        style={{ background: 'rgba(0,0,0,0.45)' }}
-        onClick={onCancel}
-      />
+      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} label="Close dialog" />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[420px] rounded-lg overflow-hidden"
         style={{

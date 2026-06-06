@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTheme } from '@shared/theme';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { simulateBranchDiff } from '@entities/repo';
 import { previewRule, evaluateAdmission } from '@entities/admission';
 import { usePrPreview } from '@features/pr-preview';

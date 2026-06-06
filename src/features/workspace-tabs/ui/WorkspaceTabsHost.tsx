@@ -1,13 +1,10 @@
 import { Suspense, memo, useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { useShallow } from 'zustand/react/shallow';
-import { ErrorBoundary } from '@app/providers';
+import { ErrorBoundary } from '@shared/ui';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
-import {
-  TAB_REGISTRY,
-  resolveTabKindFromPath,
-  type TabKind,
-} from '@app/router/workspaceTabsRegistry';
+import { resolveTabKindFromPath, type TabKind } from '@shared/config/workspaceTabs';
+import { useWorkspaceTabsRegistry, type TabKindDef } from '../model/RegistryContext';
 import { TabVisibilityProvider } from './TabVisibilityContext';
 
 // Cap on simultaneously-mounted tab panels. Each WebGL-bearing tab
@@ -43,6 +40,7 @@ const MAX_MOUNTED_TABS = 6;
 //      heavy descendants (WebGL rAF loops, polling intervals) can pause
 //      when hidden behind `display: none`.
 export default function WorkspaceTabsHost() {
+  const tabRegistry = useWorkspaceTabsRegistry();
   // One shallow-equal subscription rather than two separate ones — the
   // host always needs both fields together, so reading them in a single
   // selector cuts per-update comparator work in half. The shallow
@@ -117,6 +115,7 @@ export default function WorkspaceTabsHost() {
             key={tab.id}
             tab={tab}
             visible={tab.id === activeId}
+            tabRegistry={tabRegistry}
           />
         );
       })}
@@ -130,11 +129,13 @@ export default function WorkspaceTabsHost() {
 const TabPanel = memo(function TabPanel({
   tab,
   visible,
+  tabRegistry,
 }: {
   tab: WorkspaceTab;
   visible: boolean;
+  tabRegistry: Record<TabKind, TabKindDef>;
 }) {
-  const def = TAB_REGISTRY[tab.kind];
+  const def = tabRegistry[tab.kind];
   const Component = def.Component;
 
   // `display: none` keeps subtree state alive (state, layout effects,
@@ -206,9 +207,10 @@ function useTabUrlSync(pathname: string, search: string) {
 // it into useMemo/useCallback dependency arrays get a stable identity.
 export function useNavigateToTab() {
   const navigate = useNavigate();
+  const tabRegistry = useWorkspaceTabsRegistry();
   return useCallback(
     (kind: TabKind, tabId?: string) => {
-      const path = TAB_REGISTRY[kind].path;
+      const path = tabRegistry[kind].path;
       // `replace: true` keeps tab switches off the browser history
       // stack. Linear behaves the same way: back/forward moves between
       // sessions, not between tabs.
@@ -223,6 +225,6 @@ export function useNavigateToTab() {
         });
       }
     },
-    [navigate],
+    [navigate, tabRegistry],
   );
 }

@@ -33,8 +33,12 @@ export function inferEdgeConfidence(
   return RANK_TO_STATE[min] ?? 'unknown';
 }
 
+const STYLE_BY_CONFIDENCE: Record<ConfidenceState, ImpactEdge['style']> = {
+  exact: 'solid',
+  overapprox: 'dashed',
+  unknown: 'faded',
+};
+
 export function edgeStyle(conf: ConfidenceState): ImpactEdge['style'] {
-  if (conf === 'exact') return 'solid';
-  if (conf === 'overapprox') return 'dashed';
-  return 'faded';
+  return STYLE_BY_CONFIDENCE[conf];
 }

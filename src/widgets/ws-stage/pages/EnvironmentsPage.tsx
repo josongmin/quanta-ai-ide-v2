@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button, Toggle, Field } from '@shared/ui/forms';
+import { ModalBackdrop } from '@shared/ui';
 
 type Tier = 'production' | 'staging' | 'dev';
 type Region = 'us' | 'eu' | 'apac';
@@ -313,7 +314,7 @@ function EnvDrawer({
 
   return (
     <>
-      <button type="button" aria-label="Dismiss" className="fixed inset-0 z-40 border-0 p-0 cursor-default" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onClose} />
+      <ModalBackdrop onClick={onClose} z="z-40" alpha={0.45} />
       <aside
         className="fixed right-0 top-0 bottom-0 z-50 w-[460px] flex flex-col"
         style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
@@ -481,7 +482,7 @@ function CreateEnvModal({
 
   return (
     <>
-      <button type="button" aria-label="Dismiss" className="fixed inset-0 z-40 border-0 p-0 cursor-default" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onCancel} />
+      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
       <div
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[460px] rounded-lg overflow-hidden"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}

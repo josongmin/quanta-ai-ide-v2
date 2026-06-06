@@ -73,7 +73,6 @@ export default function IntelligenceLayout() {
         <FilterBarHost
           width={leftPanelWidth}
           onWidthChange={setLeftPanelWidth}
-          isDark={isDark}
         />
       </div>
 

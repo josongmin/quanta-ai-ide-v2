@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from '@shared/i18n';
-import { useFilterStore } from '@features/filter-files';
+import { useFilterStore } from '@entities/filter-state';
 import { useTabVisibility } from '@features/workspace-tabs';
 import {
   useActivityStore, pickHue,

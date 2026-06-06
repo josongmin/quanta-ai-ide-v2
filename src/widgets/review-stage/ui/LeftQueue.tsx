@@ -35,7 +35,7 @@
 // Layout: vertical column, header → scope → group list → footer hint.
 // ─────────────────────────────────────────────────────────────────────────
 
-import { useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type DragEvent } from 'react';
 import {
   computePrRisk, engineFindings, engineSummary, summariseChecks,
   type PullRequest,
@@ -161,19 +161,12 @@ export default function LeftQueue({
   // and invalidated only when repo or viewerLogin change. Pin toggles,
   // collapse toggles, query edits, and drag state never re-run the
   // computations — only the cheap group/sort step downstream re-runs.
-  const annCacheRef = useRef<{
-    repo: RepoData | null;
-    viewerLogin: string;
-    map: WeakMap<PullRequest, Annotated>;
-  }>({ repo: null, viewerLogin: '', map: new WeakMap() });
-  if (
-    annCacheRef.current.repo !== repo
-    || annCacheRef.current.viewerLogin !== viewerLogin
-  ) {
-    annCacheRef.current = { repo, viewerLogin, map: new WeakMap() };
-  }
-  const annotate = (p: PullRequest): Annotated => {
-    const cached = annCacheRef.current.map.get(p);
+  const annotationCache = useMemo(
+    () => ({ repo, viewerLogin, map: new WeakMap<PullRequest, Annotated>() }),
+    [repo, viewerLogin],
+  );
+  const annotate = useCallback((p: PullRequest): Annotated => {
+    const cached = annotationCache.map.get(p);
     if (cached !== undefined) return cached;
     const myState = p.reviewers.find((r) => r.login === viewerLogin)?.state ?? null;
     const engine = engineSummary(engineFindings(p, repo));
@@ -190,9 +183,9 @@ export default function LeftQueue({
       reviewerCount: p.reviewers.length,
       tier: triageTier(p, myState, engine, ci, needsReReview),
     };
-    annCacheRef.current.map.set(p, ann);
+    annotationCache.map.set(p, ann);
     return ann;
-  };
+  }, [annotationCache, repo, viewerLogin]);
 
   // Risk-annotated + grouped by repo. Within each group, *pinned*
   // PRs float to the top (ordinal-sorted), then risk tier → updatedAt.
@@ -244,10 +237,7 @@ export default function LeftQueue({
       return a.repo.localeCompare(b.repo);
     });
     return list;
-    // annotate is a stable closure over a ref-backed cache; its inputs
-    // (repo, viewerLogin) are already in deps via cache invalidation.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filtered, repo, pinMap, viewerLogin]);
+  }, [filtered, pinMap, annotate]);
 
   // Counters for the project header — open / attention / critical
   // across the visible (non-archived) prs. Reuses the per-PR annotation
@@ -266,11 +256,7 @@ export default function LeftQueue({
       if (ann.ci.required.pending > 0) backgrounded += 1;
     }
     return { open, attention, critical, backgrounded };
-    // annotate is a stable closure over a ref-backed cache; it
-    // intentionally isn't in deps. Cache invalidation is keyed on
-    // repo + viewerLogin checked at the top of the render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prs, repo, viewerLogin]);
+  }, [prs, annotate]);
 
   const totalShown = filtered.length;
   const togglePinPr = (n: number): void => {

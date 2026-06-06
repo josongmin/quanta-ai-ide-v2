@@ -2,7 +2,7 @@
 // sits inside one large GlassCard shell, with the detailed sections rendered
 // as nested cards inside it.
 
-import { useFilterRepo } from '@features/filter-files';
+import { useFilterRepo } from '@entities/filter-state';
 import { GlassCard } from '@shared/ui';
 import WorkspaceBody from './WorkspaceBody';
 import FolderBody from './FolderBody';

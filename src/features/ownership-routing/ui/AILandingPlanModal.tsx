@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties, JSX } from 'react';
+import type { JSX } from 'react';
 import { Modal, GlassCard, EmptyHint } from '@shared/ui';
 import {
   findPerson,
@@ -11,6 +11,7 @@ import {
   type StackStep,
   type StackStepKind,
 } from '@entities/ownership';
+import { createAvatarStyle, riskTone } from '../lib';
 
 // AILandingPlanModal — Phase 2 manual-trigger headline. Cinematic reveal of
 // the AI's landing plan: rationale → strategy → steps → footer. Pure
@@ -54,43 +55,11 @@ const WHY_REVIEWER_BY_KIND: Record<StackStepKind, string> = {
   gate: 'platform reviewer holds canary keys and rollout dashboards',
 };
 
-function riskTone(risk: RiskBadge): { fg: string; bg: string; label: string } {
-  if (risk === 'low') {
-    return { fg: 'var(--intent-success-fg)', bg: 'var(--intent-success-bg)', label: 'LOW RISK' };
-  }
-  if (risk === 'medium') {
-    return { fg: 'var(--intent-warn-fg)', bg: 'var(--intent-warn-bg)', label: 'MED RISK' };
-  }
-  return { fg: 'var(--intent-danger-fg)', bg: 'var(--intent-danger-bg)', label: 'HIGH RISK' };
-}
-
-function avatarStyle(person: Person | undefined, size: number): CSSProperties {
-  if (!person) {
-    return {
-      width: size,
-      height: size,
-      background: 'var(--bg-surface-muted)',
-      border: '1px solid var(--border-muted)',
-      color: 'var(--fg-subtle)',
-    };
-  }
-  const stale = !person.active;
-  const sat = stale ? 14 : 58;
-  const ld = stale ? 36 : 44;
-  return {
-    width: size,
-    height: size,
-    background: `hsl(${person.avatarHue} ${sat}% ${ld}% / ${stale ? 0.55 : 0.92})`,
-    border: '1px solid var(--border-muted)',
-    color: 'rgba(255,255,255,0.94)',
-  };
-}
-
 function PersonAvatar({ person, size }: { person: Person | undefined; size: number }) {
   return (
     <span
       className="inline-flex items-center justify-center rounded-full font-bold tracking-[0.04em] shrink-0"
-      style={{ ...avatarStyle(person, size), fontSize: Math.max(8, Math.round(size * 0.42)) }}
+      style={{ ...createAvatarStyle(person, size), fontSize: Math.max(8, Math.round(size * 0.42)) }}
       aria-hidden="true"
     >
       {person?.initials ?? '??'}

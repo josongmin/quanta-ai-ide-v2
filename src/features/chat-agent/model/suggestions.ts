@@ -6,7 +6,7 @@
 // it lets the panel stay in charge of when to fire it.
 
 import { useCallback } from 'react';
-import { useFilter } from '@features/filter-files';
+import { useFilter } from '@entities/filter-state';
 import { useOverlay } from '@features/apply-overlay';
 import { useStack } from '@features/inspect-target';
 
