@@ -1,55 +1,12 @@
 import { useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import {
-  Search, Filter, Sparkles, ShieldCheck, Star, ArrowUpRight, CheckCircle2,
-  MessageSquare, GitBranch, BarChart3, Bell, Briefcase, Bot, Code2, Lock,
-} from 'lucide-react';
+import { Search, Filter, Sparkles, ArrowUpRight } from 'lucide-react';
 import { PublicShell , HeroBackdrop, Eyebrow, HeadlineGradient, SeamDivider } from '@shared/ui/marketing';
-import { formatNumber } from '@shared/i18n';
-
-type Category =
-  | 'all' | 'chat' | 'ticketing' | 'observability' | 'identity'
-  | 'devtools' | 'analytics' | 'ai';
-
-type Integration = {
-  slug: string;
-  name: string;
-  vendor: string;
-  category: Exclude<Category, 'all'>;
-  blurb: string;
-  installs: number;
-  rating: number;
-  verified: boolean;
-  featured?: boolean;
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
-  tone: { from: string; to: string };
-};
-
-const CATEGORIES: { id: Category; label: string }[] = [
-  { id: 'all',           label: 'All' },
-  { id: 'chat',          label: 'Chat' },
-  { id: 'ticketing',     label: 'Ticketing' },
-  { id: 'observability', label: 'Observability' },
-  { id: 'identity',      label: 'Identity' },
-  { id: 'devtools',      label: 'Dev tools' },
-  { id: 'analytics',     label: 'Analytics' },
-  { id: 'ai',            label: 'AI' },
-];
-
-const INTEGRATIONS: Integration[] = [
-  { slug: 'slack',     name: 'Slack',      vendor: 'Slack',      category: 'chat',           blurb: 'Channel routing, threaded alerts, and slash commands.',     installs: 12480, rating: 4.8, verified: true, featured: true, icon: MessageSquare, tone: { from: 'var(--fg-accent)', to: 'var(--fg-link)' } },
-  { slug: 'linear',    name: 'Linear',     vendor: 'Linear',     category: 'ticketing',      blurb: 'Sync admission failures and fix PRs to Linear issues.',     installs: 6420,  rating: 4.9, verified: true, featured: true, icon: Briefcase, tone: { from: 'var(--fg-link)', to: 'var(--intent-info-fg)' } },
-  { slug: 'jira',      name: 'Jira',       vendor: 'Atlassian',  category: 'ticketing',      blurb: 'Bi-directional issue sync. Auto-create from agent runs.',  installs: 4810,  rating: 4.5, verified: true, icon: Briefcase, tone: { from: 'var(--intent-info-fg)', to: 'var(--fg-accent)' } },
-  { slug: 'datadog',   name: 'Datadog',    vendor: 'Datadog',    category: 'observability',  blurb: 'Push metrics and admission events to a Datadog dashboard.', installs: 3210,  rating: 4.6, verified: true, icon: BarChart3, tone: { from: 'var(--intent-warn-fg)', to: 'var(--intent-danger-fg)' } },
-  { slug: 'pagerduty', name: 'PagerDuty',  vendor: 'PagerDuty',  category: 'observability',  blurb: 'Page oncall on agent failures or admission outages.',       installs: 2840,  rating: 4.7, verified: true, icon: Bell, tone: { from: 'var(--intent-success-fg)', to: 'var(--fg-accent)' } },
-  { slug: 'okta',      name: 'Okta',       vendor: 'Okta',       category: 'identity',       blurb: 'SAML SSO + SCIM provisioning. Enterprise plan.',            installs: 1820,  rating: 4.8, verified: true, icon: Lock, tone: { from: 'var(--intent-info-fg)', to: 'var(--fg-link)' } },
-  { slug: 'github',    name: 'GitHub',     vendor: 'GitHub',     category: 'devtools',       blurb: 'Repo connection, status checks, PR comments.',              installs: 18900, rating: 4.9, verified: true, featured: true, icon: GitBranch, tone: { from: 'var(--fg-strong)', to: 'var(--fg-accent)' } },
-  { slug: 'gitlab',    name: 'GitLab',     vendor: 'GitLab',     category: 'devtools',       blurb: 'MR pipelines and merge checks, self-hosted-compatible.',    installs: 2410,  rating: 4.4, verified: true, icon: GitBranch, tone: { from: 'var(--intent-warn-fg)', to: 'var(--intent-danger-fg)' } },
-  { slug: 'amplitude', name: 'Amplitude',  vendor: 'Amplitude',  category: 'analytics',      blurb: 'Stream usage events for product analytics.',                installs: 1120,  rating: 4.3, verified: false, icon: BarChart3, tone: { from: 'var(--fg-link)', to: 'var(--fg-accent)' } },
-  { slug: 'openai',    name: 'OpenAI',     vendor: 'OpenAI',     category: 'ai',             blurb: 'Bring-your-own model key for the autonomous fix agents.',   installs: 5320,  rating: 4.7, verified: true, icon: Bot, tone: { from: 'var(--intent-success-fg)', to: 'var(--intent-info-fg)' } },
-  { slug: 'anthropic', name: 'Anthropic',  vendor: 'Anthropic',  category: 'ai',             blurb: 'Use Claude as the reasoning engine for review + fix.',      installs: 4210,  rating: 4.8, verified: true, featured: true, icon: Bot, tone: { from: 'var(--fg-accent)', to: 'var(--intent-warn-fg)' } },
-  { slug: 'sentry',    name: 'Sentry',     vendor: 'Sentry',     category: 'observability',  blurb: 'Pull live errors into admission context.',                  installs: 2010,  rating: 4.5, verified: true, icon: Code2, tone: { from: 'var(--intent-danger-fg)', to: 'var(--fg-link)' } },
-];
+import type { Category } from './parts/marketplace/types';
+import { CATEGORIES, INTEGRATIONS } from './parts/marketplace/data';
+import { SectionLabel } from './parts/marketplace/SectionLabel';
+import { FeaturedCard } from './parts/marketplace/FeaturedCard';
+import { IntegrationCard } from './parts/marketplace/IntegrationCard';
 
 export default function MarketplacePage() {
   const [q, setQ] = useState('');
@@ -201,135 +158,6 @@ export default function MarketplacePage() {
         </div>
       </div>
     </PublicShell>
-  );
-}
-
-function SectionLabel({
-  icon: Icon, label, hint,
-}: { icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>; label: string; hint?: string }) {
-  return (
-    <div className="flex items-baseline justify-between mt-12 mb-4">
-      <div className="flex items-center gap-2">
-        <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
-        <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-          {label}
-        </h2>
-      </div>
-      {hint && (
-        <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>{hint}</span>
-      )}
-    </div>
-  );
-}
-
-function FeaturedCard({ integration }: { integration: Integration }) {
-  const { icon: Icon } = integration;
-  return (
-    <Link
-      to={'/integrations/$slug' as never}
-      params={{ slug: integration.slug } as never}
-      className="group flex items-center gap-4 rounded-xl p-5 transition-all"
-      style={{
-        background: 'var(--bg-canvas)',
-        border: '1px solid var(--border-default)',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 12px 30px -12px color-mix(in srgb, var(--fg-accent) 22%, transparent)';
-        e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--fg-accent) 60%, var(--border-default))';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.borderColor = 'var(--border-default)';
-      }}
-    >
-      <div
-        className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 text-white"
-        style={{
-          backgroundImage: `linear-gradient(135deg, ${integration.tone.from}, ${integration.tone.to})`,
-        }}
-      >
-        <Icon className="w-6 h-6" />
-      </div>
-      <div className="flex flex-col gap-1 min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <h3 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: 'var(--fg-strong)' }}>
-            {integration.name}
-          </h3>
-          {integration.verified && (
-            <CheckCircle2 className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
-          )}
-        </div>
-        <p className="text-[12px] leading-snug truncate" style={{ color: 'var(--fg-muted)' }}>
-          {integration.blurb}
-        </p>
-        <div className="flex items-center gap-3 mt-1 text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
-          <span className="inline-flex items-center gap-1">
-            <Star className="w-3 h-3" />
-            <span className="tabular-nums">{integration.rating.toFixed(1)}</span>
-          </span>
-          <span className="tabular-nums">{formatNumber(integration.installs)} installs</span>
-        </div>
-      </div>
-      <ArrowUpRight
-        className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-        style={{ color: 'var(--fg-link)' }}
-      />
-    </Link>
-  );
-}
-
-function IntegrationCard({ integration }: { integration: Integration }) {
-  const { icon: Icon } = integration;
-  return (
-    <Link
-      to={'/integrations/$slug' as never}
-      params={{ slug: integration.slug } as never}
-      className="group flex flex-col gap-3 rounded-xl p-4 transition-colors"
-      style={{
-        background: 'var(--bg-canvas)',
-        border: '1px solid var(--border-default)',
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-canvas)'; }}
-    >
-      <div className="flex items-start justify-between">
-        <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center text-white"
-          style={{
-            backgroundImage: `linear-gradient(135deg, ${integration.tone.from}, ${integration.tone.to})`,
-          }}
-        >
-          <Icon className="w-4.5 h-4.5" />
-        </div>
-        <div className="flex items-center gap-1">
-          {integration.verified && (
-            <span
-              title="Verified"
-              className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.14em] font-semibold"
-              style={{ color: 'var(--fg-accent)' }}
-            >
-              <ShieldCheck className="w-3 h-3" />
-              verified
-            </span>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col gap-1">
-        <h3 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-          {integration.name}
-        </h3>
-        <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{integration.blurb}</p>
-      </div>
-      <div className="flex items-center gap-3 mt-auto text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
-        <span className="inline-flex items-center gap-1">
-          <Star className="w-3 h-3" />
-          <span className="tabular-nums">{integration.rating.toFixed(1)}</span>
-        </span>
-        <span className="tabular-nums">{formatNumber(integration.installs)} installs</span>
-      </div>
-    </Link>
   );
 }
 

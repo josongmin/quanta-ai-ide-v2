@@ -2,6 +2,9 @@
 // Routine → Run → Step model from CI/CD pipelines (Pipeline → Run → Job)
 // because the mental model is already familiar to engineers.
 
+// Narrow translator signature shared across the fleet-stage view layer.
+export type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+
 export type RoutineStatus = 'active' | 'paused' | 'draft';
 
 export type RoutineKind =
