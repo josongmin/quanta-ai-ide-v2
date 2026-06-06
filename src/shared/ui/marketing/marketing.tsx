@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { formatNumber } from '@shared/i18n';
+import { useHoverStyle } from '@shared/lib';
 
 // ─────────────────────────────────────────────────────────────────────────
 // HeroBackdrop — animated mesh gradient + dotted grid overlay. Sits behind
@@ -259,33 +260,24 @@ export function SectionHead({
 export function LiftCard({
   children, className = '', featured = false, style,
 }: { children: ReactNode; className?: string; featured?: boolean; style?: CSSProperties }) {
-  // Hover effect attached via ref+addEventListener so it stays purely
-  // presentational — no JSX-level mouse interactions on a static <div>.
+  // Hover effect attached via ref so it stays purely presentational — no
+  // JSX-level mouse interactions on a static <div>.
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const baseShadow = featured
-      ? '0 12px 40px -16px color-mix(in srgb, var(--fg-accent) 40%, transparent)'
-      : '0 1px 0 0 color-mix(in srgb, var(--fg-strong) 4%, transparent)';
-    const hoverShadow = featured
-      ? '0 18px 50px -16px color-mix(in srgb, var(--fg-accent) 50%, transparent)'
-      : '0 8px 24px -10px color-mix(in srgb, var(--fg-strong) 18%, transparent)';
-    const onEnter = () => {
-      el.style.transform = 'translateY(-2px)';
-      el.style.boxShadow = hoverShadow;
-    };
-    const onLeave = () => {
-      el.style.transform = 'translateY(0)';
-      el.style.boxShadow = baseShadow;
-    };
-    el.addEventListener('mouseenter', onEnter);
-    el.addEventListener('mouseleave', onLeave);
-    return () => {
-      el.removeEventListener('mouseenter', onEnter);
-      el.removeEventListener('mouseleave', onLeave);
-    };
-  }, [featured]);
+  const baseShadow = featured
+    ? '0 12px 40px -16px color-mix(in srgb, var(--fg-accent) 40%, transparent)'
+    : '0 1px 0 0 color-mix(in srgb, var(--fg-strong) 4%, transparent)';
+  const hoverShadow = featured
+    ? '0 18px 50px -16px color-mix(in srgb, var(--fg-accent) 50%, transparent)'
+    : '0 8px 24px -10px color-mix(in srgb, var(--fg-strong) 18%, transparent)';
+  const hoverStyle = useMemo<CSSProperties>(
+    () => ({ transform: 'translateY(-2px)', boxShadow: hoverShadow }),
+    [hoverShadow],
+  );
+  const restStyle = useMemo<CSSProperties>(
+    () => ({ transform: 'translateY(0)', boxShadow: baseShadow }),
+    [baseShadow],
+  );
+  useHoverStyle(ref, hoverStyle, restStyle);
   return (
     <div
       ref={ref}

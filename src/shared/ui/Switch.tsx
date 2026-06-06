@@ -1,5 +1,31 @@
 import type { CSSProperties } from 'react';
 
+// Static track/thumb styling hoisted to module scope so it isn't reallocated on
+// every render. Only the prop/state-dependent bits (track background, cursor,
+// opacity; thumb transform) are merged in inline below.
+const TRACK_STYLE_BASE: CSSProperties = Object.freeze({
+  width: 36,
+  height: 20,
+  borderRadius: 'var(--radius-pill)',
+  position: 'relative',
+  transition: 'background-color 160ms ease',
+  border: 'none',
+  padding: 0,
+  display: 'inline-block',
+  flexShrink: 0,
+});
+const THUMB_STYLE_BASE: CSSProperties = Object.freeze({
+  position: 'absolute',
+  top: 2,
+  left: 2,
+  width: 16,
+  height: 16,
+  borderRadius: '50%',
+  background: '#fff',
+  transition: 'transform 160ms ease',
+  boxShadow: 'var(--shadow-sm)',
+});
+
 type Props = {
   checked: boolean;
   onChange: (next: boolean) => void;
@@ -17,30 +43,14 @@ type Props = {
 
 export function Switch({ checked, onChange, disabled, label, primary }: Props) {
   const trackStyle: CSSProperties = {
-    width: 36,
-    height: 20,
-    borderRadius: 'var(--radius-pill)',
+    ...TRACK_STYLE_BASE,
     background: checked ? 'var(--intent-success-vivid)' : 'var(--bg-active)',
-    position: 'relative',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
-    transition: 'background-color 160ms ease',
-    border: 'none',
-    padding: 0,
-    display: 'inline-block',
-    flexShrink: 0,
   };
   const thumbStyle: CSSProperties = {
-    position: 'absolute',
-    top: 2,
-    left: 2,
-    width: 16,
-    height: 16,
-    borderRadius: '50%',
-    background: '#fff',
+    ...THUMB_STYLE_BASE,
     transform: checked ? 'translateX(16px)' : 'translateX(0)',
-    transition: 'transform 160ms ease',
-    boxShadow: 'var(--shadow-sm)',
   };
 
   const button = (

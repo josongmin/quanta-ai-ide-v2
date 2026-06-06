@@ -1,8 +1,9 @@
 import {
-  useEffect, useLayoutEffect, useRef, useState, type ReactNode,
+  useCallback, useLayoutEffect, useRef, useState, type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { useClickOutside } from '@shared/lib';
+
+import { useDialogDismiss } from './useDialogDismiss';
 
 // Anchored popover with viewport-aware smart positioning.
 //
@@ -62,44 +63,11 @@ export function Popover({
   const panelRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState<Coords | null>(null);
 
-  // Don't use the shared `useClickOutside` here — it only knows about
-  // `wrapRef` and would close the popover when the user clicks inside the
-  // portal-rendered panel. The single mousedown handler below covers both.
-
-  // Esc + focus-out + click-outside close. One mousedown listener that
-  // considers both the trigger wrapper and the portal panel as "inside".
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    const onFocusIn = (e: FocusEvent) => {
-      const target = e.target as Node | null;
-      if (!target) return;
-      const inWrap = wrapRef.current?.contains(target);
-      const inPanel = panelRef.current?.contains(target);
-      if (!inWrap && !inPanel) setOpen(false);
-    };
-    const onDown = (e: MouseEvent) => {
-      const target = e.target as Node | null;
-      if (!target) return;
-      if (wrapRef.current?.contains(target)) return;
-      if (panelRef.current?.contains(target)) return;
-      setOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    window.addEventListener('mousedown', onDown);
-    document.addEventListener('focusin', onFocusIn);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      window.removeEventListener('mousedown', onDown);
-      document.removeEventListener('focusin', onFocusIn);
-    };
-  }, [open]);
-  // Touch the import once so the linter doesn't complain about unused —
-  // we keep the import in case other call sites rely on the previous
-  // wiring during a transition window.
-  void useClickOutside;
+  // Esc + focus-out + click-outside close. The portal panel lives outside the
+  // trigger wrapper in the DOM, so the shared `useClickOutside` (single-ref)
+  // can't be reused — `useDialogDismiss` treats both refs as "inside".
+  const close = useCallback(() => { setOpen(false); }, []);
+  useDialogDismiss(wrapRef, panelRef, open, close);
 
   // Viewport-aware positioning. Recomputes on open, on every scroll
   // anywhere (capture phase catches inner scroll containers too), and on

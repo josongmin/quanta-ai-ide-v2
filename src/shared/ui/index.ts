@@ -38,3 +38,14 @@ export { ConfidenceMeter } from './ConfidenceMeter';
 export { FileRow } from './FileRow';
 export { StackedRatioBar } from './StackedRatioBar';
 export { EmptyHint } from './EmptyHint';
+
+// ── Settings / admin kit ──
+// Composable chrome for org/ws/me-stage settings pages (confirm dialogs, modal
+// chrome, grid tables, search, row menus, copy blocks, empty states).
+export { ConfirmDialog } from './settings-kit/ConfirmDialog';
+export { SettingsModal } from './settings-kit/SettingsModal';
+export { SearchInput } from './settings-kit/SearchInput';
+export { DataTable, type Column } from './settings-kit/DataTable';
+export { RowMenu, type RowMenuItem } from './settings-kit/RowMenu';
+export { CopyableCode } from './settings-kit/CopyableCode';
+export { EmptyState } from './settings-kit/EmptyState';

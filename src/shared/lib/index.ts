@@ -11,6 +11,7 @@ export { useHoverStyle } from './useHoverStyle';
 export { toneToColors, type SemanticTone, type ToneColors } from './toneToColors';
 export { shallowEqual } from './shallowEqual';
 export { useScrollRestoration } from './useScrollRestoration';
+export { useScrollLock } from './useScrollLock';
 export {
   scanForSecrets, redactText,
   type SecretMatch, type SecretPattern, type SecretSeverity,

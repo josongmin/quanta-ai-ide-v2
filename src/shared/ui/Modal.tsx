@@ -1,5 +1,6 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { useScrollLock } from '@shared/lib';
 
 import { useDialogA11y } from './useDialogA11y';
 
@@ -30,15 +31,7 @@ export function Modal({
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, open, onClose);
-
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
+  useScrollLock(open);
 
   if (!open) return null;
 
