@@ -56,6 +56,13 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
 
   const rafRef = useRef<number>(0);
 
+  // Pin object pool. The rAF loop runs at 60fps and previously allocated a
+  // fresh Pin object for every (chat, file) pair every frame → heavy GC
+  // churn. Instead we reuse the same object instances across frames,
+  // mutating their fields in place and only growing the pool when the active
+  // pin count exceeds what we've allocated so far. The pool never shrinks.
+  const pinPoolRef = useRef<Pin[]>([]);
+
   // Memoise the bound projector so the rAF effect's dependency array stays
   // stable across renders. Without this, every parent re-render produced a
   // fresh function identity, restarting the animation loop and dropping a
@@ -82,25 +89,36 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
     const tick = () => {
       if (cancelled) return;
       const acts = useActivityStore.getState().activities;
-      const out: Pin[] = [];
+      const pool = pinPoolRef.current;
+      let n = 0;
       for (const a of acts) {
         for (const fid of a.fileIds) {
           const p = project(fid);
           if (!p) continue;
           const f = repo.files[fid];
           if (!f) continue;
-          out.push({
-            chatId: a.chatId,
-            fileId: fid,
-            x: p.x,
-            y: p.y,
-            hue: a.hue,
-            state: a.state,
-            folder: f.folderPath,
-          });
+          // Reuse a pooled Pin if one exists at this slot, otherwise grow the
+          // pool by one. Either way we mutate fields in place — no per-pin
+          // object allocation per frame.
+          let pin = pool[n];
+          if (!pin) {
+            pin = { chatId: '', fileId: 0, x: 0, y: 0, hue: '', state: 'thinking', folder: '' };
+            pool[n] = pin;
+          }
+          pin.chatId = a.chatId;
+          pin.fileId = fid;
+          pin.x = p.x;
+          pin.y = p.y;
+          pin.hue = a.hue;
+          pin.state = a.state;
+          pin.folder = f.folderPath;
+          n++;
         }
       }
-      setPins(out);
+      // React needs a changed array reference to re-render; slice the active
+      // prefix of the (possibly larger) pool into a cheap fresh wrapper. The
+      // expensive part — the Pin objects themselves — is reused.
+      setPins(pool.slice(0, n));
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);

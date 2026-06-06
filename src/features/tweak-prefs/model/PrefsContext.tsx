@@ -91,7 +91,18 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
   }, []);
   const reset = useCallback(() => { setS(() => defaults()); }, []);
 
-  // isUnlocked/isVisible read live state, so identities track plan+hidden.
+  // Mutators carry empty deps, so this object is built once and keeps a
+  // stable identity for the lifetime of the provider — pulling them into a
+  // static bundle means action-identity changes can never trigger a context
+  // re-render on their own.
+  const mutators = useMemo(
+    () => ({ setPlan, toggleHidden, toggleCategoryCollapsed, reset }),
+    [setPlan, toggleHidden, toggleCategoryCollapsed, reset],
+  );
+
+  // isUnlocked/isVisible read live state, so their identities must track
+  // plan+hidden to stay correct when called synchronously during a
+  // consumer's render in the same commit as a prefs change.
   const isUnlocked = useCallback(
     ({ requiredPlan }: { requiredPlan: Plan }) => PLAN_RANK[s.plan] >= PLAN_RANK[requiredPlan],
     [s.plan],
@@ -101,15 +112,12 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
     [s.plan, s.hidden],
   );
 
-  const ctx = useMemo<Ctx>(() => ({
-    ...s,
-    setPlan,
-    toggleHidden,
-    toggleCategoryCollapsed,
-    isUnlocked,
-    isVisible,
-    reset,
-  }), [s, setPlan, toggleHidden, toggleCategoryCollapsed, isUnlocked, isVisible, reset]);
+  // Value identity changes only when state or the plan-dependent predicates
+  // change; the stable mutators never contribute a new identity.
+  const ctx = useMemo<Ctx>(
+    () => ({ ...s, ...mutators, isUnlocked, isVisible }),
+    [s, mutators, isUnlocked, isVisible],
+  );
 
   return <PrefsCtx.Provider value={ctx}>{children}</PrefsCtx.Provider>;
 }

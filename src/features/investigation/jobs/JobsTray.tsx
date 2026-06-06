@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { GlassCard } from '@shared/ui';
 import { useJobs } from './JobsContext';
 import { JobRow } from './JobRow';
+import { isTerminalJobStatus } from './jobStatus';
 
 // Popup surfaced from the status-bar Jobs button. `open` lives in
 // JobsContext so the bar (in AppShell) and this tray (in the layout)
@@ -13,9 +14,7 @@ export function JobsTray() {
 
   if (!open || jobs.length === 0) return null;
 
-  const completedCount = jobs.filter(
-    (j) => j.status === 'completed' || j.status === 'cancelled' || j.status === 'failed',
-  ).length;
+  const completedCount = jobs.filter((j) => isTerminalJobStatus(j.status)).length;
 
   const headerStyle: CSSProperties = {
     borderBottom: '1px solid var(--border-default)',

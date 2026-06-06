@@ -5,6 +5,7 @@ import type {
   NotebookQuestionStatus,
   QuestionType,
 } from '@entities/investigation';
+import { QUESTION_TYPE_META } from '../lib';
 
 type Props = {
   questions: NotebookQuestion[];
@@ -54,12 +55,6 @@ const STATUS_TONE: Record<NotebookQuestionStatus, { bg: string; fg: string; labe
   },
 };
 
-const QT_LABEL: Record<QuestionType, string> = {
-  why_risky: 'RISK',
-  blast_of_change: 'BLAST',
-  incident_suspect: 'SUSPECT',
-};
-
 function StatusPill({ status }: { status: NotebookQuestionStatus }) {
   const tone = STATUS_TONE[status];
   const style: CSSProperties = {
@@ -87,7 +82,7 @@ function QtBadge({ qt }: { qt: QuestionType }) {
   };
   return (
     <span className="font-mono uppercase tracking-wider" style={style}>
-      {QT_LABEL[qt]}
+      {QUESTION_TYPE_META[qt].badge}
     </span>
   );
 }

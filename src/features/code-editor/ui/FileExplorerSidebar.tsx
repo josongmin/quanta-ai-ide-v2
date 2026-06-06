@@ -30,8 +30,11 @@ export function FileExplorerSidebar({
 }) {
   const root = useMemo(() => buildTree(repo.folders), [repo.folders]);
 
-  // Auto-expand the chain leading to the active file so it's always visible.
-  const initialExpanded = useMemo(() => {
+  // Auto-expand the chain leading to the active file so it's always visible
+  // on first paint. Seeded once on mount via a lazy initializer — later
+  // file swaps reuse the editor's request channel, which keeps this sidebar
+  // mounted, so the user's manual expand/collapse state is preserved.
+  const [expanded, setExpanded] = useState<Set<string>>(() => {
     const set = new Set<string>();
     const f = repo.files[activeFileId];
     if (!f) return set;
@@ -42,11 +45,7 @@ export function FileExplorerSidebar({
       cursor = folder?.parentPath ?? null;
     }
     return set;
-    // Only seed once per active file change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFileId]);
-
-  const [expanded, setExpanded] = useState<Set<string>>(initialExpanded);
+  });
 
   const toggle = (path: string) => {
     setExpanded((prev) => {

@@ -7,6 +7,7 @@ import type {
   QuestionType,
 } from '@entities/investigation';
 import { ActionButton } from '../evidence';
+import { QUESTION_TYPES, QUESTION_TYPE_META } from '../lib';
 import { FindingsBlock } from './FindingsBlock';
 import { PendingUnknownsBlock } from './PendingUnknownsBlock';
 
@@ -20,12 +21,6 @@ type Props = {
   onArchive: (questionId: string) => void;
   onAction: (action: ActionRecommendation) => void;
 };
-
-const QT_OPTIONS: { value: QuestionType; label: string }[] = [
-  { value: 'why_risky', label: 'Risk' },
-  { value: 'blast_of_change', label: 'Blast' },
-  { value: 'incident_suspect', label: 'Suspect' },
-];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   const style: CSSProperties = {
@@ -130,8 +125,8 @@ export function Notebook({
             </button>
           </div>
           <div className="flex items-center gap-1">
-            {QT_OPTIONS.map((opt) => {
-              const active = pickedQt === opt.value;
+            {QUESTION_TYPES.map((qt) => {
+              const active = pickedQt === qt;
               const pillStyle: CSSProperties = {
                 background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
                 color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -141,13 +136,13 @@ export function Notebook({
               };
               return (
                 <button
-                  key={opt.value}
+                  key={qt}
                   type="button"
-                  onClick={() => { setPickedQt(opt.value); }}
+                  onClick={() => { setPickedQt(qt); }}
                   style={pillStyle}
                   className="px-1.5 py-0.5 rounded font-mono uppercase tracking-wider"
                 >
-                  {opt.label}
+                  {QUESTION_TYPE_META[qt].short}
                 </button>
               );
             })}

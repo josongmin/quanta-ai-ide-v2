@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Search, X, Code2, Regex, CaseSensitive, ChevronDown, History, SlidersHorizontal } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useFilterStore } from '@entities/filter-state';
 import { useTranslation } from '@shared/i18n';
 import { GlassCard } from '@shared/ui';
@@ -30,18 +31,25 @@ export default function SearchBar({
   maxWidth?: number | string;
 } = {}) {
   const { t } = useTranslation('search');
-  // Narrow selectors. Action setters in zustand are reference-stable, so
-  // selecting them individually avoids the shallow-equality cost from the
-  // legacy `useFilter()` shape and prevents extraneous re-renders when
-  // unrelated store fields change. Hot-path: `search` updates on every
-  // keystroke, so the per-field subscriptions stay localised.
-  const search = useFilterStore((s) => s.state.search);
-  const searchMode = useFilterStore((s) => s.state.searchMode);
-  const matchedCount = useFilterStore((s) => s.matchedCount);
-  const repo = useFilterStore((s) => s.repo);
-  const searchError = useFilterStore((s) => s.searchError);
-  const setSearch = useFilterStore((s) => s.setSearch);
-  const setSearchMode = useFilterStore((s) => s.setSearchMode);
+  // Batch the read-only store reads into a single shallow-selected object so
+  // this keystroke-hot component runs one subscription instead of five. The
+  // `useShallow` wrapper keeps the snapshot stable when the selected fields
+  // are unchanged, so unrelated store mutations don't re-render. `search`
+  // still updates on every keystroke, which is the intended re-render.
+  const { search, searchMode, matchedCount, repo, searchError } = useFilterStore(
+    useShallow((s) => ({
+      search: s.state.search,
+      searchMode: s.state.searchMode,
+      matchedCount: s.matchedCount,
+      repo: s.repo,
+      searchError: s.searchError,
+    })),
+  );
+  // Action setters are reference-stable in zustand, so they can be pulled
+  // once via a shallow-selected object without adding re-renders.
+  const { setSearch, setSearchMode } = useFilterStore(
+    useShallow((s) => ({ setSearch: s.setSearch, setSearchMode: s.setSearchMode })),
+  );
   const [advOpen, setAdvOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 

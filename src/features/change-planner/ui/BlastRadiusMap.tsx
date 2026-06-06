@@ -10,6 +10,7 @@
 // repos. No left-edge coloured stripes anywhere — confidence is encoded by
 // border-style + opacity, ring is encoded by section header.
 
+import { useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import type {
   ConfidenceState,
@@ -129,8 +130,14 @@ function EdgeRow({
 }
 
 export function BlastRadiusMap({ graph }: Props) {
-  const nodeById = new Map<string, ImpactNode>();
-  for (const n of graph.nodes) nodeById.set(n.id, n);
+  // `graph` is a stable prop, so the id→node index only needs to be rebuilt
+  // when the node set actually changes. Keyed on `graph.nodes` to avoid the
+  // per-render Map allocation + repopulation.
+  const nodeById = useMemo(() => {
+    const map = new Map<string, ImpactNode>();
+    for (const n of graph.nodes) map.set(n.id, n);
+    return map;
+  }, [graph.nodes]);
 
   // Bucket edges by the ring of their downstream node — that's the ring the
   // edge "lives in" from a reviewer's POV, since L1 → L2 represents an L2

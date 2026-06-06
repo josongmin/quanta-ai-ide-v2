@@ -70,13 +70,14 @@ export function critiqueAndRepatch(input: {
   };
 }
 
+const ADJUSTMENT_LABEL: Record<string, string> = {
+  static:    'static obligation 통과 못한 영역 회피 — diff 축소',
+  dynamic:   'dynamic check 실패 영역의 변경 제거',
+  policy:    'policy 위반 패턴 우회 — 안전한 대안 적용',
+  stylistic: '컨벤션 일치하도록 helper 재사용',
+  human:     'public API surface 미변경으로 후퇴',
+};
+
 function describeAdjustment(category: string): string {
-  switch (category) {
-    case 'static':    return 'static obligation 통과 못한 영역 회피 — diff 축소';
-    case 'dynamic':   return 'dynamic check 실패 영역의 변경 제거';
-    case 'policy':    return 'policy 위반 패턴 우회 — 안전한 대안 적용';
-    case 'stylistic': return '컨벤션 일치하도록 helper 재사용';
-    case 'human':     return 'public API surface 미변경으로 후퇴';
-    default:          return '범위 축소';
-  }
+  return ADJUSTMENT_LABEL[category] ?? '범위 축소';
 }

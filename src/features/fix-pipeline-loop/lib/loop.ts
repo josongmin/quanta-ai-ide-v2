@@ -68,13 +68,15 @@ export function currentFailureKey(v: ValidationResult): string | null {
   return failing.join('|');
 }
 
+const REASON_LABEL: Record<LoopTerminationReason, string> = {
+  'max-iterations': 'max iterations 도달',
+  'time-budget':    'CI 시간 budget 초과',
+  'token-budget':   'token / cost budget 초과',
+  'non-progress':   '같은 실패 반복 — 진전 없음',
+  'all-rejected':   '모든 candidate 거절됨',
+  'success':        'obligations 모두 통과',
+};
+
 export function describeReason(reason: LoopTerminationReason): string {
-  switch (reason) {
-    case 'max-iterations': return 'max iterations 도달';
-    case 'time-budget':    return 'CI 시간 budget 초과';
-    case 'token-budget':   return 'token / cost budget 초과';
-    case 'non-progress':   return '같은 실패 반복 — 진전 없음';
-    case 'all-rejected':   return '모든 candidate 거절됨';
-    case 'success':        return 'obligations 모두 통과';
-  }
+  return REASON_LABEL[reason];
 }

@@ -1,12 +1,7 @@
 import type { QuestionType } from '@entities/investigation';
+import { QUESTION_TYPES, QUESTION_TYPE_META } from '../../lib';
 
 type ViewMode = 'answer' | 'notebook';
-
-const QUESTION_TABS: { value: QuestionType; label: string }[] = [
-  { value: 'why_risky', label: 'Why risky?' },
-  { value: 'blast_of_change', label: 'Blast of change?' },
-  { value: 'incident_suspect', label: 'Suspect for incident?' },
-];
 
 function ModeTab({
   active,
@@ -93,12 +88,12 @@ export function PanelTabs({
       </div>
       {mode === 'answer' ? (
         <div className="flex items-center gap-1 ml-1">
-          {QUESTION_TABS.map((tab) => (
+          {QUESTION_TYPES.map((qt) => (
             <QuestionTab
-              key={tab.value}
-              label={tab.label}
-              active={questionType === tab.value}
-              onClick={() => { onQuestionTypeChange(tab.value); }}
+              key={qt}
+              label={QUESTION_TYPE_META[qt].tab}
+              active={questionType === qt}
+              onClick={() => { onQuestionTypeChange(qt); }}
             />
           ))}
         </div>

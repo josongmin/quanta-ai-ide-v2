@@ -1,6 +1,6 @@
 import { Sparkles } from 'lucide-react';
 import type { InvestigationTarget } from '@entities/investigation';
-import { useInvestigation } from '../model/InvestigationContext';
+import { useInvestigationRunner } from '../model/InvestigationContext';
 
 type Props = {
   target: InvestigationTarget;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function InvestigateCTA({ target, onClick }: Props) {
-  const { start } = useInvestigation();
+  const { start } = useInvestigationRunner();
   const handleClick = () => {
     start(target);
     onClick?.();

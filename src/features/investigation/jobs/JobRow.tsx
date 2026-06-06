@@ -8,6 +8,7 @@ import {
   type LucideProps,
 } from 'lucide-react';
 import type { Job, JobKind, JobStatus } from '@entities/investigation';
+import { isActiveJobStatus } from './jobStatus';
 
 type Props = {
   job: Job;
@@ -52,7 +53,7 @@ function StatusPill({ status }: { status: JobStatus }) {
 
 export function JobRow({ job, onCancel }: Props) {
   const Icon = KIND_ICON[job.kind];
-  const isActive = job.status === 'running' || job.status === 'queued';
+  const isActive = isActiveJobStatus(job.status);
 
   const rowStyle: CSSProperties = {
     background: 'var(--bg-surface)',

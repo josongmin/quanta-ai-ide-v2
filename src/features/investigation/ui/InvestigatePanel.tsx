@@ -7,7 +7,7 @@ import {
   type QuestionType,
   type UnknownTag,
 } from '@entities/investigation';
-import { useInvestigation } from '../model/InvestigationContext';
+import { useInvestigationRunner, useNotebook } from '../model/InvestigationContext';
 import { useStack } from '@features/inspect-target';
 import { useJobs } from '../jobs';
 import { useFixHandoff } from '../handoff';
@@ -40,17 +40,19 @@ export default function InvestigatePanel() {
     questionType,
     panelOpen,
     pickedEvidenceId,
-    notebook,
-    activeNotebookId,
     start,
     regenerate,
     setQuestionType,
     clear,
     closePanel,
     pickEvidence,
+  } = useInvestigationRunner();
+  const {
+    notebook,
+    activeNotebookId,
     addQuestion,
     archiveQuestion,
-  } = useInvestigation();
+  } = useNotebook();
   const stack = useStack();
   const jobs = useJobs();
   const requestFixHandoff = useFixHandoff();

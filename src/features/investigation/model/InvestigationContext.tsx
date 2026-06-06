@@ -60,6 +60,26 @@ function notebookIdForTarget(targetId: string): string {
   return `nb-${targetId}`;
 }
 
+/**
+ * Apply `mutate` to a single question (matched by id) wherever it lives in the
+ * notebook list, leaving every other entry/question referentially untouched.
+ * Shared by `answerQuestion` and `archiveQuestion`, which differ only in how
+ * they transform the matched question.
+ */
+function mapQuestionById(
+  entries: NotebookEntry[],
+  questionId: string,
+  mutate: (q: NotebookQuestion) => NotebookQuestion,
+): NotebookEntry[] {
+  return entries.map((entry) => {
+    if (!entry.questions.some((q) => q.id === questionId)) return entry;
+    return {
+      ...entry,
+      questions: entry.questions.map((q) => (q.id === questionId ? mutate(q) : q)),
+    };
+  });
+}
+
 function NotebookProvider({ children }: { children: ReactNode }) {
   const [notebook, setNotebook] = useState<NotebookEntry[]>(FIXTURE_NOTEBOOKS);
   const [activeNotebookId, setActiveNotebookIdState] = useState<string | null>(null);
@@ -115,31 +135,18 @@ function NotebookProvider({ children }: { children: ReactNode }) {
 
   const answerQuestion = useCallback((questionId: string, ans: InvestigationAnswer, bundleId: string) => {
     setNotebook((cur) =>
-      cur.map((entry) => {
-        if (!entry.questions.some((q) => q.id === questionId)) return entry;
-        return {
-          ...entry,
-          questions: entry.questions.map((q) =>
-            q.id === questionId
-              ? { ...q, status: 'answered' as const, answer: ans, bundleId }
-              : q,
-          ),
-        };
-      }),
+      mapQuestionById(cur, questionId, (q) => ({
+        ...q,
+        status: 'answered' as const,
+        answer: ans,
+        bundleId,
+      })),
     );
   }, []);
 
   const archiveQuestion = useCallback((questionId: string) => {
     setNotebook((cur) =>
-      cur.map((entry) => {
-        if (!entry.questions.some((q) => q.id === questionId)) return entry;
-        return {
-          ...entry,
-          questions: entry.questions.map((q) =>
-            q.id === questionId ? { ...q, status: 'archived' as const } : q,
-          ),
-        };
-      }),
+      mapQuestionById(cur, questionId, (q) => ({ ...q, status: 'archived' as const })),
     );
   }, []);
 

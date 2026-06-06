@@ -149,9 +149,13 @@ export function CodeEditor({
       view.destroy();
       viewRef.current = null;
     };
-    // Mount once. Doc / file / theme transitions are handled by the
-    // dedicated effects below so we don't tear down the editor on every
-    // keystroke.
+    // Mount once. This intentionally captures `initialDoc`, `file` and
+    // `lspExtensions` only as the editor's initial state — re-running on
+    // their change would destroy/recreate the EditorView and lose undo
+    // history, selection and scroll. Every one of those inputs is instead
+    // routed in-place after mount: callbacks via refs (onChangeRef/
+    // onSaveRef), theme/file/doc via the compartment-reconfigure effects
+    // below. The exhaustive-deps disable is therefore correct, not a silence.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

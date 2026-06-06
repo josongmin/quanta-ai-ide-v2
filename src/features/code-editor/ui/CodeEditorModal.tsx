@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { Save, X, RotateCcw, FileCode2, Search, AlertTriangle, Lock, ShieldCheck } from 'lucide-react';
 import { Modal } from '@shared/ui/Modal';
 import { useTheme } from '@shared/theme';
@@ -7,6 +7,7 @@ import type { FileRecord } from '@entities/repo';
 
 import { useCodeEditor } from '../model/CodeEditorContext';
 import { buildMockSource } from '../lib/mockSource';
+import { useDirtyBuffer } from '../lib/useDirtyBuffer';
 import { CodeEditor } from './CodeEditor';
 import { FileExplorerSidebar } from './FileExplorerSidebar';
 
@@ -29,35 +30,9 @@ export function CodeEditorModal() {
   }, [request, repo.files]);
 
   const initialDoc = useMemo(() => (file ? buildMockSource(file) : ''), [file]);
-  const [doc, setDoc] = useState(initialDoc);
-  const [savedDoc, setSavedDoc] = useState(initialDoc);
-  const [prevInitialDoc, setPrevInitialDoc] = useState(initialDoc);
-  const [savedAnnounce, setSavedAnnounce] = useState('');
-
-  // When the open file changes, refresh both buffers.
-  if (initialDoc !== prevInitialDoc) {
-    setPrevInitialDoc(initialDoc);
-    setDoc(initialDoc);
-    setSavedDoc(initialDoc);
-  }
-
-  const dirty = doc !== savedDoc;
-
-  const onSave = useCallback((next: string) => {
-    setSavedDoc(next);
-    setDoc(next);
-    setSavedAnnounce('Saved');
-  }, []);
-
-  useEffect(() => {
-    if (!savedAnnounce) return;
-    const handle = window.setTimeout(() => { setSavedAnnounce(''); }, 1500);
-    return () => { window.clearTimeout(handle); };
-  }, [savedAnnounce]);
-
-  const onReset = useCallback(() => {
-    setDoc(savedDoc);
-  }, [savedDoc]);
+  const {
+    doc, setDoc, isDirty: dirty, save: onSave, reset: onReset, savedAnnounce,
+  } = useDirtyBuffer(initialDoc);
 
   if (!file) return null;
   const open = request !== null;

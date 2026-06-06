@@ -14,6 +14,7 @@ import {
   type Job,
   type JobKind,
 } from '@entities/investigation';
+import { isTerminalJobStatus } from './jobStatus';
 
 type Ctx = {
   jobs: Job[];
@@ -97,7 +98,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
       const idx = cur.findIndex((j) => j.id === id);
       if (idx === -1) return cur;
       const j = cur[idx];
-      if (j.status === 'cancelled' || j.status === 'completed' || j.status === 'failed') {
+      if (isTerminalJobStatus(j.status)) {
         return cur;
       }
       const timing = KIND_TIMING[j.kind];
@@ -148,7 +149,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
     setJobs((cur) =>
       cur.map((j) => {
         if (j.id !== id) return j;
-        if (j.status === 'completed' || j.status === 'cancelled' || j.status === 'failed') return j;
+        if (isTerminalJobStatus(j.status)) return j;
         return { ...j, status: 'cancelled', finishedAt: Date.now() };
       }),
     );
@@ -156,9 +157,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
 
   const clearCompleted = useCallback(() => {
     setJobs((cur) =>
-      cur.filter(
-        (j) => j.status !== 'completed' && j.status !== 'cancelled' && j.status !== 'failed',
-      ),
+      cur.filter((j) => !isTerminalJobStatus(j.status)),
     );
   }, []);
 

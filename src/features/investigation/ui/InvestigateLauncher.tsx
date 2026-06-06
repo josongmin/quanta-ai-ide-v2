@@ -1,11 +1,11 @@
 import { Sparkles } from 'lucide-react';
 import { GlassCard } from '@shared/ui';
 import { FIXTURE_TARGETS } from '@entities/investigation';
-import { useInvestigation } from '../model/InvestigationContext';
+import { useInvestigationRunner } from '../model/InvestigationContext';
 import { useJobs } from '../jobs';
 
 export default function InvestigateLauncher() {
-  const { panelOpen, openPanel } = useInvestigation();
+  const { panelOpen, openPanel } = useInvestigationRunner();
   const { jobs } = useJobs();
   if (panelOpen) return null;
 

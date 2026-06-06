@@ -53,7 +53,3 @@ export function suggestReviewer(seed: FixSeed, candidate: FixCandidate): Reviewe
     rationale: '최근 해당 영역에 commit한 contributor 기반 추천.',
   };
 }
-
-export function loadLabel(load: 'low' | 'medium' | 'high'): string {
-  return load;
-}
