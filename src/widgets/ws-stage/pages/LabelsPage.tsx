@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
 import {
-  Search, Plus, Pencil, Trash2, X, Check, AlertTriangle,
+  Plus, Pencil, Trash2, X, Check,
 } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import {
+  ConfirmDialog, SearchInput, DataTable, EmptyState,
+} from '@shared/ui';
 
 type ColorChoice = {
   id: string;
@@ -101,29 +103,7 @@ export default function LabelsPage() {
         <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
           {filtered.length} of {labels.length} labels
         </span>
-        <div
-          className="flex items-center gap-2 h-8 px-2.5 rounded-md"
-          style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', minWidth: 240 }}
-        >
-          <Search className="w-3.5 h-3.5" style={{ color: 'var(--fg-subtle)' }} />
-          <input
-            value={q}
-            onChange={(e) => { setQ(e.target.value); }}
-            placeholder="Search labels…"
-            className="flex-1 bg-transparent outline-none text-[12px]"
-            style={{ color: 'var(--fg-strong)' }}
-          />
-          {q && (
-            <button
-              type="button"
-              onClick={() => { setQ(''); }}
-              style={{ color: 'var(--fg-subtle)' }}
-              aria-label="Clear search"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          )}
-        </div>
+        <SearchInput value={q} onChange={setQ} placeholder="Search labels…" />
       </div>
 
       {/* Inline editor */}
@@ -147,79 +127,60 @@ export default function LabelsPage() {
       )}
 
       {/* Table */}
-      <div
-        className="rounded-md overflow-hidden"
-        style={{ border: '1px solid var(--border-muted)' }}
-      >
-        <div
-          className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
-          style={{
-            gridTemplateColumns: '180px 1fr 80px 70px',
-            gap: 12,
-            background: 'var(--bg-surface-muted)',
-            color: 'var(--fg-subtle)',
-            borderBottom: '1px solid var(--border-muted)',
-          }}
-        >
-          <span>Label</span>
-          <span>Description</span>
-          <span className="text-right">Usage</span>
-          <span />
-        </div>
-
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-12 px-4 text-center">
-            <Search className="w-5 h-5" style={{ color: 'var(--fg-subtle)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              {q ? `No matches for "${q}"` : 'No labels yet'}
-            </span>
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
-              {q ? 'Try a different keyword.' : 'Create your first label to get started.'}
-            </span>
-          </div>
-        ) : (
-          filtered.map((l, i) => {
-            const color = COLORS.find((c) => c.id === l.colorId)?.value ?? 'var(--fg-muted)';
-            return (
-              <div
-                key={l.id}
-                role="row"
-                className="grid items-center px-3 h-12 text-[12px] transition-colors"
-                style={{
-                  gridTemplateColumns: '180px 1fr 80px 70px',
-                  gap: 12,
-                  borderTop: i === 0 ? 'none' : '1px solid var(--border-muted)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-              >
-                <Chip color={color} name={l.name} />
-                <span className="truncate" style={{ color: 'var(--fg-default)' }}>{l.description}</span>
-                <span className="text-right tabular-nums" style={{ color: 'var(--fg-muted)' }}>{l.usage}</span>
-                <div className="flex justify-end items-center gap-0.5">
-                  <RowAction
-                    icon={Pencil}
-                    label="Edit"
-                    onClick={() => { setEditing({ mode: 'edit', id: l.id }); }}
-                  />
-                  <RowAction
-                    icon={Trash2}
-                    label="Delete"
-                    danger
-                    onClick={() => { setConfirmDelete(l); }}
-                  />
-                </div>
+      <DataTable
+        columns="180px 1fr 80px 70px"
+        headers={[
+          { header: 'Label' },
+          { header: 'Description' },
+          { header: 'Usage', align: 'right' },
+          { header: '' },
+        ]}
+        rows={filtered}
+        rowKey={(l) => l.id}
+        empty={
+          <EmptyState
+            title={q ? `No matches for "${q}"` : 'No labels yet'}
+            subtitle={q ? 'Try a different keyword.' : 'Create your first label to get started.'}
+          />
+        }
+        renderRow={(l) => {
+          const color = COLORS.find((c) => c.id === l.colorId)?.value ?? 'var(--fg-muted)';
+          return (
+            <>
+              <Chip color={color} name={l.name} />
+              <span className="truncate" style={{ color: 'var(--fg-default)' }}>{l.description}</span>
+              <span className="text-right tabular-nums" style={{ color: 'var(--fg-muted)' }}>{l.usage}</span>
+              <div className="flex justify-end items-center gap-0.5">
+                <RowAction
+                  icon={Pencil}
+                  label="Edit"
+                  onClick={() => { setEditing({ mode: 'edit', id: l.id }); }}
+                />
+                <RowAction
+                  icon={Trash2}
+                  label="Delete"
+                  danger
+                  onClick={() => { setConfirmDelete(l); }}
+                />
               </div>
-            );
-          })
-        )}
-      </div>
+            </>
+          );
+        }}
+      />
 
       {confirmDelete && (
-        <ConfirmDelete
-          label={confirmDelete}
+        <ConfirmDialog
+          open
           onCancel={() => { setConfirmDelete(null); }}
           onConfirm={() => { remove(confirmDelete.id); setConfirmDelete(null); }}
+          title="Delete label?"
+          confirmLabel="Delete label"
+          description={
+            <>
+              <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{confirmDelete.name}</span> will be
+              removed from {confirmDelete.usage} {confirmDelete.usage === 1 ? 'item' : 'items'}. This can&apos;t be undone.
+            </>
+          }
         />
       )}
     </WsShell>
@@ -370,39 +331,5 @@ function LabelEditor({
         </Button>
       </div>
     </div>
-  );
-}
-
-function ConfirmDelete({
-  label, onCancel, onConfirm,
-}: { label: Label; onCancel: () => void; onConfirm: () => void }) {
-  return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[420px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Delete label?
-            </span>
-          </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{label.name}</span> will be
-            removed from {label.usage} {label.usage === 1 ? 'item' : 'items'}. This can&apos;t be undone.
-          </p>
-        </div>
-        <div
-          className="flex items-center justify-end gap-2 px-4 py-3"
-          style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}
-        >
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" size="md" onClick={onConfirm}>Delete label</Button>
-        </div>
-      </div>
-    </>
   );
 }

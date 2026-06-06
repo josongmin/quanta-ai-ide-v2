@@ -1,22 +1,12 @@
 import { useMemo, useState } from 'react';
-import {
-  Search, Plus, MoreHorizontal, RotateCw, ShieldCheck, Trash2,
-  Eye, EyeOff, X, Copy, Check, AlertTriangle,
-} from 'lucide-react';
+import { Search, Plus, X, AlertTriangle } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
-
-type SecretScope = 'ci' | 'agents' | 'fix-pipeline' | 'webhooks';
-
-type Secret = {
-  id: string;
-  name: string;
-  scopes: SecretScope[];
-  lastRotated: string;        // ISO date
-  lastAccessed: string;       // relative phrase
-  expiresAt: string | null;   // ISO date or null
-};
+import { ConfirmDialog } from '@shared/ui';
+import {
+  SecretRow, NewSecretModal, RevealOnceModal,
+  type Secret, type SecretScope,
+} from './secrets-parts';
 
 const SEED: Secret[] = [
   { id: 's1', name: 'STRIPE_API_KEY',     scopes: ['ci', 'agents', 'fix-pipeline'], lastRotated: '2026-04-22', lastAccessed: '4m ago',  expiresAt: '2026-07-22' },
@@ -28,8 +18,6 @@ const SEED: Secret[] = [
   { id: 's7', name: 'PAGERDUTY_TOKEN',    scopes: ['webhooks', 'fix-pipeline'],      lastRotated: '2026-03-26', lastAccessed: '6h ago',  expiresAt: '2027-03-26' },
   { id: 's8', name: 'SENTRY_DSN',         scopes: ['agents'],                        lastRotated: '2025-12-04', lastAccessed: '1w ago',  expiresAt: null         },
 ];
-
-const ALL_SCOPES: SecretScope[] = ['ci', 'agents', 'fix-pipeline', 'webhooks'];
 
 export default function SecretsPage() {
   const [secrets, setSecrets] = useState<Secret[]>(SEED);
@@ -196,363 +184,27 @@ export default function SecretsPage() {
         />
       )}
       {confirmDelete && (
-        <ConfirmDelete
-          secret={confirmDelete}
+        <ConfirmDialog
+          open
           onCancel={() => { setConfirmDelete(null); }}
           onConfirm={() => { remove(confirmDelete); }}
+          title={`Delete ${confirmDelete.name}?`}
+          monoTitle
+          confirmLabel="Delete"
+          description="Any CI run, agent, or webhook resolving this secret will start failing immediately. This cannot be undone."
         />
       )}
       {confirmRotateAll && (
-        <ConfirmRotateAll
-          count={secrets.length}
+        <ConfirmDialog
+          open
           onCancel={() => { setConfirmRotateAll(false); }}
           onConfirm={rotateAll}
+          title={`Rotate all ${secrets.length} secrets?`}
+          confirmLabel="Rotate all"
+          width={440}
+          description="New values will be generated for every secret in this workspace. In-flight runs holding the old values will fail until they pick up the new ones. New values will be shown once, then never again."
         />
       )}
     </WsShell>
-  );
-}
-
-function SecretRow({
-  secret, onRotate, onDelete,
-}: { secret: Secret; onRotate: () => void; onDelete: () => void }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <div
-      role="row"
-      className="grid items-center px-3 h-12 text-[12px] transition-colors"
-      style={{
-        gridTemplateColumns: '1fr 220px 110px 100px 32px',
-        gap: 12,
-        borderTop: '1px solid var(--border-muted)',
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-    >
-      <span
-        className="font-mono uppercase truncate font-medium"
-        style={{ color: 'var(--fg-strong)' }}
-      >
-        {secret.name}
-      </span>
-      <div className="flex flex-wrap gap-1">
-        {secret.scopes.map((sc) => (
-          <span
-            key={sc}
-            className="text-[10px] font-mono px-1.5 py-0.5 rounded"
-            style={{
-              background: 'var(--bg-surface-muted)',
-              color: 'var(--fg-default)',
-              border: '1px solid var(--border-muted)',
-            }}
-          >
-            {sc}
-          </span>
-        ))}
-      </div>
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
-        {secret.lastRotated}
-      </span>
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
-        {secret.lastAccessed}
-      </span>
-      <div className="relative flex justify-end">
-        <button
-          type="button"
-          onClick={() => { setMenuOpen((v) => !v); }}
-          className="w-7 h-7 rounded-md inline-flex items-center justify-center transition-colors"
-          style={{ color: 'var(--fg-subtle)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-          aria-label="Row actions"
-        >
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
-        {menuOpen && (
-          <>
-            <button type="button" aria-label="Dismiss menu" className="fixed inset-0 z-30 bg-transparent border-0 p-0 cursor-default" onClick={() => { setMenuOpen(false); }} />
-            <div
-              className="absolute right-0 top-full mt-1 z-40 min-w-[180px] py-1 rounded-md"
-              style={{
-                background: 'var(--bg-elevated)',
-                border: '1px solid var(--border-default)',
-                boxShadow: 'var(--shadow-md)',
-              }}
-            >
-              <RowMenuItem icon={RotateCw}    label="Rotate"      onClick={() => { setMenuOpen(false); onRotate(); }} />
-              <RowMenuItem icon={ShieldCheck} label="View scopes" onClick={() => { setMenuOpen(false); }} />
-              <RowMenuItem icon={Trash2}      label="Delete"      onClick={() => { setMenuOpen(false); onDelete(); }} danger />
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function RowMenuItem({
-  icon: Icon, label, onClick, danger = false,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  onClick: () => void;
-  danger?: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex items-center gap-2 w-full px-3 h-8 text-[12px] transition-colors text-left"
-      style={{ color: danger ? 'var(--intent-danger-fg)' : 'var(--fg-default)' }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-    >
-      <Icon className="w-3.5 h-3.5" />
-      {label}
-    </button>
-  );
-}
-
-function NewSecretModal({
-  onCancel, onCreate,
-}: { onCancel: () => void; onCreate: (name: string, scopes: SecretScope[], exp: number | null) => void }) {
-  const [name, setName] = useState('');
-  const [value, setValue] = useState('');
-  const [reveal, setReveal] = useState(false);
-  const [scopes, setScopes] = useState<Set<SecretScope>>(new Set(['agents']));
-  const [exp, setExp] = useState<number | null>(90);
-
-  const valid = /^[A-Z][A-Z0-9_]*$/.test(name) && value.length > 0 && scopes.size > 0;
-
-  const toggle = (s: SecretScope) => {
-    setScopes((prev) => {
-      const next = new Set(prev);
-      if (next.has(s)) next.delete(s); else next.add(s);
-      return next;
-    });
-  };
-
-  return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] max-h-[85vh] flex flex-col rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>New secret</span>
-          <button type="button" onClick={onCancel} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="p-4 flex flex-col gap-4 overflow-y-auto">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
-              Name (uppercase, snake_case)
-            </span>
-            <input
-              value={name}
-              onChange={(e) => { setName(e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, '')); }}
-              placeholder="e.g. STRIPE_API_KEY"
-              className="h-9 rounded-md px-3 text-[12px] outline-none font-mono"
-              style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
-            />
-          </label>
-
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
-              <span>Value</span>
-              <button
-                type="button"
-                onClick={() => { setReveal((v) => !v); }}
-                className="lowercase tracking-normal inline-flex items-center gap-1"
-                style={{ color: 'var(--fg-muted)' }}
-              >
-                {reveal ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                {reveal ? 'hide' : 'show'}
-              </button>
-            </span>
-            <textarea
-              value={value}
-              onChange={(e) => { setValue(e.target.value); }}
-              placeholder="paste secret value"
-              rows={3}
-              className="w-full rounded-md p-2.5 text-[12px] outline-none resize-none font-mono"
-              style={{
-                background: 'var(--bg-surface-muted)',
-                border: '1px solid var(--border-default)',
-                color: 'var(--fg-strong)',
-                WebkitTextSecurity: reveal ? 'none' : 'disc',
-              } as React.CSSProperties}
-            />
-          </label>
-
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
-              Scopes
-            </span>
-            <div className="grid grid-cols-2 gap-1.5">
-              {ALL_SCOPES.map((s) => {
-                const on = scopes.has(s);
-                return (
-                  <label
-                    key={s}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors"
-                    style={{
-                      background: on ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
-                      border: `1px solid ${on ? 'color-mix(in srgb, var(--fg-accent) 40%, transparent)' : 'var(--border-muted)'}`,
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={on}
-                      onChange={() => { toggle(s); }}
-                      className="w-3.5 h-3.5 cursor-pointer"
-                    />
-                    <span className="font-mono text-[11px]" style={{ color: 'var(--fg-default)' }}>{s}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
-
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
-              Expiration
-            </span>
-            <select
-              value={exp == null ? 'never' : String(exp)}
-              onChange={(e) => { setExp(e.target.value === 'never' ? null : Number(e.target.value)); }}
-              className="h-9 rounded-md px-3 text-[12px] outline-none cursor-pointer"
-              style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
-            >
-              <option value="never">Never</option>
-              <option value="30">30 days</option>
-              <option value="90">90 days</option>
-              <option value="365">365 days</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button
-            variant="primary"
-            size="md"
-            disabled={!valid}
-            onClick={() => { onCreate(name, Array.from(scopes), exp); }}
-          >
-            Generate
-          </Button>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function RevealOnceModal({
-  name, value, onClose,
-}: { name: string; value: string; onClose: () => void }) {
-  const [copied, setCopied] = useState(false);
-  const copy = () => {
-    try { void navigator.clipboard.writeText(value); } catch { /* noop */ }
-    setCopied(true);
-    setTimeout(() => { setCopied(false); }, 1500);
-  };
-  return (
-    <>
-      <div className="fixed inset-0 z-50" style={{ background: 'rgba(0,0,0,0.55)' }} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <Check className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
-            <span className="text-[12px] font-semibold font-mono" style={{ color: 'var(--fg-strong)' }}>
-              {name} stored
-            </span>
-          </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            Copy this value now — for security, it can&apos;t be shown again. You can rotate to generate a new one later.
-          </p>
-          <div
-            className="flex items-center gap-2 p-2.5 rounded-md"
-            style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
-          >
-            <code className="flex-1 font-mono text-[11px] break-all" style={{ color: 'var(--fg-strong)' }}>
-              {value}
-            </code>
-            <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={copy}>
-              {copied ? 'Copied' : 'Copy'}
-            </Button>
-          </div>
-        </div>
-        <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
-          <Button variant="primary" size="md" onClick={onClose}>I&apos;ve saved it</Button>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function ConfirmDelete({
-  secret, onCancel, onConfirm,
-}: { secret: Secret; onCancel: () => void; onConfirm: () => void }) {
-  return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[420px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
-            <span className="text-[12px] font-semibold font-mono" style={{ color: 'var(--fg-strong)' }}>
-              Delete {secret.name}?
-            </span>
-          </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            Any CI run, agent, or webhook resolving this secret will start failing immediately. This cannot be undone.
-          </p>
-        </div>
-        <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" size="md" onClick={onConfirm}>Delete</Button>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function ConfirmRotateAll({
-  count, onCancel, onConfirm,
-}: { count: number; onCancel: () => void; onConfirm: () => void }) {
-  return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[440px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Rotate all {count} secrets?
-            </span>
-          </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            New values will be generated for every secret in this workspace. In-flight runs holding the old values will fail until they pick up the new ones. New values will be shown once, then never again.
-          </p>
-        </div>
-        <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" size="md" onClick={onConfirm}>Rotate all</Button>
-        </div>
-      </div>
-    </>
   );
 }

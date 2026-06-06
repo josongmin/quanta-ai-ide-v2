@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import {
   Webhook, Plus, Check, X, Activity, Pause, Play,
-  Copy, RefreshCw, Trash2, ChevronRight, AlertTriangle,
+  Copy, RefreshCw, Trash2, ChevronRight,
 } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button, Toggle } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import { ModalBackdrop, ConfirmDialog } from '@shared/ui';
 
 type Endpoint = {
   id: string;
@@ -153,10 +153,17 @@ export default function WebhooksPage() {
         />
       )}
       {confirmDelete && (
-        <ConfirmDelete
-          url={confirmDelete.url}
+        <ConfirmDialog
+          open
           onCancel={() => { setConfirmDelete(null); }}
           onConfirm={() => { remove(confirmDelete.id); setConfirmDelete(null); }}
+          title="Delete endpoint?"
+          confirmLabel="Delete"
+          description={(
+            <>
+              <span className="font-mono">{confirmDelete.url}</span> will stop receiving events immediately. Past delivery history is purged after 30 days.
+            </>
+          )}
         />
       )}
     </WsShell>
@@ -400,30 +407,3 @@ function CreateEndpointModal({
   );
 }
 
-function ConfirmDelete({
-  url, onCancel, onConfirm,
-}: { url: string; onCancel: () => void; onConfirm: () => void }) {
-  return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[420px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>Delete endpoint?</span>
-          </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            <span className="font-mono">{url}</span> will stop receiving events immediately. Past delivery history is purged after 30 days.
-          </p>
-        </div>
-        <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" size="md" onClick={onConfirm}>Delete</Button>
-        </div>
-      </div>
-    </>
-  );
-}

@@ -1,11 +1,12 @@
 import { useState, type CSSProperties } from 'react';
 import {
-  CheckCircle2, Circle, RefreshCcw, Copy, Check, Plus, Trash2, X,
+  CheckCircle2, Circle, RefreshCcw, Copy, Check, Plus, Trash2,
   KeyRound, UserPlus, UserMinus, UserCog, ShieldAlert,
 } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
 import { shallowEqual } from '@shared/lib';
+import { RevealTokenModal } from './parts/scim/RevealTokenModal';
 
 type Status = 'connected' | 'not-configured';
 
@@ -304,56 +305,5 @@ function CopyRow({ label, value }: { label: string; value: string }) {
         {copied ? 'Copied' : 'Copy'}
       </Button>
     </div>
-  );
-}
-
-function RevealTokenModal({
-  token, saved, onSaved, onClose,
-}: { token: string; saved: boolean; onSaved: () => void; onClose: () => void }) {
-  const [copied, setCopied] = useState(false);
-  const copy = () => {
-    try { void navigator.clipboard.writeText(token); } catch { /* noop */ }
-    setCopied(true);
-    setTimeout(() => { setCopied(false); }, 1500);
-  };
-  return (
-    <>
-      <div className="fixed inset-0 z-50" style={{ background: 'rgba(0,0,0,0.55)' }} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
-          <div className="flex items-center gap-2">
-            <Check className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>SCIM token created</span>
-          </div>
-          <button type="button" onClick={onClose} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-        <div className="p-5 flex flex-col gap-3">
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            Copy and store this token now — for security, it can&apos;t be shown again.
-          </p>
-          <div
-            className="flex items-center gap-2 p-2.5 rounded-md"
-            style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
-          >
-            <code className="flex-1 font-mono text-[11px] break-all" style={{ color: 'var(--fg-strong)' }}>
-              {token}
-            </code>
-            <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={copy}>
-              {copied ? 'Copied' : 'Copy'}
-            </Button>
-          </div>
-        </div>
-        <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
-          <Button variant="primary" size="md" disabled={saved} onClick={() => { onSaved(); onClose(); }}>
-            {saved ? 'Saved' : "I've saved it"}
-          </Button>
-        </div>
-      </div>
-    </>
   );
 }

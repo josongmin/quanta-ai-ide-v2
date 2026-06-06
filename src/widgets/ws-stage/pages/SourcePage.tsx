@@ -6,7 +6,7 @@ import {
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Field, Toggle, Button } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import { ModalBackdrop, ConfirmDialog } from '@shared/ui';
 
 type Host = 'github' | 'gitlab' | 'bitbucket';
 
@@ -185,9 +185,15 @@ export default function SourcePage() {
 
       {revealOpen && <RevealSecretModal onClose={() => { setRevealOpen(false); }} />}
       {confirmDisconnect && (
-        <ConfirmDisconnect
+        <ConfirmDialog
+          open
           onCancel={() => { setConfirmDisconnect(false); }}
           onConfirm={() => { setConfirmDisconnect(false); }}
+          title="Disconnect source?"
+          confirmLabel="Disconnect"
+          width={440}
+          icon={<AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-warn-fg)' }} />}
+          description="Pipelines for this workspace will pause until a new source is connected. Existing history is preserved."
         />
       )}
     </WsShell>
@@ -326,36 +332,3 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-function ConfirmDisconnect({
-  onCancel, onConfirm,
-}: { onCancel: () => void; onConfirm: () => void }) {
-  return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[440px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-warn-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Disconnect source?
-            </span>
-          </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            Pipelines for this workspace will pause until a new source is connected. Existing
-            history is preserved.
-          </p>
-        </div>
-        <div
-          className="flex items-center justify-end gap-2 px-4 py-3"
-          style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}
-        >
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" size="md" onClick={onConfirm}>Disconnect</Button>
-        </div>
-      </div>
-    </>
-  );
-}

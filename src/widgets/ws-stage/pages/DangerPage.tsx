@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ArrowRightLeft, Trash2, AlertTriangle } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Toggle, Button } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import { ModalBackdrop, ConfirmDialog } from '@shared/ui';
 
 const TARGET_ORGS = [
   { id: 'partner-co',     label: 'partner-co' },
@@ -76,10 +76,21 @@ export default function DangerPage() {
         />
       )}
       {deleteOpen && (
-        <ConfirmDelete
-          wsName={WS_NAME}
+        <ConfirmDialog
+          open
           onCancel={() => { setDeleteOpen(false); }}
           onConfirm={() => { setDeleteOpen(false); }}
+          title={`Delete ${WS_NAME}?`}
+          confirmLabel="I understand, delete"
+          width={460}
+          requireTypedConfirmation={WS_NAME}
+          description={(
+            <>
+              This permanently deletes the workspace, every pipeline run, agent thread,
+              secret, label, and webhook attached to it. The source repository is not touched.
+              Type <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{WS_NAME}</span> below to confirm.
+            </>
+          )}
         />
       )}
     </WsShell>
@@ -157,49 +168,3 @@ function ConfirmTransfer({
   );
 }
 
-function ConfirmDelete({
-  wsName, onCancel, onConfirm,
-}: { wsName: string; onCancel: () => void; onConfirm: () => void }) {
-  const [typed, setTyped] = useState('');
-  const matches = typed === wsName;
-
-  return (
-    <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
-      <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[460px] rounded-lg overflow-hidden"
-        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
-      >
-        <div className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Delete {wsName}?
-            </span>
-          </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            This permanently deletes the workspace, every pipeline run, agent thread,
-            secret, label, and webhook attached to it. The source repository is not touched.
-            Type <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{wsName}</span> below to confirm.
-          </p>
-          <input
-            value={typed}
-            onChange={(e) => { setTyped(e.target.value); }}
-            placeholder={wsName}
-            className="h-9 rounded-md px-3 text-[12px] outline-none font-mono"
-            style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
-          />
-        </div>
-        <div
-          className="flex items-center justify-end gap-2 px-4 py-3"
-          style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}
-        >
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" size="md" disabled={!matches} onClick={onConfirm}>
-            I understand, delete
-          </Button>
-        </div>
-      </div>
-    </>
-  );
-}

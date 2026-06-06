@@ -17,6 +17,7 @@ import { useTaskThread } from './lib/useTaskThread';
 import { useComposerState } from './lib/useComposerState';
 import { useBudgetChallenge } from './lib/useBudgetChallenge';
 import { useCommandPalette } from './lib/useCommandPalette';
+import { useCodingBlockEvents } from './lib/useCodingBlockEvents';
 import type {
   AgentBlock, AgentTurn, Project, Task, UserTurn, ReactionKind,
 } from './parts/types';
@@ -99,8 +100,12 @@ export default function CodingStage() {
     if (raw === 'compact' || raw === 'comfortable' || raw === 'spacious') return raw;
     return 'comfortable';
   });
-  useEffect(() => { window.localStorage.setItem('coding:highContrast', highContrast ? '1' : '0'); }, [highContrast]);
-  useEffect(() => { window.localStorage.setItem('coding:density', density); }, [density]);
+  // Single persistence effect for both a11y prefs — same storage keys and
+  // write behavior, one effect instead of two.
+  useEffect(() => {
+    window.localStorage.setItem('coding:highContrast', highContrast ? '1' : '0');
+    window.localStorage.setItem('coding:density', density);
+  }, [highContrast, density]);
 
   // When the active project changes, mirror its `defaultModel` into the
   // lifted model state — unless the user has set a per-project override
@@ -118,25 +123,7 @@ export default function CodingStage() {
   // Window event bridge from Blocks (plan auto-advance + inline line edit).
   // Registered before useCommandPalette()'s ⌘K listener to preserve the
   // original effect mount order from the pre-split monolith.
-  useEffect(() => {
-    function onPlanAdvance(e: Event) {
-      const detail = (e as CustomEvent<{ nextText: string }>).detail;
-      if (detail?.nextText == null) return;
-      setDraft(`다음 단계: ${detail.nextText} `);
-    }
-    function onLineRewrite(e: Event) {
-      const detail = (e as CustomEvent<{ original: string; instruction: string }>).detail;
-      if (detail?.instruction == null) return;
-      const orig = detail.original.length > 80 ? `${detail.original.slice(0, 80)}…` : detail.original;
-      setDraft(`이 줄을 다시 작성: \`${orig}\` — ${detail.instruction}`);
-    }
-    window.addEventListener('coding:plan-advance', onPlanAdvance);
-    window.addEventListener('coding:line-rewrite', onLineRewrite);
-    return () => {
-      window.removeEventListener('coding:plan-advance', onPlanAdvance);
-      window.removeEventListener('coding:line-rewrite', onLineRewrite);
-    };
-  }, [setDraft]);
+  useCodingBlockEvents(setDraft);
 
   // Command palette + per-turn context menu open state. The ⌘K
   // capture-phase listener fires from inside this hook.

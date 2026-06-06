@@ -1,0 +1,99 @@
+import { Trash2 } from 'lucide-react';
+import type { Pat } from './types';
+
+// NOTE: kept hand-rolled (not DataTable): the header strip has NO
+// `--bg-surface-muted` background, rows are h-14 (DataTable hardcodes h-12),
+// and the first row keeps its top border (DataTable drops it). Migrating would
+// change the rendered table.
+export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) => void }) {
+  if (pats.length === 0) {
+    return (
+      <div className="text-center py-12 text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+        No tokens yet. Create one to authenticate machine clients to the org API.
+      </div>
+    );
+  }
+  return (
+    <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
+      <div
+        className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        style={{
+          gridTemplateColumns: '1fr 200px 110px 100px 32px',
+          gap: 12,
+          color: 'var(--fg-subtle)',
+          borderBottom: '1px solid var(--border-muted)',
+        }}
+      >
+        <span>Token</span>
+        <span>Scopes</span>
+        <span>Expires</span>
+        <span>Last used</span>
+        <span />
+      </div>
+      {pats.map((p) => {
+        const expired = p.expiresAt && p.expiresAt < '2026-05-11';
+        return (
+          <div
+            key={p.id}
+            role="presentation"
+            className="grid items-center px-3 h-14 text-[12px] transition-colors"
+            style={{
+              gridTemplateColumns: '1fr 200px 110px 100px 32px',
+              gap: 12,
+              borderTop: '1px solid var(--border-muted)',
+              opacity: expired ? 0.55 : 1,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+          >
+            <div className="flex flex-col min-w-0 gap-0.5">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>{p.name}</span>
+                {expired && (
+                  <span className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+                    style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)', border: '1px solid var(--intent-danger-fg)' }}>
+                    expired
+                  </span>
+                )}
+              </div>
+              <span className="font-mono text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>
+                {p.prefix}…  · created by {p.createdBy} · {p.createdAt}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1 min-w-0">
+              {p.scopes.slice(0, 2).map((s) => (
+                <span
+                  key={s}
+                  className="text-[10px] font-mono px-1.5 py-0.5 rounded truncate"
+                  style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-default)', border: '1px solid var(--border-muted)' }}
+                >
+                  {s}
+                </span>
+              ))}
+              {p.scopes.length > 2 && (
+                <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+                  +{p.scopes.length - 2}
+                </span>
+              )}
+            </div>
+            <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+              {p.expiresAt ?? 'Never'}
+            </span>
+            <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>
+              {p.lastUsed}
+            </span>
+            <button
+              type="button"
+              onClick={() => { onDelete(p); }}
+              className="w-7 h-7 rounded-md inline-flex items-center justify-center"
+              style={{ color: 'var(--fg-subtle)' }}
+              aria-label="Revoke token"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
