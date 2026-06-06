@@ -19,7 +19,8 @@ const DOMAINS: Domain[] = [
 ];
 
 export default function DomainsPage() {
-  const { org } = useParams({ strict: false }) as unknown as { org: string };
+  // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
+  const { org = '' } = useParams({ strict: false });
   return (
     <OrgShell
       orgName={org}

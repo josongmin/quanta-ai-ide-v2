@@ -143,6 +143,8 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
   }
 
   if (phase === 'found' && idp) {
+    // Capture once so the truthy narrowing flows into the onClick closure below.
+    const metadataUrl = idp.metadataUrl;
     return (
       <div
         className="flex flex-col gap-3 px-3 py-3 rounded-md onb-stagger"
@@ -164,16 +166,16 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
           </div>
         </div>
 
-        {idp.metadataUrl && (
+        {metadataUrl && (
           <div
             className="flex items-center gap-2 px-2 py-1 rounded text-[10px] font-mono tabular-nums"
             style={{ background: 'var(--bg-canvas)', color: 'var(--fg-muted)' }}
           >
             <Lock className="w-2.5 h-2.5" style={{ color: 'var(--fg-subtle)' }} />
-            <span className="flex-1 truncate">{idp.metadataUrl}</span>
+            <span className="flex-1 truncate">{metadataUrl}</span>
             <button
               type="button"
-              onClick={() => { void navigator.clipboard?.writeText(idp.metadataUrl!); }}
+              onClick={() => { void navigator.clipboard?.writeText(metadataUrl); }}
               className="p-0.5 rounded transition-colors"
               style={{ color: 'var(--fg-subtle)' }}
               aria-label="Copy metadata URL"

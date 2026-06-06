@@ -1,8 +1,5 @@
 import type { ComponentType } from 'react';
-import type {
-  RuleSignal, MetricField, CompareOp, GraphPattern,
-  TaintSource, TaintSink,
-} from '@entities/admission';
+import type { RuleSignal } from '@entities/admission';
 import type { V2Theme } from './tokens';
 import { DrawerInput, DrawerSelect } from './RuleEditorOverlay';
 
@@ -24,7 +21,7 @@ function MetricEditor({ signal, onChange, t }: EditorProps<SignalOfKind<'metric'
     <div className="grid grid-cols-3 gap-2">
       <DrawerSelect
         value={signal.field}
-        onChange={(v) => { onChange({ ...signal, field: v as MetricField }); }}
+        onChange={(v) => { onChange({ ...signal, field: v }); }}
         options={['blastRadius', 'editSafety', 'sastFindings', 'cognitive', 'cyclomatic',
           'loc', 'fanIn', 'fanOut', 'churn', 'lineCoverage', 'maintainability',
           'eslintErrors', 'todoCount']}
@@ -32,7 +29,7 @@ function MetricEditor({ signal, onChange, t }: EditorProps<SignalOfKind<'metric'
       />
       <DrawerSelect
         value={signal.op}
-        onChange={(v) => { onChange({ ...signal, op: v as CompareOp }); }}
+        onChange={(v) => { onChange({ ...signal, op: v }); }}
         options={['>', '>=', '<', '<=', '=', '!=']}
         t={t}
       />
@@ -50,7 +47,7 @@ function GraphEditor({ signal, onChange, t }: EditorProps<SignalOfKind<'graph'>>
   return (
     <DrawerSelect
       value={signal.pattern}
-      onChange={(v) => { onChange({ kind: 'graph', pattern: v as GraphPattern }); }}
+      onChange={(v) => { onChange({ kind: 'graph', pattern: v }); }}
       options={['import-cycle', 'public-api-touched', 'public-api-without-test',
         'orphan-edit', 'blast-radius-spike', 'unknown-region-creep', 'layer-violation']}
       t={t}
@@ -63,13 +60,13 @@ function TaintEditor({ signal, onChange, t }: EditorProps<SignalOfKind<'taint'>>
     <div className="grid grid-cols-2 gap-2">
       <DrawerSelect
         value={signal.source}
-        onChange={(v) => { onChange({ ...signal, source: v as TaintSource }); }}
+        onChange={(v) => { onChange({ ...signal, source: v }); }}
         options={['env', 'http', 'user-input', 'config', 'secret']}
         t={t}
       />
       <DrawerSelect
         value={signal.sink}
-        onChange={(v) => { onChange({ ...signal, sink: v as TaintSink }); }}
+        onChange={(v) => { onChange({ ...signal, sink: v }); }}
         options={['fs.write', 'exec', 'sql', 'network', 'log']}
         t={t}
       />
@@ -94,7 +91,7 @@ function ExternalEditor({ signal, onChange, t }: EditorProps<SignalOfKind<'exter
     <div className="grid grid-cols-2 gap-2">
       <DrawerSelect
         value={signal.tool}
-        onChange={(v) => { onChange({ ...signal, tool: v as 'eslint' | 'semgrep' | 'codeql' | 'bandit' | 'ruff' }); }}
+        onChange={(v) => { onChange({ ...signal, tool: v }); }}
         options={['eslint', 'semgrep', 'codeql', 'bandit', 'ruff']}
         t={t}
       />

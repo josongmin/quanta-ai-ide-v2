@@ -8,7 +8,9 @@ import { INTEGRATIONS } from './MarketplacePage';
 import { formatNumber } from '@shared/i18n';
 
 export default function IntegrationDetailPage() {
-  const { slug } = useParams({ strict: false }) as unknown as { slug: string };
+  // This route's `$slug` isn't in the typed param registry (path registered as
+  // a plain string), so narrow it in `select` across that untyped boundary.
+  const slug = useParams({ strict: false, select: (p) => (p as { slug?: string }).slug });
   const integration = INTEGRATIONS.find((i) => i.slug === slug) ?? INTEGRATIONS[0];
   const { icon: Icon } = integration;
 

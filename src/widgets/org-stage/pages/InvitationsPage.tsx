@@ -31,7 +31,8 @@ const STATUS_META: Record<InviteStatus, { label: string; fg: string; bg: string 
 };
 
 export default function InvitationsPage() {
-  const { org } = useParams({ strict: false }) as unknown as { org: string };
+  // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
+  const { org = '' } = useParams({ strict: false });
   const [filter, setFilter] = useState<'all' | InviteStatus>('all');
   const filtered = INVITES.filter((i) => filter === 'all' || i.status === filter);
 

@@ -115,9 +115,11 @@ export default function AiPoliciesPage() {
     }, 600);
   };
 
-  const residencyConflicts = Array.from(form.allowedModels).filter(
-    (id) => !MODELS.find((m) => m.id === id)!.residencyOk.includes(form.residency),
-  );
+  const residencyConflicts = Array.from(form.allowedModels).filter((id) => {
+    // Ids only ever come from MODELS, so a missing entry is treated as "no conflict".
+    const model = MODELS.find((m) => m.id === id);
+    return model != null && !model.residencyOk.includes(form.residency);
+  });
 
   return (
     <OrgShell

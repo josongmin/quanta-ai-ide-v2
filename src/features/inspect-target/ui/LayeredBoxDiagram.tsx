@@ -40,7 +40,7 @@ export default function LayeredBoxDiagram({ repo, size = 280 }: Props) {
     }
     const present = LAYER_ORDER.filter((l) => (count[l] ?? 0) > 0);
 
-    const violMap: Record<string, Record<string, number>> = {};
+    const violMap: Partial<Record<Layer, Partial<Record<Layer, number>>>> = {};
     for (const l of present) violMap[l] = {};
 
     let total = 0;
@@ -55,23 +55,26 @@ export default function LayeredBoxDiagram({ repo, size = 280 }: Props) {
         const bi = LAYER_ORDER.indexOf(b);
         total++;
         if (bi < ai && b !== 'vendor') {
-          violMap[a][b] = (violMap[a][b] ?? 0) + 1;
+          const row = (violMap[a] ??= {});
+          row[b] = (row[b] ?? 0) + 1;
           totalViolations++;
         }
       }
     }
 
     const rows: RowStat[] = present.map((l) => {
-      const v = violMap[l];
+      const v = violMap[l] ?? {};
       let worstTarget: Layer | null = null;
       let worstCount = 0;
       let total = 0;
-      for (const k of Object.keys(v)) {
-        const c = v[k];
+      // Object.entries preserves insertion order (matching the original
+      // tie-break) and gives us the value typed, so only the key needs a
+      // narrow — and every key here was inserted as a Layer (`b` above).
+      for (const [k, c] of Object.entries(v) as [Layer, number][]) {
         total += c;
         if (c > worstCount) {
           worstCount = c;
-          worstTarget = k as Layer;
+          worstTarget = k;
         }
       }
       return {

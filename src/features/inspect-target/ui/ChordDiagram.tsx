@@ -48,6 +48,8 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
     const pairCount = new Map<string, number>();
     let totalEdges = 0;
     for (const f of repo.files) {
+      // Invariant: every file in repo.files was inserted into fileBucket
+      // (keyed by f.id) in the loop above, so this lookup is always defined.
       const a = fileBucket.get(f.id)!;
       for (const tid of f.deps) {
         const b = fileBucket.get(tid);

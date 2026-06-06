@@ -32,9 +32,18 @@ const REASON_LABEL: Record<Reason, { title: string; subtitle: string; tone: 'neu
 };
 
 export default function SessionExpiredPage() {
-  const search = useSearch({ strict: false }) as unknown as { from?: string; reason?: Reason };
-  const lastRoute = (search.from && search.from in ROUTE_META ? search.from : '/coding') as LastRoute;
-  const reason: Reason = search.reason ?? 'idle';
+  // Search params aren't registered on this route's schema, so the loose-mode
+  // result is untyped ({}); narrow it in `select` to raw string fields, then
+  // validate each against its known set before use.
+  const search = useSearch({
+    strict: false,
+    select: (s) => s as { from?: string; reason?: string },
+  });
+  // `from in ROUTE_META` proves `from` is a LastRoute key in this branch.
+  const lastRoute: LastRoute =
+    search.from && search.from in ROUTE_META ? (search.from as LastRoute) : '/coding';
+  const reason: Reason =
+    search.reason && search.reason in REASON_LABEL ? (search.reason as Reason) : 'idle';
 
   const meta = ROUTE_META[lastRoute];
   const reasonMeta = REASON_LABEL[reason];

@@ -64,7 +64,8 @@ function format(n: number, mode?: 'compact') {
 }
 
 export default function UsagePage() {
-  const { org } = useParams({ strict: false }) as unknown as { org: string };
+  // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
+  const { org = '' } = useParams({ strict: false });
 
   return (
     <OrgShell

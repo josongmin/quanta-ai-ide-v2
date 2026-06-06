@@ -64,6 +64,8 @@ export default function Treemap({ repo, isDark, size = 280 }: Props) {
         bucket: b,
         name: f.name,
         value: v,
+        // Invariant: `b` was just inserted into bucketSet above when missing,
+        // so this lookup is always defined here.
         bucketIdx: bucketSet.get(b)!,
       });
     }

@@ -23,7 +23,8 @@ export function ArticleList({
       </div>
       <ol>
         {articles.map((a, i) => {
-          const cat = CATEGORIES.find((c) => c.id === a.category)!;
+          // Every CategoryId has a CATEGORIES entry; fallback satisfies the type.
+          const cat = CATEGORIES.find((c) => c.id === a.category) ?? CATEGORIES[0];
           return (
             <li key={a.id}>
               <button

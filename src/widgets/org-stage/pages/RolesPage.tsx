@@ -107,7 +107,9 @@ export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>(SEED_ROLES);
   const [selectedId, setSelectedId] = useState<string>('r-secops');
 
-  const selected = roles.find((r) => r.id === selectedId)!;
+  // selectedId always points at an existing role (deletes reset to 'r-owner');
+  // fall back to the first role so `selected` is always a Role, never undefined.
+  const selected = roles.find((r) => r.id === selectedId) ?? roles[0];
 
   const togglePerm = (perm: PermissionId) => {
     if (selected.builtIn) return;

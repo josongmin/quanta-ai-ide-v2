@@ -15,7 +15,12 @@ import { DonePage } from './parts/DonePage';
 // data lives in component state (in-memory demo) — wiring it to a
 // persistence layer is a one-line replacement of `setData`.
 export default function OnboardingStage() {
-  const search = useSearch({ strict: false }) as unknown as { step?: string; done?: string };
+  // Search params aren't registered on this route's schema, so the loose-mode
+  // result is untyped ({}); narrow it in `select` to the fields we read.
+  const search = useSearch({
+    strict: false,
+    select: (s) => s as { step?: string; done?: string },
+  });
   const stepFromUrl = clampStep(parseInt(search.step ?? '0', 10) || 0);
   const isDone = search.done === '1';
 

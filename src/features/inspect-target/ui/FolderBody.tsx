@@ -43,10 +43,8 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
       label: t('tab.risk'),
       icon: ShieldAlert,
       badges: [
-        // `satisfies` keeps the literal narrowed to a member of Tone without
-        // the bare `as` cast lying about provenance — if Tone ever drops
-        // 'critical' or 'warn', this is a compile error instead of a silent
-        // miscoercion at runtime.
+        // 'critical'/'warn' are verified Tone members; the mutable badge
+        // property needs the Tone type (not the widened literal), so assert it.
         ...(riskCritical > 0 ? [{ n: riskCritical, tone: 'critical' as Tone }] : []),
         ...(riskWarn > 0     ? [{ n: riskWarn,     tone: 'warn'     as Tone }] : []),
       ],

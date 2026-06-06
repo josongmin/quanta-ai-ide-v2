@@ -70,12 +70,18 @@ export const useFilterStore = create<FilterStore>()(
     // length-N typed arrays tied to the current repo.
     let maskCache: MaskCache = EMPTY_CACHE;
 
-    // Apply a state mutation, then recompute derived values from the new state.
-    const updateState = (mutator: (s: FilterState) => FilterState): void => {
-      const { state } = get();
-      const nextState = mutator(state);
+    // Single derivation+commit seam. Every state transition routes through
+    // here so the coupling to `computeDerived`/`maskCache` lives in exactly
+    // one place — callers express *what* the next state is, never *how* it
+    // is derived or committed.
+    const commitState = (nextState: FilterState): void => {
       const derived = computeDerived(maskCache, nextState);
       set({ state: nextState, ...derived });
+    };
+
+    // Apply a state mutation, then recompute derived values from the new state.
+    const updateState = (mutator: (s: FilterState) => FilterState): void => {
+      commitState(mutator(get().state));
     };
 
     return {
@@ -183,15 +189,11 @@ export const useFilterStore = create<FilterStore>()(
               break;
           }
         }
-        const derived = computeDerived(maskCache, nextState);
-        set({ state: nextState, ...derived });
+        commitState(nextState);
       },
 
       resetAll: () => {
-        const { repo } = get();
-        const state = defaultState(repo);
-        const derived = computeDerived(maskCache, state);
-        set({ state, ...derived });
+        commitState(defaultState(get().repo));
       },
     };
   }),

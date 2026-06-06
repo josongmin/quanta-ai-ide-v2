@@ -26,12 +26,16 @@ export default function BillingStage() {
   const [planId, setPlanId] = useState<PlanId>('team');
   const visible = useTabVisibility();
 
-  const plan = PLANS.find((p) => p.id === planId)!;
-  const seats = USAGE.find((u) => u.key === 'seats')!;
+  // planId is the PlanId union (every value has a PLANS entry); USAGE always
+  // has a 'seats' row. Fallbacks keep these non-undefined without an assertion.
+  const plan = PLANS.find((p) => p.id === planId) ?? PLANS[0];
+  const seats = USAGE.find((u) => u.key === 'seats') ?? USAGE[0];
   const seatCount = seats.used;
   const monthlyUsd =
     plan.monthly == null ? 0
-    : (cycle === 'annual' ? plan.annual! : plan.monthly) * seatCount;
+    // In this branch monthly is a number, and annual mirrors it in the data;
+    // fall back to monthly if annual were ever absent.
+    : (cycle === 'annual' ? (plan.annual ?? plan.monthly) : plan.monthly) * seatCount;
 
   return (
     <ScrollPane

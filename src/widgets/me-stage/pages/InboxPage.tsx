@@ -47,7 +47,9 @@ export default function InboxPage() {
     const m = new Map<string, Item[]>();
     for (const i of filtered) {
       const g = bucketOf(i.at);
-      (m.get(g) ?? m.set(g, []).get(g)!).push(i);
+      let bucket = m.get(g);
+      if (!bucket) { bucket = []; m.set(g, bucket); }
+      bucket.push(i);
     }
     return Array.from(m.entries());
   }, [filtered]);

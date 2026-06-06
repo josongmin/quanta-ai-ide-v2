@@ -22,7 +22,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
   const t = useVfx();
   const { t: tr } = useTranslation('verified-fix');
   const [expanded, setExpanded] = useState(false);
-  const stages = fixCase.loop.aborted ? [...STAGE_ORDER, 'aborted' as LoopStage] : STAGE_ORDER;
+  const stages: LoopStage[] = fixCase.loop.aborted ? [...STAGE_ORDER, 'aborted'] : STAGE_ORDER;
   const currentIdx = stages.indexOf(fixCase.loop.currentStage);
   const totalTokens = fixCase.loop.iterations.reduce((a, b) => a + b.costTokens, 0);
   const totalSeconds = fixCase.loop.iterations.reduce((a, b) => a + b.validationSeconds, 0);

@@ -38,6 +38,8 @@ export default function DependencyMatrix({ repo, isDark, size = 280 }: Props) {
     }
 
     for (const f of repo.files) {
+      // Invariant: fileTop was populated for every repo.files entry (keyed by
+      // f.id) in the loop above, so this lookup is always defined.
       const a = fileTop.get(f.id)!;
       for (const tid of f.deps) {
         const b = fileTop.get(tid);

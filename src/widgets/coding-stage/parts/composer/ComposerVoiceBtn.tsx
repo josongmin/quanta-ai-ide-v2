@@ -24,7 +24,9 @@ type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
 
 function getSpeechRecognitionCtor(): SpeechRecognitionCtor | null {
   if (typeof window === 'undefined') return null;
-  const w = window as unknown as {
+  // `window` doesn't declare these non-standard / vendor-prefixed globals;
+  // both are optional so a direct cast (no `unknown` bridge) is sound.
+  const w = window as {
     SpeechRecognition?: SpeechRecognitionCtor;
     webkitSpeechRecognition?: SpeechRecognitionCtor;
   };

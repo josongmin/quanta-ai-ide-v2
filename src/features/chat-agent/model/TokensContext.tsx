@@ -76,6 +76,19 @@ export type Tokens = {
   global: GlobalTokenSections;
 };
 
+// Shape that `mergeTokens` actually reads: every section is optional and each
+// leaf section is itself a Partial. Used for persisted/migrated input which is
+// not guaranteed to carry every field.
+type PartialTokens = {
+  semantic?: {
+    dark?: Partial<SemanticTokens>;
+    light?: Partial<SemanticTokens>;
+  };
+  global?: {
+    [S in keyof GlobalTokenSections]?: Partial<GlobalTokenSections[S]>;
+  };
+};
+
 type Ctx = {
   tokens: Tokens;
   setSemantic: <K extends keyof SemanticTokens>(theme: Theme, key: K, value: SemanticTokens[K]) => void;
@@ -219,7 +232,7 @@ function createDefaults(): Tokens {
   };
 }
 
-function mergeTokens(raw: Partial<Tokens> | null | undefined): Tokens {
+function mergeTokens(raw: PartialTokens | null | undefined): Tokens {
   const defaults = createDefaults();
   if (!raw) return defaults;
   return {
@@ -242,7 +255,7 @@ function mergeTokens(raw: Partial<Tokens> | null | undefined): Tokens {
   };
 }
 
-function migrateLegacy(raw: unknown): Partial<Tokens> | null {
+function migrateLegacy(raw: unknown): PartialTokens | null {
   if (raw == null || typeof raw !== 'object') return null;
   const legacy = raw as Record<string, unknown>;
   const asNumber = (value: unknown): number | undefined =>
@@ -250,8 +263,8 @@ function migrateLegacy(raw: unknown): Partial<Tokens> | null {
   const asString = (value: unknown): string | undefined =>
     typeof value === 'string' && value.trim().length > 0 ? value : undefined;
 
-  // mergeTokens accepts a deep-partial shape, so the migration shape is
-  // intentionally loosely typed and cast at the boundary.
+  // mergeTokens accepts a deep-partial shape (PartialTokens), so the migration
+  // shape is built up section-by-section as partials.
   const glass: Partial<GlobalTokenSections['glass']> = {};
   const card: Partial<GlobalTokenSections['card']> = {};
 
@@ -280,10 +293,10 @@ function migrateLegacy(raw: unknown): Partial<Tokens> | null {
   if (bgDark) semanticPartial.dark = { bgSurface: bgDark, bgStage: bgDark };
   if (bgLight) semanticPartial.light = { bgSurface: bgLight, bgStage: bgLight };
 
-  const next = {
+  const next: PartialTokens = {
     global: { glass, card },
     ...(bgDark || bgLight ? { semantic: semanticPartial } : {}),
-  } as unknown as Partial<Tokens>;
+  };
 
   return next;
 }
@@ -292,7 +305,8 @@ function load(): Tokens {
   if (typeof window === 'undefined') return createDefaults();
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (raw) return mergeTokens(JSON.parse(raw) as Partial<Tokens>);
+    // JSON boundary: parsed persisted state is structurally a deep-partial.
+    if (raw) return mergeTokens(JSON.parse(raw) as PartialTokens);
     const legacy = window.localStorage.getItem(LEGACY_STORAGE_KEY);
     if (legacy) return mergeTokens(migrateLegacy(JSON.parse(legacy)));
   } catch {

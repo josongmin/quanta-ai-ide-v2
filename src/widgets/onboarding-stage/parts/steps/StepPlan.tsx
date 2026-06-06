@@ -15,7 +15,9 @@ type Props = {
 export function StepPlan({ value, onChange }: Props) {
   const { isDark } = useTheme();
   const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
-  const plan = PLANS.find((p) => p.id === value.id)!;
+  // value.id is the PLANS id union and only ever set from a PLANS entry;
+  // fallback keeps `plan` a Plan rather than Plan | undefined.
+  const plan = PLANS.find((p) => p.id === value.id) ?? PLANS[0];
 
   return (
     <div className="flex flex-col gap-5">

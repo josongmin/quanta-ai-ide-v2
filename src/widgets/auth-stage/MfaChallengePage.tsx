@@ -184,7 +184,7 @@ function TotpInput({
       const next = [...value];
       const start = i;
       for (let j = 0; j < digits.length && start + j < 6; j++) {
-        next[start + j] = digits[j]!;
+        next[start + j] = digits[j];
       }
       onChange(next);
       const lastFilled = Math.min(5, start + digits.length - 1);

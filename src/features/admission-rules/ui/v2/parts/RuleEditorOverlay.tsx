@@ -8,7 +8,7 @@ import { useFilterStore } from '@entities/filter-state';
 import { simulateBranchDiff } from '@entities/repo';
 import {
   previewRule, evaluateAdmission, estimateCost,
-  type AdmissionRule, type RuleSource, type RuleSeverity,
+  type AdmissionRule,
 } from '@entities/admission';
 import { useAdmissionStore } from '../../../model/store';
 import { usesHint } from '../../sourceStyle';
@@ -184,7 +184,7 @@ export function RuleEditorOverlay({
             <Field label="Source" t={t}>
               <DrawerSelect
                 value={draft.source}
-                onChange={(v) => { updateDraft({ source: v as RuleSource }); }}
+                onChange={(v) => { updateDraft({ source: v }); }}
                 options={['native', 'eslint', 'semgrep', 'codeql', 'custom']}
                 t={t}
               />
@@ -192,7 +192,7 @@ export function RuleEditorOverlay({
             <Field label="Severity" t={t}>
               <DrawerSelect
                 value={draft.severity}
-                onChange={(v) => { updateDraft({ severity: v as RuleSeverity }); }}
+                onChange={(v) => { updateDraft({ severity: v }); }}
                 options={['block', 'warn', 'info']}
                 accent={draft.severity === 'block' ? SEVERITY_COLOR.block
                   : draft.severity === 'warn' ? SEVERITY_COLOR.warn : undefined}
@@ -477,12 +477,12 @@ export function DrawerInput({
   );
 }
 
-export function DrawerSelect({
+export function DrawerSelect<T extends string>({
   value, onChange, options, accent, t,
 }: {
-  value: string;
-  onChange: (v: string) => void;
-  options: readonly string[];
+  value: T;
+  onChange: (v: T) => void;
+  options: readonly T[];
   accent?: string;
   t?: V2Theme;
 }) {
@@ -497,7 +497,9 @@ export function DrawerSelect({
         color: accent ?? tt.textBody,
       }}
       value={value}
-      onChange={(e) => { onChange(e.currentTarget.value); }}
+      // The native <select> can only emit one of the rendered `options`, so
+      // the DOM string value is one of T; narrowed once here at the boundary.
+      onChange={(e) => { onChange(e.currentTarget.value as T); }}
     >
       {options.map((o) => <option key={o} value={o}>{o}</option>)}
     </select>

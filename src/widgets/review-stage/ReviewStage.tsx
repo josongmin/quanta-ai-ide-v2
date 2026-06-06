@@ -97,7 +97,9 @@ export default function ReviewStage() {
               inspectionWeights={s.inspectionWeights}
               onChangeWeights={s.setInspectionWeights}
               onSelectFile={s.setActiveFilePath}
-              onToggleViewed={(path, v) => { s.markFileViewed(s.activePr!.number, path, v); }}
+              onToggleViewed={(path, v) => {
+                if (s.activePr) s.markFileViewed(s.activePr.number, path, v);
+              }}
               onJumpToFile={s.jumpToFile}
               scrollerRef={s.scrollerRef}
               composerRef={s.composerRef}

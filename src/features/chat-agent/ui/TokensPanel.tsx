@@ -3,7 +3,7 @@ import { X, RotateCcw } from 'lucide-react';
 import { Modal } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import { useTheme } from '@shared/theme';
-import type { SemanticTokens } from '@shared/tokens';
+import { semantic, type SemanticTokens } from '@shared/tokens';
 import { useTokens, type GlobalTokenSections, type Tokens } from '../model/TokensContext';
 import { DARK_PRESETS, LIGHT_PRESETS, type ThemePreset } from '../model/theme-presets';
 
@@ -254,34 +254,16 @@ function PresetSwatch({
 }
 
 function makeStubTokens(): Tokens {
-  // We only need a SemanticTokens shape that the preset's `apply` can
-  // spread into. The non-colour fields are inert for the swatch render.
-  // Cast (not annotate): this is a throwaway swatch-preview stub. The
-  // SemanticTokens shape drifted (brandFg→fgAccent etc.) since this code
-  // was authored; the preset's `apply` only reads the colour keys it
-  // touches, so an approximate stub is fine here.
-  const blank = {
-    bgCanvas: '#000', bgSurface: '#000', bgSurfaceMuted: '#000',
-    bgOverlay: '#000', bgElevated: '#000', bgPanelStrong: '#000',
-    bgHover: '#000', bgActive: '#000', bgActiveStrong: '#000',
-    bgSelected: '#000', bgScrim: '#000', bgStage: '#000', bgStageUniverse: '#000',
-    fgStrong: '#fff', fgDefault: '#fff', fgMuted: '#fff', fgSubtle: '#fff',
-    fgOnAccent: '#fff', fgOnActiveStrong: '#fff', fgLink: '#fff', fgAccent: '#fff',
-    borderDefault: '#000', borderMuted: '#000', borderStrong: '#000',
-    borderFocus: '#000', ringActive: '#000',
-    shadowSm: '', shadowMd: '', shadowLg: '',
-    brandFg: '#fff', brandBg: '#000', brandVivid: '#000',
-    intentSuccessFg: '#fff', intentSuccessBg: '#000', intentSuccessVivid: '#000',
-    intentWarnFg: '#fff', intentWarnBg: '#000', intentWarnVivid: '#000',
-    intentDangerFg: '#fff', intentDangerBg: '#000', intentDangerVivid: '#000',
-    intentInfoFg: '#fff', intentInfoBg: '#000',
-    intentNeutralFg: '#fff', intentNeutralBg: '#000',
-    identityStable: '#fff', identityModified: '#fff',
-    identityVulnerable: '#fff', identityOutOfScope: '#fff',
-    intensityWarm: '#fff', intensityCool: '#fff', intensityNeutral: '#fff',
-  } as unknown as SemanticTokens;
+  // We only need a real SemanticTokens shape that the preset's `apply` can
+  // spread into; it overwrites the colour keys it cares about. Using the
+  // shipped defaults keeps the stub exactly in sync with SemanticTokens (no
+  // hand-maintained shape that can drift).
   return {
-    semantic: { dark: blank, light: blank },
+    semantic: { dark: { ...semantic.dark }, light: { ...semantic.light } },
+    // `global` is structurally required by Tokens but never read by any
+    // preset's `apply` (and the call site only inspects `.semantic`). There
+    // is no exported default GlobalTokenSections value to clone, so an empty
+    // object is cast at this throwaway-stub boundary.
     global: {} as Tokens['global'],
   };
 }
@@ -375,7 +357,10 @@ function GlobalTokenGroup<S extends keyof GlobalTokenSections>({
   values: GlobalTokenSections[S];
   onChange: <K extends keyof GlobalTokenSections[S]>(key: K, value: GlobalTokenSections[S][K]) => void;
 }) {
-  const entries = Object.entries(values) as [keyof GlobalTokenSections[S], GlobalTokenSections[S][keyof GlobalTokenSections[S]]][];
+  // Every leaf in GlobalTokenSections is a `string | number` primitive; type the
+  // Object.entries boundary to that union so the editable value flows cleanly
+  // into TokenField (the precise per-key type is re-narrowed in onChange below).
+  const entries = Object.entries(values) as [keyof GlobalTokenSections[S], string | number][];
   return (
     <div
       className="rounded-xl border p-3 space-y-2"
@@ -398,9 +383,14 @@ function GlobalTokenGroup<S extends keyof GlobalTokenSections>({
           </div>
           <TokenField
             label={humanizeKey(String(key))}
-            value={value as string | number}
+            value={value}
             onChange={(next) => {
-              onChange(key, (typeof value === 'number' ? Number(next) : next) as unknown as GlobalTokenSections[S][typeof key]);
+              // Every leaf in GlobalTokenSections is string | number; we mirror
+              // the existing value's kind. TS can't correlate the runtime
+              // typeof-check with the indexed property type, so a single cast
+              // bridges the matching primitive union to the precise key type.
+              const coerced = typeof value === 'number' ? Number(next) : next;
+              onChange(key, coerced as GlobalTokenSections[S][typeof key]);
             }}
           />
         </div>

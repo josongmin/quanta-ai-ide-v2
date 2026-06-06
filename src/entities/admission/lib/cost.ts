@@ -31,22 +31,19 @@ export function estimateSignalCost(signal: RuleSignal): CostClass {
   }
 }
 
+const GRAPH_COST: Record<string, CostClass> = {
+  'import-cycle': 'fast',
+  'public-api-touched': 'fast',
+  'orphan-edit': 'fast',
+  'layer-violation': 'fast',
+  'public-api-without-test': 'fast',
+  'unknown-region-creep': 'fast',
+  // Already precomputed on each file; aggregation is O(PR).
+  'blast-radius-spike': 'instant',
+};
+
 function graphCost(pattern: string): CostClass {
-  switch (pattern) {
-    case 'import-cycle':
-    case 'public-api-touched':
-    case 'orphan-edit':
-    case 'layer-violation':
-      return 'fast';
-    case 'public-api-without-test':
-    case 'unknown-region-creep':
-      return 'fast';
-    case 'blast-radius-spike':
-      // Already precomputed on each file; aggregation is O(PR).
-      return 'instant';
-    default:
-      return 'medium';
-  }
+  return GRAPH_COST[pattern] ?? 'medium';
 }
 
 // DSL cost is heuristic. If the expression touches only metric/flag fields

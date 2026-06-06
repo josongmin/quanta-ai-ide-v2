@@ -463,12 +463,20 @@ export const useAdmissionStore = create<AdmissionStore>((set, get) => ({
       ) {
         return { ok: false, error: 'Expected {"rules": [...]}' };
       }
-      const incoming = parsed.rules as AdmissionRule[];
-      // Validate minimal shape
-      for (const r of incoming) {
-        if (!r.id || !r.name || !r.signal) {
+      // JSON import boundary: each element is untrusted until shape-checked.
+      const raw: unknown[] = parsed.rules;
+      const incoming: AdmissionRule[] = [];
+      for (const r of raw) {
+        if (
+          !r || typeof r !== 'object' ||
+          !('id' in r) || !r.id ||
+          !('name' in r) || !r.name ||
+          !('signal' in r) || !r.signal
+        ) {
           return { ok: false, error: `Invalid rule: ${JSON.stringify(r).slice(0, 80)}` };
         }
+        // Shape validated above; the parsed object carries the AdmissionRule fields.
+        incoming.push(r as AdmissionRule);
       }
       set((s) => {
         const merged = [...s.rules];
@@ -481,7 +489,7 @@ export const useAdmissionStore = create<AdmissionStore>((set, get) => ({
       });
       return { ok: true, count: incoming.length };
     } catch (e) {
-      return { ok: false, error: (e as Error).message };
+      return { ok: false, error: e instanceof Error ? e.message : String(e) };
     }
   },
 }));

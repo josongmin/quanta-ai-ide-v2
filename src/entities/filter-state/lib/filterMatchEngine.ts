@@ -221,8 +221,10 @@ function computeMatched(cache: MaskCache, state: FilterState): { mask: Uint8Arra
     if (r[0] === def?.[0] && r[1] === def[1]) return null;
     return getMask(cache, `range:${key}`, [r[0], r[1]], () => {
       const m = new Uint8Array(N);
+      // `key` is a `RangeKey` — every member is a `number`-typed key of
+      // `metrics`, so this indexes to `number` with no cast.
       for (const f of files) {
-        const v = (f.metrics as unknown as Record<string, number>)[key];
+        const v = f.metrics[key];
         if (v >= r[0] && v <= r[1]) m[f.id] = 1;
       }
       return m;

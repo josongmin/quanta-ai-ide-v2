@@ -21,10 +21,14 @@ function build(folders: FolderRecord[]): Tree {
   for (const f of folders) map.set(f.path, { folder: f, children: [] });
   let root: Tree | null = null;
   for (const f of folders) {
+    // Invariant: every folder was inserted into `map` keyed by its own path
+    // in the loop above, so this lookup is always defined.
     const node = map.get(f.path)!;
     if (f.parentPath === null) root = node;
     else map.get(f.parentPath)?.children.push(node);
   }
+  // Invariant: repo folder data always contains exactly one root folder
+  // (parentPath === null), so `root` is assigned during the loop.
   return root!;
 }
 

@@ -82,9 +82,10 @@ function compareNum(op: string, a: number, b: number): boolean {
 
 function compileMetric(signal: Extract<RuleSignal, { kind: 'metric' }>): FilePredicate {
   const { field, op, value } = signal;
+  // `field` is a `MetricField` — every member is a `number`-typed key of
+  // `metrics`, so this indexes to `number` with no cast.
   return (f) => {
-    const v = (f.metrics as unknown as Record<string, number | boolean>)[field];
-    if (typeof v !== 'number') return null;
+    const v = f.metrics[field];
     if (!compareNum(op, v, value)) return null;
     return {
       fileId: f.id,

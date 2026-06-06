@@ -176,7 +176,9 @@ function detectGap(pr: PullRequest, repo: RepoData): { hasGap: boolean; missingT
 // future renames.
 function useReviewStoreRequestReviewer(): (prNumber: number, login: string) => void {
   const requestFromStore = useReviewStore(
-    (s) => (s as unknown as { requestReviewer?: (n: number, l: string) => void }).requestReviewer,
+    // The store type may not declare this action yet; widen with an optional
+    // member (no `unknown` bridge) so a future addition stays compatible.
+    (s) => (s as typeof s & { requestReviewer?: (n: number, l: string) => void }).requestReviewer,
   );
   return requestFromStore ?? (() => { /* no-op */ });
 }
