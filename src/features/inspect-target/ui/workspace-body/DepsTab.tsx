@@ -2,8 +2,9 @@
 
 import { memo } from 'react';
 import { formatNumber } from '@shared/lib';
-import { BarRow, Stat } from '@shared/ui';
+import { Stat } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
+import { BarRow } from '../BarRow';
 import { SubCard } from '../parts/TabPanel';
 import type { RepoStats } from './shared';
 

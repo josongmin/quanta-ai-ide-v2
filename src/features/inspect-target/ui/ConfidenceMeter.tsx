@@ -1,8 +1,10 @@
 import { memo } from 'react';
 import { useTranslation } from '@shared/i18n';
-import { C } from '../lib/color';
-import { formatNumber } from '../lib/format';
+import { C, formatNumber } from '@shared/lib';
 
+// Feature-local viz (relocated from shared/ui): only inspect-target consumes it
+// (workspace-body/OverviewTab + FolderBody), so it lives with its callers.
+//
 // All numeric/boolean props — shallow equality is correct. Renders inside
 // memoized tab bodies so this mostly defends against stats object identity
 // flips, but it's a cheap guard.

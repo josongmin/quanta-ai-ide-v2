@@ -4,8 +4,9 @@
 
 import { memo } from 'react';
 import { pct } from '@shared/lib';
-import { BarRow, EmptyHint, FileRow, Stat } from '@shared/ui';
+import { EmptyHint, FileRow, Stat } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
+import { BarRow } from '../BarRow';
 import { SubCard } from '../parts/TabPanel';
 import type { RepoStats } from './shared';
 

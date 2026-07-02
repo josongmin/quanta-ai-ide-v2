@@ -5,8 +5,9 @@
 import { memo } from 'react';
 import { useFilterRepo } from '@entities/filter-state';
 import { languageHue, pct } from '@shared/lib';
-import { ConfidenceMeter, Score, StackedRatioBar, Stat } from '@shared/ui';
+import { Score, StackedRatioBar, Stat } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
+import { ConfidenceMeter } from '../ConfidenceMeter';
 import DepsCarousel from '../DepsCarousel';
 import { SubCard } from '../parts/TabPanel';
 import type { RepoStats } from './shared';

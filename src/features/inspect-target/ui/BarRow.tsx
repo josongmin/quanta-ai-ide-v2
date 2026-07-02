@@ -1,5 +1,8 @@
 import { memo } from 'react';
 
+// Feature-local viz (relocated from shared/ui): only inspect-target consumes it
+// (FolderBody + workspace-body/{ActivityTab,DepsTab}), so it lives with its callers.
+//
 // All props are primitives so the default shallow comparator is a perfect
 // fit. BarRow is rendered in lists (top owners, layers) where the list
 // often re-renders even though individual rows haven't changed.

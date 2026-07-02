@@ -34,8 +34,6 @@ export { PanelFooter } from './PanelFooter';
 // ── Data display ──
 export { Score } from './Score';
 export { Stat } from './Stat';
-export { BarRow } from './BarRow';
-export { ConfidenceMeter } from './ConfidenceMeter';
 export { FileRow } from './FileRow';
 export { StackedRatioBar } from './StackedRatioBar';
 export { EmptyHint } from './EmptyHint';
