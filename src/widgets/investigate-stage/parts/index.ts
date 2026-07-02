@@ -1,1 +1,0 @@
-export { QuickInvestigateSection } from './QuickInvestigateSection';

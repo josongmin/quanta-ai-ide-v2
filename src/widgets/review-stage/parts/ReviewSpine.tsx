@@ -29,9 +29,10 @@ import ReviewerExpectations from '../ui/ReviewerExpectations';
 import SymbolExplainer from '../ui/SymbolExplainer';
 import InspectionWeightsPanel, { type InspectionWeights } from '../ui/InspectionWeights';
 import { FooterHints } from '../ui/ReviewChromeBits';
-import { EngineScene, OverviewScene, RiskScene } from '../ui/ReviewCoreScenes';
-import { DecisionHeadsUp, DecisionPipeline, VerdictHero } from '../ui/ReviewDecisionChrome';
-import { ActivityScene, ChecksScene, FilesScene } from '../ui/ReviewDetailScenes';
+import {
+  ActivityScene, ChecksScene, DecisionHeadsUp, DecisionPipeline, EngineScene,
+  FilesScene, OverviewScene, RiskScene, VerdictHero,
+} from '../ui/scenes';
 import type { ReviewTabKey } from '../ReviewStage';
 
 type Props = {
