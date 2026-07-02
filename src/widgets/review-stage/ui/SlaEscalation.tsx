@@ -29,6 +29,7 @@ import { AlertOctagon, Send, X } from 'lucide-react';
 import type { PullRequest } from '@entities/pr';
 import { viewerLogin } from '@features/review-pr';
 import { useTabVisibility } from '@features/workspace-tabs';
+import { safeSessionGet, safeSessionSet } from '@shared/lib';
 import { dispatchPing, canPing, type PingResult } from '../lib/notifyDispatcher';
 
 const ESCALATION_HOURS = 24 * 7;  // 7 days
@@ -48,7 +49,7 @@ type Props = {
 function loadDismissed(): Set<string> {
   if (typeof window === 'undefined') return new Set();
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    const raw = safeSessionGet(STORAGE_KEY);
     if (raw === null) return new Set();
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return new Set();
@@ -60,11 +61,7 @@ function loadDismissed(): Set<string> {
 
 function saveDismissed(s: Set<string>): void {
   if (typeof window === 'undefined') return;
-  try {
-    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(s)));
-  } catch {
-    /* QuotaExceeded — best effort */
-  }
+  safeSessionSet(STORAGE_KEY, JSON.stringify(Array.from(s)));
 }
 
 export default function SlaEscalation({ prs, onJumpToPr }: Props) {

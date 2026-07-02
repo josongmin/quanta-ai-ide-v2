@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
 import type { ComposerModelId } from '../parts/Composer';
 import { isModelId } from './codingStageHelpers';
 
@@ -26,17 +27,19 @@ export function useComposerState() {
   // the current session.
   const [model, setModel] = useState<ComposerModelId>(() => {
     if (typeof window === 'undefined') return 'claude-opus-4-7';
-    const raw = window.localStorage.getItem('coding:model');
+    const raw = safeLocalGet('coding:model');
     if (isModelId(raw)) return raw;
     return 'claude-opus-4-7';
   });
-  useEffect(() => { window.localStorage.setItem('coding:model', model); }, [model]);
+  useEffect(() => { safeLocalSet('coding:model', model); }, [model]);
 
   // Per-task prompt history for shell-style ↑↓ recall.
   const [promptHistory, setPromptHistory] = useState<Record<string, string[]>>(() => {
     if (typeof window === 'undefined') return {};
+    // Storage read is wrapped by the helper; the try/catch remains as a parse
+    // guard for malformed JSON, preserving the same {} fallback.
     try {
-      const raw = window.localStorage.getItem('coding:prompt-history');
+      const raw = safeLocalGet('coding:prompt-history');
       return raw != null ? JSON.parse(raw) as Record<string, string[]> : {};
     } catch { return {}; }
   });
@@ -46,7 +49,7 @@ export function useComposerState() {
       if (list[list.length - 1] === prompt) return cur;
       const next = [...list, prompt].slice(-50);
       const merged = { ...cur, [taskId]: next };
-      try { window.localStorage.setItem('coding:prompt-history', JSON.stringify(merged)); } catch { /* fine */ }
+      safeLocalSet('coding:prompt-history', JSON.stringify(merged));
       return merged;
     });
   }, []);

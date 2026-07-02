@@ -14,6 +14,7 @@
 // "Cmd-K" is universally a palette gesture, even from inside an input.
 
 import { useEffect } from 'react';
+import { isEditableTarget as isEditable } from '@shared/lib';
 import { useNavigate } from '@tanstack/react-router';
 import { useControlPaletteStore } from '../model/store';
 import { NAV_TABS } from './buildCommands';
@@ -27,14 +28,6 @@ export function useGlobalShortcuts({ onOpenHelp }: Options = {}) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    function isEditable(target: EventTarget | null): boolean {
-      if (!(target instanceof HTMLElement)) return false;
-      const tag = target.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
-      if (target.isContentEditable) return true;
-      return false;
-    }
-
     function onKeyDown(e: KeyboardEvent) {
       const meta = e.metaKey || e.ctrlKey;
 

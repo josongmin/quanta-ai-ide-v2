@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { safeLocalGet, safeLocalSet } from './safeStorage';
+
 export type PanelWidthConfig = {
   storageKey: string;
   defaultWidth: number;
@@ -35,21 +37,17 @@ function clampWidth(width: number, config: PanelWidthConfig): number {
 
 function readStoredWidth(config: PanelWidthConfig): number {
   if (typeof window === 'undefined') return config.defaultWidth;
-  try {
-    const raw = window.localStorage.getItem(config.storageKey);
-    if (!raw) return config.defaultWidth;
-    const parsed = Number(raw);
-    return Number.isFinite(parsed) ? clampWidth(parsed, config) : config.defaultWidth;
-  } catch {
-    return config.defaultWidth;
-  }
+  const raw = safeLocalGet(config.storageKey);
+  if (!raw) return config.defaultWidth;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? clampWidth(parsed, config) : config.defaultWidth;
 }
 
 export function usePersistedPanelWidth(config: PanelWidthConfig): [number, (next: number) => void] {
   const [width, setWidth] = useState<number>(() => readStoredWidth(config));
 
   useEffect(() => {
-    try { window.localStorage.setItem(config.storageKey, String(width)); } catch { /* ignore */ }
+    safeLocalSet(config.storageKey, String(width));
   }, [config.storageKey, width]);
 
   return [width, (next: number) => { setWidth(clampWidth(next, config)); }];

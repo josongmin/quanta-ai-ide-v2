@@ -23,6 +23,8 @@
 // testable and decoupled from React.
 // ─────────────────────────────────────────────────────────────────────────
 
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
+
 const STORAGE_KEY = 'review.pins.v1';
 const TTL_DAYS = 90;
 
@@ -41,7 +43,7 @@ const EMPTY: PinMap = { prs: {}, repos: {} };
 function readMap(): PinMap {
   if (typeof window === 'undefined') return { prs: {}, repos: {} };
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = safeLocalGet(STORAGE_KEY);
     if (raw === null) return { prs: {}, repos: {} };
     const parsed: unknown = JSON.parse(raw);
     if (parsed === null || typeof parsed !== 'object') return { prs: {}, repos: {} };
@@ -72,11 +74,7 @@ function isEntry(v: unknown): v is PinEntry {
 
 function writeMap(m: PinMap): void {
   if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(m));
-  } catch {
-    // Swallow — pin persistence is best-effort.
-  }
+  safeLocalSet(STORAGE_KEY, JSON.stringify(m));
 }
 
 // ── Public API ───────────────────────────────────────────────────────────

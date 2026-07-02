@@ -1,32 +1,21 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Sparkles, ArrowUp, X, Paperclip, Hash, AtSign, Cpu, Plus, ChevronDown } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
-import { useClickOutside } from '@shared/lib';
-import { GlassCard, Pill } from '@shared/ui';
+import { safeLocalGet, safeLocalSet, safeLocalRemove } from '@shared/lib';
+import { GlassCard } from '@shared/ui';
 import { useRunSuggestion, type SuggestionKey } from '../model/suggestions';
-
-type Role = 'user' | 'agent';
-type Msg = { id: number; role: Role; text: string };
-type Session = {
-  id: number;
-  title: string;
-  msgs: Msg[];
-  input: string;
-  pending: boolean;
-};
-
-const SUGGESTION_KEYS = [
-  'lowSafety',
-  'unknownFlag',
-  'refactor',
-  'blastRadius',
-] as const;
-
-let sessionSeq = 1;
-function newSession(titleFn: (n: number) => string): Session {
-  const n = sessionSeq++;
-  return { id: n, title: titleFn(n), msgs: [], input: '', pending: false };
-}
+import { ChatHeader } from './parts/ChatHeader';
+import { Composer } from './parts/Composer';
+import { ExternalSuggestions } from './parts/ExternalSuggestions';
+import { MessageList } from './parts/MessageList';
+import { ResizeHandle } from './parts/ResizeHandle';
+import {
+  deriveTitle,
+  newSession,
+  synthReply,
+  type Msg,
+  type Session,
+} from './parts/types';
 
 export default function ChatAgent({
   maxWidth = 'calc(100vw - 820px)',
@@ -58,7 +47,7 @@ export default function ChatAgent({
   const HEIGHT_MAX_VH = 0.92;
   const [height, setHeight] = useState<number | null>(() => {
     if (typeof window === 'undefined') return null;
-    const raw = window.localStorage.getItem(HEIGHT_KEY);
+    const raw = safeLocalGet(HEIGHT_KEY);
     if (raw == null) return null;
     const n = Number(raw);
     return Number.isFinite(n) && n >= HEIGHT_MIN ? n : null;
@@ -91,13 +80,13 @@ export default function ChatAgent({
     dragRef.current = null;
     setIsResizing(false);
     if (height != null) {
-      window.localStorage.setItem(HEIGHT_KEY, String(height));
+      safeLocalSet(HEIGHT_KEY, String(height));
     }
   }
   function onResizeDoubleClick() {
     // Reset to the CSS default (max-h-[60vh]) by clearing the override.
     setHeight(null);
-    window.localStorage.removeItem(HEIGHT_KEY);
+    safeLocalRemove(HEIGHT_KEY);
   }
   function onResizeKey(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'ArrowUp')   { e.preventDefault(); setHeight((h) => clampHeight((h ?? 360) + 24)); }
@@ -105,7 +94,7 @@ export default function ChatAgent({
     if (e.key === 'Home' || e.key === 'Escape') {
       e.preventDefault();
       setHeight(null);
-      window.localStorage.removeItem(HEIGHT_KEY);
+      safeLocalRemove(HEIGHT_KEY);
     }
   }
 
@@ -348,405 +337,50 @@ export default function ChatAgent({
         }`}
         style={hasConversation && height != null ? { height } : undefined}
       >
-        {/* Vertical resize grip pinned to the very top of the card.
-            Dragging up grows the widget (it's anchored to the viewport
-            bottom). Double-click resets to the CSS default; ArrowUp/Down
-            nudge ±24px; Home/Esc reset. Pattern: macOS Finder column
-            separator + VS Code panel grip.
-            Only shown when there's a conversation — empty state hugs
-            content and has nothing to resize. */}
-        {/* Resize-handle WAI-ARIA pattern uses role="separator" but with
-            interactive pointer/key handlers — the lint rule flags this even
-            though it is the canonical pattern. */}
-        {/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */}
         {hasConversation && (
-          <div
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label={t('agent.resize', { defaultValue: 'Resize chat panel' })}
-          tabIndex={0}
-          onPointerDown={onResizeStart}
-          onPointerMove={onResizeMove}
-          onPointerUp={onResizeEnd}
-          onPointerCancel={onResizeEnd}
-          onDoubleClick={onResizeDoubleClick}
-          onKeyDown={onResizeKey}
-          className={`absolute top-0 left-0 right-0 h-2 -mt-1 z-20 cursor-ns-resize flex items-center justify-center group ${
-            isResizing ? '' : ''
-          }`}
-        >
-          <span
-            className={`block w-8 h-[3px] rounded-full transition-all ${
-              isResizing
-                ? 'bg-[color:var(--fg-default)] opacity-80 w-12'
-                : 'bg-[color:var(--fg-subtle)] opacity-30 group-hover:opacity-70 group-focus-visible:opacity-90'
-            }`}
+          <ResizeHandle
+            isResizing={isResizing}
+            onPointerDown={onResizeStart}
+            onPointerMove={onResizeMove}
+            onPointerUp={onResizeEnd}
+            onDoubleClick={onResizeDoubleClick}
+            onKeyDown={onResizeKey}
+            t={t}
           />
-        </div>
         )}
-        {/* eslint-enable jsx-a11y/no-noninteractive-element-interactions */}
-        {/* Header — p0 brand on the left, tab strip inline, close on the right */}
-        <header
-          className="shrink-0 flex items-stretch border-b"
-          style={{ height: 32, borderColor: 'var(--border-default)' }}
-        >
-          <div className="shrink-0 flex items-center pl-3 pr-3">
-            <span
-              className="font-mono font-black tracking-tight text-[12px] leading-none"
-              style={{ color: 'var(--fg-strong)' }}
-            >
-              p0
-            </span>
-          </div>
-
-          {/* Inline tab strip */}
-          <div className="flex-1 min-w-0 overflow-x-auto scrollbar-hide">
-            <div className="flex items-stretch min-w-max h-full">
-              {sessions.map((s) => {
-                const a = s.id === activeId;
-                return (
-                  <div
-                    key={s.id}
-                    role="tab"
-                    aria-selected={a}
-                    tabIndex={0}
-                    className="group relative flex items-center gap-1.5 px-2.5 text-[11px] font-bold cursor-pointer transition-colors whitespace-nowrap"
-                    style={{ color: a ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
-                    onClick={() => { setActiveId(s.id); }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setActiveId(s.id);
-                      }
-                    }}
-                  >
-                    <span className="max-w-[160px] truncate">{s.title}</span>
-                    {s.pending && (
-                      <span
-                        className="w-1 h-1 rounded-full animate-pulse shrink-0"
-                        style={{ background: 'var(--intent-success-vivid)' }}
-                      />
-                    )}
-                    <button type="button"
-                      onClick={(e) => { e.stopPropagation(); closeSession(s.id); }}
-                      className="ml-0.5 p-0.5 rounded-md transition-colors hover-surface"
-                      style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
-                      title={t('tabs.closeTitle')}
-                      aria-label={t('tabs.closeAria')}
-                    >
-                      <X className="w-2.5 h-2.5" />
-                    </button>
-                    {a && (
-                      <span
-                        className="absolute left-2 right-2 bottom-0 h-[2px]"
-                        style={{ background: 'var(--intent-success-vivid)' }}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-              <button type="button"
-                onClick={addSession}
-                title={t('tabs.newTitle')}
-                aria-label={t('tabs.newAria')}
-                className="shrink-0 px-2.5 flex items-center justify-center transition-colors hover-surface"
-                style={{ color: 'var(--fg-subtle)' }}
-              >
-                <Plus className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-
-          <div className="shrink-0 flex items-center pr-1.5">
-            <button type="button"
-              onClick={() => { setOpen(false); }}
-              aria-label={t('agent.closeAria')}
-              className="p-1 rounded-md transition-colors hover-surface"
-              style={{ color: 'var(--fg-subtle)' }}
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </header>
+        <ChatHeader
+          sessions={sessions}
+          activeId={activeId}
+          onSelect={setActiveId}
+          onAddSession={addSession}
+          onCloseSession={closeSession}
+          onClose={() => { setOpen(false); }}
+          t={t}
+        />
 
         {/* Conversation */}
-        {(active.msgs.length > 0 || active.pending) && (
-          <div className="relative flex-1 min-h-0">
-            <div
-              ref={scrollRef}
-              onScroll={onScroll}
-              className="absolute inset-0 overflow-y-auto scrollbar-hide px-4 py-3"
-            >
-              <div className="space-y-3">
-                {active.msgs.map((m) => (
-                  <Message key={m.id} msg={m} />
-                ))}
-                {active.pending && <PendingDots />}
-              </div>
-            </div>
-            {hasNewBelow && !pinnedToBottom && (
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-10 pointer-events-auto">
-                <button
-                  type="button"
-                  onClick={jumpToLatest}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border shadow-lg transition-colors coding-pill-rise"
-                  style={{
-                    background: 'var(--bg-elevated)',
-                    color: 'var(--fg-strong)',
-                    borderColor: 'var(--border-default)',
-                  }}
-                >
-                  <span
-                    className="w-1 h-1 rounded-full coding-breath"
-                    style={{ background: 'var(--intent-success-vivid)' }}
-                  />
-                  ↓
-                </button>
-              </div>
-            )}
-          </div>
+        {hasConversation && (
+          <MessageList
+            msgs={active.msgs}
+            pending={active.pending}
+            scrollRef={scrollRef}
+            onScroll={onScroll}
+            hasNewBelow={hasNewBelow}
+            pinnedToBottom={pinnedToBottom}
+            onJumpToLatest={jumpToLatest}
+          />
         )}
 
-        {/* Composer */}
-        <div className="shrink-0 border-t" style={{ borderColor: 'var(--border-default)' }}>
-          <div className="px-3 pt-2.5 pb-2">
-            <textarea
-              ref={inputRef}
-              rows={1}
-              value={active.input}
-              onChange={(e) => { patchActive({ input: e.target.value }); }}
-              onKeyDown={onKeyDown}
-              placeholder={t('composer.placeholder')}
-              spellCheck={false}
-              className="w-full bg-transparent resize-none text-[12px] leading-relaxed font-medium focus:outline-none placeholder:text-[color:var(--fg-subtle)]"
-              style={{ maxHeight: 120, color: 'var(--fg-strong)' }}
-            />
-          </div>
-          <div
-            className="flex items-center justify-between px-2 pb-2 pt-1 border-t"
-            style={{ borderColor: 'var(--border-muted)' }}
-          >
-            <div className="flex items-center gap-1">
-              <ToolChip title={t('composer.attachFile')} icon={Paperclip} />
-              <ToolChip title={t('composer.mentionFile')} icon={Hash} />
-              <ToolChip title={t('composer.mentionPerson')} icon={AtSign} />
-              <span className="mx-1 h-3 w-px" style={{ background: 'var(--border-default)' }} />
-              <ModelChip t={t} />
-            </div>
-            <div className="flex items-center gap-2">
-              <span
-                className="text-[9px] font-mono"
-                style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
-              >
-                <kbd
-                  className="px-1 py-0.5 rounded-md"
-                  style={{ background: 'var(--bg-elevated)', color: 'var(--fg-subtle)' }}
-                >↵</kbd> {t('composer.hintSend')}
-                <span className="mx-1.5 opacity-50">·</span>
-                <kbd
-                  className="px-1 py-0.5 rounded-md"
-                  style={{ background: 'var(--bg-elevated)', color: 'var(--fg-subtle)' }}
-                >⇧↵</kbd> {t('composer.hintNewline')}
-              </span>
-              <button type="button"
-                onClick={() => { send(active.input); }}
-                disabled={!active.input.trim() || active.pending}
-                className="flex items-center justify-center w-7 h-7 rounded-md transition-all"
-                style={
-                  active.input.trim() && !active.pending
-                    ? { background: 'var(--intent-success-vivid)', color: 'var(--bg-canvas)' }
-                    : { background: 'var(--bg-elevated)', color: 'var(--fg-subtle)' }
-                }
-                title={t('composer.send')}
-                aria-label={t('composer.sendAria')}
-              >
-                <ArrowUp className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        </div>
+        <Composer
+          inputRef={inputRef}
+          value={active.input}
+          pending={active.pending}
+          onChange={(value) => { patchActive({ input: value }); }}
+          onKeyDown={onKeyDown}
+          onSend={() => { send(active.input); }}
+          t={t}
+        />
       </GlassCard>
     </div>
   );
-}
-
-function ExternalSuggestions({
-  onPick, t,
-}: {
-  onPick: (key: SuggestionKey, label: string) => void;
-  t: (key: string, opts?: Record<string, unknown>) => string;
-}) {
-  return (
-    <div>
-      <div className="flex flex-wrap gap-1.5">
-        {SUGGESTION_KEYS.map((k) => {
-          const s = t(`suggestions.items.${k}`);
-          return (
-            <Pill key={k} onClick={() => { onPick(k, s); }}>
-              {s}
-            </Pill>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function Message({ msg }: { msg: Msg }) {
-  const isUser = msg.role === 'user';
-  return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-      <div
-        className="max-w-[85%] px-3 py-2 rounded-xl text-[12px] leading-relaxed"
-        style={
-          isUser
-            ? {
-                background: 'var(--bg-elevated)',
-                color: 'var(--fg-strong)',
-              }
-            : {
-                background: 'var(--bg-surface-muted)',
-                color: 'var(--fg-muted)',
-                border: '1px solid var(--border-muted)',
-              }
-        }
-      >
-        {!isUser && (
-          <div
-            className="mb-1 font-mono font-black tracking-tight text-[11px] leading-none"
-            style={{ color: 'var(--fg-muted)' }}
-          >
-            p0
-          </div>
-        )}
-        <div className="whitespace-pre-wrap">{msg.text}</div>
-      </div>
-    </div>
-  );
-}
-
-function PendingDots() {
-  return (
-    <div className="flex justify-start">
-      <div
-        className="px-3 py-2 rounded-xl border"
-        style={{
-          background: 'var(--bg-surface-muted)',
-          borderColor: 'var(--border-muted)',
-        }}
-      >
-        <div className="flex items-center gap-1">
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="w-1 h-1 rounded-full animate-pulse"
-              style={{ background: 'var(--fg-subtle)', animationDelay: `${i * 150}ms` }}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const MODELS = [
-  'claude-opus-4-7',
-  'claude-sonnet-4-6',
-  'claude-haiku-4-5',
-];
-
-function ModelChip({
-  t,
-}: {
-  t: (key: string, opts?: Record<string, unknown>) => string;
-}) {
-  const [open, setOpen] = useState(false);
-  const [model, setModel] = useState(MODELS[0]);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useClickOutside(ref, open, () => { setOpen(false); });
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => { setOpen((v) => !v); }}
-        title={t('composer.model')}
-        className="flex items-center gap-1 px-1.5 py-1 rounded-md text-[9px] font-mono transition-colors hover-surface"
-        style={{
-          background: 'var(--bg-elevated)',
-          color: 'var(--fg-muted)',
-        }}
-      >
-        <Cpu className="w-2.5 h-2.5" />
-        <span>{model}</span>
-        <ChevronDown className={`w-2.5 h-2.5 transition-transform ${open ? 'rotate-180' : ''}`} />
-      </button>
-
-      {open && (
-        <div
-          className="absolute bottom-full left-0 mb-1 w-[180px] rounded-lg border shadow-2xl chat-agent-model-pop"
-          style={{
-            borderColor: 'var(--border-default)',
-            background: 'var(--bg-overlay)',
-          }}
-        >
-          {MODELS.map((m) => {
-            const a = m === model;
-            return (
-              <button type="button"
-                key={m}
-                onClick={() => { setModel(m); setOpen(false); }}
-                className="w-full text-left px-2.5 py-1.5 text-[10px] font-mono transition-colors hover-surface"
-                style={
-                  a
-                    ? { background: 'var(--bg-active)', color: 'var(--fg-strong)' }
-                    : { color: 'var(--fg-muted)' }
-                }
-              >
-                {m}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ToolChip({
-  title, icon: Icon,
-}: {
-  title: string; icon: React.ComponentType<{ className?: string }>;
-}) {
-  return (
-    <button type="button"
-      title={title}
-      aria-label={title}
-      className="p-1.5 rounded-md transition-colors hover-surface"
-      style={{ color: 'var(--fg-subtle)' }}
-    >
-      <Icon className="w-3.5 h-3.5" />
-    </button>
-  );
-}
-
-// Derive a short tab title from the first user message.
-function deriveTitle(text: string): string {
-  const cleaned = text.replace(/\s+/g, ' ').trim();
-  if (cleaned.length <= 22) return cleaned;
-  return cleaned.slice(0, 22).trimEnd() + '…';
-}
-
-// Local synthetic reply — no real model call, just a plausible response shape.
-// Takes a t() function so the canned phrases live in locale JSON
-// (chat.synthReply.*) and stay in sync with the user's chosen language.
-type SynthT = (key: string, opts?: Record<string, unknown>) => string;
-function synthReply(q: string, t: SynthT): string {
-  const lower = q.toLowerCase();
-  if (lower.includes('blast')) return t('synthReply.blast');
-  if (lower.includes('refactor')) return t('synthReply.refactor');
-  if (lower.includes('unknown') || lower.includes('flagged')) return t('synthReply.unknown');
-  if (lower.includes('low edit safety') || lower.includes('safety')) return t('synthReply.safety');
-  return t('synthReply.fallback', { q });
 }

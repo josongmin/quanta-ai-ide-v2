@@ -1,3 +1,4 @@
+import { clamp01 } from '@shared/lib';
 import type { FileRecord, RepoData } from '@entities/repo';
 import { computeHotspots, HOTSPOT_VISIBLE_PERCENTILE } from '@entities/hotspot';
 import type { HeatMetricKey } from '../model';
@@ -21,7 +22,6 @@ export type HeatMetric = {
   score: (f: FileRecord, repo: RepoData) => number;
 };
 
-function clamp01(v: number): number { return Math.max(0, Math.min(1, v)); }
 
 // Single warm-sequential hue for "high = bad" metrics. Spec / Healey 1996:
 // keep hue stable, encode intensity via alpha + size. Cool blue is reserved

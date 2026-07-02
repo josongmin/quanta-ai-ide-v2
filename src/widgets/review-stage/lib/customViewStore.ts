@@ -18,6 +18,7 @@
 //     the same recipe-not-result rule.
 // ─────────────────────────────────────────────────────────────────────────
 
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
 import type { QueueScope } from '../ui/LeftQueue';
 
 const STORAGE_KEY = 'review.customViews.v1';
@@ -37,7 +38,7 @@ type StoredMap = Record<string, CustomView>;
 function readMap(): StoredMap {
   if (typeof window === 'undefined') return {};
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = safeLocalGet(STORAGE_KEY);
     if (raw === null) return {};
     const parsed: unknown = JSON.parse(raw);
     if (parsed === null || typeof parsed !== 'object') return {};
@@ -67,11 +68,7 @@ function isView(v: unknown): v is CustomView {
 
 function writeMap(m: StoredMap): void {
   if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(m));
-  } catch {
-    /* QuotaExceeded — best-effort */
-  }
+  safeLocalSet(STORAGE_KEY, JSON.stringify(m));
 }
 
 // ── Public API ───────────────────────────────────────────────────────────

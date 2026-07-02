@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
 import { TaskRail } from './parts/chrome/TaskRail';
 import { type ComposerModelId } from './parts/Composer';
 import { CommandPalette, type PaletteAction } from './parts/palette/CommandPalette';
@@ -91,20 +92,20 @@ export default function CodingStage() {
   // toggle is shell-style compact/comfortable/spacious.
   const [highContrast, setHighContrast] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
-    if (window.localStorage.getItem('coding:highContrast') === '1') return true;
+    if (safeLocalGet('coding:highContrast') === '1') return true;
     return window.matchMedia?.('(prefers-contrast: more)').matches ?? false;
   });
   const [density, setDensity] = useState<'compact' | 'comfortable' | 'spacious'>(() => {
     if (typeof window === 'undefined') return 'comfortable';
-    const raw = window.localStorage.getItem('coding:density');
+    const raw = safeLocalGet('coding:density');
     if (raw === 'compact' || raw === 'comfortable' || raw === 'spacious') return raw;
     return 'comfortable';
   });
   // Single persistence effect for both a11y prefs — same storage keys and
   // write behavior, one effect instead of two.
   useEffect(() => {
-    window.localStorage.setItem('coding:highContrast', highContrast ? '1' : '0');
-    window.localStorage.setItem('coding:density', density);
+    safeLocalSet('coding:highContrast', highContrast ? '1' : '0');
+    safeLocalSet('coding:density', density);
   }, [highContrast, density]);
 
   // When the active project changes, mirror its `defaultModel` into the
@@ -113,7 +114,7 @@ export default function CodingStage() {
   useEffect(() => {
     if (!active) return;
     const proj = projects.find((p) => p.id === active.projectId);
-    const stored = window.localStorage.getItem(`coding:project-default-model:${active.projectId}`);
+    const stored = safeLocalGet(`coding:project-default-model:${active.projectId}`);
     if (isModelId(stored)) { setModel(stored); return; }
     if (proj?.defaultModel != null && isModelId(proj.defaultModel)) {
       setModel(proj.defaultModel);

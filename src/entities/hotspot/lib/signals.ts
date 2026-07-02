@@ -1,9 +1,6 @@
+import { clamp01 } from '@shared/lib';
 import type { FileRecord, RepoData } from '@entities/repo';
 import type { HotspotSignals } from '../model';
-
-function clamp01(n: number): number {
-  return n < 0 ? 0 : n > 1 ? 1 : n;
-}
 
 function range(repo: RepoData, key: keyof RepoData['ranges']): number {
   const [, hi] = repo.ranges[key];

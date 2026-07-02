@@ -13,6 +13,7 @@
 // "evidence" reads as noise.
 //
 // Pure, no React, no async.
+import { clamp01 } from '@shared/lib';
 import type { FileRecord, RepoData } from '../model';
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -24,8 +25,6 @@ function lcg(seed: number): () => number {
   let s = (seed * 9301 + 49297) % 233280;
   return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
 }
-
-function clamp01(v: number): number { return Math.max(0, Math.min(1, v)); }
 
 // ─────────────────────────────────────────────────────────────────────────
 // Function summary — catalog: `function_summary`

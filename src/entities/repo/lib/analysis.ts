@@ -3,6 +3,7 @@
 // three.js. Each is small enough to run on demand from a hover handler
 // without memo plumbing — the repo has ~600 files in the demo.
 
+import { clamp01 } from '@shared/lib';
 import type { FileRecord, RepoData } from '../model';
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -283,7 +284,6 @@ export type RiskLensHit = {
   breakdown: { label: string; value: number }[];
 };
 
-function clamp01(v: number): number { return Math.max(0, Math.min(1, v)); }
 
 function riskLensScore(
   file: FileRecord,

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { clamp, isEditableTarget as inEditableTarget } from '@shared/lib';
 import type { ReviewTabKey } from '../ReviewStage';
 
 // Two-key chord timeout ("g o" → Overview). 1.2s mirrors common Vim-bindings
@@ -49,15 +50,6 @@ const TAB_CHORD: Record<string, ReviewTabKey> = {
   c: 'checks',
   a: 'activity',
 };
-
-/** Returns true when a typing surface owns focus and we should bail. */
-function inEditableTarget(target: EventTarget | null): boolean {
-  if (!(target instanceof HTMLElement)) return false;
-  const tag = target.tagName;
-  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
-  if (target.isContentEditable) return true;
-  return false;
-}
 
 /**
  * Keyboard map for the review surface. All bindings are global (window-level)
@@ -197,10 +189,4 @@ export function useReviewKeyboard(args: ReviewKeyboardArgs): void {
     // `visiblePrNumbersRef` — both are mutable containers the parent
     // updates each render, so we install the listener exactly once.
   }, []);
-}
-
-function clamp(n: number, lo: number, hi: number): number {
-  if (n < lo) return lo;
-  if (n > hi) return hi;
-  return n;
 }

@@ -29,6 +29,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import { useReviewStore } from '@features/review-pr';
+import { safeSessionGet, safeSessionSet } from '@shared/lib';
 
 const STORAGE_KEY = 'review.ping.sentInSession.v1';
 const COOLDOWN_MS = 30 * 60 * 1000;  // 30 min
@@ -38,7 +39,7 @@ type Sent = Record<string, number>;  // key=`${prNumber}:${target}` → epoch ms
 function read(): Sent {
   if (typeof window === 'undefined') return {};
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    const raw = safeSessionGet(STORAGE_KEY);
     if (raw === null) return {};
     const parsed: unknown = JSON.parse(raw);
     if (parsed === null || typeof parsed !== 'object') return {};
@@ -54,11 +55,7 @@ function read(): Sent {
 
 function write(m: Sent): void {
   if (typeof window === 'undefined') return;
-  try {
-    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(m));
-  } catch {
-    /* QuotaExceeded */
-  }
+  safeSessionSet(STORAGE_KEY, JSON.stringify(m));
 }
 
 export type PingTarget = 'pending-reviewers' | 'author';

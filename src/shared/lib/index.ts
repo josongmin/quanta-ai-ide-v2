@@ -9,6 +9,12 @@ export { useShortcut, type Shortcut } from './useShortcut';
 export { useClickOutside } from './useClickOutside';
 export { useHoverStyle } from './useHoverStyle';
 export { toneToColors, type SemanticTone, type ToneColors } from './toneToColors';
+export {
+  safeLocalSet, safeLocalGet, safeSessionSet, safeSessionGet,
+  safeLocalRemove, safeSessionRemove,
+} from './safeStorage';
+export { clamp, clamp01 } from './clamp';
+export { isEditableTarget } from './isEditableTarget';
 export { shallowEqual } from './shallowEqual';
 export { useScrollRestoration } from './useScrollRestoration';
 export { useScrollLock } from './useScrollLock';

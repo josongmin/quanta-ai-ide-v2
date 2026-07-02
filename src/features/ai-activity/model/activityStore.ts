@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
 
 // ─── Domain ───────────────────────────────────────────────────────────
 // Each "activity" is one AI chat session touching N files. Files are
@@ -91,8 +92,10 @@ const STORAGE_KEY = 'cflens.aiActivity.prefs.v1';
 
 function loadPrefs(): ActivityPrefs {
   if (typeof window === 'undefined') return PREFS_DEFAULTS;
+  // The storage read is wrapped by the helper; the try/catch remains as a
+  // parse guard for malformed JSON, preserving the same defaults fallback.
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = safeLocalGet(STORAGE_KEY);
     if (!raw) return PREFS_DEFAULTS;
     return { ...PREFS_DEFAULTS, ...(JSON.parse(raw) as Partial<ActivityPrefs>) };
   } catch {
@@ -102,8 +105,7 @@ function loadPrefs(): ActivityPrefs {
 
 function persistPrefs(p: ActivityPrefs) {
   if (typeof window === 'undefined') return;
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }
-  catch { /* localStorage full / disabled — non-fatal */ }
+  safeLocalSet(STORAGE_KEY, JSON.stringify(p));
 }
 
 // ─── Store ────────────────────────────────────────────────────────────

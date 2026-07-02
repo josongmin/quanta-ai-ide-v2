@@ -1,15 +1,8 @@
 import { useEffect } from 'react';
+import { isEditableTarget } from '@shared/lib';
 import type { InvestigationTarget } from '@entities/investigation';
 
 type ViewMode = 'answer' | 'notebook';
-
-function isEditableTarget(t: EventTarget | null): boolean {
-  if (!(t instanceof HTMLElement)) return false;
-  const tag = t.tagName;
-  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
-  if (t.isContentEditable) return true;
-  return false;
-}
 
 export function usePanelKeyboardNav(opts: {
   panelOpen: boolean;

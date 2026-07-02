@@ -42,6 +42,7 @@ import type {
   EngineFinding, FileDiff, PullRequest,
 } from '@entities/pr';
 import { incidentMatches } from '@entities/pr';
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
 import type { RepoData } from '@entities/repo';
 
 // ─── Symbol-level change extraction ──────────────────────────────────────
@@ -355,7 +356,7 @@ type SessionMap = Record<string, SessionState>;
 function readMap(): SessionMap {
   if (typeof window === 'undefined') return {};
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = safeLocalGet(STORAGE_KEY);
     if (raw === null) return {};
     const parsed: unknown = JSON.parse(raw);
     if (parsed === null || typeof parsed !== 'object') return {};
@@ -377,11 +378,7 @@ function readMap(): SessionMap {
 
 function writeMap(m: SessionMap): void {
   if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(m));
-  } catch {
-    // Swallow QuotaExceeded / SecurityError — session resume is a nice-to-have.
-  }
+  safeLocalSet(STORAGE_KEY, JSON.stringify(m));
 }
 
 export function getSession(prNumber: number): SessionState | null {

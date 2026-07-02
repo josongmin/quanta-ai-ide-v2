@@ -1,6 +1,7 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode,
 } from 'react';
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
 import type { Plan, FacetCategoryKey, FacetEntry } from '@entities/facet';
 
 export type { Plan, FacetCategoryKey, FacetEntry };
@@ -28,8 +29,10 @@ const PrefsCtx = createContext<Ctx | null>(null);
 
 function load(): PrefsState {
   if (typeof window === 'undefined') return defaults();
+  // The storage read is wrapped by the helper; the try/catch remains as a
+  // parse guard for malformed JSON, preserving the same defaults fallback.
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = safeLocalGet(STORAGE_KEY);
     if (!raw) return defaults();
     const parsed = JSON.parse(raw) as { plan?: Plan; hidden?: string[]; collapsedCategories?: string[] };
     return {
@@ -51,7 +54,7 @@ function defaults(): PrefsState {
 }
 function persist(s: PrefsState) {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+  safeLocalSet(STORAGE_KEY, JSON.stringify({
     plan: s.plan,
     hidden: [...s.hidden],
     collapsedCategories: [...s.collapsedCategories],

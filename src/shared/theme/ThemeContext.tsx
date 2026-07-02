@@ -1,6 +1,7 @@
 import {
   createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode,
 } from 'react';
+import { safeLocalGet, safeLocalSet } from '@shared/lib';
 
 
 export type Theme = 'dark' | 'light';
@@ -12,12 +13,8 @@ const STORAGE_KEY = 'app:theme';
 
 function readStored(): Theme | null {
   if (typeof window === 'undefined') return null;
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (raw === 'dark' || raw === 'light') return raw;
-  } catch {
-    /* localStorage unavailable (private mode, sandboxed iframe) — ignore. */
-  }
+  const raw = safeLocalGet(STORAGE_KEY);
+  if (raw === 'dark' || raw === 'light') return raw;
   return null;
 }
 
@@ -52,11 +49,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Persistence is non-visual; keep it in useEffect so we don't block paint.
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, theme);
-    } catch {
-      /* swallow — best-effort persistence. */
-    }
+    safeLocalSet(STORAGE_KEY, theme);
   }, [theme]);
 
   const toggle = useCallback(() => {
