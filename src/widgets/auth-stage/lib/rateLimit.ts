@@ -3,19 +3,22 @@
 // check; here it lets us demonstrate the lockout UI deterministically.
 
 import { useEffect, useRef, useState } from 'react';
+import { safeSessionGet, safeSessionSet } from '@shared/lib';
 
 type Attempt = { at: number; ok: boolean };
 
 const HISTORY_KEY = 'auth.rate.history.v1';
 
 function readHistory(): Attempt[] {
+  // Storage read is wrapped by the helper; the surrounding try/catch remains as
+  // a parse guard for malformed JSON.
   try {
-    const raw = sessionStorage.getItem(HISTORY_KEY);
+    const raw = safeSessionGet(HISTORY_KEY);
     return raw ? (JSON.parse(raw) as Attempt[]) : [];
   } catch { return []; }
 }
 function writeHistory(h: Attempt[]) {
-  try { sessionStorage.setItem(HISTORY_KEY, JSON.stringify(h)); } catch { /* ignore */ }
+  safeSessionSet(HISTORY_KEY, JSON.stringify(h));
 }
 
 export type RateLimitState = {
