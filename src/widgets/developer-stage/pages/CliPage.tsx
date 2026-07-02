@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Apple, Terminal, Copy, Check, ArrowUpRight } from 'lucide-react';
 import { useHoverStyle } from '@shared/lib';
 import { GithubIcon } from '@shared/ui/brand-icons';
+import { StatusDot } from '@shared/ui';
 import { DeveloperShell } from '../parts/DeveloperShell';
 
 type OS = 'mac' | 'linux' | 'windows';
@@ -37,7 +38,7 @@ export default function CliPage() {
               color: 'var(--intent-success-fg)',
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--intent-success-fg)' }} />
+            <StatusDot intent="success" size="xs" />
             v3.14.0 stable
           </span>
           <a

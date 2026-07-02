@@ -1,7 +1,8 @@
 import { useParams } from '@tanstack/react-router';
 import { useRef, useState } from 'react';
-import { Mail, Plus, Copy, RotateCcw, X, Clock, Check } from 'lucide-react';
+import { Mail, Plus, RotateCcw, X, Clock } from 'lucide-react';
 import { useHoverStyle } from '@shared/lib';
+import { CopyableField } from '@shared/ui';
 import { OrgShell } from '../parts/OrgShell';
 
 type InviteStatus = 'pending' | 'accepted' | 'expired';
@@ -120,7 +121,7 @@ export default function InvitationsPage() {
         <p className="text-[11px] mb-3" style={{ color: 'var(--fg-muted)' }}>
           Anyone with this link from a verified domain can join as a Member. Disable any time.
         </p>
-        <ShareLink url={`https://acme.dev/join/${org}#aB12Cd34`} />
+        <CopyableField value={`https://acme.dev/join/${org}#aB12Cd34`} layout="row" button="text" />
       </div>
     </OrgShell>
   );
@@ -209,36 +210,3 @@ function RowBtn({ icon: Icon, label, danger }: { icon: React.ComponentType<{ cla
   );
 }
 
-function ShareLink({ url }: { url: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <div
-      className="flex items-center rounded-md overflow-hidden"
-      style={{
-        background: 'var(--bg-surface-muted)',
-        border: '1px solid var(--border-default)',
-      }}
-    >
-      <code className="flex-1 px-3 py-2 text-[12px] font-mono truncate" style={{ color: 'var(--fg-strong)' }}>
-        {url}
-      </code>
-      <button
-        type="button"
-        onClick={() => {
-          if (typeof navigator !== 'undefined' && navigator.clipboard) {
-            void navigator.clipboard.writeText(url);
-            setCopied(true);
-            window.setTimeout(() => { setCopied(false); }, 1200);
-          }
-        }}
-        className="inline-flex items-center gap-1 h-9 px-3 text-[11px] font-semibold transition-colors"
-        style={{ color: 'var(--fg-muted)' }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-      >
-        {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-        {copied ? 'Copied' : 'Copy'}
-      </button>
-    </div>
-  );
-}

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Play, ChevronDown, Clock, Zap } from 'lucide-react';
+import { StatusDot } from '@shared/ui';
 import { DeveloperShell } from '../parts/DeveloperShell';
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
@@ -63,10 +64,7 @@ export default function PlaygroundPage() {
             color: 'var(--intent-success-fg)',
           }}
         >
-          <span
-            className="w-1.5 h-1.5 rounded-full animate-pulse"
-            style={{ background: 'var(--intent-success-fg)' }}
-          />
+          <StatusDot intent="success" size="xs" pulse />
           Authenticated · sk
         </span>
       }
@@ -171,7 +169,7 @@ export default function PlaygroundPage() {
             right={response ? (
               <div className="flex items-center gap-3 text-[10px]" style={{ color: 'var(--fg-muted)' }}>
                 <span className="inline-flex items-center gap-1 font-semibold" style={{ color: 'var(--intent-success-fg)' }}>
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--intent-success-fg)' }} />
+                  <StatusDot intent="success" size="xs" />
                   {response.status}
                 </span>
                 <span className="inline-flex items-center gap-1 tabular-nums">

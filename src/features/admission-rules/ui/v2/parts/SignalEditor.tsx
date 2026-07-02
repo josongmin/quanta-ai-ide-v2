@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import type { RuleSignal } from '@entities/admission';
 import type { V2Theme } from './tokens';
-import { DrawerInput, DrawerSelect } from './RuleEditorOverlay';
+import { DrawerInput, DrawerSelect } from './DrawerFields';
 
 // Per-kind signal editor registry (Open/Closed): adding a new signal kind
 // means adding one entry to SIGNAL_EDITORS instead of growing an if-chain.

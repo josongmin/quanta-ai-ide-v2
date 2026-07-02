@@ -1,6 +1,8 @@
 // Static demo data for the billing surface. Pure data; no effects.
 
-export type PlanId = 'free' | 'team' | 'business' | 'enterprise';
+import type { PlanId } from '@entities/plan';
+
+export type { PlanId };
 
 export type Plan = {
   id: PlanId;

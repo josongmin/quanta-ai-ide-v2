@@ -3,6 +3,7 @@ import {
   Activity, Bot, Brush, FlaskConical, GitPullRequest, Pause, Pencil, Plus,
   Search as SearchIcon, Sparkles, Wrench, Zap,
 } from 'lucide-react';
+import { StatusDot } from '@shared/ui';
 import type { Routine, RoutineKind, RoutineStatus } from './types';
 import { relativeUntilMs } from './data';
 
@@ -149,10 +150,10 @@ function RoutineRow({
   const muted = isDark ? 'text-white/45' : 'text-black/55';
   const faint = isDark ? 'text-white/30' : 'text-black/40';
 
-  const statusDot =
-    routine.status === 'active' ? 'bg-[color:var(--intent-success-vivid)]'
-    : routine.status === 'paused' ? 'bg-[color:var(--intent-warn-vivid)]'
-    : (isDark ? 'bg-white/25' : 'bg-black/25');
+  const statusDotColor =
+    routine.status === 'active' ? 'var(--intent-success-vivid)'
+    : routine.status === 'paused' ? 'var(--intent-warn-vivid)'
+    : (isDark ? 'rgb(255 255 255 / 0.25)' : 'rgb(0 0 0 / 0.25)');
 
   const nextLabel = routine.trigger.kind === 'manual'
     ? t('rail.noNextFire')
@@ -175,7 +176,7 @@ function RoutineRow({
           </span>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-0.5">
-              <span className={`shrink-0 w-1.5 h-1.5 rounded-full ${statusDot} ${routine.status === 'active' ? 'animate-pulse' : ''}`} />
+              <StatusDot color={statusDotColor} size="xs" pulse={routine.status === 'active'} />
               <span className={`text-[12px] font-semibold truncate ${heading}`}>{routine.name}</span>
             </div>
             <div className={`text-[10px] font-mono truncate ${faint} mb-1`}>

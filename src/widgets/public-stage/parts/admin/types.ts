@@ -1,6 +1,9 @@
 // Shared types for the Super-admin page parts.
 
-export type Plan = 'free' | 'team' | 'business' | 'enterprise';
+import type { PlanId } from '@entities/plan';
+
+// The admin surface refers to the tier as `Plan`; it's the shared PlanId.
+export type Plan = PlanId;
 export type Org = {
   id: string;
   name: string;

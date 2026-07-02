@@ -1,9 +1,11 @@
 // Shared types for the Pricing page parts.
 
+import type { PlanId } from '@entities/plan';
+
 export type Cycle = 'monthly' | 'annual';
 
 export type Plan = {
-  id: 'free' | 'team' | 'business' | 'enterprise';
+  id: PlanId;
   name: string;
   tagline: string;
   monthly: number | null;

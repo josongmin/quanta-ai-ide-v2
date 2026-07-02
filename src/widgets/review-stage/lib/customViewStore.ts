@@ -18,8 +18,8 @@
 //     the same recipe-not-result rule.
 // ─────────────────────────────────────────────────────────────────────────
 
-import { safeLocalGet, safeLocalSet } from '@shared/lib';
 import type { QueueScope } from '../ui/LeftQueue';
+import { createTtlMapStore } from './ttlMapStore';
 
 const STORAGE_KEY = 'review.customViews.v1';
 const TTL_DAYS = 180;
@@ -35,26 +35,6 @@ export type CustomView = {
 
 type StoredMap = Record<string, CustomView>;
 
-function readMap(): StoredMap {
-  if (typeof window === 'undefined') return {};
-  try {
-    const raw = safeLocalGet(STORAGE_KEY);
-    if (raw === null) return {};
-    const parsed: unknown = JSON.parse(raw);
-    if (parsed === null || typeof parsed !== 'object') return {};
-    const cutoff = Date.now() - TTL_DAYS * 24 * 60 * 60 * 1000;
-    const out: StoredMap = {};
-    for (const [k, v] of Object.entries(parsed as StoredMap)) {
-      if (!isView(v)) continue;
-      if (new Date(v.createdAt).getTime() < cutoff) continue;
-      out[k] = v;
-    }
-    return out;
-  } catch {
-    return {};
-  }
-}
-
 function isView(v: unknown): v is CustomView {
   if (v === null || typeof v !== 'object') return false;
   const o = v as Partial<CustomView>;
@@ -66,10 +46,12 @@ function isView(v: unknown): v is CustomView {
     && typeof o.createdAt === 'string';
 }
 
-function writeMap(m: StoredMap): void {
-  if (typeof window === 'undefined') return;
-  safeLocalSet(STORAGE_KEY, JSON.stringify(m));
-}
+const { readMap, writeMap } = createTtlMapStore<CustomView>({
+  key: STORAGE_KEY,
+  ttlDays: TTL_DAYS,
+  timestampOf: (v) => v.createdAt,
+  isValid: isView,
+});
 
 // ── Public API ───────────────────────────────────────────────────────────
 

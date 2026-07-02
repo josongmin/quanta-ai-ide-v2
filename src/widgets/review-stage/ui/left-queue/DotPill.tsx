@@ -1,3 +1,5 @@
+import { StatusDot } from '@shared/ui';
+
 export function DotPill({
   tone, label, title,
 }: { tone: string; label: string; title: string }) {
@@ -11,7 +13,7 @@ export function DotPill({
       }}
       title={title}
     >
-      <span className="w-1.5 h-1.5 rounded-full" style={{ background: tone }} />
+      <StatusDot color={tone} size="xs" />
       {label}
     </span>
   );

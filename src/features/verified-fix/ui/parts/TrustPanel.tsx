@@ -1,9 +1,17 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { AlertTriangle, Trash2, Sparkles, Send, ShieldCheck, FlaskConical, Loader2 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
-import type { CandidateFix, CounterEvidence, DeliveryTier, FixCase } from '../../model/types';
+import type { CandidateFix, FixCase } from '../../model/types';
 import { useVerifiedFixStore } from '../../model/store';
 import { useVfx, tierColor } from './tokens';
+import {
+  ConfidenceDial,
+  CounterEvidenceRow,
+  DeliveryGate,
+  TierRuleChecklist,
+  tierExplainKey,
+  tierKey,
+} from './trust-panel';
 
 export function TrustPanel({
   candidate, fixCase, onDismiss,
@@ -246,166 +254,4 @@ export function TrustPanel({
       </div>
     </aside>
   );
-}
-
-function CounterEvidenceRow({ item }: { item: CounterEvidence }) {
-  const t = useVfx();
-  const { t: tr } = useTranslation('verified-fix');
-  const sevColor =
-    item.severity === 'block'   ? t.bad
-    : item.severity === 'concern' ? t.warn
-    : t.textMuted;
-  const sevBg =
-    item.severity === 'block'   ? t.badSoft
-    : item.severity === 'concern' ? t.warnSoft
-    : t.badgeBg;
-  return (
-    <div
-      className="rounded border p-2"
-      style={{ background: t.cardBacking, borderColor: t.borderSoft }}
-    >
-      <div className="flex items-center gap-1.5 mb-1">
-        <span
-          className="text-2xs font-bold uppercase tracking-[0.14em] px-1 py-px rounded font-mono"
-          style={{ background: sevBg, color: sevColor }}
-        >
-          {tr(`trust.counterSeverity.${item.severity}`)}
-        </span>
-        <span className="text-sm font-semibold" style={{ color: t.textHi }}>
-          {item.label}
-        </span>
-      </div>
-      <div className="text-sm leading-snug" style={{ color: t.textMuted }}>
-        {item.detail}
-      </div>
-    </div>
-  );
-}
-
-function ConfidenceDial({ value }: { value: number }) {
-  const t = useVfx();
-  const { t: tr } = useTranslation('verified-fix');
-  const pct = Math.round(value * 100);
-  const arc = 2 * Math.PI * 22;
-  const dashed = (value * arc).toFixed(2);
-  const color = value >= 0.85 ? t.ok : value >= 0.7 ? t.info : value >= 0.5 ? t.warn : t.bad;
-  return (
-    <div className="flex items-center gap-3">
-      <div className="relative w-[60px] h-[60px] shrink-0">
-        <svg viewBox="0 0 56 56" className="w-[60px] h-[60px] -rotate-90">
-          <circle cx="28" cy="28" r="22" stroke={t.borderSoft} strokeWidth="4" fill="none" />
-          <circle
-            cx="28" cy="28" r="22"
-            stroke={color} strokeWidth="4" fill="none"
-            strokeDasharray={`${dashed} ${arc.toFixed(2)}`}
-            strokeLinecap="round"
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-[16px] font-black font-mono" style={{ color }}>{pct}</span>
-          <span className="text-[8px] font-bold uppercase tracking-[0.12em]" style={{ color: t.textFaint }}>
-            {tr('trust.conf')}
-          </span>
-        </div>
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
-          {tr('trust.patchConfidence')}
-        </div>
-        <div className="text-sm mt-0.5 leading-snug" style={{ color: t.textBody }}>
-          {tr(confidenceKey(value))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DeliveryGate({ gateDecision, gateReason }: { gateDecision: string; gateReason: string }) {
-  const t = useVfx();
-  const { t: tr } = useTranslation('verified-fix');
-  const color =
-    gateDecision === 'auto-submit'  ? t.ok
-    : gateDecision === 'needs-review' ? t.info
-    : t.warn;
-  const bg =
-    gateDecision === 'auto-submit'  ? t.okSoft
-    : gateDecision === 'needs-review' ? t.infoSoft
-    : t.warnSoft;
-  return (
-    <div className="rounded border p-2.5" style={{ background: t.cardBacking, borderColor: t.borderSoft }}>
-      <div className="flex items-center gap-1.5 mb-1">
-        <span
-          className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
-          style={{ background: bg, color }}
-        >
-          {tr(`gateDecision.${gateDecision}`)}
-        </span>
-      </div>
-      <div className="text-sm leading-snug" style={{ color: t.textMuted }}>
-        {gateReason}
-      </div>
-    </div>
-  );
-}
-
-// Quantitative gate rules for safe-mechanical tier — exposed inline so
-// reviewers can see why this candidate did or didn't qualify, instead
-// of trusting an opaque label. Plan doc demands this be measurable.
-function TierRuleChecklist({ candidate }: { candidate: CandidateFix }) {
-  const t = useVfx();
-  const { t: tr } = useTranslation('verified-fix');
-  const allPass = candidate.obligations.every((o) => o.status === 'pass');
-  const partial = candidate.obligations.some((o) => o.status === 'partial');
-  const failing = candidate.obligations.some((o) => o.status === 'fail');
-
-  const checks: { label: string; pass: boolean }[] = [
-    { label: tr('trust.tierRule.lines'),       pass: candidate.changedLines <= 20 },
-    { label: tr('trust.tierRule.files'),       pass: candidate.changedFiles <= 2 },
-    { label: tr('trust.tierRule.blast'),       pass: candidate.blastModules <= 1 },
-    { label: tr('trust.tierRule.noPublicApi'), pass: !candidate.publicApiChange },
-    { label: tr('trust.tierRule.allProofs'),   pass: allPass && !partial && !failing },
-  ];
-  return (
-    <ul className="space-y-0.5">
-      {checks.map((c, i) => (
-        <li
-          key={i}
-          className="flex items-center gap-1.5 text-[10px] font-mono"
-          style={{ color: c.pass ? t.ok : t.textFaint }}
-        >
-          <span className="inline-block w-3 text-center">{c.pass ? '✓' : '·'}</span>
-          <span>{c.label}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-// tier → i18n-key lookups. Replace the parallel switches; the keys are
-// identical to the prior switch arms so the rendered copy is unchanged.
-const TIER_KEY: Record<DeliveryTier, string> = {
-  'safe-mechanical': 'tier.safeMechanical',
-  'guarded':         'tier.guarded',
-  'human-required':  'tier.humanRequired',
-};
-
-const TIER_EXPLAIN_KEY: Record<DeliveryTier, string> = {
-  'safe-mechanical': 'tier.explainSafe',
-  'guarded':         'tier.explainGuarded',
-  'human-required':  'tier.explainHuman',
-};
-
-function tierKey(tier: DeliveryTier): string {
-  return TIER_KEY[tier];
-}
-
-function tierExplainKey(tier: DeliveryTier): string {
-  return TIER_EXPLAIN_KEY[tier];
-}
-
-function confidenceKey(v: number): string {
-  if (v >= 0.9)  return 'trust.confidence.strong';
-  if (v >= 0.75) return 'trust.confidence.sound';
-  if (v >= 0.5)  return 'trust.confidence.mixed';
-  return 'trust.confidence.weak';
 }

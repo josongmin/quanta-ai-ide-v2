@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Clock } from 'lucide-react';
+import { StatusDot } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import type { PRDiff } from '@entities/repo';
 import { type evaluateAdmission } from '@entities/admission';
@@ -25,7 +26,7 @@ export function LiveFeed({
       <div className="flex items-center gap-2 mb-3">
         <SectionTitle icon={Clock}>{tA('section.livePrFeed')}</SectionTitle>
         <span className="ml-1 inline-flex items-center gap-1 text-[9px] font-mono" style={{ color: t.textSubtle }}>
-          <span className="w-1.5 h-1.5 rounded-full admv2-blink" style={{ background: t.ok }} />
+          <StatusDot color={t.ok} size="xs" className="admv2-blink" />
           live
         </span>
       </div>

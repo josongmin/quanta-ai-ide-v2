@@ -1,6 +1,9 @@
+import { StatusDot } from '@shared/ui';
 import { STATUS_FG, type Status } from './types';
 
-// Pulse dot (live indicator)
+// Pulse dot (live indicator). Keeps its bespoke slow radar-sweep `pulse-ring`
+// animation (1.8s, scale 2.6) — distinct from StatusDot's animate-ping — but
+// defers the core dot to the shared StatusDot primitive.
 export function PulseDot({ status }: { status: Status }) {
   const color = STATUS_FG[status];
   return (
@@ -10,10 +13,7 @@ export function PulseDot({ status }: { status: Status }) {
         className="absolute inset-0 rounded-full pulse-ring"
         style={{ background: color }}
       />
-      <span
-        className="relative inline-flex w-2 h-2 rounded-full"
-        style={{ background: color }}
-      />
+      <StatusDot color={color} size="sm" className="relative" />
       <style>{`
         .pulse-ring {
           animation: status-pulse 1.8s ease-out infinite;

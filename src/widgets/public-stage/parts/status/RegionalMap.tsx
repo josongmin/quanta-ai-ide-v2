@@ -1,4 +1,5 @@
 import { Globe } from 'lucide-react';
+import { StatusDot } from '@shared/ui';
 import { REGIONS } from './data';
 import { STATUS_FG } from './types';
 import { PulseDot } from './atoms';
@@ -72,10 +73,7 @@ export function RegionalMap() {
         {REGIONS.map((r) => (
           <div key={r.id} className="flex items-center justify-between gap-3 text-[11px]">
             <span className="flex items-center gap-1.5 min-w-0">
-              <span
-                className="w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ background: STATUS_FG[r.status] }}
-              />
+              <StatusDot color={STATUS_FG[r.status]} size="xs" />
               <span className="truncate" style={{ color: 'var(--fg-default)' }}>{r.label}</span>
             </span>
             <span className="font-mono tabular-nums shrink-0" style={{ color: 'var(--fg-muted)' }}>{r.latencyMs}ms</span>

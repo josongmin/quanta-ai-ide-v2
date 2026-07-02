@@ -42,8 +42,8 @@ import type {
   EngineFinding, FileDiff, PullRequest,
 } from '@entities/pr';
 import { incidentMatches } from '@entities/pr';
-import { safeLocalGet, safeLocalSet } from '@shared/lib';
 import type { RepoData } from '@entities/repo';
+import { createTtlMapStore } from './ttlMapStore';
 
 // ─── Symbol-level change extraction ──────────────────────────────────────
 
@@ -351,35 +351,21 @@ export type SessionState = {
 const STORAGE_KEY = 'review.session.v1';
 const TTL_DAYS = 30;
 
-type SessionMap = Record<string, SessionState>;
-
-function readMap(): SessionMap {
-  if (typeof window === 'undefined') return {};
-  try {
-    const raw = safeLocalGet(STORAGE_KEY);
-    if (raw === null) return {};
-    const parsed: unknown = JSON.parse(raw);
-    if (parsed === null || typeof parsed !== 'object') return {};
-    // Drop entries past TTL so the store doesn't grow unbounded.
-    const cutoff = Date.now() - TTL_DAYS * 24 * 60 * 60 * 1000;
-    const clean: SessionMap = {};
-    for (const [k, v] of Object.entries(parsed as SessionMap)) {
-      if (v === null || typeof v !== 'object') continue;
-      const t = new Date(v.lastVisitedAt).getTime();
-      if (Number.isNaN(t)) continue;
-      if (t < cutoff) continue;
-      clean[k] = v;
-    }
-    return clean;
-  } catch {
-    return {};
-  }
+// Preserves the original guard exactly: entry must be a non-null object
+// with a parseable lastVisitedAt (NaN timestamps were dropped explicitly,
+// which the factory's cutoff check alone would otherwise keep).
+function isSession(v: unknown): v is SessionState {
+  if (v === null || typeof v !== 'object') return false;
+  const t = new Date((v as SessionState).lastVisitedAt).getTime();
+  return !Number.isNaN(t);
 }
 
-function writeMap(m: SessionMap): void {
-  if (typeof window === 'undefined') return;
-  safeLocalSet(STORAGE_KEY, JSON.stringify(m));
-}
+const { readMap, writeMap } = createTtlMapStore<SessionState>({
+  key: STORAGE_KEY,
+  ttlDays: TTL_DAYS,
+  timestampOf: (v) => v.lastVisitedAt,
+  isValid: isSession,
+});
 
 export function getSession(prNumber: number): SessionState | null {
   return readMap()[String(prNumber)] ?? null;

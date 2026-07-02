@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
 import { useTheme } from '@shared/theme';
+import { StatusDot } from '@shared/ui';
 import { Building2, Users, CreditCard, Activity, Database, Settings, ArrowUpRight } from 'lucide-react';
 
 type Props = {
@@ -42,16 +43,7 @@ export function AdminShell({ active = 'overview', children }: Props) {
         }}
       >
         <div className="flex items-center gap-2.5">
-          <span className="relative inline-flex w-1.5 h-1.5">
-            <span
-              className="absolute inset-0 rounded-full opacity-60 animate-ping"
-              style={{ background: 'var(--intent-danger-fg)' }}
-            />
-            <span
-              className="relative w-1.5 h-1.5 rounded-full"
-              style={{ background: 'var(--intent-danger-fg)' }}
-            />
-          </span>
+          <StatusDot intent="danger" size="xs" ping />
           <span style={{ color: 'var(--fg-strong)' }}>Admin mode</span>
           <span style={{ color: 'var(--border-strong)' }}>·</span>
           <span>Acting as <span style={{ color: 'var(--fg-default)' }}>Sora Kim</span></span>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ChevronRight } from 'lucide-react';
+import { StatusDot } from '@shared/ui';
 
 export function ChannelCard({
   icon: Icon, title, blurb, cta, href, tone, badge,
@@ -42,7 +43,7 @@ export function ChannelCard({
             className="inline-flex items-center gap-1.5 px-2 h-6 rounded-full text-[10px] font-semibold"
             style={{ color: 'var(--intent-success-fg)', background: 'var(--intent-success-bg)' }}
           >
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--intent-success-fg)' }} />
+            <StatusDot intent="success" size="xs" pulse />
             {badge}
           </span>
         )}

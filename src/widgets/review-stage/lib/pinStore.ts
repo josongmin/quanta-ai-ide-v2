@@ -23,7 +23,8 @@
 // testable and decoupled from React.
 // ─────────────────────────────────────────────────────────────────────────
 
-import { safeLocalGet, safeLocalSet } from '@shared/lib';
+import { safeLocalGet } from '@shared/lib';
+import { pruneTtlRecord, writeJson } from './ttlMapStore';
 
 const STORAGE_KEY = 'review.pins.v1';
 const TTL_DAYS = 90;
@@ -40,6 +41,11 @@ type PinMap = {
 
 const EMPTY: PinMap = { prs: {}, repos: {} };
 
+// PinMap is a nested { prs, repos } shape rather than a single flat
+// record, so it can't use the flat createTtlMapStore directly. It reuses
+// the shared per-entry prune (pruneTtlRecord) on each sub-record and the
+// shared SSR-guarded write (writeJson) — identical semantics, just a
+// two-record top level.
 function readMap(): PinMap {
   if (typeof window === 'undefined') return { prs: {}, repos: {} };
   try {
@@ -47,20 +53,12 @@ function readMap(): PinMap {
     if (raw === null) return { prs: {}, repos: {} };
     const parsed: unknown = JSON.parse(raw);
     if (parsed === null || typeof parsed !== 'object') return { prs: {}, repos: {} };
-    const cutoff = Date.now() - TTL_DAYS * 24 * 60 * 60 * 1000;
-    const out: PinMap = { prs: {}, repos: {} };
     const p = (parsed as Partial<PinMap>);
-    for (const [k, v] of Object.entries(p.prs ?? {})) {
-      if (!isEntry(v)) continue;
-      if (new Date(v.pinnedAt).getTime() < cutoff) continue;
-      out.prs[k] = v;
-    }
-    for (const [k, v] of Object.entries(p.repos ?? {})) {
-      if (!isEntry(v)) continue;
-      if (new Date(v.pinnedAt).getTime() < cutoff) continue;
-      out.repos[k] = v;
-    }
-    return out;
+    const ts = (v: PinEntry): string => v.pinnedAt;
+    return {
+      prs: pruneTtlRecord(p.prs, TTL_DAYS, ts, isEntry),
+      repos: pruneTtlRecord(p.repos, TTL_DAYS, ts, isEntry),
+    };
   } catch {
     return { prs: {}, repos: {} };
   }
@@ -73,8 +71,7 @@ function isEntry(v: unknown): v is PinEntry {
 }
 
 function writeMap(m: PinMap): void {
-  if (typeof window === 'undefined') return;
-  safeLocalSet(STORAGE_KEY, JSON.stringify(m));
+  writeJson(STORAGE_KEY, m);
 }
 
 // ── Public API ───────────────────────────────────────────────────────────

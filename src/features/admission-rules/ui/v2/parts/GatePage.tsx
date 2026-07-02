@@ -12,7 +12,7 @@ import { SOURCE_GLYPH, usesHint, describeSignal } from '../../sourceStyle';
 import { SEVERITY_COLOR, useV2 } from './tokens';
 import { V2Card, SectionTitle } from './primitives';
 import { Hero } from './HealthPage';
-import { Field, DrawerInput } from './RuleEditorOverlay';
+import { Field, DrawerInput } from './DrawerFields';
 
 // ═════════════════════════════════════════════════════════════════════════
 // GATE PAGE — current PR's verdict, fired-rule details, override workflow
