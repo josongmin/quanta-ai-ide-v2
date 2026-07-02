@@ -24,9 +24,13 @@ export type {
   RulePreview,
   AdmissionDecision,
   RuleEvaluation,
+  AdmissionSeverity,
+  AdmissionRuleCategory,
+  AdmissionRuleCore,
 } from './model';
 
 export { SAMPLE_RULES } from './lib/sample';
+export { SEED_ADMISSION_RULES, SEED_ADMISSION_RULE_BY_ID } from './lib/seed';
 export { estimateCost } from './lib/cost';
 export {
   previewRule,

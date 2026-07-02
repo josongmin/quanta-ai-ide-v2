@@ -48,4 +48,5 @@ export { SearchInput } from './settings-kit/SearchInput';
 export { DataTable, type Column } from './settings-kit/DataTable';
 export { RowMenu, type RowMenuItem } from './settings-kit/RowMenu';
 export { CopyableCode } from './settings-kit/CopyableCode';
+export { RevealOnceModal } from './settings-kit/RevealOnceModal';
 export { EmptyState } from './settings-kit/EmptyState';

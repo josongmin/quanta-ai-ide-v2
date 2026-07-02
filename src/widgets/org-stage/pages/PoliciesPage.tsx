@@ -7,62 +7,75 @@ import { OrgShell } from '../parts/OrgShell';
 import type { CSSProperties } from 'react';
 import { Section, Toggle, SaveBar } from '@shared/ui/forms';
 import { shallowEqual } from '@shared/lib';
+import {
+  SEED_ADMISSION_RULE_BY_ID,
+  type AdmissionSeverity,
+  type AdmissionRuleCore,
+} from '@entities/admission';
 
-type Severity = 'block' | 'warn' | 'off';
+// Org-default admission rules. Shares the rule display core (id/title/
+// description/category) with the per-workspace Admission page via the
+// admission entity; this page adds the org tail (single severity + rollout
+// counters) and resolves icons locally by rule id.
 
-type Rule = {
-  id: string;
-  title: string;
-  description: string;
-  category: 'secrets' | 'review' | 'tests' | 'deps' | 'config';
-  icon: React.ComponentType<{ className?: string; style?: CSSProperties }>;
+type Severity = AdmissionSeverity;
+
+type IconComponent = React.ComponentType<{ className?: string; style?: CSSProperties }>;
+
+type Rule = AdmissionRuleCore & {
+  icon: IconComponent;
   severity: Severity;
   appliedToWorkspaces: number;
   totalWorkspaces: number;
   whenChanged: string;
 };
 
-const SEED_RULES: Rule[] = [
-  { id: 'r-secrets', title: 'No secrets in diff',
-    description: 'Block any push that introduces a credential matching the secret-scanner ruleset.',
-    category: 'secrets', icon: KeyRound, severity: 'block',
+// Icons + this page's tail, keyed by canonical rule id. Icons live here (not in
+// the entity) to keep the entity layer free of lucide-react. A couple of rules
+// render slightly different copy on this page than the canonical seed; those
+// `titleOverride` / `descriptionOverride` values preserve the exact org wording.
+type OrgTail = {
+  icon: IconComponent;
+  severity: Severity;
+  appliedToWorkspaces: number;
+  totalWorkspaces: number;
+  whenChanged: string;
+  titleOverride?: string;
+  descriptionOverride?: string;
+};
+
+// Ordered id list drives this page's rows (order differs from the canonical seed).
+const ORG_RULE_TAILS: (OrgTail & { id: string })[] = [
+  { id: 'r-secrets', icon: KeyRound, severity: 'block',
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-12' },
-
-  { id: 'r-2-approvers', title: 'Require ≥2 approvers',
-    description: 'Production branches need at least two human approvals. Owners count once.',
-    category: 'review', icon: ShieldCheck, severity: 'block',
-    appliedToWorkspaces: 11, totalWorkspaces: 12, whenChanged: '2026-04-19' },
-
-  { id: 'r-tests-pass', title: 'Tests must pass',
-    description: 'Any failing or skipped required test on the default branch blocks merge.',
-    category: 'tests', icon: TestTube2, severity: 'block',
+  { id: 'r-2-approvers', icon: ShieldCheck, severity: 'block',
+    appliedToWorkspaces: 11, totalWorkspaces: 12, whenChanged: '2026-04-19',
+    titleOverride: 'Require ≥2 approvers',
+    descriptionOverride: 'Production branches need at least two human approvals. Owners count once.' },
+  { id: 'r-tests-pass', icon: TestTube2, severity: 'block',
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-08' },
-
-  { id: 'r-coverage', title: 'Coverage cannot regress >2%',
-    description: 'Compare against last green commit on the same branch.',
-    category: 'tests', icon: TestTube2, severity: 'warn',
+  { id: 'r-coverage', icon: TestTube2, severity: 'warn',
     appliedToWorkspaces: 7, totalWorkspaces: 12, whenChanged: '2026-04-30' },
-
-  { id: 'r-no-prod-config', title: 'No prod config edits without label',
-    description: 'Edits under config/prod/** require the "prod-change" label.',
-    category: 'config', icon: FileLock2, severity: 'block',
+  { id: 'r-no-prod-config', icon: FileLock2, severity: 'block',
     appliedToWorkspaces: 8, totalWorkspaces: 12, whenChanged: '2026-05-02' },
-
-  { id: 'r-license', title: 'Disallow GPL dependencies',
-    description: 'Block PRs adding any dependency with a GPL-family license.',
-    category: 'deps', icon: FileWarning, severity: 'block',
+  { id: 'r-license', icon: FileWarning, severity: 'block',
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-21' },
-
-  { id: 'r-stale-deps', title: 'Warn on dependencies >365 days behind',
-    description: 'Surface a soft warning during review; does not block merge.',
-    category: 'deps', icon: FileWarning, severity: 'warn',
-    appliedToWorkspaces: 5, totalWorkspaces: 12, whenChanged: '2026-04-25' },
-
-  { id: 'r-protected-paths', title: 'Protected paths require security team',
-    description: 'Edits to .semgrep/** and IAM policies require @security review.',
-    category: 'config', icon: GitBranch, severity: 'block',
+  { id: 'r-stale-deps', icon: FileWarning, severity: 'warn',
+    appliedToWorkspaces: 5, totalWorkspaces: 12, whenChanged: '2026-04-25',
+    titleOverride: 'Warn on dependencies >365 days behind' },
+  { id: 'r-protected-paths', icon: GitBranch, severity: 'block',
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-15' },
 ];
+
+const SEED_RULES: Rule[] = ORG_RULE_TAILS.map(({ id, titleOverride, descriptionOverride, ...tail }) => {
+  const core = SEED_ADMISSION_RULE_BY_ID[id];
+  return {
+    ...core,
+    ...tail,
+    title: titleOverride ?? core.title,
+    description: descriptionOverride ?? core.description,
+  };
+});
 
 const CATEGORIES: { id: Rule['category']; label: string }[] = [
   { id: 'secrets', label: 'Secrets' },

@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
-import { Link, useRouterState } from '@tanstack/react-router';
-import { ScrollPane } from '@shared/ui';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
+import { SideNavShell, type SideNavGroup } from '@shared/ui';
 import { useTabVisibility } from '@features/workspace-tabs';
 import {
   Building2, Users, UsersRound, Shield, Lock, Plug, Webhook,
@@ -8,7 +8,6 @@ import {
   KeyRound, UserCog, ClipboardList, Globe, Archive,
   Mail, AtSign, Bot, BarChart3,
 } from 'lucide-react';
-import { useTheme } from '@shared/theme';
 
 export type OrgPath =
   | '/org/$org/general' | '/org/$org/members' | '/org/$org/teams'
@@ -20,50 +19,42 @@ export type OrgPath =
   | '/org/$org/invitations' | '/org/$org/domains'
   | '/org/$org/service-accounts' | '/org/$org/usage';
 
-type NavItem = {
-  path: OrgPath;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  planned?: boolean;
-};
-type NavGroup = { id: string; title: string; items: NavItem[] };
-
-const NAV: NavGroup[] = [
+const NAV: SideNavGroup<OrgPath>[] = [
   {
     id: 'org',
     title: 'Organization',
     items: [
-      { path: '/org/$org/general',          label: 'General',          icon: Building2 },
-      { path: '/org/$org/members',          label: 'Members',          icon: Users },
-      { path: '/org/$org/invitations',      label: 'Invitations',      icon: Mail },
-      { path: '/org/$org/teams',            label: 'Teams',            icon: UsersRound },
-      { path: '/org/$org/roles',            label: 'Roles',            icon: Shield },
-      { path: '/org/$org/service-accounts', label: 'Service accounts', icon: Bot },
-      { path: '/org/$org/domains',          label: 'Domains',          icon: AtSign },
-      { path: '/org/$org/usage',            label: 'Usage',            icon: BarChart3 },
+      { key: '/org/$org/general',          label: 'General',          icon: Building2 },
+      { key: '/org/$org/members',          label: 'Members',          icon: Users },
+      { key: '/org/$org/invitations',      label: 'Invitations',      icon: Mail },
+      { key: '/org/$org/teams',            label: 'Teams',            icon: UsersRound },
+      { key: '/org/$org/roles',            label: 'Roles',            icon: Shield },
+      { key: '/org/$org/service-accounts', label: 'Service accounts', icon: Bot },
+      { key: '/org/$org/domains',          label: 'Domains',          icon: AtSign },
+      { key: '/org/$org/usage',            label: 'Usage',            icon: BarChart3 },
     ],
   },
   {
     id: 'access',
     title: 'Access & policy',
     items: [
-      { path: '/org/$org/security',     label: 'Security',     icon: Lock },
-      { path: '/org/$org/integrations', label: 'Integrations', icon: Plug },
-      { path: '/org/$org/webhooks',     label: 'Webhooks',     icon: Webhook },
-      { path: '/org/$org/api',          label: 'API & OAuth',  icon: KeySquare },
-      { path: '/org/$org/policies',     label: 'Policies',     icon: ScrollText },
-      { path: '/org/$org/ai-policies',  label: 'AI policies',  icon: Sparkles },
+      { key: '/org/$org/security',     label: 'Security',     icon: Lock },
+      { key: '/org/$org/integrations', label: 'Integrations', icon: Plug },
+      { key: '/org/$org/webhooks',     label: 'Webhooks',     icon: Webhook },
+      { key: '/org/$org/api',          label: 'API & OAuth',  icon: KeySquare },
+      { key: '/org/$org/policies',     label: 'Policies',     icon: ScrollText },
+      { key: '/org/$org/ai-policies',  label: 'AI policies',  icon: Sparkles },
     ],
   },
   {
     id: 'compliance',
     title: 'Compliance',
     items: [
-      { path: '/org/$org/sso',            label: 'SAML SSO',          icon: KeyRound },
-      { path: '/org/$org/scim',           label: 'SCIM',              icon: UserCog },
-      { path: '/org/$org/audit',          label: 'Audit log',         icon: ClipboardList },
-      { path: '/org/$org/data-residency', label: 'Data residency',    icon: Globe },
-      { path: '/org/$org/retention',      label: 'Retention',         icon: Archive },
+      { key: '/org/$org/sso',            label: 'SAML SSO',       icon: KeyRound },
+      { key: '/org/$org/scim',           label: 'SCIM',           icon: UserCog },
+      { key: '/org/$org/audit',          label: 'Audit log',      icon: ClipboardList },
+      { key: '/org/$org/data-residency', label: 'Data residency', icon: Globe },
+      { key: '/org/$org/retention',      label: 'Retention',      icon: Archive },
     ],
   },
 ];
@@ -78,135 +69,60 @@ type Props = {
 };
 
 // Mirrors MeShell. Renders inside the AppShell chrome (GNB tabs stay
-// visible). 220px sticky sidebar + scrollable body. The sidebar lists
-// every Organization-scoped surface; planned ones render as disabled.
+// visible). Adopts the shared SideNavShell with Organization-scoped nav
+// data. Nav keys are $org route templates; onSelect resolves the slug and
+// navigates. Selection matches the resolved current path.
 export function OrgShell({ orgName, orgSlug, title, subtitle, topRight, children }: Props) {
-  const { isDark } = useTheme();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
   const visible = useTabVisibility();
 
+  // The current route as a $org template, so it matches a NAV key.
+  const selectedKey = pathname.replace(`/org/${orgSlug}`, '/org/$org') as OrgPath;
+
   return (
-    <div
-      className="absolute inset-0 flex"
-      style={{ background: isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)' }}
+    <SideNavShell<OrgPath>
+      groups={NAV}
+      selectedKey={selectedKey}
+      onSelect={(key) => {
+        void navigate({ to: key as never, params: { org: orgSlug } as never });
+      }}
+      title={title}
+      {...(subtitle ? { subtitle } : {})}
+      {...(topRight ? { topRight } : {})}
+      sidebarHeader={<OrgCard orgName={orgName} orgSlug={orgSlug} />}
+      breadcrumb={<Breadcrumb orgName={orgName} pageTitle={title} />}
+      scrollKey="org"
+      visible={visible}
+      contentMaxWidth={920}
     >
-      <Sidebar orgName={orgName} orgSlug={orgSlug} />
+      {children}
+    </SideNavShell>
+  );
+}
 
-      <ScrollPane scope="org" visible={visible} className="flex-1 min-w-0 overflow-y-auto">
-        <div className="max-w-[920px] mx-auto px-10 pt-10 pb-32">
-          <header className="flex items-end justify-between gap-4 mb-8">
-            <div className="flex flex-col gap-1.5 min-w-0">
-              <Breadcrumb orgName={orgName} pageTitle={title} />
-              <h1
-                className="text-[22px] font-semibold tracking-tight leading-tight"
-                style={{ color: 'var(--fg-strong)' }}
-              >
-                {title}
-              </h1>
-              {subtitle && (
-                <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
-                  {subtitle}
-                </p>
-              )}
-            </div>
-            {topRight && <div className="shrink-0">{topRight}</div>}
-          </header>
-
-          {children}
-        </div>
-      </ScrollPane>
+function OrgCard({ orgName, orgSlug }: { orgName: string; orgSlug: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div
+        className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-black"
+        style={{
+          backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
+          color: 'var(--bg-canvas)',
+        }}
+      >
+        {orgName.slice(0, 2).toUpperCase()}
+      </div>
+      <div className="flex flex-col min-w-0">
+        <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+          {orgName}
+        </span>
+        <span className="text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>
+          {orgSlug}
+        </span>
+      </div>
     </div>
   );
-}
-
-function Sidebar({ orgName, orgSlug }: { orgName: string; orgSlug: string }) {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  return (
-    <aside
-      className="shrink-0 w-[220px] border-r overflow-y-auto"
-      style={{ borderColor: 'var(--border-muted)' }}
-    >
-      <div className="px-4 py-6 flex flex-col gap-1">
-        <div className="px-2 mb-3 flex items-center gap-2">
-          <div
-            className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-black"
-            style={{
-              backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
-              color: 'var(--bg-canvas)',
-            }}
-          >
-            {orgName.slice(0, 2).toUpperCase()}
-          </div>
-          <div className="flex flex-col min-w-0">
-            <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
-              {orgName}
-            </span>
-            <span className="text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>
-              {orgSlug}
-            </span>
-          </div>
-        </div>
-
-        {NAV.map((group) => (
-          <div key={group.id} className="flex flex-col gap-0.5 mb-3">
-            <span
-              className="px-2 mb-1 text-[9px] uppercase tracking-[0.14em] font-semibold"
-              style={{ color: 'var(--fg-subtle)' }}
-            >
-              {group.title}
-            </span>
-            {group.items.map(({ path, label, icon: Icon, planned }) => {
-              const active = pathname === resolvePath(path, orgSlug);
-              if (planned) {
-                return (
-                  <div
-                    key={path}
-                    aria-disabled="true"
-                    title="Planned"
-                    className="flex items-center gap-2 px-2 h-7 rounded-md text-[12px] font-medium"
-                    style={{ color: 'var(--fg-subtle)', opacity: 0.55, cursor: 'not-allowed' }}
-                  >
-                    <Icon className="w-3.5 h-3.5 shrink-0" />
-                    <span className="truncate flex-1">{label}</span>
-                    <span
-                      className="text-[8px] uppercase tracking-[0.14em] font-semibold px-1 rounded"
-                      style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-subtle)' }}
-                    >
-                      Soon
-                    </span>
-                  </div>
-                );
-              }
-              return (
-                <Link
-                  key={path}
-                  to={path as never}
-                  params={{ org: orgSlug } as never}
-                  className="flex items-center gap-2 px-2 h-7 rounded-md text-[12px] font-medium transition-colors"
-                  style={{
-                    background: active ? 'var(--bg-active)' : 'transparent',
-                    color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!active) e.currentTarget.style.background = 'var(--bg-hover)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!active) e.currentTarget.style.background = 'transparent';
-                  }}
-                >
-                  <Icon className="w-3.5 h-3.5 shrink-0" />
-                  <span className="truncate">{label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-    </aside>
-  );
-}
-
-function resolvePath(template: string, orgSlug: string) {
-  return template.replace('$org', orgSlug);
 }
 
 function Breadcrumb({ orgName, pageTitle }: { orgName: string; pageTitle: string }) {

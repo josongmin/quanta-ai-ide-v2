@@ -6,7 +6,7 @@ import {
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
 import { shallowEqual } from '@shared/lib';
-import { RevealTokenModal } from './parts/scim/RevealTokenModal';
+import { RevealOnceModal } from '@shared/ui';
 
 type Status = 'connected' | 'not-configured';
 
@@ -237,11 +237,13 @@ export default function ScimPage() {
       />
 
       {tokenModal !== null && (
-        <RevealTokenModal
-          token={tokenModal}
+        <RevealOnceModal
+          title="SCIM token created"
+          value={tokenModal}
           saved={savedToken}
+          showClose
           onSaved={() => { setSavedToken(true); }}
-          onClose={() => { setTokenModal(null); }}
+          onDismiss={() => { setTokenModal(null); }}
         />
       )}
     </OrgShell>

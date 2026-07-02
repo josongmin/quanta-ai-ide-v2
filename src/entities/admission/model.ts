@@ -219,3 +219,31 @@ export type RuleEvaluation = {
   /** Short reason string for the decision panel. */
   reason: string;
 };
+
+// ─────────────────────────────────────────────────────────────────────────
+// Admission rules board (settings surface)
+//
+// The org Policies page and the per-workspace Admission page both render a
+// grouped list of the same canonical rules. This is a *simpler, presentational*
+// shape than `AdmissionRule` above (which models the live static engine): here
+// severity is just a tri-state gate and rules carry only display fields. Each
+// page extends `AdmissionRuleCore` with its own tail (org: default/effective;
+// ws: per-workspace rollout) and maps `SEED_ADMISSION_RULES` into that shape.
+//
+// Icons intentionally live in the pages (keyed by rule id): the entity layer
+// stays free of lucide-react per FSD conventions.
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Tri-state gate severity for the rules board. Distinct from `RuleSeverity`
+    ('block'|'warn'|'info') used by the live engine above. */
+export type AdmissionSeverity = 'block' | 'warn' | 'off';
+
+export type AdmissionRuleCategory = 'secrets' | 'review' | 'tests' | 'deps' | 'config';
+
+/** Fields shared verbatim by every rules-board rule, across org & workspace. */
+export type AdmissionRuleCore = {
+  id: string;
+  title: string;
+  description: string;
+  category: AdmissionRuleCategory;
+};

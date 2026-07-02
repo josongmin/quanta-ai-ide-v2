@@ -7,56 +7,47 @@ import type { CSSProperties } from 'react';
 import { WsShell } from '../parts/WsShell';
 import { Section, SaveBar } from '@shared/ui/forms';
 import { shallowEqual } from '@shared/lib';
+import {
+  SEED_ADMISSION_RULES,
+  type AdmissionSeverity,
+  type AdmissionRuleCore,
+} from '@entities/admission';
 
 // Per-workspace admission rules. Each rule inherits an org default and may
 // be locally overridden. The inheritance indicator surfaces whether the
 // effective severity matches the org default or has drifted.
+//
+// The rule display core (id/title/description/category) is shared with the org
+// Policies page via the admission entity; this page adds the inheritance tail
+// (org default + effective severity) and resolves icons locally by rule id.
 
-type Severity = 'block' | 'warn' | 'off';
+type Severity = AdmissionSeverity;
 
-type Rule = {
-  id: string;
-  title: string;
-  description: string;
-  category: 'secrets' | 'review' | 'tests' | 'deps' | 'config';
-  icon: React.ComponentType<{ className?: string; style?: CSSProperties }>;
+type IconComponent = React.ComponentType<{ className?: string; style?: CSSProperties }>;
+
+type Rule = AdmissionRuleCore & {
+  icon: IconComponent;
   orgDefault: Severity;
   effective: Severity;
 };
 
-const SEED_RULES: Rule[] = [
-  { id: 'r-secrets',       title: 'No secrets in diff',
-    description: 'Block any push that introduces a credential matching the secret-scanner ruleset.',
-    category: 'secrets', icon: KeyRound, orgDefault: 'block', effective: 'block' },
+// Icons + this page's severity tail, keyed by canonical rule id. Icons live
+// here (not in the entity) to keep the entity layer free of lucide-react.
+const RULE_TAIL: Record<string, { icon: IconComponent; orgDefault: Severity; effective: Severity }> = {
+  'r-secrets':        { icon: KeyRound,   orgDefault: 'block', effective: 'block' },
+  'r-2-approvers':    { icon: ShieldCheck, orgDefault: 'block', effective: 'warn' },
+  'r-owner-review':   { icon: ShieldCheck, orgDefault: 'block', effective: 'block' },
+  'r-tests-pass':     { icon: TestTube2,  orgDefault: 'block', effective: 'block' },
+  'r-coverage':       { icon: TestTube2,  orgDefault: 'warn',  effective: 'off' },
+  'r-license':        { icon: FileWarning, orgDefault: 'block', effective: 'block' },
+  'r-stale-deps':     { icon: FileWarning, orgDefault: 'warn',  effective: 'warn' },
+  'r-no-prod-config': { icon: FileLock2,  orgDefault: 'block', effective: 'block' },
+};
 
-  { id: 'r-2-approvers',   title: 'Require >=2 approvers',
-    description: 'Production branches need at least two human approvals.',
-    category: 'review', icon: ShieldCheck, orgDefault: 'block', effective: 'warn' },
-
-  { id: 'r-owner-review',  title: 'CODEOWNERS must approve',
-    description: 'Any modified path that has owners requires at least one owner approval.',
-    category: 'review', icon: ShieldCheck, orgDefault: 'block', effective: 'block' },
-
-  { id: 'r-tests-pass',    title: 'Tests must pass',
-    description: 'Any failing or skipped required test on the default branch blocks merge.',
-    category: 'tests', icon: TestTube2, orgDefault: 'block', effective: 'block' },
-
-  { id: 'r-coverage',      title: 'Coverage cannot regress >2%',
-    description: 'Compare against last green commit on the same branch.',
-    category: 'tests', icon: TestTube2, orgDefault: 'warn', effective: 'off' },
-
-  { id: 'r-license',       title: 'Disallow GPL dependencies',
-    description: 'Block PRs adding any dependency with a GPL-family license.',
-    category: 'deps', icon: FileWarning, orgDefault: 'block', effective: 'block' },
-
-  { id: 'r-stale-deps',    title: 'Warn on deps >365 days behind',
-    description: 'Surface a soft warning during review; does not block merge.',
-    category: 'deps', icon: FileWarning, orgDefault: 'warn', effective: 'warn' },
-
-  { id: 'r-no-prod-config',title: 'No prod config edits without label',
-    description: 'Edits under config/prod/** require the "prod-change" label.',
-    category: 'config', icon: FileLock2, orgDefault: 'block', effective: 'block' },
-];
+// This page shows a subset of the canonical rules, in canonical order.
+const SEED_RULES: Rule[] = SEED_ADMISSION_RULES
+  .filter((r) => r.id in RULE_TAIL)
+  .map((r) => ({ ...r, ...RULE_TAIL[r.id] }));
 
 const CATEGORIES: { id: Rule['category']; label: string; icon: React.ComponentType<{ className?: string; style?: CSSProperties }> }[] = [
   { id: 'secrets', label: 'Secrets',         icon: KeyRound },

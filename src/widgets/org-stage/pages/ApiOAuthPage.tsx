@@ -4,11 +4,10 @@ import {
 } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Button } from '@shared/ui/forms';
-import { ConfirmDialog } from '@shared/ui';
+import { ConfirmDialog, RevealOnceModal } from '@shared/ui';
 import { PatList } from './parts/api-oauth/PatList';
 import { AppList } from './parts/api-oauth/AppList';
 import { CreatePatModal } from './parts/api-oauth/CreatePatModal';
-import { RevealTokenModal } from './parts/api-oauth/RevealTokenModal';
 import type { Pat, OAuthApp, Scope } from './parts/api-oauth/types';
 
 const SEED_PATS: Pat[] = [
@@ -121,10 +120,10 @@ export default function ApiOAuthPage() {
         />
       )}
       {revealedToken && (
-        <RevealTokenModal
-          name={revealedToken.name}
-          token={revealedToken.value}
-          onClose={() => { setRevealedToken(null); }}
+        <RevealOnceModal
+          title={<>Token &quot;{revealedToken.name}&quot; created</>}
+          value={revealedToken.value}
+          onDismiss={() => { setRevealedToken(null); }}
         />
       )}
       {confirmDelete && (

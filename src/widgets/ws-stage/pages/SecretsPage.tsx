@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react';
 import { Search, Plus, X, AlertTriangle } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button } from '@shared/ui/forms';
-import { ConfirmDialog } from '@shared/ui';
+import { ConfirmDialog, RevealOnceModal } from '@shared/ui';
 import {
-  SecretRow, NewSecretModal, RevealOnceModal,
+  SecretRow, NewSecretModal,
   type Secret, type SecretScope,
 } from './secrets-parts';
 
@@ -178,9 +178,11 @@ export default function SecretsPage() {
       )}
       {revealed && (
         <RevealOnceModal
-          name={revealed.name}
+          title={`${revealed.name} stored`}
+          titleMono
           value={revealed.value}
-          onClose={() => { setRevealed(null); }}
+          description="Copy this value now — for security, it can't be shown again. You can rotate to generate a new one later."
+          onDismiss={() => { setRevealed(null); }}
         />
       )}
       {confirmDelete && (

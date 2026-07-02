@@ -11,4 +11,5 @@ export { SearchInput } from './SearchInput';
 export { DataTable, type Column } from './DataTable';
 export { RowMenu, type RowMenuItem } from './RowMenu';
 export { CopyableCode } from './CopyableCode';
+export { RevealOnceModal } from './RevealOnceModal';
 export { EmptyState } from './EmptyState';
