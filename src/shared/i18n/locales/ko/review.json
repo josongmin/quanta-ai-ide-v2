@@ -90,10 +90,12 @@
     }
   },
   "bgJobs": {
-    "summary": "진행 중인 백그라운드 작업 {{count}}개",
+    "summary_one": "진행 중인 백그라운드 작업 {{count}}개",
+    "summary_other": "진행 중인 백그라운드 작업 {{count}}개",
     "empty": "진행 중인 작업이 없습니다.",
     "header": "백그라운드 작업",
-    "runningCount": "{{count}}개 진행 중",
+    "runningCount_one": "{{count}}개 진행 중",
+    "runningCount_other": "{{count}}개 진행 중",
     "failedCount": "{{count}} 실패"
   },
   "savedViews": {
@@ -115,7 +117,8 @@
   },
   "sla": {
     "header": "SLA 만료",
-    "summary": "{{count}}개 · 7일+",
+    "summary_one": "{{count}}개 · 7일+",
+    "summary_other": "{{count}}개 · 7일+",
     "stalled": "{{days}}d 정체",
     "waiting": "@{{login}} 대기",
     "waitingMore": "@{{login}}+{{extra}} 대기",
@@ -136,7 +139,8 @@
   "outliers": {
     "empty": "비슷한 outlier PR이 없습니다.",
     "header": "비슷한 outlier",
-    "count": "{{count}}개"
+    "count_one": "{{count}}개",
+    "count_other": "{{count}}개"
   },
   "authorVelocity": {
     "zVsSelf": "{{sign}}{{value}}σ vs 본인",

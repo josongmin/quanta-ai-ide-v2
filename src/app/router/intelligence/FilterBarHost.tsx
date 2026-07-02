@@ -3,7 +3,7 @@ import { FilterBar } from '@features/filter-files';
 // Deep-import: the inspect-target barrel re-exports FocusScanStack (which
 // in turn drags Treemap/CycleGraph/FolderBody/etc.), so going through it
 // here pulls that whole viz tree into the initial chunk.
-import { useStack } from '@features/inspect-target/model/StackContext';
+import { useStack } from '@features/inspect-target';
 import { LEFT_PANEL } from '@shared/lib/panelLayout';
 
 type Props = {

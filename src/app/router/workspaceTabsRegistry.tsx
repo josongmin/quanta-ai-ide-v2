@@ -22,7 +22,7 @@ import {
   type TabKindGroup,
   type TabMeta,
 } from '@shared/config/workspaceTabs';
-import type { TabKindDef } from '@features/workspace-tabs/model/RegistryContext';
+import type { TabKindDef } from '@features/workspace-tabs';
 
 // App-layer composition: lazy stage components stitched onto shared tab
 // metadata. Features consume the result via WorkspaceTabsRegistryProvider.

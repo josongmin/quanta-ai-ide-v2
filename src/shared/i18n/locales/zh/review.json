@@ -90,10 +90,12 @@
     }
   },
   "bgJobs": {
-    "summary": "进行中的后台任务 {{count}} 个",
+    "summary_one": "进行中的后台任务 {{count}} 个",
+    "summary_other": "进行中的后台任务 {{count}} 个",
     "empty": "没有进行中的任务。",
     "header": "后台任务",
-    "runningCount": "{{count}} 个进行中",
+    "runningCount_one": "{{count}} 个进行中",
+    "runningCount_other": "{{count}} 个进行中",
     "failedCount": "{{count}} 失败"
   },
   "savedViews": {
@@ -115,7 +117,8 @@
   },
   "sla": {
     "header": "SLA 超时",
-    "summary": "{{count}} 个 · 7天+",
+    "summary_one": "{{count}} 个 · 7天+",
+    "summary_other": "{{count}} 个 · 7天+",
     "stalled": "{{days}}d 停滞",
     "waiting": "@{{login}} 等待",
     "waitingMore": "@{{login}}+{{extra}} 等待",
@@ -136,7 +139,8 @@
   "outliers": {
     "empty": "没有类似的 outlier PR。",
     "header": "类似 outlier",
-    "count": "{{count}} 个"
+    "count_one": "{{count}} 个",
+    "count_other": "{{count}} 个"
   },
   "authorVelocity": {
     "zVsSelf": "{{sign}}{{value}}σ vs 本人",

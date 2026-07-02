@@ -6,7 +6,8 @@
     "agents": "智能体",
     "reviews": "评审",
     "admission": "准入",
-    "fix-pipeline": "Fix"
+    "fix-pipeline": "Fix",
+    "fixes": "修复"
   },
   "action": {
     "resetFilters": "重置筛选",

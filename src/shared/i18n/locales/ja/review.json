@@ -90,10 +90,12 @@
     }
   },
   "bgJobs": {
-    "summary": "進行中のバックグラウンドジョブ {{count}}件",
+    "summary_one": "進行中のバックグラウンドジョブ {{count}}件",
+    "summary_other": "進行中のバックグラウンドジョブ {{count}}件",
     "empty": "進行中のジョブはありません。",
     "header": "バックグラウンドジョブ",
-    "runningCount": "{{count}}件 進行中",
+    "runningCount_one": "{{count}}件 進行中",
+    "runningCount_other": "{{count}}件 進行中",
     "failedCount": "{{count}} 失敗"
   },
   "savedViews": {
@@ -115,7 +117,8 @@
   },
   "sla": {
     "header": "SLA超過",
-    "summary": "{{count}}件 · 7日+",
+    "summary_one": "{{count}}件 · 7日+",
+    "summary_other": "{{count}}件 · 7日+",
     "stalled": "{{days}}日 停滞",
     "waiting": "@{{login}} 待ち",
     "waitingMore": "@{{login}}+{{extra}} 待ち",
@@ -136,7 +139,8 @@
   "outliers": {
     "empty": "類似のoutlier PRはありません。",
     "header": "類似のoutlier",
-    "count": "{{count}}件"
+    "count_one": "{{count}}件",
+    "count_other": "{{count}}件"
   },
   "authorVelocity": {
     "zVsSelf": "{{sign}}{{value}}σ vs 本人",

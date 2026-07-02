@@ -2,8 +2,21 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve('src/shared/i18n/locales');
-const NAMESPACES = ['admission', 'app', 'chat', 'coding', 'common', 'diff', 'filter', 'help', 'inspect', 'mode', 'overlay', 'prefs', 'review', 'search'];
 const LOCALES = fs.readdirSync(ROOT).filter((d) => fs.statSync(path.join(ROOT, d)).isDirectory());
+// Derive namespaces from the union of *.json files across every locale dir, so
+// this can never drift from src/shared/i18n/config.ts NAMESPACES again (a
+// hardcoded list previously omitted fix-pipeline/verified-fix/agents, leaving
+// them unchecked for key parity).
+const NAMESPACES = [
+  ...new Set(
+    LOCALES.flatMap((loc) =>
+      fs
+        .readdirSync(path.join(ROOT, loc))
+        .filter((f) => f.endsWith('.json'))
+        .map((f) => f.replace(/\.json$/, '')),
+    ),
+  ),
+].sort();
 
 function flatKeys(obj, prefix = '') {
   if (typeof obj !== 'object' || obj === null) return [prefix];

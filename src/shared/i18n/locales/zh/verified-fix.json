@@ -110,7 +110,14 @@
     "humanRequired": "需要人工",
     "explainSafe": "可一键草稿。机械补丁类,影响范围 ≤ 1,所有证明通过。",
     "explainGuarded": "需审核者明确批准的草稿 PR。静态证明通过;动态范围有限。",
-    "explainHuman": "路由人工审核。超过交付门槛或触及公共接口。"
+    "explainHuman": "路由人工审核。超过交付门槛或触及公共接口。",
+    "rule": {
+      "lines": "行数 ≤ 20",
+      "files": "文件 ≤ 2",
+      "blast": "影响范围 ≤ 1 个模块",
+      "noApiBreak": "无公共 API 破坏",
+      "allPass": "所有证明通过"
+    }
   },
   "trust": {
     "signal": "信任信号",

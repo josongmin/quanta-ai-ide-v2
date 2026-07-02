@@ -7,9 +7,9 @@ import { useTabVisibility } from '@features/workspace-tabs';
 // Deep-import the hooks rather than the slice barrels — those re-export
 // heavy UI (OverlayPopover, FocusScanStack) that would otherwise ride into
 // the initial chunk through this stage.
-import { useOverlay } from '@features/apply-overlay/model/OverlayContext';
-import { useBoundaries } from '@features/inspect-boundaries/model/BoundaryContext';
-import { useStack } from '@features/inspect-target/model/StackContext';
+import { useOverlay } from '@features/apply-overlay';
+import { useBoundaries } from '@features/inspect-boundaries';
+import { useStack } from '@features/inspect-target';
 import type { OverlaySnapshot, ViewMode } from '@entities/viz-mode';
 import type { FileRecord } from '@entities/repo';
 

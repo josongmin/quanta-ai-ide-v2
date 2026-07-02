@@ -22,4 +22,4 @@ export {
   rangeOk,
   type RangeKey,
   type BoolKey,
-} from './model/FilterContext';
+} from './model/filterStore';

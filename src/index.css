@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --accent: #4f9a5c;
   --bg-dark: #0d1117;
   --bg-light: #ffffff;
   --glass-alpha-dark: 0.5;
@@ -79,9 +78,10 @@ body,
 #root {
   margin: 0;
   height: 100%;
-  /* One Dark canvas — matches semantic.dark.bgCanvas so the pre-paint fill
-     doesn't flash a different colour before applyTokens runs. */
-  background-color: #282c34;
+  /* Matches semantic.dark.bgCanvas so the pre-paint fill doesn't flash a
+     different colour before applyTokens runs. Keep in sync with
+     shared/tokens/semantic.ts dark.bgCanvas. */
+  background-color: #0a0d12;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow: hidden;
   color-scheme: dark;
@@ -90,8 +90,8 @@ body,
 html[data-theme="light"],
 html[data-theme="light"] body,
 html[data-theme="light"] #root {
-  /* One Light canvas — matches semantic.light.bgCanvas. */
-  background-color: #fafafa;
+  /* Matches semantic.light.bgCanvas (keep in sync with semantic.ts). */
+  background-color: #f4f6f9;
   color-scheme: light;
 }
 
