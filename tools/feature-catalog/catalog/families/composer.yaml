@@ -36,7 +36,7 @@
     Tab/Enter pick, Esc clears.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/Composer.tsx::SLASH_COMMANDS
+      - src/widgets/coding-stage/parts/composer/useSlashCommands.ts::SLASH_COMMANDS
     locales: []
   pattern:
     source: Slack / Linear command bar
@@ -59,8 +59,8 @@
     path inline.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/MentionPicker.tsx::MentionPicker
-      - src/widgets/coding-stage/parts/MentionPicker.tsx::findMentionAtCaret
+      - src/widgets/coding-stage/parts/palette/MentionPicker.tsx::MentionPicker
+      - src/widgets/coding-stage/parts/palette/MentionPicker.tsx::findMentionAtCaret
   pattern:
     source: GitHub PR `@`-mention picker
     rationale: >-
@@ -80,7 +80,7 @@
     types). Shares the picker component; only the candidate set differs.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/MentionPicker.tsx::MentionPicker
+      - src/widgets/coding-stage/parts/palette/MentionPicker.tsx::MentionPicker
   pattern:
     source: Cursor `@symbol`
     rationale: >-

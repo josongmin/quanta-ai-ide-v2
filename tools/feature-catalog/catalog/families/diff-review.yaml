@@ -34,7 +34,7 @@
     actual change, not the whole line.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/Blocks.tsx::DiffBlock
+      - src/widgets/coding-stage/parts/turn/blocks/DiffBlockView.tsx::DiffBlockView
       - src/widgets/coding-stage/parts/types.ts::CodingDiffHunk
   pattern:
     source: GitHub split view / Beyond Compare

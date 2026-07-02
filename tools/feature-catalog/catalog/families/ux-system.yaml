@@ -239,19 +239,20 @@
   added_in: "2026-03-12"
 
 - id: button-tone-system
-  label: Button tone system (primary / secondary / ghost / danger)
+  label: IconButton tone system (muted / accent / danger)
   tier: parity
   description: >-
-    `<Button tone>` covers four tones with consistent hover / focus /
-    active states. Disabled state respects contrast minimums; danger
-    tone is reserved for irreversible actions.
+    `<IconButton tone>` covers three semantic tones with consistent
+    hover / focus / active states. Tones resolve through intent
+    tokens (`--intent-danger-vivid` etc); danger tone is reserved for
+    irreversible actions.
   evidence:
     symbols:
-      - src/shared/ui/Button.tsx
+      - src/shared/ui/IconButton.tsx
   pattern:
     source: Material 3 button hierarchy / shadcn/ui
     rationale: >-
-      Four tones is the right resolution — fewer is ambiguous, more
-      becomes a guessing game for the implementer.
+      Three semantic tones is the right resolution — fewer is
+      ambiguous, more becomes a guessing game for the implementer.
   sota: {}
   added_in: "2026-03-12"

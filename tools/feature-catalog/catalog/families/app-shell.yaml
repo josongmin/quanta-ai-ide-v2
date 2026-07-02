@@ -1,4 +1,4 @@
-# App shell, providers, review-stage rails, GitActions menu.
+# App shell, providers, review-stage rails, overlay pickers.
 
 - id: app-shell
   label: AppShell (chrome host)
@@ -36,23 +36,6 @@
       transitions cheap — only the stage re-renders on nav.
   sota: {}
   added_in: "2026-01-15"
-
-- id: git-actions-menu
-  label: GitActionsMenu (branch-scoped quick actions)
-  tier: parity
-  description: >-
-    Branch-anchored menu surfacing Pull / Push / Sync / Rebase /
-    Discard with confirmation gates on the destructive entries.
-  evidence:
-    symbols:
-      - src/widgets/app-shell/GitActionsMenu.tsx
-  pattern:
-    source: GitHub Desktop branch menu
-    rationale: >-
-      Branch-scoped grouping keeps "is this safe?" answerable —
-      destructive actions are clearly under the active branch's name.
-  sota: {}
-  added_in: "2026-04-01"
 
 - id: prefs-context
   label: PrefsContext (cross-feature preferences)
@@ -131,15 +114,15 @@
   added_in: "2026-03-22"
 
 - id: heat-overlay-picker
-  label: HeatOverlayPicker (heat-metric chooser)
+  label: HeatDetail (heat-metric chooser)
   tier: leading
   description: >-
-    Picker exposing the heat-metric axes — churn, complexity,
-    blast radius, coverage gap, recent edits, cost, latency. Active
-    metric drives the colour ramp on every viz.
+    Master-detail pane in the overlay popover exposing the heat-metric
+    axes — churn, complexity, blast radius, coverage gap, recent edits,
+    cost, latency. Active metric drives the colour ramp on every viz.
   evidence:
     symbols:
-      - src/features/apply-overlay/ui/HeatOverlayPicker.tsx
+      - src/features/apply-overlay/ui/parts/HeatDetail.tsx::HeatDetail
   pattern:
     source: Chrome DevTools "Rendering" pane / Datadog metric picker
     rationale: >-
@@ -149,15 +132,15 @@
   added_in: "2026-03-22"
 
 - id: risk-lens-switcher
-  label: RiskLensSwitcher (risk-axis cycler)
+  label: RiskDetail (risk-axis selector)
   tier: leading
   description: >-
-    One-tap cycler through risk lenses (no-coverage, high-blast,
-    recent-failures, churn-spike). The "what would hurt most if it
-    breaks" lens.
+    Master-detail pane in the overlay popover selecting the risk lens
+    (no-coverage, high-blast, recent-failures, churn-spike). The
+    "what would hurt most if it breaks" lens.
   evidence:
     symbols:
-      - src/features/apply-overlay/ui/RiskLensSwitcher.tsx
+      - src/features/apply-overlay/ui/parts/RiskDetail.tsx::RiskDetail
   pattern:
     source: Photography lens cycle (50mm / 35mm / 85mm)
     rationale: >-
@@ -167,15 +150,15 @@
   added_in: "2026-03-22"
 
 - id: time-window-picker
-  label: TimeWindowPicker (rolling window)
+  label: Time-window control (rolling window)
   tier: parity
   description: >-
-    Picker for the time window applied to every metric — 24h, 7d,
-    30d, 90d, all-time. Affects churn, recent-failures, cost
-    aggregation.
+    Time-window control inside the overlay popover — 24h, 7d, 30d,
+    90d, all-time — applied to every metric. Affects churn,
+    recent-failures, cost aggregation.
   evidence:
     symbols:
-      - src/features/apply-overlay/ui/TimeWindowPicker.tsx
+      - src/features/apply-overlay/ui/OverlayPopover.tsx::OverlayPopover
   pattern:
     source: Datadog/Grafana time-range picker
     rationale: >-
@@ -185,37 +168,35 @@
   added_in: "2026-03-22"
 
 - id: pr-ticket-rail
-  label: PrTicketRail (PR list scoped to me / team)
+  label: LeftQueue (PR list scoped to me / archived)
   tier: leading
   description: >-
-    Resizable rail listing PRs in scope (`mine-to-review` / `my-prs`
-    / `team`) sortable by risk / updated / size. Persists width,
-    scope, and sort key.
+    `LeftQueue` is the review-stage left rail listing PRs by
+    `QueueScope` (all / mine / archived), grouped by repo and ordered
+    by risk within each group.
   evidence:
     symbols:
-      - src/widgets/review-stage/PrTicketRail.tsx
-      - src/widgets/review-stage/PrTicketRail.tsx::PrScope
-      - src/widgets/review-stage/PrTicketRail.tsx::PrSortKey
-      - src/widgets/review-stage/PrTicketRail.tsx::PR_RAIL_MIN_WIDTH
+      - src/widgets/review-stage/ui/LeftQueue.tsx::LeftQueue
+      - src/widgets/review-stage/ui/LeftQueue.tsx::QueueScope
   pattern:
     source: GitHub Pulls inbox / Linear inbox
     rationale: >-
-      The right-rail-of-tickets shape is the lingua franca of work
-      queues. Scope + sort cover the 95% of "what should I review
+      The rail-of-tickets shape is the lingua franca of work queues.
+      Scope + risk ordering cover the 95% of "what should I review
       next" decisions.
   sota: {}
   added_in: "2026-04-15"
 
 - id: engine-findings-rail
-  label: EngineFindingsRail (CI / scanner findings)
+  label: EngineFindingsPanel (CI / scanner findings)
   tier: leading
   description: >-
-    Right-side rail in review stage showing findings from CI,
-    semgrep, lint, type, test runs — grouped by severity, click to
-    jump to the offending hunk.
+    Panel in review stage showing findings from CI, semgrep, lint,
+    type, test runs — grouped by severity, click to jump to the
+    offending hunk.
   evidence:
     symbols:
-      - src/widgets/review-stage/EngineFindingsRail.tsx
+      - src/widgets/review-stage/ui/ReviewShellChrome.tsx::EngineFindingsPanel
   pattern:
     source: GitHub PR checks / Sourcegraph code intel
     rationale: >-
@@ -226,14 +207,14 @@
   added_in: "2026-04-15"
 
 - id: pr-context-rail
-  label: PrContextRail (PR-level context)
+  label: ReviewContextRail (PR-level context)
   tier: parity
   description: >-
-    Left rail in review stage showing PR-level metadata — author,
-    branch, base, linked issues, reviewers, status checks summary.
+    Rail in review stage showing PR-level metadata — author, branch,
+    base, linked issues, reviewers, status checks summary.
   evidence:
     symbols:
-      - src/widgets/review-stage/PrContextRail.tsx
+      - src/widgets/review-stage/ui/ReviewContextRail.tsx::ContextRail
   pattern:
     source: GitHub PR sidebar
     rationale: >-

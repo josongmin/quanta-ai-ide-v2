@@ -33,7 +33,7 @@
     to exit preview. Keyboard ←→ steps, Home/End jumps to ends.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::TimelineScrubber
+      - src/widgets/coding-stage/parts/timeline/TimelineScrubber.tsx::TimelineScrubber
     locales:
       - "coding:scrubber.preview"
   pattern:
@@ -56,8 +56,8 @@
     new task. Menu is keyboard-navigable, Esc closes, focus restores.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/TurnContextMenu.tsx::TurnContextMenu
-      - src/widgets/coding-stage/parts/TurnContextMenu.tsx::TurnContextMenuItem
+      - src/widgets/coding-stage/parts/turn/TurnContextMenu.tsx::TurnContextMenu
+      - src/widgets/coding-stage/parts/turn/TurnContextMenu.tsx::TurnContextMenuItem
   pattern:
     source: GitHub commit dropdown
     rationale: >-

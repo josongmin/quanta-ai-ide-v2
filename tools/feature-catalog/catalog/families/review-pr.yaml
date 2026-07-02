@@ -1,18 +1,17 @@
 # PR review surface — diff viewer, threads, action bar.
 
 - id: diff-view
-  label: DiffView (unified / split toggle)
+  label: Diff block view (unified / split toggle)
   tier: parity
   description: >-
-    `DiffView` is the host for diff rendering. Mode toggle switches
-    between unified and split via `ModeToggle`. Renders one
-    `DiffHunk` per hunk.
+    `DiffBlockView` is the host for diff rendering inside a coding-stage
+    turn. Per-file rows (`DiffFileRow`) switch between unified and split
+    via a `viewMode` toggle. Renders one `DiffHunk` per hunk.
   evidence:
     symbols:
-      - src/features/diff-view/ui/DiffView.tsx
-      - src/features/diff-view/ui/DiffHunk.tsx
-      - src/features/diff-view/ui/ModeToggle.tsx
-      - src/features/diff-view/ui/DiffHunk.tsx::DiffMode
+      - src/widgets/coding-stage/parts/turn/blocks/DiffBlockView.tsx::DiffBlockView
+      - src/widgets/coding-stage/parts/turn/blocks/DiffFileRow.tsx
+      - src/widgets/coding-stage/parts/turn/blocks/DiffHunk.tsx
   pattern:
     source: GitHub PR diff viewer / Gerrit
     rationale: >-
@@ -28,13 +27,12 @@
   label: Inline review thread (per-line conversation)
   tier: leading
   description: >-
-    `InlineThread` renders a comment thread inline in the diff at the
-    line it was anchored to. Replies stack under the original; resolve
-    collapses the thread to a single chip.
+    `HunkCommentThread` renders a comment thread inline in the diff at
+    the line it was anchored to. Replies stack under the original;
+    resolve collapses the thread to a single chip.
   evidence:
     symbols:
-      - src/features/diff-view/ui/InlineThread.tsx
-      - src/features/review-pr/ui/CommentThread.tsx
+      - src/widgets/coding-stage/parts/turn/blocks/DiffComments.tsx::HunkCommentThread
   pattern:
     source: GitHub line-comment threads / Gerrit replies
     rationale: >-
@@ -48,11 +46,12 @@
   label: Inline comment composer
   tier: parity
   description: >-
-    Click `+` on a diff line to open `InlineCommentComposer` directly
-    in the gutter. Cmd+Enter submits; Esc cancels and restores focus.
+    Click `+` on a diff line to open the inline composer directly in
+    the gutter (part of `HunkCommentThread`). Cmd+Enter submits; Esc
+    cancels and restores focus.
   evidence:
     symbols:
-      - src/features/diff-view/ui/InlineCommentComposer.tsx
+      - src/widgets/coding-stage/parts/turn/blocks/DiffComments.tsx::HunkCommentThread
   pattern:
     source: GitHub PR review composer
     rationale: >-
@@ -66,12 +65,12 @@
   label: Review action bar (approve / request-changes / comment)
   tier: parity
   description: >-
-    Sticky bottom bar with the three GitHub-canonical review actions.
-    Approve / Request changes both require a non-empty top-level
-    comment for traceability.
+    `DecisionHeadsUp` is the review-stage decision bar carrying the
+    GitHub-canonical review actions (approve / request-changes /
+    comment) with the blocking-comment traceability guard.
   evidence:
     symbols:
-      - src/features/review-pr/ui/ReviewActionBar.tsx
+      - src/widgets/review-stage/ui/ReviewDecisionChrome.tsx::DecisionHeadsUp
   pattern:
     source: GitHub PR review summary
     rationale: >-
@@ -85,12 +84,12 @@
   label: ConversationLog (timeline of review events)
   tier: leading
   description: >-
-    Chronological mix of comments, reviews, status checks, force-pushes.
-    Each event is one row; clicking expands the row to the full body
-    inline.
+    `ReviewTimeline` is the chronological mix of commits, reviews,
+    threads, and status checks for a PR, rendered as event lanes in
+    the review stage.
   evidence:
     symbols:
-      - src/features/review-pr/ui/ConversationLog.tsx
+      - src/widgets/review-stage/ui/ReviewTimeline.tsx::ReviewTimeline
   pattern:
     source: GitHub PR conversation tab / Linear activity log
     rationale: >-

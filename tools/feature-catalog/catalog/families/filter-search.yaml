@@ -20,15 +20,16 @@
   added_in: "2026-03-12"
 
 - id: preset-facet
-  label: PresetFacet (saved filter presets)
+  label: Saved filter presets (project-selector dropdown)
   tier: parity
   description: >-
-    Dropdown of saved filter presets — "my open PRs", "high-risk
-    files", "untested code paths". Selecting a preset replaces the
-    active facet stack atomically.
+    Saved filter presets — "my open PRs", "high-risk files",
+    "untested code paths" — surfaced in the project selector's
+    dropdown (`PRESETS` + `applyPreset`). Selecting a preset replaces
+    the active facet stack atomically.
   evidence:
     symbols:
-      - src/features/filter-files/ui/PresetFacet.tsx
+      - src/features/filter-files/ui/ProjectSelector.tsx
   pattern:
     source: Linear views / GitHub Issues filters
     rationale: >-
@@ -45,7 +46,6 @@
     Live-updates the result count as the user drags.
   evidence:
     symbols:
-      - src/features/filter-files/ui/RangeFacet.tsx
       - src/features/filter-files/ui/MetricRangeSlider.tsx
   pattern:
     source: Airbnb price slider / Steam refine sliders
@@ -126,7 +126,7 @@
   evidence:
     symbols:
       - src/features/filter-files/ui/ProjectSelector.tsx
-      - src/features/filter-files/model/FilterContext.tsx
+      - src/entities/filter-state/model/FilterContext.tsx
   pattern:
     source: GitHub repo scope selector / Linear team picker
     rationale: >-

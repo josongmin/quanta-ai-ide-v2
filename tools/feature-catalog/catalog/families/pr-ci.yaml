@@ -9,7 +9,7 @@
     by file, test results, cost. One click copies to clipboard.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::turnToPrDescription
+      - src/widgets/coding-stage/lib/codingStageHelpers.ts::turnToPrDescription
     locales:
       - "coding:export.prTitle"
   pattern:

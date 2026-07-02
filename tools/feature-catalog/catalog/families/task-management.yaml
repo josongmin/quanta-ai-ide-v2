@@ -9,8 +9,8 @@
     main thread; ⌘K opens a fuzzy task switcher.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/TaskRail.tsx::TaskRail
-      - src/widgets/coding-stage/parts/CommandPalette.tsx::CommandPalette
+      - src/widgets/coding-stage/parts/chrome/TaskRail.tsx::TaskRail
+      - src/widgets/coding-stage/parts/palette/CommandPalette.tsx::CommandPalette
     locales:
       - "coding:tasks.empty"
   pattern:
@@ -35,7 +35,7 @@
     user opens the task.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/TaskRail.tsx::TaskRail
+      - src/widgets/coding-stage/parts/chrome/TaskRail.tsx::TaskRail
     locales:
       - "coding:background.ribbon"
     locales:

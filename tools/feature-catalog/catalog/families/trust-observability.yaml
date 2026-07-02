@@ -10,7 +10,7 @@
   evidence:
     symbols:
       - src/widgets/coding-stage/parts/types.ts::Citation
-      - src/widgets/coding-stage/CodingStage.tsx::CitationStrip
+      - src/widgets/coding-stage/parts/turn/TurnViews.tsx::CitationStrip
   pattern:
     source: Cody / Phind source attribution
     rationale: >-
@@ -31,7 +31,7 @@
     with an amber `[stale]` chip + line-through on the file basename.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::annotatedThread
+      - src/widgets/coding-stage/lib/useTaskThread.ts::annotatedThread
   pattern:
     source: Cache invalidation marker (HTTP `Vary` / GraphQL fragments)
     rationale: >-
@@ -95,7 +95,7 @@
     as the meter so the meaning ("this is live") reads instantly.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::TpsLiveMeter
+      - src/widgets/coding-stage/parts/turn/TurnViews.tsx::TpsLiveMeter
     locales:
       - "coding:tps.tooltip"
   pattern:
@@ -117,7 +117,7 @@
     Total ms shown to the right.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::LatencyBar
+      - src/widgets/coding-stage/parts/turn/TurnViews.tsx::LatencyBar
   pattern:
     source: Chrome DevTools waterfall / Linkerd latency dashboard
     rationale: >-
@@ -137,7 +137,7 @@
     faster prints emerald `0.7× faster`, slower prints amber `2.3× slower`.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::LatencyBar
+      - src/widgets/coding-stage/parts/turn/TurnViews.tsx::LatencyBar
     locales:
       - "coding:latencyBaseline.faster"
   pattern:
@@ -180,7 +180,7 @@
     bars with tones at 80% / 50% thresholds.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::SuccessRatePanel
+      - src/widgets/coding-stage/parts/chrome/ContextRail.tsx::SuccessRatePanel
   pattern:
     source: Agent-eval literature (METR / OpenAI evals)
     rationale: >-

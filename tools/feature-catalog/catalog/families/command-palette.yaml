@@ -10,8 +10,8 @@
     keyboard nav, hint chips, and a deterministic insertion point.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/CommandPalette.tsx::CommandPalette
-      - src/widgets/coding-stage/parts/CommandPalette.tsx::PaletteAction
+      - src/widgets/coding-stage/parts/palette/CommandPalette.tsx::CommandPalette
+      - src/widgets/coding-stage/parts/palette/CommandPalette.tsx::PaletteAction
     locales:
       - "coding:palette.actions.newTask"
   pattern:
@@ -53,7 +53,7 @@
     without scrolling. Shows even when the thread has scrolled away.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/LiveSnapshotCard.tsx::LiveSnapshotCard
+      - src/widgets/coding-stage/parts/timeline/LiveSnapshotCard.tsx::LiveSnapshotCard
   pattern:
     source: GitHub PR summary card / Linear issue header
     rationale: >-
@@ -72,7 +72,7 @@
     a per-project concern.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/TaskRail.tsx::TaskRail
+      - src/widgets/coding-stage/parts/chrome/TaskRail.tsx::TaskRail
   pattern:
     source: Trello card drag / Linear sub-issue reorder
     rationale: >-
@@ -90,8 +90,8 @@
     width persists in localStorage.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/TaskRail.tsx::TASK_RAIL_DEFAULT_WIDTH
-      - src/widgets/coding-stage/parts/TaskRail.tsx::TASK_RAIL_MIN_WIDTH
+      - src/widgets/coding-stage/parts/chrome/TaskRail.tsx::TASK_RAIL_DEFAULT_WIDTH
+      - src/widgets/coding-stage/parts/chrome/TaskRail.tsx::TASK_RAIL_MIN_WIDTH
   pattern:
     source: VS Code activity bar resize
     rationale: >-
@@ -113,9 +113,9 @@
     rewind is `safe / risky / noop`.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/timelineMeta.ts::turnMeta
-      - src/widgets/coding-stage/parts/timelineMeta.ts::approxCost
-      - src/widgets/coding-stage/parts/timelineMeta.ts::classifyInverse
+      - src/widgets/coding-stage/parts/timeline/timelineMeta.ts::turnMeta
+      - src/widgets/coding-stage/parts/timeline/timelineMeta.ts::approxCost
+      - src/widgets/coding-stage/parts/timeline/timelineMeta.ts::classifyInverse
   pattern:
     source: Functional core / imperative shell
     rationale: >-
@@ -135,8 +135,8 @@
     the active mention without disturbing the rest of the draft.
   evidence:
     symbols:
-      - src/widgets/coding-stage/parts/MentionPicker.tsx::findMentionAtCaret
-      - src/widgets/coding-stage/parts/MentionPicker.tsx::MentionTrigger
+      - src/widgets/coding-stage/parts/palette/MentionPicker.tsx::findMentionAtCaret
+      - src/widgets/coding-stage/parts/palette/MentionPicker.tsx::MentionTrigger
   pattern:
     source: Slack / GitHub @mention parser
     rationale: >-

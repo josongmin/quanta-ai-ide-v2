@@ -9,7 +9,7 @@
     map, and renders the total as `tok · ~$X.XX`.
   evidence:
     symbols:
-      - src/widgets/coding-stage/CodingStage.tsx::MODEL_PRICING
+      - src/widgets/coding-stage/lib/codingStageHelpers.ts::MODEL_PRICING
     locales:
       - "coding:cost.tooltip"
   pattern:

@@ -4,11 +4,12 @@
   label: Admission workspace (top-level)
   tier: parity
   description: >-
-    `AdmissionWorkspace` is the host for the rule lifecycle UI —
-    Overview / Decision / History / RulesBoard / RuleEditor tabs.
+    `AdmissionV2` is the host for the rule lifecycle UI — Health /
+    Rules / Gate pages routed through a sidebar. `AdmissionRoot`
+    mounts it.
   evidence:
     symbols:
-      - src/features/admission-rules/ui/AdmissionWorkspace.tsx
+      - src/features/admission-rules/ui/v2/AdmissionV2.tsx
       - src/features/admission-rules/ui/AdmissionRoot.tsx
   pattern:
     source: Feature-flag platforms (LaunchDarkly / GrowthBook)
@@ -23,11 +24,13 @@
   label: RuleEditor (declarative predicate editor)
   tier: parity
   description: >-
-    Condition-builder surface for the per-rule predicate. Group / AND /
-    OR / NOT scaffolding with one input per leaf clause.
+    Condition-builder surface for the per-rule predicate — the
+    `RuleEditorForm` inside the `RuleEditorOverlay`, with one input
+    per signal clause.
   evidence:
     symbols:
-      - src/features/admission-rules/ui/RuleEditor.tsx
+      - src/features/admission-rules/ui/v2/parts/RuleEditorForm.tsx::RuleEditorForm
+      - src/features/admission-rules/ui/v2/parts/RuleEditorOverlay.tsx::RuleEditorOverlay
   pattern:
     source: Notion filter builder / Sentry alert rules
     rationale: >-
@@ -38,34 +41,35 @@
   added_in: "2026-03-12"
 
 - id: rules-board
-  label: RulesBoard (kanban-style rule lifecycle)
+  label: RulesPage (rule list + lifecycle states)
   tier: leading
   description: >-
-    Three columns — proposed / shadow / live — with rule cards
-    moving between them as approvers act. Drop targets enforce
-    valid transitions.
+    `RulesPage` hosts the rule list (`RuleListSection`) with search,
+    source-filter chips, and bulk actions. Lifecycle (proposed /
+    shadow / live) is a per-row state, not a kanban column.
   evidence:
     symbols:
-      - src/features/admission-rules/ui/RulesBoard.tsx
+      - src/features/admission-rules/ui/v2/parts/RulesPage.tsx::RulesPage
+      - src/features/admission-rules/ui/v2/parts/rules/RuleListSection.tsx::RuleListSection
   pattern:
-    source: Kanban / Jira workflow
+    source: Linear list views / GitHub Issues
     rationale: >-
       Rules go through a known lifecycle (propose → shadow → live).
-      Kanban makes the lifecycle the primary navigation, not a
-      buried status field.
+      A filterable list with a status column scales past the handful
+      of rules a kanban board reads well.
   sota: {}
   added_in: "2026-03-15"
 
 - id: confidence-mix
-  label: ConfidenceMix (rule confidence breakdown)
+  label: VerdictDonut (decision-class breakdown)
   tier: leading
   description: >-
-    Stacked bar of rule confidence by decision class — accept /
-    revise / reject — so a reviewer can see whether the model is
+    Donut of rule verdicts by decision class — accept / revise /
+    reject — so a reviewer can see whether the model is
     confident-correct or confident-wrong.
   evidence:
     symbols:
-      - src/features/admission-rules/ui/ConfidenceMix.tsx
+      - src/features/admission-rules/ui/v2/parts/health/VerdictDonut.tsx::VerdictDonut
   pattern:
     source: Calibration histogram (Brier score viz)
     rationale: >-
@@ -208,11 +212,12 @@
   label: CostBadge (per-rule cost overlay)
   tier: parity
   description: >-
-    Tiny chip on each rule card showing rolling cost ($/day) so
-    expensive rules surface for review without opening the row.
+    Tiny cost chip inline in each `RuleListSection` row showing
+    rolling cost ($/day) so expensive rules surface for review
+    without opening the row.
   evidence:
     symbols:
-      - src/features/admission-rules/ui/CostBadge.tsx
+      - src/features/admission-rules/ui/v2/parts/rules/RuleListSection.tsx::RuleListSection
   pattern:
     source: AWS cost-by-tag chips
     rationale: >-
