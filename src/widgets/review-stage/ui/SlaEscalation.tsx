@@ -29,11 +29,11 @@ import { AlertOctagon, Send, X } from 'lucide-react';
 import type { PullRequest } from '@entities/pr';
 import { viewerLogin } from '@features/review-pr';
 import { useTabVisibility } from '@features/workspace-tabs';
-import { safeSessionGet, safeSessionSet } from '@shared/lib';
+import { safeSessionGet, safeSessionSet, STORAGE_KEYS } from '@shared/lib';
 import { dispatchPing, canPing, type PingResult } from '../lib/notifyDispatcher';
 
 const ESCALATION_HOURS = 24 * 7;  // 7 days
-const STORAGE_KEY = 'review.escalation.dismissed.v1';
+const STORAGE_KEY = STORAGE_KEYS.reviewEscalationDismissed;
 
 type Stalled = {
   pr: PullRequest;

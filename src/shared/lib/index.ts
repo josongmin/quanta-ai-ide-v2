@@ -13,6 +13,9 @@ export {
   safeLocalSet, safeLocalGet, safeSessionSet, safeSessionGet,
   safeLocalRemove, safeSessionRemove,
 } from './safeStorage';
+export {
+  STORAGE_KEYS, STORAGE_KEY_PREFIX, type StorageKey,
+} from './storageKeys';
 export { clamp, clamp01 } from './clamp';
 export { isEditableTarget } from './isEditableTarget';
 export { shallowEqual } from './shallowEqual';

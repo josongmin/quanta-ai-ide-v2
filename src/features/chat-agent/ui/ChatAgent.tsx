@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
-import { safeLocalGet, safeLocalSet, safeLocalRemove } from '@shared/lib';
+import { safeLocalGet, safeLocalSet, safeLocalRemove, STORAGE_KEYS } from '@shared/lib';
 import { GlassCard } from '@shared/ui';
 import { useRunSuggestion, type SuggestionKey } from '../model/suggestions';
 import { ChatHeader } from './parts/ChatHeader';
@@ -42,7 +42,7 @@ export default function ChatAgent({
   // height that survives reloads via localStorage. Dragging up grows
   // the widget (since it's anchored to the bottom of the viewport),
   // so deltaY is *subtracted* from the running height during drag.
-  const HEIGHT_KEY = 'chat-agent:height';
+  const HEIGHT_KEY = STORAGE_KEYS.chatAgentHeight;
   const HEIGHT_MIN = 240;
   const HEIGHT_MAX_VH = 0.92;
   const [height, setHeight] = useState<number | null>(() => {

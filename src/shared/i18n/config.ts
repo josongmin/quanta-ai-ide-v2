@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next';
+import { STORAGE_KEYS } from '@shared/lib';
 
 export const SUPPORTED_LOCALES = ['en', 'ko', 'ja', 'zh'] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
@@ -11,7 +12,7 @@ export const NAMESPACES = [
   'review', 'admission', 'diff', 'fix-pipeline', 'verified-fix', 'agents',
 ] as const;
 
-const STORAGE_KEY = 'cflens.i18n.lang';
+const STORAGE_KEY = STORAGE_KEYS.i18nLang;
 
 // Lazy-load resources via Vite dynamic import. Each locale × namespace
 // becomes its own chunk; the entry no longer ships any locale JSON.

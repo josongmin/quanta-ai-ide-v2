@@ -43,6 +43,7 @@ import type {
 } from '@entities/pr';
 import { incidentMatches } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
+import { STORAGE_KEYS } from '@shared/lib';
 import { createTtlMapStore } from './ttlMapStore';
 
 // ─── Symbol-level change extraction ──────────────────────────────────────
@@ -348,7 +349,7 @@ export type SessionState = {
   cumulativeMs: number;
 };
 
-const STORAGE_KEY = 'review.session.v1';
+const STORAGE_KEY = STORAGE_KEYS.reviewSession;
 const TTL_DAYS = 30;
 
 // Preserves the original guard exactly: entry must be a non-null object

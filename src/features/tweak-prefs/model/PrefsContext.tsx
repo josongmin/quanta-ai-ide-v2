@@ -1,14 +1,14 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode,
 } from 'react';
-import { safeLocalGet, safeLocalSet } from '@shared/lib';
+import { safeLocalGet, safeLocalSet, STORAGE_KEYS } from '@shared/lib';
 import type { Plan, FacetCategoryKey, FacetEntry } from '@entities/facet';
 
 export type { Plan, FacetCategoryKey, FacetEntry };
 
 const PLAN_RANK: Record<Plan, number> = { free: 0, pro: 1, enterprise: 2 };
 
-const STORAGE_KEY = 'cflens.prefs.v1';
+const STORAGE_KEY = STORAGE_KEYS.prefs;
 
 export type PrefsState = {
   plan: Plan;

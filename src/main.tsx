@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './app/App';
 import './index.css';
 import { applyTokens } from '@shared/tokens';
+import { STORAGE_KEYS } from '@shared/lib';
 
 // Stamp the active theme's CSS variables onto :root *before* React mounts
 // so the very first React render reads correct `var(--bg-canvas)` etc.
@@ -11,7 +12,7 @@ import { applyTokens } from '@shared/tokens';
 // localStorage wins, then fall back to dark.
 (() => {
   try {
-    const t = localStorage.getItem('app:theme');
+    const t = localStorage.getItem(STORAGE_KEYS.theme);
     applyTokens(t === 'light' ? 'light' : 'dark');
   } catch {
     applyTokens('dark');

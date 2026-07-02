@@ -1,4 +1,4 @@
-import { safeLocalGet } from '@shared/lib';
+import { safeLocalGet, STORAGE_KEYS } from '@shared/lib';
 import { components, semantic, type SemanticTokens } from '@shared/tokens';
 import type { GlobalTokenSections, Tokens } from './TokensContext';
 
@@ -6,8 +6,8 @@ import type { GlobalTokenSections, Tokens } from './TokensContext';
 // (applyGlassTints, dark alpha 0.04 → 0.5). Stale persisted v2 tokens
 // would otherwise override the new defaults and freeze the chrome —
 // invalidate them once so everyone picks up the new theming.
-export const STORAGE_KEY = 'cflens.tokens.v3';
-const LEGACY_STORAGE_KEY = 'cflens.tokens.v1';
+export const STORAGE_KEY = STORAGE_KEYS.tokens;
+const LEGACY_STORAGE_KEY = STORAGE_KEYS.tokensLegacy;
 
 // Shape that `mergeTokens` actually reads: every section is optional and each
 // leaf section is itself a Partial. Used for persisted/migrated input which is

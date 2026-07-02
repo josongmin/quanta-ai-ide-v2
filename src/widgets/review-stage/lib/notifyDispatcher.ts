@@ -29,9 +29,9 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import { useReviewStore } from '@features/review-pr';
-import { safeSessionGet, safeSessionSet } from '@shared/lib';
+import { safeSessionGet, safeSessionSet, STORAGE_KEYS } from '@shared/lib';
 
-const STORAGE_KEY = 'review.ping.sentInSession.v1';
+const STORAGE_KEY = STORAGE_KEYS.reviewPingSentInSession;
 const COOLDOWN_MS = 30 * 60 * 1000;  // 30 min
 
 type Sent = Record<string, number>;  // key=`${prNumber}:${target}` → epoch ms

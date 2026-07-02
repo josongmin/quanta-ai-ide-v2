@@ -1,7 +1,8 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { useRouterState } from '@tanstack/react-router';
+import { STORAGE_KEY_PREFIX } from './storageKeys';
 
-const STORAGE_PREFIX = 'scroll:';
+const STORAGE_PREFIX = STORAGE_KEY_PREFIX.scroll;
 
 function readKey(scope: string, routeKey: string): number | null {
   try {

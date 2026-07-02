@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { safeLocalSet } from '@shared/lib';
+import { safeLocalSet, STORAGE_KEY_PREFIX } from '@shared/lib';
 import { SAMPLE_PROJECTS, getSampleTasks } from '../parts/data';
 import { sliceToHead } from '../parts/timeline/TimelineScrubber';
 import { deriveTitle, MODEL_PRICING } from './codingStageHelpers';
@@ -58,7 +58,7 @@ export function useTaskThread(
   // Save the active model as a per-project default. Clicked from the
   // Composer's model dropdown footer.
   const saveProjectDefaultModel = useCallback((projectId: string, next: ComposerModelId) => {
-    safeLocalSet(`coding:project-default-model:${projectId}`, next);
+    safeLocalSet(`${STORAGE_KEY_PREFIX.codingProjectDefaultModel}${projectId}`, next);
     setProjects((cur) => cur.map((p) =>
       p.id === projectId ? { ...p, defaultModel: next } : p,
     ));

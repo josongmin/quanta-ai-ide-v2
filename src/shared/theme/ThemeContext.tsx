@@ -1,7 +1,7 @@
 import {
   createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode,
 } from 'react';
-import { safeLocalGet, safeLocalSet } from '@shared/lib';
+import { safeLocalGet, safeLocalSet, STORAGE_KEYS } from '@shared/lib';
 
 
 export type Theme = 'dark' | 'light';
@@ -9,7 +9,7 @@ type ThemeCtx = { theme: Theme; isDark: boolean; toggle: () => void; setTheme: (
 
 const Ctx = createContext<ThemeCtx | null>(null);
 
-const STORAGE_KEY = 'app:theme';
+const STORAGE_KEY = STORAGE_KEYS.theme;
 
 function readStored(): Theme | null {
   if (typeof window === 'undefined') return null;

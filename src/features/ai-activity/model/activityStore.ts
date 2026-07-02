@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { safeLocalGet, safeLocalSet } from '@shared/lib';
+import { safeLocalGet, safeLocalSet, STORAGE_KEYS } from '@shared/lib';
 
 // ─── Domain ───────────────────────────────────────────────────────────
 // Each "activity" is one AI chat session touching N files. Files are
@@ -88,7 +88,7 @@ const PREFS_DEFAULTS: ActivityPrefs = {
 
 // Keep the v1 storage key — the spread-with-defaults loader is forward
 // compatible (missing `demoMode` falls back to the default `true`).
-const STORAGE_KEY = 'cflens.aiActivity.prefs.v1';
+const STORAGE_KEY = STORAGE_KEYS.aiActivityPrefs;
 
 function loadPrefs(): ActivityPrefs {
   if (typeof window === 'undefined') return PREFS_DEFAULTS;

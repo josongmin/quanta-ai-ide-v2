@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { safeLocalGet, safeLocalSet } from './safeStorage';
+import { STORAGE_KEYS } from './storageKeys';
 
 export type PanelWidthConfig = {
   storageKey: string;
@@ -10,14 +11,14 @@ export type PanelWidthConfig = {
 };
 
 export const LEFT_PANEL: PanelWidthConfig = {
-  storageKey: 'intelligence:left-panel-width',
+  storageKey: STORAGE_KEYS.panelLeftWidth,
   defaultWidth: 296,
   min: 240,
   max: 420,
 };
 
 export const RIGHT_PANEL: PanelWidthConfig = {
-  storageKey: 'intelligence:right-panel-width',
+  storageKey: STORAGE_KEYS.panelRightWidth,
   defaultWidth: 360,
   min: 320,
   max: 620,

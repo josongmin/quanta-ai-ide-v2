@@ -5,6 +5,7 @@ import {
   type StateStorage,
 } from 'zustand/middleware';
 import { DEFAULT_TAB_KINDS, isTabKind, type TabKind } from '@shared/config/workspaceTabs';
+import { STORAGE_KEYS } from '@shared/lib';
 
 // Throttle window for localStorage writes. Tab activations cluster (e.g.
 // the user cycles through tabs with Cmd+Alt+Arrow) — without throttling,
@@ -321,7 +322,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
       };
     },
     {
-      name: 'workspace-tabs:v2',
+      name: STORAGE_KEYS.workspaceTabs,
       // Throttled localStorage — bursts of activations (Cmd+Alt+Arrow
       // cycling, drag-reorder) coalesce into one disk write instead of
       // one per state mutation. See `throttledLocalStorage` above for

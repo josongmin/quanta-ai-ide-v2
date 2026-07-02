@@ -23,10 +23,10 @@
 // testable and decoupled from React.
 // ─────────────────────────────────────────────────────────────────────────
 
-import { safeLocalGet } from '@shared/lib';
+import { safeLocalGet, STORAGE_KEYS } from '@shared/lib';
 import { pruneTtlRecord, writeJson } from './ttlMapStore';
 
-const STORAGE_KEY = 'review.pins.v1';
+const STORAGE_KEY = STORAGE_KEYS.reviewPins;
 const TTL_DAYS = 90;
 
 type PinEntry = {

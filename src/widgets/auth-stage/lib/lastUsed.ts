@@ -10,9 +10,9 @@ export type AuthMethod =
   | 'sso'
   | 'magic-link';
 
-import { safeLocalGet, safeLocalSet } from '@shared/lib';
+import { safeLocalGet, safeLocalSet, STORAGE_KEYS } from '@shared/lib';
 
-const KEY = 'auth.lastUsed.v1';
+const KEY = STORAGE_KEYS.authLastUsed;
 
 export function getLastUsedMethod(): AuthMethod | null {
   const v = safeLocalGet(KEY);

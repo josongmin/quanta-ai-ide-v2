@@ -3,11 +3,11 @@
 // check; here it lets us demonstrate the lockout UI deterministically.
 
 import { useEffect, useRef, useState } from 'react';
-import { safeSessionGet, safeSessionSet } from '@shared/lib';
+import { safeSessionGet, safeSessionSet, STORAGE_KEYS } from '@shared/lib';
 
 type Attempt = { at: number; ok: boolean };
 
-const HISTORY_KEY = 'auth.rate.history.v1';
+const HISTORY_KEY = STORAGE_KEYS.authRateHistory;
 
 function readHistory(): Attempt[] {
   // Storage read is wrapped by the helper; the surrounding try/catch remains as

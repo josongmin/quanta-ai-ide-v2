@@ -18,10 +18,11 @@
 //     the same recipe-not-result rule.
 // ─────────────────────────────────────────────────────────────────────────
 
+import { STORAGE_KEYS } from '@shared/lib';
 import type { QueueScope } from '../ui/LeftQueue';
 import { createTtlMapStore } from './ttlMapStore';
 
-const STORAGE_KEY = 'review.customViews.v1';
+const STORAGE_KEY = STORAGE_KEYS.reviewCustomViews;
 const TTL_DAYS = 180;
 
 export type CustomView = {
