@@ -12,7 +12,7 @@ import {
   LEFT_PANEL,
   RIGHT_PANEL,
   usePersistedPanelWidth,
-} from './panelLayout';
+} from '@shared/lib/panelLayout';
 
 const ChatAgent = lazy(() =>
   import('@features/chat-agent').then((m) => ({ default: m.ChatAgent })),

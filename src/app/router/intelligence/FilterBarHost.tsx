@@ -4,7 +4,7 @@ import { FilterBar } from '@features/filter-files';
 // in turn drags Treemap/CycleGraph/FolderBody/etc.), so going through it
 // here pulls that whole viz tree into the initial chunk.
 import { useStack } from '@features/inspect-target/model/StackContext';
-import { LEFT_PANEL } from './panelLayout';
+import { LEFT_PANEL } from '@shared/lib/panelLayout';
 
 type Props = {
   width: number;
