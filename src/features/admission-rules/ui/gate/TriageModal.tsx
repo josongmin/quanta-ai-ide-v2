@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Sparkles, Check, X, AlertTriangle } from 'lucide-react';
-import { Portal, ModalBackdrop, useDialogA11y } from '@shared/ui';
+import { Portal, ModalBackdrop, useDialogA11y, IconButton } from '@shared/ui';
 import type { FileRecord } from '@entities/repo';
 import type { ConsensusFinding } from './consensus';
 import { lowSignalCount } from './consensus';
@@ -183,23 +183,7 @@ export function TriageModal({
             >
               AI auto-triage · {String(candidates.length)} low-signal finding{candidates.length === 1 ? '' : 's'}
             </h3>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-              className="inline-flex items-center justify-center w-6 h-6 rounded transition-colors"
-              style={{ color: 'var(--fg-subtle)' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--fg-strong)';
-                e.currentTarget.style.background = 'var(--bg-hover)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--fg-subtle)';
-                e.currentTarget.style.background = 'transparent';
-              }}
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+            <IconButton icon={X} label="Close" onClick={onClose} size="sm" />
           </header>
 
           <p className="px-4 pt-3 text-[11px]" style={{ color: 'var(--fg-muted)' }}>

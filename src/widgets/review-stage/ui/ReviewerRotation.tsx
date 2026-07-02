@@ -38,6 +38,7 @@ type ReviewerSuggestion = {
 };
 import type { RepoData } from '@entities/repo';
 import { useReviewStore } from '@features/review-pr';
+import { Badge } from '@shared/ui/Badge';
 import V2Card from './V2Card';
 import { ProvenanceBadge } from './ReviewCopilot';
 
@@ -73,11 +74,12 @@ export default function ReviewerRotation({
         </span>
         {gap.hasGap && (
           <span
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-            style={{ background: 'color-mix(in srgb, var(--intent-warn-fg) 18%, transparent)', color: 'var(--intent-warn-fg)', border: '1px solid color-mix(in srgb, var(--intent-warn-fg) 40%, transparent)' }}
+            className="ml-auto inline-flex"
             title={`${String(gap.missingTeams)} owner team${gap.missingTeams === 1 ? '' : 's'} unrepresented in current reviewers`}
           >
-            {gap.missingTeams} gap{gap.missingTeams === 1 ? '' : 's'}
+            <Badge variant="warn" fill="soft">
+              {gap.missingTeams} gap{gap.missingTeams === 1 ? '' : 's'}
+            </Badge>
           </span>
         )}
       </div>

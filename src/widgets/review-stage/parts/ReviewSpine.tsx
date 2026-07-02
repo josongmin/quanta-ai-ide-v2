@@ -172,7 +172,7 @@ export default function ReviewSpine({
           />
         </div>
         <div id={sectionIds.checks}>
-          <ChecksScene pr={pr} blockerColor={SEV.blocker} />
+          <ChecksScene pr={pr} />
         </div>
         <div id={sectionIds.activity}>
           {/* Time-axis lane chart of PR life — commits / reviews / threads

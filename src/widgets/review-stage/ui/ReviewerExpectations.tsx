@@ -37,6 +37,7 @@ import type { RepoData } from '@entities/repo';
 import V2Card from './V2Card';
 import { ProvenanceBadge } from './ReviewCopilot';
 import { Avatar } from '@features/review-pr';
+import { Badge, type BadgeVariant } from '@shared/ui/Badge';
 
 type ReviewerScope = {
   login: string;
@@ -58,6 +59,13 @@ const STATE_LABEL: Record<ReviewerScope['state'], string> = {
   approved:            'Approved',
   'changes-requested': 'Changes',
   commented:           'Commented',
+};
+
+const STATE_VARIANT: Record<ReviewerScope['state'], BadgeVariant> = {
+  pending:             'warn',
+  approved:            'success',
+  'changes-requested': 'danger',
+  commented:           'info',
 };
 
 export default function ReviewerExpectations({
@@ -103,12 +111,9 @@ function ReviewerScopeRow({ scope }: { scope: ReviewerScope }) {
         <span className="text-[12px] font-bold text-[var(--fg-default)]">
           @{scope.login}
         </span>
-        <span
-          className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-          style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone, border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)` }}
-        >
+        <Badge variant={STATE_VARIANT[scope.state]} fill="soft">
           {STATE_LABEL[scope.state]}
-        </span>
+        </Badge>
         <span className="ml-auto inline-flex items-center gap-3 text-[10px] font-mono text-[var(--fg-muted)]">
           <span className="inline-flex items-center gap-1" title="Files this reviewer owns in this PR">
             <FileCode className="w-2.5 h-2.5" />

@@ -1,6 +1,7 @@
 import { memo, useState } from 'react';
 import { Check, Sparkles, Zap } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
+import { formatNumber } from '@shared/lib';
 import type { PlanBlock } from '../../types';
 
 function PlanBlockViewImpl({ block }: { block: PlanBlock }) {
@@ -137,7 +138,7 @@ function PlanBlockViewImpl({ block }: { block: PlanBlock }) {
                       </span>
                     )}
                     {item.estTokens != null && (
-                      <span className={sub}>{t('planMeta.estTokens', { n: item.estTokens.toLocaleString() })}</span>
+                      <span className={sub}>{t('planMeta.estTokens', { n: formatNumber(item.estTokens) })}</span>
                     )}
                     {item.estSeconds != null && (
                       <span className={sub}>{t('planMeta.estTime', { n: item.estSeconds })}</span>

@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { Grid3x3, Sparkles } from 'lucide-react';
 import { useViewMode } from '../model/ViewModeContext';
 import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
+import { useClickOutside } from '@shared/lib';
 import { GlassCard } from '@shared/ui';
 import type { ViewModeId } from '@entities/viz-mode';
 
@@ -30,14 +31,7 @@ export default function ModeSwitcher() {
   const Icon = current.icon;
   const currentLabel = t(`${current.id}.label`);
 
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    window.addEventListener('mousedown', handler);
-    return () => { window.removeEventListener('mousedown', handler); };
-  }, [open]);
+  useClickOutside(ref, open, useCallback(() => { setOpen(false); }, []));
 
   return (
     <div ref={ref} className="relative">

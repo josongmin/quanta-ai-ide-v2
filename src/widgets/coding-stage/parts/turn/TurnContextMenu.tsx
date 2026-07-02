@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import {
   Copy, ClipboardCopy, Share2, Download, FilePlus2, GitPullRequest,
 } from 'lucide-react';
+import { useClickOutside } from '@shared/lib';
 
 // Right-click context menu over a thread turn. Pure presentational —
 // the parent decides where to anchor it (clientX/Y from the contextmenu
@@ -41,17 +42,13 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
 
   // Close on outside click (mousedown so we beat the next click that
   // might land on a different button) and on Escape.
+  useClickOutside(ref, true, onClose);
   useEffect(() => {
-    const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    window.addEventListener('mousedown', onDown);
     window.addEventListener('keydown', onKey);
     return () => {
-      window.removeEventListener('mousedown', onDown);
       window.removeEventListener('keydown', onKey);
     };
   }, [onClose]);

@@ -4,6 +4,7 @@ import {
   ChevronDown, ChevronRight, type LucideIcon,
 } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
+import { formatNumber } from '@shared/lib';
 import type { FixCase, LoopStage } from '../../model/types';
 import { useVfx } from './tokens';
 
@@ -57,7 +58,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
             {tr('loop.status', {
               iters,
               max,
-              tokens: totalTokens.toLocaleString(),
+              tokens: formatNumber(totalTokens),
               seconds: totalSeconds.toFixed(0),
             })}
           </span>
@@ -180,7 +181,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
                       className="text-[9px] font-mono shrink-0"
                       style={{ color: t.textFaint }}
                     >
-                      {it.costTokens.toLocaleString()}t
+                      {formatNumber(it.costTokens)}t
                       {it.validationSeconds > 0 && ` · ${it.validationSeconds.toFixed(0)}s`}
                     </span>
                   </li>

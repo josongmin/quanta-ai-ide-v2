@@ -5,6 +5,7 @@ import {
 import { useTranslation } from '@shared/i18n';
 import type { PullRequest, ReviewerState } from '@entities/pr';
 import { Avatar, useReviewStore } from '@features/review-pr';
+import { Badge } from '@shared/ui/Badge';
 
 export function ReviewRailSection({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -19,23 +20,20 @@ export function ReviewRailSection({ label, children }: { label: string; children
 
 export function ParticipantsSection({
   pr,
-  blockerColor,
 }: {
   pr: PullRequest;
-  blockerColor: string;
 }) {
   const { t } = useTranslation('review');
 
   return (
     <ReviewRailSection label="Participants">
-      <Participant login={pr.author} role="author" blockerColor={blockerColor} />
+      <Participant login={pr.author} role="author" />
       {pr.reviewers.map((r) => (
         <Participant
           key={r.login}
           login={r.login}
           role="reviewer"
           state={r.state}
-          blockerColor={blockerColor}
         />
       ))}
       {pr.reviewers.length === 0 && (
@@ -49,15 +47,11 @@ function Participant({
   login,
   role,
   state,
-  blockerColor,
 }: {
   login: string;
   role: 'author' | 'reviewer';
   state?: ReviewerState;
-  blockerColor: string;
 }) {
-  const tone = state === 'approved' ? 'var(--intent-success-fg)' : state === 'changes-requested' ? blockerColor : 'var(--fg-muted)';
-
   return (
     <div className="flex items-center gap-2">
       <Avatar login={login} size={20} />
@@ -66,12 +60,16 @@ function Participant({
         <div className="text-[10px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">{role}</div>
       </div>
       {state !== undefined && (
-        <span
-          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-          style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone }}
+        <Badge
+          variant={
+            state === 'approved' ? 'success'
+              : state === 'changes-requested' ? 'danger'
+                : 'neutral'
+          }
+          fill="soft"
         >
           {state === 'changes-requested' ? 'Changes' : state}
-        </span>
+        </Badge>
       )}
     </div>
   );

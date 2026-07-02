@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import type { RepoData } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
+import { formatNumber } from '@shared/lib';
 
 // Squarified treemap (Bruls/Huijsmans/van Wijk 2000). Same algorithm
 // WinDirStat, Disk Inventory X, and GitHub's code-volume widget use:
@@ -153,8 +154,8 @@ export default function Treemap({ repo, isDark, size = 280 }: Props) {
       <div className="mt-2 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
         {t('deps.treemapSummary', {
           n: cells.length,
-          loc: totalLoc.toLocaleString(),
-          defaultValue: `${cells.length} files · ${totalLoc.toLocaleString()} LOC sized by weight`,
+          loc: formatNumber(totalLoc),
+          defaultValue: `${cells.length} files · ${formatNumber(totalLoc)} LOC sized by weight`,
         })}
       </div>
     </div>

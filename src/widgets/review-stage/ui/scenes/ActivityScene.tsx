@@ -6,6 +6,7 @@ import {
   type PullRequest,
 } from '@entities/pr';
 import { Avatar, useReviewStore, viewerLogin } from '@features/review-pr';
+import { Badge } from '@shared/ui/Badge';
 import { timeAgo } from '../../lib/reviewStageFormatting';
 import { SceneHeader, V2Card } from '../ReviewSurface';
 
@@ -110,12 +111,16 @@ function ActivityRow({
         <div className="flex items-center gap-2">
           <span className="text-[12px] font-bold text-[var(--fg-strong)]">{displayName(item.authorLogin)}</span>
           {isReview && (
-            <span
-              className="inline-flex px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-              style={{ background: `color-mix(in srgb, ${verdictColor} 13%, transparent)`, color: verdictColor }}
+            <Badge
+              variant={
+                item.verdict === 'approve' ? 'success'
+                  : item.verdict === 'request-changes' ? 'danger'
+                    : 'neutral'
+              }
+              fill="soft"
             >
               {item.verdict}
-            </span>
+            </Badge>
           )}
           <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">{timeAgo(item.createdAt)}</span>
         </div>

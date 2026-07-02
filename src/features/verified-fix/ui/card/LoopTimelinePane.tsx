@@ -1,4 +1,5 @@
 import type { FixCase } from '../../model/types';
+import { formatNumber } from '@shared/lib';
 import { ACCENT, mix } from './tokens';
 import { PaneHeader } from './shared';
 
@@ -25,7 +26,7 @@ export function LoopTimelinePane({ iterations }: { iterations: FixCase['loop']['
             </span>
             <span className="text-[10px] text-[var(--fg-default)] leading-snug">{it.note}</span>
             <span className="ml-auto text-[9px] font-mono text-[var(--fg-subtle)] shrink-0">
-              {it.costTokens.toLocaleString()} tok
+              {formatNumber(it.costTokens)} tok
             </span>
           </li>
         ))}

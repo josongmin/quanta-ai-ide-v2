@@ -1,6 +1,7 @@
 import { Sparkles, Box, Network } from 'lucide-react';
 import type { FileRecord } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
+import { formatNumber } from '@shared/lib';
 
 // AI-context box — the "what an agent can actually safely reason about
 // here" view. Three sub-facts:
@@ -124,13 +125,13 @@ export function AiContextBox({ file }: { file: FileRecord }) {
         <BudgetCell
           icon={<Box className="w-2.5 h-2.5" />}
           label={t('aiCtx.thisFile', { defaultValue: 'This file' })}
-          value={`${tokens.toLocaleString()} tok`}
+          value={`${formatNumber(tokens)} tok`}
           sub={`${m.loc} LOC`}
         />
         <BudgetCell
           icon={<Network className="w-2.5 h-2.5" />}
           label={t('aiCtx.oneHopCtx', { defaultValue: '1-hop ctx' })}
-          value={`${hopTokens.toLocaleString()} tok`}
+          value={`${formatNumber(hopTokens)} tok`}
           sub={t('aiCtx.hopFiles', { count: hopFiles, defaultValue: `${hopFiles} files` })}
           warn={hopTokens > 32000}
         />

@@ -117,7 +117,7 @@ export function ContextRail({
           }}
         />
 
-        <ParticipantsSection pr={pr} blockerColor={severityColors.blocker} />
+        <ParticipantsSection pr={pr} />
         <BranchSection pr={pr} blockerColor={severityColors.blocker} />
         <MergeActionsSection pr={pr} />
       </div>

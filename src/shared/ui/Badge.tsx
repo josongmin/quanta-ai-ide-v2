@@ -12,6 +12,7 @@ import type { CSSProperties, ReactNode } from 'react';
 // No coloured left stripes, no dark-grey "selected" fills — colour alone
 // encodes the kind/severity, consistent with the rest of shared/ui.
 type Variant = 'neutral' | 'success' | 'danger' | 'warn' | 'info';
+export type BadgeVariant = Variant;
 type Fill = 'outline' | 'soft';
 type Size = 'sm' | 'md';
 

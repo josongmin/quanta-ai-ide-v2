@@ -5,6 +5,7 @@
 // individual tab files can import them without duplication.
 
 import type { Confidence } from '@entities/repo';
+import { Badge as SharedBadge, type BadgeVariant } from '@shared/ui/Badge';
 
 // SectionHeader — used by Profile, Graph, Risk (ChannelHits), Proof.
 export function SectionHeader({ title, sub }: { title: string; sub?: string }) {
@@ -80,10 +81,10 @@ export function Empty({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Badge — pill chip used by the panel header for status/confidence/safety.
-// Outlined pill (rounded-full + 1px border + solid text colour, no fill) so
-// the chips read as labels against the panel surface rather than as filled
-// alerts. The colour itself encodes the kind/severity.
+// Badge — status/confidence/safety chip used by the panel header. Delegates
+// to the shared <Badge>, mapping the panel's kind/severity to a Badge variant
+// so the colour encoding stays consistent with the rest of shared/ui. Outline
+// fill (default) keeps the label-against-surface read the panel relied on.
 export function Badge({
   children, kind, conf, safety,
 }: {
@@ -92,30 +93,23 @@ export function Badge({
   conf?: Confidence;
   safety?: number;
 }) {
-  let color = 'var(--fg-muted)';
+  let variant: BadgeVariant = 'neutral';
   if (kind === 'confidence' && conf) {
-    color =
-      conf === 'exact'      ? 'var(--intent-success-fg)'   :
-      conf === 'overapprox' ? 'var(--intent-warn-vivid)'   :
-      conf === 'unknown'    ? 'var(--intent-danger-vivid)' :
-                              'var(--fg-muted)';
+    variant =
+      conf === 'exact'      ? 'success' :
+      conf === 'overapprox' ? 'warn'    :
+      conf === 'unknown'    ? 'danger'  :
+                              'neutral';
   } else if (kind === 'safety' && safety !== undefined) {
-    color =
-      safety >= 70 ? 'var(--intent-success-fg)'   :
-      safety >= 40 ? 'var(--intent-warn-vivid)'   :
-                     'var(--intent-danger-vivid)';
+    variant =
+      safety >= 70 ? 'success' :
+      safety >= 40 ? 'warn'    :
+                     'danger';
   } else if (kind === 'SECURITY_ALERT') {
-    color = 'var(--intent-danger-vivid)';
+    variant = 'danger';
   } else if (kind === 'NEW' || kind === 'MODIFIED') {
-    color = 'var(--intent-success-vivid)';
+    variant = 'success';
   }
 
-  return (
-    <span
-      className="inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
-      style={{ color, borderColor: 'currentColor' }}
-    >
-      {children}
-    </span>
-  );
+  return <SharedBadge variant={variant}>{children}</SharedBadge>;
 }

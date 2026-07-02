@@ -23,6 +23,7 @@ import { useMemo } from 'react';
 import { TestTube2, AlertTriangle } from 'lucide-react';
 import type { FileDiff, PullRequest } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
+import { Badge } from '@shared/ui/Badge';
 import V2Card from './V2Card';
 
 type LineStatus = 'covered' | 'partial' | 'uncovered' | 'removed';
@@ -148,13 +149,10 @@ export default function ChangedLinesCoverage({
           {totals.covered}/{totals.added} new lines tested
         </span>
         {danger && (
-          <span
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-            style={{ background: 'color-mix(in srgb, var(--intent-danger-fg) 16%, transparent)', color: 'var(--intent-danger-fg)', border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 45%, transparent)' }}
-          >
+          <Badge variant="danger" fill="soft" className="ml-auto gap-1">
             <AlertTriangle className="w-2.5 h-2.5" />
             {totals.uncovered} untested
-          </span>
+          </Badge>
         )}
       </div>
 

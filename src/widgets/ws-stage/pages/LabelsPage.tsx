@@ -5,7 +5,7 @@ import {
 import { WsShell } from '../parts/WsShell';
 import { Button } from '@shared/ui/forms';
 import {
-  ConfirmDialog, SearchInput, DataTable, EmptyState,
+  ConfirmDialog, SearchInput, DataTable, EmptyState, IconButton,
 } from '@shared/ui';
 
 type ColorChoice = {
@@ -259,15 +259,7 @@ function LabelEditor({
           </span>
           <Chip color={previewColor} name={name.trim() || 'preview'} />
         </div>
-        <button
-          type="button"
-          onClick={onCancel}
-          aria-label="Close editor"
-          className="w-6 h-6 rounded-md inline-flex items-center justify-center"
-          style={{ color: 'var(--fg-muted)' }}
-        >
-          <X className="w-3.5 h-3.5" />
-        </button>
+        <IconButton icon={X} label="Close editor" onClick={onCancel} size="sm" />
       </div>
 
       <div className="grid grid-cols-[180px_1fr] gap-2">

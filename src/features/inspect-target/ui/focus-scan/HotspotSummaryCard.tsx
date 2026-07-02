@@ -4,6 +4,7 @@ import { useFilterRepo } from '@entities/filter-state';
 import { computeHotspots, explainHotspot, type SignalKey } from '@entities/hotspot';
 import type { FileRecord } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
+import { Badge, type BadgeVariant } from '@shared/ui/Badge';
 
 const SIGNAL_LABEL_KEY: Record<SignalKey, string> = {
   change_pressure: 'hotspot.signal.changePressure',
@@ -17,6 +18,12 @@ function percentileColor(p: number): string {
   if (p >= 0.95) return 'var(--intent-danger-vivid)';
   if (p >= 0.85) return 'var(--intent-warn-vivid)';
   return 'var(--fg-muted)';
+}
+
+function percentileVariant(p: number): BadgeVariant {
+  if (p >= 0.95) return 'danger';
+  if (p >= 0.85) return 'warn';
+  return 'neutral';
 }
 
 export function HotspotSummaryCard({ file }: { file: FileRecord }) {
@@ -46,12 +53,9 @@ export function HotspotSummaryCard({ file }: { file: FileRecord }) {
         >
           {t('hotspot.title')}
         </span>
-        <span
-          className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
-          style={{ color: chipColor, borderColor: 'currentColor' }}
-        >
+        <Badge variant={percentileVariant(entry.percentile)} className="ml-auto">
           {t('hotspot.topPercent', { pct: pctText })}
-        </span>
+        </Badge>
       </div>
 
       <div className="space-y-1.5">

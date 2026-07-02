@@ -28,6 +28,7 @@ import type { RepoData } from '@entities/repo';
 import { intentMismatch, prSummary, symbolChanges } from '../lib/sota';
 import V2Card from './V2Card';
 import { ProvenanceBadge } from './ReviewCopilot';
+import { Badge, type BadgeVariant } from '@shared/ui/Badge';
 
 export default function DiffNarrative({
   pr, repo,
@@ -65,6 +66,9 @@ export default function DiffNarrative({
   const verdictTone = verdict === 'mismatch' ? 'var(--intent-danger-fg)'
     : verdict === 'uncertain' ? 'var(--intent-warn-fg)'
     : 'var(--intent-success-fg)';
+  const verdictVariant: BadgeVariant = verdict === 'mismatch' ? 'danger'
+    : verdict === 'uncertain' ? 'warn'
+    : 'success';
   const verdictLabel = verdict === 'mismatch' ? 'Description disagrees'
     : verdict === 'uncertain' ? 'Light description'
     : 'Description matches';
@@ -85,13 +89,10 @@ export default function DiffNarrative({
           Claimed vs observed
         </span>
         <ProvenanceBadge kind="static" />
-        <span
-          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-          style={{ background: `color-mix(in srgb, ${verdictTone} 13%, transparent)`, color: verdictTone, border: `1px solid color-mix(in srgb, ${verdictTone} 33%, transparent)` }}
-        >
+        <Badge variant={verdictVariant} fill="soft" className="ml-auto gap-1">
           <VerdictIcon className="w-2.5 h-2.5" />
           {verdictLabel}
-        </span>
+        </Badge>
       </div>
 
       <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-4">

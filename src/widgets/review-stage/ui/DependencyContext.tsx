@@ -25,6 +25,7 @@ import { useMemo, useState, useCallback, type KeyboardEvent } from 'react';
 import { Network } from 'lucide-react';
 import type { PullRequest } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
+import { Badge, type BadgeVariant } from '@shared/ui/Badge';
 import V2Card from './V2Card';
 import {
   buildGraph,
@@ -158,9 +159,9 @@ export default function DependencyContext({
   const reachLabel = (() => {
     const touchesData = (laneToNodes.get('data') ?? []).some((n) => n.touched);
     const touchesVendor = (laneToNodes.get('vendor') ?? []).some((n) => n.touched);
-    if (touchesVendor) return { text: 'reaches vendor', tone: 'var(--intent-danger-fg)' };
-    if (touchesData) return { text: 'reaches data', tone: 'var(--intent-warn-fg)' };
-    return { text: 'ui/logic only', tone: 'var(--intent-success-fg)' };
+    if (touchesVendor) return { text: 'reaches vendor', variant: 'danger' as BadgeVariant };
+    if (touchesData) return { text: 'reaches data', variant: 'warn' as BadgeVariant };
+    return { text: 'ui/logic only', variant: 'success' as BadgeVariant };
   })();
 
   return (
@@ -173,16 +174,9 @@ export default function DependencyContext({
         <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {touchedCount} touched · {laneSpread} {laneSpread === 1 ? 'layer' : 'layers'}
         </span>
-        <span
-          className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-          style={{
-            background: `color-mix(in srgb, ${reachLabel.tone} 13%, transparent)`,
-            color: reachLabel.tone,
-            border: `1px solid color-mix(in srgb, ${reachLabel.tone} 33%, transparent)`,
-          }}
-        >
+        <Badge variant={reachLabel.variant} fill="soft" className="ml-auto">
           {reachLabel.text}
-        </span>
+        </Badge>
       </div>
 
       <div

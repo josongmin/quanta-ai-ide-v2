@@ -22,6 +22,7 @@ import { useMemo } from 'react';
 import { Users, AlertCircle, CheckCircle2 } from 'lucide-react';
 import type { PullRequest } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
+import { Badge } from '@shared/ui/Badge';
 import V2Card from './V2Card';
 
 type OwnerGroup = {
@@ -90,12 +91,13 @@ export default function OwnerMatrix({
         </span>
         {missingReviewers > 0 && (
           <span
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-            style={{ background: 'color-mix(in srgb, var(--intent-warn-fg) 18%, transparent)', color: 'var(--intent-warn-fg)', border: '1px solid color-mix(in srgb, var(--intent-warn-fg) 40%, transparent)' }}
+            className="ml-auto inline-flex"
             title={`${String(missingReviewers)} owner ${missingReviewers === 1 ? 'team has' : 'teams have'} no reviewer requested`}
           >
-            <AlertCircle className="w-2.5 h-2.5" />
-            {missingReviewers} unrepresented
+            <Badge variant="warn" fill="soft" className="gap-1">
+              <AlertCircle className="w-2.5 h-2.5" />
+              {missingReviewers} unrepresented
+            </Badge>
           </span>
         )}
       </div>

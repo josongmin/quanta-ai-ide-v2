@@ -1,25 +1,11 @@
 import type { JSX } from 'react';
 import type { ApprovalPath, ApprovalStep, Person } from '@entities/ownership';
 import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
-import { createAvatarStyle } from '../lib';
+import { PersonAvatar } from '../lib';
 
 export type ApprovalPathCardProps = {
   path: ApprovalPath | undefined;
   people: Person[];
-}
-
-function PersonAvatar({ person, size }: { person: Person | undefined; size: number }) {
-  const initials = person?.initials ?? '??';
-  const fontSize = Math.max(8, Math.round(size * 0.42));
-  return (
-    <span
-      className="inline-flex items-center justify-center rounded-full font-bold tracking-[0.04em] shrink-0"
-      style={{ ...createAvatarStyle(person, size), fontSize }}
-      aria-hidden="true"
-    >
-      {initials}
-    </span>
-  );
 }
 
 function StepNumber({ n }: { n: number }) {

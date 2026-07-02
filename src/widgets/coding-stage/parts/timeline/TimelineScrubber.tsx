@@ -4,6 +4,7 @@ import {
   Sparkles, User, Wrench, Check, AlertTriangle, FileText, ListChecks,
 } from 'lucide-react';
 import type { Turn } from '../types';
+import { isEditableTarget } from '@shared/lib';
 import {
   approxCost, classifyInverse, turnMeta,
   type InverseRisk, type TurnMeta, type TurnStatus,
@@ -70,13 +71,8 @@ export function TimelineScrubber({
   }, [isLive, metas, headSafe]);
 
   useEffect(() => {
-    function isEditable(el: EventTarget | null): boolean {
-      if (!(el instanceof HTMLElement)) return false;
-      const tag = el.tagName;
-      return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable;
-    }
     function onKey(e: KeyboardEvent) {
-      if (isEditable(e.target)) return;
+      if (isEditableTarget(e.target)) return;
       if (e.key === '[') {
         e.preventDefault();
         const next = Math.max(0, headSafe - 1);

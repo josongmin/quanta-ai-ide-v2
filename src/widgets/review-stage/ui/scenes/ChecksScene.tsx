@@ -8,15 +8,14 @@ import {
   type CheckStatus,
   type PullRequest,
 } from '@entities/pr';
+import { Badge, type BadgeVariant } from '@shared/ui/Badge';
 import { formatDuration } from '../../lib/reviewStageFormatting';
 import { SceneHeader, V2Card } from '../ReviewSurface';
 
 export function ChecksScene({
   pr,
-  blockerColor,
 }: {
   pr: PullRequest;
-  blockerColor: string;
 }) {
   const { t } = useTranslation('review');
   if (pr.checks.length === 0) {
@@ -33,7 +32,7 @@ export function ChecksScene({
       <SceneHeader icon={Activity} title="CI checks" hint={`${String(pr.checks.length)} runs`} />
       <ul className="mt-3 divide-y divide-[var(--border-muted)]">
         {pr.checks.map((c) => (
-          <CheckRow key={c.id} c={c} blockerColor={blockerColor} />
+          <CheckRow key={c.id} c={c} />
         ))}
       </ul>
     </V2Card>
@@ -42,10 +41,8 @@ export function ChecksScene({
 
 function CheckRow({
   c,
-  blockerColor,
 }: {
   c: CheckRun;
-  blockerColor: string;
 }) {
   const meta = CHECK_META[c.status];
   return (
@@ -56,22 +53,13 @@ function CheckRow({
           <div className="text-[11px] truncate text-[var(--fg-subtle)]">{c.summary}</div>
         )}
       </div>
-      <span
-        className="inline-flex px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-        style={{
-          background: c.required ? `color-mix(in srgb, ${blockerColor} 10%, transparent)` : 'var(--bg-active)',
-          color: c.required ? blockerColor : 'var(--fg-muted)',
-        }}
-      >
+      <Badge variant={c.required ? 'danger' : 'neutral'} fill="soft">
         {c.required ? 'Required' : 'Optional'}
-      </span>
-      <span
-        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-        style={{ background: `color-mix(in srgb, ${meta.color} 15%, transparent)`, color: meta.color }}
-      >
+      </Badge>
+      <Badge variant={meta.variant} fill="soft" className="gap-1">
         <meta.Icon className={`w-2.5 h-2.5 ${c.status === 'running' ? 'animate-spin' : ''}`} />
         {meta.label}
-      </span>
+      </Badge>
       <span className="text-right text-[11px] font-mono tabular-nums text-[var(--fg-subtle)]">
         {formatDuration(c.durationMs)}
       </span>
@@ -86,11 +74,11 @@ function CheckRow({
   );
 }
 
-const CHECK_META: Record<CheckStatus, { label: string; color: string; Icon: LucideIcon }> = {
-  pending: { label: 'Pending', color: 'var(--fg-muted)', Icon: Clock },
-  running: { label: 'Running', color: 'var(--intent-warn-fg)', Icon: Loader2 },
-  success: { label: 'Success', color: 'var(--intent-success-fg)', Icon: Check },
-  failure: { label: 'Failure', color: 'var(--intent-danger-fg)', Icon: X },
-  cancelled: { label: 'Cancelled', color: 'var(--fg-muted)', Icon: MinusCircle },
-  skipped: { label: 'Skipped', color: 'var(--fg-muted)', Icon: MinusCircle },
+const CHECK_META: Record<CheckStatus, { label: string; variant: BadgeVariant; Icon: LucideIcon }> = {
+  pending: { label: 'Pending', variant: 'neutral', Icon: Clock },
+  running: { label: 'Running', variant: 'warn', Icon: Loader2 },
+  success: { label: 'Success', variant: 'success', Icon: Check },
+  failure: { label: 'Failure', variant: 'danger', Icon: X },
+  cancelled: { label: 'Cancelled', variant: 'neutral', Icon: MinusCircle },
+  skipped: { label: 'Skipped', variant: 'neutral', Icon: MinusCircle },
 };

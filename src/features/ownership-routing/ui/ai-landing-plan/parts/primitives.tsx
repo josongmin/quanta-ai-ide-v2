@@ -1,18 +1,8 @@
 import type { MergeStrategy, Person, RiskBadge, StackStepKind } from '@entities/ownership';
-import { createAvatarStyle, riskTone } from '../../../lib';
+import { PersonAvatar, riskTone } from '../../../lib';
 import { KIND_LABEL, MERGE_STRATEGY_LABEL } from './types';
 
-export function PersonAvatar({ person, size }: { person: Person | undefined; size: number }) {
-  return (
-    <span
-      className="inline-flex items-center justify-center rounded-full font-bold tracking-[0.04em] shrink-0"
-      style={{ ...createAvatarStyle(person, size), fontSize: Math.max(8, Math.round(size * 0.42)) }}
-      aria-hidden="true"
-    >
-      {person?.initials ?? '??'}
-    </span>
-  );
-}
+export { PersonAvatar };
 
 export function BlinkingCursor() {
   return (

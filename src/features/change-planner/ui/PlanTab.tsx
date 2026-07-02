@@ -6,6 +6,7 @@
 // required-checks list. No left-edge stripes; the kind is encoded by chip
 // label, not a coloured spine.
 
+import { Badge } from '@shared/ui/Badge';
 import type { ChangePlan, ChangeStep } from '../model/types';
 
 type Props = {
@@ -42,15 +43,9 @@ function StepCard({ step }: { step: ChangeStep }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span
-              className="inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.18em]"
-              style={{
-                color: 'var(--fg-muted)',
-                borderColor: 'currentColor',
-              }}
-            >
+            <Badge variant="neutral">
               {KIND_LABEL[step.kind]}
-            </span>
+            </Badge>
             <span
               className="text-[11px] font-bold truncate"
               style={{ color: 'var(--fg-default)' }}
@@ -158,15 +153,9 @@ export function PlanTab({ plan }: Props) {
                 }}
               >
                 <div className="flex items-center gap-2">
-                  <span
-                    className="inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.18em]"
-                    style={{
-                      color: 'var(--fg-muted)',
-                      borderColor: 'currentColor',
-                    }}
-                  >
+                  <Badge variant="neutral">
                     {seam.cutKind}
-                  </span>
+                  </Badge>
                   <span
                     className="text-[11px] font-mono"
                     style={{ color: 'var(--fg-default)' }}

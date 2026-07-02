@@ -1,5 +1,7 @@
-import type { MergeStrategy, Person, RiskBadge } from '@entities/ownership';
-import { createAvatarStyle, riskTone } from '../../../lib';
+import type { MergeStrategy, RiskBadge } from '@entities/ownership';
+import { PersonAvatar, riskTone } from '../../../lib';
+
+export { PersonAvatar };
 
 export const MERGE_STRATEGY_SHORT: Record<MergeStrategy, string> = {
   'split-now': 'SPLIT NOW',
@@ -8,29 +10,6 @@ export const MERGE_STRATEGY_SHORT: Record<MergeStrategy, string> = {
   parallelizable: 'PARALLELIZABLE',
   'risky-serial': 'RISKY SERIAL',
 };
-
-export function PersonAvatar({
-  person,
-  size,
-}: {
-  person: Person | undefined;
-  size: number;
-}) {
-  const initials = person?.initials ?? '??';
-  const fontSize = Math.max(8, Math.round(size * 0.42));
-  return (
-    <span
-      className="inline-flex items-center justify-center rounded-full font-bold tracking-[0.04em] shrink-0"
-      style={{
-        ...createAvatarStyle(person, size),
-        fontSize,
-      }}
-      aria-hidden="true"
-    >
-      {initials}
-    </span>
-  );
-}
 
 export function MergeStrategyPill({ strategy }: { strategy: MergeStrategy }) {
   return (

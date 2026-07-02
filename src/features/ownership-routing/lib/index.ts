@@ -15,6 +15,7 @@ export {
 export type { RefactorStackInput } from './stackPlanner';
 
 export { createAvatarStyle } from './personAvatar';
+export { PersonAvatar } from './personAvatarComponent';
 
 export { riskTone } from './riskTheme';
 export type { RiskTone } from './riskTheme';

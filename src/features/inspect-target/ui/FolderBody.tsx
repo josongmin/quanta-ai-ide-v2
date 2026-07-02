@@ -8,7 +8,7 @@
 import { memo, useMemo } from 'react';
 import { Activity, Folder, GitBranch, LayoutGrid, Network, ShieldAlert } from 'lucide-react';
 import type { FolderRecord, RepoData } from '@entities/repo';
-import { type Tone, languageHue, pct } from '@shared/lib';
+import { type Tone, languageHue, pct, formatNumber } from '@shared/lib';
 import { computeFolderStats } from '@entities/metric';
 import {
   BarRow, ConfidenceMeter, EmptyHint, FileRow,
@@ -65,13 +65,13 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
             className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] tabular-nums"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
-            {stats.totalFiles.toLocaleString()} {t('focus.filesUnit')}
+            {formatNumber(stats.totalFiles)} {t('focus.filesUnit')}
           </span>
           <span
             className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] tabular-nums"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
-            {stats.totalLoc.toLocaleString()} {t('stat.loc')}
+            {formatNumber(stats.totalLoc)} {t('stat.loc')}
           </span>
         </>
       }
@@ -125,7 +125,7 @@ const FolderOverviewTab = memo(function FolderOverviewTab({
           <Stat label={t('stat.directFiles')} value={stats.directFiles} isDark={isDark} />
           <Stat label={t('stat.recursive')} value={stats.totalFiles} isDark={isDark} />
           <Stat label={t('stat.subfolders')} value={folder.childPaths.length} isDark={isDark} />
-          <Stat label={t('stat.totalLoc')} value={stats.totalLoc.toLocaleString()} isDark={isDark} />
+          <Stat label={t('stat.totalLoc')} value={formatNumber(stats.totalLoc)} isDark={isDark} />
         </div>
       </SubCard>
 

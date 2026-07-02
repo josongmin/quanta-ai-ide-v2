@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
-import { useDialogA11y } from '@shared/ui';
+import { useDialogA11y, IconButton } from '@shared/ui';
 import type { Routine, TranslateFn } from './types';
 import { simulateDryRun } from './routine-editor/dryRun';
 import {
@@ -66,16 +66,7 @@ export default function RoutineEditorModal({
       >
         <div className={`shrink-0 flex items-center justify-between px-5 py-3 border-b ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'}`}>
           <h2 className={`text-[12px] font-bold ${heading}`}>{t('editor.title', { name: draft.name })}</h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className={`p-1 rounded-md transition-colors ${
-              isDark ? 'text-white/45 hover:text-white/85 hover:bg-white/[0.05]' : 'text-black/45 hover:text-black/85 hover:bg-black/[0.05]'
-            }`}
-            aria-label="Close"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
+          <IconButton icon={X} label="Close" onClick={onClose} size="sm" />
         </div>
 
         <div className={`shrink-0 px-5 py-2 border-b ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'}`}>

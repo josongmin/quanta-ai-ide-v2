@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Wrench, X } from 'lucide-react';
-import { GlassCard } from '@shared/ui';
+import { GlassCard, IconButton } from '@shared/ui';
 import { consumePendingHandoff, type FixHandoffPayload } from './fixHandoff';
 
 export function FixPipelineHandoffBanner() {
@@ -41,15 +41,12 @@ export function FixPipelineHandoffBanner() {
               {payload.hypothesis ? ' · 1 hypothesis' : ''}
             </span>
           </div>
-          <button
-            type="button"
+          <IconButton
+            icon={X}
+            label="Dismiss handoff banner"
             onClick={() => { setPayload(null); }}
-            aria-label="Dismiss handoff banner"
-            className="rounded p-0.5 transition-colors hover:[background:var(--bg-hover)]"
-            style={{ color: 'var(--fg-subtle)', cursor: 'pointer' }}
-          >
-            <X size={12} />
-          </button>
+            size="sm"
+          />
         </div>
       </GlassCard>
     </div>

@@ -29,6 +29,7 @@ import {
   Activity, GitCommit, MessageSquare, ShieldCheck,
 } from 'lucide-react';
 import type { ConversationItem, PullRequest } from '@entities/pr';
+import { Badge, type BadgeVariant } from '@shared/ui/Badge';
 import V2Card from './V2Card';
 
 type LaneKey = 'commits' | 'reviews' | 'threads' | 'checks';
@@ -89,16 +90,9 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
         <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
           {events.length} events · {fmtFromTo}
         </span>
-        <span
-          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-          style={{
-            background: `color-mix(in srgb, ${isStuck.tone} 16%, transparent)`,
-            color: isStuck.tone,
-            border: `1px solid color-mix(in srgb, ${isStuck.tone} 33%, transparent)`,
-          }}
-        >
+        <Badge variant={isStuck.variant} fill="soft" className="ml-auto gap-1">
           {isStuck.label}
-        </span>
+        </Badge>
       </div>
 
       <div
@@ -360,12 +354,12 @@ function fmtDate(ms: number): string {
 
 function computeStuckState(
   events: TimelineEvent[], now: number,
-): { label: string; tone: string } {
-  if (events.length === 0) return { label: 'no events', tone: 'var(--fg-muted)' };
+): { label: string; variant: BadgeVariant } {
+  if (events.length === 0) return { label: 'no events', variant: 'neutral' };
   const lastAt = Math.max(...events.map((e) => e.at));
   const idleHours = (now - lastAt) / 3_600_000;
-  if (idleHours < 6)   return { label: 'active', tone: 'var(--intent-success-fg)' };
-  if (idleHours < 48)  return { label: 'cooling', tone: 'var(--intent-warn-fg)' };
-  return { label: `stalled ${Math.round(idleHours / 24)}d`, tone: 'var(--intent-danger-fg)' };
+  if (idleHours < 6)   return { label: 'active', variant: 'success' };
+  if (idleHours < 48)  return { label: 'cooling', variant: 'warn' };
+  return { label: `stalled ${Math.round(idleHours / 24)}d`, variant: 'danger' };
 }
 

@@ -13,8 +13,13 @@ import {
   type RiskTier,
 } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
+import { Badge, type BadgeVariant } from '@shared/ui/Badge';
 import { testCoverageRatio } from '../../lib/sota';
 import { V2Card } from '../ReviewSurface';
+
+const TIER_VARIANT: Record<RiskTier, BadgeVariant> = {
+  safe: 'success', attention: 'warn', critical: 'danger',
+};
 
 export function RiskScene({
   pr,
@@ -43,13 +48,10 @@ export function RiskScene({
         <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
           Risk profile
         </span>
-        <span
-          className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
-          style={{ background: `color-mix(in srgb, ${accent} 15%, transparent)`, color: accent }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
+        <Badge variant={TIER_VARIANT[risk.tier]} fill="soft" className="ml-auto gap-1">
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'currentColor' }} />
           {tierLabels[risk.tier]}
-        </span>
+        </Badge>
       </div>
 
       <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">

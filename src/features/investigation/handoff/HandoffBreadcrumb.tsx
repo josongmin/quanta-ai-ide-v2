@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, X } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { GlassCard } from '@shared/ui';
+import { GlassCard, IconButton } from '@shared/ui';
 import {
   clearHandoffBreadcrumb,
   readHandoffBreadcrumb,
@@ -72,15 +72,12 @@ export function HandoffBreadcrumb() {
               · {crumb.hypothesisStatement}
             </span>
           ) : null}
-          <button
-            type="button"
+          <IconButton
+            icon={X}
+            label="Dismiss breadcrumb"
             onClick={handleDismiss}
-            aria-label="Dismiss breadcrumb"
-            className="rounded p-0.5 transition-colors hover:[background:var(--bg-hover)]"
-            style={{ color: 'var(--fg-subtle)', cursor: 'pointer' }}
-          >
-            <X size={12} />
-          </button>
+            size="sm"
+          />
         </div>
       </GlassCard>
     </div>
