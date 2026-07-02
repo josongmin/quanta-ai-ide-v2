@@ -1,9 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Key, Copy, Check, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
+import { useDialogA11y } from '@shared/ui';
 import type { Token } from './types';
 
 export function RevealModal({ token, onClose }: { token: Token; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
   const fullToken = useMemo(() => {
     // Demo: deterministic-ish full token. Real systems hash + only show on creation.
     const seedRef = { s: 0 };
@@ -31,7 +34,11 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
       style={{ background: 'var(--bg-scrim)' }}
     >
       <div
-        className="w-full max-w-[520px] rounded-md p-5 popover-panel-in flex flex-col gap-4"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        className="w-full max-w-[520px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
         style={{
           background: 'var(--bg-elevated)',
           border: '1px solid var(--fg-accent)',

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
+import { useDialogA11y } from '@shared/ui';
 import type { MfaKind, MfaMethod } from './types';
 
 export function AddMfaModal({
@@ -10,6 +11,8 @@ export function AddMfaModal({
   onClose: () => void;
   onAdded: (m: MfaMethod) => void;
 }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
   const [label, setLabel] = useState(kind === 'totp' ? '1Password' : 'YubiKey');
   return (
     <div
@@ -17,7 +20,11 @@ export function AddMfaModal({
       style={{ background: 'var(--bg-scrim)' }}
     >
       <div
-        className="w-full max-w-[400px] rounded-md p-5 popover-panel-in flex flex-col gap-4"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        className="w-full max-w-[400px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
         style={{
           background: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)',

@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Field, Button, Checkbox } from '@shared/ui/forms';
+import { useDialogA11y } from '@shared/ui';
 import { SCOPE_GROUPS, ALL_SCOPES, type ScopeId, type Token } from './types';
 
 export function CreateModal({
   onClose, onCreate,
 }: { onClose: () => void; onCreate: (t: Token) => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
   const [name, setName] = useState('');
   const [expiresIn, setExpiresIn] = useState<'30' | '60' | '90' | '365' | 'never'>('90');
   const [scopes, setScopes] = useState<Set<ScopeId>>(new Set(['read:repo']));
@@ -44,7 +47,11 @@ export function CreateModal({
       style={{ background: 'var(--bg-scrim)' }}
     >
       <div
-        className="w-full max-w-[520px] max-h-[90vh] rounded-md p-5 popover-panel-in flex flex-col gap-4 overflow-y-auto"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        className="w-full max-w-[520px] max-h-[90vh] rounded-md p-5 popover-panel-in flex flex-col gap-4 overflow-y-auto outline-none"
         style={{
           background: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)',

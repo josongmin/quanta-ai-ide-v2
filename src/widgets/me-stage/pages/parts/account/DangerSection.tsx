@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { AlertTriangle, Loader2, Trash2 } from 'lucide-react';
 import { Row, Field, Button, Divider } from '@shared/ui/forms';
+import { useDialogA11y } from '@shared/ui';
 
 export function DangerSection() {
   const [open, setOpen] = useState(false);
@@ -10,6 +11,10 @@ export function DangerSection() {
 
   const required = 'delete sora@acme.com';
   const matched = confirmText.trim().toLowerCase() === required;
+
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const close = useCallback(() => { setOpen(false); setConfirmText(''); }, []);
+  useDialogA11y(dialogRef, open, close);
 
   return (
     <>
@@ -48,7 +53,11 @@ export function DangerSection() {
           style={{ background: 'var(--bg-scrim)' }}
         >
           <div
-            className="w-full max-w-[440px] rounded-md p-5 popover-panel-in flex flex-col gap-4"
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            tabIndex={-1}
+            className="w-full max-w-[440px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
             style={{
               background: 'var(--bg-elevated)',
               border: '1px solid var(--intent-danger-fg)',
@@ -109,7 +118,7 @@ export function DangerSection() {
             </div>
 
             <div className="flex items-center justify-end gap-2 pt-1">
-              <Button variant="ghost" size="md" onClick={() => { setOpen(false); setConfirmText(''); }}>
+              <Button variant="ghost" size="md" onClick={close}>
                 Cancel
               </Button>
               <Button

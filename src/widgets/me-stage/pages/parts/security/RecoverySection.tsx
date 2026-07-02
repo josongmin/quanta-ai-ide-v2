@@ -1,5 +1,7 @@
+import { useRef } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { Section, Row, Button } from '@shared/ui/forms';
+import { useDialogA11y } from '@shared/ui';
 import { useGeneratedCodes, downloadCodes } from './types';
 
 export function RecoverySection({ onShow }: { onShow: () => void }) {
@@ -21,6 +23,8 @@ export function RecoverySection({ onShow }: { onShow: () => void }) {
 }
 
 export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
   const codes = useGeneratedCodes(10);
   return (
     <div
@@ -28,7 +32,11 @@ export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
       style={{ background: 'var(--bg-scrim)' }}
     >
       <div
-        className="w-full max-w-[480px] rounded-md p-5 popover-panel-in flex flex-col gap-4"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        className="w-full max-w-[480px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
         style={{
           background: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)',

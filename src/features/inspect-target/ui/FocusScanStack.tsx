@@ -1,10 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { History, X, Boxes, Folder, FileCode } from 'lucide-react';
+import { useEffect } from 'react';
 import { useFilterRepo } from '@entities/filter-state';
-import type { RepoData } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
-import { ResizeHandle, useDialogA11y } from '@shared/ui';
-import { useClickOutside } from '@shared/lib';
+import { ResizeHandle } from '@shared/ui';
 // Intelligence layout constants — duplicated here to avoid features → app
 // boundary violation. Source of truth is @app/router/intelligence/panelLayout.
 const INTELLIGENCE_LAYOUT = {
@@ -14,9 +11,12 @@ const INTELLIGENCE_LAYOUT = {
   bottomInset: 12,
   centerReserve: 88,
 } as const;
-import { useStack, stackKey, type StackItem } from '../model/StackContext';
+import { useStack, stackKey } from '../model/StackContext';
 import FocusScanPanel from './focus-scan/FocusScanPanel';
 import InspectPanel from './InspectPanel';
+import { itemLabel } from './parts/stackLabel';
+import { CrestTab } from './parts/CrestTab';
+import { HistoryButton } from './parts/HistoryButton';
 
 type Props = {
   isDark: boolean;
@@ -26,24 +26,6 @@ type Props = {
   defaultWidth?: number;
   onWidthChange: (next: number) => void;
 };
-
-// Display string for an inspect tab (label / path).
-function itemLabel(
-  item: StackItem,
-  repo: RepoData,
-  t: (key: string) => string,
-): { name: string; sub: string } {
-  if (item.kind === 'workspace') return { name: t('header.workspace'), sub: t('header.workspaceName') };
-  if (item.kind === 'folder') {
-    const f = repo.foldersByPath.get(item.path);
-    return {
-      name: f?.name ?? t('deps.rootLabel'),
-      sub: f ? (f.parts.length === 0 ? '/' : '/' + f.parts.join('/')) : item.path,
-    };
-  }
-  const file = repo.files[item.id];
-  return { name: file?.name ?? `#${item.id}`, sub: file?.folderPath ?? '' };
-}
 
 export default function FocusScanStack({
   isDark,
@@ -219,207 +201,5 @@ export default function FocusScanStack({
       </div>
       </div>
     </>
-  );
-}
-
-function CrestTab({
-  isDark, name, kind, index, fontSize, length, thickness, isActive,
-}: {
-  isDark: boolean; name: string; kind: StackItem['kind']; index: number; fontSize: number;
-  length: number; thickness: number; isActive: boolean;
-}) {
-  const Icon = kind === 'workspace' ? Boxes : kind === 'folder' ? Folder : FileCode;
-  // Square folder-tab, rotated -90deg so it stands vertically.
-  // Active tab : shares the GlassCard surface tokens (same alpha + blur via
-  //              the .glass-dark/.glass-light class) + no right border so
-  //              tab and card read as one open folder face. Do NOT bake an
-  //              opaque rgba fill here — that visibly desyncs the tab from
-  //              the card body.
-  // Inactive   : darker, sunken fill + full border → closed folder behind.
-  const inactiveBg = 'var(--bg-active)';
-  const activeBorder = 'var(--border-strong)';
-  const inactiveBorder = 'var(--border-default)';
-
-  // Coordinate mapping under rotate(-90deg):
-  //   pre-rotation right  → post-rotation TOP    (the tab's outer/free end)
-  //   pre-rotation left   → post-rotation BOTTOM
-  //   pre-rotation top    → post-rotation LEFT   (rail's outer side, away from card)
-  //   pre-rotation bottom → post-rotation RIGHT  (the side that meets the card)
-  // → To merge active tab with card we drop pre-rotation `borderBottom`.
-  // → Outer end of standing tab = pre-rotation `borderRight`; we keep it bold
-  //   so the tip reads as a closed cap.
-  return (
-    <div
-      className={`absolute flex items-center px-2.5 gap-1.5 overflow-hidden group-hover:brightness-110 ${
-        isActive ? (isDark ? 'glass-dark' : 'glass-light') : ''
-      }`}
-      style={{
-        width: length,
-        height: thickness,
-        top: '50%',
-        left: '50%',
-        marginTop: -thickness / 2,
-        marginLeft: -length / 2,
-        borderRadius: 0,
-        // Inactive tabs use a flat sunken fill; the active tab inherits the
-        // GlassCard surface via the glass-* class so it stays in lockstep
-        // with the panel body.
-        ...(isActive ? null : { background: inactiveBg }),
-        // outer top/bottom long edges of the standing tab
-        borderTop: `1px solid ${isActive ? activeBorder : inactiveBorder}`,
-        // outer end-cap (top of standing tab)
-        borderRight: `1px solid ${isActive ? activeBorder : inactiveBorder}`,
-        // rail-outer long edge (left side of standing tab, away from card)
-        borderLeft: `1px solid ${isActive ? activeBorder : inactiveBorder}`,
-        // edge that touches the card. Active: drop it so the tab and card
-        // visually merge into one open folder face.
-        borderBottom: isActive ? 'none' : `1px solid ${inactiveBorder}`,
-        transform: 'rotate(-90deg)',
-        transformOrigin: 'center center',
-        // Subtle inset on inactive tabs only, on the card-side edge.
-        boxShadow: isActive
-          ? 'none'
-          : (isDark
-            ? 'inset 0 -2px 4px rgba(0,0,0,0.35)'
-            : 'inset 0 -2px 4px rgba(0,0,0,0.08)'),
-      }}
-    >
-      <span
-        style={isActive ? { color: 'var(--intent-success-fg)' } : undefined}
-        className={`shrink-0 text-[9px] font-mono tabular-nums ${
-        isActive
-          ? ''
-          : 'text-[var(--fg-subtle)]'
-      }`}>
-        {index}
-      </span>
-      <Icon className={`shrink-0 w-3 h-3 ${
-        isActive
-          ? 'text-[var(--fg-strong)]'
-          : 'text-[var(--fg-subtle)]'
-      }`} />
-      <span
-        className={`min-w-0 truncate font-bold tracking-tight ${
-          isActive
-            ? 'text-[var(--fg-strong)]'
-            : 'text-[var(--fg-muted)]'
-        }`}
-        style={{ fontSize, lineHeight: 1 }}
-      >
-        {name}
-      </span>
-    </div>
-  );
-}
-
-function HistoryButton({
-  items, activeKey, isDark, thickness, onPick, onClose, repo, t,
-}: {
-  items: StackItem[]; activeKey: string; isDark: boolean; thickness: number;
-  onPick: (key: string) => void;
-  onClose: (key: string) => void;
-  repo: RepoData;
-  t: (key: string, opts?: Record<string, unknown>) => string;
-}) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Escape-to-close + focus trap (shared dialog a11y) and mousedown-outside
-  // dismissal (shared hook). `close` is stable across renders so the hooks'
-  // effect deps stay quiet.
-  const close = useCallback(() => { setOpen(false); }, []);
-  useDialogA11y(ref, open, close);
-  useClickOutside(ref, open, close);
-
-  return (
-    <div ref={ref} className="relative pointer-events-auto shrink-0" style={{ height: thickness }}>
-      <button
-        type="button"
-        onClick={() => { setOpen((v) => !v); }}
-        title={t('stack_axis.openTabs')}
-        aria-label={t('stack_axis.openTabsHistory')}
-        aria-expanded={open}
-        className="flex items-center justify-center transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)]"
-        style={{ width: thickness, height: thickness }}
-      >
-        <History className="w-3.5 h-3.5" />
-      </button>
-
-      {open && (
-        <div
-          className="absolute top-0 left-full ml-1 w-[240px] max-h-[60vh] overflow-y-auto scrollbar-hide rounded-xl border border-[var(--border-default)] shadow-2xl"
-          style={{
-            background: 'var(--bg-panel-strong)',
-            ...(isDark ? {
-              backdropFilter: 'blur(22px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(22px) saturate(160%)',
-            } : {}),
-          }}
-        >
-          <div className="px-3 py-2 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] border-b text-[var(--fg-subtle)] border-[var(--border-default)]">
-            {t('stack_axis.openTabsCount', { count: items.length })}
-          </div>
-          <div className="py-1">
-            {items.map((it, i) => {
-              const k = stackKey(it);
-              const a = k === activeKey;
-              const { name, sub } = itemLabel(it, repo, t);
-              const Icon = it.kind === 'workspace' ? Boxes : it.kind === 'folder' ? Folder : FileCode;
-              return (
-                <div
-                  key={k}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => { onPick(k); setOpen(false); }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      onPick(k);
-                      setOpen(false);
-                    }
-                  }}
-                  className={`group relative flex items-center gap-2 px-3 py-1.5 cursor-pointer transition-colors ${
-                    a
-                      ? 'bg-[var(--bg-active)]'
-                      : 'hover:bg-[var(--bg-hover)]'
-                  }`}
-                >
-                  {a && <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[var(--fg-accent)] rounded-r" />}
-                  <span
-                    style={a ? { color: 'var(--intent-success-fg)' } : undefined}
-                    className={`shrink-0 w-4 text-[9px] font-mono tabular-nums text-right ${
-                    a ? '' : 'text-[var(--fg-subtle)]'
-                  }`}>
-                    {i + 1}
-                  </span>
-                  <Icon className={`shrink-0 w-3 h-3 ${
-                    a ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-subtle)]'
-                  }`} />
-                  <div className="min-w-0 flex-1">
-                    <div className={`text-[11px] font-bold truncate ${
-                      a ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-muted)]'
-                    }`}>
-                      {name}
-                    </div>
-                    <div className="text-[9px] font-mono truncate text-[var(--fg-subtle)]">
-                      {sub}
-                    </div>
-                  </div>
-                  {it.kind !== 'workspace' && (
-                    <button type="button"
-                      onClick={(e) => { e.stopPropagation(); onClose(k); }}
-                      className="shrink-0 p-0.5 rounded-md transition-colors opacity-0 group-hover:opacity-100 text-[var(--fg-subtle)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-active)]"
-                      title={t('stack_axis.closeTab')}
-                    >
-                      <X className="w-2.5 h-2.5" />
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-    </div>
   );
 }
