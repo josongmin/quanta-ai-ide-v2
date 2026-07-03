@@ -85,6 +85,10 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
 
   seed: (seed, candidates) => {
     const caseId = `case-${seed.id}`;
+    // Re-seeding an existing caseId replaces its case with a fresh loop, so any
+    // validation in flight for that id must be invalidated (else its delayed
+    // result would clobber the new case). Harmless for a never-seen caseId.
+    bumpValidationRun(caseId);
     const fixCase: FixCase = {
       id: caseId,
       seedId: seed.id,
