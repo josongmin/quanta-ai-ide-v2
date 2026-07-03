@@ -214,6 +214,17 @@ export default tseslint.config(
           message:
             'Use a design-system token (var(--intent-*/--fg-*/--bg-*)) instead of a raw hex arbitrary colour class.',
         },
+        {
+          // white-alpha utilities (bg-white/10, text-white/40, …) render
+          // invisibly in light mode and only worked via a hand-maintained
+          // !important inversion cascade in index.css. Use --bg-*/--fg-*/
+          // --border-* tokens (theme-aware). The Stage WebGL tooltip is exempt.
+          // (black-alpha is NOT flagged — those are theme-neutral scrims.)
+          selector:
+            "Literal[value=/(bg|text|border|divide|ring|hover:bg|hover:text)-white\\/(\\[[0-9.]+\\]|[0-9]+)/]",
+          message:
+            'Use theme-aware --bg-*/--fg-*/--border-* tokens instead of white/N alpha utilities (they break light mode).',
+        },
       ],
     },
   },
@@ -227,6 +238,9 @@ export default tseslint.config(
       'src/features/chat-agent/ui/tokens-panel/**',
       'src/widgets/me-stage/pages/parts/appearance/**',
       'src/shared/tokens/**',
+      // WebGL canvas host: a fixed-dark glass tooltip that legitimately uses
+      // white-alpha classes on an always-dark surface.
+      'src/widgets/stage/Stage.tsx',
     ],
     rules: {
       'no-restricted-syntax': [

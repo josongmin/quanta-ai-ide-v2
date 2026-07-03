@@ -31,17 +31,17 @@ export const TASK_RAIL_DEFAULT_WIDTH = 284;
 export const TASK_RAIL_MIN_WIDTH = 220;
 export const TASK_RAIL_MAX_WIDTH = 480;
 
-const NEUTRAL_ACCENT_DARK = '#a1a1aa';
-const NEUTRAL_ACCENT_LIGHT = '#71717a';
+// Project accents are de-chromed to a single neutral muted foreground (theme-
+// aware token, was a hardcoded #a1a1aa/#71717a pair).
+const NEUTRAL_ACCENT = 'var(--fg-muted)';
 const ACCENT_HEX = {
-  emerald: NEUTRAL_ACCENT_DARK,
-  sky:     NEUTRAL_ACCENT_DARK,
-  violet:  NEUTRAL_ACCENT_DARK,
-  amber:   NEUTRAL_ACCENT_DARK,
-  rose:    NEUTRAL_ACCENT_DARK,
-  cyan:    NEUTRAL_ACCENT_DARK,
+  emerald: NEUTRAL_ACCENT,
+  sky:     NEUTRAL_ACCENT,
+  violet:  NEUTRAL_ACCENT,
+  amber:   NEUTRAL_ACCENT,
+  rose:    NEUTRAL_ACCENT,
+  cyan:    NEUTRAL_ACCENT,
 };
-void NEUTRAL_ACCENT_LIGHT;
 
 export function TaskRail({
   projects, tasks, activeId, onSelect, onNewTask, onNewProject, onReorder, t,
