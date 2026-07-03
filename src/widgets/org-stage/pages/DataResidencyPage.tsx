@@ -1,10 +1,10 @@
-import { useState, type CSSProperties } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import {
   Globe2, Check, AlertTriangle, X, ShieldCheck, Award, Lock, FileWarning,
 } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Toggle, Button } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import { ModalBackdrop, useDialogA11y } from '@shared/ui';
 
 type RegionId = 'us' | 'eu' | 'apac';
 
@@ -178,11 +178,18 @@ function CertBadge({
 function ConfirmMigration({
   from, to, onCancel, onConfirm,
 }: { from: Region; to: Region; onCancel: () => void; onConfirm: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onCancel);
   return (
     <>
       <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} label="Close dialog" />
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] rounded-lg overflow-hidden"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Request migration to ${to.name}`}
+        tabIndex={-1}
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] rounded-lg overflow-hidden outline-none"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
       >
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
@@ -192,8 +199,8 @@ function ConfirmMigration({
               Request migration to {to.name}?
             </span>
           </div>
-          <button type="button" onClick={onCancel} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-            <X className="w-4 h-4" />
+          <button type="button" onClick={onCancel} aria-label="Close" className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
         <div className="p-5 flex flex-col gap-3">

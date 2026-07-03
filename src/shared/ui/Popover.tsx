@@ -4,6 +4,7 @@ import {
 import { createPortal } from 'react-dom';
 
 import { useDialogDismiss } from './useDialogDismiss';
+import { useDialogA11y } from './useDialogA11y';
 
 // Anchored popover with viewport-aware smart positioning.
 //
@@ -68,6 +69,10 @@ export function Popover({
   // can't be reused — `useDialogDismiss` treats both refs as "inside".
   const close = useCallback(() => { setOpen(false); }, []);
   useDialogDismiss(wrapRef, panelRef, open, close);
+  // The centered path renders role="dialog" + aria-modal, so it must actually
+  // behave modally: move focus in, trap Tab, and restore focus on close. The
+  // anchored path is a transient menu and stays untrapped (no-op when false).
+  useDialogA11y(panelRef, open && placement === 'center', close);
 
   // Viewport-aware positioning. Recomputes on open, on every scroll
   // anywhere (capture phase catches inner scroll containers too), and on

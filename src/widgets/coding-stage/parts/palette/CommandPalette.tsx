@@ -161,13 +161,23 @@ export function CommandPalette({
             onChange={(e) => { setQuery(e.target.value); setIndex(0); }}
             onKeyDown={onKeyDown}
             placeholder={t('palette.placeholder')}
+            role="combobox"
+            aria-expanded={rows.length > 0}
+            aria-controls="coding-palette-listbox"
+            aria-activedescendant={rows.length > 0 ? `coding-palette-opt-${index}` : undefined}
+            aria-autocomplete="list"
             className="flex-1 bg-transparent outline-none text-md text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
             spellCheck={false}
           />
           <span className={`text-xs font-mono ${faint}`}>{t('palette.hint')}</span>
         </div>
 
-        <div className="max-h-[55vh] overflow-auto scrollbar-thin py-1">
+        <div
+          id="coding-palette-listbox"
+          role="listbox"
+          aria-label={t('palette.placeholder')}
+          className="max-h-[55vh] overflow-auto scrollbar-thin py-1"
+        >
           {rows.length === 0 ? (
             <div className={`px-3 py-6 text-center text-base ${muted}`}>
               {t('palette.noResults')}
@@ -190,6 +200,9 @@ export function CommandPalette({
                   )}
                   <button
                     type="button"
+                    id={`coding-palette-opt-${i}`}
+                    role="option"
+                    aria-selected={active}
                     onClick={() => { dispatch(row); }}
                     onMouseEnter={() => { setIndex(i); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-left transition-colors ${

@@ -76,10 +76,11 @@ export function DismissModal({
           <button
             type="button"
             onClick={onCancel}
+            aria-label={tr('common:close')}
             className="ml-auto rounded p-1 transition-colors"
             style={{ color: t.textMuted }}
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
         </div>
 

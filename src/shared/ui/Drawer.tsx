@@ -31,8 +31,11 @@ export function Drawer({
   if (!open) return null;
 
   return createPortal(
+    // The backdrop is a click-to-dismiss target only; keyboard dismiss (Escape)
+    // is owned by useDialogA11y. It must NOT be aria-hidden — that would strip
+    // the dialog subtree it wraps from the a11y tree.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- backdrop click-to-dismiss; Escape handled by useDialogA11y
     <div
-      aria-hidden="true"
       className="fixed inset-0 z-[200] flex"
       onClick={onClose}
     >

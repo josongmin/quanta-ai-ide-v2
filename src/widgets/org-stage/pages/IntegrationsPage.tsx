@@ -3,7 +3,7 @@ import { Check, ExternalLink, Settings2, X, Link2, AlertCircle } from 'lucide-re
 import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
 import { Button, Toggle } from '@shared/ui/forms';
-import { ModalBackdrop, SearchInput } from '@shared/ui';
+import { ModalBackdrop, SearchInput, useDialogA11y } from '@shared/ui';
 
 type Category = 'chat' | 'tracker' | 'pager' | 'observability' | 'sourcecontrol' | 'docs';
 
@@ -270,11 +270,18 @@ function labelFor(c: Category): string {
 function ConfigDrawer({
   item, onClose, onUninstall,
 }: { item: Integration; onClose: () => void; onUninstall: () => void }) {
+  const dialogRef = useRef<HTMLElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
   return (
     <>
       <ModalBackdrop onClick={onClose} z="z-40" alpha={0.45} label="Close drawer" />
       <aside
-        className="fixed right-0 top-0 bottom-0 z-50 w-[440px] flex flex-col"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${item.name} configuration`}
+        tabIndex={-1}
+        className="fixed right-0 top-0 bottom-0 z-50 w-[440px] flex flex-col outline-none"
         style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
       >
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
@@ -290,8 +297,8 @@ function ConfigDrawer({
             </span>
             {item.status && <StatusDot status={item.status} />}
           </div>
-          <button type="button" onClick={onClose} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-            <X className="w-4 h-4" />
+          <button type="button" onClick={onClose} aria-label="Close" className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
 

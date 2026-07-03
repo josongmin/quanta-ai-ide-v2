@@ -84,8 +84,8 @@ export function RevealOnceModal({
               <Check className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
               <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{title}</span>
             </div>
-            <button type="button" onClick={onDismiss} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-              <X className="w-4 h-4" />
+            <button type="button" onClick={onDismiss} aria-label="Close" className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
+              <X className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         )}

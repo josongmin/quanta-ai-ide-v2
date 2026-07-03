@@ -38,8 +38,11 @@ export function Modal({
   const justify = align === 'top' ? 'items-start pt-[12vh]' : 'items-center';
 
   return createPortal(
+    // The backdrop is a click-to-dismiss target only; keyboard dismiss (Escape)
+    // is owned by useDialogA11y. It must NOT be aria-hidden — that would strip
+    // the dialog subtree it wraps from the a11y tree.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- backdrop click-to-dismiss; Escape handled by useDialogA11y
     <div
-      aria-hidden="true"
       className={`fixed inset-0 z-[var(--z-modal)] flex justify-center p-4 sm:p-6 bg-[var(--bg-scrim)] backdrop-blur-sm ${justify}`}
       onClick={onClose}
     >

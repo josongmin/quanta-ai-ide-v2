@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useFilterRepo } from '@entities/filter-state';
 import { findSimilar, type FileRecord, type SimilarHit } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
@@ -16,6 +16,14 @@ export function SimilarDrawer({ file, onClose }: { file: FileRecord; onClose: ()
   const { t } = useTranslation('inspect');
   const { open: openStack } = useStack();
   const hits = useMemo<SimilarHit[]>(() => findSimilar(repo, file.id, 6), [repo, file.id]);
+
+  // The header shows an "esc" affordance — make the key actually work.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('keydown', onKey); };
+  }, [onClose]);
+
   return (
     <div
       className="shrink-0 px-4 py-3 border-b"
@@ -32,6 +40,7 @@ export function SimilarDrawer({ file, onClose }: { file: FileRecord; onClose: ()
         <button
           type="button"
           onClick={onClose}
+          aria-label={t('common:close')}
           className="text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
         >

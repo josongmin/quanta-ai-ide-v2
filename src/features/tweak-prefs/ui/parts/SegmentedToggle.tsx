@@ -91,7 +91,7 @@ export function SegmentedToggle<V extends string>({
         />
       )}
 
-      {options.map((opt) => {
+      {options.map((opt, i) => {
         const active = opt.value === value;
         return (
           <button
@@ -101,8 +101,26 @@ export function SegmentedToggle<V extends string>({
             role="radio"
             aria-checked={active}
             disabled={opt.disabled}
+            // WAI-ARIA radiogroup: a single tab stop (the checked radio), with
+            // arrow keys moving selection between the enabled options.
+            tabIndex={active ? 0 : -1}
             onClick={() => { if (!opt.disabled) onChange(opt.value); }}
-            className="relative z-[1] px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-eyebrow outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            onKeyDown={(e) => {
+              if (e.key !== 'ArrowRight' && e.key !== 'ArrowDown' &&
+                  e.key !== 'ArrowLeft' && e.key !== 'ArrowUp') return;
+              e.preventDefault();
+              const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1;
+              const n = options.length;
+              for (let step = 1; step <= n; step++) {
+                const next = options[(i + dir * step + n * step) % n];
+                if (next && !next.disabled) {
+                  onChange(next.value);
+                  itemRefs.current[next.value]?.focus();
+                  break;
+                }
+              }
+            }}
+            className="relative z-[1] px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-eyebrow outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
             style={{
               color: active ? 'var(--bg-canvas)' : 'var(--fg-muted)',
             }}

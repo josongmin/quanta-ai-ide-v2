@@ -422,6 +422,55 @@ function PipelineTelemetryGroup() {
   );
 }
 
+// ─── Screen-reader announcer ──────────────────────────────────────────
+// The status cells are visual-only (dots, colour, pulsing). Assistive tech
+// gets nothing when the pipeline advances or a draft ships. This polite,
+// atomic live region announces the meaningful *discrete* transitions —
+// pipeline terminal outcome, blocked submissions, stage changes — without
+// narrating the continuous index/agent churn (the text only changes on a
+// real transition, so aria-live won't spam).
+const srOnlyStyle: CSSProperties = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  overflow: 'hidden',
+  clip: 'rect(0 0 0 0)',
+  whiteSpace: 'nowrap',
+};
+
+const STAGE_LABEL: Record<PipelineStage, string> = {
+  seed: 'Selecting seed',
+  loop: 'Generating fix',
+  proof: 'Validating fix',
+  draft: 'Preparing draft',
+};
+
+function StatusAnnouncer() {
+  const state = usePipelineStage();
+  const submissions = useFixPipelineStore((s) => s.submissions);
+
+  const message = useMemo(() => {
+    if (state.terminated) {
+      return state.reason === 'success'
+        ? 'Fix pipeline succeeded.'
+        : `Fix pipeline stopped: ${state.reason ?? 'unknown'}.`;
+    }
+    const blocked = Object.values(submissions).filter(
+      (r) => r.status === 'submission-blocked',
+    ).length;
+    if (blocked > 0) {
+      return `${blocked} submission${blocked === 1 ? '' : 's'} blocked — needs review.`;
+    }
+    return state.busy ? `${STAGE_LABEL[state.stage]}…` : '';
+  }, [state, submissions]);
+
+  return (
+    <span role="status" aria-live="polite" aria-atomic="true" style={srOnlyStyle}>
+      {message}
+    </span>
+  );
+}
+
 function WorkspaceCell() {
   const repo = useFilterRepo();
   const loc = repo.files.length;
@@ -475,6 +524,8 @@ export default function StatusBar() {
           <AgentsCell />
           <PipelineTelemetryGroup />
         </div>
+
+        <StatusAnnouncer />
       </footer>
     </>
   );

@@ -45,7 +45,7 @@ export function FacetTile({ facet, unlocked, hidden, onToggle, delayMs = 0 }: Pr
       disabled={!unlocked}
       onClick={onToggle}
       aria-pressed={!hidden}
-      className="group facet-tile flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs border text-left outline-none disabled:cursor-not-allowed"
+      className="group facet-tile flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs border text-left outline-none disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
       style={{
         background: stateBg,
         borderColor: stateBorder,

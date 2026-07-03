@@ -83,7 +83,7 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
         {hint && <span className="lowercase tracking-normal">{hint}</span>}
       </span>
       <div
-        className="flex items-center h-9 rounded-md transition-colors"
+        className="flex items-center h-9 rounded-md transition-colors focus-within:ring-2 focus-within:ring-[var(--fg-accent)]"
         style={{
           background: 'var(--bg-surface-muted)',
           border: `1px solid ${error ? 'var(--intent-danger-fg)' : 'var(--border-default)'}`,
@@ -135,7 +135,7 @@ export function Textarea({
         placeholder={placeholder}
         rows={rows}
         maxLength={maxLength}
-        className="w-full rounded-md p-2.5 text-base outline-none resize-none transition-colors"
+        className="w-full rounded-md p-2.5 text-base outline-none resize-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -230,7 +230,7 @@ export function Select<T extends string>({
     <select
       value={value}
       onChange={(e) => { onChange(e.target.value as T); }}
-      className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
+      className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-default)',

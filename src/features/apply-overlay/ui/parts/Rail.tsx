@@ -76,7 +76,7 @@ function RailRow({
       tabIndex={selected ? 0 : -1}
       aria-selected={selected}
       onClick={onSelect}
-      className={`relative w-full text-left px-3 py-2.5 transition-colors outline-none ${surface}`}
+      className={`relative w-full text-left px-3 py-2.5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--fg-accent)] ${surface}`}
     >
       <div className="flex items-center gap-2">
         <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: on ? iconColor : undefined }} />

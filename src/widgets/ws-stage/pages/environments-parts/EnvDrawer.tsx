@@ -1,6 +1,7 @@
+import { useRef } from 'react';
 import { X } from 'lucide-react';
 import { Button, Toggle, Field } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import { ModalBackdrop, useDialogA11y } from '@shared/ui';
 import { DeployStatusIcon, RegionChip, TierBadge } from './cards';
 import type { Environment, Region } from './types';
 import { REGION_LABELS } from './types';
@@ -17,12 +18,19 @@ export function EnvDrawer({
     { id: 'none', label: '(no auto-promote)' },
     ...allEnvs.filter((e) => e.id !== env.id).map((e) => ({ id: e.name, label: e.name })),
   ];
+  const dialogRef = useRef<HTMLElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
 
   return (
     <>
       <ModalBackdrop onClick={onClose} z="z-40" alpha={0.45} />
       <aside
-        className="fixed right-0 top-0 bottom-0 z-50 w-[460px] flex flex-col"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Environment ${env.name}`}
+        tabIndex={-1}
+        className="fixed right-0 top-0 bottom-0 z-50 w-[460px] flex flex-col outline-none"
         style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
       >
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
@@ -33,8 +41,8 @@ export function EnvDrawer({
             <TierBadge tier={env.tier} />
             <RegionChip region={env.region} />
           </div>
-          <button type="button" onClick={onClose} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-            <X className="w-4 h-4" />
+          <button type="button" onClick={onClose} aria-label="Close" className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
 

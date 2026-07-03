@@ -1,4 +1,4 @@
-import { useState, type ComponentType } from 'react';
+import { useEffect, useRef, useState, type ComponentType } from 'react';
 import { MoreHorizontal } from 'lucide-react';
 
 // Row action menu used 5+ times across settings/admin tables: a MoreHorizontal
@@ -37,16 +37,50 @@ export function RowMenu({
 }: Props) {
   const [open, setOpen] = useState(false);
   const px = itemPadding === 'wide' ? 'px-3' : 'px-2.5';
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Move focus into the menu when it opens so keyboard users land on the
+  // first actionable item (WAI-ARIA menu pattern).
+  useEffect(() => {
+    if (!open) return;
+    menuRef.current
+      ?.querySelector<HTMLElement>('[role="menuitem"]:not([disabled])')
+      ?.focus();
+  }, [open]);
+
+  const closeAndRestore = () => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
+  const onMenuKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') { e.preventDefault(); closeAndRestore(); return; }
+    if (e.key === 'Tab') { setOpen(false); return; }
+    const nodes = Array.from(
+      menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled])') ?? [],
+    );
+    if (nodes.length === 0) return;
+    const idx = nodes.indexOf(document.activeElement as HTMLElement);
+    const n = nodes.length;
+    if (e.key === 'ArrowDown') { e.preventDefault(); nodes[(idx + 1 + n) % n]?.focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); nodes[(idx - 1 + n) % n]?.focus(); }
+    else if (e.key === 'Home') { e.preventDefault(); nodes[0]?.focus(); }
+    else if (e.key === 'End') { e.preventDefault(); nodes[n - 1]?.focus(); }
+  };
 
   return (
     <div className="relative flex justify-end">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => { setOpen((v) => !v); }}
         className="w-7 h-7 rounded-md inline-flex items-center justify-center transition-colors"
         style={{ color: triggerColor }}
         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+        aria-haspopup="menu"
+        aria-expanded={open}
         aria-label={ariaLabel}
       >
         <MoreHorizontal className="w-4 h-4" />
@@ -60,6 +94,10 @@ export function RowMenu({
             onClick={() => { setOpen(false); }}
           />
           <div
+            ref={menuRef}
+            role="menu"
+            aria-label={ariaLabel}
+            onKeyDown={onMenuKeyDown}
             className="absolute right-0 top-full mt-1 z-40 min-w-[180px] py-1 rounded-md"
             style={{
               background: 'var(--bg-elevated)',
@@ -73,6 +111,7 @@ export function RowMenu({
                 <button
                   key={item.label}
                   type="button"
+                  role="menuitem"
                   disabled={item.disabled}
                   onClick={() => { setOpen(false); item.onClick?.(); }}
                   className={`flex items-center gap-2 w-full ${px} h-8 text-base transition-colors text-left`}

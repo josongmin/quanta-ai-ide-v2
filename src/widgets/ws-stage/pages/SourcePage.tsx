@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   GitBranch, Copy, Check, RefreshCw, Unplug,
   Eye, EyeOff, Key, AlertTriangle,
@@ -6,7 +6,7 @@ import {
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Field, Toggle, Button } from '@shared/ui/forms';
-import { ModalBackdrop, ConfirmDialog } from '@shared/ui';
+import { ModalBackdrop, ConfirmDialog, useDialogA11y } from '@shared/ui';
 
 type Host = 'github' | 'gitlab' | 'bitbucket';
 
@@ -260,11 +260,18 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
     setTimeout(() => { setCopied(false); }, 1500);
   };
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onClose);
   return (
     <>
       <ModalBackdrop onClick={onClose} z="z-40" alpha={0.45} />
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] rounded-lg overflow-hidden"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Save your signing secret"
+        tabIndex={-1}
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[520px] rounded-lg overflow-hidden outline-none"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
       >
         <div className="p-5 flex flex-col gap-4">

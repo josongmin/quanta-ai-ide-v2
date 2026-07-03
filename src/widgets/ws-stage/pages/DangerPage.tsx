@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ArrowRightLeft, Trash2, AlertTriangle } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Toggle, Button } from '@shared/ui/forms';
-import { ModalBackdrop, ConfirmDialog } from '@shared/ui';
+import { ModalBackdrop, ConfirmDialog, useDialogA11y } from '@shared/ui';
 
 const TARGET_ORGS = [
   { id: 'partner-co',     label: 'partner-co' },
@@ -103,12 +103,19 @@ function ConfirmTransfer({
   const [target, setTarget] = useState(TARGET_ORGS[0].id);
   const [typed, setTyped] = useState('');
   const matches = typed === wsName;
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onCancel);
 
   return (
     <>
       <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] rounded-lg overflow-hidden"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Transfer ${wsName}`}
+        tabIndex={-1}
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] rounded-lg overflow-hidden outline-none"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
       >
         <div className="p-5 flex flex-col gap-3">

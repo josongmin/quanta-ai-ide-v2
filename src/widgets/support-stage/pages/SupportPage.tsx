@@ -30,6 +30,8 @@ export default function SupportPage() {
           >
             <Search className="w-4 h-4" style={{ color: 'var(--fg-subtle)' }} />
             <input
+              type="search"
+              aria-label="Search help articles"
               placeholder="Search help articles, error codes, SDK references…"
               className="flex-1 bg-transparent outline-none text-md"
               style={{ color: 'var(--fg-strong)' }}

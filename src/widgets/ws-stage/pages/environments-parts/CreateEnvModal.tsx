@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { X, AlertTriangle, Trash2 } from 'lucide-react';
 import { Button, Field } from '@shared/ui/forms';
-import { ModalBackdrop } from '@shared/ui';
+import { ModalBackdrop, useDialogA11y } from '@shared/ui';
 import type { Region } from './types';
 import { REGION_LABELS } from './types';
 
@@ -12,12 +12,19 @@ export function CreateEnvModal({
   const [url, setUrl] = useState('https://');
   const [region, setRegion] = useState<Region>('us');
   const valid = name.trim().length > 0 && /^https:\/\/.+/.test(url);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, true, onCancel);
 
   return (
     <>
       <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} />
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[460px] rounded-lg overflow-hidden"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="New environment"
+        tabIndex={-1}
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[460px] rounded-lg overflow-hidden outline-none"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
       >
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
@@ -25,8 +32,8 @@ export function CreateEnvModal({
             <AlertTriangle className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
             <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>New environment</span>
           </div>
-          <button type="button" onClick={onCancel} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
-            <X className="w-4 h-4" />
+          <button type="button" onClick={onCancel} aria-label="Close" className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
         <div className="p-4 flex flex-col gap-4">

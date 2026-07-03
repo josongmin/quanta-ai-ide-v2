@@ -53,6 +53,26 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
     };
   }, [onClose]);
 
+  // Move focus into the menu on open so it's reachable by keyboard (a
+  // right-click menu has no trigger to tab from).
+  useEffect(() => {
+    ref.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+  }, []);
+
+  const onMenuKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' &&
+        e.key !== 'Home' && e.key !== 'End') return;
+    e.preventDefault();
+    const nodes = Array.from(ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
+    if (nodes.length === 0) return;
+    const idx = nodes.indexOf(document.activeElement as HTMLElement);
+    const n = nodes.length;
+    if (e.key === 'ArrowDown') nodes[(idx + 1 + n) % n]?.focus();
+    else if (e.key === 'ArrowUp') nodes[(idx - 1 + n) % n]?.focus();
+    else if (e.key === 'Home') nodes[0]?.focus();
+    else nodes[n - 1]?.focus();
+  };
+
   // Bias the menu to the click point but keep it inside the viewport.
   // Width/height are conservative estimates; the menu is small enough
   // that we don't need a measurement pass.
@@ -65,6 +85,7 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
     <div
       ref={ref}
       role="menu"
+      onKeyDown={onMenuKeyDown}
       className="fixed z-[60] min-w-[200px] py-1 rounded-md border shadow-2xl bg-[var(--bg-elevated)] border-[color:var(--border-default)]"
       style={isDark ? {
         left, top,

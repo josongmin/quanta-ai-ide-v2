@@ -48,10 +48,11 @@ export function AddMfaModal({
               Then enter the 6-digit code it generates.
             </p>
             <input
+              aria-label="6-digit authentication code"
               placeholder="6-digit code"
               maxLength={6}
               inputMode="numeric"
-              className="h-10 px-3 rounded-md text-[15px] font-mono tabular-nums tracking-wider text-center outline-none"
+              className="h-10 px-3 rounded-md text-[15px] font-mono tabular-nums tracking-wider text-center outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
               style={{
                 background: 'var(--bg-surface-muted)',
                 border: '1px solid var(--border-default)',

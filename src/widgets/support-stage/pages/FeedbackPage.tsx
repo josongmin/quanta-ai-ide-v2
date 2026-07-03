@@ -73,8 +73,9 @@ export default function FeedbackPage() {
               </div>
 
               <input
+                aria-label="Summary"
                 placeholder="One-line summary"
-                className="w-full bg-transparent outline-none text-base h-9 px-3 rounded-md"
+                className="w-full bg-transparent outline-none text-base h-9 px-3 rounded-md focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
@@ -83,8 +84,9 @@ export default function FeedbackPage() {
               />
               <textarea
                 rows={5}
+                aria-label="Details"
                 placeholder="Details… what problem does this solve?"
-                className="w-full bg-transparent outline-none text-base p-3 rounded-md resize-y"
+                className="w-full bg-transparent outline-none text-base p-3 rounded-md resize-y focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
