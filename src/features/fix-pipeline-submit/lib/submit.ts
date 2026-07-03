@@ -1,3 +1,4 @@
+import { assertNever } from '@shared/lib';
 import type {
   DeliveryDecision,
   PermissionLedger,
@@ -31,7 +32,11 @@ export function decideSubmissionAction(
   if (decision.tier === 'safe-mechanical') {
     return { kind: 'auto-submit', reason: 'safe-mechanical · 권한 졸업 — 자동 제출 가능' };
   }
-  return { kind: 'manual-submit', reason: 'guarded · 명시 승인 필요' };
+  if (decision.tier === 'guarded') {
+    return { kind: 'manual-submit', reason: 'guarded · 명시 승인 필요' };
+  }
+  // Every DeliveryTier is handled above; a new tier becomes a compile error here.
+  return assertNever(decision.tier);
 }
 
 // Mock submission — assigns a fake PR number and timestamps. Real impl

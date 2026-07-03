@@ -3,7 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=10"
+  },
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
@@ -25,7 +31,7 @@
     "semgrep:strict": "semgrep --config .semgrep.yml --metrics=off --error",
     "semgrep:registry": "semgrep --config p/typescript --config p/react --config p/javascript --config p/security-audit --metrics=off",
     "semgrep:ci": "semgrep --config .semgrep.yml --config p/typescript --config p/react --config p/security-audit --metrics=off --severity=ERROR --error",
-    "verify": "pnpm typecheck && pnpm lint && pnpm semgrep:ci && pnpm catalog:validate",
+    "verify": "pnpm typecheck && pnpm i18n:audit && pnpm lint:strict && pnpm semgrep:ci && pnpm catalog:validate && pnpm test && pnpm build && pnpm bundle-budget",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
@@ -49,6 +55,8 @@
     "@eslint/js": "^9.39.4",
     "@tauri-apps/cli": "^2.11.1",
     "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.6.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

@@ -207,49 +207,6 @@ export function FilterProvider({ repo, children }: { repo: RepoData; children: R
   return <>{children}</>;
 }
 
-// Public hook — preserves the legacy `useFilter()` shape via a shallow-equality
-// selector so consumers continue to destructure { repo, state, matched, ... }.
-//
-// @deprecated Prefer the narrow hooks below — `useFilterRepo`,
-// `useFilterMatched`, `useFilterFacets`, `useFilterActions`. Subscribing
-// to the entire API forces a re-render on every keystroke (setSearch),
-// every range tweak, every preset change. The narrow hooks slice the
-// store so a `setSearch` doesn't force a Stage re-mount or a FocusScan
-// re-render that only reads `repo`.
-export function useFilter(): FilterApi {
-  return useFilterStore(
-    useShallow((s) => ({
-      repo: s.repo,
-      state: s.state,
-      toggleFolder: s.toggleFolder,
-      clearFolders: s.clearFolders,
-      setSearch: s.setSearch,
-      setSearchRegex: s.setSearchRegex,
-      setSearchMode: s.setSearchMode,
-      searchError: s.searchError,
-      toggleLanguage: s.toggleLanguage,
-      toggleLayer: s.toggleLayer,
-      toggleOwner: s.toggleOwner,
-      toggleStatus: s.toggleStatus,
-      toggleConfidence: s.toggleConfidence,
-      setUnknownOnly: s.setUnknownOnly,
-      setIsTest: s.setIsTest,
-      setIsGenerated: s.setIsGenerated,
-      setIsDeprecated: s.setIsDeprecated,
-      setPublicApiOnly: s.setPublicApiOnly,
-      setRange: s.setRange,
-      setBool: s.setBool,
-      setSort: s.setSort,
-      setTopN: s.setTopN,
-      applyPreset: s.applyPreset,
-      resetAll: s.resetAll,
-      matched: s.matched,
-      matchedCount: s.matchedCount,
-      rankByFileId: s.rankByFileId,
-    })),
-  );
-}
-
 // ─── Narrow selectors ─────────────────────────────────────────────────
 // Prefer these in new code. Each subscribes to a small, semantically
 // related slice of the store so `setSearch` doesn't ripple into every

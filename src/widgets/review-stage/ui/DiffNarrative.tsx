@@ -136,6 +136,7 @@ export default function DiffNarrative({
             {observed.map((o, i) => (
               <li key={i} className="flex items-start gap-1.5 text-base text-[var(--fg-muted)] leading-snug">
                 <span className="shrink-0 mt-0.5" style={{ color: verdictTone }}>▸</span>
+                {/* nosemgrep: sec-no-dangerously-set-inner-html -- highlightInlineCode() HTML-escapes its input via escapeHtml() before adding only the trusted <code> wrapper, so this is sanitized at the boundary (no user HTML can survive). */}
                 <span dangerouslySetInnerHTML={{ __html: highlightInlineCode(o) }} />
               </li>
             ))}

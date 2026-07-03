@@ -9,9 +9,21 @@
 //
 // Per the feature's boundary rules these accessors stay inside filter-files
 // rather than in entities/filter-state.
-import { useFilter } from '@entities/filter-state';
+import { useFilterFacets, useFilterRepo, useFilterActions } from '@entities/filter-state';
 import type { Layer } from '@entities/repo';
 import type { EnumFacet, ToggleFacet } from '@entities/facet';
+
+// Combine the narrow filter-state selectors into the `{ state, repo, ...actions }`
+// shape these accessor registries expect. Replaces the deprecated wide
+// `useFilter()`; each underlying hook subscribes to only its slice, so a search
+// keystroke no longer re-renders every facet row.
+function useFacetApi() {
+  const { state } = useFilterFacets();
+  const repo = useFilterRepo();
+  const actions = useFilterActions();
+  return { state, repo, ...actions };
+}
+type FacetApi = ReturnType<typeof useFacetApi>;
 
 // ─── Toggle facets ────────────────────────────────────────────────────
 // The shared `ToggleFacet` lumps a binary toggle (`publicApiOnly`) together
@@ -34,7 +46,7 @@ export function useBinaryToggle(facet: BinaryToggleFacet): {
   value: boolean;
   setValue: (v: boolean) => void;
 } {
-  const f = useFilter();
+  const f = useFacetApi();
   // Single binary key today; index kept generic so future binary toggles
   // resolve through the same accessor instead of another inline branch.
   const value = f.state[facet.toggleKey];
@@ -45,8 +57,8 @@ export function useBinaryToggle(facet: BinaryToggleFacet): {
 // Registry keyed by tri-state toggleKey — adding a tri-state toggle is one
 // entry here, not another arm of a getter/setter ternary.
 type TriAccessor = {
-  read: (f: ReturnType<typeof useFilter>) => boolean | null;
-  write: (f: ReturnType<typeof useFilter>) => (v: boolean | null) => void;
+  read: (f: FacetApi) => boolean | null;
+  write: (f: FacetApi) => (v: boolean | null) => void;
 };
 
 const TRI_TOGGLES: Record<TriToggleKey, TriAccessor> = {
@@ -60,7 +72,7 @@ export function useTriToggle(facet: TriToggleFacet): {
   value: boolean | null;
   setValue: (v: boolean | null) => void;
 } {
-  const f = useFilter();
+  const f = useFacetApi();
   const accessor = TRI_TOGGLES[facet.toggleKey];
   return { value: accessor.read(f), setValue: accessor.write(f) };
 }
@@ -70,9 +82,9 @@ export function useTriToggle(facet: TriToggleFacet): {
 // action all resolve through one entry, so a new enum facet is a single
 // addition here (OCP) rather than three more ternary arms.
 type EnumAccessor = {
-  options: (f: ReturnType<typeof useFilter>, facet: EnumFacet) => readonly string[];
-  selected: (f: ReturnType<typeof useFilter>) => Set<string>;
-  toggle: (f: ReturnType<typeof useFilter>) => (v: string) => void;
+  options: (f: FacetApi, facet: EnumFacet) => readonly string[];
+  selected: (f: FacetApi) => Set<string>;
+  toggle: (f: FacetApi) => (v: string) => void;
 };
 
 const DEFAULT_LANGUAGE_OPTIONS = ['ts', 'tsx', 'js'] as const;
@@ -102,7 +114,7 @@ export function useEnumFacet(facet: EnumFacet): {
   selected: Set<string>;
   toggle: (v: string) => void;
 } {
-  const f = useFilter();
+  const f = useFacetApi();
   const accessor = ENUMS[facet.enumKey];
   return {
     options: accessor.options(f, facet),

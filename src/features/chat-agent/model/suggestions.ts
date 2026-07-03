@@ -6,7 +6,7 @@
 // it lets the panel stay in charge of when to fire it.
 
 import { useCallback } from 'react';
-import { useFilter } from '@entities/filter-state';
+import { useFilterRepo, useFilterActions } from '@entities/filter-state';
 import { useOverlay } from '@features/apply-overlay';
 import { useStack } from '@features/inspect-target';
 
@@ -20,7 +20,8 @@ export type SuggestionEffect = {
 };
 
 export function useRunSuggestion(): (key: SuggestionKey) => SuggestionEffect {
-  const { repo, setRange, toggleFolder, clearFolders } = useFilter();
+  const repo = useFilterRepo();
+  const { setRange, toggleFolder, clearFolders } = useFilterActions();
   const { setRiskLens, setBlastSeed } = useOverlay();
   const stack = useStack();
 

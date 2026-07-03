@@ -4,7 +4,7 @@ import {
   Sparkles, User, Wrench, Check, AlertTriangle, FileText, ListChecks,
 } from 'lucide-react';
 import type { Turn } from '../types';
-import { isEditableTarget } from '@shared/lib';
+import { isEditableTarget, assertNever } from '@shared/lib';
 import {
   approxCost, classifyInverse, turnMeta,
   type InverseRisk, type TurnMeta, type TurnStatus,
@@ -540,6 +540,7 @@ function StatusIconFor({ status }: { status: TurnStatus }) {
     case 'rejected':   return <AlertTriangle className="w-2.5 h-2.5" />;
     case 'failed':     return <AlertTriangle className="w-2.5 h-2.5" />;
     case 'streaming':  return <Wrench className="w-2.5 h-2.5" />;
+    default:           return assertNever(status);
   }
 }
 
@@ -553,6 +554,7 @@ function statusFgColor(status: TurnStatus): string {
     case 'streaming': return 'var(--intent-info-fg)';
     case 'thinking':  return 'var(--fg-muted)';
     case 'user':      return 'var(--fg-default)';
+    default:          return assertNever(status);
   }
 }
 

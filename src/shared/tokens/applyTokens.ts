@@ -17,7 +17,9 @@ import {
 import { semantic, type Theme } from './semantic';
 import { glass, card, chip, panel, header, tab, dropdown, pill } from './components';
 
-const semanticToCssVar: Record<keyof typeof semantic.dark, string> = {
+// Exported so the token↔tailwind sync test can assert every `var(--x)` the
+// tailwind config references actually resolves to a token emitted here.
+export const semanticToCssVar: Record<keyof typeof semantic.dark, string> = {
   // Surfaces
   bgCanvas: '--bg-canvas',
   bgSurface: '--bg-surface',

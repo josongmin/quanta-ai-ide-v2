@@ -17,6 +17,7 @@ export {
   STORAGE_KEYS, STORAGE_KEY_PREFIX, type StorageKey,
 } from './storageKeys';
 export { clamp, clamp01 } from './clamp';
+export { assertNever } from './assertNever';
 export { isEditableTarget } from './isEditableTarget';
 export { shallowEqual } from './shallowEqual';
 export { useScrollRestoration } from './useScrollRestoration';

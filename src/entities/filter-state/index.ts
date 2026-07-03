@@ -8,12 +8,11 @@
 //   • useFilterMatched() — match mask + count + ranks
 //   • useFilterFacets()  — current FilterState + search error
 //   • useFilterActions() — reference-stable action setters
-// `useFilter()` returns the full API but is deprecated; prefer the
-// narrow selectors so a `setSearch` keystroke doesn't ripple to every
-// subscriber.
+// Consumers pick the narrowest selector they need so a `setSearch`
+// keystroke doesn't ripple to every subscriber. (The legacy wide
+// `useFilter()` hook was removed — use these narrow hooks instead.)
 export {
   FilterProvider,
-  useFilter,
   useFilterStore,
   useFilterRepo,
   useFilterMatched,
