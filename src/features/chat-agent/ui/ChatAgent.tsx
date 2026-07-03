@@ -35,6 +35,7 @@ export default function ChatAgent({
   // of "can't perform a React state update on an unmounted component"
   // warnings here).
   const pendingTimersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  const pendingRafsRef = useRef<Set<number>>(new Set());
   const runSuggestion = useRunSuggestion();
 
   // User-resizable height. The widget defaults to 60vh-ish via CSS but
@@ -100,9 +101,12 @@ export default function ChatAgent({
 
   useEffect(() => {
     const timers = pendingTimersRef.current;
+    const rafs = pendingRafsRef.current;
     return () => {
       for (const id of timers) clearTimeout(id);
       timers.clear();
+      for (const id of rafs) cancelAnimationFrame(id);
+      rafs.clear();
     };
   }, []);
 
@@ -244,14 +248,17 @@ export default function ChatAgent({
       : s));
 
     // Defer the action one frame so the user message paints before any
-    // overlay/filter changes ripple back into the UI.
-    requestAnimationFrame(() => {
+    // overlay/filter changes ripple back into the UI. Tracked so it's
+    // cancelled on unmount (no setState after teardown).
+    const raf = requestAnimationFrame(() => {
+      pendingRafsRef.current.delete(raf);
       const effect = runSuggestion(key);
       const reply = effect.reply ?? synthReply(text, t);
       setSessions((cur) => cur.map((s) => s.id === sid
         ? { ...s, msgs: [...s.msgs, { id: id + 1, role: 'agent', text: reply }], pending: false }
         : s));
     });
+    pendingRafsRef.current.add(raf);
   }
 
   function send(text: string) {

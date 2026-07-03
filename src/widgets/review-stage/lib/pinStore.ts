@@ -39,8 +39,6 @@ type PinMap = {
   repos: Record<string, PinEntry>;   // keyed by repo name
 };
 
-const EMPTY: PinMap = { prs: {}, repos: {} };
-
 // PinMap is a nested { prs, repos } shape rather than a single flat
 // record, so it can't use the flat createTtlMapStore directly. It reuses
 // the shared per-entry prune (pruneTtlRecord) on each sub-record and the
@@ -94,9 +92,7 @@ export function getPrOrdinal(map: PinMap, prNumber: number): number | null {
 
 export function togglePr(map: PinMap, prNumber: number): PinMap {
   const key = String(prNumber);
-  const next: PinMap = EMPTY;
-  next.prs = { ...map.prs };
-  next.repos = { ...map.repos };
+  const next: PinMap = { prs: { ...map.prs }, repos: { ...map.repos } };
   if (next.prs[key]) {
     Reflect.deleteProperty(next.prs, key);
   } else {
@@ -107,9 +103,7 @@ export function togglePr(map: PinMap, prNumber: number): PinMap {
 }
 
 export function toggleRepo(map: PinMap, repo: string): PinMap {
-  const next: PinMap = EMPTY;
-  next.prs = { ...map.prs };
-  next.repos = { ...map.repos };
+  const next: PinMap = { prs: { ...map.prs }, repos: { ...map.repos } };
   if (next.repos[repo]) {
     Reflect.deleteProperty(next.repos, repo);
   } else {

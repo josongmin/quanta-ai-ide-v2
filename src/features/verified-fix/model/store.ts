@@ -32,6 +32,30 @@ const initialSeeds = Object.fromEntries(SEEDS.map((s) => [s.id, s]));
 
 export type PhaseId = 1 | 2 | 3;
 
+// Per-case validation run token + timer handle. Validation is mocked with an
+// uncancellable-looking setTimeout, so without a guard a delayed result would
+// overwrite state after the user switched candidate/case. bumpValidationRun
+// invalidates any in-flight run for a case (and clears its pending timer); the
+// timer callback bails if its captured token is no longer current. Mirrors the
+// runId/AbortController guard in InvestigationContext.
+const validationRun = new Map<string, number>();
+const validationTimer = new Map<string, ReturnType<typeof setTimeout>>();
+
+function bumpValidationRun(caseId: string): number {
+  const next = (validationRun.get(caseId) ?? 0) + 1;
+  validationRun.set(caseId, next);
+  const pending = validationTimer.get(caseId);
+  if (pending !== undefined) {
+    clearTimeout(pending);
+    validationTimer.delete(caseId);
+  }
+  return next;
+}
+
+function isCurrentValidationRun(caseId: string, runId: number): boolean {
+  return validationRun.get(caseId) === runId;
+}
+
 type State = {
   cases: Record<string, FixCase>;
   seeds: Record<string, Seed>;
@@ -86,6 +110,9 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
   },
 
   selectCandidate: (caseId, candidateId) => {
+    // Invalidate any in-flight validation for this case — its stale result must
+    // not land on the newly-selected candidate.
+    bumpValidationRun(caseId);
     set((s) => {
       const c = s.cases[caseId];
       if (!c) return s;
@@ -106,6 +133,8 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
   setPhase: (phase) => { set({ phase }); },
 
   dismissCandidate: (caseId, candidateId) => {
+    // Dismiss can move the selection; invalidate any in-flight validation.
+    bumpValidationRun(caseId);
     set((s) => {
       const cur = s.cases[caseId];
       if (!cur) return s;
@@ -134,6 +163,9 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
     const candidate = c.candidates.find((x) => x.id === c.selectedCandidateId);
     if (!candidate) return;
 
+    // Fresh run token (also clears any prior pending timer for this case).
+    const runId = bumpValidationRun(caseId);
+
     set((s) => mergeCase(s, caseId, (cur) => ({
       ...cur,
       loop: { ...cur.loop, currentStage: 'validate',
@@ -141,14 +173,22 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
     })));
 
     const startedAt = Date.now();
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      validationTimer.delete(caseId);
+      if (!isCurrentValidationRun(caseId, runId)) return; // superseded → drop
       const finishedAt = Date.now();
       const run = runValidation(candidate, 1, startedAt, finishedAt);
-      handleAttempt(get, set, caseId, run, candidate);
+      handleAttempt(get, set, caseId, run, candidate, runId);
     }, VALIDATE_MS);
+    validationTimer.set(caseId, timer);
   },
 
-  reset: () => { set({ cases: {}, seeds: {}, activeCaseId: null }); },
+  reset: () => {
+    for (const t of validationTimer.values()) clearTimeout(t);
+    validationTimer.clear();
+    validationRun.clear();
+    set({ cases: {}, seeds: {}, activeCaseId: null });
+  },
 }));
 
 // ─── helpers ────────────────────────────────────────────────────────────
@@ -161,6 +201,7 @@ function handleAttempt(
   caseId: string,
   run: ValidationRun,
   candidate: CandidateFix,
+  runId: number,
 ) {
   if (run.passing) {
     const draft = buildDraftPackage(get(), caseId, candidate, run);
@@ -196,11 +237,14 @@ function handleAttempt(
     // proof obligations the patch now carries.
     const revised = critique(candidate);
     const startedAt = Date.now();
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      validationTimer.delete(caseId);
+      if (!isCurrentValidationRun(caseId, runId)) return; // superseded → drop
       const finishedAt = Date.now();
       const run2 = runValidation(revised, 2, startedAt, finishedAt);
-      handleAttempt(get, set, caseId, run2, revised);
+      handleAttempt(get, set, caseId, run2, revised, runId);
     }, VALIDATE_MS);
+    validationTimer.set(caseId, timer);
     return;
   }
 

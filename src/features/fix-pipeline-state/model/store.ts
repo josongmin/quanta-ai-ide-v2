@@ -64,6 +64,16 @@ type ValidationStatus = 'idle' | 'running' | 'done';
 
 const MOCK_INDEX_AGE_MS = 60 * 60 * 1000;
 
+// Monotonic run tokens guarding the two mocked async flows against stale-
+// response races: a delayed await/setTimeout result must not overwrite global
+// state after the user changed the seed/candidate. `genRun` guards selectSeed's
+// generation; `valRun` guards runValidation. Any selection change bumps the
+// relevant token and the async continuation bails when its captured token is no
+// longer current. Keyed record-map writes are left unguarded (landing in the
+// correct bucket is harmless). Mirrors InvestigationContext's runId guard.
+let genRun = 0;
+let valRun = 0;
+
 type Store = {
   seeds: FixSeed[];
   selectedSeedId: string | null;
@@ -208,6 +218,9 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
   async selectSeed(seedId) {
     const seed = get().seeds.find((s) => s.id === seedId);
     if (!seed) return;
+    genRun += 1;
+    valRun += 1;
+    const myGen = genRun;
     set({
       selectedSeedId: seedId,
       selectedCandidateId: null,
@@ -229,7 +242,17 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
     for (const c of get().candidatesBySeed[seedId] ?? []) knownIds.add(c.id);
     const seedDismissals = get().dismissals.filter((d) => knownIds.has(d.candidateId));
 
-    const result = await simulateGenerate(seed, seedDismissals);
+    let result: Awaited<ReturnType<typeof simulateGenerate>>;
+    try {
+      result = await simulateGenerate(seed, seedDismissals);
+    } catch {
+      if (myGen === genRun) {
+        set({ generationStatus: 'rejected', generationError: 'candidate generation failed' });
+      }
+      return;
+    }
+    // Superseded by a newer seed selection (or reset) while generating — drop.
+    if (myGen !== genRun) return;
     if ('kind' in result) {
       set({ generationStatus: 'rejected', generationError: result.reason });
       return;
@@ -261,6 +284,8 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
   },
 
   selectCandidate(candidateId) {
+    // Switching candidate invalidates any in-flight validation.
+    valRun += 1;
     set({ selectedCandidateId: candidateId });
   },
 
@@ -274,8 +299,13 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
     const candidate = get().candidatesBySeed[seedId]?.find((c) => c.id === candidateId);
     if (!candidate) return;
 
+    valRun += 1;
+    const myVal = valRun;
     set({ validationStatus: 'running' });
     window.setTimeout(() => {
+      // Superseded (seed/candidate switched, or reset) during the mock delay.
+      if (myVal !== valRun) return;
+      try {
       const next = simulateRunValidation(validation.obligations, candidate);
       const permissions = get().permissions;
       const r = recompute(candidate, next, permissions);
@@ -360,10 +390,17 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
           }));
         }
       }
+      } catch {
+        // Defensive: never strand validationStatus at 'running' if the mock
+        // derivation throws — return to idle so the user can retry.
+        if (myVal === valRun) set({ validationStatus: 'idle' });
+      }
     }, 700);
   },
 
   dismissCandidate(candidateId, reason, note) {
+    // Dismiss can move the selection; invalidate any in-flight validation.
+    valRun += 1;
     const at = new Date().toISOString();
     const seedId = get().selectedSeedId;
     set((cur) => {
@@ -387,12 +424,14 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
           const list = get().candidatesBySeed[seedId] ?? [];
           return list.some((c) => c.id === d.candidateId);
         });
-        void simulateGenerate(seed, seedDismissals, 0).then((next) => {
-          if ('kind' in next) return;
-          set((cur) => ({
-            candidatesBySeed: { ...cur.candidatesBySeed, [seedId]: next },
-          }));
-        });
+        void simulateGenerate(seed, seedDismissals, 0)
+          .then((next) => {
+            if ('kind' in next) return;
+            set((cur) => ({
+              candidatesBySeed: { ...cur.candidatesBySeed, [seedId]: next },
+            }));
+          })
+          .catch(() => { /* mock regeneration failed; keep the existing list */ });
       }
     }
   },
@@ -418,10 +457,18 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
       },
     }));
     window.setTimeout(() => {
-      const by = action.kind === 'auto-submit' ? 'system' : 'user';
-      set((cur) => ({
-        submissions: { ...cur.submissions, [candidateId]: submit(candidateId, by) },
-      }));
+      try {
+        const by = action.kind === 'auto-submit' ? 'system' : 'user';
+        set((cur) => ({
+          submissions: { ...cur.submissions, [candidateId]: submit(candidateId, by) },
+        }));
+      } catch {
+        // Defensive: never strand a submission at 'submitting' — revert so the
+        // user can retry.
+        set((cur) => ({
+          submissions: { ...cur.submissions, [candidateId]: unsubmittedRecord(candidateId) },
+        }));
+      }
     }, 500);
   },
 
@@ -441,6 +488,8 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
   },
 
   reset() {
+    genRun += 1;
+    valRun += 1;
     set({
       selectedSeedId: null,
       candidatesBySeed: {},
