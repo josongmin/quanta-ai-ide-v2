@@ -157,6 +157,12 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
             ...cur,
             dismissedCandidateIds: [...cur.dismissedCandidateIds, candidateId],
             selectedCandidateId: remaining[0]?.id ?? null,
+            // Mirror selectCandidate: a bailed in-flight validation must not
+            // strand the newly-selected candidate showing a stuck 'validate'/
+            // 'critique' spinner.
+            validations: [],
+            draft: null,
+            loop: { ...cur.loop, currentStage: 'patch' },
           },
         },
       };
