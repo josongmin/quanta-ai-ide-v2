@@ -284,9 +284,11 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
   },
 
   selectCandidate(candidateId) {
-    // Switching candidate invalidates any in-flight validation.
+    // Switching candidate invalidates any in-flight validation; reset the
+    // (global) validationStatus so a bailed run doesn't leave it stuck at
+    // 'running' on the newly-selected candidate.
     valRun += 1;
-    set({ selectedCandidateId: candidateId });
+    set({ selectedCandidateId: candidateId, validationStatus: 'idle' });
   },
 
   runValidation(candidateId) {
@@ -414,7 +416,7 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
         const dismissedIds = new Set(dismissals.map((d) => d.candidateId));
         nextSelected = list.find((c) => !dismissedIds.has(c.id))?.id ?? null;
       }
-      return { dismissals, selectedCandidateId: nextSelected };
+      return { dismissals, selectedCandidateId: nextSelected, validationStatus: 'idle' };
     });
 
     if (seedId !== null) {

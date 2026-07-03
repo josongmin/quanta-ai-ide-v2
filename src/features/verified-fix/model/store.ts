@@ -120,7 +120,15 @@ export const useVerifiedFixStore = create<State>()((set, get) => ({
         ...s,
         cases: {
           ...s.cases,
-          [caseId]: { ...c, selectedCandidateId: candidateId, validations: [], draft: null },
+          [caseId]: {
+            ...c,
+            selectedCandidateId: candidateId,
+            validations: [],
+            draft: null,
+            // Back to pre-validate so a bailed in-flight validation doesn't
+            // leave the loop stuck displaying the 'validate' stage.
+            loop: { ...c.loop, currentStage: 'patch' },
+          },
         },
       };
     });
