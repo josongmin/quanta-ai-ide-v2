@@ -4,7 +4,7 @@ import { MergeStrategyPill } from './primitives';
 function AiPill() {
   return (
     <span
-      className="inline-flex items-center justify-center px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-[0.22em] shrink-0"
+      className="inline-flex items-center justify-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em] shrink-0"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',
@@ -21,7 +21,7 @@ export function RationaleStrip({ text }: { text: string }) {
     <div className="flex items-start gap-2">
       <AiPill />
       <p
-        className="text-[12px] leading-snug italic line-clamp-2"
+        className="text-base leading-snug italic line-clamp-2"
         style={{
           color: 'var(--fg-muted)',
           display: '-webkit-box',
@@ -49,21 +49,21 @@ function MetaCell({
   return (
     <div className="flex flex-col gap-0.5 min-w-0">
       <span
-        className="text-[9px] font-black uppercase tracking-[0.18em] truncate"
+        className="text-2xs font-black uppercase tracking-eyebrow truncate"
         style={{ color: 'var(--fg-muted)' }}
       >
         {label}
       </span>
       <div className="flex items-baseline gap-1 min-w-0">
         <span
-          className="text-[14px] font-bold tabular-nums leading-none truncate"
+          className="text-lg font-bold tabular-nums leading-none truncate"
           style={{ color: 'var(--fg-strong)' }}
         >
           {value}
         </span>
         {sublabel && (
           <span
-            className="text-[10px] tabular-nums leading-none"
+            className="text-xs tabular-nums leading-none"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {sublabel}
@@ -110,20 +110,20 @@ export function PlanMeta({ stack }: { stack: RefactorStack }) {
         title={`Confidence in this split shape — based on: ${stack.splitConfidenceBasis.join(' · ')}`}
       >
         <span
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-muted)' }}
         >
           Split confidence
         </span>
         <div className="flex items-baseline gap-1">
           <span
-            className="text-[14px] font-bold tabular-nums leading-none"
+            className="text-lg font-bold tabular-nums leading-none"
             style={{ color: confidenceColor }}
           >
             {confidencePct}
           </span>
           <span
-            className="text-[10px] tabular-nums leading-none"
+            className="text-xs tabular-nums leading-none"
             style={{ color: 'var(--fg-subtle)' }}
           >
             %
@@ -139,7 +139,7 @@ export function SplitConfidenceBasis({ basis }: { basis: string[] }) {
   return (
     <div>
       <div
-        className="text-[8px] font-black uppercase tracking-[0.22em] mb-1"
+        className="text-2xs font-black uppercase tracking-[0.22em] mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         Why this confidence
@@ -148,7 +148,7 @@ export function SplitConfidenceBasis({ basis }: { basis: string[] }) {
         {basis.map((b, i) => (
           <li
             key={i}
-            className="flex items-start gap-1.5 text-[11px] leading-snug"
+            className="flex items-start gap-1.5 text-sm leading-snug"
             style={{ color: 'var(--fg-muted)' }}
           >
             <span

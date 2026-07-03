@@ -47,18 +47,18 @@ function CandidateRow({
           className="w-1.5 h-1.5 rounded-full shrink-0"
           style={{ background: tierColor, boxShadow: selected ? `0 0 6px ${tierColor}` : 'none' }}
         />
-        <span className="text-[11px] font-bold text-[var(--fg-default)] truncate">{cand.title}</span>
+        <span className="text-sm font-bold text-[var(--fg-default)] truncate">{cand.title}</span>
         <span
-          className="ml-auto shrink-0 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
+          className="ml-auto shrink-0 text-2xs font-mono uppercase tracking-eyebrow"
           style={{ color: tierColor }}
         >
           {cand.tier}
         </span>
       </div>
-      <div className="text-[10px] text-[var(--fg-muted)] leading-relaxed mt-1 line-clamp-2">
+      <div className="text-xs text-[var(--fg-muted)] leading-relaxed mt-1 line-clamp-2">
         {cand.rationale}
       </div>
-      <div className="flex items-center gap-3 text-[9px] font-mono text-[var(--fg-subtle)] mt-1.5">
+      <div className="flex items-center gap-3 text-2xs font-mono text-[var(--fg-subtle)] mt-1.5">
         <span>{cand.diffSummary}</span>
         <span>·</span>
         <span>{cand.changedLines}L · {String(cand.changedFiles)}f</span>

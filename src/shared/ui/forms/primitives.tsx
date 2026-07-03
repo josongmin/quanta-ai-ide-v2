@@ -14,11 +14,11 @@ export function Section({
     <section className="flex flex-col gap-4 py-6 first:pt-0">
       <header className="flex items-end justify-between gap-4">
         <div className="flex flex-col gap-0.5">
-          <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             {title}
           </h2>
           {hint && (
-            <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+            <p className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
               {hint}
             </p>
           )}
@@ -46,13 +46,13 @@ export function Row({
     >
       <div className="flex flex-col gap-1 min-w-0 flex-1 max-w-[420px]">
         <span
-          className="text-[12px] font-medium"
+          className="text-base font-medium"
           style={{ color: danger ? 'var(--intent-danger-fg)' : 'var(--fg-strong)' }}
         >
           {label}
         </span>
         {sub && (
-          <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
             {sub}
           </span>
         )}
@@ -76,7 +76,7 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{label}</span>
@@ -92,13 +92,13 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
         <input
           ref={ref}
           {...rest}
-          className="flex-1 bg-transparent outline-none px-3 text-[12px] tabular-nums"
+          className="flex-1 bg-transparent outline-none px-3 text-base tabular-nums"
           style={{ color: 'var(--fg-strong)' }}
         />
         {trailing && <div className="pr-2">{trailing}</div>}
       </div>
       {error && (
-        <span className="text-[11px]" style={{ color: 'var(--intent-danger-fg)' }}>
+        <span className="text-sm" style={{ color: 'var(--intent-danger-fg)' }}>
           {error}
         </span>
       )}
@@ -119,7 +119,7 @@ export function Textarea({
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{label}</span>
@@ -135,7 +135,7 @@ export function Textarea({
         placeholder={placeholder}
         rows={rows}
         maxLength={maxLength}
-        className="w-full rounded-md p-2.5 text-[12px] outline-none resize-none transition-colors"
+        className="w-full rounded-md p-2.5 text-base outline-none resize-none transition-colors"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -230,7 +230,7 @@ export function Select<T extends string>({
     <select
       value={value}
       onChange={(e) => { onChange(e.target.value as T); }}
-      className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+      className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-default)',
@@ -264,7 +264,7 @@ export function Button({
 }: ButtonProps) {
   const h = size === 'md' ? 'h-9' : 'h-7';
   const px = size === 'md' ? 'px-3' : 'px-2.5';
-  const fs = size === 'md' ? 'text-[12px]' : 'text-[11px]';
+  const fs = size === 'md' ? 'text-base' : 'text-sm';
 
   const styles = (() => {
     switch (variant) {
@@ -329,7 +329,7 @@ export function SaveBar({
         }}
       >
         <span
-          className="text-[11px] font-medium"
+          className="text-sm font-medium"
           style={{ color: dirty ? 'var(--fg-strong)' : 'var(--fg-muted)' }}
         >
           {savingState === 'saving' ? 'Saving…'

@@ -48,7 +48,7 @@ export function FilterChips({
             key={c}
             type="button"
             onClick={() => { onChange(c); }}
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-[12px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-base font-semibold transition-colors"
             style={{
               background: active ? ACTIVE_BG[tone] : 'var(--bg-canvas)',
               color: active ? ACTIVE_FG[tone] : 'var(--fg-muted)',
@@ -57,7 +57,7 @@ export function FilterChips({
           >
             {c}
             <span
-              className="text-[10px] tabular-nums px-1.5 rounded"
+              className="text-xs tabular-nums px-1.5 rounded"
               style={{
                 background: active ? 'color-mix(in srgb, currentColor 16%, transparent)' : 'var(--bg-surface-muted)',
                 color: 'inherit',

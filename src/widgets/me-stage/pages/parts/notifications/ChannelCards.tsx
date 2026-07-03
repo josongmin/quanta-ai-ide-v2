@@ -19,11 +19,11 @@ export function ChannelCards() {
           >
             <div className="flex items-center gap-1.5">
               <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-strong)' }} />
-              <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+              <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                 {c.label}
               </span>
             </div>
-            <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
               {c.sub}
             </span>
           </div>

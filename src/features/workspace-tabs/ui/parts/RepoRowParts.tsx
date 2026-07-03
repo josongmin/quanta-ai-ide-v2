@@ -13,10 +13,10 @@ export function DiffBar({ added, removed }: { added: number; removed: number }) 
         <span style={{ width: `${addedPct}%`, background: 'var(--intent-success-vivid)' }} />
         <span style={{ width: `${100 - addedPct}%`, background: 'var(--intent-danger-vivid)' }} />
       </span>
-      <span className="font-mono text-[9px]" style={{ color: 'var(--intent-success-vivid)' }}>
+      <span className="font-mono text-2xs" style={{ color: 'var(--intent-success-vivid)' }}>
         +{formatCount(added)}
       </span>
-      <span className="font-mono text-[9px]" style={{ color: 'var(--intent-danger-vivid)' }}>
+      <span className="font-mono text-2xs" style={{ color: 'var(--intent-danger-vivid)' }}>
         −{formatCount(removed)}
       </span>
     </span>
@@ -39,7 +39,7 @@ export function BadgeChip({ badge }: { badge: { label: string; tone: 'merged' | 
   const prefix = badge.tone === 'cve' ? '⚠ ' : badge.tone === 'tag' ? '◇ ' : '';
   return (
     <span
-      className="inline-flex items-center text-[9px] font-mono px-1 py-px rounded"
+      className="inline-flex items-center text-2xs font-mono px-1 py-px rounded"
       style={style}
     >
       {prefix}
@@ -79,7 +79,7 @@ export function StatusDot({ status, label }: { status: 'changes' | 'clean' | 're
     review: '#7baaea',
   };
   return (
-    <span className="inline-flex items-center gap-1.5 text-[10px]" style={{ color: COLOR[status] }}>
+    <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: COLOR[status] }}>
       <span className="inline-block w-[6px] h-[6px] rounded-full" style={{ background: COLOR[status] }} />
       {label}
     </span>

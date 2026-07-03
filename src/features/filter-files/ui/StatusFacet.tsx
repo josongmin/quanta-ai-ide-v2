@@ -35,15 +35,15 @@ export default function StatusFacet() {
           <button type="button"
             key={s}
             onClick={() => { toggleStatus(s); }}
-            className={`flex items-center gap-1.5 px-2 py-1 rounded-md border text-[10px] transition-colors ${
+            className={`flex items-center gap-1.5 px-2 py-1 rounded-md border text-xs transition-colors ${
               selected
                 ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] border-[color:var(--fg-strong)]'
                 : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-default)] hover:bg-[color:var(--bg-active)]'
             }`}
           >
             <span className="w-1.5 h-1.5 rounded-sm shrink-0" style={{ backgroundColor: STATUS_CSS[s] }} />
-            <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">{t(`status.${s}`)}</span>
-            <span className={`text-[9px] tabular-nums font-mono ${
+            <span className="font-bold uppercase tracking-eyebrow">{t(`status.${s}`)}</span>
+            <span className={`text-2xs tabular-nums font-mono ${
               selected ? 'opacity-70' : 'text-[color:var(--fg-subtle)]'
             }`}>
               {counts.m[s]}

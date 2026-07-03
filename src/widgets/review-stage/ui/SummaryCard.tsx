@@ -41,28 +41,28 @@ export default function SummaryCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+            <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
               Synthesis
             </span>
             <span
-              className="inline-flex items-center gap-1 px-1.5 h-4 rounded-sm text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
+              className="inline-flex items-center gap-1 px-1.5 h-4 rounded-sm text-2xs font-mono uppercase tracking-eyebrow"
               style={{ background: `color-mix(in srgb, ${confColor} 13%, transparent)`, color: confColor, border: `1px solid color-mix(in srgb, ${confColor} 33%, transparent)` }}
               title="Confidence is high when the description and diff corroborate. Low confidence usually means the description is missing or the change is large."
             >
               {confLabel} confidence
             </span>
             <span
-              className="text-[9px] font-mono text-[var(--fg-subtle)]"
+              className="text-2xs font-mono text-[var(--fg-subtle)]"
               title="Built from diff facts (LOC, file kinds, public-API count, prior incidents). No LLM."
             >
               · deterministic
             </span>
           </div>
-          <p className="text-[13px] leading-relaxed text-[var(--fg-default)]">
+          <p className="text-md leading-relaxed text-[var(--fg-default)]">
             {summary.narrative}
           </p>
           {summary.highlights.length > 0 && (
-            <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[12px] text-[var(--fg-muted)]">
+            <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-base text-[var(--fg-muted)]">
               {summary.highlights.map((h, i) => (
                 <li key={i} className="flex items-start gap-1.5">
                   <span className="text-[var(--fg-subtle)] mt-1">•</span>
@@ -73,7 +73,7 @@ export default function SummaryCard({
           )}
           {mismatch.detected && (
             <div
-              className="mt-3 flex items-start gap-2 px-3 py-2 rounded-md text-[12px]"
+              className="mt-3 flex items-start gap-2 px-3 py-2 rounded-md text-base"
               style={{ background: `color-mix(in srgb, ${SEV.medium} 10%, transparent)`, color: SEV.medium, border: `1px solid color-mix(in srgb, ${SEV.medium} 33%, transparent)` }}
             >
               <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />

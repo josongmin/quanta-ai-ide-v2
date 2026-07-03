@@ -16,12 +16,12 @@ export function FlagsList({
         <FlagRow key={f.id} isFirst={i === 0}>
           <div className="flex flex-col min-w-0 gap-0.5">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+              <span className="font-mono text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                 {f.id}
               </span>
               {f.enabled ? null : (
                 <span
-                  className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+                  className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                   style={{
                     background: 'var(--bg-surface-muted)',
                     color: 'var(--fg-muted)',
@@ -32,7 +32,7 @@ export function FlagsList({
                 </span>
               )}
             </div>
-            <span className="text-[11px] truncate" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-sm truncate" style={{ color: 'var(--fg-muted)' }}>
               {f.description}
             </span>
           </div>
@@ -45,14 +45,14 @@ export function FlagsList({
               onChange={(v) => { onChange(f.id, { acmeForced: v }); }}
               label={`Force on for ACME ${f.id}`}
             />
-            <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
               ACME
             </span>
           </div>
 
           <button
             type="button"
-            className="text-[11px] font-medium inline-flex items-center gap-1 justify-end"
+            className="text-sm font-medium inline-flex items-center gap-1 justify-end"
             style={{ color: 'var(--fg-muted)' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg-strong)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--fg-muted)'; }}
@@ -72,7 +72,7 @@ function FlagRow({ isFirst, children }: { isFirst: boolean; children: React.Reac
   return (
     <div
       ref={ref}
-      className="grid items-center px-3 py-3 text-[12px] transition-colors"
+      className="grid items-center px-3 py-3 text-base transition-colors"
       style={{
         gridTemplateColumns: '1.6fr 130px 100px 80px',
         gap: 16,
@@ -103,7 +103,7 @@ function RolloutBar({ pct, dim }: { pct: number; dim: boolean }) {
         />
       </div>
       <span
-        className="tabular-nums text-[11px] font-medium w-8 text-right"
+        className="tabular-nums text-sm font-medium w-8 text-right"
         style={{ color: 'var(--fg-muted)' }}
       >
         {pct}%

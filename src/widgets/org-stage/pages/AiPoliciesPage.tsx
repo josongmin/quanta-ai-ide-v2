@@ -135,7 +135,7 @@ export default function AiPoliciesPage() {
       >
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
-            className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               gridTemplateColumns: '24px 1fr 110px 90px 80px 100px',
               gap: 12,
@@ -157,7 +157,7 @@ export default function AiPoliciesPage() {
             return (
               <label
                 key={m.id}
-                className="grid items-center px-3 h-12 text-[12px] cursor-pointer transition-colors"
+                className="grid items-center px-3 h-12 text-base cursor-pointer transition-colors"
                 style={{
                   gridTemplateColumns: '24px 1fr 110px 90px 80px 100px',
                   gap: 12,
@@ -178,18 +178,18 @@ export default function AiPoliciesPage() {
                 />
                 <div className="flex flex-col min-w-0 gap-0.5">
                   <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>{m.label}</span>
-                  <span className="font-mono text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>{m.id}</span>
+                  <span className="font-mono text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>{m.id}</span>
                 </div>
                 <span style={{ color: 'var(--fg-default)' }}>{m.vendor}</span>
                 <span className="tabular-nums" style={{ color: 'var(--fg-muted)' }}>{m.contextK}k</span>
                 <span
-                  className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded w-fit"
+                  className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded w-fit"
                   style={tierBadgeStyle(m.tier)}
                 >
                   {m.tier}
                 </span>
                 <span
-                  className="text-[10px] font-mono"
+                  className="text-xs font-mono"
                   style={{ color: conflict ? 'var(--intent-danger-fg)' : 'var(--fg-muted)' }}
                   title={conflict ? `Not available in ${form.residency.toUpperCase()}` : undefined}
                 >
@@ -200,7 +200,7 @@ export default function AiPoliciesPage() {
           })}
         </div>
         {residencyConflicts.length > 0 && (
-          <p className="text-[11px] mt-2 flex items-start gap-1.5" style={{ color: 'var(--intent-danger-fg)' }}>
+          <p className="text-sm mt-2 flex items-start gap-1.5" style={{ color: 'var(--intent-danger-fg)' }}>
             <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
             {residencyConflicts.length} selected model{residencyConflicts.length === 1 ? ' is' : 's are'} not available in the chosen residency. Members will get an error on use.
           </p>
@@ -213,7 +213,7 @@ export default function AiPoliciesPage() {
           <select
             value={form.defaultModel}
             onChange={(e) => { set('defaultModel', e.target.value as ModelId); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 200 }}
           >
             {Array.from(form.allowedModels).map((id) => (
@@ -225,7 +225,7 @@ export default function AiPoliciesPage() {
           <select
             value={form.fastModel}
             onChange={(e) => { set('fastModel', e.target.value as ModelId); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 200 }}
           >
             {Array.from(form.allowedModels).map((id) => (
@@ -252,7 +252,7 @@ export default function AiPoliciesPage() {
                   key={r}
                   type="button"
                   onClick={() => { set('residency', r); }}
-                  className="inline-flex items-center gap-1.5 h-7 px-2.5 text-[10px] uppercase tracking-[0.14em] font-semibold transition-colors"
+                  className="inline-flex items-center gap-1.5 h-7 px-2.5 text-xs uppercase tracking-eyebrow font-semibold transition-colors"
                   style={{
                     background: active ? 'var(--bg-active)' : 'transparent',
                     color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -269,7 +269,7 @@ export default function AiPoliciesPage() {
           <select
             value={form.retentionDays}
             onChange={(e) => { set('retentionDays', Number(e.target.value)); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 120 }}
           >
             <option value={0}>0 days (zero retention)</option>
@@ -312,15 +312,15 @@ export default function AiPoliciesPage() {
               min={0}
               value={form.monthlyTokenCapM}
               onChange={(e) => { set('monthlyTokenCapM', Number(e.target.value) || 0); }}
-              className="w-20 bg-transparent outline-none text-[12px] tabular-nums"
+              className="w-20 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>M tokens / month</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>M tokens / month</span>
           </div>
         </Row>
       </Section>
 
-      <div className="flex items-start gap-3 mt-6 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="flex items-start gap-3 mt-6 text-sm" style={{ color: 'var(--fg-subtle)' }}>
         <div className="flex flex-col gap-1.5">
           <span className="flex items-start gap-1.5">
             <Cpu className="w-3 h-3 mt-0.5" />

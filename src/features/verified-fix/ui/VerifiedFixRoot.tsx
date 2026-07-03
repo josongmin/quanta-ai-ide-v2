@@ -173,7 +173,7 @@ function Header({ fixCase, seed }: { fixCase: FixCase; seed: Seed }) {
   return (
     <div className="flex items-center gap-3">
       <span
-        className="text-[10px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded font-mono"
+        className="text-xs font-black uppercase tracking-eyebrow px-2 py-0.5 rounded font-mono"
         style={{ background: t.badgeBg, color: t.textMuted }}
       >
         {tr(`header.kind.${seed.kind}`)}
@@ -181,7 +181,7 @@ function Header({ fixCase, seed }: { fixCase: FixCase; seed: Seed }) {
       <h1 className="text-[15px] font-bold" style={{ color: t.textHi }}>
         {seed.title}
       </h1>
-      <span className="ml-auto text-[10px] font-mono" style={{ color: t.textFaint }}>
+      <span className="ml-auto text-xs font-mono" style={{ color: t.textFaint }}>
         {tr('header.case', { id: fixCase.id })}
       </span>
     </div>
@@ -198,12 +198,12 @@ function PhaseIntro({ titleKey, bodyKey }: { titleKey: string; bodyKey: string }
       style={{ background: t.inset, borderColor: t.borderSoft }}
     >
       <div
-        className="text-[10px] font-black uppercase tracking-[0.18em]"
+        className="text-xs font-black uppercase tracking-eyebrow"
         style={{ color: t.textMuted }}
       >
         {tr(titleKey)}
       </div>
-      <div className="text-[11px] mt-0.5 leading-snug" style={{ color: t.textBody }}>
+      <div className="text-sm mt-0.5 leading-snug" style={{ color: t.textBody }}>
         {tr(bodyKey)}
       </div>
     </div>
@@ -217,10 +217,10 @@ function EmptyState() {
   return (
     <div className="flex items-center justify-center h-[60vh]">
       <div className="text-center">
-        <div className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
+        <div className="text-sm font-bold uppercase tracking-eyebrow" style={{ color: t.textMuted }}>
           {tr('empty.noCaseTitle')}
         </div>
-        <div className="text-[11px] mt-1" style={{ color: t.textFaint }}>
+        <div className="text-sm mt-1" style={{ color: t.textFaint }}>
           {tr('empty.noCaseBody')}
         </div>
       </div>
@@ -237,10 +237,10 @@ function TrustPanelEmpty() {
       className="shrink-0 w-[320px] h-full overflow-auto border-l p-4"
       style={{ background: t.sidebar, backdropFilter: t.sidebarBlur, borderColor: t.border }}
     >
-      <div className="text-[10px] font-black uppercase tracking-[0.18em] mb-2" style={{ color: t.textMuted }}>
+      <div className="text-xs font-black uppercase tracking-eyebrow mb-2" style={{ color: t.textMuted }}>
         {tr('trust.signal')}
       </div>
-      <div className="text-[11px]" style={{ color: t.textFaint }}>
+      <div className="text-sm" style={{ color: t.textFaint }}>
         {tr('empty.trustEmpty')}
       </div>
     </aside>

@@ -35,15 +35,15 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
     <div className={`rounded-lg border overflow-hidden ${card} shadow-[0_1px_3px_rgba(0,0,0,0.04)]`}>
       <div className={`flex items-center gap-2 px-3 py-2 border-b ${headerBorder}`}>
         <GitPullRequest className={`w-3 h-3 ${textMuted}`} />
-        <span className={`text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
+        <span className={`text-sm font-bold uppercase tracking-eyebrow ${textFaint}`}>
           changes
         </span>
-        <span className={`text-[11px] font-mono ${textMuted}`}>
+        <span className={`text-sm font-mono ${textMuted}`}>
           {block.files.length} {block.files.length === 1 ? t('block.fileOne') : t('block.fileMany')}
         </span>
         <span
           style={stateBadgeStyle}
-          className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] border ${stateBadge}`}
+          className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-bold uppercase tracking-eyebrow border ${stateBadge}`}
         >
           <StateIcon className="w-2.5 h-2.5" />
           {applied ? t('apply.applied') : t('apply.suggested')}
@@ -80,7 +80,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
             <Columns2 className="w-3 h-3" />
           </button>
         </div>
-        <div className="flex items-center gap-2 text-[11px] font-mono tabular-nums">
+        <div className="flex items-center gap-2 text-sm font-mono tabular-nums">
           <span style={{ color: 'var(--intent-success-vivid)' }} className="coding-num-rise">+{block.added}</span>
           <span style={{ color: 'var(--intent-danger-vivid)', animationDelay: '60ms' }} className="coding-num-rise">−{block.removed}</span>
         </div>
@@ -94,20 +94,20 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
 
       <div className={`flex items-start gap-2 px-3 py-2 border-t ${headerBorder} bg-[color:var(--bg-surface-muted)]`}>
         <AlertCircle className={`w-3 h-3 shrink-0 mt-0.5 ${textFaint}`} />
-        <span className={`text-[10px] leading-relaxed ${textMuted}`}>
+        <span className={`text-xs leading-relaxed ${textMuted}`}>
           {applied ? t('apply.appliedNote') : t('apply.suggestedNote')}
         </span>
       </div>
 
       <div className={`flex items-center justify-between px-2.5 py-2 border-t ${headerBorder} bg-[color:var(--bg-surface-muted)]`}>
-        <span className={`text-[11px] font-mono ${textFaint}`}>
+        <span className={`text-sm font-mono ${textFaint}`}>
           {applied ? t('apply.applied') : t('apply.previewOnly')}
         </span>
         <div className="flex items-center gap-1">
           <button
             type="button"
             title={t('block.patch')}
-            className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-medium transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
           >
             <Copy className="w-2.5 h-2.5" />
             {t('block.patch')}
@@ -116,7 +116,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
             <button
               type="button"
               onClick={() => { setApplied(true); }}
-              className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors text-[color:var(--fg-strong)] bg-[color:var(--bg-active)] hover:bg-[color:var(--bg-selected)] border border-[color:var(--border-default)]"
+              className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-semibold transition-colors text-[color:var(--fg-strong)] bg-[color:var(--bg-active)] hover:bg-[color:var(--bg-selected)] border border-[color:var(--border-default)]"
             >
               <FileEdit className="w-2.5 h-2.5" />
               {t('apply.applyToTree')}
@@ -125,7 +125,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
             <button
               type="button"
               onClick={() => { setApplied(false); }}
-              className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
+              className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-medium transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
               title={t('apply.previewOnly')}
             >
               <Eye className="w-2.5 h-2.5" />
@@ -139,7 +139,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
               background: 'var(--intent-success-bg)',
               border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 20%, transparent)',
             }}
-            className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors"
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-semibold transition-colors"
           >
             <ExternalLink className="w-2.5 h-2.5" />
             {applied ? t('apply.applyAndPr') : t('block.openPr')}

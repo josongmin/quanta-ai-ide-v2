@@ -46,20 +46,20 @@ export default function ShortcutsModal({ open, onClose }: Props) {
     <Modal open={open} onClose={onClose} ariaLabel={t('title')} width={520}>
       <div className="p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-[14px] font-black tracking-wide">
+          <h2 className="text-lg font-black tracking-wide">
             {t('title')}
           </h2>
           <span
-            className="text-[10px] font-mono opacity-50"
+            className="text-xs font-mono opacity-50"
             aria-hidden
           >
             {mod} /
           </span>
         </div>
 
-        <table className="w-full text-[12px]">
+        <table className="w-full text-base">
           <thead>
-            <tr className="text-[9px] font-black uppercase tracking-[0.18em] opacity-50">
+            <tr className="text-2xs font-black uppercase tracking-eyebrow opacity-50">
               <th className="text-left pb-2">{t('column.action')}</th>
               <th className="text-right pb-2">{t('column.shortcut')}</th>
             </tr>
@@ -73,7 +73,7 @@ export default function ShortcutsModal({ open, onClose }: Props) {
                     <span key={`${r.actionKey}-${String(i)}`} className="inline-flex items-center">
                       {i > 0 && <span className="mx-1 opacity-40">+</span>}
                       <kbd
-                        className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-md text-[10px] font-mono font-bold"
+                        className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-md text-xs font-mono font-bold"
                         style={{
                           background: 'var(--bg-muted, rgba(127,127,127,0.12))',
                           border: '1px solid var(--border-default)',
@@ -89,7 +89,7 @@ export default function ShortcutsModal({ open, onClose }: Props) {
           </tbody>
         </table>
 
-        <p className="mt-4 text-[11px] opacity-60">
+        <p className="mt-4 text-sm opacity-60">
           {t('hint')}
         </p>
       </div>

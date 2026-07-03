@@ -55,7 +55,7 @@ export function RuleCalibrationCard({ rows, sortBy = 'f1' }: Props) {
         {t('calibration.title', { defaultValue: 'Rule calibration' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {t('calibration.sub', {
           defaultValue: 'precision · recall · F1 · false-positive rate',
@@ -64,7 +64,7 @@ export function RuleCalibrationCard({ rows, sortBy = 'f1' }: Props) {
 
       {/* Header row */}
       <div
-        className="grid grid-cols-[1fr_repeat(4,40px)] gap-2 mt-3 pb-1 border-b text-[8.5px] font-black uppercase tracking-[0.16em]"
+        className="grid grid-cols-[1fr_repeat(4,40px)] gap-2 mt-3 pb-1 border-b text-2xs font-black uppercase tracking-[0.16em]"
         style={{
           borderColor: v.borderSoft,
           color: v.textFaint,
@@ -83,7 +83,7 @@ export function RuleCalibrationCard({ rows, sortBy = 'f1' }: Props) {
           <Row key={r.id} row={r} v={v} />
         ))}
         {sorted.length === 0 && (
-          <div className="text-[10px] italic py-4 text-center"
+          <div className="text-xs italic py-4 text-center"
                style={{ color: v.textFaint }}>
             {t('calibration.empty', {
               defaultValue: 'No rules with enough samples to calibrate yet.',
@@ -123,7 +123,7 @@ function Row({
         <div className="truncate font-bold" style={{ color: v.textBody }}>
           {row.label}
         </div>
-        <div className="text-[8.5px] mt-0.5"
+        <div className="text-2xs mt-0.5"
              style={{ color: v.textFaint }}>
           tp {tp} · fp {fp} · fn {fn} · tn {tn}
         </div>

@@ -15,7 +15,7 @@ export function DefaultRoleRow({
   return (
     <div className="flex items-end justify-between gap-4">
       <div className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Default role for new invitees
         </span>
         <SegmentedToggle
@@ -29,7 +29,7 @@ export function DefaultRoleRow({
 
       {totalCount > 0 && (
         <div
-          className="flex items-center gap-3 px-3 py-1.5 rounded-md text-[11px] tabular-nums onb-stagger"
+          className="flex items-center gap-3 px-3 py-1.5 rounded-md text-sm tabular-nums onb-stagger"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}
         >
           <Users className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />

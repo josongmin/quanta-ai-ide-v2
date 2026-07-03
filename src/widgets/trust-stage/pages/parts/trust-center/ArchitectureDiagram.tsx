@@ -29,8 +29,8 @@ export function ArchitectureDiagram() {
               <b.icon className="w-4 h-4" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{b.label}</span>
-              <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{b.sub}</span>
+              <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{b.label}</span>
+              <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{b.sub}</span>
             </div>
           </div>
         ))}

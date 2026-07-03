@@ -14,7 +14,7 @@ export function JobsTable() {
       style={{ border: '1px solid var(--border-muted)' }}
     >
       <div
-        className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '160px 1.2fr 110px 90px 70px 80px 130px',
           gap: 12,
@@ -43,30 +43,30 @@ function JobRow({ job }: { job: Job }) {
   return (
     <div
       ref={ref}
-      className="grid items-center px-3 h-11 text-[12px] transition-colors"
+      className="grid items-center px-3 h-11 text-base transition-colors"
       style={{
         gridTemplateColumns: '160px 1.2fr 110px 90px 70px 80px 130px',
         gap: 12,
         borderTop: '1px solid var(--border-muted)',
       }}
     >
-      <span className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-default)' }}>
+      <span className="font-mono text-sm truncate" style={{ color: 'var(--fg-default)' }}>
         {job.id}
       </span>
-      <span className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-muted)' }}>
+      <span className="font-mono text-sm truncate" style={{ color: 'var(--fg-muted)' }}>
         {job.type}
       </span>
       <JobStatePill state={job.state} />
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="tabular-nums text-sm" style={{ color: 'var(--fg-muted)' }}>
         {job.runtime}
       </span>
       <span
-        className="tabular-nums text-right text-[11px]"
+        className="tabular-nums text-right text-sm"
         style={{ color: job.retries > 0 ? 'var(--intent-warn-fg)' : 'var(--fg-muted)' }}
       >
         {job.retries}
       </span>
-      <span className="tabular-nums text-right text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="tabular-nums text-right text-sm" style={{ color: 'var(--fg-muted)' }}>
         {job.payload}
       </span>
       <div className="flex items-center justify-end gap-1.5">
@@ -98,7 +98,7 @@ function JobStatePill({ state }: { state: JobState }) {
   const Icon = cfg.Icon;
   return (
     <span
-      className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+      className="inline-flex items-center gap-1 text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
       style={{
         background: cfg.bg,
         color: cfg.fg,

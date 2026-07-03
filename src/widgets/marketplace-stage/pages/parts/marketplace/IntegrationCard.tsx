@@ -30,7 +30,7 @@ export function IntegrationCard({ integration }: { integration: Integration }) {
           {integration.verified && (
             <span
               title="Verified"
-              className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.14em] font-semibold"
+              className="inline-flex items-center gap-1 text-2xs uppercase tracking-eyebrow font-semibold"
               style={{ color: 'var(--fg-accent)' }}
             >
               <ShieldCheck className="w-3 h-3" />
@@ -40,12 +40,12 @@ export function IntegrationCard({ integration }: { integration: Integration }) {
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <h3 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h3 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           {integration.name}
         </h3>
-        <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{integration.blurb}</p>
+        <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>{integration.blurb}</p>
       </div>
-      <div className="flex items-center gap-3 mt-auto text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="flex items-center gap-3 mt-auto text-xs" style={{ color: 'var(--fg-subtle)' }}>
         <span className="inline-flex items-center gap-1">
           <Star className="w-3 h-3" />
           <span className="tabular-nums">{integration.rating.toFixed(1)}</span>

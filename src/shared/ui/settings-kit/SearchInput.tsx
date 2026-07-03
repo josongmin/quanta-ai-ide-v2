@@ -52,7 +52,7 @@ export function SearchInput({
         value={value}
         onChange={(e) => { onChange(e.target.value); }}
         placeholder={placeholder}
-        className="flex-1 bg-transparent outline-none text-[12px] min-w-0"
+        className="flex-1 bg-transparent outline-none text-base min-w-0"
         style={{ color: 'var(--fg-strong)' }}
       />
       {clearable && value && (

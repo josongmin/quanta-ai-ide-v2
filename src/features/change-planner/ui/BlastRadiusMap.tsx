@@ -76,7 +76,7 @@ function edgeRowStyle(conf: ConfidenceState): EdgeRowStyle {
 function NodeChip({ node }: { node: ImpactNode }) {
   return (
     <span
-      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono"
+      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-mono"
       style={{
         background: 'var(--bg-elevated)',
         color: 'var(--fg-default)',
@@ -85,7 +85,7 @@ function NodeChip({ node }: { node: ImpactNode }) {
     >
       <span>{node.label}</span>
       <span
-        className="text-[8.5px] uppercase tracking-[0.14em] font-black"
+        className="text-2xs uppercase tracking-eyebrow font-black"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {node.layer}
@@ -120,7 +120,7 @@ function EdgeRow({
       />
       <NodeChip node={toNode} />
       <span
-        className="ml-auto text-[8.5px] font-black uppercase tracking-[0.16em] shrink-0"
+        className="ml-auto text-2xs font-black uppercase tracking-[0.16em] shrink-0"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {CONF_LABEL[edge.confidence]}
@@ -165,18 +165,18 @@ export function BlastRadiusMap({ graph }: Props) {
         }}
       >
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           Blast radius · seed
         </div>
         <div
-          className="mt-1 text-[11px] font-mono"
+          className="mt-1 text-sm font-mono"
           style={{ color: 'var(--fg-default)' }}
         >
           {graph.seed.label}
           <span
-            className="ml-2 text-[9px] uppercase tracking-[0.16em] font-black"
+            className="ml-2 text-2xs uppercase tracking-[0.16em] font-black"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {graph.seed.kind}
@@ -200,20 +200,20 @@ export function BlastRadiusMap({ graph }: Props) {
           >
             <header className="px-3 py-2 flex items-baseline gap-2">
               <span
-                className="text-[9px] font-black uppercase tracking-[0.18em]"
+                className="text-2xs font-black uppercase tracking-eyebrow"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {RING_LABEL[ring]}
               </span>
               <span
-                className="text-[10px] font-mono tabular-nums"
+                className="text-xs font-mono tabular-nums"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {nodes.length} nodes · {edges.length} edges
               </span>
             </header>
             <p
-              className="px-3 pb-2 text-[10px] leading-snug"
+              className="px-3 pb-2 text-xs leading-snug"
               style={{ color: 'var(--fg-muted)' }}
             >
               {RING_HINT[ring]}
@@ -237,7 +237,7 @@ export function BlastRadiusMap({ graph }: Props) {
               </ul>
             ) : (
               <div
-                className="px-3 pb-2 text-[10px] italic"
+                className="px-3 pb-2 text-xs italic"
                 style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
               >
                 No edges in this ring.

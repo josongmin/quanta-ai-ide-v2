@@ -43,7 +43,7 @@ export function NavGroup({
   return (
     <div className="mb-3 last:mb-0">
       <div
-        className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-[0.18em]"
+        className="px-3 mb-1 text-xs font-semibold uppercase tracking-eyebrow"
         style={{ color: t.textSubtle }}
       >
         {label}
@@ -95,14 +95,14 @@ export function NavItem({
         style={{ color: active ? t.textBody : t.textMuted }}
       />
       <span
-        className="flex-1 text-[12px] font-medium truncate"
+        className="flex-1 text-base font-medium truncate"
         style={{ color: active ? t.textHi : t.textMuted }}
       >
         {label}
       </span>
       {badge ? (
         <span
-          className="shrink-0 inline-flex items-center justify-center min-w-[18px] h-[16px] px-1.5 rounded-md text-[10px] font-mono tabular-nums"
+          className="shrink-0 inline-flex items-center justify-center min-w-[18px] h-[16px] px-1.5 rounded-md text-xs font-mono tabular-nums"
           style={{
             background: badge.color ? `${badge.color}1f` : t.badgeBg,
             color: badge.color ?? t.textMuted,
@@ -112,7 +112,7 @@ export function NavItem({
         </span>
       ) : shortcut ? (
         <span
-          className="shrink-0 text-[10px] font-mono"
+          className="shrink-0 text-xs font-mono"
           style={{ color: active ? t.textSubtle : t.textFaint }}
         >
           {shortcut}
@@ -133,7 +133,7 @@ export function SectionTitle({
       <span className="inline-flex" style={{ color: t.textMuted }}>
         <Icon className="w-3.5 h-3.5" />
       </span>
-      <h3 className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textBody }}>
+      <h3 className="text-sm font-bold uppercase tracking-eyebrow" style={{ color: t.textBody }}>
         {children}
       </h3>
     </div>
@@ -155,9 +155,9 @@ export function Stat({
     : t.textBody;
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>{label}</span>
+      <span className="text-xs font-mono" style={{ color: t.textSubtle }}>{label}</span>
       <span
-        className="text-[18px] font-bold tabular-nums leading-none"
+        className="text-2xl font-bold tabular-nums leading-none"
         style={{
           color,
           textShadow: tone !== 'mute' ? `0 0 14px ${color}55` : 'none',

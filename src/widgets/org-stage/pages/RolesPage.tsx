@@ -190,12 +190,12 @@ export default function RolesPage() {
                 <Shield className="w-3.5 h-3.5 shrink-0" style={{ color: r.builtIn ? 'var(--fg-subtle)' : 'var(--fg-accent)' }} />
                 <div className="flex flex-col min-w-0 flex-1 gap-0.5">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+                    <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
                       {r.name}
                     </span>
                     {r.builtIn && <Lock className="w-2.5 h-2.5" style={{ color: 'var(--fg-subtle)' }} />}
                   </div>
-                  <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>
+                  <span className="text-xs tabular-nums" style={{ color: 'var(--fg-muted)' }}>
                     {r.permissions.size} perms · {r.memberCount} {r.memberCount === 1 ? 'person' : 'people'}
                   </span>
                 </div>
@@ -214,12 +214,12 @@ export default function RolesPage() {
                   value={selected.name}
                   onChange={(e) => { rename(e.target.value); }}
                   readOnly={selected.builtIn}
-                  className="text-[16px] font-semibold tracking-tight bg-transparent outline-none flex-1 min-w-0"
+                  className="text-xl font-semibold tracking-tight bg-transparent outline-none flex-1 min-w-0"
                   style={{ color: 'var(--fg-strong)', cursor: selected.builtIn ? 'default' : 'text' }}
                 />
                 {selected.builtIn && (
                   <span
-                    className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+                    className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                     style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)', border: '1px solid var(--border-muted)' }}
                   >
                     Built-in
@@ -231,10 +231,10 @@ export default function RolesPage() {
                 onChange={(e) => { redescribe(e.target.value); }}
                 readOnly={selected.builtIn}
                 placeholder="Describe what this role is for…"
-                className="text-[12px] bg-transparent outline-none"
+                className="text-base bg-transparent outline-none"
                 style={{ color: 'var(--fg-muted)', cursor: selected.builtIn ? 'default' : 'text' }}
               />
-              <div className="flex items-center gap-3 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 <span className="inline-flex items-center gap-1">
                   <Users className="w-3 h-3" /> {selected.memberCount} assigned
                 </span>
@@ -258,7 +258,7 @@ export default function RolesPage() {
           {/* Built-in lock notice */}
           {selected.builtIn && (
             <div
-              className="flex items-start gap-2 px-5 py-3 text-[11px]"
+              className="flex items-start gap-2 px-5 py-3 text-sm"
               style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)', borderBottom: '1px solid var(--border-muted)' }}
             >
               <Lock className="w-3.5 h-3.5 mt-0.5 shrink-0" />
@@ -271,7 +271,7 @@ export default function RolesPage() {
             {PERM_GROUPS.map((g) => (
               <div key={g.id} className="px-5 py-4" style={{ borderBottom: '1px solid var(--border-muted)' }}>
                 <span
-                  className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-3 block"
+                  className="text-xs uppercase tracking-eyebrow font-semibold mb-3 block"
                   style={{ color: 'var(--fg-subtle)' }}
                 >
                   {g.title}
@@ -287,10 +287,10 @@ export default function RolesPage() {
                         style={{ borderTop: '1px solid var(--border-muted)' }}
                       >
                         <div className="flex flex-col min-w-0 flex-1 gap-0.5">
-                          <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+                          <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
                             {p.label}
                           </span>
-                          <span className="text-[10px] font-mono" style={{ color: danger ? 'var(--intent-danger-fg)' : 'var(--fg-subtle)' }}>
+                          <span className="text-xs font-mono" style={{ color: danger ? 'var(--intent-danger-fg)' : 'var(--fg-subtle)' }}>
                             {p.id}
                             {p.hint && <span className="ml-2" style={{ color: 'var(--fg-subtle)' }}>· {p.hint}</span>}
                           </span>
@@ -311,7 +311,7 @@ export default function RolesPage() {
         </div>
       </div>
 
-      <p className="text-[11px] mt-3 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-3 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
         Custom roles take effect immediately for assigned members. Audit log records every permission change.
       </p>

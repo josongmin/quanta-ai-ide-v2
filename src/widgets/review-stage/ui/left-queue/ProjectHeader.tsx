@@ -20,7 +20,7 @@ export function ProjectHeader({
 }) {
   return (
     <div className="shrink-0 flex items-center gap-1.5 px-3 pt-3 pb-2 min-w-0">
-      <div className="shrink-0 text-sm font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] leading-tight">
+      <div className="shrink-0 text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)] leading-tight">
         프로젝트
       </div>
       {/* dot counters: critical (red) · attention (amber). Only render
@@ -54,7 +54,7 @@ export function ProjectHeader({
                 onClick={toggle}
                 aria-expanded={open}
                 aria-haspopup="dialog"
-                className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono tabular-nums transition-colors hover:bg-[var(--bg-active)]"
+                className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs font-mono tabular-nums transition-colors hover:bg-[var(--bg-active)]"
                 style={{
                   background: 'var(--intent-info-bg)',
                   border: '1px solid color-mix(in srgb, var(--intent-info-fg) 35%, transparent)',

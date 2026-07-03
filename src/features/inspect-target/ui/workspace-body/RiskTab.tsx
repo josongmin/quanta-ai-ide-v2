@@ -24,7 +24,7 @@ export const RiskTab = memo(function RiskTab({ stats, isDark }: { stats: RepoSta
         </div>
         {totalRisk === 0 && (
           <div
-            className="mt-1.5 text-[10px] italic"
+            className="mt-1.5 text-xs italic"
             style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
           >
             {t('empty.noStructuralDefects')}

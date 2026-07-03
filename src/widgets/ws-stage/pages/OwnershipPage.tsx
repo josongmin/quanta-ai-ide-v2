@@ -149,17 +149,17 @@ export default function OwnershipPage() {
               className="flex items-center justify-between px-3 h-8"
               style={{ background: 'var(--bg-surface-muted)', borderBottom: '1px solid var(--border-muted)' }}
             >
-              <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
                 .github/CODEOWNERS
               </span>
-              <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                 generated · read-only
               </span>
             </div>
             <textarea
               value={codeowners}
               readOnly
-              className="flex-1 w-full p-3 text-[11px] font-mono outline-none resize-none"
+              className="flex-1 w-full p-3 text-sm font-mono outline-none resize-none"
               style={{
                 background: 'var(--bg-canvas)',
                 color: 'var(--fg-default)',
@@ -175,7 +175,7 @@ export default function OwnershipPage() {
             style={{ border: '1px solid var(--border-muted)' }}
           >
             <div
-              className="grid items-center px-3 h-8 text-[10px] uppercase tracking-[0.14em] font-semibold"
+              className="grid items-center px-3 h-8 text-xs uppercase tracking-eyebrow font-semibold"
               style={{
                 gridTemplateColumns: '1fr 1.4fr 56px',
                 gap: 8,
@@ -191,10 +191,10 @@ export default function OwnershipPage() {
             {rules.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-2 py-10 px-4 text-center">
                 <Users className="w-5 h-5" style={{ color: 'var(--fg-subtle)' }} />
-                <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   No ownership rules yet
                 </span>
-                <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
                   Add a rule to start mapping paths to teams.
                 </span>
               </div>
@@ -214,7 +214,7 @@ export default function OwnershipPage() {
               className="px-3 py-2 flex items-center justify-between"
               style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}
             >
-              <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
                 Order matters — last matching rule wins.
               </span>
               <Button leading={<Plus className="w-3 h-3" />} onClick={addRule}>
@@ -225,7 +225,7 @@ export default function OwnershipPage() {
         </div>
       </Section>
 
-      <p className="text-[11px] mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <FileWarning className="w-3 h-3 mt-0.5 shrink-0" />
         Saving writes <span className="font-mono">.github/CODEOWNERS</span> on the default branch via the integration bot.
       </p>
@@ -269,7 +269,7 @@ function RuleRow({
         value={rule.pattern}
         onChange={(e) => { onPatternChange(e.target.value); }}
         placeholder="/path/glob/"
-        className="h-7 px-2 rounded-md text-[12px] font-mono outline-none"
+        className="h-7 px-2 rounded-md text-base font-mono outline-none"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -281,7 +281,7 @@ function RuleRow({
         {rule.owners.map((o) => (
           <span
             key={o}
-            className="inline-flex items-center gap-1 h-6 pl-2 pr-1 rounded-full text-[11px] font-medium"
+            className="inline-flex items-center gap-1 h-6 pl-2 pr-1 rounded-full text-sm font-medium"
             style={{
               background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
               color: 'var(--fg-accent)',
@@ -301,14 +301,14 @@ function RuleRow({
           </span>
         ))}
         {empty && (
-          <span className="text-[11px]" style={{ color: 'var(--intent-warn-fg)' }}>
+          <span className="text-sm" style={{ color: 'var(--intent-warn-fg)' }}>
             no owners — files will be flagged
           </span>
         )}
         <button
           type="button"
           onClick={() => { setPicking((v) => !v); }}
-          className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[12px]"
+          className="inline-flex items-center justify-center w-6 h-6 rounded-full text-base"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px dashed var(--border-default)',
@@ -336,7 +336,7 @@ function RuleRow({
                   key={t}
                   type="button"
                   onClick={() => { onToggleOwner(t); setPicking(false); }}
-                  className="w-full flex items-center gap-2 px-2.5 h-7 text-[12px] text-left transition-colors"
+                  className="w-full flex items-center gap-2 px-2.5 h-7 text-base text-left transition-colors"
                   style={{ color: 'var(--fg-default)' }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -371,14 +371,14 @@ function Stat({
 }: { label: string; value: string; sub?: string; tone?: 'default' | 'warn' }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
       <span
-        className="text-[18px] font-semibold tabular-nums"
+        className="text-2xl font-semibold tabular-nums"
         style={{ color: tone === 'warn' ? 'var(--intent-warn-fg)' : 'var(--fg-strong)' }}
       >
         {value}
       </span>
-      {sub && <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{sub}</span>}
+      {sub && <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{sub}</span>}
     </div>
   );
 }

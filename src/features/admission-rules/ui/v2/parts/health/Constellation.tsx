@@ -63,13 +63,13 @@ export function Constellation({
     <V2Card className="p-5 relative overflow-hidden">
       <div className="flex items-center gap-3 mb-4">
         <SectionTitle icon={Zap}>{tA('section.ruleConstellation')}</SectionTitle>
-        <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+        <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
           {visible.length} nodes · severity = hue · matches = glow · dashed = fired
         </span>
         <div className="flex-1" />
         <FilterChips value={filter} onChange={setFilter} rules={rules} />
         <button type="button"
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-eyebrow transition-colors"
           style={{ background: t.textHi, color: t.page }}
         >
           <Plus className="w-3 h-3" />

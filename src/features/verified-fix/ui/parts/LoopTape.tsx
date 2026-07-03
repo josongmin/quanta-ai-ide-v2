@@ -43,13 +43,13 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
       <div className="flex items-center justify-between mb-2.5">
         <div className="flex items-center gap-2">
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('loop.title')}
           </span>
           <span
-            className="text-[9px] font-mono px-1.5 py-0.5 rounded"
+            className="text-2xs font-mono px-1.5 py-0.5 rounded"
             style={{
               background: overBudget ? t.warnSoft : t.badgeBg,
               color: overBudget ? t.warn : t.textMuted,
@@ -65,7 +65,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
         </div>
         {fixCase.loop.aborted && fixCase.loop.abortReason && (
           <span
-            className="text-[10px] font-semibold"
+            className="text-xs font-semibold"
             style={{ color: t.bad }}
             title={fixCase.loop.abortReason}
           >
@@ -100,7 +100,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
               >
                 <Icon className="w-3 h-3 shrink-0" style={{ color: fg }} />
                 <span
-                  className="text-[10px] font-bold uppercase tracking-[0.12em] truncate"
+                  className="text-xs font-bold uppercase tracking-[0.12em] truncate"
                   style={{ color: fg }}
                 >
                   {tr(`loop.stage.${stage}`)}
@@ -129,16 +129,16 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
               ? <ChevronDown className="w-3 h-3 shrink-0 mt-0.5" style={{ color: t.textFaint }} />
               : <ChevronRight className="w-3 h-3 shrink-0 mt-0.5" style={{ color: t.textFaint }} />}
             <span
-              className="font-mono text-[10px] mr-2 mt-0.5 shrink-0"
+              className="font-mono text-xs mr-2 mt-0.5 shrink-0"
               style={{ color: t.textFaint }}
             >
               #{fixCase.loop.iterations[fixCase.loop.iterations.length - 1].index}
             </span>
-            <span className="text-[11px] leading-snug flex-1" style={{ color: t.textBody }}>
+            <span className="text-sm leading-snug flex-1" style={{ color: t.textBody }}>
               {fixCase.loop.iterations[fixCase.loop.iterations.length - 1].note}
             </span>
             <span
-              className="text-[9px] font-mono ml-2 mt-0.5 shrink-0"
+              className="text-2xs font-mono ml-2 mt-0.5 shrink-0"
               style={{ color: t.textFaint }}
             >
               {expanded ? tr('loop.collapse') : tr('loop.iter', { count: iters })}
@@ -169,7 +169,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
                     </span>
                     <Icon className="w-3 h-3 mt-0.5 shrink-0" style={{ color: t.textMuted }} />
                     <span
-                      className="text-[9px] font-bold uppercase tracking-[0.12em] mt-0.5 shrink-0"
+                      className="text-2xs font-bold uppercase tracking-[0.12em] mt-0.5 shrink-0"
                       style={{ color: t.textFaint, minWidth: 64 }}
                     >
                       {tr(`loop.stage.${it.stage}`)}
@@ -178,7 +178,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
                       {it.note}
                     </span>
                     <span
-                      className="text-[9px] font-mono shrink-0"
+                      className="text-2xs font-mono shrink-0"
                       style={{ color: t.textFaint }}
                     >
                       {formatNumber(it.costTokens)}t

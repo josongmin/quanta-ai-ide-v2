@@ -108,13 +108,13 @@ export function SideNavShell<K extends string>({
             <div className="flex flex-col gap-1.5 min-w-0">
               {breadcrumb}
               <h1
-                className="text-[22px] font-semibold tracking-tight leading-tight"
+                className="text-3xl font-semibold tracking-tight leading-tight"
                 style={{ color: 'var(--fg-strong)' }}
               >
                 {title}
               </h1>
               {subtitle && (
-                <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+                <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
                   {subtitle}
                 </p>
               )}
@@ -155,7 +155,7 @@ function Sidebar<K extends string>({
         {groups.map((group) => (
           <div key={group.id} className="flex flex-col gap-0.5 mb-3">
             <span
-              className="px-2 mb-1 text-[9px] uppercase tracking-[0.14em] font-semibold"
+              className="px-2 mb-1 text-2xs uppercase tracking-eyebrow font-semibold"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {group.title}
@@ -168,7 +168,7 @@ function Sidebar<K extends string>({
                   type="button"
                   onClick={() => { onSelect(key); }}
                   aria-current={active ? 'page' : undefined}
-                  className="flex items-center gap-2 px-2 h-7 rounded-md text-[12px] font-medium transition-colors text-left focus-ring"
+                  className="flex items-center gap-2 px-2 h-7 rounded-md text-base font-medium transition-colors text-left focus-ring"
                   style={{
                     background: active && navVariant === 'fill' ? 'var(--bg-active)' : 'transparent',
                     color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',

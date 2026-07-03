@@ -135,7 +135,7 @@ export function PasswordSection() {
               Cancel
             </Button>
           </div>
-          <p className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <p className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             Demo: current password is <span className="font-mono">sefield-demo</span>.
             Anything else triggers the wrong-current branch.
           </p>

@@ -36,21 +36,21 @@ export function CreatePatModal({
       )}
     >
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>Token name</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Token name</span>
         <input
           value={name}
           onChange={(e) => { setName(e.target.value); }}
           placeholder="e.g. CI deploy gate"
-          className="h-9 rounded-md px-3 text-[12px] outline-none"
+          className="h-9 rounded-md px-3 text-base outline-none"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         />
       </label>
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>Expires</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Expires</span>
         <select
           value={exp == null ? 'never' : String(exp)}
           onChange={(e) => { setExp(e.target.value === 'never' ? null : Number(e.target.value)); }}
-          className="h-9 rounded-md px-3 text-[12px] outline-none cursor-pointer"
+          className="h-9 rounded-md px-3 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         >
           <option value="30">30 days</option>
@@ -61,7 +61,7 @@ export function CreatePatModal({
         </select>
       </label>
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
           <span>Scopes</span>
           <span className="lowercase tracking-normal tabular-nums">{scopes.size} selected</span>
         </span>
@@ -84,12 +84,12 @@ export function CreatePatModal({
                   className="w-3.5 h-3.5 cursor-pointer"
                 />
                 <span
-                  className="font-mono text-[11px] flex-1"
+                  className="font-mono text-sm flex-1"
                   style={{ color: s.danger ? 'var(--intent-warn-fg)' : 'var(--fg-default)' }}
                 >
                   {s.id}
                 </span>
-                <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{s.label}</span>
+                <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{s.label}</span>
               </label>
             );
           })}

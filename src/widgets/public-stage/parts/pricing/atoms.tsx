@@ -18,7 +18,7 @@ export function CycleToggle({ value, onChange }: { value: Cycle; onChange: (v: C
             key={id}
             type="button"
             onClick={() => { onChange(id); }}
-            className="relative h-9 px-4 rounded-full text-[12px] font-semibold transition-colors"
+            className="relative h-9 px-4 rounded-full text-base font-semibold transition-colors"
             style={{
               color: active ? 'var(--bg-canvas)' : 'var(--fg-muted)',
               background: active ? 'var(--fg-strong)' : 'transparent',
@@ -27,7 +27,7 @@ export function CycleToggle({ value, onChange }: { value: Cycle; onChange: (v: C
             <span className="capitalize">{id}</span>
             {id === 'annual' && (
               <span
-                className="ml-1.5 text-[10px] font-semibold px-1.5 py-0.5 rounded"
+                className="ml-1.5 text-xs font-semibold px-1.5 py-0.5 rounded"
                 style={{
                   background: active ? 'color-mix(in srgb, var(--bg-canvas) 22%, transparent)' : 'var(--intent-success-bg)',
                   color: active ? 'var(--bg-canvas)' : 'var(--intent-success-fg)',
@@ -46,7 +46,7 @@ export function CycleToggle({ value, onChange }: { value: Cycle; onChange: (v: C
 export function TrustStat({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex items-baseline gap-2">
-      <span className="text-[16px] font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>{value}</span>
+      <span className="text-xl font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>{value}</span>
       <span style={{ color: 'var(--fg-subtle)' }}>{label}</span>
     </div>
   );
@@ -68,7 +68,7 @@ export function PrimaryCta({ children, block = false }: { children: React.ReactN
   return (
     <button
       type="button"
-      className={`${block ? 'w-full' : ''} inline-flex items-center justify-center gap-1.5 h-10 px-5 rounded-md text-[12px] font-semibold transition-transform`}
+      className={`${block ? 'w-full' : ''} inline-flex items-center justify-center gap-1.5 h-10 px-5 rounded-md text-base font-semibold transition-transform`}
       style={{
         background: 'var(--fg-strong)',
         color: 'var(--bg-canvas)',
@@ -87,7 +87,7 @@ export function SecondaryCta({ children, block = false }: { children: React.Reac
   return (
     <button
       type="button"
-      className={`${block ? 'w-full' : ''} inline-flex items-center justify-center gap-1.5 h-10 px-5 rounded-md text-[12px] font-semibold transition-colors`}
+      className={`${block ? 'w-full' : ''} inline-flex items-center justify-center gap-1.5 h-10 px-5 rounded-md text-base font-semibold transition-colors`}
       style={{
         background: 'var(--bg-canvas)',
         color: 'var(--fg-strong)',

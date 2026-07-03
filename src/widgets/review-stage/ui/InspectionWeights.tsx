@@ -86,29 +86,29 @@ export default function InspectionWeightsPanel({ weights, onChange }: Props) {
         className="w-full flex items-center gap-2 text-left"
       >
         <Sliders className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Why this order
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           adjust ranking weights
         </span>
         {!isDefault && (
           <span
-            className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-eyebrow"
             style={{ background: 'color-mix(in srgb, var(--fg-link) 18%, transparent)', color: 'var(--fg-link)', border: '1px solid color-mix(in srgb, var(--fg-link) 40%, transparent)' }}
           >
             tuned
           </span>
         )}
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">
           {open ? 'collapse' : 'expand'}
         </span>
       </button>
 
       {open && (
         <div className="mt-3 space-y-3">
-          <p className="text-[11px] leading-relaxed text-[var(--fg-muted)]">
+          <p className="text-sm leading-relaxed text-[var(--fg-muted)]">
             The recommended path above is ranked by combining these axes.
             Pull a slider to nudge what you read first — the model defers
             to you when you do.
@@ -119,7 +119,7 @@ export default function InspectionWeightsPanel({ weights, onChange }: Props) {
               <div key={axis.key} className="grid grid-cols-[80px_1fr_44px] items-center gap-3">
                 <label
                   htmlFor={`weight-${axis.key}`}
-                  className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+                  className="text-xs font-bold uppercase tracking-eyebrow"
                   style={{ color: axis.tone }}
                   title={axis.help}
                 >
@@ -140,21 +140,21 @@ export default function InspectionWeightsPanel({ weights, onChange }: Props) {
                   className="w-full"
                   style={{ accentColor: axis.tone }}
                 />
-                <span className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)] text-right">
+                <span className="text-xs font-mono tabular-nums text-[var(--fg-muted)] text-right">
                   {Math.round(value * 100)}%
                 </span>
               </div>
             );
           })}
           <div className="flex items-center justify-between pt-2 border-t border-[var(--border-default)]">
-            <span className="text-[10px] italic text-[var(--fg-subtle)]">
+            <span className="text-xs italic text-[var(--fg-subtle)]">
               Greenberg &amp; Buxton (2008): surfacing the model builds trust even before retraining it.
             </span>
             <button
               type="button"
               onClick={reset}
               disabled={isDefault}
-              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}
             >
               <RotateCcw className="w-2.5 h-2.5" />

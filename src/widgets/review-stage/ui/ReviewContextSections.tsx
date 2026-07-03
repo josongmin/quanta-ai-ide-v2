@@ -10,7 +10,7 @@ import { Badge } from '@shared/ui/Badge';
 export function ReviewRailSection({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
-      <div className="mb-2 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+      <div className="mb-2 text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">
         {label}
       </div>
       <div className="space-y-1.5">{children}</div>
@@ -37,7 +37,7 @@ export function ParticipantsSection({
         />
       ))}
       {pr.reviewers.length === 0 && (
-        <div className="text-[11px] text-[var(--fg-subtle)]">{t('empty.noReviewers')}</div>
+        <div className="text-sm text-[var(--fg-subtle)]">{t('empty.noReviewers')}</div>
       )}
     </ReviewRailSection>
   );
@@ -56,8 +56,8 @@ function Participant({
     <div className="flex items-center gap-2">
       <Avatar login={login} size={20} />
       <div className="flex-1 min-w-0">
-        <div className="text-[11px] truncate text-[var(--fg-default)]">@{login}</div>
-        <div className="text-[10px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">{role}</div>
+        <div className="text-sm truncate text-[var(--fg-default)]">@{login}</div>
+        <div className="text-xs uppercase tracking-eyebrow text-[var(--fg-subtle)]">{role}</div>
       </div>
       {state !== undefined && (
         <Badge
@@ -86,15 +86,15 @@ export function BranchSection({
 
   return (
     <ReviewRailSection label="Branch">
-      <div className="flex items-center gap-1.5 text-[11px] font-mono text-[var(--fg-default)]">
+      <div className="flex items-center gap-1.5 text-sm font-mono text-[var(--fg-default)]">
         <GitBranch className="w-3 h-3 shrink-0 opacity-70" />
         <span className="truncate">{pr.baseBranch}</span>
         <span className="text-[var(--fg-subtle)]">←</span>
         <span className="truncate">{pr.headBranch}</span>
       </div>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] text-[var(--fg-subtle)]">{t('merge.aheadBehind')}</span>
-        <span className="text-[11px] font-mono tabular-nums">
+        <span className="text-sm text-[var(--fg-subtle)]">{t('merge.aheadBehind')}</span>
+        <span className="text-sm font-mono tabular-nums">
           <span style={{ color: 'var(--intent-success-vivid)' }}>+{pr.ahead}</span>
           <span className="text-[var(--fg-subtle)]"> / </span>
           <span style={{ color: 'var(--intent-danger-vivid)' }}>−{pr.behind}</span>
@@ -102,7 +102,7 @@ export function BranchSection({
       </div>
       {pr.hasConflicts && (
         <div
-          className="flex items-center gap-1.5 mt-1 px-2 py-1 rounded-md text-[11px]"
+          className="flex items-center gap-1.5 mt-1 px-2 py-1 rounded-md text-sm"
           style={{ background: `color-mix(in srgb, ${blockerColor} 10%, transparent)`, color: blockerColor, border: `1px solid color-mix(in srgb, ${blockerColor} 33%, transparent)` }}
         >
           <AlertTriangle className="w-3 h-3 shrink-0" />
@@ -132,7 +132,7 @@ export function MergeActionsSection({ pr }: { pr: PullRequest }) {
             type="button"
             disabled={!enabled}
             onClick={() => { mergePr(pr.number, b.key); }}
-            className="inline-flex items-center justify-center gap-1 h-8 rounded-md text-[11px] font-bold transition-colors disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-1 h-8 rounded-md text-sm font-bold transition-colors disabled:cursor-not-allowed"
             style={{
               background: enabled
                 ? 'linear-gradient(140deg, color-mix(in srgb, var(--intent-success-fg) 22%, transparent), color-mix(in srgb, var(--intent-success-fg) 6%, transparent))'
@@ -148,7 +148,7 @@ export function MergeActionsSection({ pr }: { pr: PullRequest }) {
         ))}
       </div>
       {block !== null && (
-        <div className="mt-1 text-[11px] text-[var(--fg-muted)]">
+        <div className="mt-1 text-sm text-[var(--fg-muted)]">
           Blocked because {block}.
         </div>
       )}

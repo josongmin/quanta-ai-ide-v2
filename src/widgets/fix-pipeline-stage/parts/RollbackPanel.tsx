@@ -17,13 +17,13 @@ export function RollbackPanel({ rollback, t }: Props) {
 
       <div className="mt-2">
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em] mb-0.5"
+          className="text-2xs font-black uppercase tracking-eyebrow mb-0.5"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('rollback.commit')}
         </div>
         <pre
-          className="text-[10px] font-mono px-2 py-1.5 rounded-md whitespace-pre-wrap"
+          className="text-xs font-mono px-2 py-1.5 rounded-md whitespace-pre-wrap"
           style={{
             background: 'var(--bg-surface-muted)',
             color: 'var(--fg-default)',
@@ -36,7 +36,7 @@ export function RollbackPanel({ rollback, t }: Props) {
 
       <div className="mt-2">
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em] mb-0.5"
+          className="text-2xs font-black uppercase tracking-eyebrow mb-0.5"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('rollback.steps')}
@@ -45,7 +45,7 @@ export function RollbackPanel({ rollback, t }: Props) {
           {rollback.steps.map((s, i) => (
             <li
               key={`s-${i.toString()}`}
-              className="text-[10px]"
+              className="text-xs"
               style={{ color: 'var(--fg-default)' }}
             >
               {(i + 1).toString()}. {s}

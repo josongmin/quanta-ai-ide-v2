@@ -22,11 +22,11 @@ export function SearchBox({
             value={q}
             onChange={(e) => { onChange(e.target.value); }}
             placeholder="Try “admission rule”, “SSO loop”, “seat pricing”…"
-            className="flex-1 bg-transparent outline-none text-[14px]"
+            className="flex-1 bg-transparent outline-none text-lg"
             style={{ color: 'var(--fg-strong)' }}
           />
           <span
-            className="hidden sm:inline-flex items-center gap-1 mr-3 text-[10px] font-mono px-2 py-1 rounded"
+            className="hidden sm:inline-flex items-center gap-1 mr-3 text-xs font-mono px-2 py-1 rounded"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-subtle)',
@@ -48,7 +48,7 @@ export function SearchBox({
             }}
           >
             {matches.length === 0 ? (
-              <div className="px-4 py-6 text-[12px] text-center" style={{ color: 'var(--fg-subtle)' }}>
+              <div className="px-4 py-6 text-base text-center" style={{ color: 'var(--fg-subtle)' }}>
                 No matches for “{q}”. Try a broader term, or contact support.
               </div>
             ) : matches.map((a, i) => {
@@ -68,12 +68,12 @@ export function SearchBox({
                 >
                   <Icon className="w-4 h-4 shrink-0" style={{ color: 'var(--fg-muted)' }} />
                   <div className="flex flex-col min-w-0 flex-1">
-                    <span className="text-[12px] font-medium truncate" style={{ color: 'var(--fg-strong)' }}>{a.title}</span>
-                    <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+                    <span className="text-base font-medium truncate" style={{ color: 'var(--fg-strong)' }}>{a.title}</span>
+                    <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
                       {cat.title}
                     </span>
                   </div>
-                  <span className="text-[11px] shrink-0" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-sm shrink-0" style={{ color: 'var(--fg-subtle)' }}>
                     {a.readMin} min
                   </span>
                 </button>
@@ -84,7 +84,7 @@ export function SearchBox({
       </div>
 
       {/* Quick links under search */}
-      <div className="flex items-center gap-2 mt-2 flex-wrap justify-center text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+      <div className="flex items-center gap-2 mt-2 flex-wrap justify-center text-base" style={{ color: 'var(--fg-muted)' }}>
         <span style={{ color: 'var(--fg-subtle)' }}>Popular:</span>
         {['Connect a repo', 'Admission rules', 'Why agent failed', 'Rotate secrets', 'Tax ID'].map((t) => (
           <button

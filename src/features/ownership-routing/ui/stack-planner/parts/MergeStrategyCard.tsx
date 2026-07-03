@@ -12,7 +12,7 @@ export function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
     >
       <div className="flex items-center gap-2">
         <span
-          className="text-[8px] font-black uppercase tracking-[0.22em]"
+          className="text-2xs font-black uppercase tracking-[0.22em]"
           style={{ color: 'var(--fg-subtle)' }}
         >
           Merge strategy
@@ -21,7 +21,7 @@ export function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
         <MergeStrategyPill strategy={advice.strategy} />
       </div>
       <p
-        className="text-[11px] leading-snug"
+        className="text-sm leading-snug"
         style={{ color: 'var(--fg-default)' }}
       >
         {advice.reason}
@@ -36,13 +36,13 @@ export function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
         >
           <div className="flex items-center gap-2 mb-1">
             <span
-              className="text-[8px] font-black uppercase tracking-[0.22em]"
+              className="text-2xs font-black uppercase tracking-[0.22em]"
               style={{ color: 'var(--fg-subtle)' }}
             >
               Alternative
             </span>
             <span
-              className="text-[8px] font-black uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-md"
+              className="text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md"
               style={{
                 background: 'var(--bg-surface-muted)',
                 color: 'var(--fg-muted)',

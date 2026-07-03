@@ -58,7 +58,7 @@ export default function PlaygroundPage() {
       subtitle="Make authenticated requests against your live workspace. Requests are scoped to your current org and rate-limited as usual."
       topRight={
         <span
-          className="inline-flex items-center gap-1.5 text-[10px] font-semibold px-2.5 h-6 rounded-full"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 h-6 rounded-full"
           style={{
             background: 'var(--intent-success-bg)',
             color: 'var(--intent-success-fg)',
@@ -82,7 +82,7 @@ export default function PlaygroundPage() {
           value={path}
           onChange={(e) => { setPath(e.target.value); }}
           spellCheck={false}
-          className="flex-1 bg-transparent outline-none px-3 text-[12px] font-mono"
+          className="flex-1 bg-transparent outline-none px-3 text-base font-mono"
           style={{ color: 'var(--fg-strong)' }}
           placeholder="/v1/…"
         />
@@ -90,7 +90,7 @@ export default function PlaygroundPage() {
           type="button"
           onClick={send}
           disabled={running}
-          className="inline-flex items-center gap-2 px-5 text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-2 px-5 text-base font-semibold transition-colors"
           style={{
             background: running ? 'var(--bg-active)' : 'var(--fg-accent)',
             color: '#fff',
@@ -103,7 +103,7 @@ export default function PlaygroundPage() {
 
       {/* Presets */}
       <div className="flex items-center gap-2 mb-6 flex-wrap">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-semibold mr-1" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold mr-1" style={{ color: 'var(--fg-subtle)' }}>
           Try
         </span>
         {PRESETS.map((p) => (
@@ -116,7 +116,7 @@ export default function PlaygroundPage() {
               setBody(p.body ?? '');
               setResponse(null);
             }}
-            className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11px] font-medium transition-colors"
+            className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-sm font-medium transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-muted)',
@@ -147,7 +147,7 @@ export default function PlaygroundPage() {
             spellCheck={false}
             placeholder={method === 'GET' || method === 'DELETE' ? '— no body —' : '{ }'}
             disabled={method === 'GET' || method === 'DELETE'}
-            className="w-full bg-transparent outline-none p-4 font-mono text-[12px] resize-none"
+            className="w-full bg-transparent outline-none p-4 font-mono text-base resize-none"
             style={{
               color: 'var(--fg-strong)',
               minHeight: 240,
@@ -167,7 +167,7 @@ export default function PlaygroundPage() {
           <PaneHeader
             title="Response"
             right={response ? (
-              <div className="flex items-center gap-3 text-[10px]" style={{ color: 'var(--fg-muted)' }}>
+              <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--fg-muted)' }}>
                 <span className="inline-flex items-center gap-1 font-semibold" style={{ color: 'var(--intent-success-fg)' }}>
                   <StatusDot intent="success" size="xs" />
                   {response.status}
@@ -178,11 +178,11 @@ export default function PlaygroundPage() {
                 </span>
               </div>
             ) : (
-              <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>idle</span>
+              <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>idle</span>
             )}
           />
           <pre
-            className="font-mono text-[12px] p-4 m-0 overflow-x-auto"
+            className="font-mono text-base p-4 m-0 overflow-x-auto"
             style={{ color: 'var(--fg-strong)', minHeight: 240 }}
           >
             {response?.payload ?? '// Send a request to see the response here.'}
@@ -199,12 +199,12 @@ export default function PlaygroundPage() {
         }}
       >
         <PaneHeader title="Equivalent cURL" right={
-          <span className="inline-flex items-center gap-1 text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--fg-subtle)' }}>
             <Zap className="w-3 h-3" /> auto-generated
           </span>
         } />
         <pre
-          className="font-mono text-[11px] p-4 m-0 overflow-x-auto"
+          className="font-mono text-sm p-4 m-0 overflow-x-auto"
           style={{ color: 'var(--fg-strong)' }}
         >
           {curl}
@@ -221,11 +221,11 @@ function PaneHeader({ title, hint, right }: { title: string; hint?: string; righ
       style={{ borderBottom: '1px solid var(--border-muted)' }}
     >
       <div className="flex items-center gap-2">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
           {title}
         </span>
         {hint && (
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>· {hint}</span>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>· {hint}</span>
         )}
       </div>
       {right}
@@ -241,7 +241,7 @@ function MethodPicker({ value, onChange }: { value: Method; onChange: (m: Method
       <button
         type="button"
         onClick={() => { setOpen((v) => !v); }}
-        className="inline-flex items-center gap-1.5 h-full px-4 text-[12px] font-bold tabular-nums border-r"
+        className="inline-flex items-center gap-1.5 h-full px-4 text-base font-bold tabular-nums border-r"
         style={{
           color: METHOD_TONE[value],
           borderColor: 'var(--border-muted)',
@@ -265,7 +265,7 @@ function MethodPicker({ value, onChange }: { value: Method; onChange: (m: Method
               key={m}
               type="button"
               onClick={() => { onChange(m); setOpen(false); }}
-              className="w-full text-left px-3 h-7 text-[11px] font-bold transition-colors"
+              className="w-full text-left px-3 h-7 text-sm font-bold transition-colors"
               style={{ color: METHOD_TONE[m] }}
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}

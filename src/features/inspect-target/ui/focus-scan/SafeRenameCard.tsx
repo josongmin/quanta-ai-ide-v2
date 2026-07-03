@@ -48,13 +48,13 @@ export function SafeRenameCard({ file }: { file: FileRecord }) {
       >
         <Edit3 className="w-3 h-3" style={{ color: verdictColor }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('safeRename.title', { defaultValue: 'Safe-rename confidence' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="ml-auto text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: verdictColor }}
         >
           {verdictLabel}
@@ -64,13 +64,13 @@ export function SafeRenameCard({ file }: { file: FileRecord }) {
       {/* Composite headline */}
       <div className="flex items-baseline gap-2 px-3 pt-2.5">
         <span
-          className="text-[28px] font-black tabular-nums leading-none"
+          className="text-4xl font-black tabular-nums leading-none"
           style={{ color: verdictColor }}
         >
           {compositePct}%
         </span>
         <span
-          className="text-[9px] font-mono"
+          className="text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('safeRename.compositeNote', {
@@ -128,7 +128,7 @@ export function SafeRenameCard({ file }: { file: FileRecord }) {
         <button
           type="button"
           disabled={verdictKey === 'unknown'}
-          className="ml-auto shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface disabled:opacity-50 disabled:cursor-not-allowed"
+          className="ml-auto shrink-0 px-2 py-1 rounded-md text-2xs font-black uppercase tracking-eyebrow transition-colors hover-surface disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
             background: verdictKey === 'exact'
               ? 'rgb(from var(--intent-success-vivid) r g b / 0.15)'
@@ -160,7 +160,7 @@ function AxisRow({ axis }: { axis: RenameAxis }) {
 
   return (
     <div>
-      <div className="flex items-baseline justify-between gap-2 text-[10px]">
+      <div className="flex items-baseline justify-between gap-2 text-xs">
         <span
           className="font-bold tracking-[0.04em]"
           style={{ color: 'var(--fg-default)' }}
@@ -184,7 +184,7 @@ function AxisRow({ axis }: { axis: RenameAxis }) {
         />
       </div>
       <div
-        className="mt-0.5 text-[9px] leading-snug"
+        className="mt-0.5 text-2xs leading-snug"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {axis.detail}

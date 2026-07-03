@@ -33,11 +33,11 @@ export function MethodTabs({
               boxShadow: active ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
             }}
           >
-            <span className="flex items-center gap-1.5 text-[11px] font-medium">
+            <span className="flex items-center gap-1.5 text-sm font-medium">
               {t.icon}
               {t.label}
             </span>
-            <span className="text-[9px]" style={{ color: 'var(--fg-subtle)' }}>{t.sub}</span>
+            <span className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>{t.sub}</span>
           </button>
         );
       })}
@@ -68,7 +68,7 @@ export function TrustDevice({ checked, onChange }: { checked: boolean; onChange:
           <Check className="w-full h-full p-0.5" style={{ color: 'var(--bg-canvas)' }} />
         )}
       </span>
-      <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+      <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
         Trust this device for 30 days.{' '}
         <span style={{ color: 'var(--fg-subtle)' }}>
           We&apos;ll skip 2FA on this browser. Don&apos;t enable on shared computers.
@@ -89,7 +89,7 @@ export function LowBackupBanner({ onRegenerate }: { onRegenerate: () => void }) 
       role="status"
     >
       <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
-      <div className="flex flex-col gap-1.5 flex-1 text-[11px]">
+      <div className="flex flex-col gap-1.5 flex-1 text-sm">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           Code accepted — 2 backup codes remaining
         </span>
@@ -99,7 +99,7 @@ export function LowBackupBanner({ onRegenerate }: { onRegenerate: () => void }) 
         <button
           type="button"
           onClick={onRegenerate}
-          className="self-start inline-flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded"
+          className="self-start inline-flex items-center gap-1 text-sm font-medium px-2 py-1 rounded"
           style={{
             background: 'var(--bg-canvas)',
             color: 'var(--fg-strong)',
@@ -121,7 +121,7 @@ export function FallbackHint({ method, onSwitch }: { method: Method; onSwitch: (
     : [{ id: 'totp', label: 'authenticator app' }, { id: 'webauthn', label: 'security key' }];
 
   return (
-    <div className="text-[11px] flex items-center gap-1 flex-wrap" style={{ color: 'var(--fg-subtle)' }}>
+    <div className="text-sm flex items-center gap-1 flex-wrap" style={{ color: 'var(--fg-subtle)' }}>
       <span>Don&apos;t have your{' '}
         {method === 'totp' ? 'phone' : method === 'webauthn' ? 'security key' : 'backup codes'}?
       </span>

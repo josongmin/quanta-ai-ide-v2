@@ -31,7 +31,7 @@ export function DecisionRibbon({
     <V2Card className="p-5 relative overflow-hidden">
       <div className="flex items-center gap-3 mb-4">
         <SectionTitle icon={Filter}>{tr('admission.decisionFlow.title')}</SectionTitle>
-        <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+        <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
           {tr('admission.decisionFlow.subtitle', { count: lanes.length })}
         </span>
       </div>
@@ -50,7 +50,7 @@ export function DecisionRibbon({
           <div className="text-[20px] font-black tabular-nums leading-none" style={{ color: t.textHi }}>
             {diff.changes.length}
           </div>
-          <div className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
+          <div className="mt-0.5 text-2xs font-bold uppercase tracking-eyebrow" style={{ color: t.textMuted }}>
             files
           </div>
         </div>
@@ -98,7 +98,7 @@ export function DecisionRibbon({
                   />
                   {/* tooltip-ish label, only on hover via group */}
                   <div
-                    className="opacity-0 group-hover:opacity-100 transition-opacity absolute left-1/2 -translate-x-1/2 -top-7 text-[9px] font-mono whitespace-nowrap px-2 py-0.5 rounded-md border z-10"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity absolute left-1/2 -translate-x-1/2 -top-7 text-2xs font-mono whitespace-nowrap px-2 py-0.5 rounded-md border z-10"
                     style={{ background: t.cardBacking, color: t.textBody, borderColor: t.border }}
                   >
                     {r.ruleName}
@@ -130,7 +130,7 @@ export function DecisionRibbon({
           >
             {decision.outcome}
           </div>
-          <div className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
+          <div className="mt-1 text-2xs font-bold uppercase tracking-eyebrow" style={{ color: t.textMuted }}>
             verdict
           </div>
         </div>

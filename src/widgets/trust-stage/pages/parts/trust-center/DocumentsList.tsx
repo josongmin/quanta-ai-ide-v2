@@ -31,14 +31,14 @@ export function DocumentsList() {
             <FileText className="w-4 h-4" />
           </div>
           <div className="flex flex-col flex-1 min-w-0">
-            <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               {d.title}
             </span>
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>{d.sub}</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{d.sub}</span>
           </div>
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-[11px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',

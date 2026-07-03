@@ -19,7 +19,7 @@ export function ComposeForm({
         <Field label="Subject">
           <input
             placeholder="Short description"
-            className="w-full bg-transparent outline-none text-[12px] h-9 px-3 rounded-md"
+            className="w-full bg-transparent outline-none text-base h-9 px-3 rounded-md"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -30,7 +30,7 @@ export function ComposeForm({
 
         <Field label="Category">
           <select
-            className="w-full bg-transparent outline-none text-[12px] h-9 px-3 rounded-md"
+            className="w-full bg-transparent outline-none text-base h-9 px-3 rounded-md"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -56,7 +56,7 @@ export function ComposeForm({
                   key={p}
                   type="button"
                   onClick={() => { onPriorityChange(p); }}
-                  className="h-8 rounded-md text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors"
+                  className="h-8 rounded-md text-sm font-semibold uppercase tracking-[0.08em] transition-colors"
                   style={{
                     color: active ? tone : 'var(--fg-muted)',
                     background: active
@@ -76,7 +76,7 @@ export function ComposeForm({
           <textarea
             rows={6}
             placeholder="What did you do? What did you expect? What happened?"
-            className="w-full bg-transparent outline-none text-[12px] p-3 rounded-md resize-y"
+            className="w-full bg-transparent outline-none text-base p-3 rounded-md resize-y"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -88,7 +88,7 @@ export function ComposeForm({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-[11px] font-medium transition-colors"
+            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-sm font-medium transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -98,12 +98,12 @@ export function ComposeForm({
             <Paperclip className="w-3.5 h-3.5" />
             Attach files
           </button>
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             Max 25MB · logs, screenshots, HAR
           </span>
           <button
             type="button"
-            className="ml-auto inline-flex items-center gap-1.5 h-9 px-5 rounded-md text-[12px] font-semibold transition-colors"
+            className="ml-auto inline-flex items-center gap-1.5 h-9 px-5 rounded-md text-base font-semibold transition-colors"
             style={{ background: 'var(--fg-accent)', color: '#fff' }}
           >
             <Send className="w-3.5 h-3.5" />

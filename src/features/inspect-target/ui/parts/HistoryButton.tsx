@@ -52,7 +52,7 @@ export function HistoryButton({
             } : {}),
           }}
         >
-          <div className="px-3 py-2 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] border-b text-[var(--fg-subtle)] border-[var(--border-default)]">
+          <div className="px-3 py-2 text-2xs font-black uppercase tracking-eyebrow border-b text-[var(--fg-subtle)] border-[var(--border-default)]">
             {t('stack_axis.openTabsCount', { count: items.length })}
           </div>
           <div className="py-1">
@@ -83,7 +83,7 @@ export function HistoryButton({
                   {a && <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[var(--fg-accent)] rounded-r" />}
                   <span
                     style={a ? { color: 'var(--intent-success-fg)' } : undefined}
-                    className={`shrink-0 w-4 text-[9px] font-mono tabular-nums text-right ${
+                    className={`shrink-0 w-4 text-2xs font-mono tabular-nums text-right ${
                     a ? '' : 'text-[var(--fg-subtle)]'
                   }`}>
                     {i + 1}
@@ -92,12 +92,12 @@ export function HistoryButton({
                     a ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-subtle)]'
                   }`} />
                   <div className="min-w-0 flex-1">
-                    <div className={`text-[11px] font-bold truncate ${
+                    <div className={`text-sm font-bold truncate ${
                       a ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-muted)]'
                     }`}>
                       {name}
                     </div>
-                    <div className="text-[9px] font-mono truncate text-[var(--fg-subtle)]">
+                    <div className="text-2xs font-mono truncate text-[var(--fg-subtle)]">
                       {sub}
                     </div>
                   </div>

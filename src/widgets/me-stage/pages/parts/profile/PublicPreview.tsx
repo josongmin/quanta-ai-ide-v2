@@ -16,7 +16,7 @@ export function PublicPreview({ data }: { data: ProfileData }) {
       }}
     >
       <div
-        className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-3 inline-flex items-center gap-1.5"
+        className="text-xs uppercase tracking-eyebrow font-semibold mb-3 inline-flex items-center gap-1.5"
         style={{ color: 'var(--fg-accent)' }}
       >
         <Eye className="w-3 h-3" />
@@ -39,31 +39,31 @@ export function PublicPreview({ data }: { data: ProfileData }) {
         </div>
         <div className="flex flex-col gap-1 min-w-0 flex-1">
           <div className="flex items-baseline gap-2">
-            <span className="text-[16px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               {data.name || 'Unnamed'}
             </span>
             {data.pronouns && (
-              <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 ({data.pronouns})
               </span>
             )}
           </div>
-          <span className="text-[12px] font-mono" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-base font-mono" style={{ color: 'var(--fg-muted)' }}>
             @{data.handle || 'me'}
             {data.jobTitle && <span className="font-sans"> · {data.jobTitle}</span>}
           </span>
           {data.location && (
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
               {data.location}
             </span>
           )}
           {data.bio && (
-            <p className="text-[12px] mt-1.5 leading-snug" style={{ color: 'var(--fg-default)' }}>
+            <p className="text-base mt-1.5 leading-snug" style={{ color: 'var(--fg-default)' }}>
               {data.bio}
             </p>
           )}
           {(data.social.github || data.social.twitter || data.social.linkedin || data.social.website) && (
-            <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px]" style={{ color: 'var(--fg-link)' }}>
+            <div className="flex flex-wrap items-center gap-3 mt-2 text-sm" style={{ color: 'var(--fg-link)' }}>
               {data.social.github   && <button type="button" className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'inherit', font: 'inherit' }}><GithubIcon   className="w-3 h-3" />{data.social.github}</button>}
               {data.social.twitter  && <button type="button" className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'inherit', font: 'inherit' }}><TwitterIcon  className="w-3 h-3" />{data.social.twitter}</button>}
               {data.social.linkedin && <button type="button" className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'inherit', font: 'inherit' }}><LinkedinIcon className="w-3 h-3" />{data.social.linkedin}</button>}
@@ -71,7 +71,7 @@ export function PublicPreview({ data }: { data: ProfileData }) {
             </div>
           )}
           {data.showEmail && data.publicProfile && (
-            <span className="text-[11px] font-mono mt-1" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-sm font-mono mt-1" style={{ color: 'var(--fg-muted)' }}>
               sora@acme.com
             </span>
           )}
@@ -79,7 +79,7 @@ export function PublicPreview({ data }: { data: ProfileData }) {
       </div>
       {!data.publicProfile && (
         <div
-          className="mt-3 px-3 py-2 rounded-md text-[11px]"
+          className="mt-3 px-3 py-2 rounded-md text-sm"
           style={{
             background: 'var(--intent-warn-bg)',
             border: '1px solid var(--intent-warn-fg)',

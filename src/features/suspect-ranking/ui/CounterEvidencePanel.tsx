@@ -20,16 +20,16 @@ export default function CounterEvidencePanel({ suspect }: Props) {
   return (
     <div className="rounded-2xl px-4 py-3 bg-[var(--bg-elevated)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)]">
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-default)]">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-default)]">
           Why not this suspect
         </span>
-        <span className="font-mono text-[10px] text-[var(--fg-muted)]">
+        <span className="font-mono text-xs text-[var(--fg-muted)]">
           {suspect.commitSha.slice(0, 7)}
         </span>
       </div>
 
       {items.length === 0 ? (
-        <p className="text-[11px] text-[var(--fg-muted)] italic">
+        <p className="text-sm text-[var(--fg-muted)] italic">
           No counter-evidence surfaced — review the supporting signals.
         </p>
       ) : (
@@ -37,7 +37,7 @@ export default function CounterEvidencePanel({ suspect }: Props) {
           {items.map((line) => (
             <li
               key={line}
-              className="text-[11px] leading-snug text-[var(--fg-muted)] flex gap-2"
+              className="text-sm leading-snug text-[var(--fg-muted)] flex gap-2"
             >
               <span aria-hidden className="text-[var(--fg-subtle)] select-none">
                 ·

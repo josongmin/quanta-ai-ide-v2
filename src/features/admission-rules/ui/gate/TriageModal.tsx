@@ -178,7 +178,7 @@ export function TriageModal({
           >
             <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--fg-strong)' }} />
             <h3
-              className="flex-1 text-[12px] font-semibold uppercase tracking-[0.14em]"
+              className="flex-1 text-base font-semibold uppercase tracking-eyebrow"
               style={{ color: 'var(--fg-strong)' }}
             >
               AI auto-triage · {String(candidates.length)} low-signal finding{candidates.length === 1 ? '' : 's'}
@@ -186,7 +186,7 @@ export function TriageModal({
             <IconButton icon={X} label="Close" onClick={onClose} size="sm" />
           </header>
 
-          <p className="px-4 pt-3 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="px-4 pt-3 text-sm" style={{ color: 'var(--fg-muted)' }}>
             The verifier examines findings the analyzers were uncertain about
             and re-judges them with code context. Dismissals are recorded as
             time-bound suppressions so the original finding isn&apos;t silently
@@ -213,17 +213,17 @@ export function TriageModal({
                   {cfg.icon}
                   <div className="flex-1 min-w-0">
                     <code
-                      className="text-[11px] font-mono truncate"
+                      className="text-sm font-mono truncate"
                       style={{ color: 'var(--fg-strong)' }}
                     >
                       {path}
                     </code>
-                    <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+                    <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
                       {verdictText(v)}
                     </div>
                   </div>
                   <span
-                    className="text-[10px] uppercase tracking-[0.14em] font-mono shrink-0"
+                    className="text-xs uppercase tracking-eyebrow font-mono shrink-0"
                     style={{ color: cfg.color }}
                   >
                     {v.kind}
@@ -232,7 +232,7 @@ export function TriageModal({
               );
             })}
             {candidates.length === 0 && (
-              <li className="px-4 py-8 text-center text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <li className="px-4 py-8 text-center text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 No low-signal findings to triage.
               </li>
             )}
@@ -242,7 +242,7 @@ export function TriageModal({
             className="flex items-center gap-2 px-4 py-3 shrink-0"
             style={{ borderTop: '1px solid var(--border-default)' }}
           >
-            <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
               {done
                 ? `Verifier completed: ${String(summary.dismissed)} dismissed · ${String(summary.promoted)} promoted · ${String(summary.kept)} kept.`
                 : 'Running verifier…'}
@@ -251,7 +251,7 @@ export function TriageModal({
             <button
               type="button"
               onClick={onClose}
-              className="h-7 px-3 rounded-md text-[11px]"
+              className="h-7 px-3 rounded-md text-sm"
               style={{
                 border: '1px solid var(--border-default)',
                 color: 'var(--fg-muted)',
@@ -269,7 +269,7 @@ export function TriageModal({
                 onApply(dismissed);
               }}
               disabled={!done || summary.dismissed === 0}
-              className="h-7 px-3 rounded-md text-[11px] font-medium"
+              className="h-7 px-3 rounded-md text-sm font-medium"
               style={{
                 background: 'var(--fg-strong)',
                 color: 'var(--bg-canvas)',

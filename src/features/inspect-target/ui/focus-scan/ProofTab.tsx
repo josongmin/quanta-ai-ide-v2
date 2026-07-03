@@ -24,7 +24,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
     <div className="space-y-4">
       {/* Trust strip */}
       <div
-        className="grid grid-cols-2 gap-2 px-3 py-2.5 rounded-xl border text-[10px]"
+        className="grid grid-cols-2 gap-2 px-3 py-2.5 rounded-xl border text-xs"
         style={{
           background: 'var(--bg-surface-muted)',
           borderColor: 'var(--border-default)',
@@ -32,7 +32,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
       >
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofTrust')}
@@ -44,7 +44,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
         </div>
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofFreshness')}
@@ -53,7 +53,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
         </div>
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofEnvelope')}
@@ -62,7 +62,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
         </div>
         <div>
           <div
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.proofReplay')}
@@ -87,12 +87,12 @@ export function ProofTab({ file }: { file: FileRecord }) {
       {/* Witness lines (legacy evidence trace) */}
       <div>
         <div
-          className="text-[9px] uppercase tracking-[var(--track-eyebrow)] mb-2"
+          className="text-2xs uppercase tracking-eyebrow mb-2"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('focus.evidenceTrace')}
         </div>
-        <div className="space-y-1 font-mono text-[10px]">
+        <div className="space-y-1 font-mono text-xs">
           {lines.map((l, i) => (
             <div key={l} className="flex gap-2" style={{ color: 'var(--fg-muted)' }}>
               <span
@@ -108,7 +108,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
       {fresh.verifiedEnvelope && (
         <button
           type="button"
-          className="w-full py-2 rounded-lg text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover:brightness-110"
+          className="w-full py-2 rounded-lg text-xs font-black uppercase tracking-eyebrow transition-colors hover:brightness-110"
           style={{
             background: 'rgb(from var(--intent-success-vivid) r g b / 0.15)',
             color: 'var(--intent-success-fg)',
@@ -120,7 +120,7 @@ export function ProofTab({ file }: { file: FileRecord }) {
       )}
 
       <div
-        className="mt-1 p-2.5 rounded-lg border text-[10px]"
+        className="mt-1 p-2.5 rounded-lg border text-xs"
         style={
           file.metrics.confidence === 'exact'
             ? {
@@ -152,7 +152,7 @@ function PlannerRow({
   const dotColor = cand.precisionClass === 'exact' ? C.ok : cand.precisionClass === 'overapprox' ? C.warning : C.critical;
   return (
     <div
-      className="px-2 py-1.5 rounded-md border text-[10px]"
+      className="px-2 py-1.5 rounded-md border text-xs"
       style={
         cand.selected
           ? { background: 'var(--bg-elevated)', borderColor: 'var(--border-strong)' }
@@ -163,7 +163,7 @@ function PlannerRow({
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: dotColor }} />
         <span className="font-mono font-bold flex-1 truncate">{cand.algorithm}</span>
         <span
-          className="shrink-0 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="shrink-0 px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-eyebrow"
           style={
             cand.selected
               ? { background: 'rgb(from var(--intent-success-fg) r g b / 0.20)', color: 'var(--intent-success-fg)' }
@@ -174,7 +174,7 @@ function PlannerRow({
         </span>
       </div>
       <div
-        className="mt-0.5 ml-3.5 font-mono text-[9px]"
+        className="mt-0.5 ml-3.5 font-mono text-2xs"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {cand.capability} · <span className="italic">{cand.reason}</span>

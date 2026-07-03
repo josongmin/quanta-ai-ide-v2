@@ -63,7 +63,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
           style={{ color: armed ? sevColor : 'var(--fg-subtle)' }}
         />
         <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: armed ? sevColor : 'var(--fg-subtle)' }}
         >
           {t('blast.title', { defaultValue: 'Blast radius' })}
@@ -71,7 +71,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
 
         {armed && (
           <span
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: sevColor }}
           >
             · {sevLabel}
@@ -82,7 +82,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
           type="button"
           onClick={() => { setArmed((v) => !v); }}
           aria-pressed={armed}
-          className="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
+          className="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-2xs font-black uppercase tracking-eyebrow transition-colors hover-surface"
           style={{
             background: armed
               ? sevColor
@@ -100,7 +100,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
       {/* Idle state — single explanatory line so the box doesn't look hollow */}
       {!armed && (
         <div
-          className="px-3 pb-2.5 text-[10px] leading-relaxed"
+          className="px-3 pb-2.5 text-xs leading-relaxed"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('blast.idleHint', {
@@ -145,7 +145,7 @@ export function BlastRadiusBox({ file }: { file: FileRecord }) {
 
           {/* Reviewer + plan footer */}
           <div
-            className="px-3 py-2 border-t flex items-center gap-2 text-[10px]"
+            className="px-3 py-2 border-t flex items-center gap-2 text-xs"
             style={{
               borderColor: 'var(--border-muted)',
               background: 'var(--bg-elevated)',
@@ -187,7 +187,7 @@ function ImpactCell({
   return (
     <div>
       <div
-        className="flex items-center gap-1 text-2xs font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="flex items-center gap-1 text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {icon}
@@ -195,13 +195,13 @@ function ImpactCell({
       </div>
       <div className="mt-0.5 flex items-baseline gap-1.5">
         <span
-          className="text-[12px] font-mono font-bold tabular-nums"
+          className="text-base font-mono font-bold tabular-nums"
           style={{ color: valueColor }}
         >
           {value}
         </span>
         <span
-          className="text-[9px] font-mono"
+          className="text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {sub}

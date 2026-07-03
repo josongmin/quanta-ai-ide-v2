@@ -41,10 +41,10 @@ export default function CallGraphChangesCard({ pr, repo, isDark }: Props) {
   return (
     <section className={`rounded-lg border ${cardBg} ${cardBorder}`}>
       <header className="flex items-center justify-between gap-2 px-3 pt-3 pb-2">
-        <h3 className={`text-[12px] font-bold ${title}`}>
+        <h3 className={`text-base font-bold ${title}`}>
           Call graph changes
         </h3>
-        <span className={`text-[11px] ${subtitle}`}>
+        <span className={`text-sm ${subtitle}`}>
           Impact paths tracked by the static engine
         </span>
       </header>
@@ -70,7 +70,7 @@ function CallGraphRow({ row }: { row: CallGraphChange; isDark: boolean }) {
   const hop    = 'text-[var(--fg-subtle)]';
 
   return (
-    <div className="flex items-center gap-2 py-1 text-[11px]">
+    <div className="flex items-center gap-2 py-1 text-sm">
       <KindPill kind={row.kind} />
       <span className={`font-mono truncate ${symbol}`} title={row.from}>
         {row.from}
@@ -90,7 +90,7 @@ function KindPill({ kind }: { kind: Kind }) {
   const color = KIND_COLOR[kind];
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold font-mono uppercase tracking-[var(--track-eyebrow)] shrink-0"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-bold font-mono uppercase tracking-eyebrow shrink-0"
       style={{ background: `color-mix(in srgb, ${color} 15%, transparent)`, color }}
     >
       {KIND_LABEL[kind]}
@@ -103,7 +103,7 @@ function KindPill({ kind }: { kind: Kind }) {
 function EmptyState(_props: { isDark: boolean }) {
   const muted = 'text-[var(--fg-subtle)]';
   return (
-    <div className={`text-[11px] italic ${muted}`}>
+    <div className={`text-sm italic ${muted}`}>
       No call-graph movement detected
     </div>
   );

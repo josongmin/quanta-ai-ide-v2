@@ -33,7 +33,7 @@ export default function MarketplacePage() {
         <div className="relative max-w-[1080px] mx-auto px-8 pt-16 pb-12 flex flex-col items-center text-center gap-5">
           <Eyebrow>Marketplace</Eyebrow>
           <HeadlineGradient accent="every tool">Plug se.field into</HeadlineGradient>
-          <p className="text-[14.5px] leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-lg leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
             Verified, security-reviewed integrations from Slack to Datadog. Install in one click; revoke just as fast.
           </p>
 
@@ -51,10 +51,10 @@ export default function MarketplacePage() {
               value={q}
               onChange={(e) => { setQ(e.target.value); }}
               placeholder="Search integrations — Slack, Datadog, OpenAI…"
-              className="flex-1 bg-transparent outline-none text-[13.5px]"
+              className="flex-1 bg-transparent outline-none text-md"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
               {INTEGRATIONS.length} apps
             </span>
           </div>
@@ -85,7 +85,7 @@ export default function MarketplacePage() {
                 key={c.id}
                 type="button"
                 onClick={() => { setCat(c.id); }}
-                className="h-8 px-3 rounded-full text-[11px] font-medium transition-colors"
+                className="h-8 px-3 rounded-full text-sm font-medium transition-colors"
                 style={{
                   background: active ? 'color-mix(in srgb, var(--fg-accent) 12%, transparent)' : 'transparent',
                   color: active ? 'var(--fg-accent)' : 'var(--fg-muted)',
@@ -105,7 +105,7 @@ export default function MarketplacePage() {
           ))}
         </div>
         {filtered.length === 0 && (
-          <div className="py-16 text-center text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="py-16 text-center text-base" style={{ color: 'var(--fg-subtle)' }}>
             No integrations match &quot;{q}&quot;.
           </div>
         )}
@@ -127,17 +127,17 @@ export default function MarketplacePage() {
             }}
           />
           <div className="relative flex flex-col gap-1">
-            <h3 className="text-[18px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <h3 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               Need something custom?
             </h3>
-            <p className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-base" style={{ color: 'var(--fg-muted)' }}>
               Build a private integration with our OAuth + webhooks. Or list it publicly — partners get a fast-track review.
             </p>
           </div>
           <div className="relative flex items-center gap-2 shrink-0">
             <Link
               to={'/developers' as never}
-              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-colors"
               style={{
                 background: 'var(--bg-surface-muted)',
                 border: '1px solid var(--border-default)',
@@ -149,7 +149,7 @@ export default function MarketplacePage() {
             </Link>
             <Link
               to={'/contact-sales' as never}
-              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-colors"
               style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
             >
               Partner with us

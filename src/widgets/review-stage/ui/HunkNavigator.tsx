@@ -148,16 +148,16 @@ export default function HunkNavigator({ file }: Props) {
         border: '1px solid var(--border-default)',
       }}
     >
-      <span className="shrink-0 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+      <span className="shrink-0 text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
         Hunk
       </span>
-      <span className="shrink-0 text-[12px] font-mono tabular-nums text-[var(--fg-default)]">
+      <span className="shrink-0 text-base font-mono tabular-nums text-[var(--fg-default)]">
         {safeIdx + 1} / {hunks.length}
       </span>
-      <span className="shrink-0 text-[10px] font-mono text-[var(--fg-muted)] tabular-nums">
+      <span className="shrink-0 text-xs font-mono text-[var(--fg-muted)] tabular-nums">
         L{cur.newStart}–{cur.newEnd}
       </span>
-      <span className="shrink-0 text-[10px] font-mono">
+      <span className="shrink-0 text-xs font-mono">
         <span style={{ color: 'color-mix(in srgb, var(--intent-success-vivid) 80%, transparent)' }}>+{cur.added}</span>
         <span className="text-[var(--fg-subtle)] mx-1">·</span>
         <span style={{ color: 'color-mix(in srgb, var(--intent-danger-vivid) 80%, transparent)' }}>−{cur.removed}</span>
@@ -186,7 +186,7 @@ export default function HunkNavigator({ file }: Props) {
           />
         ))}
       </span>
-      <span className="shrink-0 hidden md:inline-flex items-center gap-2 text-[9px] font-mono text-[var(--fg-subtle)]">
+      <span className="shrink-0 hidden md:inline-flex items-center gap-2 text-2xs font-mono text-[var(--fg-subtle)]">
         <span className="inline-flex items-center gap-1">
           <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">{'{'}</kbd>
           <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">{'}'}</kbd>

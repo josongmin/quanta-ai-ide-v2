@@ -35,18 +35,18 @@ export function Sidebar({
         style={{ borderColor: t.borderSoft }}
       >
         <div
-          className="text-[10px] font-black uppercase tracking-[0.18em]"
+          className="text-xs font-black uppercase tracking-eyebrow"
           style={{ color: t.textMuted }}
         >
           {tr('sidebar.brand')}
         </div>
         <div
-          className="text-[12px] font-semibold mt-0.5"
+          className="text-base font-semibold mt-0.5"
           style={{ color: t.textHi }}
         >
           {tr('sidebar.title')}
         </div>
-        <div className="text-[10px] mt-2" style={{ color: t.textFaint }}>
+        <div className="text-xs mt-2" style={{ color: t.textFaint }}>
           {tr('sidebar.active', { count: cases.length })}
         </div>
       </div>
@@ -75,24 +75,24 @@ export function Sidebar({
               <div className="flex items-center gap-2">
                 <Icon className="w-3 h-3 shrink-0" style={{ color: severityColor(seed.severity, t) }} />
                 <span
-                  className="text-[10px] font-bold uppercase tracking-[0.14em]"
+                  className="text-xs font-bold uppercase tracking-eyebrow"
                   style={{ color: t.textMuted }}
                 >
                   {tr(`header.kind.${seed.kind}`)}
                 </span>
-                <span className="ml-auto text-[9px] font-mono" style={{ color: t.textFaint }}>
+                <span className="ml-auto text-2xs font-mono" style={{ color: t.textFaint }}>
                   {seed.age}
                 </span>
               </div>
               <div
-                className="text-[12px] mt-1 leading-snug"
+                className="text-base mt-1 leading-snug"
                 style={{ color: active ? t.textHi : t.textBody }}
               >
                 {seed.title}
               </div>
               <div className="flex items-center gap-2 mt-1.5">
                 <span
-                  className="text-[9px] font-mono px-1.5 py-0.5 rounded"
+                  className="text-2xs font-mono px-1.5 py-0.5 rounded"
                   style={{
                     background: aborted ? t.badSoft : stage === 'done' ? t.okSoft : t.badgeBg,
                     color: aborted ? t.bad : stage === 'done' ? t.ok : t.textMuted,
@@ -100,7 +100,7 @@ export function Sidebar({
                 >
                   {aborted ? tr('sidebar.aborted') : tr(`loop.stage.${stage}`)}
                 </span>
-                <span className="text-[9px]" style={{ color: t.textFaint }}>
+                <span className="text-2xs" style={{ color: t.textFaint }}>
                   {candCount === 0
                     ? tr('sidebar.noCandidates')
                     : tr('sidebar.candidate', { count: candCount })}
@@ -112,7 +112,7 @@ export function Sidebar({
       </div>
 
       <div
-        className="px-4 py-2.5 border-t text-[9px] font-mono"
+        className="px-4 py-2.5 border-t text-2xs font-mono"
         style={{ borderColor: t.borderSoft, color: t.textFaint }}
       >
         {tr('sidebar.footer')}

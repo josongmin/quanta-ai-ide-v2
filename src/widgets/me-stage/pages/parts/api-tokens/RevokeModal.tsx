@@ -34,10 +34,10 @@ export function RevokeModal({
             <Trash2 className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               Revoke &quot;{token.name}&quot;?
             </h3>
-            <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
               Any script, CLI, or integration using this token will start failing immediately.
               We&apos;ll log the revocation in your audit trail.
             </p>

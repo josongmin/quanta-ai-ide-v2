@@ -38,12 +38,12 @@ function ToolBlockViewImpl({ block }: { block: ToolBlock }) {
         className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left"
       >
         <Icon style={toneStyle} className="w-3 h-3 shrink-0" />
-        <span style={toneStyle} className="uppercase tracking-[var(--track-eyebrow)] text-[9px] font-bold shrink-0">
+        <span style={toneStyle} className="uppercase tracking-eyebrow text-2xs font-bold shrink-0">
           {meta.label}
         </span>
-        <span className={`flex-1 truncate font-mono text-[12px] ${textPrimary}`}>{block.label}</span>
+        <span className={`flex-1 truncate font-mono text-base ${textPrimary}`}>{block.label}</span>
         {block.detail && (
-          <span className={`shrink-0 font-mono text-[11px] ${textFaint}`}>{block.detail}</span>
+          <span className={`shrink-0 font-mono text-sm ${textFaint}`}>{block.detail}</span>
         )}
         {block.status && (
           <StatusIcon style={statusStyle} className={`w-3 h-3 shrink-0 ${statusClass}`} />
@@ -54,7 +54,7 @@ function ToolBlockViewImpl({ block }: { block: ToolBlock }) {
       </button>
       {open && block.output && (
         <div className="border-t border-[color:var(--border-muted)] bg-[color:var(--bg-elevated)]">
-          <pre className="px-3 py-2 text-[11px] leading-[1.55] font-mono overflow-x-auto whitespace-pre text-[color:var(--fg-default)] scrollbar-thin">
+          <pre className="px-3 py-2 text-sm leading-[1.55] font-mono overflow-x-auto whitespace-pre text-[color:var(--fg-default)] scrollbar-thin">
             {block.output}
           </pre>
         </div>
@@ -93,7 +93,7 @@ function TestFailuresCard({
     >
       <div
         style={{ color: 'var(--intent-danger-fg)' }}
-        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+        className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-eyebrow"
       >
         <XCircle className="w-2.5 h-2.5" />
         {t('testMap.linkedFailures')} · {run.failed} / {run.failed + run.passed}
@@ -104,10 +104,10 @@ function TestFailuresCard({
           className={`coding-test-link rounded-md border ${border} bg-[var(--bg-elevated)] px-2 py-1.5`}
         >
           <div className={`flex items-center gap-1.5 mb-0.5`}>
-            <span className={`text-[11px] font-semibold truncate ${heading}`}>{f.name}</span>
-            <span className={`shrink-0 text-[9px] font-mono ${faint}`}>{f.file.split('/').pop()}</span>
+            <span className={`text-sm font-semibold truncate ${heading}`}>{f.name}</span>
+            <span className={`shrink-0 text-2xs font-mono ${faint}`}>{f.file.split('/').pop()}</span>
           </div>
-          <div className={`text-[10px] font-mono leading-relaxed ${muted}`}>{f.message}</div>
+          <div className={`text-xs font-mono leading-relaxed ${muted}`}>{f.message}</div>
           {f.stackHits.length > 0 && (
             <div className="mt-1 flex flex-wrap gap-1">
               {f.stackHits.slice(0, 3).map((h, j) => (

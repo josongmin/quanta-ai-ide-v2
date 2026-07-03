@@ -57,7 +57,7 @@ export function ChangeSeedPanel({ seeds, selectedId, onSelect }: Props) {
       }}
     >
       <div
-        className="px-3 py-2.5 text-[9px] font-black uppercase tracking-[0.18em]"
+        className="px-3 py-2.5 text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         Change seeds
@@ -70,7 +70,7 @@ export function ChangeSeedPanel({ seeds, selectedId, onSelect }: Props) {
           return (
             <div key={kind} className="space-y-1">
               <div
-                className="flex items-center gap-1 px-1 text-[8.5px] font-black uppercase tracking-[0.16em]"
+                className="flex items-center gap-1 px-1 text-2xs font-black uppercase tracking-[0.16em]"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 <KindIcon kind={kind} />
@@ -85,7 +85,7 @@ export function ChangeSeedPanel({ seeds, selectedId, onSelect }: Props) {
                         type="button"
                         onClick={() => { onSelect(seed.id); }}
                         aria-pressed={isActive}
-                        className="w-full text-left px-2 py-1.5 rounded-md text-[10px] transition-colors hover-surface"
+                        className="w-full text-left px-2 py-1.5 rounded-md text-xs transition-colors hover-surface"
                         style={{
                           background: isActive
                             ? 'var(--bg-elevated)'
@@ -99,7 +99,7 @@ export function ChangeSeedPanel({ seeds, selectedId, onSelect }: Props) {
                         <div className="flex items-center justify-between gap-2">
                           <span className="truncate">{seed.label}</span>
                           <span
-                            className="text-[8.5px] font-mono opacity-70 shrink-0"
+                            className="text-2xs font-mono opacity-70 shrink-0"
                             style={{ color: 'var(--fg-subtle)' }}
                           >
                             {seed.targetId}

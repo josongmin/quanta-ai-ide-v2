@@ -15,7 +15,7 @@ export default function TrustCenterPage() {
         <div className="relative max-w-[1080px] mx-auto px-8 pt-16 pb-14 flex flex-col items-center text-center gap-5">
           <Eyebrow tone="success"><ShieldCheck className="w-3 h-3" /> Trust center</Eyebrow>
           <HeadlineGradient accent="auditable">Security built in,</HeadlineGradient>
-          <p className="text-[14.5px] leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-lg leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
             How we protect your code, your data, and the agents that act on your behalf. Read the report; meet our security team.
           </p>
 

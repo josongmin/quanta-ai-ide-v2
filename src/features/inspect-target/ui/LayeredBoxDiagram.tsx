@@ -231,7 +231,7 @@ export default function LayeredBoxDiagram({ repo, size = 280 }: Props) {
         })}
       </svg>
 
-      <div className="mt-1 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+      <div className="mt-1 text-2xs uppercase tracking-eyebrow text-[var(--fg-subtle)]">
         {t('deps.layeredSummary', {
           edges: formatNumber(data.total),
           violations: data.totalViolations,

@@ -27,13 +27,13 @@ export function DismissFeedback() {
         <div className="flex items-center gap-1.5">
           <MessageSquareWarning className="w-3 h-3" style={{ color: t.textMuted }} />
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('dismissFeedback.title')}
           </span>
         </div>
-        <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {tr('dismissFeedback.subtitle')}
         </span>
       </div>
@@ -42,7 +42,7 @@ export function DismissFeedback() {
       <div className="mb-3">
         <div className="flex items-center gap-1.5 mb-1.5">
           <BarChart3 className="w-2.5 h-2.5" style={{ color: t.textFaint }} />
-          <span className="text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: t.textFaint }}>
+          <span className="text-2xs font-bold uppercase tracking-[0.16em]" style={{ color: t.textFaint }}>
             {tr('dismissFeedback.distribution')}
           </span>
         </div>
@@ -52,7 +52,7 @@ export function DismissFeedback() {
             return (
               <div key={tag} className="flex items-center gap-2">
                 <span
-                  className="text-[10px] font-mono shrink-0"
+                  className="text-xs font-mono shrink-0"
                   style={{ color: t.textBody, minWidth: 150 }}
                 >
                   {tr(`dismissModal.reason.${tag}`)}
@@ -67,7 +67,7 @@ export function DismissFeedback() {
                   />
                 </div>
                 <span
-                  className="text-[10px] font-mono shrink-0 text-right"
+                  className="text-xs font-mono shrink-0 text-right"
                   style={{ color: t.textMuted, minWidth: 30 }}
                 >
                   {n}
@@ -83,7 +83,7 @@ export function DismissFeedback() {
         className="pt-3 border-t"
         style={{ borderColor: t.borderHair }}
       >
-        <div className="text-[9px] font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.textFaint }}>
+        <div className="text-2xs font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.textFaint }}>
           {tr('dismissFeedback.recent')}
         </div>
         <ul className="space-y-1.5">
@@ -97,12 +97,12 @@ export function DismissFeedback() {
                   {tr(`dismissModal.reason.${r.reasonTag}`)}
                 </span>
                 <span style={{ color: t.textHi }}>{r.candidateTitle}</span>
-                <span className="ml-auto text-[9px] font-mono" style={{ color: t.textFaint }}>
+                <span className="ml-auto text-2xs font-mono" style={{ color: t.textFaint }}>
                   {ago(r.at, tr)}
                 </span>
               </div>
               {r.note && (
-                <div className="ml-1 mt-0.5 text-[10px]" style={{ color: t.textMuted }}>
+                <div className="ml-1 mt-0.5 text-xs" style={{ color: t.textMuted }}>
                   → {r.note}
                 </div>
               )}

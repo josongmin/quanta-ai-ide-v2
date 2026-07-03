@@ -204,7 +204,7 @@ export default function SavedViews({
             role="tab"
             aria-selected={active}
             onClick={() => { onApply(active ? null : v); }}
-            className="shrink-0 inline-flex items-center gap-1.5 h-6 px-2 rounded-full text-[10px] font-mono tabular-nums transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 h-6 px-2 rounded-full text-xs font-mono tabular-nums transition-colors"
             style={{
               background: active ? `color-mix(in srgb, ${v.tone} 12%, transparent)` : 'var(--bg-surface-muted)',
               border: active
@@ -236,7 +236,7 @@ export default function SavedViews({
               role="tab"
               aria-selected={active}
               onClick={() => { onApplyCustom?.(active ? null : cv); }}
-              className="inline-flex items-center gap-1.5 h-6 pl-2 pr-1 rounded-l-full text-[10px] font-mono transition-colors"
+              className="inline-flex items-center gap-1.5 h-6 pl-2 pr-1 rounded-l-full text-xs font-mono transition-colors"
               style={{
                 background: active ? `color-mix(in srgb, ${tone} 12%, transparent)` : 'var(--bg-surface-muted)',
                 border: active ? `1px solid color-mix(in srgb, ${tone} 33%, transparent)` : '1px solid var(--border-default)',
@@ -274,7 +274,7 @@ export default function SavedViews({
             type="button"
             onClick={() => { setShowSavePrompt(true); setDraftLabel(currentQuery ?? ''); }}
             title="현재 검색을 뷰로 저장"
-            className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors"
+            className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs font-mono text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors"
             style={{ border: '1px dashed var(--border-strong)' }}
           >
             <BookmarkIcon className="w-2.5 h-2.5" strokeWidth={2.2} />
@@ -303,13 +303,13 @@ export default function SavedViews({
               else if (e.key === 'Escape') { setShowSavePrompt(false); setDraftLabel(''); }
             }}
             placeholder="이름…"
-            className="bg-transparent outline-none text-[10px] font-mono text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)] w-20"
+            className="bg-transparent outline-none text-xs font-mono text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)] w-20"
           />
           <button
             type="button"
             onClick={submitSave}
             disabled={draftLabel.trim().length === 0}
-            className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-accent)] disabled:opacity-40"
+            className="text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-accent)] disabled:opacity-40"
           >
             저장
           </button>

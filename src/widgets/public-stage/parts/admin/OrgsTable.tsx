@@ -13,7 +13,7 @@ export function OrgsTable() {
       style={{ border: '1px solid var(--border-muted)' }}
     >
       <div
-        className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '1.6fr 90px 80px 110px 110px 32px',
           gap: 12,
@@ -41,7 +41,7 @@ function OrgRow({ org }: { org: Org }) {
   return (
     <div
       ref={ref}
-      className="grid items-center px-3 h-12 text-[12px] transition-colors"
+      className="grid items-center px-3 h-12 text-base transition-colors"
       style={{
         gridTemplateColumns: '1.6fr 90px 80px 110px 110px 32px',
         gap: 12,
@@ -50,7 +50,7 @@ function OrgRow({ org }: { org: Org }) {
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <div
-          className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold shrink-0"
+          className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shrink-0"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -63,7 +63,7 @@ function OrgRow({ org }: { org: Org }) {
           <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>
             {org.name}
           </span>
-          <span className="text-[11px] font-mono truncate" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-sm font-mono truncate" style={{ color: 'var(--fg-muted)' }}>
             {org.slug}
           </span>
         </div>
@@ -79,7 +79,7 @@ function OrgRow({ org }: { org: Org }) {
         ${formatNumber(org.spend)}
       </span>
 
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="tabular-nums text-sm" style={{ color: 'var(--fg-muted)' }}>
         {org.signedUp}
       </span>
 
@@ -123,7 +123,7 @@ function PlanBadge({ plan }: { plan: Plan }) {
   const tone = PLAN_TONES[plan];
   return (
     <span
-      className="inline-flex items-center text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+      className="inline-flex items-center text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
       style={{
         background: tone.bg,
         color: tone.fg,

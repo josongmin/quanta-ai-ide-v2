@@ -78,11 +78,11 @@ export default function ReviewerExpectations({
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <Users className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Per-reviewer expectations
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {scopes.length} {scopes.length === 1 ? 'reviewer' : 'reviewers'} · division of labour
         </span>
       </div>
@@ -108,13 +108,13 @@ function ReviewerScopeRow({ scope }: { scope: ReviewerScope }) {
     >
       <div className="flex items-center gap-2">
         <Avatar login={scope.login} size={22} />
-        <span className="text-[12px] font-bold text-[var(--fg-default)]">
+        <span className="text-base font-bold text-[var(--fg-default)]">
           @{scope.login}
         </span>
         <Badge variant={STATE_VARIANT[scope.state]} fill="soft">
           {STATE_LABEL[scope.state]}
         </Badge>
-        <span className="ml-auto inline-flex items-center gap-3 text-[10px] font-mono text-[var(--fg-muted)]">
+        <span className="ml-auto inline-flex items-center gap-3 text-xs font-mono text-[var(--fg-muted)]">
           <span className="inline-flex items-center gap-1" title="Files this reviewer owns in this PR">
             <FileCode className="w-2.5 h-2.5" />
             {scope.ownedPaths.length}
@@ -132,7 +132,7 @@ function ReviewerScopeRow({ scope }: { scope: ReviewerScope }) {
       {scope.reasons.length > 0 && (
         <ul className="mt-2 space-y-0.5">
           {scope.reasons.slice(0, 3).map((r, i) => (
-            <li key={i} className="flex items-start gap-1.5 text-[11px] leading-snug text-[var(--fg-muted)]">
+            <li key={i} className="flex items-start gap-1.5 text-sm leading-snug text-[var(--fg-muted)]">
               <span className="shrink-0 mt-0.5" style={{ color: tone }}>▸</span>
               <span>{r}</span>
             </li>
@@ -140,7 +140,7 @@ function ReviewerScopeRow({ scope }: { scope: ReviewerScope }) {
         </ul>
       )}
       {scope.findings.length === 0 && scope.ownedPaths.length === 0 && (
-        <div className="mt-2 text-[11px] italic text-[var(--fg-subtle)]">
+        <div className="mt-2 text-sm italic text-[var(--fg-subtle)]">
           No specific scope — generalist review of high-severity findings.
         </div>
       )}

@@ -87,7 +87,7 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
     <div className="flex flex-col items-stretch w-full" style={{ width: size }}>
       {/* Column header */}
       <div
-        className="flex items-center text-[8px] font-black uppercase tracking-[var(--track-eyebrow)] pb-1 border-b"
+        className="flex items-center text-2xs font-black uppercase tracking-eyebrow pb-1 border-b"
         style={{
           color: 'var(--fg-subtle)',
           borderColor: 'var(--border-muted)',
@@ -133,7 +133,7 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
                 {truncate(p.from)}
               </span>
               <span
-                className="relative w-[6%] text-center text-[10px]"
+                className="relative w-[6%] text-center text-xs"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 →
@@ -146,7 +146,7 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
                 {truncate(p.to)}
               </span>
               <span
-                className="relative w-[10%] text-right text-[10px] font-mono font-bold tabular-nums pr-1"
+                className="relative w-[10%] text-right text-xs font-mono font-bold tabular-nums pr-1"
                 style={{ color: 'var(--fg-default)' }}
               >
                 {p.n}
@@ -159,7 +159,7 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
       {/* Tail summary if we truncated */}
       {data.remaining > 0 && (
         <div
-          className="text-[9px] mt-1.5 pt-1.5 border-t border-dashed"
+          className="text-2xs mt-1.5 pt-1.5 border-t border-dashed"
           style={{ color: 'var(--fg-subtle)', borderColor: 'var(--border-muted)' }}
         >
           {t('deps.coupling.remaining', {
@@ -170,7 +170,7 @@ export default function ChordDiagram({ repo, size = 280 }: Props) {
       )}
 
       <div
-        className="text-[9px] uppercase tracking-[var(--track-eyebrow)] mt-2 text-center"
+        className="text-2xs uppercase tracking-eyebrow mt-2 text-center"
         style={{ color: 'var(--fg-subtle)', minHeight: Math.max(0, size - totalH) }}
       >
         {t('deps.couplingSummary', {

@@ -26,16 +26,16 @@ export function PoliciesGrid() {
               <p.icon className="w-4 h-4" />
             </div>
             <span
-              className="text-[9px] uppercase tracking-[0.14em] font-semibold"
+              className="text-2xs uppercase tracking-eyebrow font-semibold"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {p.tag}
             </span>
           </div>
-          <h3 className="text-[13.5px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <h3 className="text-md font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             {p.title}
           </h3>
-          <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{p.blurb}</p>
+          <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>{p.blurb}</p>
         </HoverCard>
       ))}
     </div>

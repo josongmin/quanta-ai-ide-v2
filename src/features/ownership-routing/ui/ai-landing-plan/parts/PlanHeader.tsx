@@ -18,7 +18,7 @@ export function PlanHeader({
       <div className="min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <h2
-            className="text-[11px] font-black uppercase tracking-[0.22em]"
+            className="text-sm font-black uppercase tracking-[0.22em]"
             style={{ color: 'var(--fg-strong)' }}
           >
             AI Landing Plan
@@ -26,7 +26,7 @@ export function PlanHeader({
           <GeneratedPill />
         </div>
         <div
-          className="text-[12px] truncate"
+          className="text-base truncate"
           style={{ color: 'var(--fg-muted)' }}
           title={zone.label}
         >
@@ -38,7 +38,7 @@ export function PlanHeader({
           <button
             type="button"
             onClick={onSkip}
-            className="inline-flex items-center px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[0.22em] transition-colors"
+            className="inline-flex items-center px-2 py-1 rounded-md text-2xs font-black uppercase tracking-[0.22em] transition-colors"
             style={{
               background: 'transparent',
               color: 'var(--fg-muted)',

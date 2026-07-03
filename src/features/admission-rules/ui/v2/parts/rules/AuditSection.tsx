@@ -37,12 +37,12 @@ export function AuditSection() {
       <V2Card className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <SectionTitle icon={Gavel}>{tA('section.overrideAudit')}</SectionTitle>
-          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+          <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
             who bypassed what · when · why
           </span>
         </div>
         {overrides.length === 0 ? (
-          <div className="text-[11px] font-mono" style={{ color: t.textSubtle }}>{tA('empty.noOverrides')}</div>
+          <div className="text-sm font-mono" style={{ color: t.textSubtle }}>{tA('empty.noOverrides')}</div>
         ) : (
           <div className="space-y-2">
             {overrides.map((o) => (
@@ -62,13 +62,13 @@ export function AuditSection() {
                         : o.severity === 'warn' ? SEVERITY_COLOR.warn : t.textSubtle,
                     }}
                   />
-                  <span className="text-[11px] font-bold" style={{ color: t.textBody }}>{o.ruleName}</span>
-                  <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>PR #{o.prSeed}</span>
-                  <span className="ml-auto text-[10px] font-mono" style={{ color: t.textSubtle }}>
+                  <span className="text-sm font-bold" style={{ color: t.textBody }}>{o.ruleName}</span>
+                  <span className="text-xs font-mono" style={{ color: t.textSubtle }}>PR #{o.prSeed}</span>
+                  <span className="ml-auto text-xs font-mono" style={{ color: t.textSubtle }}>
                     @{o.actor} · {timeAgo(o.at)}
                   </span>
                 </div>
-                <div className="mt-1 text-[11px] font-mono" style={{ color: t.textMuted }}>
+                <div className="mt-1 text-sm font-mono" style={{ color: t.textMuted }}>
                   {o.reason}
                 </div>
               </div>
@@ -80,12 +80,12 @@ export function AuditSection() {
       <V2Card className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <SectionTitle icon={Clock}>{tA('section.versionLog')}</SectionTitle>
-          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+          <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
             edits to ruleset · most recent
           </span>
         </div>
         {versionLog.length === 0 ? (
-          <div className="text-[11px] font-mono" style={{ color: t.textSubtle }}>
+          <div className="text-sm font-mono" style={{ color: t.textSubtle }}>
             No edits yet — saving any rule will record a version here.
           </div>
         ) : (
@@ -101,19 +101,19 @@ export function AuditSection() {
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-[10px] font-mono px-1.5 py-px rounded-md"
+                    className="text-xs font-mono px-1.5 py-px rounded-md"
                     style={{ color: t.accent, background: `${t.accent}15`, border: `1px solid ${t.accent}33` }}
                   >
                     v{v.v}
                   </span>
-                  <span className="text-[11px] font-bold truncate" style={{ color: t.textBody }}>
+                  <span className="text-sm font-bold truncate" style={{ color: t.textBody }}>
                     {v.ruleName}
                   </span>
-                  <span className="ml-auto text-[10px] font-mono" style={{ color: t.textSubtle }}>
+                  <span className="ml-auto text-xs font-mono" style={{ color: t.textSubtle }}>
                     {timeAgo(v.at)}
                   </span>
                 </div>
-                <div className="mt-1 text-[11px] font-mono" style={{ color: t.textMuted }}>
+                <div className="mt-1 text-sm font-mono" style={{ color: t.textMuted }}>
                   {v.summary}
                 </div>
               </div>

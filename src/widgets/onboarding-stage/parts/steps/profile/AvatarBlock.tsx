@@ -50,7 +50,7 @@ export function AvatarBlock({ value, onChange }: Props) {
             const file = e.dataTransfer.files[0];
             if (file) accept(file);
           }}
-          className="relative w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-[22px] font-bold tracking-tight cursor-pointer transition-[outline-color]"
+          className="relative w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-3xl font-bold tracking-tight cursor-pointer transition-[outline-color]"
           style={{
             background: value.avatarUrl
               ? 'transparent'
@@ -90,7 +90,7 @@ export function AvatarBlock({ value, onChange }: Props) {
             <button
               type="button"
               onClick={() => { inputRef.current?.click(); }}
-              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
               style={{
                 background: 'var(--bg-surface-muted)',
                 color: 'var(--fg-default)',
@@ -106,7 +106,7 @@ export function AvatarBlock({ value, onChange }: Props) {
               <button
                 type="button"
                 onClick={remove}
-                className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-[11px] font-medium transition-colors onb-stagger"
+                className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-sm font-medium transition-colors onb-stagger"
                 style={{ color: 'var(--fg-muted)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -116,7 +116,7 @@ export function AvatarBlock({ value, onChange }: Props) {
               </button>
             )}
           </div>
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             JPG · PNG · GIF · WebP. Max 2 MB. Drop a file on the circle.
           </span>
         </div>
@@ -136,7 +136,7 @@ export function AvatarBlock({ value, onChange }: Props) {
 
       {error && (
         <div
-          className="flex items-start gap-2 text-[11px] onb-stagger"
+          className="flex items-start gap-2 text-sm onb-stagger"
           style={{ color: 'var(--intent-danger-fg)' }}
           role="alert"
         >

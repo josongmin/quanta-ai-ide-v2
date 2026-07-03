@@ -22,10 +22,10 @@ export function AvailableRow({ item }: { item: typeof AVAILABLE_INTEGRATIONS[num
         <Icon className="w-3.5 h-3.5" />
       </span>
       <div className="flex flex-col flex-1 min-w-0">
-        <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {item.name}
         </span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           {item.blurb}
         </span>
       </div>

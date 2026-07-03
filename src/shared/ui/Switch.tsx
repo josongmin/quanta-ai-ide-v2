@@ -71,7 +71,7 @@ export function Switch({ checked, onChange, disabled, label, primary }: Props) {
 
   return (
     <label
-      className={`flex items-center justify-between gap-3 text-[11px] cursor-pointer select-none ${
+      className={`flex items-center justify-between gap-3 text-sm cursor-pointer select-none ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
     >

@@ -31,7 +31,7 @@ export function SectionHeader({ title, sub, badge, actions, children }: Props) {
   const titleBlock = (
     <div>
       <h3
-        className="text-xs font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="text-xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-muted)' }}
       >
         {title}

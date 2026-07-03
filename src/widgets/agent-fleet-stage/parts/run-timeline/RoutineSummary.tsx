@@ -15,17 +15,17 @@ export function RoutineSummary({
   const m = routine.metrics;
   return (
     <div className={`rounded-lg border ${card} px-4 py-3`}>
-      <div className={`text-[12px] leading-relaxed ${heading} mb-2`}>{routine.description}</div>
+      <div className={`text-base leading-relaxed ${heading} mb-2`}>{routine.description}</div>
       <div className="grid grid-cols-4 gap-3">
         <Stat label={t('metrics.successRate')} value={`${Math.round(m.successRate * 100)}%`} isDark={isDark} />
         <Stat label={t('metrics.merged')} value={String(m.prsMerged30d)} isDark={isDark} />
         <Stat label={t('metrics.netLoc')} value={(m.netLocDelta > 0 ? '+' : '') + String(m.netLocDelta)} isDark={isDark} />
         <Stat label={t('metrics.spent')} value={`$${m.spentUsd.toFixed(2)}`} isDark={isDark} />
       </div>
-      <div className={`mt-2 text-[9px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+      <div className={`mt-2 text-2xs font-bold uppercase tracking-eyebrow ${faint}`}>
         {t('metrics.thirtyDay')}
       </div>
-      <div className={`mt-2 flex flex-wrap gap-1.5 text-[10px] font-mono ${muted}`}>
+      <div className={`mt-2 flex flex-wrap gap-1.5 text-xs font-mono ${muted}`}>
         <Pill text={t('rail.memoryItems', { n: routine.memoryItemCount })} isDark={isDark} />
         <Pill text={t('rail.metricSaved', { h: m.reviewHoursSaved.toFixed(1) })} isDark={isDark} />
         <Pill text={`reviewer Δ ${m.reviewerTouches.toFixed(1)}`} isDark={isDark} />
@@ -39,8 +39,8 @@ function Stat({ label, value, isDark }: { label: string; value: string; isDark: 
   const heading = isDark ? 'text-white/85' : 'text-black/85';
   return (
     <div>
-      <div className={`text-[9px] font-bold uppercase tracking-[0.18em] ${muted}`}>{label}</div>
-      <div className={`text-[14px] font-mono tabular-nums ${heading}`}>{value}</div>
+      <div className={`text-2xs font-bold uppercase tracking-eyebrow ${muted}`}>{label}</div>
+      <div className={`text-lg font-mono tabular-nums ${heading}`}>{value}</div>
     </div>
   );
 }

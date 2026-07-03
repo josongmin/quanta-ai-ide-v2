@@ -11,7 +11,7 @@ export function SearchBar({ q, onChange }: { q: string; onChange: (v: string) =>
         value={q}
         onChange={(e) => { onChange(e.target.value); }}
         placeholder="Search inbox…"
-        className="flex-1 bg-transparent outline-none text-[12px]"
+        className="flex-1 bg-transparent outline-none text-base"
         style={{ color: 'var(--fg-strong)' }}
       />
     </div>

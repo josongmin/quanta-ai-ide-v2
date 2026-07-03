@@ -23,7 +23,7 @@ export function SlashMenu({
         WebkitBackdropFilter: 'blur(22px) saturate(160%)',
       } : undefined}
     >
-      <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-subtle)] bg-[color:var(--bg-surface-muted)]">
+      <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-eyebrow text-[color:var(--fg-subtle)] bg-[color:var(--bg-surface-muted)]">
         <Slash className="inline w-2.5 h-2.5 mr-1" />
         slash commands
       </div>
@@ -46,13 +46,13 @@ export function SlashMenu({
             >
               <span
                 style={{ color: 'var(--intent-success-fg)' }}
-                className="font-mono text-[12px] font-semibold"
+                className="font-mono text-base font-semibold"
               >
                 {c.cmd}
               </span>
-              <span className={`text-[11px] ${textMuted}`}>{c.desc}</span>
+              <span className={`text-sm ${textMuted}`}>{c.desc}</span>
               {active && (
-                <span className="ml-auto text-[9px] font-mono text-[color:var(--fg-subtle)]">
+                <span className="ml-auto text-2xs font-mono text-[color:var(--fg-subtle)]">
                   ↵
                 </span>
               )}

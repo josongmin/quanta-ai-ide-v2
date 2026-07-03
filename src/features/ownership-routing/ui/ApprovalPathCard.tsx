@@ -11,7 +11,7 @@ export type ApprovalPathCardProps = {
 function StepNumber({ n }: { n: number }) {
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full shrink-0 text-[11px] font-black tabular-nums"
+      className="inline-flex items-center justify-center rounded-full shrink-0 text-sm font-black tabular-nums"
       style={{
         width: 24,
         height: 24,
@@ -29,7 +29,7 @@ function StepNumber({ n }: { n: number }) {
 function RequirementLabel({ required }: { required: boolean }) {
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-[0.22em]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
       style={{
         background: 'var(--bg-surface-muted)',
         color: required ? 'var(--fg-default)' : 'var(--fg-subtle)',
@@ -70,13 +70,13 @@ function StepRow({
           <PersonAvatar person={person} size={22} />
           <div className="flex flex-col min-w-0">
             <span
-              className="text-[12px] font-bold leading-tight truncate"
+              className="text-base font-bold leading-tight truncate"
               style={{ color: 'var(--fg-default)' }}
             >
               {person?.name ?? 'Unknown'}
             </span>
             <span
-              className="text-[9px] font-mono uppercase tracking-[0.14em] truncate"
+              className="text-2xs font-mono uppercase tracking-eyebrow truncate"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {person?.team ?? '—'}
@@ -88,13 +88,13 @@ function StepRow({
         </div>
 
         <div
-          className="text-[9px] font-black uppercase tracking-[0.22em] mb-0.5"
+          className="text-2xs font-black uppercase tracking-[0.22em] mb-0.5"
           style={{ color: 'var(--fg-muted)' }}
         >
           {step.role}
         </div>
         <div
-          className="text-[11px] leading-snug"
+          className="text-sm leading-snug"
           style={{ color: 'var(--fg-muted)' }}
         >
           {step.reason}
@@ -125,20 +125,20 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
       <div className="flex items-stretch gap-3 mb-3">
         <div className="flex items-baseline gap-0.5">
           <span
-            className="text-[26px] font-black leading-none tabular-nums tracking-tight font-mono"
+            className="text-4xl font-black leading-none tabular-nums tracking-tight font-mono"
             style={{ color: 'var(--fg-strong)' }}
           >
             ~{path.estimatedDurationHours}
           </span>
           <span
-            className="text-[12px] font-bold leading-none"
+            className="text-base font-bold leading-none"
             style={{ color: 'var(--fg-muted)' }}
           >
             h
           </span>
         </div>
         <span
-          className="text-[10px] font-bold tabular-nums self-center"
+          className="text-xs font-bold tabular-nums self-center"
           style={{ color: 'var(--fg-default)' }}
         >
           {approvers} approver{approvers === 1 ? '' : 's'}
@@ -168,7 +168,7 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
             }}
             aria-hidden
           />
-          <span className="text-[9px] font-black uppercase tracking-[0.18em]">
+          <span className="text-2xs font-black uppercase tracking-eyebrow">
             {path.parallelizable ? 'parallel · any order' : 'serial · must run in order'}
           </span>
         </div>
@@ -188,7 +188,7 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
 
       {path.parallelizable && (
         <div
-          className="mt-2 px-2.5 py-1.5 rounded-md text-[10px] leading-snug"
+          className="mt-2 px-2.5 py-1.5 rounded-md text-xs leading-snug"
           style={{
             background: 'var(--bg-surface-muted)',
             color: 'var(--fg-muted)',

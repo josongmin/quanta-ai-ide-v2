@@ -59,7 +59,7 @@ export function Badge({
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full border font-black uppercase tracking-[var(--track-eyebrow)] ${className}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-full border font-black uppercase tracking-eyebrow ${className}`}
       style={{ fontSize, ...visual, ...style }}
     >
       {children}

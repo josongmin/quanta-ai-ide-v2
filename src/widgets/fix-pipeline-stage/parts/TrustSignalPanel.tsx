@@ -24,28 +24,28 @@ export function TrustSignalPanel({ confidence, dismissal, onDismiss, t }: Props)
       <SectionHeader title={t('trust.header')} />
 
       <div className="mt-1.5 flex items-center justify-between">
-        <span className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs font-black uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
           {t('trust.level')}
         </span>
-        <span className="text-[12px] font-bold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-bold" style={{ color: 'var(--fg-strong)' }}>
           {levelLabel(confidence.level)}
         </span>
       </div>
 
       <div className="mt-1 flex items-center justify-between">
-        <span className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs font-black uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
           {t('trust.score')}
         </span>
-        <span className="text-[12px] font-mono" style={{ color: 'var(--fg-default)' }}>
+        <span className="text-base font-mono" style={{ color: 'var(--fg-default)' }}>
           {(confidence.numeric * 100).toFixed(0)}%
         </span>
       </div>
 
       <div className="mt-2 rounded-md p-2" style={{ background: 'var(--bg-surface-muted)' }}>
-        <div className="text-[9px] font-black uppercase tracking-[0.18em]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="text-2xs font-black uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
           {t('trust.weakest')}
         </div>
-        <div className="text-[11px] mt-0.5" style={{ color: 'var(--fg-default)' }}>
+        <div className="text-sm mt-0.5" style={{ color: 'var(--fg-default)' }}>
           {confidence.weakestObligation}
         </div>
       </div>
@@ -55,14 +55,14 @@ export function TrustSignalPanel({ confidence, dismissal, onDismiss, t }: Props)
           className="mt-2 rounded-md p-2"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
         >
-          <div className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="text-xs font-black uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
             {t('trust.dismissed')}
           </div>
-          <div className="text-[11px] mt-0.5" style={{ color: 'var(--fg-default)' }}>
+          <div className="text-sm mt-0.5" style={{ color: 'var(--fg-default)' }}>
             {t(`trust.dismissReason.${dismissal.reason}`)}
           </div>
           {dismissal.note !== undefined && dismissal.note.length > 0 && (
-            <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+            <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
               {dismissal.note}
             </div>
           )}
@@ -72,7 +72,7 @@ export function TrustSignalPanel({ confidence, dismissal, onDismiss, t }: Props)
           <select
             value={reason}
             onChange={(e) => { setReason(e.target.value as DismissReason); }}
-            className="text-[11px] rounded-md px-2 py-1"
+            className="text-sm rounded-md px-2 py-1"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-default)',
@@ -88,7 +88,7 @@ export function TrustSignalPanel({ confidence, dismissal, onDismiss, t }: Props)
             value={note}
             onChange={(e) => { setNote(e.target.value); }}
             placeholder="(optional note)"
-            className="text-[11px] rounded-md px-2 py-1"
+            className="text-sm rounded-md px-2 py-1"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-default)',
@@ -103,7 +103,7 @@ export function TrustSignalPanel({ confidence, dismissal, onDismiss, t }: Props)
                 setOpen(false);
                 setNote('');
               }}
-              className="flex-1 text-[10px] font-black uppercase tracking-[0.18em] px-2 py-1 rounded-md"
+              className="flex-1 text-xs font-black uppercase tracking-eyebrow px-2 py-1 rounded-md"
               style={{
                 background: 'var(--bg-active)',
                 color: 'var(--fg-strong)',
@@ -115,7 +115,7 @@ export function TrustSignalPanel({ confidence, dismissal, onDismiss, t }: Props)
             <button
               type="button"
               onClick={() => { setOpen(false); }}
-              className="text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-1 rounded-md"
+              className="text-xs font-bold uppercase tracking-eyebrow px-2 py-1 rounded-md"
               style={{
                 background: 'transparent',
                 color: 'var(--fg-muted)',
@@ -130,7 +130,7 @@ export function TrustSignalPanel({ confidence, dismissal, onDismiss, t }: Props)
         <button
           type="button"
           onClick={() => { setOpen(true); }}
-          className="mt-2 w-full text-[10px] font-black uppercase tracking-[0.18em] px-2 py-1.5 rounded-md transition-colors"
+          className="mt-2 w-full text-xs font-black uppercase tracking-eyebrow px-2 py-1.5 rounded-md transition-colors"
           style={{
             background: 'transparent',
             color: 'var(--fg-default)',

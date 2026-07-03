@@ -12,7 +12,7 @@ export function HandleField({
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>Handle</span>
@@ -31,13 +31,13 @@ export function HandleField({
           }`,
         }}
       >
-        <span className="pl-3 text-[12px]" style={{ color: 'var(--fg-subtle)' }}>@</span>
+        <span className="pl-3 text-base" style={{ color: 'var(--fg-subtle)' }}>@</span>
         <input
           value={value}
           onChange={(e) => { onChange(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 32)); }}
           placeholder="sora"
           required
-          className="flex-1 bg-transparent outline-none px-1 text-[12px] tabular-nums"
+          className="flex-1 bg-transparent outline-none px-1 text-base tabular-nums"
           style={{ color: 'var(--fg-strong)' }}
         />
         <div className="pr-2.5">

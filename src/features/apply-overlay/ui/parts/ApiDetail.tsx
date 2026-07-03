@@ -18,7 +18,7 @@ export function ApiDetail({
         title={t('panel.tile.api')}
         onClear={on ? () => { ov.setApiRing(false); } : undefined}
       />
-      <div className="text-[11px] leading-relaxed mb-3 text-[var(--fg-muted)]">
+      <div className="text-sm leading-relaxed mb-3 text-[var(--fg-muted)]">
         {t('panel.detail.apiBody')}
       </div>
 

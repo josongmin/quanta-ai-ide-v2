@@ -30,7 +30,7 @@ export default function ChangelogPage() {
         <div className="relative max-w-[1080px] mx-auto px-8 pt-20 pb-10 flex flex-col items-center text-center gap-6">
           <Eyebrow>Changelog</Eyebrow>
           <HeadlineGradient accent="every release.">What we shipped, in</HeadlineGradient>
-          <p className="text-[16px] leading-relaxed max-w-[580px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-xl leading-relaxed max-w-[580px]" style={{ color: 'var(--fg-muted)' }}>
             New capabilities, improvements, and the occasional honest &quot;we broke something, here&apos;s the fix.&quot;
             Subscribe for a monthly digest — no marketing, no growth-hack copy.
           </p>
@@ -63,7 +63,7 @@ export default function ChangelogPage() {
             <div className="flex justify-center mt-12">
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 h-10 px-5 rounded-md text-[12px] font-semibold transition-colors"
+                className="inline-flex items-center gap-1.5 h-10 px-5 rounded-md text-base font-semibold transition-colors"
                 style={{
                   background: 'var(--bg-canvas)',
                   border: '1px solid var(--border-default)',

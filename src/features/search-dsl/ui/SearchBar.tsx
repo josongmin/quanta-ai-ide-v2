@@ -100,7 +100,7 @@ export default function SearchBar({
               {showOverlay && (
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 flex items-center px-1 py-1.5 font-mono text-[12px] whitespace-pre overflow-hidden"
+                  className="pointer-events-none absolute inset-0 flex items-center px-1 py-1.5 font-mono text-base whitespace-pre overflow-hidden"
                 >
                   {tokens.map((t) => {
                     const ts = tokenStyle(t.kind);
@@ -120,7 +120,7 @@ export default function SearchBar({
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); }}
                 style={hasError ? { color: 'var(--intent-danger-fg)' } : undefined}
-                className={`relative w-full bg-transparent text-[12px] font-medium px-1 py-1.5 focus:outline-none ${
+                className={`relative w-full bg-transparent text-base font-medium px-1 py-1.5 focus:outline-none ${
                   hasError
                     ? ''
                     : 'text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)]'
@@ -133,7 +133,7 @@ export default function SearchBar({
 
           {/* Right cluster */}
           <div className="flex items-center gap-1 px-2 border-l border-[var(--border-default)]">
-            <span className="shrink-0 px-2 py-1 rounded-md text-[10px] font-mono tabular-nums bg-[var(--bg-hover)] text-[var(--fg-default)]">
+            <span className="shrink-0 px-2 py-1 rounded-md text-xs font-mono tabular-nums bg-[var(--bg-hover)] text-[var(--fg-default)]">
               <span className="text-[var(--fg-strong)]">{matchedCount}</span>
               <span className="text-[var(--fg-subtle)]"> / {total}</span>
             </span>
@@ -151,7 +151,7 @@ export default function SearchBar({
             <IconChip disabled title={t('action.caseSensitive')} icon={CaseSensitive} />
             <IconChip disabled title={t('action.recent')} icon={History} />
 
-            <kbd className="hidden md:inline-flex items-center justify-center mx-0.5 h-5 min-w-[18px] px-1 rounded-md text-[9px] font-mono font-black bg-[var(--bg-hover)] text-[var(--fg-subtle)]">/</kbd>
+            <kbd className="hidden md:inline-flex items-center justify-center mx-0.5 h-5 min-w-[18px] px-1 rounded-md text-2xs font-mono font-black bg-[var(--bg-hover)] text-[var(--fg-subtle)]">/</kbd>
 
             <button type="button"
               onClick={() => { setAdvOpen((v) => !v); }}
@@ -159,7 +159,7 @@ export default function SearchBar({
               style={!advOpen && searchMode !== 'text'
                 ? { background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)', color: 'var(--intent-success-fg)' }
                 : undefined}
-              className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 ml-0.5 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors ${
+              className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 ml-0.5 rounded-md text-xs font-black uppercase tracking-eyebrow transition-colors ${
                 advOpen
                   ? 'bg-[var(--fg-strong)] text-[var(--bg-surface)]'
                   : searchMode !== 'text'
@@ -178,7 +178,7 @@ export default function SearchBar({
         {hasError && (
           <div
             style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)' }}
-            className="mx-3 mb-2 px-3 py-1.5 text-[10px] font-mono rounded-md"
+            className="mx-3 mb-2 px-3 py-1.5 text-xs font-mono rounded-md"
           >
             ✕ {searchError}
           </div>
@@ -210,7 +210,7 @@ function PatternToggle({
             onClick={() => { setMode(id); }}
             title={t(`mode.${id}.title`)}
             style={active ? { color: 'var(--intent-success-fg)' } : undefined}
-            className={`px-2.5 font-mono text-[11px] font-black transition-colors ${
+            className={`px-2.5 font-mono text-sm font-black transition-colors ${
               active
                 ? 'bg-[var(--bg-active)]'
                 : 'text-[var(--fg-subtle)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]'
@@ -313,7 +313,7 @@ function AdvancedPanel({
     <div className="border-t border-[var(--border-default)] px-3 py-3 space-y-3">
       {/* Mode switch */}
       <div>
-        <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[var(--fg-subtle)]">
+        <div className="text-2xs font-black uppercase tracking-eyebrow mb-1.5 text-[var(--fg-subtle)]">
           {t('mode.title')}
         </div>
         <div className="flex gap-1">
@@ -324,7 +324,7 @@ function AdvancedPanel({
                 key={id}
                 onClick={() => { setMode(id); }}
                 title={t(`mode.${id}.hint`)}
-                className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-black uppercase tracking-eyebrow transition-colors ${
                   active
                     ? 'bg-[var(--fg-strong)] text-[var(--bg-surface)]'
                     : 'bg-[var(--bg-hover)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)]'
@@ -336,7 +336,7 @@ function AdvancedPanel({
             );
           })}
         </div>
-        <p className="mt-1.5 text-[10px] text-[var(--fg-subtle)]">
+        <p className="mt-1.5 text-xs text-[var(--fg-subtle)]">
           {t(`mode.${mode}.hint`)}
         </p>
       </div>
@@ -344,7 +344,7 @@ function AdvancedPanel({
       {/* Sample queries (only meaningful for DSL) */}
       {mode === 'dsl' && (
         <div>
-          <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[var(--fg-subtle)]">
+          <div className="text-2xs font-black uppercase tracking-eyebrow mb-1.5 text-[var(--fg-subtle)]">
             {t('samples.title')}
           </div>
           <div className="grid grid-cols-2 gap-1.5">
@@ -352,10 +352,10 @@ function AdvancedPanel({
               <button type="button"
                 key={s.q}
                 onClick={() => { setSearch(s.q); }}
-                className="text-left px-2.5 py-1.5 rounded-md border text-[10px] transition-colors bg-[var(--bg-hover)] border-[var(--border-muted)] hover:bg-[var(--bg-active)] text-[var(--fg-default)]"
+                className="text-left px-2.5 py-1.5 rounded-md border text-xs transition-colors bg-[var(--bg-hover)] border-[var(--border-muted)] hover:bg-[var(--bg-active)] text-[var(--fg-default)]"
               >
                 <div className="font-bold">{t(`samples.${s.i18nKey}`)}</div>
-                <code className="text-[9px] font-mono text-[var(--fg-subtle)]">{s.q}</code>
+                <code className="text-2xs font-mono text-[var(--fg-subtle)]">{s.q}</code>
               </button>
             ))}
           </div>
@@ -365,20 +365,20 @@ function AdvancedPanel({
       {/* Reference */}
       {mode === 'dsl' && (
         <div>
-          <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[var(--fg-subtle)]">
+          <div className="text-2xs font-black uppercase tracking-eyebrow mb-1.5 text-[var(--fg-subtle)]">
             {t('reference.title')}
           </div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px] text-[var(--fg-muted)]">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-[var(--fg-muted)]">
             <Doc syntax="key:>n / key:<n"   ex="complexity:>30" />
             <Doc syntax="key:value"          ex="layer:service" />
             <Doc syntax="!flag / +flag"      ex="!cyclic +dead" />
             <Doc syntax='"free text"'        ex='"AuthProvider"' />
           </div>
           <details className="mt-2">
-            <summary className="cursor-pointer text-[10px] font-bold text-[var(--fg-muted)] hover:text-[var(--fg-strong)]">
+            <summary className="cursor-pointer text-xs font-bold text-[var(--fg-muted)] hover:text-[var(--fg-strong)]">
               {t('reference.allFields')}
             </summary>
-            <div className="mt-2 text-[10px] space-y-1 text-[var(--fg-muted)]">
+            <div className="mt-2 text-xs space-y-1 text-[var(--fg-muted)]">
               <p><b>{t('reference.numeric')}</b> <code className="font-mono">complexity, cognitive, loc, fanIn, fanOut, churn, days, authors, prs, any, tsIgnore, unsafe, coverage, branch, mutation, eslintErr, eslintWarn, todos, console, sast, bundle, jsdoc, pagerank</code></p>
               <p><b>{t('reference.string')}</b> <code className="font-mono">status, layer, lang, owner, name, path</code></p>
               <p><b>{t('reference.flags')}</b> <code className="font-mono">cyclic, dead, deprecated, generated, test, secrets, strictOptOut, busFactor1, publicApi, hasTest</code></p>
@@ -388,7 +388,7 @@ function AdvancedPanel({
       )}
 
       {mode === 'regex' && (
-        <p className="text-[10px] text-[var(--fg-muted)]">
+        <p className="text-xs text-[var(--fg-muted)]">
           {t('regexHint.prefix')}<em>{t('regexHint.emphasis')}</em>{t('regexHint.suffix')}<code className="font-mono">{`<filename> + " " + <path>`}</code>.
         </p>
       )}

@@ -24,13 +24,13 @@ export function PolicyThresholds() {
         <div className="flex items-center gap-1.5">
           <SlidersHorizontal className="w-3 h-3" style={{ color: t.textMuted }} />
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('policy.title')}
           </span>
         </div>
-        <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {tr('policy.subtitle')}
         </span>
       </div>
@@ -70,7 +70,7 @@ function ThresholdRow({
           {policy.label}
         </span>
         <span
-          className="text-[10px] font-mono px-1.5 py-0.5 rounded ml-auto"
+          className="text-xs font-mono px-1.5 py-0.5 rounded ml-auto"
           style={{
             background: changed ? t.warnSoft : t.badgeBg,
             color: changed ? t.warn : t.textMuted,
@@ -89,13 +89,13 @@ function ThresholdRow({
         style={{ accentColor: t.accent }}
       />
       <div className="flex items-center justify-between mt-0.5">
-        <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {policy.min}
         </span>
         <span className="text-xs" style={{ color: t.textMuted }}>
           {policy.description}
         </span>
-        <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {policy.max}
         </span>
       </div>

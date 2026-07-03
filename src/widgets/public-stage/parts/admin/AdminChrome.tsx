@@ -16,7 +16,7 @@ export function SectionHeader({
   return (
     <header className="flex flex-col gap-1 mb-4">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="text-xs uppercase tracking-eyebrow font-semibold"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {eyebrow}
@@ -24,7 +24,7 @@ export function SectionHeader({
       <h2 className="text-[15px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
         {title}
       </h2>
-      <p className="text-[12px] leading-snug max-w-[640px]" style={{ color: 'var(--fg-muted)' }}>
+      <p className="text-base leading-snug max-w-[640px]" style={{ color: 'var(--fg-muted)' }}>
         {hint}
       </p>
     </header>
@@ -41,7 +41,7 @@ export function Stat({
       style={{ borderRight: last ? 'none' : '1px solid var(--border-muted)' }}
     >
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="text-xs uppercase tracking-eyebrow font-semibold"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}

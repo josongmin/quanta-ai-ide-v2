@@ -83,10 +83,10 @@ export default function OwnerMatrix({
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <Users className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Ownership
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {fragmentation} {fragmentation === 1 ? 'team' : 'teams'} · {pr.files.length} files
         </span>
         {missingReviewers > 0 && (
@@ -105,13 +105,13 @@ export default function OwnerMatrix({
       <ul className="space-y-1">
         {groups.map((g) => (
           <li key={g.owner} className="flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-[var(--bg-surface-muted)]">
-            <span className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md text-[11px] font-mono font-bold tabular-nums text-[var(--fg-default)]"
+            <span className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md text-sm font-mono font-bold tabular-nums text-[var(--fg-default)]"
               style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}>
               {g.files.length}
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <span className="text-[12px] font-bold text-[var(--fg-default)] truncate">
+                <span className="text-base font-bold text-[var(--fg-default)] truncate">
                   @{g.owner}
                 </span>
                 {g.reviewerRequested ? (
@@ -123,7 +123,7 @@ export default function OwnerMatrix({
                     <AlertCircle className="w-3 h-3 shrink-0" style={{ color: 'color-mix(in srgb, var(--intent-warn-vivid) 80%, transparent)' }} />
                   </span>
                 )}
-                <span className="text-[10px] font-mono text-[var(--fg-subtle)] ml-auto tabular-nums">
+                <span className="text-xs font-mono text-[var(--fg-subtle)] ml-auto tabular-nums">
                   {Math.round(g.share * 100)}%
                 </span>
               </div>
@@ -141,7 +141,7 @@ export default function OwnerMatrix({
                   }}
                 />
               </div>
-              <div className="mt-1 text-[10px] font-mono text-[var(--fg-subtle)] truncate" title={g.files.join('  ·  ')}>
+              <div className="mt-1 text-xs font-mono text-[var(--fg-subtle)] truncate" title={g.files.join('  ·  ')}>
                 {g.files.slice(0, 2).join(' · ')}
                 {g.files.length > 2 && ` · +${String(g.files.length - 2)}`}
               </div>

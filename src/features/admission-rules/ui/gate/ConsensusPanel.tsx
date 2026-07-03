@@ -58,23 +58,23 @@ export function ConsensusPanel({
       >
         <Layers className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <h3
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Findings
         </h3>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           deduped across analyzers
         </span>
         <div className="flex-1" />
         <span
-          className="text-[10px] font-mono tabular-nums"
+          className="text-xs font-mono tabular-nums"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {findings.length} finding{findings.length === 1 ? '' : 's'}
         </span>
         <span
-          className="ml-2 text-[10px] font-mono tabular-nums"
+          className="ml-2 text-xs font-mono tabular-nums"
           style={{ color: 'var(--fg-subtle)' }}
           title="Aggregate risk score (severity × confidence × blast, quadratic-mean)"
         >
@@ -86,7 +86,7 @@ export function ConsensusPanel({
           <button
             type="button"
             onClick={onTriageRequest}
-            className="ml-2 inline-flex items-center gap-1 h-6 px-2 rounded text-[10px] font-medium transition-colors"
+            className="ml-2 inline-flex items-center gap-1 h-6 px-2 rounded text-xs font-medium transition-colors"
             style={{
               background: 'var(--bg-canvas)',
               border: '1px solid var(--border-default)',
@@ -116,7 +116,7 @@ export function ConsensusPanel({
               style={{ borderColor: 'var(--border-default)' }}
             >
               <span
-                className="shrink-0 mt-1 inline-flex items-center justify-center min-w-[28px] h-[20px] px-1 rounded-md text-[10px] font-mono tabular-nums font-bold"
+                className="shrink-0 mt-1 inline-flex items-center justify-center min-w-[28px] h-[20px] px-1 rounded-md text-xs font-mono tabular-nums font-bold"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   color: bandColor(risk.band),
@@ -129,20 +129,20 @@ export function ConsensusPanel({
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <code
-                    className="text-[11px] font-mono truncate"
+                    className="text-sm font-mono truncate"
                     style={{ color: 'var(--fg-strong)' }}
                   >
                     {path}
                   </code>
                   <span
-                    className="text-[10px] uppercase tracking-[0.14em] font-mono"
+                    className="text-xs uppercase tracking-eyebrow font-mono"
                     style={{ color: SEVERITY_FG[f.severity] }}
                   >
                     {f.severity}
                   </span>
                   {f.consensus && (
                     <span
-                      className="text-[9px] uppercase tracking-[0.14em] font-mono px-1.5 py-px rounded"
+                      className="text-2xs uppercase tracking-eyebrow font-mono px-1.5 py-px rounded"
                       style={{
                         color: 'var(--fg-strong)',
                         background: 'var(--bg-active)',
@@ -153,7 +153,7 @@ export function ConsensusPanel({
                     </span>
                   )}
                   <span
-                    className="text-[9px] uppercase tracking-[0.14em] font-mono"
+                    className="text-2xs uppercase tracking-eyebrow font-mono"
                     style={{ color: conf.fg }}
                     title={`Composite confidence across ${String(f.sources.length)} source${f.sources.length === 1 ? '' : 's'}`}
                   >
@@ -161,7 +161,7 @@ export function ConsensusPanel({
                   </span>
                 </div>
                 <div
-                  className="mt-1 flex items-center gap-2 flex-wrap text-[10px] font-mono"
+                  className="mt-1 flex items-center gap-2 flex-wrap text-xs font-mono"
                   style={{ color: 'var(--fg-subtle)' }}
                 >
                   {f.sources.map((s) => (

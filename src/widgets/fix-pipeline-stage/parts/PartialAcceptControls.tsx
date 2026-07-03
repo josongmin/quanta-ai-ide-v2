@@ -38,10 +38,10 @@ export function PartialAcceptControls({ diff, acceptance, onToggle, t }: Props) 
                   color: 'var(--fg-default)',
                 }}
               >
-                <span className="text-[10px] font-mono" style={{ color: 'var(--fg-muted)' }}>
+                <span className="text-xs font-mono" style={{ color: 'var(--fg-muted)' }}>
                   [{isAccepted ? '✓' : ' '}]
                 </span>{' '}
-                <span className="text-[11px]">{hunk.file}</span>
+                <span className="text-sm">{hunk.file}</span>
               </button>
             </li>
           );
@@ -50,7 +50,7 @@ export function PartialAcceptControls({ diff, acceptance, onToggle, t }: Props) 
 
       {acceptance && (
         <div
-          className="mt-2 rounded-md px-2 py-1.5 text-[10px]"
+          className="mt-2 rounded-md px-2 py-1.5 text-xs"
           style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)' }}
         >
           {t('partial.residual', {

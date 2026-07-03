@@ -7,7 +7,7 @@ export function EmptyHint({
   isDark: _isDark,
 }: { text: string; isDark?: boolean }) {
   return (
-    <div className="text-[10px] italic text-fg-subtle">
+    <div className="text-xs italic text-fg-subtle">
       {text}
     </div>
   );

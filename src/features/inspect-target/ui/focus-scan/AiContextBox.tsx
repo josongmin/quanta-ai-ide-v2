@@ -73,13 +73,13 @@ export function AiContextBox({ file }: { file: FileRecord }) {
       <div className="flex items-center gap-1.5">
         <Sparkles className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('aiCtx.title', { defaultValue: 'AI context' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="ml-auto text-2xs font-black uppercase tracking-eyebrow"
           style={{
             color: embeddingFresh ? 'var(--intent-success-fg)' : 'var(--fg-subtle)',
           }}
@@ -113,7 +113,7 @@ export function AiContextBox({ file }: { file: FileRecord }) {
                 className="w-1 h-1 rounded-full"
                 style={{ background: fg }}
               />
-              <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">{a.label}</span>
+              <span className="font-bold uppercase tracking-eyebrow">{a.label}</span>
               <span className="opacity-75">{a.detail}</span>
             </span>
           );
@@ -166,7 +166,7 @@ function BudgetCell({
   return (
     <div>
       <div
-        className="flex items-center gap-1 text-2xs font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="flex items-center gap-1 text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {icon}
@@ -176,13 +176,13 @@ function BudgetCell({
         className="mt-0.5 flex items-baseline gap-1.5"
       >
         <span
-          className="text-[11px] font-mono font-bold tabular-nums"
+          className="text-sm font-mono font-bold tabular-nums"
           style={{ color: warn ? 'var(--intent-warn-fg)' : 'var(--fg-default)' }}
         >
           {value}
         </span>
         <span
-          className="text-[9px] font-mono"
+          className="text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {sub}

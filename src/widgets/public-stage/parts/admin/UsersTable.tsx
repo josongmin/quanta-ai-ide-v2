@@ -19,7 +19,7 @@ export function UserSearchInput({ q, onChange }: { q: string; onChange: (v: stri
         value={q}
         onChange={(e) => { onChange(e.target.value); }}
         placeholder="Search by name, email, org slug…"
-        className="flex-1 bg-transparent outline-none text-[12px]"
+        className="flex-1 bg-transparent outline-none text-base"
         style={{ color: 'var(--fg-strong)' }}
       />
     </div>
@@ -33,7 +33,7 @@ export function UsersTable({ users }: { users: AdminUser[] }) {
       style={{ border: '1px solid var(--border-muted)' }}
     >
       <div
-        className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '1.4fr 1.4fr 110px 110px 100px 110px',
           gap: 12,
@@ -50,7 +50,7 @@ export function UsersTable({ users }: { users: AdminUser[] }) {
         <span />
       </div>
       {users.length === 0 ? (
-        <div className="py-8 text-center text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="py-8 text-center text-base" style={{ color: 'var(--fg-subtle)' }}>
           No users matched.
         </div>
       ) : (
@@ -66,7 +66,7 @@ function UserRow({ user }: { user: AdminUser }) {
   return (
     <div
       ref={ref}
-      className="grid items-center px-3 h-11 text-[12px] transition-colors"
+      className="grid items-center px-3 h-11 text-base transition-colors"
       style={{
         gridTemplateColumns: '1.4fr 1.4fr 110px 110px 100px 110px',
         gap: 12,
@@ -80,10 +80,10 @@ function UserRow({ user }: { user: AdminUser }) {
       <span className="truncate" style={{ color: 'var(--fg-default)' }}>
         {user.email}
       </span>
-      <span className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-muted)' }}>
+      <span className="font-mono text-sm truncate" style={{ color: 'var(--fg-muted)' }}>
         {user.org}
       </span>
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="tabular-nums text-sm" style={{ color: 'var(--fg-muted)' }}>
         {user.lastSignIn}
       </span>
       <UserStatusPill status={user.status} />
@@ -104,7 +104,7 @@ function UserStatusPill({ status }: { status: UserStatus }) {
   const tone = USER_STATUS_TONES[status];
   return (
     <span
-      className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+      className="inline-flex items-center gap-1 text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
       style={{
         background: tone.bg,
         color: tone.fg,

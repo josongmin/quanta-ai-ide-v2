@@ -20,7 +20,7 @@ export function Section({ anchor, title, hint, right, children }: Props) {
             {title}
           </h2>
           {hint && (
-            <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+            <p className="text-base leading-snug" style={{ color: 'var(--fg-subtle)' }}>
               {hint}
             </p>
           )}

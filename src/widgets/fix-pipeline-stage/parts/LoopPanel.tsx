@@ -27,19 +27,19 @@ export function LoopPanel({ loop, t }: Props) {
         }}
       >
         {!loop.terminated && (
-          <div className="text-[11px]" style={{ color: 'var(--fg-default)' }}>
+          <div className="text-sm" style={{ color: 'var(--fg-default)' }}>
             {loop.iteration === 0 ? t('loop.idle') : t('loop.running')}
           </div>
         )}
         {loop.terminated && loop.reason !== null && (
           <>
             <div
-              className="text-[10px] font-black uppercase tracking-[0.18em]"
+              className="text-xs font-black uppercase tracking-eyebrow"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {t('loop.terminated')}
             </div>
-            <div className="text-[11px] mt-0.5" style={{ color: 'var(--fg-default)' }}>
+            <div className="text-sm mt-0.5" style={{ color: 'var(--fg-default)' }}>
               {describeReason(loop.reason)}
             </div>
           </>

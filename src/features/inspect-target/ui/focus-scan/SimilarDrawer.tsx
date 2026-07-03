@@ -25,20 +25,20 @@ export function SimilarDrawer({ file, onClose }: { file: FileRecord; onClose: ()
       }}
     >
       <div
-        className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5 flex items-center justify-between"
+        className="text-2xs font-black uppercase tracking-eyebrow mb-1.5 flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{t('catalog.openSimilar')}</span>
         <button
           type="button"
           onClick={onClose}
-          className="text-[9px] font-mono"
+          className="text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
         >
           esc
         </button>
       </div>
-      <p className="text-[10px] mb-2" style={{ color: 'var(--fg-muted)' }}>
+      <p className="text-xs mb-2" style={{ color: 'var(--fg-muted)' }}>
         {t('focus.similarHint', { name: file.name })}
       </p>
       {hits.length === 0 ? (
@@ -54,21 +54,21 @@ export function SimilarDrawer({ file, onClose }: { file: FileRecord; onClose: ()
                 key={hit.id}
                 type="button"
                 onClick={() => { openStack({ kind: 'file', id: hit.id }); }}
-                className="w-full text-left px-2 py-1.5 rounded-md text-[10px] transition-colors hover-surface"
+                className="w-full text-left px-2 py-1.5 rounded-md text-xs transition-colors hover-surface"
                 style={{ background: 'var(--bg-surface-muted)' }}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <div className="font-mono truncate">{f.name}</div>
                     <div
-                      className="font-mono truncate text-[9px]"
+                      className="font-mono truncate text-2xs"
                       style={{ color: 'var(--fg-subtle)' }}
                     >
                       {f.folderPath}
                     </div>
                   </div>
                   <span
-                    className="shrink-0 px-1.5 py-0.5 rounded-md font-mono text-[9px] tabular-nums"
+                    className="shrink-0 px-1.5 py-0.5 rounded-md font-mono text-2xs tabular-nums"
                     style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
                   >
                     {Math.round(pct * 100)}%

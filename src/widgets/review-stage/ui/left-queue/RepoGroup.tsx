@@ -44,7 +44,7 @@ export function RepoGroup({
             : <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.5} />}
         </button>
         <span
-          className="shrink-0 inline-flex items-center justify-center w-4 h-4 rounded text-[9px] font-mono font-bold"
+          className="shrink-0 inline-flex items-center justify-center w-4 h-4 rounded text-2xs font-mono font-bold"
           style={{
             background: tone.bg,
             color: tone.fg,
@@ -59,7 +59,7 @@ export function RepoGroup({
           {name}
         </span>
         <span
-          className="text-[10px] font-mono tabular-nums"
+          className="text-xs font-mono tabular-nums"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {count}

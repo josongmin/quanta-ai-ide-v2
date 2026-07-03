@@ -30,7 +30,7 @@ export function FixPipelineHandoffBanner() {
       aria-live="polite"
     >
       <GlassCard className="rounded-md">
-        <div className="px-3 py-2 flex items-center gap-3 text-[11px]">
+        <div className="px-3 py-2 flex items-center gap-3 text-sm">
           <Wrench size={14} style={{ color: 'var(--intent-success-vivid)' }} aria-hidden="true" />
           <div className="flex flex-col leading-tight">
             <span style={{ color: 'var(--fg-default)' }} className="font-semibold">

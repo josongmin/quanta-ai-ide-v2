@@ -82,7 +82,7 @@ export function SettingsModal({
         >
           <div className="flex items-center gap-2">
             {icon}
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
               {title}
             </span>
           </div>

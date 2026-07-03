@@ -76,7 +76,7 @@ export function GatePage({
         <V2Card className="p-0 admv2-rise admv2-rise-1 overflow-hidden">
           <div className="px-5 py-3 border-b" style={{ borderColor: t.borderSoft }}>
             <SectionTitle icon={FileText}>{tA('section.filesInPr')}</SectionTitle>
-            <div className="mt-1 text-[10px] font-mono" style={{ color: t.textSubtle }}>
+            <div className="mt-1 text-xs font-mono" style={{ color: t.textSubtle }}>
               {diff.changes.length} files · {diff.affected.length} ripple
             </div>
           </div>
@@ -110,15 +110,15 @@ export function GatePage({
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono truncate" style={{ color: t.textBody }}>
+                      <span className="text-sm font-mono truncate" style={{ color: t.textBody }}>
                         {f.folderPath}.{f.name}
                       </span>
-                      <span className="ml-auto text-[9px] font-mono uppercase tracking-[0.18em]" style={{ color: t.textSubtle }}>
+                      <span className="ml-auto text-2xs font-mono uppercase tracking-eyebrow" style={{ color: t.textSubtle }}>
                         {c.kind}
                       </span>
                     </div>
                     {fileFired.length > 0 && (
-                      <div className="mt-1 text-[10px] font-mono truncate" style={{ color: t.textSubtle }}>
+                      <div className="mt-1 text-xs font-mono truncate" style={{ color: t.textSubtle }}>
                         {fileFired.map((r) => r.ruleName).join(' · ')}
                       </div>
                     )}
@@ -134,8 +134,8 @@ export function GatePage({
           {fired.length === 0 ? (
             <V2Card className="p-8 text-center">
               <ShieldCheck className="w-10 h-10 mx-auto mb-3" style={{ color: t.ok }} />
-              <div className="text-[14px] font-bold" style={{ color: t.textBody }}>{tr('admission.gate.allChecksPassed')}</div>
-              <div className="mt-1 text-[11px] font-mono" style={{ color: t.textSubtle }}>
+              <div className="text-lg font-bold" style={{ color: t.textBody }}>{tr('admission.gate.allChecksPassed')}</div>
+              <div className="mt-1 text-sm font-mono" style={{ color: t.textSubtle }}>
                 {passed.length} rules evaluated · 0 blocking · 0 warning
               </div>
             </V2Card>
@@ -144,12 +144,12 @@ export function GatePage({
               <V2Card className="p-4">
                 <div className="flex items-center gap-2">
                   <Icon className="w-4 h-4" style={{ color: accent }} />
-                  <span className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: accent }}>
+                  <span className="text-sm font-bold uppercase tracking-eyebrow" style={{ color: accent }}>
                     {fired.length} rule{fired.length === 1 ? '' : 's'} fired
                   </span>
                   <div className="flex-1" />
                   {prOverrides.length > 0 && (
-                    <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+                    <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
                       {prOverrides.length} override{prOverrides.length === 1 ? '' : 's'} on this PR
                     </span>
                   )}
@@ -178,19 +178,19 @@ export function GatePage({
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+                          <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
                             {SOURCE_GLYPH[r.source]} {r.source}
                           </span>
                           <span style={{ color: t.textFaint }}>·</span>
                           <span
-                            className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
+                            className="text-2xs font-mono uppercase tracking-eyebrow px-1.5 py-px rounded-md"
                             style={{ color: sevColor, background: `${sevColor}1a` }}
                           >
                             {r.severity}
                           </span>
                           {overridden && (
                             <span
-                              className="ml-auto text-[9px] font-mono uppercase tracking-[0.18em] px-2 py-px rounded-md"
+                              className="ml-auto text-2xs font-mono uppercase tracking-eyebrow px-2 py-px rounded-md"
                               style={{
                                 color: t.accent,
                                 background: `${t.accent}15`,
@@ -201,15 +201,15 @@ export function GatePage({
                             </span>
                           )}
                         </div>
-                        <div className="mt-1 text-[14px] font-bold" style={{ color: t.textBody }}>
+                        <div className="mt-1 text-lg font-bold" style={{ color: t.textBody }}>
                           {r.ruleName}
                         </div>
                         {rule && (
-                          <div className="mt-0.5 text-[11px] font-mono" style={{ color: t.textSubtle }}>
+                          <div className="mt-0.5 text-sm font-mono" style={{ color: t.textSubtle }}>
                             uses {usesHint(rule.signal)} · {describeSignal(rule.signal)}
                           </div>
                         )}
-                        <div className="mt-2 text-[11px] font-mono" style={{ color: t.textMuted }}>
+                        <div className="mt-2 text-sm font-mono" style={{ color: t.textMuted }}>
                           {r.reason}
                         </div>
 
@@ -218,7 +218,7 @@ export function GatePage({
                             {r.hits.slice(0, 5).map((h) => {
                               const f = repo.files[h.fileId];
                               return (
-                                <div key={h.fileId} className="flex items-center gap-2 text-[10px] font-mono px-2 py-1 rounded-md" style={{ background: t.inset }}>
+                                <div key={h.fileId} className="flex items-center gap-2 text-xs font-mono px-2 py-1 rounded-md" style={{ background: t.inset }}>
                                   <span className="w-1 h-1 rounded-full" style={{ background: t.textSubtle }} />
                                   <span className="truncate flex-1" style={{ color: t.textBody }}>
                                     {f ? `${f.folderPath}.${f.name}` : `#${h.fileId}`}
@@ -230,7 +230,7 @@ export function GatePage({
                               );
                             })}
                             {r.hits.length > 5 && (
-                              <div className="text-[10px] font-mono px-2" style={{ color: t.textSubtle }}>
+                              <div className="text-xs font-mono px-2" style={{ color: t.textSubtle }}>
                                 … {r.hits.length - 5} more
                               </div>
                             )}
@@ -242,7 +242,7 @@ export function GatePage({
                             <button
                               type="button"
                               onClick={() => { setOverrideTarget({ ruleId: r.ruleId, ruleName: r.ruleName, severity: r.severity }); }}
-                              className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md border transition-colors"
+                              className="text-xs font-mono uppercase tracking-eyebrow px-3 py-1 rounded-md border transition-colors"
                               style={{ background: 'transparent', borderColor: t.border, color: t.textMuted }}
                               onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; e.currentTarget.style.color = t.textHi; }}
                               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = t.textMuted; }}
@@ -251,7 +251,7 @@ export function GatePage({
                             </button>
                             <button
                               type="button"
-                              className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1 rounded-md border transition-colors"
+                              className="text-xs font-mono uppercase tracking-eyebrow px-3 py-1 rounded-md border transition-colors"
                               style={{ background: 'transparent', borderColor: t.border, color: t.textMuted }}
                               onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; e.currentTarget.style.color = t.textHi; }}
                               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = t.textMuted; }}
@@ -273,11 +273,11 @@ export function GatePage({
             <V2Card className="p-4">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-3.5 h-3.5" style={{ color: t.ok }} />
-                <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
+                <span className="text-xs font-bold uppercase tracking-eyebrow" style={{ color: t.textMuted }}>
                   {passed.length} rule{passed.length === 1 ? '' : 's'} passed
                 </span>
                 <div className="flex-1" />
-                <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+                <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
                   {passed.map((r) => r.ruleName).slice(0, 4).join(' · ')}
                   {passed.length > 4 && ` +${passed.length - 4}`}
                 </span>
@@ -310,14 +310,14 @@ export function GatePage({
             >
               <div className="flex items-center gap-2 mb-4">
                 <Gavel className="w-4 h-4" style={{ color: t.textMuted }} />
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textHi }}>
+                <h3 className="text-sm font-bold uppercase tracking-eyebrow" style={{ color: t.textHi }}>
                   {tr('admission.override.title')}
                 </h3>
               </div>
-              <div className="text-[12px] font-bold mb-1" style={{ color: t.textBody }}>
+              <div className="text-base font-bold mb-1" style={{ color: t.textBody }}>
                 {overrideTarget.ruleName}
               </div>
-              <div className="text-[11px] font-mono mb-4" style={{ color: t.textMuted }}>
+              <div className="text-sm font-mono mb-4" style={{ color: t.textMuted }}>
                 {tr('admission.override.notice')}
               </div>
               <Field label="Reason (required)">
@@ -332,7 +332,7 @@ export function GatePage({
                 <button
                   type="button"
                   onClick={closeOverride}
-                  className="text-[10px] font-mono uppercase tracking-[0.18em] px-3 py-1.5 rounded-md border transition-colors"
+                  className="text-xs font-mono uppercase tracking-eyebrow px-3 py-1.5 rounded-md border transition-colors"
                   style={{ background: 'transparent', borderColor: t.border, color: t.textMuted }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverSubtle; e.currentTarget.style.color = t.textHi; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = t.textMuted; }}
@@ -354,7 +354,7 @@ export function GatePage({
                     });
                     closeOverride();
                   }}
-                  className="px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-eyebrow disabled:opacity-30 disabled:cursor-not-allowed"
                   style={{ background: t.textHi, color: t.page }}
                 >
                   record override

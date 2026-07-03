@@ -28,14 +28,14 @@ export function DetailHeader({
 }: { title: string; onClear?: () => void }) {
   return (
     <div className="flex items-center justify-between mb-2">
-      <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+      <div className="text-2xs font-black uppercase tracking-eyebrow text-[var(--fg-subtle)]">
         {title}
       </div>
       {onClear && (
         <button
           type="button"
           onClick={onClear}
-          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] px-1.5 py-0.5 rounded transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]"
+          className="flex items-center gap-1 text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]"
         >
           <X className="w-2.5 h-2.5" /> clear
         </button>
@@ -97,7 +97,7 @@ export function Slider({
 }) {
   return (
     <div className="px-1.5">
-      <div className="flex justify-between text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] mb-1 text-[var(--fg-muted)]">
+      <div className="flex justify-between text-2xs font-bold uppercase tracking-eyebrow mb-1 text-[var(--fg-muted)]">
         <span>{label}</span>
         <span className="font-mono tabular-nums">{value.toFixed(2)}</span>
       </div>
@@ -152,7 +152,7 @@ export function SegmentedControl<T extends string>({
             role="radio"
             aria-checked={active}
             tabIndex={active ? 0 : -1}
-            className="flex-1 px-2 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--border-focus)]"
+            className="flex-1 px-2 py-1.5 rounded-md text-xs font-black uppercase tracking-eyebrow transition-colors outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--border-focus)]"
             style={active
               ? {
                   background: ACCENT_TINT_BG,
@@ -178,7 +178,7 @@ export function ToggleButton({
       type="button"
       onClick={onClick}
       aria-pressed={on}
-      className="flex items-center gap-2 px-3 py-2 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors"
+      className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-black uppercase tracking-eyebrow transition-colors"
       style={on
         ? {
             background: ACCENT_TINT_BG,
@@ -201,7 +201,7 @@ export function FooterChip({
 }: { color: string; label: string; onClear: () => void }) {
   return (
     <span
-      className="inline-flex items-center gap-1 pl-1.5 pr-0.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+      className="inline-flex items-center gap-1 pl-1.5 pr-0.5 py-0.5 rounded text-2xs font-bold uppercase tracking-eyebrow"
       style={{
         background: `color-mix(in srgb, ${color} 12%, transparent)`,
         color,

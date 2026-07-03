@@ -16,7 +16,7 @@ export function OverviewScene({ pr, repo }: { pr: PullRequest; repo: RepoData })
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4">
       <V2Card className="p-5">
         <SceneHeader icon={GitPullRequest} title="Description" hint="markdown · author intent" />
-        <div className="mt-3 text-[13px] leading-relaxed text-[var(--fg-strong)] whitespace-pre-wrap break-words font-sans">
+        <div className="mt-3 text-md leading-relaxed text-[var(--fg-strong)] whitespace-pre-wrap break-words font-sans">
           {pr.description.trim().length === 0
             ? <span className="italic text-[var(--fg-subtle)]">{t('empty.noDescription')}</span>
             : pr.description}
@@ -26,7 +26,7 @@ export function OverviewScene({ pr, repo }: { pr: PullRequest; repo: RepoData })
             {pr.labels.map((l) => (
               <span
                 key={l}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] font-mono bg-[var(--bg-hover)] border-[var(--border-default)] text-[var(--fg-default)]"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-sm font-mono bg-[var(--bg-hover)] border-[var(--border-default)] text-[var(--fg-default)]"
               >
                 #{l}
               </span>
@@ -47,7 +47,7 @@ function ReviewerSuggestionsCard({ pr, repo }: { pr: PullRequest; repo: RepoData
     <V2Card className="p-5">
       <SceneHeader icon={Users} title={t('section.suggestedReviewers')} hint={t('section.suggestedReviewersHint')} />
       {suggestions.length === 0 ? (
-        <div className="mt-3 text-[12px] italic text-[var(--fg-subtle)]">{t('empty.noSuggestions')}</div>
+        <div className="mt-3 text-base italic text-[var(--fg-subtle)]">{t('empty.noSuggestions')}</div>
       ) : (
         <ul className="mt-3 space-y-2">
           {suggestions.map((s) => {
@@ -58,10 +58,10 @@ function ReviewerSuggestionsCard({ pr, repo }: { pr: PullRequest; repo: RepoData
                 <Avatar login={s.login} size={28} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[12px] font-bold text-[var(--fg-strong)] truncate">{person.display}</span>
-                    <span className="text-[10px] font-mono text-[var(--fg-subtle)]">@{s.login}</span>
+                    <span className="text-base font-bold text-[var(--fg-strong)] truncate">{person.display}</span>
+                    <span className="text-xs font-mono text-[var(--fg-subtle)]">@{s.login}</span>
                   </div>
-                  <div className="mt-0.5 text-[11px] text-[var(--fg-subtle)] truncate">
+                  <div className="mt-0.5 text-sm text-[var(--fg-subtle)] truncate">
                     {s.reasons.join(' · ')}
                   </div>
                 </div>
@@ -76,7 +76,7 @@ function ReviewerSuggestionsCard({ pr, repo }: { pr: PullRequest; repo: RepoData
                       }}
                     />
                   </div>
-                  <span className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)]">{pct}</span>
+                  <span className="text-xs font-mono tabular-nums text-[var(--fg-muted)]">{pct}</span>
                 </div>
               </li>
             );

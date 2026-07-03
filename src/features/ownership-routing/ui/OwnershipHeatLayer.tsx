@@ -127,7 +127,7 @@ function StateBadge({ state }: { state: OwnershipState }) {
   const v = STATE_VISUALS[state];
   return (
     <span
-      className="text-[9px] font-bold uppercase tracking-[0.12em] px-1.5 py-0.5 rounded-md border"
+      className="text-2xs font-bold uppercase tracking-[0.12em] px-1.5 py-0.5 rounded-md border"
       style={{
         background: v.bgVar,
         color: v.fgVar,
@@ -162,7 +162,7 @@ function Avatar({
   return (
     <span
       title={`${person.name} · ${person.team}${stale ? ' · stale' : ''}`}
-      className="relative inline-flex items-center justify-center w-6 h-6 rounded-full border text-[8.5px] font-bold uppercase tracking-tight select-none"
+      className="relative inline-flex items-center justify-center w-6 h-6 rounded-full border text-2xs font-bold uppercase tracking-tight select-none"
       style={style}
     >
       {person.initials}
@@ -183,7 +183,7 @@ function AvatarStack({ owners }: { owners: Person[] }) {
   if (owners.length === 0) {
     return (
       <span
-        className="text-[9px] italic"
+        className="text-2xs italic"
         style={{ color: 'var(--fg-subtle)' }}
       >
         no owners
@@ -239,7 +239,7 @@ function ZoneRow({
       <div className="flex-1 min-w-0 flex flex-col gap-1">
         <div className="flex items-center gap-2 min-w-0">
           <span
-            className="text-[10px] font-semibold uppercase tracking-[0.10em] truncate"
+            className="text-xs font-semibold uppercase tracking-[0.10em] truncate"
             style={{ color: 'var(--fg-default)' }}
           >
             {zone.label}
@@ -247,7 +247,7 @@ function ZoneRow({
           <StateBadge state={zone.state} />
         </div>
         <span
-          className="text-[10px] truncate"
+          className="text-xs truncate"
           style={{ color: 'var(--fg-muted)' }}
         >
           {summary}
@@ -278,7 +278,7 @@ function Legend({ zones }: { zones: OwnershipZone[] }) {
         return (
           <span
             key={s}
-            className="inline-flex items-center gap-1 text-[9px] font-medium uppercase tracking-[0.10em] px-1.5 py-0.5 rounded-md border"
+            className="inline-flex items-center gap-1 text-2xs font-medium uppercase tracking-[0.10em] px-1.5 py-0.5 rounded-md border"
             style={{
               background: v.bgVar,
               color: v.fgVar,

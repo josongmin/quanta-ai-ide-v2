@@ -123,7 +123,7 @@ export function AILandingPlanModal({
         <div className="px-5 py-4 space-y-3">
           <header className="flex items-center justify-between gap-2">
             <h2
-              className="text-[11px] font-black uppercase tracking-[0.22em]"
+              className="text-sm font-black uppercase tracking-[0.22em]"
               style={{ color: 'var(--fg-strong)' }}
             >
               AI Landing Plan

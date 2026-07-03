@@ -15,7 +15,7 @@ function StatusBadge({ status }: { status: SafeSeamCandidate['status'] }): JSX.E
   };
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[0.18em] flex-none"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-bold uppercase tracking-eyebrow flex-none"
       style={style}
     >
       {detected ? 'DETECTED' : 'SLOT'}
@@ -40,7 +40,7 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
         }}
       >
         <span
-          className="text-[8px] font-black uppercase tracking-[0.22em] px-1.5 py-0.5 rounded"
+          className="text-2xs font-black uppercase tracking-[0.22em] px-1.5 py-0.5 rounded"
           style={{
             background: 'var(--bg-elevated)',
             color: 'var(--fg-muted)',
@@ -78,13 +78,13 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
                   <div className="flex items-center gap-2 min-w-0">
                     <span
                       aria-hidden
-                      className="font-mono text-[10px] flex-none"
+                      className="font-mono text-xs flex-none"
                       style={{ color: 'var(--fg-subtle)' }}
                     >
                       ├──
                     </span>
                     <span
-                      className={`font-mono text-[11px] truncate flex-1 min-w-0 ${
+                      className={`font-mono text-sm truncate flex-1 min-w-0 ${
                         isSlot ? 'italic' : ''
                       }`}
                       style={{ color: isSlot ? 'var(--fg-muted)' : 'var(--fg-default)' }}
@@ -95,7 +95,7 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
                     <StatusBadge status={s.status} />
                   </div>
                   <div
-                    className="text-[11px] leading-snug pl-[26px]"
+                    className="text-sm leading-snug pl-[26px]"
                     style={{ color: 'var(--fg-muted)' }}
                   >
                     {s.reason}
@@ -106,7 +106,7 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
           </ul>
 
           <div
-            className="mt-2.5 pt-2 text-[10px] leading-snug border-t"
+            className="mt-2.5 pt-2 text-xs leading-snug border-t"
             style={{ color: 'var(--fg-subtle)', borderColor: 'var(--border-muted)' }}
           >
             Detected seams come from import-graph + behavior-diff. Slots are reserved for future

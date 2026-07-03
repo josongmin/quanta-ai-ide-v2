@@ -7,7 +7,7 @@ export function PanelFooter({
 }: { text: string; isDark?: boolean }) {
   return (
     <footer
-      className="shrink-0 px-5 py-2.5 border-t text-[9px] font-mono uppercase tracking-[0.18em]"
+      className="shrink-0 px-5 py-2.5 border-t text-2xs font-mono uppercase tracking-eyebrow"
       style={{
         borderColor: 'var(--border-muted)',
         color: 'var(--fg-subtle)',

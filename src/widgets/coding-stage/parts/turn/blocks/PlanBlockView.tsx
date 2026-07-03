@@ -55,8 +55,8 @@ function PlanBlockViewImpl({ block }: { block: PlanBlock }) {
     <div className={`rounded-lg border ${card} p-3`}>
       <div className="flex items-center gap-2 mb-2.5">
         <Sparkles className={`w-3 h-3 ${sub}`} />
-        <span className={`text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] ${sub}`}>plan</span>
-        <span className={`text-[12px] font-semibold ${labelColor}`}>{block.title}</span>
+        <span className={`text-sm font-bold uppercase tracking-eyebrow ${sub}`}>plan</span>
+        <span className={`text-base font-semibold ${labelColor}`}>{block.title}</span>
         <div className="flex-1" />
         <button
           type="button"
@@ -67,7 +67,7 @@ function PlanBlockViewImpl({ block }: { block: PlanBlock }) {
             background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)',
             color: 'var(--intent-success-fg)',
           } : undefined}
-          className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
+          className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-mono transition-colors ${
             autoAdvance
               ? ''
               : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-hover)]'
@@ -86,7 +86,7 @@ function PlanBlockViewImpl({ block }: { block: PlanBlock }) {
               />
             ))}
           </div>
-          <span className={`text-[11px] font-mono ${sub} tabular-nums`}>{doneCount}/{total}</span>
+          <span className={`text-sm font-mono ${sub} tabular-nums`}>{doneCount}/{total}</span>
         </div>
       </div>
       <ol className="space-y-1.5">
@@ -118,16 +118,16 @@ function PlanBlockViewImpl({ block }: { block: PlanBlock }) {
                 {done[item.id] && <Check className="w-2.5 h-2.5 text-[color:var(--fg-on-accent)]" strokeWidth={3} />}
               </button>
               <div className="flex-1 min-w-0">
-                <span className={`text-[12px] leading-relaxed ${
+                <span className={`text-base leading-relaxed ${
                   done[item.id]
                     ? 'text-[color:var(--fg-subtle)] line-through'
                     : labelColor
                 }`}>
-                  <span className={`mr-1.5 font-mono text-[11px] ${sub}`}>{i + 1}.</span>
+                  <span className={`mr-1.5 font-mono text-sm ${sub}`}>{i + 1}.</span>
                   {item.text}
                 </span>
                 {(pct != null || item.estTokens != null || item.estSeconds != null) && (
-                  <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono">
+                  <div className="mt-0.5 flex items-center gap-2 text-xs font-mono">
                     {pct != null && (
                       <span
                         style={confidenceStyle}

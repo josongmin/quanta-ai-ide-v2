@@ -113,7 +113,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
         }}
       >
         <Search className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
-        <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+        <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
           We&apos;ll discover your identity provider once you start typing your domain.
         </span>
       </div>
@@ -130,7 +130,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
         }}
       >
         <Loader2 className="w-4 h-4 mt-0.5 shrink-0 animate-spin" style={{ color: 'var(--fg-muted)' }} />
-        <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
+        <div className="flex flex-col gap-0.5 text-sm leading-snug">
           <span style={{ color: 'var(--fg-strong)' }}>
             Looking up <span className="font-mono">{domain}</span>…
           </span>
@@ -155,7 +155,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
       >
         <div className="flex items-start gap-3">
           <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
-          <div className="flex flex-col gap-0.5 text-[11px] leading-snug flex-1">
+          <div className="flex flex-col gap-0.5 text-sm leading-snug flex-1">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               {idp.org} · {PROVIDER_LABEL[idp.provider]}
             </span>
@@ -168,7 +168,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
 
         {metadataUrl && (
           <div
-            className="flex items-center gap-2 px-2 py-1 rounded text-[10px] font-mono tabular-nums"
+            className="flex items-center gap-2 px-2 py-1 rounded text-xs font-mono tabular-nums"
             style={{ background: 'var(--bg-canvas)', color: 'var(--fg-muted)' }}
           >
             <Lock className="w-2.5 h-2.5" style={{ color: 'var(--fg-subtle)' }} />
@@ -201,7 +201,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
     >
       <div className="flex items-start gap-3">
         <ShieldX className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
-        <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
+        <div className="flex flex-col gap-0.5 text-sm leading-snug">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
             <span className="font-mono">{domain}</span> isn&apos;t configured for SSO yet
           </span>
@@ -210,7 +210,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
           </span>
         </div>
       </div>
-      <div className="flex items-center gap-2 text-[11px]">
+      <div className="flex items-center gap-2 text-sm">
         <Link
           to={'/auth/login' as never}
           className="inline-flex items-center gap-1 px-2 py-1 rounded transition-colors"
@@ -245,13 +245,13 @@ function DemoDomainHints() {
   ];
   return (
     <div
-      className="text-[10px] flex flex-col gap-1.5 px-3 py-2 rounded-md"
+      className="text-xs flex flex-col gap-1.5 px-3 py-2 rounded-md"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px dashed var(--border-default)',
       }}
     >
-      <span className="font-semibold uppercase tracking-[0.14em]" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="font-semibold uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
         Demo · try these domains
       </span>
       <div className="flex flex-wrap gap-1.5">

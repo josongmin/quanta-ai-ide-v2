@@ -55,7 +55,7 @@ function ErrorScene({
         style={{ color: 'var(--fg-strong)' }}
       >
         <div
-          className="w-7 h-7 rounded-md flex items-center justify-center text-[11px] font-black"
+          className="w-7 h-7 rounded-md flex items-center justify-center text-sm font-black"
           style={{
             backgroundImage: 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
             color: 'var(--bg-canvas)',
@@ -63,7 +63,7 @@ function ErrorScene({
         >
           SE
         </div>
-        <span className="text-[14px]">se.field</span>
+        <span className="text-lg">se.field</span>
       </Link>
 
       {/* Center */}
@@ -81,7 +81,7 @@ function ErrorScene({
 
         {code && (
           <code
-            className="text-[11px] uppercase tracking-[0.18em] font-bold tabular-nums"
+            className="text-sm uppercase tracking-eyebrow font-bold tabular-nums"
             style={{ color: accent }}
           >
             {code} · {eyebrow}
@@ -89,7 +89,7 @@ function ErrorScene({
         )}
         {!code && (
           <span
-            className="text-[10px] uppercase tracking-[0.18em] font-bold"
+            className="text-xs uppercase tracking-eyebrow font-bold"
             style={{ color: accent }}
           >
             {eyebrow}
@@ -102,7 +102,7 @@ function ErrorScene({
         >
           {title}
         </h1>
-        <p className="text-[14px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-lg leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
           {body}
         </p>
 
@@ -135,7 +135,7 @@ export function NotFoundPage() {
         <>
           <Link
             to={'/intelligence'}
-            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold transition-colors"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             <Home className="w-3.5 h-3.5" />
@@ -143,7 +143,7 @@ export function NotFoundPage() {
           </Link>
           <Link
             to={'/help' as never}
-            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -164,7 +164,7 @@ export function NotFoundPage() {
             <Link
               key={l.to}
               to={l.to as never}
-              className="rounded-lg p-3 text-[11px] font-medium transition-colors"
+              className="rounded-lg p-3 text-sm font-medium transition-colors"
               style={{
                 background: 'var(--bg-canvas)',
                 border: '1px solid var(--border-default)',
@@ -200,7 +200,7 @@ export function ServerErrorPage() {
           <button
             type="button"
             onClick={() => { if (typeof window !== 'undefined') window.location.reload(); }}
-            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold transition-colors"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -208,7 +208,7 @@ export function ServerErrorPage() {
           </button>
           <Link
             to={'/status' as never}
-            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -222,14 +222,14 @@ export function ServerErrorPage() {
       }
       extra={
         <div
-          className="rounded-lg p-3 inline-flex items-center gap-3 text-[11px]"
+          className="rounded-lg p-3 inline-flex items-center gap-3 text-sm"
           style={{
             background: 'var(--bg-canvas)',
             border: '1px solid var(--border-default)',
             color: 'var(--fg-muted)',
           }}
         >
-          <span className="uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
             Request ID
           </span>
           <code className="font-mono" style={{ color: 'var(--fg-strong)' }}>req_4a2b…71f</code>
@@ -254,7 +254,7 @@ export function MaintenancePage() {
       actions={
         <Link
           to={'/status' as never}
-          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold transition-colors"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <Activity className="w-3.5 h-3.5" />
@@ -263,26 +263,26 @@ export function MaintenancePage() {
       }
       extra={
         <div
-          className="rounded-lg p-4 inline-flex items-center gap-4 text-[12px]"
+          className="rounded-lg p-4 inline-flex items-center gap-4 text-base"
           style={{
             background: 'var(--bg-canvas)',
             border: '1px solid var(--border-default)',
           }}
         >
           <div className="flex flex-col items-start gap-0.5">
-            <span className="text-[9px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-2xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
               Started
             </span>
-            <code className="font-mono tabular-nums text-[12px]" style={{ color: 'var(--fg-strong)' }}>
+            <code className="font-mono tabular-nums text-base" style={{ color: 'var(--fg-strong)' }}>
               2026-05-13 03:00 UTC
             </code>
           </div>
           <div className="w-px h-8" style={{ background: 'var(--border-muted)' }} />
           <div className="flex flex-col items-start gap-0.5">
-            <span className="text-[9px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-2xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
               Back by
             </span>
-            <code className="font-mono tabular-nums text-[12px]" style={{ color: 'var(--fg-strong)' }}>
+            <code className="font-mono tabular-nums text-base" style={{ color: 'var(--fg-strong)' }}>
               ~ 03:45 UTC
             </code>
           </div>
@@ -308,7 +308,7 @@ export function OfflinePage() {
         <button
           type="button"
           onClick={() => { if (typeof window !== 'undefined') window.location.reload(); }}
-          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold transition-colors"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           Retry

@@ -110,7 +110,7 @@ export function ThreadPane({
           <ProjectChip project={project} />
           <span className={textFaint}>/</span>
           <StatusBadge status={task.status} />
-          <span className={`text-[13px] font-semibold truncate ${textPrimary}`}>
+          <span className={`text-md font-semibold truncate ${textPrimary}`}>
             {task.title}
           </span>
         </div>
@@ -142,7 +142,7 @@ export function ThreadPane({
             return (
               <span
                 style={toneStyle}
-                className={`flex items-center gap-1.5 text-[11px] font-mono ${toneClass} ${pulseClass} px-1.5 py-0.5`}
+                className={`flex items-center gap-1.5 text-sm font-mono ${toneClass} ${pulseClass} px-1.5 py-0.5`}
                 title={t('cost.tooltip')}
               >
                 <Coins className="w-3 h-3" />
@@ -157,7 +157,7 @@ export function ThreadPane({
                     style={badge === t('budget.exceeded')
                       ? { borderColor: 'color-mix(in srgb, var(--intent-danger-vivid) 40%, transparent)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 10%, transparent)' }
                       : { borderColor: 'color-mix(in srgb, var(--intent-warn-vivid) 40%, transparent)', background: 'color-mix(in srgb, var(--intent-warn-vivid) 10%, transparent)' }}
-                    className="px-1 py-px rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] border"
+                    className="px-1 py-px rounded-sm text-2xs font-bold uppercase tracking-eyebrow border"
                   >{badge}</span>
                 )}
                 {cost.avgUsd > 0 && (
@@ -172,13 +172,13 @@ export function ThreadPane({
             );
           })()}
           {(cost.inTok + cost.outTok > 0) && <span className={textFaint}>·</span>}
-          <span className={`flex items-center gap-1 text-[11px] font-mono ${textMuted}`}>
+          <span className={`flex items-center gap-1 text-sm font-mono ${textMuted}`}>
             <GitBranch className="w-3 h-3" />
             {task.branch}
             <span className={textFaint}>← {task.baseBranch}</span>
           </span>
           <span className={textFaint}>·</span>
-          <button type="button" className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]">
+          <button type="button" className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]">
             <GitPullRequest className="w-3 h-3" />
             {t('header.openPr')}
           </button>
@@ -274,7 +274,7 @@ function ProjectChip({ project }: { project: Project }) {
   return (
     <div className="flex items-center gap-1.5">
       <span
-        className="inline-flex items-center justify-center w-4 h-4 rounded-md font-mono text-[9px] font-bold"
+        className="inline-flex items-center justify-center w-4 h-4 rounded-md font-mono text-2xs font-bold"
         style={{
           background: `${accent}20`,
           color: accent,
@@ -283,7 +283,7 @@ function ProjectChip({ project }: { project: Project }) {
       >
         {project.initial}
       </span>
-      <span className="text-[12px] font-semibold text-[color:var(--fg-default)]">
+      <span className="text-base font-semibold text-[color:var(--fg-default)]">
         {project.name}
       </span>
     </div>
@@ -294,7 +294,7 @@ function StatusBadge({ status }: { status: Task['status'] }) {
   const tone = 'text-[color:var(--fg-default)] bg-[color:var(--bg-elevated)] border-[color:var(--border-default)]';
   const dot = `bg-[color:var(--fg-muted)]${status === 'running' ? ' animate-pulse' : ''}`;
   return (
-    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] border ${tone}`}>
+    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-xs font-bold uppercase tracking-eyebrow border ${tone}`}>
       <span className={`w-1 h-1 rounded-full ${dot}`} />
       {status}
     </span>
@@ -331,17 +331,17 @@ function EmptyState({
             boxShadow: `inset 0 0 0 1px ${accent}33, 0 8px 32px -8px ${accent}55`,
           }}
         >
-          <span className="font-mono text-[18px] font-bold" style={{ color: accent }}>
+          <span className="font-mono text-2xl font-bold" style={{ color: accent }}>
             {project.initial}
           </span>
         </div>
         <h2 className={`text-[15px] font-semibold mb-1 ${textPrimary}`}>
           {t('empty.title')}
         </h2>
-        <p className={`text-[12px] ${textMuted} mb-2`}>
+        <p className={`text-base ${textMuted} mb-2`}>
           {t('empty.subtitle')}
         </p>
-        <p className={`text-[11px] font-mono ${textFaint} mb-8`}>
+        <p className={`text-sm font-mono ${textFaint} mb-8`}>
           {project.slug}
         </p>
 
@@ -354,11 +354,11 @@ function EmptyState({
             >
               <div className="flex items-center gap-2 mb-1">
                 <Icon className={`w-3.5 h-3.5 ${textFaint}`} />
-                <span className={`text-[12px] font-semibold ${textPrimary}`}>
+                <span className={`text-base font-semibold ${textPrimary}`}>
                   {t(`suggestion.${key}.title`)}
                 </span>
               </div>
-              <div className={`text-[11px] leading-relaxed ${textMuted} line-clamp-2`}>
+              <div className={`text-sm leading-relaxed ${textMuted} line-clamp-2`}>
                 {t(`suggestion.${key}.body`)}
               </div>
             </button>

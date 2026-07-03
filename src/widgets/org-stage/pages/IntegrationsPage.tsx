@@ -117,7 +117,7 @@ export default function IntegrationsPage() {
                 key={c.id}
                 type="button"
                 onClick={() => { setFilter(c.id); }}
-                className="h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+                className="h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
                 style={{
                   background: active ? 'var(--bg-active)' : 'transparent',
                   color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -132,7 +132,7 @@ export default function IntegrationsPage() {
           })}
         </div>
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-1.5 text-[11px] cursor-pointer" style={{ color: 'var(--fg-muted)' }}>
+          <label className="flex items-center gap-1.5 text-sm cursor-pointer" style={{ color: 'var(--fg-muted)' }}>
             <Toggle checked={installedOnly} onChange={setInstalledOnly} label="Installed only" />
             Installed only
           </label>
@@ -149,8 +149,8 @@ export default function IntegrationsPage() {
       {/* Grid */}
       {filtered.length === 0 ? (
         <div className="text-center py-12" style={{ color: 'var(--fg-subtle)' }}>
-          <p className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>No apps match.</p>
-          <p className="text-[11px] mt-1">Try a different category or clear the search.</p>
+          <p className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>No apps match.</p>
+          <p className="text-sm mt-1">Try a different category or clear the search.</p>
         </div>
       ) : (
         <div
@@ -199,7 +199,7 @@ function IntegrationCard({
     >
       <div className="flex items-start gap-3">
         <div
-          className="w-10 h-10 rounded-md flex items-center justify-center text-[12px] font-black shrink-0"
+          className="w-10 h-10 rounded-md flex items-center justify-center text-base font-black shrink-0"
           style={{
             backgroundImage: `linear-gradient(135deg, ${item.markFrom}, ${item.markTo})`,
             color: '#fff',
@@ -209,28 +209,28 @@ function IntegrationCard({
         </div>
         <div className="flex flex-col flex-1 min-w-0 gap-0.5">
           <div className="flex items-center gap-1.5">
-            <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
               {item.name}
             </span>
             {item.installed && <StatusDot status={item.status ?? 'healthy'} />}
           </div>
-          <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             {labelFor(item.category)}
           </span>
         </div>
       </div>
 
-      <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+      <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
         {item.blurb}
       </p>
 
       <div className="flex items-center justify-between mt-auto pt-1">
         {item.installed ? (
-          <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
             {item.account}
           </span>
         ) : (
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             Not installed
           </span>
         )}
@@ -280,12 +280,12 @@ function ConfigDrawer({
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
           <div className="flex items-center gap-2.5 min-w-0">
             <div
-              className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-black shrink-0"
+              className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-black shrink-0"
               style={{ backgroundImage: `linear-gradient(135deg, ${item.markFrom}, ${item.markTo})`, color: '#fff' }}
             >
               {item.name.slice(0, 2).toUpperCase()}
             </div>
-            <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
               {item.name}
             </span>
             {item.status && <StatusDot status={item.status} />}
@@ -297,22 +297,22 @@ function ConfigDrawer({
 
         <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>Account</span>
-            <span className="text-[12px] font-mono" style={{ color: 'var(--fg-default)' }}>{item.account}</span>
+            <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>Account</span>
+            <span className="text-base font-mono" style={{ color: 'var(--fg-default)' }}>{item.account}</span>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>Installed by</span>
-            <span className="text-[12px]" style={{ color: 'var(--fg-default)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>Installed by</span>
+            <span className="text-base" style={{ color: 'var(--fg-default)' }}>
               {item.installedBy} · <span className="font-mono">{item.installedAt}</span>
             </span>
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>Subscribed events</span>
+            <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>Subscribed events</span>
             <ul className="flex flex-col rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
               {(item.events ?? []).length === 0 ? (
-                <li className="px-3 py-3 text-[11px] text-center" style={{ color: 'var(--fg-subtle)' }}>
+                <li className="px-3 py-3 text-sm text-center" style={{ color: 'var(--fg-subtle)' }}>
                   No events configured.
                 </li>
               ) : (item.events ?? []).map((e) => (
@@ -322,7 +322,7 @@ function ConfigDrawer({
                   style={{ borderColor: 'var(--border-muted)' }}
                 >
                   <Check className="w-3 h-3 shrink-0" style={{ color: 'var(--intent-success-fg)' }} />
-                  <span className="font-mono text-[11px]" style={{ color: 'var(--fg-default)' }}>{e}</span>
+                  <span className="font-mono text-sm" style={{ color: 'var(--fg-default)' }}>{e}</span>
                 </li>
               ))}
             </ul>
@@ -330,7 +330,7 @@ function ConfigDrawer({
 
           {item.status === 'error' && (
             <div
-              className="flex items-start gap-2 px-3 py-2.5 rounded-md text-[11px]"
+              className="flex items-start gap-2 px-3 py-2.5 rounded-md text-sm"
               style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)', border: '1px solid var(--intent-danger-fg)' }}
             >
               <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
@@ -339,10 +339,10 @@ function ConfigDrawer({
           )}
 
           <div className="flex flex-col gap-2">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>Documentation</span>
+            <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>Documentation</span>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 text-[12px] font-medium bg-transparent border-0 p-0 cursor-pointer self-start"
+              className="inline-flex items-center gap-1.5 text-base font-medium bg-transparent border-0 p-0 cursor-pointer self-start"
               style={{ color: 'var(--fg-link)' }}
             >
               Open {item.name} docs

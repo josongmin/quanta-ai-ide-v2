@@ -40,7 +40,7 @@ export function ActivityScene({
 
       <ul className="mt-3 space-y-2">
         {pr.conversation.length === 0 ? (
-          <li className="text-[12px] italic text-[var(--fg-subtle)]">{tr('empty.noActivity')}</li>
+          <li className="text-base italic text-[var(--fg-subtle)]">{tr('empty.noActivity')}</li>
         ) : (
           pr.conversation.map((it) => (
             <ActivityRow key={it.id} item={it} blockerColor={blockerColor} />
@@ -58,15 +58,15 @@ export function ActivityScene({
           }}
           placeholder={tr('comment.placeholder')}
           rows={3}
-          className="w-full px-2 py-1.5 rounded-md text-[12px] font-mono resize-y outline-none bg-[var(--bg-hover)] text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)] border border-[var(--border-default)]"
+          className="w-full px-2 py-1.5 rounded-md text-base font-mono resize-y outline-none bg-[var(--bg-hover)] text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)] border border-[var(--border-default)]"
         />
         <div className="flex items-center justify-between mt-2">
-          <span className="text-[10px] font-mono text-[var(--fg-subtle)]">⌘↵ to send · r to focus</span>
+          <span className="text-xs font-mono text-[var(--fg-subtle)]">⌘↵ to send · r to focus</span>
           <button
             type="button"
             onClick={send}
             disabled={draft.trim().length === 0}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold transition-colors bg-[var(--fg-strong)] text-[var(--fg-on-accent)] disabled:bg-[var(--bg-elevated)] disabled:text-[var(--fg-subtle)] disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-sm font-bold transition-colors bg-[var(--fg-strong)] text-[var(--fg-on-accent)] disabled:bg-[var(--bg-elevated)] disabled:text-[var(--fg-subtle)] disabled:cursor-not-allowed"
           >
             <Send className="w-3 h-3" />
             Comment
@@ -86,11 +86,11 @@ function ActivityRow({
 }) {
   if (item.kind === 'event') {
     return (
-      <li className="flex items-center gap-2 text-[11px] text-[var(--fg-muted)]">
+      <li className="flex items-center gap-2 text-sm text-[var(--fg-muted)]">
         <span className="w-1.5 h-1.5 rounded-full bg-[var(--fg-subtle)]" />
-        <span className="font-mono text-[11px] text-[var(--fg-subtle)]">@{item.actorLogin}</span>
+        <span className="font-mono text-sm text-[var(--fg-subtle)]">@{item.actorLogin}</span>
         <span className="text-[var(--fg-muted)]">{item.detail}</span>
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">{timeAgo(item.createdAt)}</span>
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">{timeAgo(item.createdAt)}</span>
       </li>
     );
   }
@@ -109,7 +109,7 @@ function ActivityRow({
       <Avatar login={item.authorLogin} size={20} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-bold text-[var(--fg-strong)]">{displayName(item.authorLogin)}</span>
+          <span className="text-base font-bold text-[var(--fg-strong)]">{displayName(item.authorLogin)}</span>
           {isReview && (
             <Badge
               variant={
@@ -122,9 +122,9 @@ function ActivityRow({
               {item.verdict}
             </Badge>
           )}
-          <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">{timeAgo(item.createdAt)}</span>
+          <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">{timeAgo(item.createdAt)}</span>
         </div>
-        <div className="mt-0.5 text-[12px] leading-snug text-[var(--fg-default)] whitespace-pre-wrap break-words">
+        <div className="mt-0.5 text-base leading-snug text-[var(--fg-default)] whitespace-pre-wrap break-words">
           {item.body}
         </div>
       </div>

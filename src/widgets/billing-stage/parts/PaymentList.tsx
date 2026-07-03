@@ -32,7 +32,7 @@ export function PaymentList({ methods }: Props) {
 
       <button
         type="button"
-        className="mt-3 self-start inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+        className="mt-3 self-start inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
         style={{
           color: 'var(--fg-default)',
           background: 'transparent',
@@ -63,20 +63,20 @@ function PaymentRow({
     >
       <BrandGlyph brand={method.brand} />
       <span
-        className="text-[12px] font-medium tabular-nums"
+        className="text-base font-medium tabular-nums"
         style={{ color: 'var(--fg-strong)' }}
       >
         {BRAND[method.brand]} ···· {method.last4}
       </span>
-      <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
         Exp {method.exp}
       </span>
-      <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
         {method.holder}
       </span>
       {method.default && (
         <span
-          className="text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="text-xs uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-accent)' }}
         >
           Default
@@ -87,7 +87,7 @@ function PaymentRow({
         <button
           type="button"
           onClick={onMakeDefault}
-          className="opacity-0 group-hover:opacity-100 transition-opacity text-[11px] font-medium"
+          className="opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium"
           style={{ color: 'var(--fg-link)' }}
         >
           Make default
@@ -103,7 +103,7 @@ function BrandGlyph({ brand }: { brand: PaymentMethod['brand'] }) {
   const label = brand === 'amex' ? 'AX' : brand === 'mastercard' ? 'MC' : 'VS';
   return (
     <span
-      className="w-7 h-5 rounded text-[9px] font-mono font-bold flex items-center justify-center shrink-0"
+      className="w-7 h-5 rounded text-2xs font-mono font-bold flex items-center justify-center shrink-0"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',

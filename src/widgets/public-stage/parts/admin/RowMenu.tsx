@@ -32,7 +32,7 @@ export function RowMenuItem({
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center px-2.5 h-8 text-[12px] text-left transition-colors"
+      className="w-full flex items-center px-2.5 h-8 text-base text-left transition-colors"
       style={{ color: danger ? 'var(--intent-danger-fg)' : 'var(--fg-default)' }}
       onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
       onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}

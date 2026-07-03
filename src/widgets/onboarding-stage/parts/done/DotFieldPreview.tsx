@@ -88,7 +88,7 @@ export function DotFieldPreview() {
       </svg>
 
       <div
-        className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[9px] font-mono tabular-nums"
+        className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-2xs font-mono tabular-nums"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>dot field · live preview</span>

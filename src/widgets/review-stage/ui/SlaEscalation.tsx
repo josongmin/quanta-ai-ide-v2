@@ -137,10 +137,10 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
     >
       <div className="flex items-center gap-2 px-2.5 py-1.5 border-b border-[var(--border-muted)]">
         <AlertOctagon className="w-3 h-3" style={{ color: 'var(--intent-danger-fg)' }} strokeWidth={2.5} />
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color: 'var(--intent-danger-fg)' }}>
+        <span className="text-xs font-bold uppercase tracking-eyebrow" style={{ color: 'var(--intent-danger-fg)' }}>
           SLA 만료
         </span>
-        <span className="ml-auto text-[10px] font-mono tabular-nums text-[var(--fg-subtle)]">
+        <span className="ml-auto text-xs font-mono tabular-nums text-[var(--fg-subtle)]">
           {stalled.length}개 · 7일+
         </span>
       </div>
@@ -153,7 +153,7 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
           return (
             <li
               key={s.pr.number}
-              className="flex items-center gap-2 px-2.5 py-1.5 text-[11px] hover:bg-[var(--bg-surface-muted)] transition-colors"
+              className="flex items-center gap-2 px-2.5 py-1.5 text-sm hover:bg-[var(--bg-surface-muted)] transition-colors"
             >
               <button
                 type="button"
@@ -163,7 +163,7 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
                 <div className="text-[var(--fg-default)] truncate font-medium">
                   {s.pr.title}
                 </div>
-                <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono text-[var(--fg-muted)]">
+                <div className="mt-0.5 flex items-center gap-2 text-xs font-mono text-[var(--fg-muted)]">
                   <span className="tabular-nums">#{s.pr.number}</span>
                   <span className="text-[var(--fg-subtle)]">·</span>
                   <span className="tabular-nums" style={{ color: 'var(--intent-danger-fg)' }}>
@@ -186,7 +186,7 @@ export default function SlaEscalation({ prs, onJumpToPr }: Props) {
                 title={cooledDown
                   ? '최근 30분 내 ping 발송됨 (cooldown)'
                   : '대기 중 reviewer에게 ping (PR 코멘트로 발송)'}
-                className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-60"
+                className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded text-xs font-bold uppercase tracking-eyebrow transition-colors disabled:opacity-60"
                 style={{
                   background: wasPinged && result === 'sent' ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)'
                     : wasPinged && result === 'cooldown' ? 'color-mix(in srgb, var(--intent-warn-fg) 16%, transparent)'

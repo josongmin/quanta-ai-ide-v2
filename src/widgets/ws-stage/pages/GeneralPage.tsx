@@ -77,7 +77,7 @@ export default function GeneralPage() {
           <select
             value={form.defaultBranch}
             onChange={(e) => { set('defaultBranch', e.target.value as Form['defaultBranch']); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',

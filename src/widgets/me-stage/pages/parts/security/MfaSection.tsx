@@ -36,7 +36,7 @@ export function MfaSection({
           }}
         >
           <ShieldAlert className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-danger-fg)' }} />
-          <div className="flex flex-col gap-0.5 text-[11px]">
+          <div className="flex flex-col gap-0.5 text-sm">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               No 2FA configured — your account is at higher risk
             </span>
@@ -95,25 +95,25 @@ function MethodRow({
       </span>
       <div className="flex flex-col min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>
             {method.label}
           </span>
           {method.primary && (
             <span
-              className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+              className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
               style={{ color: 'var(--fg-accent)', border: '1px solid var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
             >
               Primary
             </span>
           )}
           <span
-            className="text-[9px] uppercase tracking-[0.14em] font-semibold"
+            className="text-2xs uppercase tracking-eyebrow font-semibold"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {method.kind === 'totp' ? 'TOTP' : method.kind === 'webauthn' ? 'WebAuthn' : 'SMS'}
           </span>
         </div>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           Added {method.added} · Last used {method.lastUsed}
         </span>
       </div>

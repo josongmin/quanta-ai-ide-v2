@@ -149,13 +149,13 @@ export default function TeamsPage() {
               value={q}
               onChange={(e) => { setQ(e.target.value); }}
               placeholder="Search teams…"
-              className="flex-1 bg-transparent outline-none text-[12px]"
+              className="flex-1 bg-transparent outline-none text-base"
               style={{ color: 'var(--fg-strong)' }}
             />
           </div>
           <div className="flex-1 overflow-y-auto">
             {filtered.length === 0 ? (
-              <div className="px-4 py-8 text-center text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <div className="px-4 py-8 text-center text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 No teams match.
               </div>
             ) : filtered.map((t) => {
@@ -176,14 +176,14 @@ export default function TeamsPage() {
                   <UsersRound className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
                   <div className="flex flex-col min-w-0 flex-1 gap-0.5">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+                      <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
                         {t.name}
                       </span>
-                      <span className="text-[10px] font-mono truncate" style={{ color: 'var(--fg-subtle)' }}>
+                      <span className="text-xs font-mono truncate" style={{ color: 'var(--fg-subtle)' }}>
                         {t.handle}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-[10px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>
+                    <div className="flex items-center gap-2 text-xs tabular-nums" style={{ color: 'var(--fg-muted)' }}>
                       <span>{t.members.length} {t.members.length === 1 ? 'member' : 'members'}</span>
                       <span>·</span>
                       <span>{t.paths.length} paths</span>
@@ -206,7 +206,7 @@ export default function TeamsPage() {
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center gap-2 px-6 text-center">
               <UsersRound className="w-7 h-7" style={{ color: 'var(--fg-subtle)' }} />
-              <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+              <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                 No team selected
               </span>
             </div>

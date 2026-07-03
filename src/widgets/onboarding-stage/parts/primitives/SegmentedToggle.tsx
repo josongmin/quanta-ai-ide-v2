@@ -34,7 +34,7 @@ export function SegmentedToggle<T extends string>({
             key={opt}
             type="button"
             onClick={() => { onChange(opt); }}
-            className={`${segmentPadding} h-7 rounded text-[11px] font-medium transition-colors`}
+            className={`${segmentPadding} h-7 rounded text-sm font-medium transition-colors`}
             style={{
               background: active ? 'var(--bg-canvas)' : 'transparent',
               color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',

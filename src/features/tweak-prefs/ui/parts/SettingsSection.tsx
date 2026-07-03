@@ -19,14 +19,14 @@ export function SettingsSection({ label, description, children, inline = false }
       <div className="flex items-center justify-between gap-4 py-3">
         <div className="min-w-0">
           <div
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-default)' }}
           >
             {label}
           </div>
           {description && (
             <div
-              className="text-[10px] mt-0.5"
+              className="text-xs mt-0.5"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {description}
@@ -42,14 +42,14 @@ export function SettingsSection({ label, description, children, inline = false }
     <section className="space-y-2.5">
       <div>
         <div
-          className="text-[10px] font-black uppercase tracking-[0.18em]"
+          className="text-xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-muted)' }}
         >
           {label}
         </div>
         {description && (
           <div
-            className="text-[10px] mt-1"
+            className="text-xs mt-1"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {description}

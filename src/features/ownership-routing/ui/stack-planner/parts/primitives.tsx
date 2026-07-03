@@ -14,7 +14,7 @@ export const MERGE_STRATEGY_SHORT: Record<MergeStrategy, string> = {
 export function MergeStrategyPill({ strategy }: { strategy: MergeStrategy }) {
   return (
     <span
-      className="inline-flex items-center px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[0.18em]"
+      className="inline-flex items-center px-2 py-1 rounded-md text-2xs font-black uppercase tracking-eyebrow"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-default)',
@@ -30,7 +30,7 @@ export function RiskBadgePill({ risk }: { risk: RiskBadge }) {
   const tone = riskTone(risk);
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em] shrink-0"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-eyebrow shrink-0"
       style={{
         background: tone.bg,
         color: tone.fg,

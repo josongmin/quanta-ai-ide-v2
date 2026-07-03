@@ -6,10 +6,10 @@ export function TocAside() {
   return (
     <aside className="min-w-0">
       <div className="sticky top-20 flex flex-col gap-2">
-        <span className="text-[10px] uppercase tracking-[0.18em] font-semibold mb-1" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold mb-1" style={{ color: 'var(--fg-subtle)' }}>
           Recent releases
         </span>
-        <ol className="flex flex-col gap-1.5 text-[12px]">
+        <ol className="flex flex-col gap-1.5 text-base">
           {ENTRIES.slice(0, 8).map((e) => (
             <li key={e.id}>
               <a
@@ -26,7 +26,7 @@ export function TocAside() {
         <SeamDivider />
         <a
           href="/changelog.rss"
-          className="inline-flex items-center gap-1.5 mt-2 text-[12px]"
+          className="inline-flex items-center gap-1.5 mt-2 text-base"
           style={{ color: 'var(--fg-link)' }}
         >
           <Rss className="w-3 h-3" /> RSS feed

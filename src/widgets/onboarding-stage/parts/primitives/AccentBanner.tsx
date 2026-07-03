@@ -21,7 +21,7 @@ export function AccentBanner({ icon: Icon, title, body, stagger = false }: Props
       style={{ background: ACCENT_TINT, border: '1px solid var(--fg-accent)' }}
     >
       <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
-      <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
+      <div className="flex flex-col gap-0.5 text-sm leading-snug">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {title}
         </span>

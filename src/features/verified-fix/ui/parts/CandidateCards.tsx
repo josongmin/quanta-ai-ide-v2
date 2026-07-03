@@ -27,7 +27,7 @@ export function CandidateCards({
         className="rounded-lg border px-4 py-8 text-center"
         style={{ background: t.cardBacking, borderColor: t.border, color: t.textFaint }}
       >
-        <div className="text-[11px] font-bold uppercase tracking-[0.16em]">
+        <div className="text-sm font-bold uppercase tracking-[0.16em]">
           {tr('candidates.noViableTitle')}
         </div>
         <div className="text-sm mt-1.5" style={{ color: t.textMuted }}>
@@ -41,12 +41,12 @@ export function CandidateCards({
     <div>
       <div className="flex items-center justify-between mb-2">
         <span
-          className="text-[10px] font-black uppercase tracking-[0.18em]"
+          className="text-xs font-black uppercase tracking-eyebrow"
           style={{ color: t.textMuted }}
         >
           {tr('candidates.header', { count: visible.length })}
         </span>
-        <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {tr('candidates.subtitle')}
         </span>
       </div>
@@ -71,20 +71,20 @@ export function CandidateCards({
               <div className="p-3.5">
                 <div className="flex items-center gap-2 mb-1.5">
                   <span
-                    className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
+                    className="text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
                     style={{ background: tc.bg, color: tc.fg }}
                   >
                     {tr(TIER_KEY[c.tier])}
                   </span>
                   {c.publicApiChange && (
                     <span
-                      className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded inline-flex items-center gap-1"
+                      className="text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded inline-flex items-center gap-1"
                       style={{ background: t.warnSoft, color: t.warn }}
                     >
                       <ShieldAlert className="w-2.5 h-2.5" /> {tr('candidates.apiBreak')}
                     </span>
                   )}
-                  <span className="ml-auto text-[10px] font-mono" style={{ color: t.textFaint }}>
+                  <span className="ml-auto text-xs font-mono" style={{ color: t.textFaint }}>
                     {Math.round(c.confidence * 100)}%
                   </span>
                 </div>
@@ -159,13 +159,13 @@ function Stat({ icon: Icon, label, value }: {
       <div className="flex items-center gap-1 mb-0.5">
         <Icon className="w-2.5 h-2.5" style={{ color: t.textFaint }} />
         <span
-          className="text-2xs font-bold uppercase tracking-[0.14em]"
+          className="text-2xs font-bold uppercase tracking-eyebrow"
           style={{ color: t.textFaint }}
         >
           {label}
         </span>
       </div>
-      <div className="text-[14px] font-bold font-mono" style={{ color: t.textHi }}>
+      <div className="text-lg font-bold font-mono" style={{ color: t.textHi }}>
         {value}
       </div>
     </div>

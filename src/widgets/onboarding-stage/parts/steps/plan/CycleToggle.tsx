@@ -17,7 +17,7 @@ export function CycleToggle({
           <span className="flex items-center gap-1.5">
             Annual
             <span
-              className="text-[8px] uppercase tracking-[0.14em] font-semibold px-1 py-0.5 rounded"
+              className="text-2xs uppercase tracking-eyebrow font-semibold px-1 py-0.5 rounded"
               style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
             >
               −17%

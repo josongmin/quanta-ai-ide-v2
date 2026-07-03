@@ -51,7 +51,7 @@ export default function ModeSwitcher() {
       {open && (
         <div className="absolute left-0 mt-2 w-[260px]">
           <GlassCard className="p-2">
-            <div className={`text-[9px] font-black uppercase tracking-[0.18em] mb-1.5 px-1.5 ${
+            <div className={`text-2xs font-black uppercase tracking-eyebrow mb-1.5 px-1.5 ${
               isDark ? 'text-white/40' : 'text-black/40'
             }`}>
               {t('switcher.heading')}
@@ -73,8 +73,8 @@ export default function ModeSwitcher() {
                   >
                     <I className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#4f9a5c]' : ''}`} />
                     <div className="min-w-0 flex-1">
-                      <div className="text-[11px] font-bold leading-tight">{label}</div>
-                      <div className={`text-[9px] leading-tight truncate ${
+                      <div className="text-sm font-bold leading-tight">{label}</div>
+                      <div className={`text-2xs leading-tight truncate ${
                         isDark ? 'text-white/40' : 'text-black/40'
                       }`}>
                         {hint}

@@ -27,12 +27,12 @@ export const Stat = memo(function Stat({
   const valueColor = tone === 'critical' ? C.critical : 'var(--fg-default)';
 
   return (
-    <div className="flex items-center justify-between gap-2 text-[11px]">
+    <div className="flex items-center justify-between gap-2 text-sm">
       <div className="flex flex-col min-w-0 flex-1">
         <span className="truncate" style={{ color: 'var(--fg-muted)' }}>{label}</span>
         {sublabel && (
           <span
-            className="text-[9px] font-mono truncate"
+            className="text-2xs font-mono truncate"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {sublabel}
@@ -50,7 +50,7 @@ export const Stat = memo(function Stat({
         <span className="font-bold tabular-nums" style={{ color: valueColor }}>{value}</span>
         {suffix && (
           <span
-            className="text-[10px] tabular-nums"
+            className="text-xs tabular-nums"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {suffix}

@@ -20,15 +20,15 @@ export function FixDrawer({
   return (
     <ModalShell title={t('gate.fix.title', { rule: ruleName })} onClose={onClose}>
       <div className="p-4 flex flex-col gap-3">
-        <p className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base" style={{ color: 'var(--fg-muted)' }}>
           {t('gate.fix.intro')}
         </p>
         <div
-          className="rounded-md overflow-hidden font-mono text-[11px] leading-[1.55]"
+          className="rounded-md overflow-hidden font-mono text-sm leading-[1.55]"
           style={{ border: '1px solid var(--border-default)' }}
         >
           <div
-            className="px-3 py-1 text-[10px] uppercase tracking-[0.14em]"
+            className="px-3 py-1 text-xs uppercase tracking-eyebrow"
             style={{
               color: 'var(--fg-subtle)',
               background: 'var(--bg-surface-muted)',
@@ -59,7 +59,7 @@ export function FixDrawer({
           </div>
         </div>
         <p
-          className="text-[11px] leading-snug"
+          className="text-sm leading-snug"
           style={{ color: 'var(--fg-subtle)' }}
         >
           The agent&apos;s confidence in this patch is moderate — verify the
@@ -69,7 +69,7 @@ export function FixDrawer({
           <button
             type="button"
             onClick={onClose}
-            className="h-7 px-3 rounded-md text-[11px]"
+            className="h-7 px-3 rounded-md text-sm"
             style={{
               border: '1px solid var(--border-default)',
               color: 'var(--fg-muted)',
@@ -83,7 +83,7 @@ export function FixDrawer({
             onClick={onClose}
             disabled
             title={t('gate.fix.applyDisabledTitle')}
-            className="h-7 px-3 rounded-md text-[11px] font-medium"
+            className="h-7 px-3 rounded-md text-sm font-medium"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',

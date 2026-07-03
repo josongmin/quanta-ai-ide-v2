@@ -59,7 +59,7 @@ function TopNav({ active }: { active?: Props['active'] }) {
           style={{ color: 'var(--fg-strong)' }}
         >
           <div
-            className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black"
+            className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-black"
             style={{
               backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
               color: 'var(--bg-canvas)',
@@ -67,7 +67,7 @@ function TopNav({ active }: { active?: Props['active'] }) {
           >
             SE
           </div>
-          <span className="text-[14px]">se.field</span>
+          <span className="text-lg">se.field</span>
         </Link>
         <nav className="flex items-center gap-1">
           {NAV.map((n) => {
@@ -77,7 +77,7 @@ function TopNav({ active }: { active?: Props['active'] }) {
                 key={n.id}
                 to={n.to as never}
                 params={{} as never}
-                className="h-8 px-3 rounded-md text-[12px] font-medium transition-colors inline-flex items-center"
+                className="h-8 px-3 rounded-md text-base font-medium transition-colors inline-flex items-center"
                 style={{
                   color: isActive ? 'var(--fg-strong)' : 'var(--fg-muted)',
                   background: isActive ? 'var(--bg-active)' : 'transparent',
@@ -92,14 +92,14 @@ function TopNav({ active }: { active?: Props['active'] }) {
           <div className="w-px h-5 mx-2" style={{ background: 'var(--border-muted)' }} />
           <Link
             to={'/auth/login' as never}
-            className="h-8 px-3 rounded-md text-[12px] font-medium inline-flex items-center"
+            className="h-8 px-3 rounded-md text-base font-medium inline-flex items-center"
             style={{ color: 'var(--fg-default)' }}
           >
             Sign in
           </Link>
           <Link
             to={'/auth/signup' as never}
-            className="h-8 px-3 rounded-md text-[12px] font-semibold inline-flex items-center"
+            className="h-8 px-3 rounded-md text-base font-semibold inline-flex items-center"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             Get started
@@ -116,7 +116,7 @@ function Footer() {
       className="mt-auto"
       style={{ borderTop: '1px solid var(--border-muted)' }}
     >
-      <div className="max-w-[1080px] mx-auto px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px]"
+      <div className="max-w-[1080px] mx-auto px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>© 2026 ACME, Inc. · Engineered in Seoul · San Francisco · Berlin</span>

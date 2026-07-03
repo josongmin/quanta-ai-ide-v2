@@ -65,19 +65,19 @@ export function PathScopingPanel({
       >
         <FolderTree className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <h3
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Per-path scoping
         </h3>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           override severity inside specific paths
         </span>
       </header>
 
       <div className="p-4 flex flex-col gap-3">
         {ruled.length === 0 ? (
-          <div className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
             No path overrides defined. Use the form below to add one.
           </div>
         ) : (
@@ -94,12 +94,12 @@ export function PathScopingPanel({
                   borderBottom: '1px solid var(--border-default)',
                 }}
               >
-                <span className="text-[11px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {r.ruleName}
                 </span>
                 {r.defaultSeverity && (
                   <span
-                    className="text-[9px] uppercase tracking-[0.14em] font-mono"
+                    className="text-2xs uppercase tracking-eyebrow font-mono"
                     style={{ color: SEVERITY_FG[r.defaultSeverity] }}
                   >
                     default {r.defaultSeverity}
@@ -114,16 +114,16 @@ export function PathScopingPanel({
                     style={{ borderColor: 'var(--border-default)' }}
                   >
                     <code
-                      className="flex-1 text-[11px] font-mono truncate"
+                      className="flex-1 text-sm font-mono truncate"
                       style={{ color: 'var(--fg-strong)' }}
                     >
                       {override.pattern}
                     </code>
-                    <span className="text-[10px] font-mono" style={{ color: 'var(--fg-subtle)' }}>
+                    <span className="text-xs font-mono" style={{ color: 'var(--fg-subtle)' }}>
                       →
                     </span>
                     <span
-                      className="text-[10px] uppercase tracking-[0.14em] font-mono"
+                      className="text-xs uppercase tracking-eyebrow font-mono"
                       style={{ color: SEVERITY_FG[override.severity] }}
                     >
                       {override.severity}
@@ -160,13 +160,13 @@ export function PathScopingPanel({
           }}
         >
           <label className="flex flex-col gap-1 flex-1 min-w-0">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Rule
             </span>
             <select
               value={draftRule}
               onChange={(e) => { setDraftRule(e.target.value); }}
-              className="h-7 px-2 rounded text-[11px] outline-none"
+              className="h-7 px-2 rounded text-sm outline-none"
               style={{
                 background: 'var(--bg-canvas)',
                 border: '1px solid var(--border-default)',
@@ -180,14 +180,14 @@ export function PathScopingPanel({
             </select>
           </label>
           <label className="flex flex-col gap-1 flex-1 min-w-0">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Path glob
             </span>
             <input
               value={draftPattern}
               onChange={(e) => { setDraftPattern(e.target.value); }}
               placeholder="src/experiments/"
-              className="h-7 px-2 rounded text-[11px] font-mono outline-none"
+              className="h-7 px-2 rounded text-sm font-mono outline-none"
               style={{
                 background: 'var(--bg-canvas)',
                 border: '1px solid var(--border-default)',
@@ -196,13 +196,13 @@ export function PathScopingPanel({
             />
           </label>
           <label className="flex flex-col gap-1 shrink-0">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Severity
             </span>
             <select
               value={draftSeverity}
               onChange={(e) => { setDraftSeverity(e.target.value as RuleSeverity); }}
-              className="h-7 px-2 rounded text-[11px] outline-none"
+              className="h-7 px-2 rounded text-sm outline-none"
               style={{
                 background: 'var(--bg-canvas)',
                 border: '1px solid var(--border-default)',
@@ -216,7 +216,7 @@ export function PathScopingPanel({
             type="button"
             onClick={submit}
             disabled={!draftRule || !draftPattern.trim()}
-            className="h-7 px-2.5 rounded-md text-[11px] font-medium inline-flex items-center gap-1 shrink-0"
+            className="h-7 px-2.5 rounded-md text-sm font-medium inline-flex items-center gap-1 shrink-0"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',

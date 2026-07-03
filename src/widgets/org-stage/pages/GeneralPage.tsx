@@ -53,7 +53,7 @@ export default function GeneralPage() {
         <Row label="Logo" sub="Square PNG or SVG, at least 64×64.">
           <div className="flex items-center gap-3">
             <div
-              className="w-12 h-12 rounded-md flex items-center justify-center text-[16px] font-black"
+              className="w-12 h-12 rounded-md flex items-center justify-center text-xl font-black"
               style={{
                 backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
                 color: 'var(--bg-canvas)',
@@ -101,7 +101,7 @@ export default function GeneralPage() {
           <select
             value={form.defaultWorkspace}
             onChange={(e) => { set('defaultWorkspace', e.target.value); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',

@@ -43,7 +43,7 @@ export default function EnvironmentsPage() {
         </Button>
       }
     >
-      <h2 className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-2" style={{ color: 'var(--fg-subtle)' }}>
+      <h2 className="text-xs uppercase tracking-eyebrow font-semibold mb-2" style={{ color: 'var(--fg-subtle)' }}>
         Environments · {envs.length}
       </h2>
       <div

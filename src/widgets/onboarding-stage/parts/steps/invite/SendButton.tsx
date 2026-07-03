@@ -17,7 +17,7 @@ export function SendButton({
           border: '1px solid var(--fg-accent)',
         }}
       >
-        <div className="flex items-center justify-between text-[11px]">
+        <div className="flex items-center justify-between text-sm">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
             Sending invitations…
           </span>
@@ -44,7 +44,7 @@ export function SendButton({
     <button
       type="button"
       onClick={onSend}
-      className="self-start inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-opacity hover:opacity-90"
+      className="self-start inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-opacity hover:opacity-90"
       style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
     >
       <Send className="w-3.5 h-3.5" />
@@ -62,7 +62,7 @@ export function SentReceipt({ entries }: { entries: InviteEntry[] }) {
         border: '1px solid var(--intent-success-fg)',
       }}
     >
-      <div className="flex items-center gap-2 text-[11px]">
+      <div className="flex items-center gap-2 text-sm">
         <Check className="w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {entries.length} invitation{entries.length === 1 ? '' : 's'} queued
@@ -71,7 +71,7 @@ export function SentReceipt({ entries }: { entries: InviteEntry[] }) {
           · sent at {formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })}
         </span>
       </div>
-      <span className="text-[10px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="text-xs" style={{ color: 'var(--fg-muted)' }}>
         Recipients will get an email within a minute. They can also use the invite link if they prefer.
       </span>
     </div>

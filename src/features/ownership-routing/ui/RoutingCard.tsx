@@ -106,7 +106,7 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
           aria-expanded={signalsOpen}
         >
           <span
-            className="text-[9px] font-black uppercase tracking-[0.18em]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-muted)' }}
           >
             Ownership signals
@@ -116,13 +116,13 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
             style={{ background: 'var(--border-muted)' }}
           />
           <span
-            className="text-[9px] font-mono tabular-nums"
+            className="text-2xs font-mono tabular-nums"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {zone.scores.length}
           </span>
           <span
-            className="text-[10px] font-mono"
+            className="text-xs font-mono"
             style={{ color: 'var(--fg-subtle)' }}
             aria-hidden="true"
           >

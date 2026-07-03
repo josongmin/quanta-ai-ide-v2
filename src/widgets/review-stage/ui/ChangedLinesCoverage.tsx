@@ -142,10 +142,10 @@ export default function ChangedLinesCoverage({
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <TestTube2 className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Changed-line coverage
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {totals.covered}/{totals.added} new lines tested
         </span>
         {danger && (
@@ -156,7 +156,7 @@ export default function ChangedLinesCoverage({
         )}
       </div>
 
-      <div className="flex items-center gap-3 mb-4 text-[10px] font-mono text-[var(--fg-muted)]">
+      <div className="flex items-center gap-3 mb-4 text-xs font-mono text-[var(--fg-muted)]">
         <span className="inline-flex items-center gap-1">
           <span className="inline-block w-2 h-2 rounded-sm" style={{ background: STATUS_COLOR.covered }} />
           covered
@@ -189,14 +189,14 @@ export default function ChangedLinesCoverage({
           return (
             <div key={b.path} className="rounded-md border border-[var(--border-default)] overflow-hidden">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--bg-surface-muted)] border-b border-[var(--border-default)]">
-                <span className="text-[11px] font-mono text-[var(--fg-default)] truncate flex-1" title={b.path}>
+                <span className="text-sm font-mono text-[var(--fg-default)] truncate flex-1" title={b.path}>
                   {b.path}
                 </span>
-                <span className="text-[10px] font-mono tabular-nums" style={{ color: fileTone }}>
+                <span className="text-xs font-mono tabular-nums" style={{ color: fileTone }}>
                   {Math.round(fileRate * 100)}% ({b.covered}/{b.added})
                 </span>
               </div>
-              <div className="font-mono text-[11px] leading-[1.45]">
+              <div className="font-mono text-sm leading-[1.45]">
                 {visibleRows.map((r, i) => (
                   <div key={i} className="flex items-stretch">
                     <span
@@ -224,7 +224,7 @@ export default function ChangedLinesCoverage({
                   </div>
                 ))}
                 {overflow > 0 && (
-                  <div className="px-3 py-1.5 text-[10px] text-[var(--fg-subtle)] italic border-t border-[var(--border-muted)]">
+                  <div className="px-3 py-1.5 text-xs text-[var(--fg-subtle)] italic border-t border-[var(--border-muted)]">
                     +{overflow} more lines…
                   </div>
                 )}

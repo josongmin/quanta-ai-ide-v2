@@ -5,7 +5,7 @@ export function Message({ msg }: { msg: Msg }) {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div
-        className="max-w-[85%] px-3 py-2 rounded-xl text-[12px] leading-relaxed"
+        className="max-w-[85%] px-3 py-2 rounded-xl text-base leading-relaxed"
         style={
           isUser
             ? {
@@ -21,7 +21,7 @@ export function Message({ msg }: { msg: Msg }) {
       >
         {!isUser && (
           <div
-            className="mb-1 font-mono font-black tracking-tight text-[11px] leading-none"
+            className="mb-1 font-mono font-black tracking-tight text-sm leading-none"
             style={{ color: 'var(--fg-muted)' }}
           >
             p0

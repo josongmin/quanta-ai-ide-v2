@@ -35,7 +35,7 @@ export function HunkCommentThread({
         <button
           type="button"
           onClick={onOpenCompose}
-          className={`flex items-center gap-1 text-[10px] font-mono opacity-60 hover:opacity-100 transition-opacity ${muted}`}
+          className={`flex items-center gap-1 text-xs font-mono opacity-60 hover:opacity-100 transition-opacity ${muted}`}
           title={t('comment.addNote')}
         >
           <Plus className="w-2.5 h-2.5" />
@@ -49,7 +49,7 @@ export function HunkCommentThread({
     <div className={`border-t ${border} ${surface}`}>
       {comments.length > 0 && (
         <>
-          <div className={`px-2 pt-1.5 pb-0.5 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+          <div className={`px-2 pt-1.5 pb-0.5 text-2xs font-bold uppercase tracking-eyebrow ${faint}`}>
             {t('comment.header', { count: comments.length })}
           </div>
           <div className="px-2 pb-1.5 space-y-1.5">
@@ -74,7 +74,7 @@ export function HunkCommentThread({
               onChange={(e) => { setText(e.target.value); }}
               placeholder={t('comment.placeholder')}
               rows={2}
-              className="w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
+              className="w-full px-2 py-1.5 bg-transparent outline-none resize-none text-sm leading-relaxed text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
               spellCheck={false}
               onKeyDown={(e) => {
                 if (e.nativeEvent.isComposing) return;
@@ -91,7 +91,7 @@ export function HunkCommentThread({
                   type="button"
                   onClick={() => { setKind('note'); }}
                   aria-pressed={kind === 'note'}
-                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
+                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-mono transition-colors ${
                     kind === 'note'
                       ? 'bg-[color:var(--bg-active)] text-[color:var(--fg-strong)]'
                       : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]'
@@ -107,7 +107,7 @@ export function HunkCommentThread({
                   style={kind === 'ask'
                     ? { background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)', color: 'var(--intent-warn-fg)' }
                     : undefined}
-                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
+                  className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-mono transition-colors ${
                     kind === 'ask'
                       ? ''
                       : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)]'
@@ -121,7 +121,7 @@ export function HunkCommentThread({
                 <button
                   type="button"
                   onClick={() => { onCancelCompose(); setText(''); }}
-                  className={`px-1.5 py-0.5 rounded text-[10px] ${muted} hover:opacity-100 opacity-70`}
+                  className={`px-1.5 py-0.5 rounded text-xs ${muted} hover:opacity-100 opacity-70`}
                 >
                   {t('comment.cancel')}
                 </button>
@@ -129,7 +129,7 @@ export function HunkCommentThread({
                   type="button"
                   onClick={() => { onSubmit(text, kind); setText(''); }}
                   disabled={!text.trim()}
-                  className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold transition-colors ${
                     text.trim()
                       ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] hover:opacity-90'
                       : 'bg-[color:var(--bg-elevated)] text-[color:var(--fg-subtle)] cursor-not-allowed'
@@ -146,7 +146,7 @@ export function HunkCommentThread({
           <button
             type="button"
             onClick={onOpenCompose}
-            className={`flex items-center gap-1 text-[10px] font-mono opacity-60 hover:opacity-100 transition-opacity ${muted}`}
+            className={`flex items-center gap-1 text-xs font-mono opacity-60 hover:opacity-100 transition-opacity ${muted}`}
             title={t('comment.addNote')}
           >
             <Plus className="w-2.5 h-2.5" />
@@ -194,7 +194,7 @@ function CommentNode({
   return (
     <div className={depth > 0 ? `pl-3 ml-3 border-l ${border}` : ''}>
       <div
-        className={`flex items-start gap-2 px-2 py-1.5 rounded-md text-[11px] leading-relaxed border ${border} ${cardBg}`}
+        className={`flex items-start gap-2 px-2 py-1.5 rounded-md text-sm leading-relaxed border ${border} ${cardBg}`}
       >
         <span
           style={avatarStyle}
@@ -209,14 +209,14 @@ function CommentNode({
         </span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
-            <span className={`text-[10px] font-mono ${muted}`}>
+            <span className={`text-xs font-mono ${muted}`}>
               {isAgent ? t('reply.agentLabel') : t('reply.userLabel')}
             </span>
-            <span className={`text-[9px] font-mono ${faint}`}>{comment.at}</span>
+            <span className={`text-2xs font-mono ${faint}`}>{comment.at}</span>
             {comment.resolved && (
               <span
                 style={{ background: 'var(--intent-success-bg)', color: 'var(--intent-success-fg)' }}
-                className="text-[9px] font-mono px-1.5 py-px rounded"
+                className="text-2xs font-mono px-1.5 py-px rounded"
               >
                 {t('reply.resolved')}
               </span>
@@ -230,7 +230,7 @@ function CommentNode({
               <button
                 type="button"
                 onClick={() => { setReplying(true); }}
-                className={`text-[10px] font-mono opacity-70 hover:opacity-100 transition-opacity ${muted}`}
+                className={`text-xs font-mono opacity-70 hover:opacity-100 transition-opacity ${muted}`}
               >
                 ↩ {t('reply.openCompose')}
               </button>
@@ -239,7 +239,7 @@ function CommentNode({
               <button
                 type="button"
                 onClick={onToggleResolve}
-                className={`text-[10px] font-mono opacity-70 hover:opacity-100 transition-opacity ${muted}`}
+                className={`text-xs font-mono opacity-70 hover:opacity-100 transition-opacity ${muted}`}
               >
                 {comment.resolved ? t('reply.reopen') : t('reply.resolve')}
               </button>
@@ -257,7 +257,7 @@ function CommentNode({
               onChange={(e) => { setReplyText(e.target.value); }}
               placeholder={t('reply.placeholder')}
               rows={2}
-              className="w-full px-2 py-1.5 bg-transparent outline-none resize-none text-[11px] leading-relaxed text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
+              className="w-full px-2 py-1.5 bg-transparent outline-none resize-none text-sm leading-relaxed text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
               spellCheck={false}
               onKeyDown={(e) => {
                 if (e.nativeEvent.isComposing) return;
@@ -272,7 +272,7 @@ function CommentNode({
               <button
                 type="button"
                 onClick={() => { setReplying(false); setReplyText(''); }}
-                className={`px-1.5 py-0.5 rounded text-[10px] ${muted} opacity-70`}
+                className={`px-1.5 py-0.5 rounded text-xs ${muted} opacity-70`}
               >
                 {t('comment.cancel')}
               </button>
@@ -280,7 +280,7 @@ function CommentNode({
                 type="button"
                 onClick={() => { if (replyText.trim()) { onReply(replyText); setReplyText(''); setReplying(false); } }}
                 disabled={!replyText.trim()}
-                className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
+                className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors ${
                   replyText.trim()
                     ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] hover:opacity-90'
                     : 'bg-[color:var(--bg-elevated)] text-[color:var(--fg-subtle)] cursor-not-allowed'

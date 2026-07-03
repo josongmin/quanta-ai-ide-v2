@@ -23,7 +23,7 @@ export function LegalSubNav({ active }: { active: LegalKey }) {
           <Link
             key={t.id}
             to={t.to as never}
-            className="relative px-3 py-2 text-[12px] font-medium whitespace-nowrap transition-colors rounded-t-md"
+            className="relative px-3 py-2 text-base font-medium whitespace-nowrap transition-colors rounded-t-md"
             style={{
               color: isActive ? 'var(--fg-strong)' : 'var(--fg-muted)',
               background: isActive ? 'var(--bg-active)' : 'transparent',

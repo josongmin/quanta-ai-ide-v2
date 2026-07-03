@@ -131,10 +131,10 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <Mountain className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Change saliency
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {skylines.length} {skylines.length === 1 ? 'file' : 'files'} · density per line range
         </span>
       </div>
@@ -157,11 +157,11 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] font-mono text-[var(--fg-default)] truncate" title={s.path}>
+                  <span className="text-sm font-mono text-[var(--fg-default)] truncate" title={s.path}>
                     {s.path}
                   </span>
                   <span
-                    className="shrink-0 inline-flex px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+                    className="shrink-0 inline-flex px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-eyebrow"
                     style={{
                       background: `color-mix(in srgb, ${focusTone} 13%, transparent)`,
                       color: focusTone,
@@ -170,7 +170,7 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
                   >
                     {focusLabel}
                   </span>
-                  <span className="text-[10px] font-mono text-[var(--fg-subtle)] ml-auto tabular-nums">
+                  <span className="text-xs font-mono text-[var(--fg-subtle)] ml-auto tabular-nums">
                     L{s.rangeStart}–{s.rangeEnd}
                   </span>
                 </div>
@@ -220,8 +220,8 @@ export default function HotLineSaliency({ pr }: { pr: PullRequest }) {
                 </div>
               </div>
               <div className="shrink-0 text-right tabular-nums">
-                <div className="text-[14px] font-bold text-[var(--fg-default)] leading-none">{s.total}</div>
-                <div className="text-[9px] font-mono text-[var(--fg-subtle)] mt-1 uppercase tracking-[var(--track-eyebrow)]">lines</div>
+                <div className="text-lg font-bold text-[var(--fg-default)] leading-none">{s.total}</div>
+                <div className="text-2xs font-mono text-[var(--fg-subtle)] mt-1 uppercase tracking-eyebrow">lines</div>
               </div>
             </div>
           );

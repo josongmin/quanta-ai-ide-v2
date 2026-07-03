@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
           }}
         >
           <Clock className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
-          <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
+          <div className="flex flex-col gap-0.5 text-sm leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Reset throttled · retry in {Math.floor(rate.cooldownSec / 60)} min
             </span>
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
           style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
         >
           <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
-          <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
+          <div className="flex flex-col gap-0.5 text-sm leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Reset your {idp.org} password
             </span>
@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
         </div>
         <Link
           to={'/auth/sso' as never}
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold w-full"
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <KeyRound className="w-3.5 h-3.5" />
@@ -151,7 +151,7 @@ export default function ForgotPasswordPage() {
 
         {idp && !idp.enforced && (
           <div
-            className="text-[11px] flex items-start gap-2 px-2.5 py-1.5 rounded onb-stagger"
+            className="text-sm flex items-start gap-2 px-2.5 py-1.5 rounded onb-stagger"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-muted)',
@@ -196,7 +196,7 @@ function SentPanel({
         }}
       >
         <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-success-fg)' }} />
-        <div className="flex flex-col gap-1 text-[11px] leading-snug">
+        <div className="flex flex-col gap-1 text-sm leading-snug">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
             Email request processed
           </span>
@@ -207,7 +207,7 @@ function SentPanel({
         </div>
       </div>
 
-      <div className="flex flex-col gap-1.5 text-[11px]">
+      <div className="flex flex-col gap-1.5 text-sm">
         <span style={{ color: 'var(--fg-muted)' }}>
           What to expect:
         </span>
@@ -234,7 +234,7 @@ function SentPanel({
         type="button"
         onClick={onResend}
         disabled={cooldownLeft > 0}
-        className="self-start inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[11px] font-medium transition-colors"
+        className="self-start inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-sm font-medium transition-colors"
         style={{
           background: 'transparent',
           color: cooldownLeft > 0 ? 'var(--fg-subtle)' : 'var(--fg-link)',
@@ -246,7 +246,7 @@ function SentPanel({
         {cooldownLeft > 0 ? `Resend in ${cooldownLeft}s` : 'Resend email'}
       </button>
 
-      <p className="text-[10px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-xs leading-snug" style={{ color: 'var(--fg-subtle)' }}>
         For security, we always show this screen — even if no account exists for{' '}
         <span className="font-mono">{email}</span>.
         That way attackers can&apos;t use this form to discover registered emails.
@@ -258,7 +258,7 @@ function SentPanel({
 function PrivacyNote({ attempts }: { attempts: number }) {
   return (
     <div
-      className="flex items-start gap-2 text-[10px] leading-snug"
+      className="flex items-start gap-2 text-xs leading-snug"
       style={{ color: 'var(--fg-subtle)' }}
     >
       <Info className="w-3 h-3 mt-0.5 shrink-0" />

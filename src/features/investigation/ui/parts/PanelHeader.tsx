@@ -24,7 +24,7 @@ export function PanelHeader({
         style={{ color: 'var(--intent-success-vivid)' }}
       />
       <span
-        className="font-mono font-bold text-[12px] shrink-0"
+        className="font-mono font-bold text-base shrink-0"
         style={{ color: 'var(--fg-default)' }}
       >
         Investigation
@@ -33,14 +33,14 @@ export function PanelHeader({
         {activeTarget ? (
           <>
             <span
-              className="block truncate text-[11px] font-semibold w-full"
+              className="block truncate text-sm font-semibold w-full"
               style={{ color: 'var(--fg-default)' }}
             >
               {activeTarget.label}
             </span>
             {activeTarget.subtitle && (
               <span
-                className="block truncate text-[10px] w-full"
+                className="block truncate text-xs w-full"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {activeTarget.subtitle}
@@ -53,7 +53,7 @@ export function PanelHeader({
         <button
           type="button"
           onClick={onClear}
-          className="text-[10px] font-mono uppercase tracking-[0.12em] px-1.5 py-1 rounded-md transition-colors hover:[background:var(--bg-hover)]"
+          className="text-xs font-mono uppercase tracking-[0.12em] px-1.5 py-1 rounded-md transition-colors hover:[background:var(--bg-hover)]"
           style={{
             background: 'transparent',
             color: 'var(--fg-subtle)',

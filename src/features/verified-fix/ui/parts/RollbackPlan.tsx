@@ -25,19 +25,19 @@ export function RollbackPlan({ caseId }: { caseId: string }) {
         <div className="flex items-center gap-1.5">
           <Undo2 className="w-3 h-3" style={{ color: t.textMuted }} />
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('rollback.title')}
           </span>
         </div>
-        <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {tr('rollback.subtitle')}
         </span>
       </div>
 
       {noPlan ? (
-        <div className="text-[11px]" style={{ color: t.textFaint }}>
+        <div className="text-sm" style={{ color: t.textFaint }}>
           {tr('rollback.empty')}
         </div>
       ) : (
@@ -55,12 +55,12 @@ export function RollbackPlan({ caseId }: { caseId: string }) {
           style={{ borderColor: t.borderHair }}
         >
           <span
-            className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
+            className="text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
             style={{ background: t.okSoft, color: t.ok }}
           >
             {tr('rollback.armed')}
           </span>
-          <span className="text-[10px]" style={{ color: t.textMuted }}>
+          <span className="text-xs" style={{ color: t.textMuted }}>
             {tr('rollback.armedHint')}
           </span>
         </div>
@@ -86,7 +86,7 @@ function Field({
           {label}
         </div>
         <div
-          className={`text-[11px] mt-0.5 leading-snug ${mono ? 'font-mono' : ''}`}
+          className={`text-sm mt-0.5 leading-snug ${mono ? 'font-mono' : ''}`}
           style={{ color: t.textBody }}
         >
           {value}

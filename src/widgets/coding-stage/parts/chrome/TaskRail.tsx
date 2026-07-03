@@ -128,12 +128,12 @@ export function TaskRail({
             "+" button off the right edge when the cloud-ribbon arrives. */}
         <div className="flex items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-            <span className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
+            <span className={`text-xs font-bold uppercase tracking-eyebrow ${textFaint}`}>
               {t('rail.title')}
             </span>
             {runningCount > 0 && (
               <span
-                className="shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap bg-[color:var(--bg-elevated)] text-[color:var(--fg-default)]"
+                className="shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-2xs font-mono whitespace-nowrap bg-[color:var(--bg-elevated)] text-[color:var(--fg-default)]"
                 title={t('rail.running', { count: runningCount })}
               >
                 <span className="w-1 h-1 rounded-full coding-breath bg-[color:var(--fg-muted)]" />
@@ -147,7 +147,7 @@ export function TaskRail({
                   color: 'var(--intent-warn-fg)',
                   background: 'var(--intent-warn-bg)',
                 }}
-                className="shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border"
+                className="shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-2xs font-mono whitespace-nowrap border"
                 title={t('rail.awaitingYou', { count: awaitingCount })}
               >
                 <span className="w-1 h-1 rounded-full coding-breath bg-current opacity-80" />
@@ -164,7 +164,7 @@ export function TaskRail({
                   color: 'var(--fg-link)',
                   background: 'var(--intent-info-bg)',
                 }}
-                className="coding-bg-arrive shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono whitespace-nowrap border"
+                className="coding-bg-arrive shrink-0 flex items-center gap-1 px-1.5 py-px rounded-full text-2xs font-mono whitespace-nowrap border"
                 title={t('background.ribbon', { count: cloudCount })}
               >
                 <Cloud className="w-2.5 h-2.5" />
@@ -190,9 +190,9 @@ export function TaskRail({
             value={query}
             onChange={(e) => { setQuery(e.target.value); }}
             placeholder={t('rail.searchPlaceholder')}
-            className="flex-1 bg-transparent outline-none text-[11px] text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
+            className="flex-1 bg-transparent outline-none text-sm text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
           />
-          <kbd className={`text-[9px] font-mono ${textFaint}`}>⌘K</kbd>
+          <kbd className={`text-2xs font-mono ${textFaint}`}>⌘K</kbd>
         </div>
       </div>
 
@@ -202,7 +202,7 @@ export function TaskRail({
           <button type="button"
             key={f}
             onClick={() => { setFilter(f); }}
-            className={`px-2 h-5 rounded-full text-[10px] font-medium transition-colors ${
+            className={`px-2 h-5 rounded-full text-xs font-medium transition-colors ${
               filter === f
                 ? 'bg-[color:var(--bg-selected)] text-[color:var(--fg-strong)]'
                 : 'text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-hover)]'
@@ -247,7 +247,7 @@ export function TaskRail({
           );
         })}
         {visibleProjects.length === 0 && (
-          <div className={`px-2 py-8 text-center text-[11px] ${textMuted}`}>
+          <div className={`px-2 py-8 text-center text-sm ${textMuted}`}>
             {t('rail.empty')}
           </div>
         )}
@@ -294,7 +294,7 @@ function ProjectGroup({
             className={`w-3 h-3 shrink-0 transition-transform ${textFaint} ${collapsed ? '' : 'rotate-90'}`}
           />
           <span
-            className="shrink-0 inline-flex items-center justify-center w-4 h-4 rounded-md font-mono text-[9px] font-bold"
+            className="shrink-0 inline-flex items-center justify-center w-4 h-4 rounded-md font-mono text-2xs font-bold"
             style={{
               background: `${accent}1f`,
               color: accent,
@@ -303,14 +303,14 @@ function ProjectGroup({
           >
             {project.initial}
           </span>
-          <span className={`text-[12px] font-semibold truncate ${textPrimary}`}>
+          <span className={`text-base font-semibold truncate ${textPrimary}`}>
             {project.name}
           </span>
           {project.pinned && (
             <Pin className={`w-2.5 h-2.5 shrink-0 ${textFaint}`} fill="currentColor" />
           )}
           <span className="flex-1" />
-          <span className={`shrink-0 text-[10px] font-mono ${textFaint}`}>
+          <span className={`shrink-0 text-xs font-mono ${textFaint}`}>
             {tasks.length}
           </span>
           {running > 0 && (
@@ -337,7 +337,7 @@ function ProjectGroup({
           {tasks.length === 0 ? (
             <button type="button"
               onClick={onNewTask}
-              className="text-left px-2 py-1.5 rounded-md text-[11px] transition-colors text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-surface-muted)]"
+              className="text-left px-2 py-1.5 rounded-md text-sm transition-colors text-[color:var(--fg-subtle)] hover:text-[color:var(--fg-default)] hover:bg-[color:var(--bg-surface-muted)]"
             >
               <span className="inline-flex items-center gap-1.5">
                 <Plus className="w-3 h-3" />
@@ -364,7 +364,7 @@ function ProjectGroup({
         </div>
       )}
       {collapsed && tasks.length > 0 && (
-        <div className={`ml-7 mt-px text-[10px] font-mono ${textMuted}`}>
+        <div className={`ml-7 mt-px text-xs font-mono ${textMuted}`}>
           {tasks.length} {tasks.length === 1 ? t('rail.taskOne') : t('rail.taskMany')}
         </div>
       )}
@@ -450,13 +450,13 @@ function TaskRow({
           </span>
           <StatusDot status={task.status} className="mt-1" />
           <div className="flex-1 min-w-0">
-            <div className={`text-[12px] leading-snug line-clamp-2 ${titleColor}`}>
+            <div className={`text-base leading-snug line-clamp-2 ${titleColor}`}>
               {task.title}
             </div>
-            <div className={`mt-1 flex items-center gap-1.5 text-[10px] font-mono ${subColor}`}>
+            <div className={`mt-1 flex items-center gap-1.5 text-xs font-mono ${subColor}`}>
               {streamingPhase ? (
                 <span
-                  className="inline-flex items-center gap-1 px-1 py-px rounded text-[9px] bg-[color:var(--bg-hover)] text-[color:var(--fg-default)]"
+                  className="inline-flex items-center gap-1 px-1 py-px rounded text-2xs bg-[color:var(--bg-hover)] text-[color:var(--fg-default)]"
                   title={t(`phase.${streamingPhase}`)}
                 >
                   <span className="inline-flex items-center gap-px">

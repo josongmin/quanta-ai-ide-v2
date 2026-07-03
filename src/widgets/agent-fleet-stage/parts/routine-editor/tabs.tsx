@@ -29,7 +29,7 @@ export function DefinitionTab({
         <input
           value={draft.name}
           onChange={(e) => { setDraft({ ...draft, name: e.target.value }); }}
-          className={`w-full px-2 py-1 rounded-md border outline-none text-[12px] ${inputBg}`}
+          className={`w-full px-2 py-1 rounded-md border outline-none text-base ${inputBg}`}
         />
       </Field>
       <Field label="description" isDark={isDark}>
@@ -37,11 +37,11 @@ export function DefinitionTab({
           value={draft.description}
           onChange={(e) => { setDraft({ ...draft, description: e.target.value }); }}
           rows={3}
-          className={`w-full px-2 py-1 rounded-md border outline-none text-[12px] resize-none ${inputBg}`}
+          className={`w-full px-2 py-1 rounded-md border outline-none text-base resize-none ${inputBg}`}
         />
       </Field>
       <Field label={t('editor.scope')} isDark={isDark}>
-        <div className={`text-[11px] font-mono ${muted}`}>
+        <div className={`text-sm font-mono ${muted}`}>
           {draft.scope.repos.join(', ')}{draft.scope.pathGlobs ? ` · ${draft.scope.pathGlobs.join(', ')}` : ''}
         </div>
       </Field>
@@ -53,7 +53,7 @@ export function DefinitionTab({
               type="button"
               onClick={() => { setDraft({ ...draft, trustLevel: lv as 1|2|3|4|5 }); }}
               aria-pressed={draft.trustLevel === lv}
-              className={`flex-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+              className={`flex-1 px-2 py-1 rounded text-xs font-mono transition-colors ${
                 draft.trustLevel === lv
                   ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black')
                   : (isDark ? 'text-white/45 hover:text-white/75' : 'text-black/45 hover:text-black/75')
@@ -64,7 +64,7 @@ export function DefinitionTab({
             </button>
           ))}
         </div>
-        <div className={`mt-1 text-[10px] font-mono ${faint}`}>{t(`trust.level${draft.trustLevel}`)}</div>
+        <div className={`mt-1 text-xs font-mono ${faint}`}>{t(`trust.level${draft.trustLevel}`)}</div>
       </Field>
     </div>
   );
@@ -86,7 +86,7 @@ export function GuardrailsTab({
           type="number"
           value={draft.guardrails.maxLocPerPr}
           onChange={(e) => { setDraft({ ...draft, guardrails: { ...draft.guardrails, maxLocPerPr: Number(e.target.value) || 0 } }); }}
-          className={`w-32 px-2 py-1 rounded-md border outline-none text-[12px] font-mono tabular-nums ${inputBg}`}
+          className={`w-32 px-2 py-1 rounded-md border outline-none text-base font-mono tabular-nums ${inputBg}`}
         />
       </Field>
       <Field label={t('editor.guardrail.confidenceFloor')} isDark={isDark}>
@@ -96,7 +96,7 @@ export function GuardrailsTab({
           onChange={(e) => { setDraft({ ...draft, guardrails: { ...draft.guardrails, confidenceFloor: Number(e.target.value) } }); }}
           className="w-full"
         />
-        <div className={`text-[10px] font-mono ${muted}`}>{Math.round(draft.guardrails.confidenceFloor * 100)}%</div>
+        <div className={`text-xs font-mono ${muted}`}>{Math.round(draft.guardrails.confidenceFloor * 100)}%</div>
       </Field>
       <Field label={t('editor.guardrail.requireGreenCi')} isDark={isDark}>
         <button
@@ -113,7 +113,7 @@ export function GuardrailsTab({
         </button>
       </Field>
       <Field label={t('editor.guardrail.forbidden')} isDark={isDark}>
-        <div className={`flex flex-wrap gap-1 text-[10px] font-mono ${muted}`}>
+        <div className={`flex flex-wrap gap-1 text-xs font-mono ${muted}`}>
           {draft.guardrails.forbiddenPaths.length === 0 ? <span className={faint}>—</span>
             : draft.guardrails.forbiddenPaths.map((p, i) => (
               <span key={i} className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md ${isDark ? 'bg-white/[0.08]' : 'bg-black/[0.06]'}`}>{p}</span>
@@ -135,7 +135,7 @@ export function GuardrailsTab({
                   setDraft({ ...draft, guardrails: { ...draft.guardrails, hitlCheckpoints: list } });
                 }}
                 aria-pressed={on}
-                className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-mono border transition-colors ${
+                className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-mono border transition-colors ${
                   on
                     ? 'border-[color:var(--intent-warn-fg)] bg-[color:var(--intent-warn-bg)] text-[color:var(--intent-warn-fg)]'
                     : (isDark ? 'border-white/[0.10] text-white/55 hover:bg-white/[0.05]' : 'border-black/[0.10] text-black/55 hover:bg-black/[0.05]')
@@ -164,7 +164,7 @@ export function ScheduleTab({
   return (
     <div className="space-y-3">
       <Field label="trigger" isDark={isDark}>
-        <div className={`text-[12px] ${muted} flex items-center gap-2`}>
+        <div className={`text-base ${muted} flex items-center gap-2`}>
           <Calendar className="w-3 h-3 opacity-70" />
           {draft.trigger.kind === 'cron' ? t('trigger.cron', { label: draft.trigger.humanLabel })
             : draft.trigger.kind === 'event' ? t('trigger.event', { event: t(`trigger.evt.${draft.trigger.event}`) })
@@ -210,30 +210,30 @@ export function DryRunTab({
   const { isDark, heading, muted, faint } = tones;
   return (
     <div className="space-y-3">
-      <div className={`text-[11px] ${muted}`}>{t('editor.dryRun.title')}</div>
+      <div className={`text-sm ${muted}`}>{t('editor.dryRun.title')}</div>
       <div className={`px-3 py-3 rounded-lg border ${isDark ? 'bg-white/[0.025] border-white/[0.06]' : 'bg-black/[0.02] border-black/[0.06]'}`}>
-        <div className={`flex items-center gap-1.5 text-[12px] font-mono tabular-nums ${heading}`}>
+        <div className={`flex items-center gap-1.5 text-base font-mono tabular-nums ${heading}`}>
           <Sparkles className="w-3 h-3 opacity-70" />
           {t('editor.dryRun.summary', { prs: dryRun.prs, lines: dryRun.lines, usd: dryRun.usd.toFixed(2) })}
         </div>
       </div>
       <div>
-        <div className={`mb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+        <div className={`mb-1.5 text-xs font-bold uppercase tracking-eyebrow ${faint}`}>
           {t('editor.dryRun.candidatesHeader')}
         </div>
         {dryRun.candidates.length === 0 ? (
-          <div className={`text-[11px] ${muted}`}>{t('editor.dryRun.noCandidates')}</div>
+          <div className={`text-sm ${muted}`}>{t('editor.dryRun.noCandidates')}</div>
         ) : (
           <div className="space-y-1">
             {dryRun.candidates.map((c, i) => (
               <div key={i} className={`flex items-center gap-2 px-2 py-1.5 rounded-md border ${
                 isDark ? 'border-white/[0.06] bg-white/[0.02]' : 'border-black/[0.06] bg-black/[0.015]'
               }`}>
-                <span className={`shrink-0 inline-flex items-center px-1 py-px rounded-sm text-[9px] font-bold uppercase tracking-[0.18em] ${
+                <span className={`shrink-0 inline-flex items-center px-1 py-px rounded-sm text-2xs font-bold uppercase tracking-eyebrow ${
                   isDark ? 'bg-white/[0.04] text-white/55' : 'bg-black/[0.04] text-black/55'
                 }`}>{c.kind}</span>
-                <span className={`text-[11px] truncate flex-1 ${heading}`}>{c.title}</span>
-                <span className={`text-[10px] font-mono ${muted}`}>+{c.added} -{c.removed}</span>
+                <span className={`text-sm truncate flex-1 ${heading}`}>{c.title}</span>
+                <span className={`text-xs font-mono ${muted}`}>+{c.added} -{c.removed}</span>
               </div>
             ))}
           </div>

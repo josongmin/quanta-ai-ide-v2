@@ -53,22 +53,22 @@ function SessionRow({
       </span>
       <div className="flex flex-col min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
             {session.device}
           </span>
           {session.current && (
             <span
-              className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+              className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
               style={{ color: 'var(--fg-accent)', border: '1px solid var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
             >
               This device
             </span>
           )}
         </div>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           {session.browser} · {session.os}
         </span>
-        <div className="flex items-center gap-3 text-[10px] mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="flex items-center gap-3 text-xs mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
           <span className="inline-flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5" />{session.location}</span>
           <span className="inline-flex items-center gap-0.5 font-mono"><Globe className="w-2.5 h-2.5" />{session.ip}</span>
           <span>· {session.lastSeen}</span>

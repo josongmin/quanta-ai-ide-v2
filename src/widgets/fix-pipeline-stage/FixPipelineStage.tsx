@@ -153,7 +153,7 @@ export default function FixPipelineStage() {
             </div>
           ) : (
             <div
-              className="h-full flex items-center justify-center text-[12px]"
+              className="h-full flex items-center justify-center text-base"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {t('empty')}

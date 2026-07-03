@@ -86,7 +86,7 @@ export function PressHoldStop({
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStop?.(); }
       }}
       style={styleObj}
-      className={`flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-semibold transition-colors select-none touch-none ${styles}`}
+      className={`flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-semibold transition-colors select-none touch-none ${styles}`}
       aria-label={heat === 0 ? label : holdLabel}
       title={heat === 0 ? label : holdLabel}
     >

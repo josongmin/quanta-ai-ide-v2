@@ -7,7 +7,7 @@ export function ModelMeta({ model }: { model: Model }) {
       ? 'var(--fg-default)'
       : 'var(--fg-muted)';
   return (
-    <div className="flex items-center gap-2 text-[10px] tabular-nums shrink-0" style={{ color: 'var(--fg-subtle)' }}>
+    <div className="flex items-center gap-2 text-xs tabular-nums shrink-0" style={{ color: 'var(--fg-subtle)' }}>
       <span style={{ color: tierColor }}>{model.tier}</span>
       <span>· {model.context}</span>
       <span>· {model.speed} tok/s</span>

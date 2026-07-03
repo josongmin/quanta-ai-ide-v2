@@ -137,8 +137,8 @@ export default function PoliciesPage() {
       <Section title="Inheritance" hint="How org defaults reach existing and new workspaces.">
         <div className="flex items-center justify-between py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
           <div className="flex flex-col gap-1 max-w-[460px]">
-            <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>Apply to new workspaces</span>
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>Apply to new workspaces</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
               Whenever a workspace is created, copy the active org rules and enforce them by default.
             </span>
           </div>
@@ -146,8 +146,8 @@ export default function PoliciesPage() {
         </div>
         <div className="flex items-center justify-between py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
           <div className="flex flex-col gap-1 max-w-[460px]">
-            <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>Push changes to existing workspaces</span>
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>Push changes to existing workspaces</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
               When a rule changes here, propagate the new severity to every workspace that hasn&apos;t customized it locally.
             </span>
           </div>
@@ -173,10 +173,10 @@ export default function PoliciesPage() {
                   className="w-full flex items-center gap-2 px-3 h-8 text-left"
                 >
                   {open ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} /> : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />}
-                  <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
                     {c.label}
                   </span>
-                  <span className="ml-auto text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="ml-auto text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                     {inCat.filter((r) => r.severity !== 'off').length} of {inCat.length} active
                   </span>
                 </button>
@@ -193,7 +193,7 @@ export default function PoliciesPage() {
         </div>
       </Section>
 
-      <p className="text-[11px] mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ScrollText className="w-3 h-3 mt-0.5 shrink-0" />
         Saved changes appear in the workspace admission view within seconds. Active fix-pipeline runs are not retroactively re-checked.
       </p>
@@ -221,9 +221,9 @@ function RuleRow({
     >
       <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
       <div className="flex flex-col gap-1 min-w-0 flex-1">
-        <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>{rule.title}</span>
-        <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{rule.description}</span>
-        <div className="flex items-center gap-3 text-[10px] tabular-nums mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>{rule.title}</span>
+        <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>{rule.description}</span>
+        <div className="flex items-center gap-3 text-xs tabular-nums mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
           <span style={{ color: partial ? 'var(--intent-warn-fg)' : 'var(--fg-subtle)' }}>
             {rule.appliedToWorkspaces} / {rule.totalWorkspaces} workspaces
             {partial && ' · some have local overrides'}
@@ -254,7 +254,7 @@ function SeverityPicker({
             key={o.id}
             type="button"
             onClick={() => { onChange(o.id); }}
-            className="h-7 px-2.5 text-[10px] uppercase tracking-[0.14em] font-semibold transition-colors"
+            className="h-7 px-2.5 text-xs uppercase tracking-eyebrow font-semibold transition-colors"
             style={{
               background: active ? o.bg : 'transparent',
               color: active ? o.fg : 'var(--fg-muted)',
@@ -274,14 +274,14 @@ function Stat({
 }: { label: string; value: string; sub?: string; tone?: 'default' | 'warn' }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
       <span
-        className="text-[18px] font-semibold tabular-nums"
+        className="text-2xl font-semibold tabular-nums"
         style={{ color: tone === 'warn' ? 'var(--intent-warn-fg)' : 'var(--fg-strong)' }}
       >
         {value}
       </span>
-      {sub && <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{sub}</span>}
+      {sub && <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{sub}</span>}
     </div>
   );
 }

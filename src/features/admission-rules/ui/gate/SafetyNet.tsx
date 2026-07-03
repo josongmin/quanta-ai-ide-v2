@@ -104,12 +104,12 @@ export function SafetyNet({
         />
         <div>
           <div
-            className="text-[12px] font-semibold"
+            className="text-base font-semibold"
             style={{ color: 'var(--fg-strong)' }}
           >
             Nothing to flag.
           </div>
-          <div className="text-[11px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+          <div className="text-sm mt-0.5" style={{ color: 'var(--fg-muted)' }}>
             All active rules pass on this PR. The safety-net comparisons
             (regression vs main, reviewer routing) are quiet because there
             are no blocking findings to triage.
@@ -138,12 +138,12 @@ export function SafetyNet({
         }}
       >
         <h3
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Safety net
         </h3>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           context the author needs before acting
         </span>
       </header>
@@ -183,12 +183,12 @@ export function SafetyNet({
             <div className="flex items-center gap-2 mb-2">
               <AtSign className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
               <span
-                className="text-[10px] uppercase tracking-[0.14em] font-medium"
+                className="text-xs uppercase tracking-eyebrow font-medium"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 Suggested reviewers
               </span>
-              <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
                 from CODEOWNERS × blocking rules
               </span>
             </div>
@@ -196,7 +196,7 @@ export function SafetyNet({
               {reviewerSuggestions.map(([owner, info]) => (
                 <span
                   key={owner}
-                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-mono"
+                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-mono"
                   style={{
                     border: '1px solid var(--border-default)',
                     color: 'var(--fg-strong)',
@@ -242,18 +242,18 @@ function SafetyTile({
       <ToneIcon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: toneFg }} />
       <div className="min-w-0">
         <div
-          className="text-[10px] uppercase tracking-[0.14em] font-medium"
+          className="text-xs uppercase tracking-eyebrow font-medium"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {label}
         </div>
         <div
-          className="text-[12px] font-semibold mt-0.5"
+          className="text-base font-semibold mt-0.5"
           style={{ color: 'var(--fg-strong)' }}
         >
           {primary}
         </div>
-        <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+        <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
           {secondary}
         </div>
       </div>

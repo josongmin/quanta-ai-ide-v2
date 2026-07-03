@@ -38,10 +38,10 @@ export function TrustPanel({
         className="shrink-0 w-[320px] h-full overflow-auto border-l p-4"
         style={{ background: t.sidebar, backdropFilter: t.sidebarBlur, borderColor: t.border }}
       >
-        <div className="text-[10px] font-black uppercase tracking-[0.18em] mb-2" style={{ color: t.textMuted }}>
+        <div className="text-xs font-black uppercase tracking-eyebrow mb-2" style={{ color: t.textMuted }}>
           {tr('trust.signal')}
         </div>
-        <div className="text-[11px]" style={{ color: t.textFaint }}>
+        <div className="text-sm" style={{ color: t.textFaint }}>
           {tr('trust.selectCandidate')}
         </div>
       </aside>
@@ -55,7 +55,7 @@ export function TrustPanel({
   const counter = candidate.counterEvidence;
 
   const actionBtnBase =
-    'w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5';
+    'w-full rounded-md py-2 text-sm font-bold uppercase tracking-eyebrow flex items-center justify-center gap-1.5';
   const actionButtons: {
     key: string;
     when: boolean;
@@ -118,7 +118,7 @@ export function TrustPanel({
       <div className="p-4 space-y-3.5">
         <div>
           <div
-            className="text-[10px] font-black uppercase tracking-[0.18em] mb-2"
+            className="text-xs font-black uppercase tracking-eyebrow mb-2"
             style={{ color: t.textMuted }}
           >
             {tr('trust.signal')}
@@ -133,11 +133,11 @@ export function TrustPanel({
 
             <div className="mt-3 pt-3 border-t" style={{ borderColor: t.borderSoft }}>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[9px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
+                <span className="text-2xs font-bold uppercase tracking-eyebrow" style={{ color: t.textFaint }}>
                   {tr('trust.deliveryTier')}
                 </span>
                 <span
-                  className="text-[9px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
+                  className="text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
                   style={{ background: tc.bg, color: tc.fg }}
                 >
                   {tr(tierKey(candidate.tier))}
@@ -155,7 +155,7 @@ export function TrustPanel({
         {weakest && (
           <div>
             <div
-              className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
+              className="text-2xs font-bold uppercase tracking-eyebrow mb-1.5"
               style={{ color: t.textFaint }}
             >
               {tr('trust.weakest')}
@@ -190,7 +190,7 @@ export function TrustPanel({
         {counter.length > 0 && (
           <div>
             <div
-              className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
+              className="text-2xs font-bold uppercase tracking-eyebrow mb-1.5"
               style={{ color: t.textFaint }}
             >
               {tr('trust.counter', { count: counter.length })}
@@ -207,7 +207,7 @@ export function TrustPanel({
         {draft && (
           <div>
             <div
-              className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
+              className="text-2xs font-bold uppercase tracking-eyebrow mb-1.5"
               style={{ color: t.textFaint }}
             >
               {tr('trust.gate')}
@@ -244,7 +244,7 @@ export function TrustPanel({
           <button
             type="button"
             onClick={() => { onDismiss(candidate.id); }}
-            className="w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5 border transition-colors hover:opacity-90"
+            className="w-full rounded-md py-2 text-sm font-bold uppercase tracking-eyebrow flex items-center justify-center gap-1.5 border transition-colors hover:opacity-90"
             style={{ borderColor: t.border, color: t.textMuted, background: 'transparent' }}
           >
             <Trash2 className="w-3 h-3" />

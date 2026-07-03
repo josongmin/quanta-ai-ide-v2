@@ -151,7 +151,7 @@ export default function SignInPage() {
             <button
               type="button"
               onClick={() => { setMode((m) => (m === 'password' ? 'magic-link' : 'password')); setError(null); }}
-              className="self-start text-[11px] font-medium"
+              className="self-start text-sm font-medium"
               style={{ color: 'var(--fg-link)' }}
             >
               {mode === 'password'
@@ -186,7 +186,7 @@ export default function SignInPage() {
           />
           <Link
             to={'/auth/sso' as never}
-            className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold tracking-tight transition-colors w-full"
+            className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-colors w-full"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-strong)',
@@ -229,7 +229,7 @@ function OauthButton({
     <button
       type="button"
       onClick={onClick}
-      className="relative inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold tracking-tight transition-colors w-full"
+      className="relative inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-colors w-full"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-strong)',
@@ -249,7 +249,7 @@ function OauthButton({
 function GitLabMark() {
   return (
     <span
-      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-[7px] font-black"
+      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-2xs font-black"
       style={{ background: 'var(--fg-default)', color: 'var(--bg-canvas)' }}
     >
       GL
@@ -260,7 +260,7 @@ function GitLabMark() {
 function LastBadge() {
   return (
     <span
-      className="ml-auto text-[8px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
+      className="ml-auto text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
       style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
     >
       Last used
@@ -290,7 +290,7 @@ function LockoutBanner({ cooldownSec }: { cooldownSec: number }) {
       role="alert"
     >
       <Lock className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-danger-fg)' }} />
-      <div className="flex flex-col gap-1 text-[11px] leading-snug flex-1">
+      <div className="flex flex-col gap-1 text-sm leading-snug flex-1">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           Account temporarily locked
         </span>
@@ -315,7 +315,7 @@ function SsoEnforcedBanner({ orgName, provider }: { orgName: string; provider: I
       style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
     >
       <KeyRound className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
-      <div className="flex flex-col gap-0.5 text-[11px] leading-snug flex-1">
+      <div className="flex flex-col gap-0.5 text-sm leading-snug flex-1">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {orgName} requires SSO
         </span>
@@ -331,7 +331,7 @@ function SsoEnforcedBanner({ orgName, provider }: { orgName: string; provider: I
 function SuccessNote({ message }: { message: string }) {
   return (
     <div
-      className="flex items-start gap-2 text-[11px] onb-stagger"
+      className="flex items-start gap-2 text-sm onb-stagger"
       style={{ color: 'var(--intent-success-fg)' }}
       role="status"
     >
@@ -344,7 +344,7 @@ function SuccessNote({ message }: { message: string }) {
 function DemoCredHint() {
   return (
     <div
-      className="text-[10px] flex items-start gap-2 px-3 py-2 rounded-md"
+      className="text-xs flex items-start gap-2 px-3 py-2 rounded-md"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px dashed var(--border-default)',

@@ -101,7 +101,7 @@ export default function SamlSsoPage() {
           />
           <label className="flex flex-col gap-1.5">
             <span
-              className="text-[10px] uppercase tracking-[0.14em] font-medium"
+              className="text-xs uppercase tracking-eyebrow font-medium"
               style={{ color: 'var(--fg-subtle)' }}
             >
               X.509 Certificate
@@ -111,7 +111,7 @@ export default function SamlSsoPage() {
               onChange={(e) => { set('cert', e.target.value); }}
               rows={6}
               spellCheck={false}
-              className="w-full rounded-md p-2.5 text-[11px] outline-none resize-none font-mono"
+              className="w-full rounded-md p-2.5 text-sm outline-none resize-none font-mono"
               style={{
                 background: 'var(--bg-surface-muted)',
                 border: '1px solid var(--border-default)',
@@ -138,7 +138,7 @@ export default function SamlSsoPage() {
       >
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
-            className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               gridTemplateColumns: '180px 1fr',
               gap: 12,
@@ -153,18 +153,18 @@ export default function SamlSsoPage() {
           {(['email', 'firstName', 'lastName', 'groups'] as AttrKey[]).map((k) => (
             <div
               key={k}
-              className="grid items-center px-3 h-12 text-[12px]"
+              className="grid items-center px-3 h-12 text-base"
               style={{
                 gridTemplateColumns: '180px 1fr',
                 gap: 12,
                 borderTop: '1px solid var(--border-muted)',
               }}
             >
-              <span className="font-mono text-[11px]" style={{ color: 'var(--fg-strong)' }}>{k}</span>
+              <span className="font-mono text-sm" style={{ color: 'var(--fg-strong)' }}>{k}</span>
               <input
                 value={form.mapping[k]}
                 onChange={(e) => { setMap(k, e.target.value); }}
-                className="h-8 px-2.5 rounded-md text-[11px] font-mono outline-none"
+                className="h-8 px-2.5 rounded-md text-sm font-mono outline-none"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
@@ -187,7 +187,7 @@ export default function SamlSsoPage() {
           <select
             value={form.defaultRole}
             onChange={(e) => { set('defaultRole', e.target.value as Form['defaultRole']); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -210,11 +210,11 @@ export default function SamlSsoPage() {
         onDiscard={() => { setForm(INITIAL); }}
       />
 
-      <p className="text-[11px] mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ShieldCheck className="w-3 h-3 mt-0.5 shrink-0" />
         Always test the connection in an incognito window before requiring SSO — misconfigured IdPs can lock everyone out.
       </p>
-      <p className="text-[11px] mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <KeyRound className="w-3 h-3 mt-0.5 shrink-0" />
         Owners can always sign in with a recovery code if SSO breaks.
       </p>
@@ -248,14 +248,14 @@ function StatusBand({
         <Icon className="w-5 h-5" style={{ color: meta.fg }} />
       </div>
       <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-        <span className="text-[14px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{meta.label}</span>
-        <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>{meta.sub}</span>
+        <span className="text-lg font-semibold" style={{ color: 'var(--fg-strong)' }}>{meta.label}</span>
+        <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{meta.sub}</span>
       </div>
       <div className="flex flex-col items-end gap-1.5 shrink-0">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Last tested
         </span>
-        <span className="font-mono text-[11px]" style={{ color: 'var(--fg-default)' }}>{lastTested}</span>
+        <span className="font-mono text-sm" style={{ color: 'var(--fg-default)' }}>{lastTested}</span>
       </div>
       <Button leading={<RefreshCcw className="w-3 h-3" />} onClick={onTest}>Test connection</Button>
     </div>
@@ -272,10 +272,10 @@ function CopyRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-3 py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
       <div className="flex flex-col min-w-0 flex-1 gap-1">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           {label}
         </span>
-        <code className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-strong)' }}>{value}</code>
+        <code className="font-mono text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{value}</code>
       </div>
       <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={copy}>
         {copied ? 'Copied' : 'Copy'}

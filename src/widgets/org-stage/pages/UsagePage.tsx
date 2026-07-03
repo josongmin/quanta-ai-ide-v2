@@ -76,7 +76,7 @@ export default function UsagePage() {
       topRight={
         <div className="flex items-center gap-2">
           <select
-            className="h-8 px-3 rounded-md text-[11px] font-medium outline-none"
+            className="h-8 px-3 rounded-md text-sm font-medium outline-none"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -90,7 +90,7 @@ export default function UsagePage() {
           </select>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[11px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -128,16 +128,16 @@ export default function UsagePage() {
           <AlertTriangle className="w-4 h-4" />
         </div>
         <div className="flex flex-col gap-0.5 flex-1">
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
             You&apos;re projected to hit 92% of plan limits this month
           </span>
-          <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
             Set a budget alert at 80%, or upgrade plans for cleaner headroom.
           </span>
         </div>
         <button
           type="button"
-          className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-[11px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
           style={{ background: 'var(--intent-warn-fg)', color: '#fff' }}
         >
           Set budget alert
@@ -148,18 +148,18 @@ export default function UsagePage() {
       <div className="flex items-baseline justify-between mb-3">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
-          <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             Cost by workspace
           </h2>
         </div>
-        <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>This month</span>
+        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>This month</span>
       </div>
       <div
         className="rounded-xl overflow-hidden"
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
         <div
-          className="grid items-center px-4 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-4 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '1.4fr 0.8fr 0.8fr 0.8fr 1.4fr',
             color: 'var(--fg-subtle)',
@@ -178,12 +178,12 @@ export default function UsagePage() {
             const pct = (b.runs / total) * 100;
             return (
               <BreakdownRow key={b.ws} isLast={i === BREAKDOWN.length - 1}>
-                <code className="text-[12px] font-mono font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <code className="text-base font-mono font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {b.ws}
                 </code>
-                <span className="text-right text-[12px] tabular-nums" style={{ color: 'var(--fg-default)' }}>{formatNumber(b.runs)}</span>
-                <span className="text-right text-[12px] tabular-nums" style={{ color: 'var(--fg-default)' }}>{b.tokens}</span>
-                <span className="text-right text-[12px] tabular-nums font-semibold" style={{ color: 'var(--fg-strong)' }}>{b.cost}</span>
+                <span className="text-right text-base tabular-nums" style={{ color: 'var(--fg-default)' }}>{formatNumber(b.runs)}</span>
+                <span className="text-right text-base tabular-nums" style={{ color: 'var(--fg-default)' }}>{b.tokens}</span>
+                <span className="text-right text-base tabular-nums font-semibold" style={{ color: 'var(--fg-strong)' }}>{b.cost}</span>
                 <div className="flex items-center gap-2">
                   <div
                     className="flex-1 h-1.5 rounded-full overflow-hidden"
@@ -197,7 +197,7 @@ export default function UsagePage() {
                       }}
                     />
                   </div>
-                  <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)', minWidth: 36 }}>
+                  <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)', minWidth: 36 }}>
                     {pct.toFixed(0)}%
                   </span>
                 </div>
@@ -246,7 +246,7 @@ function MetricTile({ m }: { m: (typeof METRICS)[number] }) {
           <m.icon className="w-4 h-4" />
         </div>
         <span
-          className="inline-flex items-center gap-0.5 text-[10px] font-semibold tabular-nums"
+          className="inline-flex items-center gap-0.5 text-xs font-semibold tabular-nums"
           style={{ color: up ? 'var(--intent-success-fg)' : 'var(--intent-danger-fg)' }}
         >
           {up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
@@ -254,14 +254,14 @@ function MetricTile({ m }: { m: (typeof METRICS)[number] }) {
         </span>
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
           {m.label}
         </span>
         <div className="flex items-baseline gap-1.5">
-          <span className="text-[22px] font-semibold tabular-nums tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-3xl font-semibold tabular-nums tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             {format(m.value, m.format)}
           </span>
-          <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{m.unit}</span>
+          <span className="text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{m.unit}</span>
         </div>
       </div>
       <div className="flex items-end gap-[2px] h-10">

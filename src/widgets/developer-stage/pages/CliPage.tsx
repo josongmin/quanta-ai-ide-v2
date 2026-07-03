@@ -32,7 +32,7 @@ export default function CliPage() {
       topRight={
         <div className="flex items-center gap-2">
           <span
-            className="inline-flex items-center gap-1.5 px-2.5 h-7 rounded-full text-[10px] font-semibold"
+            className="inline-flex items-center gap-1.5 px-2.5 h-7 rounded-full text-xs font-semibold"
             style={{
               background: 'var(--intent-success-bg)',
               color: 'var(--intent-success-fg)',
@@ -43,7 +43,7 @@ export default function CliPage() {
           </span>
           <a
             href="https://github.com/acme/se-cli"
-            className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-semibold transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -74,7 +74,7 @@ export default function CliPage() {
                 key={id}
                 type="button"
                 onClick={() => { setOs(id); }}
-                className="flex-1 inline-flex items-center justify-center gap-2 h-12 text-[12px] font-semibold transition-colors relative"
+                className="flex-1 inline-flex items-center justify-center gap-2 h-12 text-base font-semibold transition-colors relative"
                 style={{
                   color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
                   background: active ? 'var(--bg-surface-muted)' : 'transparent',
@@ -96,9 +96,9 @@ export default function CliPage() {
           })}
         </div>
         <div className="p-6">
-          <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>{INSTALL[os].sub}</span>
+          <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{INSTALL[os].sub}</span>
           <InstallCommand cmd={INSTALL[os].cmd} />
-          <div className="mt-4 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+          <div className="mt-4 text-sm" style={{ color: 'var(--fg-muted)' }}>
             Then authenticate: <code
               className="font-mono px-1.5 py-0.5 rounded ml-1"
               style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-strong)' }}
@@ -108,7 +108,7 @@ export default function CliPage() {
       </div>
 
       {/* Common commands */}
-      <h2 className="text-[12px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
+      <h2 className="text-base font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
         Common commands
       </h2>
       <div
@@ -138,7 +138,7 @@ function CommandRow({ cmd, blurb, isLast }: { cmd: string; blurb: string; isLast
       }}
     >
       <code
-        className="text-[12px] font-mono shrink-0 px-2 py-1 rounded"
+        className="text-base font-mono shrink-0 px-2 py-1 rounded"
         style={{
           background: 'var(--bg-surface-muted)',
           color: 'var(--fg-strong)',
@@ -148,7 +148,7 @@ function CommandRow({ cmd, blurb, isLast }: { cmd: string; blurb: string; isLast
         <span style={{ color: 'var(--fg-subtle)' }}>$ </span>
         {cmd}
       </code>
-      <span className="text-[12px] flex-1" style={{ color: 'var(--fg-muted)' }}>{blurb}</span>
+      <span className="text-base flex-1" style={{ color: 'var(--fg-muted)' }}>{blurb}</span>
     </div>
   );
 }
@@ -164,7 +164,7 @@ function InstallCommand({ cmd }: { cmd: string }) {
       }}
     >
       <code
-        className="flex-1 p-4 text-[13.5px] font-mono"
+        className="flex-1 p-4 text-md font-mono"
         style={{ color: 'var(--fg-strong)' }}
       >
         <span style={{ color: 'var(--fg-subtle)' }}>$ </span>
@@ -179,7 +179,7 @@ function InstallCommand({ cmd }: { cmd: string }) {
             window.setTimeout(() => { setCopied(false); }, 1200);
           }
         }}
-        className="inline-flex items-center gap-1 h-9 px-3 mr-2 rounded-md text-[11px] font-semibold transition-colors"
+        className="inline-flex items-center gap-1 h-9 px-3 mr-2 rounded-md text-sm font-semibold transition-colors"
         style={{ color: 'var(--fg-muted)' }}
         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}

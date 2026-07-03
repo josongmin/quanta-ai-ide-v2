@@ -25,7 +25,7 @@ export default function ContactSalesPage() {
           <div className="flex flex-col gap-6 sticky top-24">
             <Eyebrow tone="info"><Building2 className="w-3 h-3" /> Enterprise sales</Eyebrow>
             <HeadlineGradient accent="at scale">Roll out se.field</HeadlineGradient>
-            <p className="text-[14.5px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-lg leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
               For orgs with 100+ engineers, complex compliance needs, or a regulated industry. Talk to a human, get an architecture review, leave with a plan.
             </p>
 
@@ -39,10 +39,10 @@ export default function ContactSalesPage() {
                     border: '1px solid var(--border-default)',
                   }}
                 >
-                  <div className="text-[18px] font-semibold tracking-tight tabular-nums" style={{ color: 'var(--fg-strong)' }}>
+                  <div className="text-2xl font-semibold tracking-tight tabular-nums" style={{ color: 'var(--fg-strong)' }}>
                     {p.value}
                   </div>
-                  <div className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+                  <div className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
                     {p.label}
                   </div>
                 </div>
@@ -64,8 +64,8 @@ export default function ContactSalesPage() {
                     <b.icon className="w-3.5 h-3.5" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{b.title}</span>
-                    <span className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{b.blurb}</span>
+                    <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{b.title}</span>
+                    <span className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>{b.blurb}</span>
                   </div>
                 </div>
               ))}
@@ -82,10 +82,10 @@ export default function ContactSalesPage() {
             }}
           >
             <div className="flex flex-col gap-1">
-              <h2 className="text-[18px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+              <h2 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
                 Get a personalized demo
               </h2>
-              <p className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+              <p className="text-base" style={{ color: 'var(--fg-muted)' }}>
                 Tell us a bit about your team. We reply within 4 business hours.
               </p>
             </div>
@@ -104,7 +104,7 @@ export default function ContactSalesPage() {
               <textarea
                 rows={3}
                 placeholder="Languages, monorepo or polyrepo, current CI, what you've tried…"
-                className="w-full bg-transparent outline-none text-[12px] p-3 rounded-md resize-y"
+                className="w-full bg-transparent outline-none text-base p-3 rounded-md resize-y"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
@@ -115,19 +115,19 @@ export default function ContactSalesPage() {
 
             <button
               type="button"
-              className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-md text-[12px] font-semibold transition-colors"
+              className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-md text-base font-semibold transition-colors"
               style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
             >
               <Calendar className="w-4 h-4" />
               Schedule a demo
             </button>
 
-            <p className="text-[10px] text-center" style={{ color: 'var(--fg-subtle)' }}>
+            <p className="text-xs text-center" style={{ color: 'var(--fg-subtle)' }}>
               By submitting you agree to our <Link to={'/legal/privacy' as never} className="underline" style={{ color: 'var(--fg-muted)' }}>privacy policy</Link>.
             </p>
 
             <div
-              className="flex items-center gap-2 pt-3 text-[11px]"
+              className="flex items-center gap-2 pt-3 text-sm"
               style={{ color: 'var(--fg-subtle)', borderTop: '1px solid var(--border-muted)' }}
             >
               <span>Prefer email?</span>
@@ -153,7 +153,7 @@ function Field({
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{label}</span>
@@ -169,7 +169,7 @@ function FieldInput({ label, placeholder }: { label: string; placeholder: string
     <Field label={label}>
       <input
         placeholder={placeholder}
-        className="w-full bg-transparent outline-none text-[12px] h-9 px-3 rounded-md"
+        className="w-full bg-transparent outline-none text-base h-9 px-3 rounded-md"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -184,7 +184,7 @@ function FieldSelect({ label, options }: { label: string; options: string[] }) {
   return (
     <Field label={label}>
       <select
-        className="w-full bg-transparent outline-none text-[12px] h-9 px-3 rounded-md"
+        className="w-full bg-transparent outline-none text-base h-9 px-3 rounded-md"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',

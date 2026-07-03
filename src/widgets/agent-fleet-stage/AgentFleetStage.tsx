@@ -150,11 +150,11 @@ function RoiRibbon({
   return (
     <div className={`shrink-0 h-14 flex items-center justify-between px-5 border-b ${border} ${panel}`}>
       <div className="flex items-baseline gap-2">
-        <span className={`text-[14px] font-semibold ${heading}`}>{t('header.title')}</span>
-        <span className={`text-[11px] ${muted}`}>{t('header.subtitle')}</span>
+        <span className={`text-lg font-semibold ${heading}`}>{t('header.title')}</span>
+        <span className={`text-sm ${muted}`}>{t('header.subtitle')}</span>
       </div>
       <div className="flex items-center gap-4">
-        <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${labelTone}`}>
+        <span className={`text-xs font-bold uppercase tracking-eyebrow ${labelTone}`}>
           {t('header.weekRoi')}
         </span>
         <RoiStat value={String(roi.prsMerged)}      label={t('header.roi.prsMerged', { n: roi.prsMerged })}      isDark={isDark} />
@@ -170,8 +170,8 @@ function RoiStat({ value, label, isDark }: { value: string; label: string; isDar
   const muted = isDark ? 'text-white/45' : 'text-black/55';
   return (
     <div className="text-right" title={label}>
-      <div className={`text-[12px] font-mono tabular-nums ${isDark ? 'text-white/85' : 'text-black/85'}`}>{value}</div>
-      <div className={`text-[9px] font-mono ${muted}`}>{label}</div>
+      <div className={`text-base font-mono tabular-nums ${isDark ? 'text-white/85' : 'text-black/85'}`}>{value}</div>
+      <div className={`text-2xs font-mono ${muted}`}>{label}</div>
     </div>
   );
 }

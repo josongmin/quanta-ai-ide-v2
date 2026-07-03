@@ -72,7 +72,7 @@ export default function VerifyEmailPage() {
             <button
               type="button"
               onClick={() => { setPhase('wasnt-me'); }}
-              className="text-[11px] underline-offset-2 hover:underline self-center"
+              className="text-sm underline-offset-2 hover:underline self-center"
               style={{ color: 'var(--fg-muted)' }}
             >
               I didn&apos;t request this verification
@@ -153,7 +153,7 @@ function StateGlyph({ phase }: { phase: Phase }) {
 function TokenChip() {
   return (
     <div
-      className="text-[11px] flex items-center gap-2 px-3 py-1.5 rounded-md font-mono tabular-nums"
+      className="text-sm flex items-center gap-2 px-3 py-1.5 rounded-md font-mono tabular-nums"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-muted)',
@@ -172,13 +172,13 @@ function SuccessActions() {
     <div className="w-full flex flex-col gap-3">
       <Link
         to={'/onboarding' as never}
-        className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold w-full"
+        className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
       >
         Continue setup →
       </Link>
       <div
-        className="grid grid-cols-2 gap-3 text-[11px] px-3 py-2.5 rounded-md"
+        className="grid grid-cols-2 gap-3 text-sm px-3 py-2.5 rounded-md"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-muted)',
@@ -204,7 +204,7 @@ function ExpiryRow({ expiresAt, remainingSec }: { expiresAt: number; remainingSe
         border: '1px solid var(--border-default)',
       }}
     >
-      <div className="flex items-baseline justify-between text-[11px]">
+      <div className="flex items-baseline justify-between text-sm">
         <span style={{ color: 'var(--fg-muted)' }}>Token validity</span>
         <span className="font-mono tabular-nums" style={{ color: 'var(--fg-default)' }}>
           expires <span title={new Date(expiresAt).toISOString()}>
@@ -240,7 +240,7 @@ function formatRelative(sec: number) {
 function Meta({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <dt className="text-[9px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+      <dt className="text-2xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </dt>
       <dd className={mono ? 'font-mono tabular-nums' : ''} style={{ color: 'var(--fg-default)' }}>
@@ -254,7 +254,7 @@ function WasntMePanel() {
   return (
     <div className="w-full flex flex-col gap-3">
       <div
-        className="px-3 py-3 rounded-md text-[11px] leading-snug"
+        className="px-3 py-3 rounded-md text-sm leading-snug"
         style={{
           background: 'var(--intent-danger-bg)',
           border: '1px solid var(--intent-danger-fg)',
@@ -271,7 +271,7 @@ function WasntMePanel() {
       <div className="grid grid-cols-2 gap-2">
         <Link
           to={'/auth/forgot' as never}
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-md text-[11px] font-medium"
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-md text-sm font-medium"
           style={{
             background: 'var(--fg-strong)',
             color: 'var(--bg-canvas)',
@@ -281,7 +281,7 @@ function WasntMePanel() {
         </Link>
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-md text-[11px] font-medium"
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-md text-sm font-medium"
           style={{
             background: 'var(--bg-surface-muted)',
             color: 'var(--fg-default)',
@@ -306,7 +306,7 @@ function DemoStateToggle({
     { id: 'wasnt-me',  label: "Wasn't me" },
   ];
   return (
-    <div className="inline-flex items-center gap-1 text-[10px]">
+    <div className="inline-flex items-center gap-1 text-xs">
       <RotateCw className="w-2.5 h-2.5" style={{ color: 'var(--fg-subtle)' }} />
       <span style={{ color: 'var(--fg-subtle)' }}>Demo:</span>
       {states.map((s, i) => (

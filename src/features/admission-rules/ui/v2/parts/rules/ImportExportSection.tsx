@@ -22,7 +22,7 @@ export function ImportExportSection() {
       <V2Card className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <SectionTitle icon={FileText}>{tA('section.export')}</SectionTitle>
-          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+          <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
             current ruleset as JSON
           </span>
           <div className="flex-1" />
@@ -30,7 +30,7 @@ export function ImportExportSection() {
             onClick={() => {
               void navigator.clipboard?.writeText(exported);
             }}
-            className="text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded-md"
+            className="text-xs font-bold uppercase tracking-eyebrow px-2.5 py-1 rounded-md"
             style={{ background: t.badgeBg, color: t.textBody, border: `1px solid ${t.border}` }}
             onMouseEnter={(e) => { e.currentTarget.style.background = t.hoverActive; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = t.badgeBg; }}
@@ -39,7 +39,7 @@ export function ImportExportSection() {
           </button>
         </div>
         <pre
-          className="text-[10px] font-mono overflow-auto p-3 rounded-md leading-relaxed"
+          className="text-xs font-mono overflow-auto p-3 rounded-md leading-relaxed"
           style={{
             color: t.textBody,
             background: t.inset,
@@ -54,7 +54,7 @@ export function ImportExportSection() {
       <V2Card className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <SectionTitle icon={FileText}>{tA('section.import')}</SectionTitle>
-          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+          <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
             paste JSON · merges by id
           </span>
         </div>
@@ -62,7 +62,7 @@ export function ImportExportSection() {
           value={importText}
           onChange={(e) => { setImportText(e.target.value); setImportResult(null); }}
           placeholder='{"version": 1, "rules": [ ... ]}'
-          className="w-full text-[10px] font-mono p-3 rounded-md leading-relaxed outline-none"
+          className="w-full text-xs font-mono p-3 rounded-md leading-relaxed outline-none"
           style={{
             color: t.textBody,
             background: t.inset,
@@ -78,14 +78,14 @@ export function ImportExportSection() {
               else setImportResult(`Error: ${r.error}`);
             }}
             disabled={!importText.trim()}
-            className="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em] disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-eyebrow disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ background: t.textHi, color: t.page }}
           >
             Import
           </button>
           <button type="button"
             onClick={() => { setImportText(''); setImportResult(null); }}
-            className="text-[10px] font-mono uppercase tracking-[0.18em] px-2"
+            className="text-xs font-mono uppercase tracking-eyebrow px-2"
             style={{ color: t.textSubtle }}
             onMouseEnter={(e) => { e.currentTarget.style.color = t.textBody; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = t.textSubtle; }}
@@ -95,7 +95,7 @@ export function ImportExportSection() {
           <div className="flex-1" />
           {importResult && (
             <span
-              className="text-[10px] font-mono"
+              className="text-xs font-mono"
               style={{
                 color: importResult.startsWith('Error') ? SEVERITY_COLOR.block : t.ok,
               }}
@@ -104,7 +104,7 @@ export function ImportExportSection() {
             </span>
           )}
         </div>
-        <div className="mt-4 text-[10px] font-mono leading-relaxed" style={{ color: t.textSubtle }}>
+        <div className="mt-4 text-xs font-mono leading-relaxed" style={{ color: t.textSubtle }}>
           Tip — drop in your <span style={{ color: t.textMuted }}>.eslintrc</span> rules,
           a <span style={{ color: t.textMuted }}>semgrep.yml</span> excerpt, or a CodeQL
           query pack manifest. The importer normalises into the unified rule shape;

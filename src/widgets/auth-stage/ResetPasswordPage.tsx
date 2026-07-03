@@ -54,13 +54,13 @@ export default function ResetPasswordPage() {
           }}
         >
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
-          <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
             For your security, password reset links can only be used once and expire quickly.
           </span>
         </div>
         <Link
           to={'/auth/forgot' as never}
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold w-full"
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           Request a new reset link
@@ -162,7 +162,7 @@ function TokenStatus({ remainingSec }: { remainingSec: number }) {
 function SignOutNotice() {
   return (
     <div
-      className="flex items-start gap-2 text-[11px] px-2.5 py-2 rounded-md"
+      className="flex items-start gap-2 text-sm px-2.5 py-2 rounded-md"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-muted)',
@@ -200,7 +200,7 @@ function ResetSuccess() {
         </div>
 
         <dl
-          className="grid grid-cols-2 gap-x-6 gap-y-2 w-full px-3 py-2.5 rounded-md text-[11px]"
+          className="grid grid-cols-2 gap-x-6 gap-y-2 w-full px-3 py-2.5 rounded-md text-sm"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -214,14 +214,14 @@ function ResetSuccess() {
 
         <Link
           to={'/auth/login' as never}
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold w-full"
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           Sign in now {secLeft > 0 && <span className="opacity-60">· auto in {secLeft}s</span>}
         </Link>
 
         {secLeft === 0 && (
-          <p className="text-[10px] onb-stagger" style={{ color: 'var(--fg-subtle)' }}>
+          <p className="text-xs onb-stagger" style={{ color: 'var(--fg-subtle)' }}>
             Auto-redirect canceled. Click the button above to continue.
           </p>
         )}
@@ -233,7 +233,7 @@ function ResetSuccess() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <dt className="text-[9px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+      <dt className="text-2xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </dt>
       <dd style={{ color: 'var(--fg-default)' }}>{value}</dd>

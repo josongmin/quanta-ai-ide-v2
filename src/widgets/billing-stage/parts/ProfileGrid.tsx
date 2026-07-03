@@ -21,13 +21,13 @@ function Field({
   return (
     <div className={`flex flex-col gap-1 ${colSpan === 2 ? 'col-span-2' : ''}`}>
       <dt
-        className="text-[10px] uppercase tracking-[0.14em] font-medium"
+        className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}
       </dt>
       <dd
-        className={`text-[12px] ${mono ? 'font-mono' : ''}`}
+        className={`text-base ${mono ? 'font-mono' : ''}`}
         style={{ color: 'var(--fg-default)' }}
       >
         {value}

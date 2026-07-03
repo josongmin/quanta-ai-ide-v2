@@ -58,7 +58,7 @@ export function TriageRail({
           if (ratio === undefined) return null;
           return (
             <span
-              className="text-[9px] font-mono tabular-nums"
+              className="text-2xs font-mono tabular-nums"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {Math.round(ratio * 100)}%

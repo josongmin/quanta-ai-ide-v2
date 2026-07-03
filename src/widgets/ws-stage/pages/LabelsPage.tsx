@@ -100,7 +100,7 @@ export default function LabelsPage() {
     >
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 mb-3">
-        <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+        <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
           {filtered.length} of {labels.length} labels
         </span>
         <SearchInput value={q} onChange={setQ} placeholder="Search labels…" />
@@ -190,7 +190,7 @@ export default function LabelsPage() {
 function Chip({ color, name }: { color: string; name: string }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 h-6 px-2 rounded-full text-[11px] font-medium w-fit"
+      className="inline-flex items-center gap-1.5 h-6 px-2 rounded-full text-sm font-medium w-fit"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-muted)',
@@ -254,7 +254,7 @@ function LabelEditor({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
             {initial ? 'Edit label' : 'New label'}
           </span>
           <Chip color={previewColor} name={name.trim() || 'preview'} />
@@ -267,7 +267,7 @@ function LabelEditor({
           value={name}
           onChange={(e) => { setName(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); }}
           placeholder="label-name"
-          className="h-8 rounded-md px-2.5 text-[12px] outline-none font-mono"
+          className="h-8 rounded-md px-2.5 text-base outline-none font-mono"
           style={{
             background: 'var(--bg-canvas)',
             border: '1px solid var(--border-default)',
@@ -278,7 +278,7 @@ function LabelEditor({
           value={description}
           onChange={(e) => { setDescription(e.target.value); }}
           placeholder="Short description shown in pickers and lists"
-          className="h-8 rounded-md px-2.5 text-[12px] outline-none"
+          className="h-8 rounded-md px-2.5 text-base outline-none"
           style={{
             background: 'var(--bg-canvas)',
             border: '1px solid var(--border-default)',
@@ -288,7 +288,7 @@ function LabelEditor({
       </div>
 
       <div className="flex items-center gap-1.5 flex-wrap">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium mr-1" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium mr-1" style={{ color: 'var(--fg-subtle)' }}>
           Color
         </span>
         {COLORS.map((c) => {

@@ -27,7 +27,7 @@ export function CreateTeamModal({
       )}
     >
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>Name</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Name</span>
         <input
           value={name}
           onChange={(e) => {
@@ -35,12 +35,12 @@ export function CreateTeamModal({
             if (!handle) setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ''));
           }}
           placeholder="Mobile"
-          className="h-9 rounded-md px-3 text-[12px] outline-none"
+          className="h-9 rounded-md px-3 text-base outline-none"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         />
       </label>
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
           <span>Handle</span>
           {conflict && (
             <span className="lowercase tracking-normal" style={{ color: 'var(--intent-danger-fg)' }}>
@@ -55,12 +55,12 @@ export function CreateTeamModal({
             border: `1px solid ${conflict ? 'var(--intent-danger-fg)' : 'var(--border-default)'}`,
           }}
         >
-          <span className="pl-3 text-[12px] font-mono" style={{ color: 'var(--fg-subtle)' }}>@</span>
+          <span className="pl-3 text-base font-mono" style={{ color: 'var(--fg-subtle)' }}>@</span>
           <input
             value={handle}
             onChange={(e) => { setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '')); }}
             placeholder="mobile"
-            className="flex-1 bg-transparent outline-none px-2 text-[12px] font-mono"
+            className="flex-1 bg-transparent outline-none px-2 text-base font-mono"
             style={{ color: 'var(--fg-strong)' }}
           />
         </div>

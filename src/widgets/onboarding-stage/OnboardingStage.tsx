@@ -82,7 +82,7 @@ export default function OnboardingStage() {
             <button
               type="button"
               onClick={next}
-              className="text-[12px] font-medium px-2.5 py-1.5 rounded-md transition-colors"
+              className="text-base font-medium px-2.5 py-1.5 rounded-md transition-colors"
               style={{ color: 'var(--fg-muted)' }}
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -94,7 +94,7 @@ export default function OnboardingStage() {
             type="button"
             onClick={next}
             disabled={!stepValid}
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold tracking-tight transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-opacity hover:opacity-90"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',

@@ -32,19 +32,19 @@ function InvoiceRow({ invoice, top }: { invoice: Invoice; top: boolean }) {
       onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
     >
       <span
-        className="font-mono text-[11px] tabular-nums w-[140px] shrink-0"
+        className="font-mono text-sm tabular-nums w-[140px] shrink-0"
         style={{ color: 'var(--fg-default)' }}
       >
         {invoice.number}
       </span>
       <span
-        className="text-[11px] tabular-nums w-[110px] shrink-0"
+        className="text-sm tabular-nums w-[110px] shrink-0"
         style={{ color: 'var(--fg-muted)' }}
       >
         {date}
       </span>
       <span
-        className="text-[12px] font-medium tabular-nums w-[90px] shrink-0"
+        className="text-base font-medium tabular-nums w-[90px] shrink-0"
         style={{ color: 'var(--fg-strong)' }}
       >
         {fmtUsd(invoice.amount)}
@@ -52,7 +52,7 @@ function InvoiceRow({ invoice, top }: { invoice: Invoice; top: boolean }) {
       <StatusInline status={invoice.status} />
       <span className="flex-1" />
       <span
-        className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-[11px]"
+        className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-sm"
         style={{ color: 'var(--fg-muted)' }}
       >
         <Download className="w-3 h-3" />
@@ -66,7 +66,7 @@ function StatusInline({ status }: { status: Invoice['status'] }) {
   // Inline text + dot — no chip background. Keeps the row visually flat.
   const m = STATUS[status];
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px]" style={{ color: m.fg }}>
+    <span className="inline-flex items-center gap-1.5 text-sm" style={{ color: m.fg }}>
       <span
         className="w-1.5 h-1.5 rounded-full"
         style={{ background: m.fg }}

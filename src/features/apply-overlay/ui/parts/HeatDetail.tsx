@@ -50,7 +50,7 @@ export function HeatDetail({
 
       {timeActive && (
         <div className="mt-2 pt-2 border-t border-[var(--border-default)]">
-          <div className="mb-1.5 px-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+          <div className="mb-1.5 px-1 text-2xs font-black uppercase tracking-eyebrow text-[var(--fg-subtle)]">
             {t('panel.tile.time')}
           </div>
           <SegmentedControl
@@ -63,7 +63,7 @@ export function HeatDetail({
 
       {isOn && (
         <div className="mt-2 pt-2 border-t border-[var(--border-default)] space-y-2">
-          <div className="px-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+          <div className="px-1.5 text-2xs font-black uppercase tracking-eyebrow text-[var(--fg-subtle)]">
             {t('panel.tile.controls')}
           </div>
           <Slider label={t('controls.intensity')} value={ov.intensity} onChange={ov.setIntensity} />

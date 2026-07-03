@@ -38,7 +38,7 @@ export function MessageList({
           <button
             type="button"
             onClick={onJumpToLatest}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border shadow-lg transition-colors coding-pill-rise"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border shadow-lg transition-colors coding-pill-rise"
             style={{
               background: 'var(--bg-elevated)',
               color: 'var(--fg-strong)',

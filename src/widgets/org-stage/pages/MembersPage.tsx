@@ -96,7 +96,7 @@ export default function MembersPage() {
         <div className="flex items-center gap-1.5">
           {bulk.size > 0 && (
             <>
-              <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+              <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
                 {bulk.size} selected
               </span>
               <Button
@@ -134,7 +134,7 @@ export default function MembersPage() {
                 key={id}
                 type="button"
                 onClick={() => { setStatusFilter(id); }}
-                className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
                 style={{
                   background: active ? 'var(--bg-active)' : 'transparent',
                   color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -145,7 +145,7 @@ export default function MembersPage() {
               >
                 <span className="capitalize">{id}</span>
                 <span
-                  className="text-[10px] tabular-nums px-1.5 py-0.5 rounded"
+                  className="text-xs tabular-nums px-1.5 py-0.5 rounded"
                   style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-subtle)' }}
                 >
                   {counts[id]}
@@ -167,7 +167,7 @@ export default function MembersPage() {
         style={{ border: '1px solid var(--border-muted)' }}
       >
         <div
-          className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '24px 1fr 140px 130px 110px 32px',
             gap: 12,
@@ -210,7 +210,7 @@ export default function MembersPage() {
         )}
       </div>
 
-      <p className="text-[11px] mt-3 px-1" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-3 px-1" style={{ color: 'var(--fg-subtle)' }}>
         {filtered.length} of {members.length} {members.length === 1 ? 'person' : 'people'} ·
         {' '}Owner cannot be removed without first transferring ownership.
       </p>
@@ -242,7 +242,7 @@ function RoleFilterMenu({
       <select
         value={value}
         onChange={(e) => { onChange(e.target.value as RoleFilter); }}
-        className="h-8 pl-7 pr-2 rounded-md text-[12px] outline-none cursor-pointer"
+        className="h-8 pl-7 pr-2 rounded-md text-base outline-none cursor-pointer"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',

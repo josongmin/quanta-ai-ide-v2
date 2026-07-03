@@ -32,7 +32,7 @@ export function PhaseTabs({ active, onChange }: { active: PhaseId; onChange: (p:
             }}
           >
             <div
-              className="text-[10px] font-black uppercase tracking-[0.16em]"
+              className="text-xs font-black uppercase tracking-[0.16em]"
               style={{ color: on ? t.textHi : t.textMuted }}
             >
               {tr(p.labelKey)}

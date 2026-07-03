@@ -35,17 +35,17 @@ export function FeaturedCard({ integration }: { integration: Integration }) {
       </div>
       <div className="flex flex-col gap-1 min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <h3 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: 'var(--fg-strong)' }}>
+          <h3 className="text-lg font-semibold tracking-tight truncate" style={{ color: 'var(--fg-strong)' }}>
             {integration.name}
           </h3>
           {integration.verified && (
             <CheckCircle2 className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
           )}
         </div>
-        <p className="text-[12px] leading-snug truncate" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base leading-snug truncate" style={{ color: 'var(--fg-muted)' }}>
           {integration.blurb}
         </p>
-        <div className="flex items-center gap-3 mt-1 text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="flex items-center gap-3 mt-1 text-xs" style={{ color: 'var(--fg-subtle)' }}>
           <span className="inline-flex items-center gap-1">
             <Star className="w-3 h-3" />
             <span className="tabular-nums">{integration.rating.toFixed(1)}</span>

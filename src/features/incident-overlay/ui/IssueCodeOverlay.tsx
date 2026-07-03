@@ -32,7 +32,7 @@ function NodeButton({
     ? 'text-zinc-800 dark:text-zinc-100'
     : 'text-zinc-500 dark:text-zinc-400';
   const handle = () => onClick?.(id);
-  const className = `text-left font-mono text-[11px] px-2 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] ${tone} ${
+  const className = `text-left font-mono text-sm px-2 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] ${tone} ${
     typeof onClick === 'function'
       ? 'cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.05]'
       : ''
@@ -64,7 +64,7 @@ function Section({
     <div>
       <div className="flex items-baseline gap-2 mb-1.5 px-1">
         <span
-          className={`text-[10px] font-bold uppercase tracking-[0.18em] ${
+          className={`text-xs font-bold uppercase tracking-eyebrow ${
             emphasis === 'direct'
               ? 'text-zinc-800 dark:text-zinc-200'
               : 'text-zinc-500 dark:text-zinc-400'
@@ -72,13 +72,13 @@ function Section({
         >
           {title}
         </span>
-        <span className="text-[10px] text-zinc-400 dark:text-zinc-500">{caption}</span>
-        <span className="ml-auto font-mono text-[10px] text-zinc-400 dark:text-zinc-500">
+        <span className="text-xs text-zinc-400 dark:text-zinc-500">{caption}</span>
+        <span className="ml-auto font-mono text-xs text-zinc-400 dark:text-zinc-500">
           {String(ids.length)}
         </span>
       </div>
       {ids.length === 0 ? (
-        <p className="px-1 text-[11px] text-zinc-400 dark:text-zinc-500 italic">None.</p>
+        <p className="px-1 text-sm text-zinc-400 dark:text-zinc-500 italic">None.</p>
       ) : (
         <div className="flex flex-wrap gap-1.5 px-1">
           {ids.map((id) => (

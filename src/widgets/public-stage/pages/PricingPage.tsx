@@ -24,7 +24,7 @@ export default function PricingPage() {
         <div className="relative max-w-[1080px] mx-auto px-8 pt-20 pb-16 flex flex-col items-center text-center gap-6">
           <Eyebrow>Pricing</Eyebrow>
           <HeadlineGradient accent="engineering rigor.">Pricing that scales with</HeadlineGradient>
-          <p className="text-[16.5px] leading-relaxed max-w-[620px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-xl leading-relaxed max-w-[620px]" style={{ color: 'var(--fg-muted)' }}>
             Start free. Upgrade when admission gates, custom roles, or data residency
             become non-negotiable. No hidden seat minimums. No &quot;contact us&quot; for the
             features you actually need.
@@ -33,7 +33,7 @@ export default function PricingPage() {
           <CycleToggle value={cycle} onChange={setCycle} />
 
           {/* Trust strip — small stat row sitting on the hero */}
-          <div className="flex items-center gap-8 mt-6 text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+          <div className="flex items-center gap-8 mt-6 text-base" style={{ color: 'var(--fg-muted)' }}>
             <TrustStat label="Active orgs"    value={<CountUp to={1284} />} />
             <Divider />
             <TrustStat label="Engineers shipping" value={<CountUp to={42392} format="compact" />} />
@@ -48,14 +48,14 @@ export default function PricingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-2">
           {PLANS.map((p) => <PlanCard key={p.id} plan={p} cycle={cycle} />)}
         </div>
-        <p className="text-[11px] mt-4 text-center" style={{ color: 'var(--fg-subtle)' }}>
+        <p className="text-sm mt-4 text-center" style={{ color: 'var(--fg-subtle)' }}>
           All plans include unlimited workspaces, public Git host integrations, and the open-source CLI.
         </p>
       </section>
 
       {/* ─── LOGO MARQUEE ──────────────────────────────────────────── */}
       <section className="mt-16">
-        <p className="text-center text-[11px] uppercase tracking-[0.18em] font-semibold mb-2" style={{ color: 'var(--fg-subtle)' }}>
+        <p className="text-center text-sm uppercase tracking-eyebrow font-semibold mb-2" style={{ color: 'var(--fg-subtle)' }}>
           Engineering teams shipping with se.field
         </p>
         <LogoMarquee items={CUSTOMERS} />
@@ -97,7 +97,7 @@ export default function PricingPage() {
                 }}
               >
                 <div className="flex items-center justify-between px-5 py-4">
-                  <span className="text-[14.5px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                  <span className="text-lg font-semibold" style={{ color: 'var(--fg-strong)' }}>
                     {f.q}
                   </span>
                   <ChevronDown
@@ -109,7 +109,7 @@ export default function PricingPage() {
                   />
                 </div>
                 {open && (
-                  <div className="px-5 pb-4 -mt-1 text-[13.5px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+                  <div className="px-5 pb-4 -mt-1 text-md leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
                     {f.a}
                   </div>
                 )}
@@ -132,10 +132,10 @@ export default function PricingPage() {
           }}
         >
           <Eyebrow>Get started</Eyebrow>
-          <h2 className="text-[28px] sm:text-[34px] leading-tight font-semibold tracking-[-0.018em] max-w-[640px]" style={{ color: 'var(--fg-strong)' }}>
+          <h2 className="text-4xl sm:text-[34px] leading-tight font-semibold tracking-[-0.018em] max-w-[640px]" style={{ color: 'var(--fg-strong)' }}>
             Start free. Upgrade when you&apos;re ready.
           </h2>
-          <p className="text-[14.5px] leading-relaxed max-w-[520px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-lg leading-relaxed max-w-[520px]" style={{ color: 'var(--fg-muted)' }}>
             14 days to evaluate every paid feature. No card. No silent conversion. Cancel inside the app — no email needed.
           </p>
           <div className="flex items-center gap-3 mt-2">

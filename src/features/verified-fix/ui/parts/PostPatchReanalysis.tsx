@@ -20,7 +20,7 @@ export function PostPatchReanalysis({ caseId }: { caseId: string }) {
         style={{ background: t.cardBacking, borderColor: t.border }}
       >
         <Header />
-        <div className="text-[11px] mt-2" style={{ color: t.textFaint }}>
+        <div className="text-sm mt-2" style={{ color: t.textFaint }}>
           {tr('reanalysis.empty')}
         </div>
       </div>
@@ -51,12 +51,12 @@ function Header() {
   return (
     <div className="flex items-center justify-between">
       <span
-        className="text-[10px] font-black uppercase tracking-[0.18em]"
+        className="text-xs font-black uppercase tracking-eyebrow"
         style={{ color: t.textMuted }}
       >
         {tr('reanalysis.title')}
       </span>
-      <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+      <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
         {tr('reanalysis.subtitle')}
       </span>
     </div>
@@ -85,7 +85,7 @@ function DeltaBar({ delta, max }: { delta: ReanalysisDelta; max: number }) {
           {delta.metric}
         </span>
         <Icon className="w-2.5 h-2.5 ml-auto" style={{ color }} />
-        <span className="text-[10px] font-mono" style={{ color }}>
+        <span className="text-xs font-mono" style={{ color }}>
           {delta.before}{delta.unit ? ` ${delta.unit}` : ''} → {delta.after}{delta.unit ? ` ${delta.unit}` : ''}
         </span>
       </div>

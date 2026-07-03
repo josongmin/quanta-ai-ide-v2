@@ -94,7 +94,7 @@ export function ProfileTab({ file }: { file: FileRecord }) {
 
       {file.metrics.unknownReasons.length > 0 && (
         <div
-          className="mt-1 px-3 py-2.5 rounded-xl border text-[10px]"
+          className="mt-1 px-3 py-2.5 rounded-xl border text-xs"
           style={{
             background: 'var(--bg-surface-muted)',
             borderColor: 'var(--border-default)',
@@ -102,7 +102,7 @@ export function ProfileTab({ file }: { file: FileRecord }) {
           }}
         >
           <div
-            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="flex items-center gap-1.5 text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             <AlertTriangle className="w-3 h-3" />
@@ -112,7 +112,7 @@ export function ProfileTab({ file }: { file: FileRecord }) {
             {file.metrics.unknownReasons.map((r) => (
               <span
                 key={r}
-                className="px-1.5 py-0.5 rounded-md font-mono text-[10px]"
+                className="px-1.5 py-0.5 rounded-md font-mono text-xs"
                 style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
               >
                 {r}
@@ -150,12 +150,12 @@ function RefactorBlock({ file }: { file: FileRecord }) {
       >
         <div className="min-w-0">
           <div
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('catalog.refactorVerdictHeader')}
           </div>
-          <div className="text-[12px] font-black mt-0.5 tracking-tight" style={{ color: accent }}>{verdict.label}</div>
+          <div className="text-base font-black mt-0.5 tracking-tight" style={{ color: accent }}>{verdict.label}</div>
         </div>
         <span className="shrink-0" style={{ color: 'var(--fg-subtle)' }}>
           {open ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -166,7 +166,7 @@ function RefactorBlock({ file }: { file: FileRecord }) {
           className="px-3 pb-3 pt-1 space-y-2 border-t"
           style={{ borderColor: 'var(--border-muted)' }}
         >
-          <div className="text-[10px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>{verdict.hint}</div>
+          <div className="text-xs leading-relaxed" style={{ color: 'var(--fg-muted)' }}>{verdict.hint}</div>
           <div className="space-y-1">
             <ProposalRow ok={file.metrics.complexity > 30} title={t('proposal.extractBranches')} detail={t('proposal.extractBranchesDetail')} />
             <ProposalRow ok={file.metrics.fnCount > 10}    title={t('proposal.moveHelpers')}     detail={t('proposal.moveHelpersDetail', { count: file.metrics.fnCount })} />
@@ -190,28 +190,28 @@ function FunctionRow({ row }: { row: ReturnType<typeof functionSummary>[number] 
   const kindLabel = t(`catalog.kind${row.kind.charAt(0).toUpperCase() + row.kind.slice(1)}`);
   return (
     <div
-      className="flex items-center gap-2 px-2 py-1.5 rounded-md text-[10px] hover-surface"
+      className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs hover-surface"
       style={{ background: 'var(--bg-surface-muted)' }}
     >
       <span
-        className="shrink-0 px-1.5 py-0.5 rounded-md font-mono text-[9px] uppercase tracking-[var(--track-eyebrow)]"
+        className="shrink-0 px-1.5 py-0.5 rounded-md font-mono text-2xs uppercase tracking-eyebrow"
         style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
       >{kindLabel}</span>
       <span className="flex-1 min-w-0 font-mono truncate">{row.name}</span>
       <span
-        className="shrink-0 font-mono tabular-nums text-[9px] px-1 py-0.5 rounded-md"
+        className="shrink-0 font-mono tabular-nums text-2xs px-1 py-0.5 rounded-md"
         style={
           row.cyclomatic >= 12 ? { background: 'rgb(from var(--intent-danger-vivid) r g b / 0.15)', color: 'var(--intent-danger-vivid)' }
           : row.cyclomatic >= 6 ? { background: 'rgb(from var(--intent-warn-vivid) r g b / 0.15)', color: 'var(--intent-warn-vivid)' }
           : { background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }
         }
       >cyc {row.cyclomatic}</span>
-      <span className="shrink-0 font-mono text-[9px]" style={{ color: 'var(--fg-subtle)' }}>{row.cost}</span>
+      <span className="shrink-0 font-mono text-2xs" style={{ color: 'var(--fg-subtle)' }}>{row.cost}</span>
       <div className="shrink-0 flex gap-0.5">
         {row.effects.map((e) => (
           <span
             key={e}
-            className="text-[9px] font-mono px-1 rounded-md"
+            className="text-2xs font-mono px-1 rounded-md"
             style={effectChipStyle(e)}
             title={t(`catalog.effect${e.charAt(0).toUpperCase() + e.slice(1)}`)}
           >
@@ -236,7 +236,7 @@ function Bar({ label, value, max, bad = false }: { label: string; value: number;
   const valueColor = bad ? 'var(--intent-danger-vivid)' : undefined;
   return (
     <div>
-      <div className="flex justify-between text-[10px] mb-1">
+      <div className="flex justify-between text-xs mb-1">
         <span style={{ color: 'var(--fg-muted)' }}>{label}</span>
         <span className="font-bold tabular-nums" style={valueColor ? { color: valueColor } : undefined}>{value}</span>
       </div>
@@ -256,7 +256,7 @@ function Bar({ label, value, max, bad = false }: { label: string; value: number;
 function ProposalRow({ ok, title, detail }: { ok: boolean; title: string; detail: string }) {
   return (
     <div
-      className="flex items-start gap-2 px-2 py-1.5 rounded-md text-[10px]"
+      className="flex items-start gap-2 px-2 py-1.5 rounded-md text-xs"
       style={
         ok
           ? { background: 'rgb(from var(--intent-success-vivid) r g b / 0.10)' }
@@ -282,7 +282,7 @@ function ActionPill({ label, icon: Icon }: { label: string; icon: React.Componen
   return (
     <button
       type="button"
-      className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
+      className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-black uppercase tracking-eyebrow transition-colors hover-surface"
       style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
     >
       <Icon className="w-2.5 h-2.5" />

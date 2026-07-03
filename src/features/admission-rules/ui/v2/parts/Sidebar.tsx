@@ -90,13 +90,13 @@ export function Sidebar({
         </div>
         <div className="min-w-0 flex-1 text-left">
           <div
-            className="text-[12px] font-semibold leading-tight truncate"
+            className="text-base font-semibold leading-tight truncate"
             style={{ color: t.textBody }}
           >
             Admission
           </div>
           <div
-            className="text-[10px] leading-tight truncate"
+            className="text-xs leading-tight truncate"
             style={{ color: t.textSubtle }}
           >
             acme-monorepo
@@ -131,14 +131,14 @@ export function Sidebar({
         <NavGroup label="Status">
           <div className="px-3 py-1.5">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.verdict')}</span>
+              <span className="text-sm" style={{ color: t.textMuted }}>{tr('admission.sidebar.verdict')}</span>
               <div className="flex items-center gap-1.5">
                 <span
                   className="w-1.5 h-1.5 rounded-full"
                   style={{ background: verdictColor }}
                 />
                 <span
-                  className="text-[11px] font-mono uppercase tracking-[0.18em]"
+                  className="text-sm font-mono uppercase tracking-eyebrow"
                   style={{ color: verdictColor }}
                 >
                   {verdict}
@@ -146,17 +146,17 @@ export function Sidebar({
               </div>
             </div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.activeRules')}</span>
-              <span className="text-[11px] font-mono tabular-nums" style={{ color: t.textBody }}>
+              <span className="text-sm" style={{ color: t.textMuted }}>{tr('admission.sidebar.activeRules')}</span>
+              <span className="text-sm font-mono tabular-nums" style={{ color: t.textBody }}>
                 {enabled}
                 <span style={{ color: t.textFaint }}> / {rules.length}</span>
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.engine')}</span>
+              <span className="text-sm" style={{ color: t.textMuted }}>{tr('admission.sidebar.engine')}</span>
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: t.ok }} />
-                <span className="text-[11px]" style={{ color: t.textMuted }}>{tr('admission.sidebar.engineReady')}</span>
+                <span className="text-sm" style={{ color: t.textMuted }}>{tr('admission.sidebar.engineReady')}</span>
               </div>
             </div>
           </div>
@@ -169,10 +169,10 @@ export function Sidebar({
         style={{ borderColor: t.borderSoft }}
       >
         <span className="w-1.5 h-1.5 rounded-full" style={{ background: t.ok }} />
-        <span className="text-[11px] flex-1 min-w-0 truncate" style={{ color: t.textMuted }}>
+        <span className="text-sm flex-1 min-w-0 truncate" style={{ color: t.textMuted }}>
           {tr('admission.sidebar.syncedJustNow')}
         </span>
-        <span className="text-[10px] font-mono" style={{ color: t.textFaint }}>v2</span>
+        <span className="text-xs font-mono" style={{ color: t.textFaint }}>v2</span>
       </div>
     </aside>
   );

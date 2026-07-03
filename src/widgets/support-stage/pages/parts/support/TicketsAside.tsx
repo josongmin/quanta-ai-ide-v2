@@ -34,10 +34,10 @@ export function TicketsAside() {
                 <m.icon className="w-3.5 h-3.5" />
               </div>
               <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
                   {t.subject}
                 </span>
-                <div className="flex items-center gap-1.5 text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+                <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--fg-subtle)' }}>
                   <code className="font-mono">{t.id}</code>
                   <span>·</span>
                   <span>{t.updatedAt}</span>
@@ -59,7 +59,7 @@ export function TicketsAside() {
         }}
       >
         <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'var(--intent-warn-fg)' }} />
-        <div className="text-[11px]" style={{ color: 'var(--fg-default)' }}>
+        <div className="text-sm" style={{ color: 'var(--fg-default)' }}>
           Production outage? Check <Link to={'/status' as never} className="font-semibold" style={{ color: 'var(--fg-link)' }}>status.acme.dev</Link> first, then page urgent.
         </div>
       </div>

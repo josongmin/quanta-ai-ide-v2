@@ -27,7 +27,7 @@ export function PlanCard({
     >
       {plan.recommended && !selected && (
         <span
-          className="absolute top-3 right-3 text-[8px] font-bold uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
+          className="absolute top-3 right-3 text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
           style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
         >
           Recommended
@@ -35,7 +35,7 @@ export function PlanCard({
       )}
 
       <div className="flex items-center gap-2">
-        <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {plan.name}
         </span>
         {selected && (
@@ -48,7 +48,7 @@ export function PlanCard({
         )}
         {plan.trial && (
           <span
-            className="ml-auto text-[9px] uppercase tracking-[0.14em] font-semibold inline-flex items-center gap-1"
+            className="ml-auto text-2xs uppercase tracking-eyebrow font-semibold inline-flex items-center gap-1"
             style={{ color: 'var(--fg-accent)' }}
           >
             <Clock className="w-2.5 h-2.5" />
@@ -59,23 +59,23 @@ export function PlanCard({
 
       <div className="flex items-baseline gap-1 min-h-[32px]">
         {price == null ? (
-          <span className="text-[18px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             Custom
           </span>
         ) : (
           <>
-            <span className="text-[24px] font-semibold tracking-tight tabular-nums leading-none"
+            <span className="text-3xl font-semibold tracking-tight tabular-nums leading-none"
               style={{ color: 'var(--fg-strong)' }}>
               ${price}
             </span>
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
               /seat/mo
             </span>
           </>
         )}
       </div>
 
-      <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
         {plan.hint}
         {plan.minSeats && plan.minSeats > 1 && (
           <span> · Min {plan.minSeats} seats</span>
@@ -84,7 +84,7 @@ export function PlanCard({
 
       <ul className="flex flex-col gap-1.5 mt-1">
         {plan.highlights.map((h) => (
-          <li key={h} className="flex items-start gap-1.5 text-[11px] leading-snug" style={{ color: 'var(--fg-default)' }}>
+          <li key={h} className="flex items-start gap-1.5 text-sm leading-snug" style={{ color: 'var(--fg-default)' }}>
             <Check className="w-3 h-3 shrink-0 mt-[2px]" style={{ color: 'var(--fg-muted)' }} />
             <span>{h}</span>
           </li>

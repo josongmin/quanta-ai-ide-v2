@@ -25,10 +25,10 @@ export function ConflictsPanel({ conflicts, t }: Props) {
               border: '1px solid var(--border-default)',
             }}
           >
-            <div className="text-[11px] font-semibold" style={{ color: 'var(--fg-default)' }}>
+            <div className="text-sm font-semibold" style={{ color: 'var(--fg-default)' }}>
               #{c.prNumber.toString()} · {c.title}
             </div>
-            <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+            <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
               {c.author} · {c.overlappingFiles.join(', ')}
             </div>
           </li>

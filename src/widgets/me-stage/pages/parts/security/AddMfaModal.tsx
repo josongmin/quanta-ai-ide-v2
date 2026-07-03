@@ -31,7 +31,7 @@ export function AddMfaModal({
           boxShadow: 'var(--shadow-lg)',
         }}
       >
-        <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           Add {kind === 'totp' ? 'authenticator app' : 'security key'}
         </h3>
 
@@ -43,7 +43,7 @@ export function AddMfaModal({
             >
               <QrPlaceholder />
             </div>
-            <p className="text-[11px] leading-snug text-center" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-sm leading-snug text-center" style={{ color: 'var(--fg-muted)' }}>
               Scan with 1Password, Authy, Google Authenticator, or similar.
               Then enter the 6-digit code it generates.
             </p>
@@ -71,21 +71,21 @@ export function AddMfaModal({
               <span className="absolute rounded-full onb-pulse-ring" style={{ width: 56, height: 56 }} aria-hidden />
               <ShieldCheck className="w-6 h-6" style={{ color: 'var(--fg-accent)' }} />
             </div>
-            <p className="text-[11px] leading-snug text-center" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-sm leading-snug text-center" style={{ color: 'var(--fg-muted)' }}>
               Touch your security key or use Touch ID / Windows Hello to register.
             </p>
           </div>
         )}
 
         <label className="flex flex-col gap-1.5">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             Label
           </span>
           <input
             value={label}
             onChange={(e) => { setLabel(e.target.value); }}
             placeholder="e.g. 1Password"
-            className="h-9 px-3 rounded-md text-[12px] outline-none"
+            className="h-9 px-3 rounded-md text-base outline-none"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',

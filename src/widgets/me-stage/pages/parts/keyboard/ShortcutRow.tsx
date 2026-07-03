@@ -23,11 +23,11 @@ export function ShortcutRow({
     >
       <Keyboard className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
       <div className="flex flex-col flex-1 min-w-0">
-        <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
           {shortcut.label}
         </span>
         {shortcut.description && (
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             {shortcut.description}
           </span>
         )}

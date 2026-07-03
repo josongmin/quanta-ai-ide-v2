@@ -75,10 +75,10 @@ export function ContextRail({
   return (
     <>
       <div className="shrink-0 h-11 flex items-center px-4 border-b border-[var(--border-default)]">
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           PR context
         </span>
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">#{pr.number}</span>
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">#{pr.number}</span>
       </div>
 
       <div className="flex-1 min-h-0 overflow-auto p-4 space-y-5">
@@ -92,10 +92,10 @@ export function ContextRail({
                 className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-[var(--bg-hover)] transition-colors text-left"
               >
                 <j.Icon className="w-3.5 h-3.5 shrink-0" style={{ color: j.tone }} />
-                <span className="flex-1 text-[12px] text-[var(--fg-muted)]">{j.label}</span>
+                <span className="flex-1 text-base text-[var(--fg-muted)]">{j.label}</span>
                 {j.count > 0 && (
                   <span
-                    className="text-[10px] font-mono tabular-nums px-1.5 rounded-full"
+                    className="text-xs font-mono tabular-nums px-1.5 rounded-full"
                     style={{ background: `color-mix(in srgb, ${j.tone} 13%, transparent)`, color: j.tone }}
                   >
                     {j.count}
@@ -122,7 +122,7 @@ export function ContextRail({
         <MergeActionsSection pr={pr} />
       </div>
 
-      <div className="shrink-0 px-4 py-3 border-t border-[var(--border-default)] text-[10px] font-mono text-[var(--fg-subtle)]">
+      <div className="shrink-0 px-4 py-3 border-t border-[var(--border-default)] text-xs font-mono text-[var(--fg-subtle)]">
         @{pr.author} · #{pr.number}
       </div>
     </>

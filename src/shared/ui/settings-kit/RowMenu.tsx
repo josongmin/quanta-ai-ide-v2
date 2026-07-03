@@ -75,7 +75,7 @@ export function RowMenu({
                   type="button"
                   disabled={item.disabled}
                   onClick={() => { setOpen(false); item.onClick?.(); }}
-                  className={`flex items-center gap-2 w-full ${px} h-8 text-[12px] transition-colors text-left`}
+                  className={`flex items-center gap-2 w-full ${px} h-8 text-base transition-colors text-left`}
                   style={{
                     color: item.disabled
                       ? 'var(--fg-subtle)'

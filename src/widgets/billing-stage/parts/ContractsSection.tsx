@@ -29,7 +29,7 @@ function StatusPill({ enterprise, count }: { enterprise: boolean; count: number 
 
   return (
     <div
-      className="self-start inline-flex items-center gap-2 h-7 px-2.5 rounded-md text-[11px]"
+      className="self-start inline-flex items-center gap-2 h-7 px-2.5 rounded-md text-sm"
       style={{
         background: 'var(--bg-canvas)',
         border: '1px solid var(--border-default)',
@@ -70,37 +70,37 @@ function ContractRow({ contract, top }: { contract: Contract; top: boolean }) {
     >
       <AbbrGlyph abbr={contract.abbr} />
       <span
-        className="text-[12px] font-medium flex-1 truncate"
+        className="text-base font-medium flex-1 truncate"
         style={{ color: 'var(--fg-strong)' }}
       >
         {contract.name}
       </span>
       <span
-        className="font-mono text-[10px] tabular-nums w-[44px] shrink-0 text-right"
+        className="font-mono text-xs tabular-nums w-[44px] shrink-0 text-right"
         style={{ color: 'var(--fg-muted)' }}
       >
         {contract.version}
       </span>
       <span
-        className="text-[11px] tabular-nums w-[110px] shrink-0"
+        className="text-sm tabular-nums w-[110px] shrink-0"
         style={{ color: 'var(--fg-muted)' }}
       >
         {eff}
       </span>
       <span
-        className="text-[11px] tabular-nums w-[90px] shrink-0"
+        className="text-sm tabular-nums w-[90px] shrink-0"
         style={{ color: contract.expires ? 'var(--fg-muted)' : 'var(--fg-subtle)' }}
       >
         {exp}
       </span>
       <span
-        className="text-[10px] tabular-nums w-[56px] shrink-0 text-right"
+        className="text-xs tabular-nums w-[56px] shrink-0 text-right"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {contract.sizeKb} KB
       </span>
       <span
-        className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-[11px]"
+        className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-sm"
         style={{ color: 'var(--fg-muted)' }}
       >
         <Download className="w-3 h-3" />
@@ -113,7 +113,7 @@ function ContractRow({ contract, top }: { contract: Contract; top: boolean }) {
 function AbbrGlyph({ abbr }: { abbr: string }) {
   return (
     <span
-      className="w-9 h-5 rounded text-[9px] font-mono font-bold flex items-center justify-center shrink-0"
+      className="w-9 h-5 rounded text-2xs font-mono font-bold flex items-center justify-center shrink-0"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',
@@ -149,18 +149,18 @@ function SalesCta() {
       </span>
       <div className="flex flex-col gap-0.5 flex-1 min-w-0">
         <div
-          className="text-[12px] font-semibold"
+          className="text-base font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Need an enterprise contract?
         </div>
-        <div className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+        <div className="text-sm" style={{ color: 'var(--fg-muted)' }}>
           Custom MSA, DPA, BAA, redlines, security review, and procurement support.
         </div>
       </div>
       <button
         type="button"
-        className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-medium transition-colors shrink-0"
+        className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-medium transition-colors shrink-0"
         style={{
           background: 'var(--fg-accent)',
           color: 'white',

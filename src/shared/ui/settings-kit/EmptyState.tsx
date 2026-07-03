@@ -20,11 +20,11 @@ export function EmptyState({ title, subtitle, icon: Icon = Search }: Props) {
   return (
     <div className="flex flex-col items-center justify-center gap-2 py-12 px-4 text-center">
       <Icon className="w-5 h-5" style={{ color: 'var(--fg-subtle)' }} />
-      <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+      <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
         {title}
       </span>
       {subtitle && (
-        <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
           {subtitle}
         </span>
       )}

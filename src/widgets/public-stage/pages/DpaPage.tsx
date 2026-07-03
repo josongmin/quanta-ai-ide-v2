@@ -58,7 +58,7 @@ export default function DpaPage() {
             className="rounded-md overflow-hidden mt-2"
             style={{ border: '1px solid var(--border-default)' }}
           >
-            <table className="w-full text-[12px]">
+            <table className="w-full text-base">
               <tbody>
                 {DEFINITIONS.map((d, i) => (
                   <tr
@@ -125,9 +125,9 @@ export default function DpaPage() {
               >
                 <div className="flex items-center gap-2 mb-1">
                   <c.icon size={14} style={{ color: 'var(--fg-accent)' }} />
-                  <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
+                  <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
                 </div>
-                <p className="text-[12px] leading-5" style={{ color: 'var(--fg-muted)' }}>{c.desc}</p>
+                <p className="text-base leading-5" style={{ color: 'var(--fg-muted)' }}>{c.desc}</p>
               </li>
             ))}
           </ul>
@@ -207,7 +207,7 @@ function DocHeader() {
   return (
     <div className="mb-8">
       <div
-        className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-medium mb-4"
+        className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium mb-4"
         style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
       >
         <Scale size={12} />
@@ -216,7 +216,7 @@ function DocHeader() {
       <h1 className="text-[32px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
         Data Processing Addendum
       </h1>
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-5 text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-5 text-base" style={{ color: 'var(--fg-muted)' }}>
         <span>Last updated <span style={{ color: 'var(--fg-default)' }}>{LAST_UPDATED}</span></span>
         <span style={{ color: 'var(--border-default)' }}>·</span>
         <span>Effective <span style={{ color: 'var(--fg-default)' }}>{EFFECTIVE}</span></span>
@@ -226,7 +226,7 @@ function DocHeader() {
       <button
         type="button"
         onClick={() => { /* no-op */ }}
-        className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[12px] font-medium"
+        className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-base font-medium"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -251,10 +251,10 @@ function AutoExecutionNotice() {
     >
       <ShieldCheck size={16} style={{ color: 'var(--intent-info-fg)', marginTop: 2 }} />
       <div className="flex-1">
-        <div className="text-[12px] font-semibold mb-1" style={{ color: 'var(--fg-strong)' }}>
+        <div className="text-base font-semibold mb-1" style={{ color: 'var(--fg-strong)' }}>
           Auto-execution
         </div>
-        <p className="text-[12px] leading-6" style={{ color: 'var(--fg-default)' }}>
+        <p className="text-base leading-6" style={{ color: 'var(--fg-default)' }}>
           This DPA is automatically executed alongside the MSA when you sign up — no separate signature
           required. Need a counter-signed copy for your records? Email{' '}
           <a
@@ -276,15 +276,15 @@ function Section({ n, title, children }: { n: number; title: string; children: R
   return (
     <section>
       <h2
-        className="text-[18px] font-semibold tracking-tight mb-3 flex items-baseline gap-3"
+        className="text-2xl font-semibold tracking-tight mb-3 flex items-baseline gap-3"
         style={{ color: 'var(--fg-strong)' }}
       >
-        <span className="text-[12px] font-mono tabular-nums w-7 inline-flex justify-end" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-base font-mono tabular-nums w-7 inline-flex justify-end" style={{ color: 'var(--fg-subtle)' }}>
           {String(n).padStart(2, '0')}
         </span>
         {title}
       </h2>
-      <div className="pl-10 space-y-3.5 text-[14px] leading-7" style={{ color: 'var(--fg-default)' }}>
+      <div className="pl-10 space-y-3.5 text-lg leading-7" style={{ color: 'var(--fg-default)' }}>
         {children}
       </div>
     </section>

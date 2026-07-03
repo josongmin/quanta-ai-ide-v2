@@ -82,12 +82,12 @@ function RailRow({
         <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: on ? iconColor : undefined }} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <span className={`text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] leading-tight ${labelColor}`}>
+            <span className={`text-xs font-black uppercase tracking-eyebrow leading-tight ${labelColor}`}>
               {label}
             </span>
             {on && <OnPill />}
           </div>
-          <div className={`mt-0.5 text-[10px] truncate ${valueColor}`}>{value}</div>
+          <div className={`mt-0.5 text-xs truncate ${valueColor}`}>{value}</div>
         </div>
         <ChevronRight className={`w-3 h-3 shrink-0 ${
           selected ? 'text-[var(--fg-default)]' : 'text-[var(--fg-subtle)]'
@@ -100,7 +100,7 @@ function RailRow({
 function OnPill() {
   return (
     <span
-      className="text-2xs font-black uppercase tracking-[var(--track-eyebrow)] px-1 py-px rounded leading-none"
+      className="text-2xs font-black uppercase tracking-eyebrow px-1 py-px rounded leading-none"
       style={{
         background: ACCENT_TINT_BG,
         color: ACCENT_TEXT,

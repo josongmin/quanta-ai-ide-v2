@@ -21,13 +21,13 @@ export function BulkActionBar() {
         border: `1px solid ${t.accent}59`,
       }}
     >
-      <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textHi }}>
+      <span className="text-xs font-bold uppercase tracking-eyebrow" style={{ color: t.textHi }}>
         {selection.size} selected
       </span>
       <div className="w-px h-4" style={{ background: t.border }} />
       <button type="button"
         onClick={() => { bulkSetEnabled(true); }}
-        className="text-[10px] font-mono uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+        className="text-xs font-mono uppercase tracking-eyebrow px-2 py-0.5 rounded-md"
         style={{ color: t.textBody }}
         onMouseEnter={(e) => { e.currentTarget.style.color = t.textHi; e.currentTarget.style.background = t.hoverSubtle; }}
         onMouseLeave={(e) => { e.currentTarget.style.color = t.textBody; e.currentTarget.style.background = ''; }}
@@ -36,7 +36,7 @@ export function BulkActionBar() {
       </button>
       <button type="button"
         onClick={() => { bulkSetEnabled(false); }}
-        className="text-[10px] font-mono uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+        className="text-xs font-mono uppercase tracking-eyebrow px-2 py-0.5 rounded-md"
         style={{ color: t.textBody }}
         onMouseEnter={(e) => { e.currentTarget.style.color = t.textHi; e.currentTarget.style.background = t.hoverSubtle; }}
         onMouseLeave={(e) => { e.currentTarget.style.color = t.textBody; e.currentTarget.style.background = ''; }}
@@ -44,12 +44,12 @@ export function BulkActionBar() {
         disable
       </button>
       <div className="w-px h-4" style={{ background: t.border }} />
-      <span className="text-[9px] font-mono uppercase tracking-[0.18em]" style={{ color: t.textSubtle }}>severity →</span>
+      <span className="text-2xs font-mono uppercase tracking-eyebrow" style={{ color: t.textSubtle }}>severity →</span>
       {(['block', 'warn', 'info'] as RuleSeverity[]).map((sev) => (
         <button type="button"
           key={sev}
           onClick={() => { bulkSetSeverity(sev); }}
-          className="text-[10px] font-mono uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+          className="text-xs font-mono uppercase tracking-eyebrow px-2 py-0.5 rounded-md"
           style={{
             color: sev === 'block' ? SEVERITY_COLOR.block
               : sev === 'warn' ? SEVERITY_COLOR.warn : t.textMuted,
@@ -65,14 +65,14 @@ export function BulkActionBar() {
         onClick={() => {
           if (confirm(`Delete ${selection.size} rules?`)) bulkRemove();
         }}
-        className="flex items-center gap-1 text-[10px] font-mono uppercase tracking-[0.18em] px-2 py-0.5 rounded-md hover:bg-[#c25a55]/15 text-[#c25a55]"
+        className="flex items-center gap-1 text-xs font-mono uppercase tracking-eyebrow px-2 py-0.5 rounded-md hover:bg-[#c25a55]/15 text-[#c25a55]"
       >
         <Trash2 className="w-3 h-3" />
         delete
       </button>
       <button type="button"
         onClick={selectClear}
-        className="text-[10px] font-mono uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+        className="text-xs font-mono uppercase tracking-eyebrow px-2 py-0.5 rounded-md"
         style={{ color: t.textMuted }}
         onMouseEnter={(e) => { e.currentTarget.style.color = t.textHi; }}
         onMouseLeave={(e) => { e.currentTarget.style.color = t.textMuted; }}

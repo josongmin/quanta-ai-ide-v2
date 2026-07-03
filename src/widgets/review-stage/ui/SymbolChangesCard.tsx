@@ -57,10 +57,10 @@ export default function SymbolChangesCard({
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <Code2 className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Symbol changes
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {symbols.length} {symbols.length === 1 ? 'symbol' : 'symbols'}
           {overflow > 0 ? ` · top ${String(visible.length)}` : ''}
         </span>
@@ -77,18 +77,18 @@ export default function SymbolChangesCard({
                 style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--bg-elevated)' }}
               >
                 <span
-                  className="shrink-0 inline-flex items-center justify-center px-1.5 h-4 rounded-sm text-[9px] font-mono font-bold uppercase tracking-[var(--track-eyebrow)]"
+                  className="shrink-0 inline-flex items-center justify-center px-1.5 h-4 rounded-sm text-2xs font-mono font-bold uppercase tracking-eyebrow"
                   style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone }}
                 >
                   {CHANGE_LABEL[s.change]}
                 </span>
-                <span className="shrink-0 text-[9px] font-mono text-[var(--fg-subtle)] uppercase">
+                <span className="shrink-0 text-2xs font-mono text-[var(--fg-subtle)] uppercase">
                   {KIND_ICON[s.kind]}
                 </span>
-                <span className="flex-1 min-w-0 text-[12px] font-mono truncate text-[var(--fg-default)]">
+                <span className="flex-1 min-w-0 text-base font-mono truncate text-[var(--fg-default)]">
                   {s.name}
                 </span>
-                <span className="shrink-0 text-[10px] font-mono text-[var(--fg-subtle)] truncate max-w-[160px]" title={s.filePath}>
+                <span className="shrink-0 text-xs font-mono text-[var(--fg-subtle)] truncate max-w-[160px]" title={s.filePath}>
                   {trimMid(s.filePath, 24)}
                 </span>
               </Tag>
@@ -97,7 +97,7 @@ export default function SymbolChangesCard({
         })}
       </ul>
       {overflow > 0 && (
-        <div className="mt-2 text-[10px] font-mono text-[var(--fg-subtle)]">
+        <div className="mt-2 text-xs font-mono text-[var(--fg-subtle)]">
           +{String(overflow)} more — open the Files section for the full list.
         </div>
       )}

@@ -119,7 +119,7 @@ export default function AgentsPage() {
       {/* Agent table */}
       <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
         <div
-          className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '1fr 70px 110px 90px 120px 32px',
             gap: 12,
@@ -144,7 +144,7 @@ export default function AgentsPage() {
         ))}
       </div>
 
-      <p className="text-[11px] mt-4 px-1" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-4 px-1" style={{ color: 'var(--fg-subtle)' }}>
         Agents share the workspace token cap and inherit org-level AI policies. Concurrency is per agent, not per repo.
       </p>
     </WsShell>
@@ -157,11 +157,11 @@ function Stat({ label, value, accent = false, last = false }: { label: string; v
       className="flex flex-col gap-1 px-4 py-3"
       style={{ borderRight: last ? 'none' : '1px solid var(--border-muted)' }}
     >
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </span>
       <span
-        className="text-[18px] font-semibold tabular-nums"
+        className="text-2xl font-semibold tabular-nums"
         style={{ color: accent ? 'var(--fg-accent)' : 'var(--fg-strong)' }}
       >
         {value}
@@ -176,7 +176,7 @@ function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial
   return (
     <div
       role="row"
-      className="grid items-center px-3 py-2.5 text-[12px] transition-colors"
+      className="grid items-center px-3 py-2.5 text-base transition-colors"
       style={{
         gridTemplateColumns: '1fr 70px 110px 90px 120px 32px',
         gap: 12,
@@ -201,7 +201,7 @@ function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial
           <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>
             {agent.name}
           </span>
-          <span className="text-[11px] leading-snug truncate" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-sm leading-snug truncate" style={{ color: 'var(--fg-muted)' }}>
             {agent.description}
           </span>
         </div>
@@ -213,7 +213,7 @@ function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial
         value={agent.model}
         disabled={!agent.enabled}
         onChange={(e) => { onChange({ model: e.target.value as ModelId }); }}
-        className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+        className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -234,7 +234,7 @@ function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial
           value={agent.concurrency}
           disabled={!agent.enabled}
           onChange={(e) => { onChange({ concurrency: Math.max(1, Number(e.target.value) || 1) }); }}
-          className="w-full bg-transparent outline-none text-[12px] tabular-nums text-right"
+          className="w-full bg-transparent outline-none text-base tabular-nums text-right"
           style={{ color: 'var(--fg-strong)' }}
         />
       </div>
@@ -322,7 +322,7 @@ function MenuItem({
     <button
       type="button"
       onClick={onClick}
-      className="flex items-center gap-2 w-full px-3 h-8 text-[12px] transition-colors text-left"
+      className="flex items-center gap-2 w-full px-3 h-8 text-base transition-colors text-left"
       style={{ color: danger ? 'var(--intent-danger-fg)' : 'var(--fg-default)' }}
       onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
       onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}

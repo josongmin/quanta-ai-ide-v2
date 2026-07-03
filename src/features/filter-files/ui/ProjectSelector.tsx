@@ -48,14 +48,14 @@ export default function ProjectSelector() {
             <FolderGit2 className="w-3.5 h-3.5 shrink-0 text-[color:var(--fg-muted)]" />
           )}
           <div className="min-w-0 flex-1">
-            <div className={`text-[11px] font-bold truncate leading-tight ${
+            <div className={`text-sm font-bold truncate leading-tight ${
               activePreset
                 ? 'text-[color:var(--fg-accent)]'
                 : 'text-[color:var(--fg-strong)]'
             }`}>
               {activePreset ? t(`preset.${activePreset.i18nKey}.label`) : projectName}
             </div>
-            <div className="text-[9px] font-mono truncate leading-tight mt-0.5 text-[color:var(--fg-subtle)]">
+            <div className="text-2xs font-mono truncate leading-tight mt-0.5 text-[color:var(--fg-subtle)]">
               {activePreset ? t(`preset.${activePreset.i18nKey}.hint`) : t('selector.subtitle')}
             </div>
           </div>
@@ -79,7 +79,7 @@ export default function ProjectSelector() {
       {open && (
         <div className="absolute left-0 right-0 mt-1 z-10">
           <GlassCard className="p-1.5">
-            <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1 px-1.5 pt-0.5 text-[color:var(--fg-subtle)]">
+            <div className="text-2xs font-black uppercase tracking-eyebrow mb-1 px-1.5 pt-0.5 text-[color:var(--fg-subtle)]">
               {t('section.savedQueries')}
             </div>
             <div className="space-y-0.5">
@@ -99,12 +99,12 @@ export default function ProjectSelector() {
                     }`}
                   >
                     <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[color:var(--fg-accent)]' : 'text-[color:var(--fg-muted)]'}`} />
-                    <span className={`text-[11px] font-bold flex-1 truncate ${
+                    <span className={`text-sm font-bold flex-1 truncate ${
                       active ? 'text-[color:var(--fg-accent)]' : 'text-[color:var(--fg-strong)]'
                     }`}>
                       {label}
                     </span>
-                    <span className="text-[9px] font-mono truncate text-[color:var(--fg-subtle)]">
+                    <span className="text-2xs font-mono truncate text-[color:var(--fg-subtle)]">
                       {hint}
                     </span>
                   </button>

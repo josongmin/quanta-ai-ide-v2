@@ -32,15 +32,15 @@ export function DiffExpander({
           ? <ChevronDown className="w-3.5 h-3.5" style={{ color: t.textMuted }} />
           : <ChevronRight className="w-3.5 h-3.5" style={{ color: t.textMuted }} />}
         <span
-          className="text-[10px] font-black uppercase tracking-[0.18em]"
+          className="text-xs font-black uppercase tracking-eyebrow"
           style={{ color: t.textMuted }}
         >
           {tr('diff.title')}
         </span>
-        <span className="text-[10px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-xs font-mono" style={{ color: t.textFaint }}>
           {candidate.diffSummary}
         </span>
-        <span className="ml-auto text-[10px]" style={{ color: t.textFaint }}>
+        <span className="ml-auto text-xs" style={{ color: t.textFaint }}>
           {expanded ? tr('diff.collapse') : tr('diff.expand')}
         </span>
       </button>
@@ -76,7 +76,7 @@ function DiffHunkView({ hunk }: { hunk: DiffHunk }) {
           {tr('diff.atLine', { line: hunk.startLine })}
         </span>
       </div>
-      <div className="font-mono text-[11px] leading-[1.55]">
+      <div className="font-mono text-sm leading-[1.55]">
         {hunk.before.map((line, i) => (
           <div
             key={`b-${String(i)}`}

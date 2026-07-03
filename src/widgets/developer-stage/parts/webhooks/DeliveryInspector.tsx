@@ -17,16 +17,16 @@ export function DeliveryInspector({ d }: { d: Delivery }) {
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <span
-              className="inline-flex items-center gap-1 px-2 h-5 rounded text-[10px] font-bold"
+              className="inline-flex items-center gap-1 px-2 h-5 rounded text-xs font-bold"
               style={{ color: m.fg, background: m.bg }}
             >
               <m.icon className="w-2.5 h-2.5" />
               {m.label}
             </span>
-            <code className="text-[11px] font-mono" style={{ color: 'var(--fg-subtle)' }}>{d.id}</code>
+            <code className="text-sm font-mono" style={{ color: 'var(--fg-subtle)' }}>{d.id}</code>
           </div>
-          <code className="text-[14px] font-mono" style={{ color: 'var(--fg-strong)' }}>{d.event}</code>
-          <div className="mt-1 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+          <code className="text-lg font-mono" style={{ color: 'var(--fg-strong)' }}>{d.event}</code>
+          <div className="mt-1 text-sm" style={{ color: 'var(--fg-muted)' }}>
             → <span className="font-mono">{d.endpoint}</span>
           </div>
         </div>
@@ -39,7 +39,7 @@ export function DeliveryInspector({ d }: { d: Delivery }) {
 
         <Section title="Payload">
           <pre
-            className="text-[11px] font-mono p-3 rounded-md overflow-x-auto"
+            className="text-sm font-mono p-3 rounded-md overflow-x-auto"
             style={{
               background: 'var(--bg-canvas)',
               border: '1px solid var(--border-default)',
@@ -52,7 +52,7 @@ export function DeliveryInspector({ d }: { d: Delivery }) {
 
         <Section title="Headers">
           <div
-            className="text-[11px] font-mono p-3 rounded-md"
+            className="text-sm font-mono p-3 rounded-md"
             style={{
               background: 'var(--bg-canvas)',
               border: '1px solid var(--border-default)',
@@ -69,7 +69,7 @@ export function DeliveryInspector({ d }: { d: Delivery }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[11px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             <RefreshCw className="w-3 h-3" />
@@ -77,7 +77,7 @@ export function DeliveryInspector({ d }: { d: Delivery }) {
           </button>
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-[11px] font-medium transition-colors"
+            className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-sm font-medium transition-colors"
             style={{
               background: 'transparent',
               border: '1px solid var(--border-default)',
@@ -102,10 +102,10 @@ function Stat({ label, value }: { label: string; value: string }) {
         border: '1px solid var(--border-default)',
       }}
     >
-      <div className="text-[9px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="text-2xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </div>
-      <div className="text-[12px] font-semibold tabular-nums mt-0.5" style={{ color: 'var(--fg-strong)' }}>
+      <div className="text-base font-semibold tabular-nums mt-0.5" style={{ color: 'var(--fg-strong)' }}>
         {value}
       </div>
     </div>
@@ -115,7 +115,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
         {title}
       </span>
       {children}

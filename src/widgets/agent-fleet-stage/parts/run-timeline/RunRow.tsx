@@ -26,12 +26,12 @@ export function RunRow({
     >
       <div className="flex items-center gap-2 mb-0.5">
         <RunStatusBadge status={run.status} isDark={isDark} t={t} />
-        <span className={`text-[12px] font-mono ${heading}`}>{run.id}</span>
-        <span className={`text-[10px] font-mono ${faint} ml-auto`}>
+        <span className={`text-base font-mono ${heading}`}>{run.id}</span>
+        <span className={`text-xs font-mono ${faint} ml-auto`}>
           {t('run.started', { when: relativeFromMs(run.startedAtMs) })}
         </span>
       </div>
-      <div className={`flex items-center gap-2 text-[10px] font-mono ${muted}`}>
+      <div className={`flex items-center gap-2 text-xs font-mono ${muted}`}>
         <span className="truncate">{run.triggeredBy}</span>
         <span className={faint}>·</span>
         <span>${run.costUsd.toFixed(2)}</span>

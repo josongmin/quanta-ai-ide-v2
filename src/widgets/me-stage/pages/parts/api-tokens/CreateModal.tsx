@@ -58,7 +58,7 @@ export function CreateModal({
           boxShadow: 'var(--shadow-lg)',
         }}
       >
-        <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           New personal access token
         </h3>
 
@@ -72,7 +72,7 @@ export function CreateModal({
         />
 
         <fieldset className="flex flex-col gap-1.5">
-          <legend className="text-[10px] uppercase tracking-[0.14em] font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
+          <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
             Expiration
           </legend>
           <div className="flex flex-wrap gap-1.5">
@@ -83,7 +83,7 @@ export function CreateModal({
                   key={d}
                   type="button"
                   onClick={() => { setExpiresIn(d); }}
-                  className="h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+                  className="h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
                   style={{
                     background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
                     color: active ? 'var(--fg-strong)' : 'var(--fg-default)',
@@ -98,13 +98,13 @@ export function CreateModal({
         </fieldset>
 
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <legend className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             Scopes
           </legend>
           <div className="flex flex-col gap-3">
             {SCOPE_GROUPS.map((g) => (
               <div key={g.title} className="flex flex-col gap-1">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: 'var(--fg-muted)' }}>
+                <span className="text-xs font-semibold uppercase tracking-eyebrow" style={{ color: 'var(--fg-muted)' }}>
                   {g.title}
                 </span>
                 {g.scopes.map((s) => (
@@ -123,14 +123,14 @@ export function CreateModal({
                     <div className="flex flex-col gap-0.5 min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <code
-                          className="text-[11px] font-mono"
+                          className="text-sm font-mono"
                           style={{ color: s.danger ? 'var(--intent-warn-fg)' : 'var(--fg-strong)' }}
                         >
                           {s.label}
                         </code>
                         {s.danger && (
                           <span
-                            className="text-[8px] uppercase tracking-[0.14em] font-semibold px-1 py-0.5 rounded"
+                            className="text-2xs uppercase tracking-eyebrow font-semibold px-1 py-0.5 rounded"
                             style={{
                               background: 'var(--intent-warn-bg)',
                               color: 'var(--intent-warn-fg)',
@@ -140,7 +140,7 @@ export function CreateModal({
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+                      <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
                         {s.sub}
                       </span>
                     </div>
@@ -153,7 +153,7 @@ export function CreateModal({
 
         {dangerScopes.length > 0 && (
           <div
-            className="flex items-start gap-2 px-2.5 py-2 rounded text-[11px] onb-stagger"
+            className="flex items-start gap-2 px-2.5 py-2 rounded text-sm onb-stagger"
             style={{
               background: 'var(--intent-warn-bg)',
               border: '1px solid var(--intent-warn-fg)',

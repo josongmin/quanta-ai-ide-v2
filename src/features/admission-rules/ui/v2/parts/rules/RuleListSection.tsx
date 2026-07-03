@@ -81,7 +81,7 @@ export function RuleListSection({
               value={query}
               onChange={(e) => { setQuery(e.target.value); }}
               placeholder={tA('search.rulesPlaceholder')}
-              className="flex-1 bg-transparent text-[11px] outline-none"
+              className="flex-1 bg-transparent text-sm outline-none"
               style={{ color: t.textBody }}
             />
             {query && (
@@ -102,7 +102,7 @@ export function RuleListSection({
           <select
             value={sortKey}
             onChange={(e) => { setSortKey(e.target.value as 'name' | 'matches' | 'severity'); }}
-            className="text-[10px] font-mono px-2 py-1 rounded-md"
+            className="text-xs font-mono px-2 py-1 rounded-md"
             style={{ background: t.inset, border: `1px solid ${t.border}`, color: t.textBody }}
           >
             <option value="matches">sort: matches</option>
@@ -112,7 +112,7 @@ export function RuleListSection({
 
           <button type="button"
             onClick={() => { openEditor(null); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em]"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-eyebrow"
             style={{ background: t.textHi, color: t.page }}
           >
             <Plus className="w-3 h-3" />
@@ -127,7 +127,7 @@ export function RuleListSection({
       {/* Table */}
       <V2Card className="p-0 overflow-hidden">
         <div
-          className="grid grid-cols-[28px_minmax(0,1fr)_80px_70px_60px_70px_24px] gap-2 px-4 py-2 text-[9px] font-bold uppercase tracking-[0.18em]"
+          className="grid grid-cols-[28px_minmax(0,1fr)_80px_70px_60px_70px_24px] gap-2 px-4 py-2 text-2xs font-bold uppercase tracking-eyebrow"
           style={{ borderBottom: `1px solid ${t.borderSoft}`, color: t.textSubtle }}
         >
           <button type="button"
@@ -148,7 +148,7 @@ export function RuleListSection({
         </div>
         <div className="max-h-[calc(100vh-360px)] overflow-y-auto">
           {visible.length === 0 ? (
-            <div className="px-4 py-8 text-center text-[11px] font-mono" style={{ color: t.textSubtle }}>
+            <div className="px-4 py-8 text-center text-sm font-mono" style={{ color: t.textSubtle }}>
               No rules match.
             </div>
           ) : visible.map((r) => {
@@ -204,12 +204,12 @@ export function RuleListSection({
                         }}
                       />
                     </button>
-                    <span className="text-[12px] font-bold truncate" style={{ color: t.textBody }}>
+                    <span className="text-base font-bold truncate" style={{ color: t.textBody }}>
                       {r.name}
                     </span>
                     {inRollout && (
                       <span
-                        className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
+                        className="text-2xs font-mono uppercase tracking-eyebrow px-1.5 py-px rounded-md"
                         style={{
                           color: t.accent,
                           background: `${t.accent}15`,
@@ -221,21 +221,21 @@ export function RuleListSection({
                       </span>
                     )}
                   </div>
-                  <div className="mt-0.5 text-[10px] font-mono truncate" style={{ color: t.textSubtle }}>
+                  <div className="mt-0.5 text-xs font-mono truncate" style={{ color: t.textSubtle }}>
                     {usesHint(r.signal)} · {describeSignal(r.signal)}
                   </div>
                 </div>
-                <span className="text-[10px] font-mono" style={{ color: t.textMuted }}>
+                <span className="text-xs font-mono" style={{ color: t.textMuted }}>
                   {SOURCE_GLYPH[r.source]} {r.source}
                 </span>
                 <span
-                  className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-md inline-block"
+                  className="text-2xs font-mono uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md inline-block"
                   style={{ color: sevColor, background: `${sevColor}1a` }}
                 >
                   {r.severity}
                 </span>
                 <span
-                  className="text-[12px] font-mono tabular-nums text-right"
+                  className="text-base font-mono tabular-nums text-right"
                   style={{
                     color: matches === 0 ? t.textFaint
                       : r.severity === 'block' ? sevColor
@@ -244,7 +244,7 @@ export function RuleListSection({
                 >
                   {matches}
                 </span>
-                <span className="text-[9px] font-mono uppercase tracking-[0.18em]" style={{ color: t.textMuted }}>
+                <span className="text-2xs font-mono uppercase tracking-eyebrow" style={{ color: t.textMuted }}>
                   {cost}
                 </span>
                 <button type="button"
@@ -256,7 +256,7 @@ export function RuleListSection({
                       startRollout(r.id, 7);
                     }
                   }}
-                  className="text-[9px]"
+                  className="text-2xs"
                   style={{ color: t.textSubtle }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = t.textBody; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = t.textSubtle; }}
@@ -271,7 +271,7 @@ export function RuleListSection({
 
         {/* Footer: total info + retro cue */}
         <div
-          className="px-4 py-2 flex items-center text-[10px] font-mono"
+          className="px-4 py-2 flex items-center text-xs font-mono"
           style={{ borderTop: `1px solid ${t.borderSoft}`, color: t.textSubtle }}
         >
           <span>{visible.length} of {rules.length} rules</span>
@@ -286,10 +286,10 @@ export function RuleListSection({
         <V2Card className="p-4">
           <SectionTitle icon={Layers}>{tA('section.activeVsTotal')}</SectionTitle>
           <div className="mt-3 flex items-baseline gap-3">
-            <span className="text-[28px] font-black tabular-nums leading-none" style={{ color: t.textHi }}>
+            <span className="text-4xl font-black tabular-nums leading-none" style={{ color: t.textHi }}>
               {rules.filter((r) => r.enabled).length}
             </span>
-            <span className="text-[14px] font-mono leading-none" style={{ color: t.textSubtle }}>
+            <span className="text-lg font-mono leading-none" style={{ color: t.textSubtle }}>
               / {rules.length}
             </span>
           </div>
@@ -307,16 +307,16 @@ export function RuleListSection({
         <V2Card className="p-4">
           <SectionTitle icon={Zap}>{tA('section.ifTodayRan')}</SectionTitle>
           <div className="mt-3 flex items-baseline gap-3">
-            <span className="text-[28px] font-black tabular-nums text-[#c25a55] leading-none"
+            <span className="text-4xl font-black tabular-nums text-[#c25a55] leading-none"
               style={{ textShadow: '0 0 12px #c25a5555' }}
             >
               {retro.filter((r) => r.decision.outcome === 'block').length}
             </span>
-            <span className="text-[14px] font-mono leading-none" style={{ color: t.textSubtle }}>
+            <span className="text-lg font-mono leading-none" style={{ color: t.textSubtle }}>
               / {retro.length}
             </span>
           </div>
-          <div className="mt-2 text-[10px] font-mono" style={{ color: t.textSubtle }}>
+          <div className="mt-2 text-xs font-mono" style={{ color: t.textSubtle }}>
             simulated PRs would block under current ruleset
           </div>
         </V2Card>
@@ -324,16 +324,16 @@ export function RuleListSection({
         <V2Card className="p-4">
           <SectionTitle icon={Cpu}>{tA('section.rolloutsInProgress')}</SectionTitle>
           <div className="mt-3 flex items-baseline gap-3">
-            <span className="text-[28px] font-black tabular-nums leading-none"
+            <span className="text-4xl font-black tabular-nums leading-none"
               style={{ color: t.accent, textShadow: `0 0 12px ${t.accent}55` }}
             >
               {rollouts.length}
             </span>
-            <span className="text-[14px] font-mono leading-none" style={{ color: t.textSubtle }}>
+            <span className="text-lg font-mono leading-none" style={{ color: t.textSubtle }}>
               warn → block
             </span>
           </div>
-          <div className="mt-2 text-[10px] font-mono" style={{ color: t.textSubtle }}>
+          <div className="mt-2 text-xs font-mono" style={{ color: t.textSubtle }}>
             scheduled rule promotions
           </div>
         </V2Card>

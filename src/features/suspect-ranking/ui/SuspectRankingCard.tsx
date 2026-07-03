@@ -38,7 +38,7 @@ function ConfidencePill({ confidence }: { confidence: SuspectConfidence }) {
   return (
     <span
       style={style}
-      className="inline-flex items-center px-1.5 h-5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] bg-[var(--bg-surface-muted)]"
+      className="inline-flex items-center px-1.5 h-5 rounded-md text-2xs font-bold uppercase tracking-eyebrow bg-[var(--bg-surface-muted)]"
     >
       {CONFIDENCE_LABEL[confidence]}
     </span>
@@ -65,22 +65,22 @@ function Row({
   const content = (
     <>
       <div className="flex items-center gap-2 min-w-0">
-        <span className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-md text-[10px] font-mono font-bold tabular-nums bg-[var(--bg-elevated)] text-[var(--fg-default)]">
+        <span className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-md text-xs font-mono font-bold tabular-nums bg-[var(--bg-elevated)] text-[var(--fg-default)]">
           {String(index + 1)}
         </span>
-        <span className="font-mono text-[11px] text-[var(--fg-default)] tabular-nums">
+        <span className="font-mono text-sm text-[var(--fg-default)] tabular-nums">
           {shortSha(suspect.commitSha)}
         </span>
         {typeof suspect.prNumber === 'number' && (
-          <span className="font-mono text-[10px] text-[var(--fg-muted)]">
+          <span className="font-mono text-xs text-[var(--fg-muted)]">
             #{String(suspect.prNumber)}
           </span>
         )}
-        <span className="text-[11px] text-[var(--fg-default)] truncate">
+        <span className="text-sm text-[var(--fg-default)] truncate">
           {suspect.authorId}
         </span>
         {suspect.suspectSymbol && (
-          <span className="font-mono text-[10px] text-[var(--fg-muted)] truncate">
+          <span className="font-mono text-xs text-[var(--fg-muted)] truncate">
             {suspect.suspectSymbol}
           </span>
         )}
@@ -93,7 +93,7 @@ function Row({
           {reasons.map((r) => (
             <li
               key={r}
-              className="text-[11px] text-[var(--fg-muted)] leading-snug"
+              className="text-sm text-[var(--fg-muted)] leading-snug"
             >
               {r}
             </li>
@@ -125,7 +125,7 @@ export default function SuspectRankingCard({ ranking, onSelect }: Props) {
   if (suspects.length === 0) {
     return (
       <div className="rounded-2xl px-4 py-4 bg-[var(--bg-elevated)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)]">
-        <div className="text-[11px] text-[var(--fg-muted)]">
+        <div className="text-sm text-[var(--fg-muted)]">
           No suspects ranked above the inference threshold for {ranking.incidentId}.
         </div>
       </div>
@@ -135,13 +135,13 @@ export default function SuspectRankingCard({ ranking, onSelect }: Props) {
   return (
     <div className="rounded-2xl px-3 py-3 bg-[var(--bg-elevated)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)]">
       <div className="flex items-center gap-2 px-1 mb-2">
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-default)]">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-default)]">
           Suspect ranking
         </span>
-        <span className="font-mono text-[10px] text-[var(--fg-muted)]">
+        <span className="font-mono text-xs text-[var(--fg-muted)]">
           {ranking.incidentId}
         </span>
-        <span className="ml-auto font-mono text-[10px] text-[var(--fg-muted)]">
+        <span className="ml-auto font-mono text-xs text-[var(--fg-muted)]">
           top {String(suspects.length)}
         </span>
       </div>

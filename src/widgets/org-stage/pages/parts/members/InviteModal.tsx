@@ -54,7 +54,7 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
     >
       <label className="flex flex-col gap-1.5">
         <span
-          className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+          className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
           style={{ color: 'var(--fg-subtle)' }}
         >
           <span>Emails</span>
@@ -69,7 +69,7 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
           onChange={(e) => { setEmails(e.target.value); }}
           placeholder="alice@acme.com, bob@acme.com…"
           rows={3}
-          className="w-full rounded-md p-2.5 text-[12px] outline-none resize-none"
+          className="w-full rounded-md p-2.5 text-base outline-none resize-none"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -78,7 +78,7 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
           }}
         />
         {invalid.length > 0 && (
-          <span className="flex items-center gap-1 text-[11px]" style={{ color: 'var(--intent-warn-fg)' }}>
+          <span className="flex items-center gap-1 text-sm" style={{ color: 'var(--intent-warn-fg)' }}>
             <AlertTriangle className="w-3 h-3" />
             Skipping {invalid.length}: {invalid.slice(0, 2).join(', ')}{invalid.length > 2 && '…'}
           </span>
@@ -87,13 +87,13 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
 
       <div className="grid grid-cols-2 gap-3">
         <label className="flex flex-col gap-1.5">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             Role
           </span>
           <select
             value={role}
             onChange={(e) => { setRole(e.target.value as Role); }}
-            className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -107,13 +107,13 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
           </select>
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             Team
           </span>
           <select
             value={team}
             onChange={(e) => { setTeam(e.target.value); }}
-            className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -135,7 +135,7 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
         className="flex flex-col gap-2 pt-3"
         style={{ borderTop: '1px solid var(--border-muted)' }}
       >
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Or share an invite link
         </span>
         <div className="flex items-center gap-2">
@@ -143,7 +143,7 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
             ref={linkRef}
             readOnly
             value={inviteLink}
-            className="flex-1 h-8 px-2.5 rounded-md text-[11px] font-mono outline-none"
+            className="flex-1 h-8 px-2.5 rounded-md text-sm font-mono outline-none"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',

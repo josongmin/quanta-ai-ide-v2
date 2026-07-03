@@ -15,7 +15,7 @@ export default function SupportPage() {
         <div className="flex flex-col items-center text-center gap-4 mb-10">
           <Eyebrow tone="info"><Inbox className="w-3 h-3" /> Support</Eyebrow>
           <HeadlineGradient accent="get unstuck">We&apos;re here to help</HeadlineGradient>
-          <p className="text-[14.5px] leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-lg leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
             Search first, then talk to us. Median response time: 38 minutes. Urgent paid tickets are paged 24/7.
           </p>
 
@@ -31,10 +31,10 @@ export default function SupportPage() {
             <Search className="w-4 h-4" style={{ color: 'var(--fg-subtle)' }} />
             <input
               placeholder="Search help articles, error codes, SDK references…"
-              className="flex-1 bg-transparent outline-none text-[13.5px]"
+              className="flex-1 bg-transparent outline-none text-md"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>1,284 articles</span>
+            <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>1,284 articles</span>
           </div>
         </div>
 

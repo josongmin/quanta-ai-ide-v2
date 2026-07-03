@@ -16,7 +16,7 @@ export function SectionView({
   return (
     <div className="mb-1.5 last:mb-0">
       <div
-        className="px-3.5 pt-2 pb-1 text-[9px] font-black uppercase tracking-[0.18em]"
+        className="px-3.5 pt-2 pb-1 text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: skin.sectionLabel }}
       >
         {title}

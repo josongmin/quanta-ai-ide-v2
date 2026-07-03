@@ -54,14 +54,14 @@ export function RiskDetail({
                   className="w-3 h-3 shrink-0"
                   style={{ color: on ? hue : undefined }}
                 />
-                <span className={`text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] ${
+                <span className={`text-xs font-black uppercase tracking-eyebrow ${
                   on ? '' : 'text-[var(--fg-default)]'
                 }`} style={on ? { color: hue } : undefined}>
                   {t(`risk.lens.${key}.label`)}
                 </span>
               </div>
               <div
-                className="mt-1 text-[9px] leading-snug text-[var(--fg-muted)]"
+                className="mt-1 text-2xs leading-snug text-[var(--fg-muted)]"
                 style={{
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
@@ -75,7 +75,7 @@ export function RiskDetail({
           );
         })}
       </div>
-      <div className="mt-2 px-1 text-[9px] leading-snug text-[var(--fg-subtle)]">
+      <div className="mt-2 px-1 text-2xs leading-snug text-[var(--fg-subtle)]">
         {t('risk.toggleHint')}
       </div>
     </div>

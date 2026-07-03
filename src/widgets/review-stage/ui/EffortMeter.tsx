@@ -34,7 +34,7 @@ export default function EffortMeter({ effort }: { effort: EffortInfo }) {
       }}
     >
       <Hourglass className="w-3 h-3 text-[var(--fg-muted)]" strokeWidth={2} />
-      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+      <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
         Effort
       </span>
       <span className="flex items-center gap-0.5">
@@ -51,11 +51,11 @@ export default function EffortMeter({ effort }: { effort: EffortInfo }) {
           />
         ))}
       </span>
-      <span className="text-[11px] font-mono tabular-nums" style={{ color: tone }}>
+      <span className="text-sm font-mono tabular-nums" style={{ color: tone }}>
         {effort.label}
       </span>
       {effort.oversized && (
-        <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color: SEV.medium }}>
+        <span className="text-2xs font-bold uppercase tracking-eyebrow" style={{ color: SEV.medium }}>
           oversized
         </span>
       )}

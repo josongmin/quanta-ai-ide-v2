@@ -97,7 +97,7 @@ export function ContextRail({
   return (
     <aside className={`shrink-0 w-[268px] flex flex-col ${panel} border-l ${border}`}>
       <div className={`shrink-0 h-12 flex items-center px-4 border-b ${border}`}>
-        <span className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
+        <span className={`text-xs font-bold uppercase tracking-eyebrow ${textFaint}`}>
           {t('context.title')}
         </span>
       </div>
@@ -106,7 +106,7 @@ export function ContextRail({
         <ContextSection label={t('context.project')}>
           <div className="flex items-center gap-2 p-2 rounded-lg bg-[color:var(--bg-surface-muted)] border border-[color:var(--border-muted)]">
             <span
-              className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md font-mono text-[12px] font-bold"
+              className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md font-mono text-base font-bold"
               style={{
                 background: `${accent}1f`,
                 color: accent,
@@ -116,10 +116,10 @@ export function ContextRail({
               {project.initial}
             </span>
             <div className="min-w-0">
-              <div className="text-[12px] font-semibold truncate text-[color:var(--fg-strong)]">
+              <div className="text-base font-semibold truncate text-[color:var(--fg-strong)]">
                 {project.name}
               </div>
-              <div className={`text-[10px] font-mono truncate ${textFaint}`}>
+              <div className={`text-xs font-mono truncate ${textFaint}`}>
                 {project.slug}
               </div>
             </div>
@@ -178,7 +178,7 @@ export function ContextRail({
                 type="button"
                 onClick={() => { onDensityChange(d); }}
                 aria-pressed={density === d}
-                className={`flex-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+                className={`flex-1 px-2 py-1 rounded text-xs font-mono transition-colors ${
                   density === d
                     ? 'bg-[color:var(--bg-active-strong)] text-[color:var(--fg-on-active-strong)]'
                     : 'text-[color:var(--fg-muted)] hover:text-[color:var(--fg-default)]'
@@ -195,7 +195,7 @@ export function ContextRail({
             type="button"
             onClick={() => { onHighContrastChange(!highContrast); }}
             aria-pressed={highContrast}
-            className="flex items-center justify-between w-full px-2 py-1.5 rounded-md text-[11px] transition-colors hover:bg-[color:var(--bg-hover)]"
+            className="flex items-center justify-between w-full px-2 py-1.5 rounded-md text-sm transition-colors hover:bg-[color:var(--bg-hover)]"
           >
             <span className="text-[color:var(--fg-default)]">
               {t('a11y.highContrast')}
@@ -218,7 +218,7 @@ export function ContextRail({
         </ContextSection>
       </div>
 
-      <div className={`shrink-0 px-4 py-3 border-t ${border} text-[10px] font-mono ${textFaint}`}>
+      <div className={`shrink-0 px-4 py-3 border-t ${border} text-xs font-mono ${textFaint}`}>
         {t('context.footer')}
       </div>
     </aside>
@@ -244,7 +244,7 @@ function SuccessRatePanel({
         : 'var(--intent-danger-vivid)';
 
     return (
-      <div key={key} className="flex items-center gap-2 text-[10px]">
+      <div key={key} className="flex items-center gap-2 text-xs">
         <span className={`shrink-0 w-14 truncate font-mono ${muted}`} title={label}>{label}</span>
         <div className={`flex-1 h-1 rounded-full ${trackBg} overflow-hidden`}>
           <div className="h-full rounded-full" style={{ width: `${pct}%`, background: fillBg }} />
@@ -263,7 +263,7 @@ function SuccessRatePanel({
     <div className="space-y-2">
       {toolEntries.length > 0 && (
         <div className="space-y-1">
-          <div className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+          <div className={`text-2xs font-bold uppercase tracking-eyebrow ${faint}`}>
             {t('successRate.byTool')}
           </div>
           {toolEntries.map(([tool, { ok, total }]) => rateRow(tool, ok, total, `t:${tool}`))}
@@ -271,7 +271,7 @@ function SuccessRatePanel({
       )}
       {modelEntries.length > 0 && (
         <div className="space-y-1">
-          <div className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+          <div className={`text-2xs font-bold uppercase tracking-eyebrow ${faint}`}>
             {t('successRate.byModel')}
           </div>
           {modelEntries.map(([model, { ok, total }]) => {
@@ -313,7 +313,7 @@ function DriftRow({
   return (
     <div style={toneStyle} className="flex items-start gap-2 px-2 py-1.5 rounded-md border">
       <Activity className="w-3 h-3 shrink-0 mt-0.5 opacity-80" />
-      <span className="text-[11px] leading-relaxed">{text}</span>
+      <span className="text-sm leading-relaxed">{text}</span>
     </div>
   );
 }
@@ -350,7 +350,7 @@ function PrCiPanel({
   return (
     <div className="space-y-2">
       {branchState && (
-        <div className="flex items-center gap-2 text-[11px] font-mono">
+        <div className="flex items-center gap-2 text-sm font-mono">
           <span className={muted}>{t('prCi.ahead', { n: branchState.ahead })}</span>
           <span className={faint}>·</span>
           <span className={muted}>{t('prCi.behind', { n: branchState.behind })}</span>
@@ -373,7 +373,7 @@ function PrCiPanel({
 
       {prState && (
         <div className={`rounded-md border ${border} p-2 space-y-1.5`}>
-          <div className={`flex items-center justify-between text-[11px] font-mono ${heading}`}>
+          <div className={`flex items-center justify-between text-sm font-mono ${heading}`}>
             <span>
               {prState.status === 'open' ? t('prCi.prOpen', { n: prState.number })
                 : prState.status === 'draft' ? t('prCi.prDraft', { n: prState.number })
@@ -384,7 +384,7 @@ function PrCiPanel({
               href={prState.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`text-[10px] underline opacity-70 hover:opacity-100 ${muted}`}
+              className={`text-xs underline opacity-70 hover:opacity-100 ${muted}`}
             >
               {t('prCi.openOnGitHub')}
             </a>
@@ -392,7 +392,7 @@ function PrCiPanel({
 
           {prState.reviewers.length > 0 && (
             <div className="space-y-0.5">
-              <div className={`text-[9px] uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+              <div className={`text-2xs uppercase tracking-eyebrow ${faint}`}>
                 {t('prCi.reviewers')}
               </div>
               <div className="flex flex-wrap gap-1">
@@ -409,7 +409,7 @@ function PrCiPanel({
                     <span
                       key={r.handle}
                       style={toneStyle}
-                      className={`inline-flex items-center gap-1 px-1.5 py-px rounded text-[10px] font-mono border ${toneClass}`}
+                      className={`inline-flex items-center gap-1 px-1.5 py-px rounded text-xs font-mono border ${toneClass}`}
                     >
                       {r.state === 'approved' ? '✓' : r.state === 'changes_requested' ? '⚠' : '○'}
                       {r.handle}
@@ -422,7 +422,7 @@ function PrCiPanel({
 
           {prState.checks.length > 0 && (
             <div className="space-y-0.5">
-              <div className={`text-[9px] uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+              <div className={`text-2xs uppercase tracking-eyebrow ${faint}`}>
                 {t('prCi.checks')}
               </div>
               <div className="space-y-px">
@@ -431,7 +431,7 @@ function PrCiPanel({
                   return (
                     <div
                       key={`${c.name}:${i}`}
-                      className={`flex items-center gap-2 text-[10px] font-mono ${muted}`}
+                      className={`flex items-center gap-2 text-xs font-mono ${muted}`}
                     >
                       <span style={tone.style} className={`coding-ci-dot ${tone.running ? 'coding-ci-dot--running' : ''}`} />
                       <span className="flex-1 truncate">{c.name}</span>
@@ -447,7 +447,7 @@ function PrCiPanel({
           )}
 
           {prState.conflicts > 0 && (
-            <div style={{ color: 'var(--intent-danger-fg)' }} className="text-[10px]">
+            <div style={{ color: 'var(--intent-danger-fg)' }} className="text-xs">
               ⚠ {t('prCi.conflicts', { n: prState.conflicts })}
             </div>
           )}
@@ -475,10 +475,10 @@ function IntegrationRow({
     <div className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-[color:var(--bg-hover)] transition-colors">
       <Icon className={`w-3 h-3 shrink-0 ${subColor}`} />
       <div className="flex-1 min-w-0">
-        <div className={`text-[11px] font-semibold truncate ${labelColor}`}>
+        <div className={`text-sm font-semibold truncate ${labelColor}`}>
           {t(`integrations.kind.${integration.kind}`)}
         </div>
-        <div className={`text-[10px] font-mono truncate ${subColor}`}>
+        <div className={`text-xs font-mono truncate ${subColor}`}>
           {integration.label}
         </div>
       </div>
@@ -500,7 +500,7 @@ function ContextSection({
   const color = 'text-[color:var(--fg-subtle)]';
   return (
     <div>
-      <div className={`mb-2.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${color}`}>
+      <div className={`mb-2.5 text-xs font-bold uppercase tracking-eyebrow ${color}`}>
         {label}
       </div>
       <div className="space-y-1.5">{children}</div>
@@ -520,8 +520,8 @@ function Field({
 
   return (
     <div className="flex items-center justify-between gap-2">
-      <span className={`text-[11px] ${labelColor}`}>{label}</span>
-      <span className={`text-[11px] truncate ${mono ? 'font-mono' : ''} ${valueColor}`}>
+      <span className={`text-sm ${labelColor}`}>{label}</span>
+      <span className={`text-sm truncate ${mono ? 'font-mono' : ''} ${valueColor}`}>
         {value}
       </span>
     </div>
@@ -542,8 +542,8 @@ function ActivityRow({
   return (
     <div className="flex items-center gap-2">
       <Icon className={`w-3 h-3 shrink-0 ${iconColor}`} />
-      <span className={`text-[11px] flex-1 truncate ${textColor}`}>{text}</span>
-      <span className={`text-[10px] font-mono ${timeColor}`}>{time}</span>
+      <span className={`text-sm flex-1 truncate ${textColor}`}>{text}</span>
+      <span className={`text-xs font-mono ${timeColor}`}>{time}</span>
     </div>
   );
 }

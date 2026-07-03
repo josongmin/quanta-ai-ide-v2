@@ -45,7 +45,7 @@ export function FacetTile({ facet, unlocked, hidden, onToggle, delayMs = 0 }: Pr
       disabled={!unlocked}
       onClick={onToggle}
       aria-pressed={!hidden}
-      className="group facet-tile flex items-center gap-2 px-2.5 py-2 rounded-lg text-[10px] border text-left outline-none disabled:cursor-not-allowed"
+      className="group facet-tile flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs border text-left outline-none disabled:cursor-not-allowed"
       style={{
         background: stateBg,
         borderColor: stateBorder,
@@ -59,7 +59,7 @@ export function FacetTile({ facet, unlocked, hidden, onToggle, delayMs = 0 }: Pr
       <span className="font-bold truncate flex-1 min-w-0">{facet.label}</span>
       {!unlocked ? (
         <span
-          className="shrink-0 text-[8px] uppercase font-black px-1.5 py-px rounded-md"
+          className="shrink-0 text-2xs uppercase font-black px-1.5 py-px rounded-md"
           style={{
             color: 'var(--fg-subtle)',
             background: 'var(--bg-surface-muted, rgba(0,0,0,0.04))',
@@ -69,7 +69,7 @@ export function FacetTile({ facet, unlocked, hidden, onToggle, delayMs = 0 }: Pr
         </span>
       ) : facet.source ? (
         <span
-          className="shrink-0 text-[8px] font-mono"
+          className="shrink-0 text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {facet.source}

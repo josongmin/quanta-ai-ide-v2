@@ -23,7 +23,7 @@ export function BillingHeader({ orgName, breadcrumb }: Props) {
     <header className="flex flex-col gap-3 mb-12">
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-1 text-[11px]"
+        className="flex items-center gap-1 text-sm"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {breadcrumb.map((crumb, i) => {
@@ -41,12 +41,12 @@ export function BillingHeader({ orgName, breadcrumb }: Props) {
 
       <div className="flex items-baseline gap-3">
         <h1
-          className="text-[24px] font-semibold tracking-tight leading-none"
+          className="text-3xl font-semibold tracking-tight leading-none"
           style={{ color: 'var(--fg-strong)' }}
         >
           Billing
         </h1>
-        <span className="text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-base" style={{ color: 'var(--fg-subtle)' }}>
           {orgName}
         </span>
       </div>
@@ -68,7 +68,7 @@ function AnchorLink({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="px-2 h-7 inline-flex items-center rounded-md text-[11px] font-medium transition-colors whitespace-nowrap"
+      className="px-2 h-7 inline-flex items-center rounded-md text-sm font-medium transition-colors whitespace-nowrap"
       style={{ color: 'var(--fg-muted)' }}
       onMouseEnter={(e) => {
         e.currentTarget.style.background = 'var(--bg-hover)';

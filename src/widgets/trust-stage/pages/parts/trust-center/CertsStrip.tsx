@@ -22,10 +22,10 @@ export function CertsStrip() {
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
           </div>
-          <span className="text-[11px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-sm font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             {c.label}
           </span>
-          <span className="text-[9px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-2xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             {c.sub}
           </span>
         </div>

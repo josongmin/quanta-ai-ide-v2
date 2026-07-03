@@ -118,11 +118,11 @@ function FileRowImpl({
             <ChevronRight className={`w-3 h-3 transition-transform ${textFaint} ${open ? 'rotate-90' : ''}`} />
           )}
           {!expandable && <span className="w-3 h-3 shrink-0" />}
-          <span className={`text-[11px] font-mono truncate ${textPrimary}`}>{file.path}</span>
+          <span className={`text-sm font-mono truncate ${textPrimary}`}>{file.path}</span>
           {expandable && acceptedCount > 0 && (
             <span
               style={{ background: 'var(--intent-success-bg)', color: 'var(--intent-success-fg)' }}
-              className="shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono"
+              className="shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono"
               title={t('hunk.summary', { accepted: acceptedCount, total })}
             >
               <Check className="w-2.5 h-2.5" />
@@ -137,7 +137,7 @@ function FileRowImpl({
             <DriftBadge drift={file.drift} isDark={isDark} t={t} />
           )}
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-mono shrink-0">
+        <div className="flex items-center gap-2 text-xs font-mono shrink-0">
           <span style={{ color: 'var(--intent-success-vivid)' }}>+{file.added}</span>
           <span style={{ color: 'var(--intent-danger-vivid)' }}>−{file.removed}</span>
           <DiffBar added={file.added} removed={file.removed} />
@@ -162,7 +162,7 @@ function FileRowImpl({
             return (
               <div key={key} className={`mt-1 rounded-md overflow-hidden border transition-opacity relative border-[color:var(--border-muted)] ${isRejected ? 'opacity-45' : ''}`}>
                 <div
-                  className={`sticky top-0 z-10 flex items-center gap-2 px-2 py-1 text-[10px] font-mono bg-[var(--bg-surface)] text-[color:var(--fg-muted)] ${isDark ? 'backdrop-blur' : ''}`}
+                  className={`sticky top-0 z-10 flex items-center gap-2 px-2 py-1 text-xs font-mono bg-[var(--bg-surface)] text-[color:var(--fg-muted)] ${isDark ? 'backdrop-blur' : ''}`}
                 >
                   {hunkDrifted && driftGlyph && (
                     <span

@@ -104,19 +104,19 @@ export function ActionPlanCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
             <h3
-              className="text-[12px] font-semibold leading-snug truncate"
+              className="text-base font-semibold leading-snug truncate"
               style={{ color: 'var(--fg-strong)' }}
             >
               {evaluation.ruleName}
             </h3>
             <span
-              className="text-[10px] uppercase tracking-[0.14em] font-mono shrink-0"
+              className="text-xs uppercase tracking-eyebrow font-mono shrink-0"
               style={{ color: sevColor }}
             >
               {evaluation.status}
             </span>
             <span
-              className="text-[10px] font-mono shrink-0"
+              className="text-xs font-mono shrink-0"
               style={{ color: 'var(--fg-subtle)' }}
               title={SOURCE_LABEL[evaluation.source]}
             >
@@ -124,7 +124,7 @@ export function ActionPlanCard({
             </span>
             {isOverridden && (
               <span
-                className="text-[10px] font-mono uppercase tracking-[0.14em] px-1.5 py-px rounded shrink-0"
+                className="text-xs font-mono uppercase tracking-eyebrow px-1.5 py-px rounded shrink-0"
                 style={{
                   color: 'var(--fg-muted)',
                   background: 'var(--bg-active)',
@@ -135,12 +135,12 @@ export function ActionPlanCard({
               </span>
             )}
           </div>
-          <p className="mt-0.5 text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+          <p className="mt-0.5 text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
             {evaluation.reason}
           </p>
           {rule && (
             <p
-              className="mt-0.5 text-[10px] font-mono truncate"
+              className="mt-0.5 text-xs font-mono truncate"
               style={{ color: 'var(--fg-subtle)' }}
               title={describeSignal(rule.signal)}
             >
@@ -149,7 +149,7 @@ export function ActionPlanCard({
           )}
         </div>
         <span
-          className="shrink-0 text-[10px] font-mono tabular-nums self-center"
+          className="shrink-0 text-xs font-mono tabular-nums self-center"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('gate.card.hits', { count: evaluation.hits.length })}
@@ -182,7 +182,7 @@ export function ActionPlanCard({
                 />
                 {suppressed && (
                   <div
-                    className="text-[10px] font-mono px-2 py-1 rounded"
+                    className="text-xs font-mono px-2 py-1 rounded"
                     style={{
                       background: 'var(--bg-surface-muted)',
                       color: 'var(--fg-subtle)',
@@ -198,7 +198,7 @@ export function ActionPlanCard({
                       setSuppressTarget({ fileId: h.fileId, filePath });
                       setDrawer('suppress');
                     }}
-                    className="self-start text-[10px] font-medium inline-flex items-center gap-1 transition-colors"
+                    className="self-start text-xs font-medium inline-flex items-center gap-1 transition-colors"
                     style={{ color: 'var(--fg-subtle)' }}
                     onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg-strong)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--fg-subtle)'; }}
@@ -211,7 +211,7 @@ export function ActionPlanCard({
             );
           })}
           {evaluation.hits.length > 4 && (
-            <p className="text-[11px] font-mono" style={{ color: 'var(--fg-subtle)' }}>
+            <p className="text-sm font-mono" style={{ color: 'var(--fg-subtle)' }}>
               {t('gate.card.moreHits', { count: evaluation.hits.length - 4 })}
             </p>
           )}
@@ -236,7 +236,7 @@ export function ActionPlanCard({
             />
           )}
           {!fixApplicable && rule && (
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
               {t(`gate.fixHint.${evaluation.source}`, { defaultValue: t('gate.card.noFix') })}
             </span>
           )}
@@ -292,7 +292,7 @@ function ActionButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+      className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
       style={{
         color: isPrimary ? 'var(--bg-canvas)' : 'var(--fg-strong)',
         background: isPrimary ? 'var(--fg-strong)' : 'transparent',

@@ -53,10 +53,10 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
             <Key className="w-4 h-4" style={{ color: 'var(--fg-accent)' }} />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               Save your new token
             </h3>
-            <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
               <span className="font-semibold">This is the only time we&apos;ll show it.</span>{' '}
               Once you close this dialog, only the prefix is visible.
             </p>
@@ -64,7 +64,7 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
         </div>
 
         <div
-          className="flex items-center gap-2 p-2 rounded-md font-mono text-[11px] tabular-nums"
+          className="flex items-center gap-2 p-2 rounded-md font-mono text-sm tabular-nums"
           style={{
             background: 'var(--bg-canvas)',
             border: '1px solid var(--border-default)',
@@ -87,7 +87,7 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
           <button
             type="button"
             onClick={() => { void copy(); }}
-            className="inline-flex items-center gap-1 h-7 px-2 rounded text-[11px] font-medium transition-colors"
+            className="inline-flex items-center gap-1 h-7 px-2 rounded text-sm font-medium transition-colors"
             style={{
               background: copied ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',
               color: copied ? 'var(--intent-success-fg)' : 'var(--fg-default)',
@@ -99,7 +99,7 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
           </button>
         </div>
 
-        <div className="flex flex-col gap-1 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+        <div className="flex flex-col gap-1 text-sm" style={{ color: 'var(--fg-muted)' }}>
           <div><span style={{ color: 'var(--fg-strong)' }}>{token.name}</span> · {token.scopes.length} scope{token.scopes.length === 1 ? '' : 's'}</div>
           <div>Expires {token.expiresAt ?? 'never'}</div>
         </div>

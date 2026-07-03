@@ -54,7 +54,7 @@ function ActivityCard({
       style={{ background: fill, borderLeftWidth: 3, borderLeftColor: hue }}
     >
       {/* Header: agent + chat id + state */}
-      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em]">
+      <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-eyebrow">
         <span
           className="w-1.5 h-1.5 rounded-full animate-pulse"
           style={{ background: hue, boxShadow: `0 0 6px ${hue}` }}
@@ -66,7 +66,7 @@ function ActivityCard({
       </div>
 
       {/* Task summary */}
-      <div className={`mt-1 text-[11px] leading-snug ${isDark ? 'text-white/70' : 'text-black/70'}`}>
+      <div className={`mt-1 text-sm leading-snug ${isDark ? 'text-white/70' : 'text-black/70'}`}>
         {task}
       </div>
 
@@ -87,7 +87,7 @@ function ActivityCard({
           />
         ))}
         {targets.length > 4 && (
-          <div className={`text-[9px] italic ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+          <div className={`text-2xs italic ${isDark ? 'text-white/40' : 'text-black/40'}`}>
             +{(targets.length - 4).toString()} more
           </div>
         )}
@@ -101,9 +101,9 @@ function TargetRow({
 }: { target: ActivityTarget; fileName: string; isDark: boolean; hue: string }) {
   const verbColor = ACTION_HUES[target.action] ?? hue;
   return (
-    <div className="text-[10px] leading-snug">
+    <div className="text-xs leading-snug">
       <div className="flex items-baseline gap-1.5">
-        <span className="font-bold uppercase tracking-[0.18em] text-[9px]" style={{ color: verbColor }}>
+        <span className="font-bold uppercase tracking-eyebrow text-2xs" style={{ color: verbColor }}>
           {target.action}
         </span>
         <span className={`font-mono truncate ${isDark ? 'text-white/85' : 'text-black/85'}`}>
@@ -123,7 +123,7 @@ function StateBadge({ state, isDark }: { state: ActivityState; isDark: boolean }
   const opacity = state === 'done' ? 0.5 : 1;
   return (
     <span
-      className={`text-[9px] font-mono ${isDark ? 'text-white/55' : 'text-black/55'}`}
+      className={`text-2xs font-mono ${isDark ? 'text-white/55' : 'text-black/55'}`}
       style={{ opacity }}
     >
       {label}

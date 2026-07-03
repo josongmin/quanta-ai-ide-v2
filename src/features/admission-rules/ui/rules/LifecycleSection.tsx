@@ -28,7 +28,7 @@ export function LifecyclePill({ lifecycle }: { lifecycle: RuleLifecycle }) {
   const Icon = meta.icon;
   return (
     <span
-      className="inline-flex items-center gap-1 px-1.5 py-px rounded text-[9px] uppercase tracking-[0.14em] font-mono"
+      className="inline-flex items-center gap-1 px-1.5 py-px rounded text-2xs uppercase tracking-eyebrow font-mono"
       style={{
         color: meta.fg,
         background: 'var(--bg-surface-muted)',
@@ -89,17 +89,17 @@ export function LifecycleSection({
       >
         <Hourglass className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <h3
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Lifecycle
         </h3>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           experimental rules earning trust before promotion
         </span>
         {deprecatedCount > 0 && (
           <span
-            className="ml-auto text-[10px] font-mono"
+            className="ml-auto text-xs font-mono"
             style={{ color: 'var(--fg-subtle)' }}
             title="Rules kept around for audit history but no longer firing"
           >
@@ -109,7 +109,7 @@ export function LifecycleSection({
       </header>
 
       {entries.length === 0 ? (
-        <div className="px-4 py-4 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="px-4 py-4 text-sm" style={{ color: 'var(--fg-subtle)' }}>
           No rules are in probation right now.
         </div>
       ) : (
@@ -122,15 +122,15 @@ export function LifecycleSection({
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2 flex-wrap">
-                  <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                  <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                     {e.rule.name}
                   </span>
-                  <span className="text-[10px] font-mono" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-xs font-mono" style={{ color: 'var(--fg-subtle)' }}>
                     day {String(e.daysIn)} of {String(PROBATION_DAYS)}
                   </span>
                   {e.overdue && (
                     <span
-                      className="text-[10px] uppercase tracking-[0.14em] font-mono px-1.5 py-px rounded"
+                      className="text-xs uppercase tracking-eyebrow font-mono px-1.5 py-px rounded"
                       style={{
                         color: 'var(--intent-warn-fg)',
                         background: 'color-mix(in oklab, var(--intent-warn-fg) 10%, transparent)',
@@ -150,7 +150,7 @@ export function LifecycleSection({
                   />
                 </div>
                 {e.entry.note && (
-                  <p className="mt-1 text-[10px]" style={{ color: 'var(--fg-muted)' }}>
+                  <p className="mt-1 text-xs" style={{ color: 'var(--fg-muted)' }}>
                     {e.entry.note}
                   </p>
                 )}
@@ -158,7 +158,7 @@ export function LifecycleSection({
               <button
                 type="button"
                 onClick={() => { setLifecycle(e.rule.id, 'enforced'); }}
-                className="h-7 px-2.5 rounded-md text-[11px] font-medium shrink-0"
+                className="h-7 px-2.5 rounded-md text-sm font-medium shrink-0"
                 style={{
                   border: '1px solid var(--border-default)',
                   color: 'var(--fg-strong)',
@@ -170,7 +170,7 @@ export function LifecycleSection({
               <button
                 type="button"
                 onClick={() => { setLifecycle(e.rule.id, 'deprecated'); }}
-                className="h-7 px-2.5 rounded-md text-[11px]"
+                className="h-7 px-2.5 rounded-md text-sm"
                 style={{
                   border: '1px solid var(--border-default)',
                   color: 'var(--fg-muted)',

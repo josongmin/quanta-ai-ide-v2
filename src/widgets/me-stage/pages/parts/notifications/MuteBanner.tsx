@@ -13,7 +13,7 @@ export function MuteBanner() {
       }}
     >
       <VolumeX className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
-      <span className="text-[11px]" style={{ color: 'var(--fg-strong)' }}>
+      <span className="text-sm" style={{ color: 'var(--fg-strong)' }}>
         All notifications are paused. Critical security alerts will still come through.
       </span>
     </div>

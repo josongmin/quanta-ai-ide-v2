@@ -46,7 +46,7 @@ export default function InvitationsPage() {
       topRight={
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-base font-semibold transition-colors"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <Plus className="w-3.5 h-3.5" />
@@ -71,7 +71,7 @@ export default function InvitationsPage() {
               key={f}
               type="button"
               onClick={() => { setFilter(f); }}
-              className="h-7 px-3 rounded-full text-[11px] font-medium capitalize transition-colors"
+              className="h-7 px-3 rounded-full text-sm font-medium capitalize transition-colors"
               style={{
                 background: active ? 'color-mix(in srgb, var(--fg-accent) 12%, transparent)' : 'transparent',
                 color: active ? 'var(--fg-accent)' : 'var(--fg-muted)',
@@ -90,7 +90,7 @@ export default function InvitationsPage() {
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
         <div
-          className="grid items-center px-4 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-4 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '2fr 0.8fr 1fr 1fr 0.8fr 0.6fr 0.8fr',
             color: 'var(--fg-subtle)',
@@ -115,10 +115,10 @@ export default function InvitationsPage() {
         className="mt-8 rounded-xl p-5"
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
-        <h2 className="text-[12px] font-semibold tracking-tight mb-1.5" style={{ color: 'var(--fg-strong)' }}>
+        <h2 className="text-base font-semibold tracking-tight mb-1.5" style={{ color: 'var(--fg-strong)' }}>
           Shareable invite link
         </h2>
-        <p className="text-[11px] mb-3" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-sm mb-3" style={{ color: 'var(--fg-muted)' }}>
           Anyone with this link from a verified domain can join as a Member. Disable any time.
         </p>
         <CopyableField value={`https://acme.dev/join/${org}#aB12Cd34`} layout="row" button="text" />
@@ -138,10 +138,10 @@ function Tile({ label, value, tone }: { label: string; value: number; tone: 'def
       className="rounded-xl p-4 flex flex-col gap-1"
       style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
     >
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </span>
-      <span className="text-[22px] font-semibold tabular-nums tracking-tight" style={{ color }}>
+      <span className="text-3xl font-semibold tabular-nums tracking-tight" style={{ color }}>
         {value}
       </span>
     </div>
@@ -163,18 +163,18 @@ function Row({ inv, last }: { inv: Invite; last: boolean }) {
     >
       <div className="flex items-center gap-2 min-w-0">
         <Mail className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
-        <span className="text-[12px] truncate" style={{ color: 'var(--fg-strong)' }}>{inv.email}</span>
+        <span className="text-base truncate" style={{ color: 'var(--fg-strong)' }}>{inv.email}</span>
       </div>
-      <span className="text-[11px]" style={{ color: 'var(--fg-default)' }}>{inv.role}</span>
-      <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>{inv.team}</span>
-      <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>{inv.sentBy}</span>
+      <span className="text-sm" style={{ color: 'var(--fg-default)' }}>{inv.role}</span>
+      <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{inv.team}</span>
+      <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{inv.sentBy}</span>
       <span
-        className="inline-flex items-center gap-1 px-2 h-5 rounded text-[10px] font-bold w-fit"
+        className="inline-flex items-center gap-1 px-2 h-5 rounded text-xs font-bold w-fit"
         style={{ color: m.fg, background: m.bg }}
       >
         {m.label}
       </span>
-      <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>
+      <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>
         {inv.status === 'pending' && <Clock className="w-3 h-3 inline mr-1" />}
         {inv.expiresIn}
       </span>

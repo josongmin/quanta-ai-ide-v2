@@ -70,7 +70,7 @@ export function CopyableField({
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1 h-9 px-3 text-[11px] font-semibold transition-colors shrink-0"
+          className="inline-flex items-center gap-1 h-9 px-3 text-sm font-semibold transition-colors shrink-0"
           style={{ color: 'var(--fg-muted)' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -85,7 +85,7 @@ export function CopyableField({
         className={`flex items-center rounded-md overflow-hidden ${className}`}
         style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
       >
-        <code className="flex-1 min-w-0 px-3 py-2 text-[11px] font-mono truncate" style={{ color: 'var(--fg-strong)' }}>
+        <code className="flex-1 min-w-0 px-3 py-2 text-sm font-mono truncate" style={{ color: 'var(--fg-strong)' }}>
           {value}
         </code>
         {rowControl}
@@ -115,7 +115,7 @@ export function CopyableField({
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           {label}
         </span>
       )}
@@ -123,7 +123,7 @@ export function CopyableField({
         className="flex items-center gap-2 p-2.5 rounded-md"
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
-        <code className="flex-1 min-w-0 font-mono text-[11px] break-all" style={{ color: 'var(--fg-strong)' }}>
+        <code className="flex-1 min-w-0 font-mono text-sm break-all" style={{ color: 'var(--fg-strong)' }}>
           {value}
         </code>
         {copyControl}

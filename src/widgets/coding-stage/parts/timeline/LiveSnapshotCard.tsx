@@ -78,10 +78,10 @@ export function LiveSnapshotCard({ task, t, onContinue }: Props) {
     <div className={`rounded-xl border ${card} overflow-hidden`}>
       <div className="flex items-center gap-2 px-3.5 py-2.5">
         <Sparkles className={`w-3 h-3 ${textFaint}`} />
-        <span className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
+        <span className={`text-xs font-bold uppercase tracking-eyebrow ${textFaint}`}>
           {t('snapshot.title')}
         </span>
-        <span className={`text-[11px] ${textMuted}`}>{t('snapshot.subtitle')}</span>
+        <span className={`text-sm ${textMuted}`}>{t('snapshot.subtitle')}</span>
       </div>
 
       <div className={`grid grid-cols-3 border-t ${divider}`}>
@@ -160,14 +160,14 @@ export function LiveSnapshotCard({ task, t, onContinue }: Props) {
 
       {touched.length > 0 && (
         <div className={`px-3.5 py-2.5 border-t ${divider}`}>
-          <div className={`mb-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
+          <div className={`mb-1.5 text-xs font-bold uppercase tracking-eyebrow ${textFaint}`}>
             {t('snapshot.touched')}
           </div>
           <div className="flex flex-wrap gap-1">
             {touched.slice(0, 4).map((file) => (
               <span
                 key={file.path}
-                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-mono bg-[color:var(--bg-hover)] text-[color:var(--fg-default)]"
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-xs font-mono bg-[color:var(--bg-hover)] text-[color:var(--fg-default)]"
                 title={file.path}
               >
                 <span style={{ color: file.kind === 'edit' ? 'var(--intent-success-fg)' : 'var(--intent-info-fg)' }}>
@@ -177,7 +177,7 @@ export function LiveSnapshotCard({ task, t, onContinue }: Props) {
               </span>
             ))}
             {touched.length > 4 && (
-              <span className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-mono ${textFaint}`}>
+              <span className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-xs font-mono ${textFaint}`}>
                 {t('snapshot.moreFiles', { count: touched.length - 4 })}
               </span>
             )}
@@ -190,12 +190,12 @@ export function LiveSnapshotCard({ task, t, onContinue }: Props) {
           className={`w-3 h-3 shrink-0 ${planRemaining === 0 ? '' : textFaint}`}
           style={planRemaining === 0 ? { color: 'var(--intent-success-fg)' } : undefined}
         />
-        <span className={`text-[11px] ${textMuted} truncate`}>{planLabel}</span>
+        <span className={`text-sm ${textMuted} truncate`}>{planLabel}</span>
         <div className="flex-1" />
         <button
           type="button"
           onClick={onContinue}
-          className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors text-[color:var(--fg-strong)] bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-active)]"
+          className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-semibold transition-colors text-[color:var(--fg-strong)] bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-active)]"
         >
           {t('snapshot.continue')}
           <ArrowRight className="w-2.5 h-2.5" />
@@ -207,7 +207,7 @@ export function LiveSnapshotCard({ task, t, onContinue }: Props) {
             background: 'var(--intent-success-bg)',
             border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)',
           }}
-          className="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-colors"
+          className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-semibold transition-colors"
         >
           <GitPullRequest className="w-2.5 h-2.5" />
           {t('snapshot.openPr')}
@@ -233,11 +233,11 @@ function Stat({
     <div className={`flex flex-col gap-1 px-3.5 py-2.5 min-w-0 ${left}`}>
       <div className="flex items-center gap-1">
         <Icon className={`w-2.5 h-2.5 ${textFaint}`} />
-        <span className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${textFaint}`}>
+        <span className={`text-2xs font-bold uppercase tracking-eyebrow ${textFaint}`}>
           {label}
         </span>
       </div>
-      <div className={`text-[12px] truncate ${textPrimary} ${mono ? 'font-mono' : ''}`}>
+      <div className={`text-base truncate ${textPrimary} ${mono ? 'font-mono' : ''}`}>
         {value}
       </div>
     </div>

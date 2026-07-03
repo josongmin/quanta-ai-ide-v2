@@ -66,7 +66,7 @@ export function CounterfactualImpactCard({
         {t('counterfactual.title', { defaultValue: 'Counterfactual impact' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {t('counterfactual.sub', {
           defaultValue: 'Difference-in-differences · 95% CI',
@@ -75,13 +75,13 @@ export function CounterfactualImpactCard({
 
       <div className="flex items-baseline gap-2 mt-3">
         <span
-          className="text-[28px] font-black tabular-nums leading-none"
+          className="text-4xl font-black tabular-nums leading-none"
           style={{ color: accent }}
         >
           {did.ate >= 0 ? '+' : ''}{did.ate.toFixed(2)}
         </span>
         <span
-          className="text-[9px] font-mono"
+          className="text-2xs font-mono"
           style={{ color: accent }}
         >
           ATE · {significant
@@ -90,7 +90,7 @@ export function CounterfactualImpactCard({
         </span>
       </div>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {metricLabel} · 95% CI [{did.loCI.toFixed(2)}, {did.hiCI.toFixed(2)}]
       </div>
@@ -156,7 +156,7 @@ export function CounterfactualImpactCard({
         />
       </svg>
 
-      <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-[9px] font-mono"
+      <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-2xs font-mono"
            style={{ color: v.textFaint }}>
         <span>
           <span className="inline-block w-2 h-px mr-1" style={{ background: accent }} />

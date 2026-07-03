@@ -14,7 +14,7 @@ export default function DevOverviewPage() {
       topRight={
         <a
           href="https://github.com/acme/se-field"
-          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[11px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',

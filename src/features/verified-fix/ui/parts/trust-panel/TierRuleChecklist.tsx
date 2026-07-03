@@ -24,7 +24,7 @@ export function TierRuleChecklist({ candidate }: { candidate: CandidateFix }) {
       {checks.map((c, i) => (
         <li
           key={i}
-          className="flex items-center gap-1.5 text-[10px] font-mono"
+          className="flex items-center gap-1.5 text-xs font-mono"
           style={{ color: c.pass ? t.ok : t.textFaint }}
         >
           <span className="inline-block w-3 text-center">{c.pass ? '✓' : '·'}</span>

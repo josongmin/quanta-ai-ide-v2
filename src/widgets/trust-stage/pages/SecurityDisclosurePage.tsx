@@ -39,7 +39,7 @@ export default function SecurityDisclosurePage() {
           Vulnerability disclosure
         </Eyebrow>
         <HeadlineGradient accent="responsibly">Found a bug? Tell us</HeadlineGradient>
-        <p className="text-[13.5px] leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-md leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
           We treat security researchers like teammates. Send the report, get an answer in 24 hours, and a fix on a public schedule.
         </p>
       </div>
@@ -62,12 +62,12 @@ export default function SecurityDisclosurePage() {
           <Mail className="w-5 h-5" />
         </div>
         <div className="flex flex-col gap-1 min-w-0 flex-1">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
             Encrypted disclosure
           </span>
           <a
             href="mailto:security@acme.dev"
-            className="text-[18px] font-mono font-semibold"
+            className="text-2xl font-mono font-semibold"
             style={{ color: 'var(--fg-strong)' }}
           >
             security@acme.dev
@@ -75,7 +75,7 @@ export default function SecurityDisclosurePage() {
         </div>
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-colors shrink-0"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-colors shrink-0"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -119,15 +119,15 @@ export default function SecurityDisclosurePage() {
             }}
           >
             <span
-              className="inline-flex items-center justify-center px-2.5 h-6 rounded text-[10px] font-bold uppercase tracking-[0.14em]"
+              className="inline-flex items-center justify-center px-2.5 h-6 rounded text-xs font-bold uppercase tracking-eyebrow"
               style={{ color: r.tone, background: r.bg, minWidth: 80 }}
             >
               {r.tier}
             </span>
-            <span className="text-[14px] font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-lg font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>
               {r.payout}
             </span>
-            <span className="ml-auto text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="ml-auto text-sm" style={{ color: 'var(--fg-subtle)' }}>
               CVSS {r.tier === 'Critical' ? '9.0+' : r.tier === 'High' ? '7.0–8.9' : r.tier === 'Medium' ? '4.0–6.9' : '< 4.0'}
             </span>
           </div>
@@ -152,12 +152,12 @@ export default function SecurityDisclosurePage() {
             }}
           >
             <span
-              className="text-[12px] font-bold tabular-nums shrink-0"
+              className="text-base font-bold tabular-nums shrink-0"
               style={{ color: 'var(--fg-accent)', minWidth: 70 }}
             >
               {s.t}
             </span>
-            <span className="text-[12px]" style={{ color: 'var(--fg-default)' }}>{s.blurb}</span>
+            <span className="text-base" style={{ color: 'var(--fg-default)' }}>{s.blurb}</span>
           </li>
         ))}
       </ol>
@@ -181,15 +181,15 @@ export default function SecurityDisclosurePage() {
         {HALL_OF_FAME.map((h) => (
           <span
             key={h.name}
-            className="inline-flex items-center gap-2 text-[12px]"
+            className="inline-flex items-center gap-2 text-base"
           >
             <code className="font-mono font-semibold" style={{ color: 'var(--fg-strong)' }}>{h.name}</code>
-            <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{h.year} · {h.finds} finds</span>
+            <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{h.year} · {h.finds} finds</span>
           </span>
         ))}
         <button
           type="button"
-          className="ml-auto text-[11px] font-semibold inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer"
+          className="ml-auto text-sm font-semibold inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer"
           style={{ color: 'var(--fg-link)' }}
         >
           <ScrollText className="w-3 h-3" />
@@ -214,14 +214,14 @@ function ScopeCard({
       }}
     >
       <h3
-        className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-3"
+        className="text-xs uppercase tracking-eyebrow font-semibold mb-3"
         style={{ color }}
       >
         {title}
       </h3>
       <ul className="flex flex-col gap-2">
         {items.map((it) => (
-          <li key={it} className="flex items-start gap-2 text-[12px]" style={{ color: 'var(--fg-default)' }}>
+          <li key={it} className="flex items-start gap-2 text-base" style={{ color: 'var(--fg-default)' }}>
             <span
               aria-hidden
               className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"

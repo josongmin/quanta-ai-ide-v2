@@ -70,12 +70,12 @@ export function AgentFeedPanel() {
               />
             )}
           </span>
-          <span className="text-[10px] font-black uppercase tracking-[0.18em]">
+          <span className="text-xs font-black uppercase tracking-eyebrow">
             {t('agentFeed.title', { defaultValue: 'Live agents' })}
           </span>
           {inflightCount > 0 && (
             <span
-              className="font-mono text-[10px] tabular-nums px-1.5 rounded-full"
+              className="font-mono text-xs tabular-nums px-1.5 rounded-full"
               style={{
                 background: 'rgba(34,211,238,0.15)',
                 color: '#22d3ee',
@@ -99,13 +99,13 @@ export function AgentFeedPanel() {
             >
               <Activity className="w-3 h-3" style={{ color: '#22d3ee' }} />
               <div
-                className="text-[9px] font-black uppercase tracking-[0.18em]"
+                className="text-2xs font-black uppercase tracking-eyebrow"
                 style={{ color: 'var(--fg-default)' }}
               >
                 {t('agentFeed.title', { defaultValue: 'Live agents' })}
               </div>
               <span
-                className="text-[9px] font-mono tabular-nums px-1.5 rounded-full"
+                className="text-2xs font-mono tabular-nums px-1.5 rounded-full"
                 style={{
                   background: inflightCount > 0
                     ? 'rgba(34,211,238,0.15)'
@@ -132,7 +132,7 @@ export function AgentFeedPanel() {
             <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide">
               {activities.length === 0 ? (
                 <div
-                  className="px-3 py-8 text-center text-[10px] italic"
+                  className="px-3 py-8 text-center text-xs italic"
                   style={{ color: 'var(--fg-subtle)' }}
                 >
                   {t('agentFeed.empty', {
@@ -150,7 +150,7 @@ export function AgentFeedPanel() {
 
             {/* Footer hint */}
             <div
-              className="shrink-0 px-3 py-2 border-t text-[9px]"
+              className="shrink-0 px-3 py-2 border-t text-2xs"
               style={{
                 borderColor: 'var(--border-default)',
                 color: 'var(--fg-subtle)',
@@ -210,19 +210,19 @@ function ActivityCard({ a, now }: { a: AiActivity; now: number }) {
           style={{ background: stateDot, boxShadow: a.state === 'editing' ? `0 0 6px ${stateDot}` : undefined }}
         />
         <span
-          className="text-[10px] font-mono font-bold truncate"
+          className="text-xs font-mono font-bold truncate"
           style={{ color: 'var(--fg-default)' }}
         >
           {a.agent}
         </span>
         <span
-          className="text-[8.5px] font-black uppercase tracking-[0.18em]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: stateDot }}
         >
           · {stateLabel}
         </span>
         <span
-          className="ml-auto text-[9px] font-mono tabular-nums"
+          className="ml-auto text-2xs font-mono tabular-nums"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {elapsedLabel}
@@ -231,7 +231,7 @@ function ActivityCard({ a, now }: { a: AiActivity; now: number }) {
 
       {/* Action line: verb + filename */}
       {target && file && (
-        <div className="mt-1 flex items-center gap-1 text-[10px] font-mono">
+        <div className="mt-1 flex items-center gap-1 text-xs font-mono">
           <span style={{ color: 'var(--fg-muted)' }}>{verb}</span>
           <ChevronRight className="w-2.5 h-2.5" style={{ color: 'var(--fg-subtle)' }} />
           <span
@@ -269,7 +269,7 @@ function ActivityCard({ a, now }: { a: AiActivity; now: number }) {
       {/* Multi-target hint */}
       {a.targets.length > 1 && (
         <div
-          className="mt-1 text-[9px] font-mono"
+          className="mt-1 text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)' }}
         >
           + {a.targets.length - 1} {t('agentFeed.moreTargets', { defaultValue: 'more files' })}

@@ -57,10 +57,10 @@ export function VerdictDonut({
         )}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-[18px] font-black tabular-nums leading-none" style={{ color: t.textHi }}>
+        <span className="text-2xl font-black tabular-nums leading-none" style={{ color: t.textHi }}>
           {total}
         </span>
-        <span className="text-[8px] font-bold uppercase tracking-[0.18em] mt-0.5" style={{ color: t.textSubtle }}>
+        <span className="text-2xs font-bold uppercase tracking-eyebrow mt-0.5" style={{ color: t.textSubtle }}>
           rules
         </span>
       </div>

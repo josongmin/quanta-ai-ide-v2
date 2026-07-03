@@ -91,7 +91,7 @@ export function DecisionPipeline({
 
   return (
     <V2Card className="px-4 py-3">
-      <div className="flex items-center gap-1.5 mb-3 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+      <div className="flex items-center gap-1.5 mb-3 text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
         <Activity className="w-3 h-3" />
         Merge pipeline
         {autoMerge.eligible && (
@@ -99,7 +99,7 @@ export function DecisionPipeline({
             type="button"
             onClick={() => { setAutoMergeArmed((v) => !v); }}
             aria-pressed={autoMergeArmed}
-            className="ml-2 inline-flex items-center gap-1 px-2 h-5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
+            className="ml-2 inline-flex items-center gap-1 px-2 h-5 rounded-full text-2xs font-bold uppercase tracking-eyebrow transition-colors"
             style={{
               background: autoMergeArmed ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)' : 'var(--bg-hover)',
               color: autoMergeArmed ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
@@ -114,7 +114,7 @@ export function DecisionPipeline({
             {autoMergeArmed ? '✓ auto-merge armed' : 'arm auto-merge'}
           </button>
         )}
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">
           {gates.filter((g) => g.state === 'pass').length}/{gates.length} gates clear
         </span>
       </div>
@@ -135,11 +135,11 @@ export function DecisionPipeline({
               >
                 <div className="flex items-center gap-1.5">
                   <GateGlyph state={g.state} color={c} />
-                  <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)]">
+                  <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-strong)]">
                     {g.label}
                   </span>
                 </div>
-                <div className="mt-0.5 text-[10px] font-mono tabular-nums truncate" style={{ color: c }}>
+                <div className="mt-0.5 text-xs font-mono tabular-nums truncate" style={{ color: c }}>
                   {g.detail}
                 </div>
               </div>

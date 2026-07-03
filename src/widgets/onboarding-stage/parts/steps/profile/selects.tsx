@@ -7,7 +7,7 @@ export function TimezoneSelect({
 }: { value: string; onChange: (v: string) => void; detected: string }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+      <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}>
         <span>Time zone</span>
         {value === detected && (
@@ -19,7 +19,7 @@ export function TimezoneSelect({
       <select
         value={value}
         onChange={(e) => { onChange(e.target.value); }}
-        className="h-9 rounded-md px-3 text-[12px] outline-none"
+        className="h-9 rounded-md px-3 text-base outline-none"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -39,7 +39,7 @@ export function TimezoneSelect({
 export function LocaleSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
         Language
       </span>
       <div className="relative">
@@ -50,7 +50,7 @@ export function LocaleSelect({ value, onChange }: { value: string; onChange: (v:
         <select
           value={value}
           onChange={(e) => { onChange(e.target.value); }}
-          className="w-full h-9 rounded-md pl-7 pr-3 text-[12px] outline-none appearance-none"
+          className="w-full h-9 rounded-md pl-7 pr-3 text-base outline-none appearance-none"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -71,7 +71,7 @@ export function LocaleSelect({ value, onChange }: { value: string; onChange: (v:
 export function DetectionBanner({ detectedTz, detectedLoc }: { detectedTz: string; detectedLoc: string }) {
   return (
     <div
-      className="flex items-start gap-2 text-[10px] leading-snug px-2.5 py-2 rounded-md"
+      className="flex items-start gap-2 text-xs leading-snug px-2.5 py-2 rounded-md"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px dashed var(--border-default)',

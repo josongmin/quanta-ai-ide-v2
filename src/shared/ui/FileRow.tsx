@@ -24,13 +24,13 @@ export function FileRow({
           <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: C.critical }} />
         )}
         <span
-          className="text-[11px] font-bold font-mono truncate"
+          className="text-sm font-bold font-mono truncate"
           style={{ color: 'var(--fg-default)' }}
         >
           {name}
         </span>
         <span
-          className="text-[9px] font-mono truncate"
+          className="text-2xs font-mono truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {path.split('.').join('/')}
@@ -42,9 +42,9 @@ export function FileRow({
             m.tone === 'critical' ? C.critical :
             m.tone === 'warn'     ? C.warning  : null;
           return (
-            <div key={m.label} className="flex items-baseline gap-1 text-[10px]">
+            <div key={m.label} className="flex items-baseline gap-1 text-xs">
               <span
-                className="uppercase tracking-[0.18em]"
+                className="uppercase tracking-eyebrow"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {m.label}

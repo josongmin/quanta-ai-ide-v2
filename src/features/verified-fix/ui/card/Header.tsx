@@ -20,11 +20,11 @@ export function Header({ stage }: { stage: FixCase['loop']['currentStage'] }) {
   return (
     <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[var(--border-default)]">
       <Wand2 className="w-3.5 h-3.5" style={{ color: ACCENT }} />
-      <span className="text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-default)]">
+      <span className="text-xs font-black uppercase tracking-eyebrow text-[var(--fg-default)]">
         Verified Fix Pipeline
       </span>
       <span
-        className="ml-auto inline-flex items-center gap-1.5 px-2 h-5 rounded text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
+        className="ml-auto inline-flex items-center gap-1.5 px-2 h-5 rounded text-2xs font-mono uppercase tracking-eyebrow"
         style={{ background: mix(stageColor, 11), color: stageColor, border: `1px solid ${mix(stageColor, 33)}` }}
       >
         {stage === 'validate' || stage === 'critique'

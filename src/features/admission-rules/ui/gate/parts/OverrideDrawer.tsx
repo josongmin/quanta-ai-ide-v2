@@ -46,7 +46,7 @@ export function OverrideDrawer({
       <div className="p-4 flex flex-col gap-3">
         {!allowsAuthor && requiresApprover && (
           <div
-            className="text-[11px] px-3 py-2 rounded-md"
+            className="text-sm px-3 py-2 rounded-md"
             style={{
               background: 'color-mix(in oklab, var(--intent-warn-fg) 8%, transparent)',
               color: 'var(--intent-warn-fg)',
@@ -63,7 +63,7 @@ export function OverrideDrawer({
             onChange={(e) => { setReason(e.target.value); }}
             rows={3}
             placeholder={t('gate.override.reasonPlaceholder')}
-            className="w-full text-[12px] px-2 py-1.5 rounded outline-none resize-none"
+            className="w-full text-base px-2 py-1.5 rounded outline-none resize-none"
             style={{
               border: '1px solid var(--border-default)',
               background: 'var(--bg-canvas)',
@@ -78,7 +78,7 @@ export function OverrideDrawer({
                 key={opt.key}
                 type="button"
                 onClick={() => { setExpiryIdx(i); }}
-                className="h-7 px-2.5 rounded-md text-[11px] transition-colors"
+                className="h-7 px-2.5 rounded-md text-sm transition-colors"
                 style={{
                   border: '1px solid var(--border-default)',
                   background: i === expiryIdx ? 'var(--bg-active)' : 'transparent',
@@ -91,14 +91,14 @@ export function OverrideDrawer({
             ))}
           </div>
         </Field>
-        <p className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <p className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           {t('gate.override.ledgerNote', { date: formatDate(new Date(mountedAt + (EXPIRY_OPTIONS[expiryIdx]?.ms ?? 0))) })}
         </p>
         <div className="flex items-center gap-2 mt-1">
           <button
             type="button"
             onClick={onClose}
-            className="h-7 px-3 rounded-md text-[11px]"
+            className="h-7 px-3 rounded-md text-sm"
             style={{
               border: '1px solid var(--border-default)',
               color: 'var(--fg-muted)',
@@ -111,7 +111,7 @@ export function OverrideDrawer({
             type="button"
             onClick={submit}
             disabled={!reason.trim()}
-            className="h-7 px-3 rounded-md text-[11px] font-medium"
+            className="h-7 px-3 rounded-md text-sm font-medium"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',

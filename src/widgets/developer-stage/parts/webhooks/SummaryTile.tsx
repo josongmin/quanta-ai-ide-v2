@@ -20,10 +20,10 @@ export function SummaryTile({
         border: '1px solid var(--border-default)',
       }}
     >
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </span>
-      <span className="text-[22px] font-semibold tabular-nums tracking-tight" style={{ color }}>
+      <span className="text-3xl font-semibold tabular-nums tracking-tight" style={{ color }}>
         {value}
       </span>
     </div>

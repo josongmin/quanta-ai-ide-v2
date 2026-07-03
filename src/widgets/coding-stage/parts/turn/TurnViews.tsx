@@ -58,14 +58,14 @@ function UserTurnView({ turn }: { turn: UserTurn }) {
   return (
     <div className="flex justify-end">
       <div className="max-w-[85%]">
-        <div className="px-3 py-2.5 rounded-2xl rounded-tr-sm text-[13px] leading-relaxed bg-[color:var(--bg-elevated)] text-[color:var(--fg-strong)]">
+        <div className="px-3 py-2.5 rounded-2xl rounded-tr-sm text-md leading-relaxed bg-[color:var(--bg-elevated)] text-[color:var(--fg-strong)]">
           <div className="whitespace-pre-wrap break-words">{turn.text}</div>
           {turn.mentions && turn.mentions.length > 0 && (
             <div className="mt-1.5 flex flex-wrap gap-1">
               {turn.mentions.map((m, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-mono text-[10px] bg-[color:var(--bg-active)] text-[color:var(--fg-default)]"
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-mono text-xs bg-[color:var(--bg-active)] text-[color:var(--fg-default)]"
                 >
                   <span className="text-[color:var(--fg-subtle)]">
                     {m.kind === 'file' ? '#' : '@'}
@@ -76,7 +76,7 @@ function UserTurnView({ turn }: { turn: UserTurn }) {
             </div>
           )}
         </div>
-        <div className="mt-1 text-right text-[10px] font-mono text-[color:var(--fg-subtle)]">
+        <div className="mt-1 text-right text-xs font-mono text-[color:var(--fg-subtle)]">
           {turn.at}
         </div>
       </div>
@@ -115,13 +115,13 @@ function AgentTurnView({
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-          <span className="text-[11px] font-semibold text-[color:var(--fg-strong)]">
+          <span className="text-sm font-semibold text-[color:var(--fg-strong)]">
             agent
           </span>
-          <span className={`text-[10px] font-mono ${faint}`}>{turn.at}</span>
+          <span className={`text-xs font-mono ${faint}`}>{turn.at}</span>
           {modelLabel && (
             <span
-              className="flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-muted)]"
+              className="flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-muted)]"
               title={turn.model}
             >
               <Cpu className="w-2.5 h-2.5" />
@@ -152,7 +152,7 @@ function AgentTurnView({
             return (
               <span
                 style={toneStyle}
-                className={`flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border ${toneClass}`}
+                className={`flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono border ${toneClass}`}
                 title={turn.confidenceRationale ?? t('selfEval.tooltip')}
               >
                 <Target className="w-2.5 h-2.5" />
@@ -161,7 +161,7 @@ function AgentTurnView({
             );
           })()}
           {turn.streaming && (
-            <span className="flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-mono bg-[color:var(--bg-elevated)] text-[color:var(--fg-default)]">
+            <span className="flex items-center gap-1 px-1.5 py-px rounded-full text-2xs font-mono bg-[color:var(--bg-elevated)] text-[color:var(--fg-default)]">
               <span className="w-1 h-1 rounded-full coding-tps-live bg-[color:var(--fg-muted)]" />
               {phaseLabel ?? 'streaming'}
             </span>
@@ -174,7 +174,7 @@ function AgentTurnView({
                 color: 'var(--intent-warn-fg)',
                 border: '1px solid color-mix(in srgb, var(--intent-warn-vivid) 30%, transparent)',
               }}
-              className="flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono"
+              className="flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono"
               title={t('inverse.anchor')}
             >
               <RotateCcw className="w-2.5 h-2.5" />
@@ -182,7 +182,7 @@ function AgentTurnView({
             </span>
           )}
           {!turn.streaming && turn.tokens && (
-            <span className={`flex items-center gap-2 ml-auto text-[10px] font-mono ${muted}`}>
+            <span className={`flex items-center gap-2 ml-auto text-xs font-mono ${muted}`}>
               <span className="flex items-center gap-1">
                 <Cpu className="w-2.5 h-2.5" />
                 {formatNumber(turn.tokens.in)} in · {formatNumber(turn.tokens.out)} out

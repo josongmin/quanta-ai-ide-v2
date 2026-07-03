@@ -12,13 +12,13 @@ export function Count({ label, value, color, t }: { label: string; value: number
   return (
     <div className="flex flex-col items-end leading-none">
       <span
-        className="text-[18px] font-semibold tabular-nums"
+        className="text-2xl font-semibold tabular-nums"
         style={{ color: color ?? t.textBody }}
       >
         {value}
       </span>
       <span
-        className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em]"
+        className="mt-1 text-xs font-semibold uppercase tracking-eyebrow"
         style={{ color: t.textSubtle }}
       >
         {label}
@@ -45,7 +45,7 @@ export function FilterChips({
           <button type="button"
             key={o}
             onClick={() => { onChange(o); }}
-            className="px-2 py-1 text-[10px] font-mono transition-colors"
+            className="px-2 py-1 text-xs font-mono transition-colors"
             style={{
               background: active ? t.hoverActive : 'transparent',
               color: active ? t.textHi : t.textSubtle,
@@ -127,18 +127,18 @@ export function FeedRow({
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono" style={{ color: t.textBody }}>#{seed}</span>
+          <span className="text-sm font-mono" style={{ color: t.textBody }}>#{seed}</span>
           <span
-            className="text-[9px] font-mono uppercase tracking-[0.18em]"
+            className="text-2xs font-mono uppercase tracking-eyebrow"
             style={{ color: accent }}
           >
             {decision.outcome}
           </span>
-          <span className="ml-auto text-[9px] font-mono tabular-nums" style={{ color: t.textFaint }}>
+          <span className="ml-auto text-2xs font-mono tabular-nums" style={{ color: t.textFaint }}>
             {ageLabel} ago
           </span>
         </div>
-        <div className="mt-0.5 flex items-center gap-2 text-[10px] font-mono truncate" style={{ color: t.textMuted }}>
+        <div className="mt-0.5 flex items-center gap-2 text-xs font-mono truncate" style={{ color: t.textMuted }}>
           <span className="tabular-nums shrink-0">
             {filesChanged} files
           </span>
@@ -152,7 +152,7 @@ export function FeedRow({
           </span>
         </div>
         {topRule && (
-          <div className="mt-0.5 text-[10px] font-mono truncate" style={{ color: t.textFaint }}>
+          <div className="mt-0.5 text-xs font-mono truncate" style={{ color: t.textFaint }}>
             {topRule}{fired.length > 1 ? ` +${fired.length - 1}` : ''}
           </div>
         )}
@@ -166,8 +166,8 @@ export function SmallStat({ label, value, color }: { label: string; value: numbe
   const t = useV2();
   return (
     <div className="flex items-baseline gap-1.5">
-      <span className="text-[16px] font-black tabular-nums" style={{ color }}>{value}</span>
-      <span className="text-[9px] font-mono uppercase tracking-[0.18em]" style={{ color: t.textSubtle }}>{label}</span>
+      <span className="text-xl font-black tabular-nums" style={{ color }}>{value}</span>
+      <span className="text-2xs font-mono uppercase tracking-eyebrow" style={{ color: t.textSubtle }}>{label}</span>
     </div>
   );
 }
@@ -175,7 +175,7 @@ export function SmallStat({ label, value, color }: { label: string; value: numbe
 export function Footer() {
   const t = useV2();
   return (
-    <div className="text-center text-[10px] font-mono pt-2" style={{ color: t.textFaint }}>
+    <div className="text-center text-xs font-mono pt-2" style={{ color: t.textFaint }}>
       admission · v2 · all data synthetic
     </div>
   );

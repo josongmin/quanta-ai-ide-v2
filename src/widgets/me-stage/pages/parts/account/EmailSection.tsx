@@ -67,14 +67,14 @@ export function EmailSection() {
                   Cancel
                 </Button>
               </div>
-              <p className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+              <p className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
                 We&apos;ll send a confirmation link to <span className="font-mono">{newEmail || 'the new address'}</span>.
                 Until you click it, you&apos;ll keep signing in with <span className="font-mono">{currentEmail}</span>.
               </p>
             </>
           )}
           {step === 'sending' && (
-            <div className="flex items-center gap-2 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+            <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--fg-muted)' }}>
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
               Sending…
             </div>
@@ -85,7 +85,7 @@ export function EmailSection() {
               style={{ color: 'var(--fg-muted)' }}
             >
               <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
-              <div className="flex flex-col gap-1.5 text-[11px] leading-snug">
+              <div className="flex flex-col gap-1.5 text-sm leading-snug">
                 <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   Verification email sent to {newEmail}
                 </span>
@@ -115,7 +115,7 @@ function SsoWarning({ email }: { email: string }) {
   if (!ssoEnforced) return null;
   return (
     <div
-      className="flex items-start gap-2 px-2.5 py-2 rounded text-[11px] leading-snug onb-stagger"
+      className="flex items-start gap-2 px-2.5 py-2 rounded text-sm leading-snug onb-stagger"
       style={{
         background: 'var(--intent-warn-bg)',
         border: '1px solid var(--intent-warn-fg)',

@@ -97,7 +97,7 @@ export function MentionPicker({
       role="listbox"
       aria-label={headerLabel}
     >
-      <div className="flex items-center justify-between px-3 py-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-subtle)] bg-[color:var(--bg-surface-muted)]">
+      <div className="flex items-center justify-between px-3 py-1.5 text-xs font-bold uppercase tracking-eyebrow text-[color:var(--fg-subtle)] bg-[color:var(--bg-surface-muted)]">
         <span className="flex items-center gap-1">
           <HeaderIcon className="w-2.5 h-2.5" />
           {headerLabel}
@@ -107,7 +107,7 @@ export function MentionPicker({
         </span>
       </div>
       {items.length === 0 ? (
-        <div className="px-3 py-3 text-[11px] text-[color:var(--fg-subtle)]">
+        <div className="px-3 py-3 text-sm text-[color:var(--fg-subtle)]">
           {t('mention.empty')}
           <button
             type="button"
@@ -146,11 +146,11 @@ export function MentionPicker({
                     ? <FileCode className="w-3 h-3" />
                     : <AtSign className="w-3 h-3" />}
                 </span>
-                <span className="font-mono text-[12px] truncate text-[color:var(--fg-strong)]">
+                <span className="font-mono text-base truncate text-[color:var(--fg-strong)]">
                   {label}
                 </span>
                 {sub && (
-                  <span className="ml-auto font-mono text-[10px] truncate max-w-[55%] text-[color:var(--fg-subtle)]">
+                  <span className="ml-auto font-mono text-xs truncate max-w-[55%] text-[color:var(--fg-subtle)]">
                     {sub}
                   </span>
                 )}

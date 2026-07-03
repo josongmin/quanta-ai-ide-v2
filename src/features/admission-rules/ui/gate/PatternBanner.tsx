@@ -30,12 +30,12 @@ export function PatternBanner({
           style={{ color: 'var(--intent-warn-fg)' }}
         />
         <span
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--intent-warn-fg)' }}
         >
           Override pattern
         </span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-muted)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-muted)' }}>
           rules being bypassed repeatedly — the rule may be the problem
         </span>
       </div>
@@ -45,13 +45,13 @@ export function PatternBanner({
           return (
             <li
               key={p.ruleId}
-              className="flex items-center gap-2 text-[11px]"
+              className="flex items-center gap-2 text-sm"
             >
               <span className="font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
                 {p.ruleName}
               </span>
               <span
-                className="text-[10px] font-mono shrink-0"
+                className="text-xs font-mono shrink-0"
                 style={{ color: 'var(--fg-muted)' }}
                 title={`${String(p.overrideCount)} overrides + ${String(p.suppressionCount)} suppressions, by ${String(p.distinctActors)} different ${p.distinctActors === 1 ? 'author' : 'authors'} in 14d`}
               >
@@ -61,7 +61,7 @@ export function PatternBanner({
               <button
                 type="button"
                 onClick={() => { onJumpToCalibration(p.ruleId); }}
-                className="shrink-0 inline-flex items-center gap-1 text-[10px] font-medium transition-colors"
+                className="shrink-0 inline-flex items-center gap-1 text-xs font-medium transition-colors"
                 style={{ color: 'var(--fg-muted)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--fg-strong)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--fg-muted)'; }}

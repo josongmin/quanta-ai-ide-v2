@@ -28,7 +28,7 @@ export const RiskTab = memo(function RiskTab({
                 tone={stats.layerViolations > 0 ? 'critical' : 'neutral'} />
         </div>
         {totalRisk === 0 && (
-          <div className="mt-1.5 text-[10px] italic text-[var(--fg-subtle)]">
+          <div className="mt-1.5 text-xs italic text-[var(--fg-subtle)]">
             {t('empty.noStructuralDefects')}
           </div>
         )}

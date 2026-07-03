@@ -39,35 +39,35 @@ export function RuleInspector({
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+          <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
             {SOURCE_GLYPH[rule.source]} {rule.source}
           </span>
           <span style={{ color: t.textFaint }}>·</span>
           <span
-            className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
+            className="text-2xs font-mono uppercase tracking-eyebrow px-1.5 py-px rounded-md"
             style={{ color: sevColor, background: `${sevColor}1a` }}
           >
             {rule.severity}
           </span>
           <span style={{ color: t.textFaint }}>·</span>
-          <span className="text-[10px] font-mono" style={{ color: t.textMuted }}>{cost}</span>
+          <span className="text-xs font-mono" style={{ color: t.textMuted }}>{cost}</span>
           {fired && (
             <span
-              className="ml-auto text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+              className="ml-auto text-xs font-bold uppercase tracking-eyebrow px-2 py-0.5 rounded-md"
               style={{ color: sevColor, background: `${sevColor}22`, border: `1px solid ${sevColor}55` }}
             >
               fired in PR
             </span>
           )}
         </div>
-        <div className="mt-1 text-[14px] font-bold truncate" style={{ color: t.textBody }}>
+        <div className="mt-1 text-lg font-bold truncate" style={{ color: t.textBody }}>
           {rule.name}
         </div>
-        <div className="mt-0.5 text-[11px] font-mono truncate" style={{ color: t.textSubtle }}>
+        <div className="mt-0.5 text-sm font-mono truncate" style={{ color: t.textSubtle }}>
           uses {usesHint(rule.signal)} · {describeSignal(rule.signal)}
         </div>
         {preview && (
-          <div className="mt-2 flex items-center gap-3 text-[10px] font-mono" style={{ color: t.textMuted }}>
+          <div className="mt-2 flex items-center gap-3 text-xs font-mono" style={{ color: t.textMuted }}>
             <span>{preview.matches.length} repo-wide</span>
             <span style={{ color: t.textFaint }}>·</span>
             <span style={{ color: t.textBody }}>{preview.confidenceMix.exact} exact</span>
@@ -83,7 +83,7 @@ export function RuleInspector({
 export function EmptyInspector() {
   const t = useV2();
   return (
-    <div className="flex items-center gap-3 text-[11px] font-mono" style={{ color: t.textSubtle }}>
+    <div className="flex items-center gap-3 text-sm font-mono" style={{ color: t.textSubtle }}>
       <Eye className="w-3.5 h-3.5" />
       Hover a node to inspect signal, cost, and evidence.
     </div>

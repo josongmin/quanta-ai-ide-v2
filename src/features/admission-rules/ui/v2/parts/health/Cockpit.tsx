@@ -73,7 +73,7 @@ export function Cockpit({
             if (total === 0) return null;
             const isNative = s === 'native';
             return (
-              <div key={s} className="flex items-center gap-2 text-[11px] font-mono">
+              <div key={s} className="flex items-center gap-2 text-sm font-mono">
                 <span className="w-3 text-center" style={{ color: isNative ? t.textBody : t.textSubtle }}>
                   {SOURCE_GLYPH[s]}
                 </span>
@@ -84,7 +84,7 @@ export function Cockpit({
             );
           })}
         </div>
-        <div className="mt-3 pt-3 border-t text-[10px] font-mono leading-relaxed" style={{ borderColor: t.borderSoft, color: t.textSubtle }}>
+        <div className="mt-3 pt-3 border-t text-xs font-mono leading-relaxed" style={{ borderColor: t.borderSoft, color: t.textSubtle }}>
           ★ native = engine-only signals. lint/semgrep can&apos;t see graph,
           taint, or PR-shape predicates.
         </div>

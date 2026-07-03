@@ -109,7 +109,7 @@ export function StepInvite({ value, onChange }: Props) {
         onSetRole={setRoleFor}
       />
 
-      <div className="flex items-center justify-between text-[11px]">
+      <div className="flex items-center justify-between text-sm">
         <span style={{ color: 'var(--fg-subtle)' }}>
           Press <KeyHint>Enter</KeyHint> or <KeyHint>,</KeyHint> to add. Paste a list to add many at once.
         </span>
@@ -117,7 +117,7 @@ export function StepInvite({ value, onChange }: Props) {
           <button
             type="button"
             onClick={() => { csvRef.current?.click(); }}
-            className="inline-flex items-center gap-1 text-[11px]"
+            className="inline-flex items-center gap-1 text-sm"
             style={{ color: 'var(--fg-link)' }}
           >
             <Upload className="w-3 h-3" />
@@ -138,7 +138,7 @@ export function StepInvite({ value, onChange }: Props) {
             <button
               type="button"
               onClick={() => { onChange({ ...value, entries: [] }); }}
-              className="inline-flex items-center gap-1 text-[11px]"
+              className="inline-flex items-center gap-1 text-sm"
               style={{ color: 'var(--fg-muted)' }}
             >
               <RotateCcw className="w-3 h-3" />
@@ -149,7 +149,7 @@ export function StepInvite({ value, onChange }: Props) {
       </div>
 
       {csvError && (
-        <div className="text-[11px] onb-stagger" style={{ color: 'var(--intent-warn-fg)' }}>
+        <div className="text-sm onb-stagger" style={{ color: 'var(--intent-warn-fg)' }}>
           {csvError}
         </div>
       )}

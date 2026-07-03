@@ -142,7 +142,7 @@ export function QueueRow({
       {/* Author avatar — first information chunk: who wrote this. */}
       <span
         aria-hidden
-        className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full text-[9px] font-bold mt-0.5"
+        className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full text-2xs font-bold mt-0.5"
         style={{ background: avatarTone.bg, color: avatarTone.fg }}
         title={`${author.display} (@${pr.author})`}
       >
@@ -159,13 +159,13 @@ export function QueueRow({
             {pr.title}
           </span>
           <span
-            className="shrink-0 text-[10px] font-mono tabular-nums"
+            className="shrink-0 text-xs font-mono tabular-nums"
             style={{ color: 'var(--fg-subtle)' }}
           >
             #{pr.number}
           </span>
           <span
-            className="ml-auto shrink-0 text-[10px] font-mono tabular-nums"
+            className="ml-auto shrink-0 text-xs font-mono tabular-nums"
             style={{
               color: ageBucket === 'stale' ? 'var(--intent-danger-fg)'
                 : ageBucket === 'aging' ? 'var(--intent-warn-fg)'

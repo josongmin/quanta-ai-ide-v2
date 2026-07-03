@@ -34,7 +34,7 @@ export default function ServiceAccountsPage() {
       topRight={
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-base font-semibold transition-colors"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <Plus className="w-3.5 h-3.5" />
@@ -53,7 +53,7 @@ export default function ServiceAccountsPage() {
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
         <div
-          className="grid items-center px-4 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-4 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '2fr 1.6fr 0.7fr 0.7fr 1fr 0.7fr 0.4fr',
             color: 'var(--fg-subtle)',
@@ -83,8 +83,8 @@ function Tile({ label, value, tone }: { label: string; value: number; tone: 'def
       className="rounded-xl p-4 flex flex-col gap-1"
       style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
     >
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
-      <span className="text-[22px] font-semibold tabular-nums tracking-tight" style={{ color }}>{value}</span>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
+      <span className="text-3xl font-semibold tabular-nums tracking-tight" style={{ color }}>{value}</span>
     </div>
   );
 }
@@ -113,18 +113,18 @@ function Row({ sa, last }: { sa: SA; last: boolean }) {
           <Bot className="w-3.5 h-3.5" />
         </div>
         <div className="flex flex-col min-w-0">
-          <code className="text-[12px] font-mono font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+          <code className="text-base font-mono font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
             {sa.name}
           </code>
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{sa.id} · by {sa.createdBy}</span>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{sa.id} · by {sa.createdBy}</span>
         </div>
       </div>
-      <span className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>{sa.purpose}</span>
-      <span className="text-right text-[12px] tabular-nums" style={{ color: 'var(--fg-default)' }}>{sa.scopes}</span>
-      <span className="text-right text-[12px] tabular-nums" style={{ color: 'var(--fg-default)' }}>{sa.tokens}</span>
-      <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>{sa.lastSeen}</span>
+      <span className="text-base" style={{ color: 'var(--fg-muted)' }}>{sa.purpose}</span>
+      <span className="text-right text-base tabular-nums" style={{ color: 'var(--fg-default)' }}>{sa.scopes}</span>
+      <span className="text-right text-base tabular-nums" style={{ color: 'var(--fg-default)' }}>{sa.tokens}</span>
+      <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{sa.lastSeen}</span>
       <span
-        className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-[10px] font-bold w-fit"
+        className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-xs font-bold w-fit"
         style={{
           color: sa.active ? 'var(--intent-success-fg)' : 'var(--fg-subtle)',
           background: sa.active ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',

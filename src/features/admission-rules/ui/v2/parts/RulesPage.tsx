@@ -42,10 +42,10 @@ export function RulesPage({
       {/* Page heading */}
       <div className="flex items-center gap-3 admv2-rise">
         <ListChecks className="w-4 h-4" style={{ color: t.textMuted }} />
-        <h1 className="text-[12px] font-bold uppercase tracking-[0.18em]" style={{ color: t.textBody }}>
+        <h1 className="text-base font-bold uppercase tracking-eyebrow" style={{ color: t.textBody }}>
           Rule management
         </h1>
-        <span className="text-[10px] font-mono" style={{ color: t.textSubtle }}>
+        <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
           author · simulate · roll out
         </span>
         <div className="flex-1" />
@@ -94,7 +94,7 @@ function SectionTabs({
           <button type="button"
             key={o.id}
             onClick={() => { onChange(o.id); }}
-            className="px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
+            className="px-3 py-1 text-xs font-bold uppercase tracking-eyebrow transition-colors"
             style={{
               background: active ? t.hoverActive : 'transparent',
               color: active ? t.textHi : t.textSubtle,

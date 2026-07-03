@@ -48,10 +48,10 @@ export default function DataResidencyPage() {
       >
         <Globe2 className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
         <div className="flex flex-col gap-1">
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
             What residency controls
           </span>
-          <span className="text-[11px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-sm leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
             Source code, agent runs, secrets, and audit logs are stored in the selected region. Authentication metadata
             (email, tenant ID) lives in our global control plane. Switching regions triggers a one-time migration with
             a coordinated cutover.
@@ -79,7 +79,7 @@ export default function DataResidencyPage() {
               >
                 <div className="flex items-center justify-between">
                   <div
-                    className="w-9 h-9 rounded-md flex items-center justify-center text-[11px] font-black"
+                    className="w-9 h-9 rounded-md flex items-center justify-center text-sm font-black"
                     style={{
                       background: 'var(--bg-surface-muted)',
                       color: 'var(--fg-strong)',
@@ -90,7 +90,7 @@ export default function DataResidencyPage() {
                   </div>
                   {isActive && (
                     <span
-                      className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+                      className="inline-flex items-center gap-1 text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                       style={{
                         background: 'var(--intent-success-bg)',
                         color: 'var(--intent-success-fg)',
@@ -102,8 +102,8 @@ export default function DataResidencyPage() {
                     </span>
                   )}
                 </div>
-                <span className="text-[14px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{r.name}</span>
-                <div className="flex flex-col gap-1.5 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+                <span className="text-lg font-semibold" style={{ color: 'var(--fg-strong)' }}>{r.name}</span>
+                <div className="flex flex-col gap-1.5 text-sm" style={{ color: 'var(--fg-muted)' }}>
                   <Stat label="Data centers" value={r.centers} />
                   <Stat label="Latency from you" value={r.latency} />
                   <Stat label="Currently stored" value={r.storedSummary} />
@@ -131,7 +131,7 @@ export default function DataResidencyPage() {
         </div>
       </Section>
 
-      <p className="text-[11px] mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <FileWarning className="w-3 h-3 mt-0.5 shrink-0" />
         Region changes are recorded in the audit log and notified to all owners and admins.
       </p>
@@ -152,7 +152,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-2">
       <span style={{ color: 'var(--fg-subtle)' }}>{label}</span>
-      <span className="font-mono text-[11px]" style={{ color: 'var(--fg-default)' }}>{value}</span>
+      <span className="font-mono text-sm" style={{ color: 'var(--fg-default)' }}>{value}</span>
     </div>
   );
 }
@@ -162,7 +162,7 @@ function CertBadge({
 }: { label: string; Icon: React.ComponentType<{ className?: string; style?: CSSProperties }> }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 h-7 rounded-md text-[11px] font-medium"
+      className="inline-flex items-center gap-1.5 px-2.5 h-7 rounded-md text-sm font-medium"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-muted)',
@@ -188,7 +188,7 @@ function ConfirmMigration({
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-warn-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Request migration to {to.name}?
             </span>
           </div>
@@ -197,12 +197,12 @@ function ConfirmMigration({
           </button>
         </div>
         <div className="p-5 flex flex-col gap-3">
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
             We&apos;ll snapshot all org data in <strong style={{ color: 'var(--fg-strong)' }}>{from.name}</strong>,
             replicate it to <strong style={{ color: 'var(--fg-strong)' }}>{to.name}</strong>,
             then perform a coordinated cutover.
           </p>
-          <ul className="flex flex-col gap-1.5 text-[11px] p-3 rounded-md"
+          <ul className="flex flex-col gap-1.5 text-sm p-3 rounded-md"
             style={{ background: 'var(--intent-warn-bg)', border: '1px solid var(--intent-warn-fg)', color: 'var(--intent-warn-fg)' }}
           >
             <li>· Estimated downtime: <strong>~12 minutes</strong> during cutover (scheduled off-hours)</li>

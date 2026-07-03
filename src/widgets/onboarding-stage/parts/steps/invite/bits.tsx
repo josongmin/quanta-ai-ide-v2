@@ -3,7 +3,7 @@ import { ShieldCheck } from 'lucide-react';
 export function KeyHint({ children }: { children: React.ReactNode }) {
   return (
     <kbd
-      className="inline-flex items-center justify-center h-4 min-w-[16px] px-1 rounded text-[9px] font-mono"
+      className="inline-flex items-center justify-center h-4 min-w-[16px] px-1 rounded text-2xs font-mono"
       style={{
         background: 'var(--bg-canvas)',
         color: 'var(--fg-default)',
@@ -18,7 +18,7 @@ export function KeyHint({ children }: { children: React.ReactNode }) {
 export function RoleHint() {
   return (
     <div
-      className="flex items-start gap-2 px-3 py-2 rounded-md text-[11px] leading-snug"
+      className="flex items-start gap-2 px-3 py-2 rounded-md text-sm leading-snug"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-muted)',

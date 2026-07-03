@@ -9,13 +9,13 @@ function TextBlockViewImpl({ block }: { block: TextBlock }) {
   // streaming text actually grows.
   const parts = useMemo(() => block.text.split(/(`[^`]+`)/g), [block.text]);
   return (
-    <div className={`text-[13px] leading-[1.65] ${color} whitespace-pre-wrap break-words`}>
+    <div className={`text-md leading-[1.65] ${color} whitespace-pre-wrap break-words`}>
       {parts.map((p, i) =>
         p.startsWith('`') && p.endsWith('`') && p.length > 2 ? (
           <code
             key={i}
             style={{ color: 'var(--intent-success-fg)' }}
-            className="mx-px px-1 py-px rounded-md text-[12px] font-mono bg-[color:var(--bg-active)] border border-[color:var(--border-muted)]"
+            className="mx-px px-1 py-px rounded-md text-base font-mono bg-[color:var(--bg-active)] border border-[color:var(--border-muted)]"
           >
             {p.slice(1, -1)}
           </code>

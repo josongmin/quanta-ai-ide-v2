@@ -12,7 +12,7 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
   return (
     <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
       <div
-        className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '1fr 200px 90px 80px 32px',
           gap: 12,
@@ -30,7 +30,7 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
         <AppRow key={a.id}>
           <div className="flex items-center gap-3 min-w-0">
             <div
-              className="w-8 h-8 rounded-md flex items-center justify-center text-[11px] font-black shrink-0"
+              className="w-8 h-8 rounded-md flex items-center justify-center text-sm font-black shrink-0"
               style={{
                 backgroundImage: 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
                 color: 'var(--bg-canvas)',
@@ -40,19 +40,19 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
             </div>
             <div className="flex flex-col min-w-0 gap-0.5">
               <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>{a.name}</span>
-              <span className="font-mono text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="font-mono text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>
                 {a.clientId} · {a.scopes.length} scope{a.scopes.length === 1 ? '' : 's'} · since {a.createdAt}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-1.5 min-w-0">
             <Globe className="w-3 h-3 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
-            <span className="font-mono text-[10px] truncate" style={{ color: 'var(--fg-default)' }}>
+            <span className="font-mono text-xs truncate" style={{ color: 'var(--fg-default)' }}>
               {a.redirectUri}
             </span>
           </div>
           <span
-            className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded w-fit"
+            className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded w-fit"
             style={{
               background: a.status === 'published' ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',
               color: a.status === 'published' ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
@@ -61,7 +61,7 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
           >
             {a.status}
           </span>
-          <span className="font-mono tabular-nums text-[12px]" style={{ color: 'var(--fg-default)' }}>
+          <span className="font-mono tabular-nums text-base" style={{ color: 'var(--fg-default)' }}>
             {a.installs}
           </span>
           <button
@@ -85,7 +85,7 @@ function AppRow({ children }: { children: React.ReactNode }) {
   return (
     <div
       ref={ref}
-      className="grid items-center px-3 h-14 text-[12px] transition-colors"
+      className="grid items-center px-3 h-14 text-base transition-colors"
       style={{
         gridTemplateColumns: '1fr 200px 90px 80px 32px',
         gap: 12,

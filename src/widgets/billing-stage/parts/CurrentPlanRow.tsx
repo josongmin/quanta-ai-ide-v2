@@ -25,13 +25,13 @@ export function CurrentPlanRow({
       <div className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
           <span
-            className="text-[28px] font-semibold tracking-tight leading-none"
+            className="text-4xl font-semibold tracking-tight leading-none"
             style={{ color: 'var(--fg-strong)' }}
           >
             {plan.name}
           </span>
           <span
-            className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+            className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
             style={{
               color: 'var(--fg-muted)',
               background: 'var(--bg-surface-muted)',
@@ -40,12 +40,12 @@ export function CurrentPlanRow({
             {cycle}
           </span>
         </div>
-        <div className="text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="text-base" style={{ color: 'var(--fg-subtle)' }}>
           {plan.tagline}
         </div>
       </div>
 
-      <dl className="grid grid-cols-3 gap-x-10 gap-y-1 text-[12px]">
+      <dl className="grid grid-cols-3 gap-x-10 gap-y-1 text-base">
         <Cell label="Monthly cost" value={fmtUsd(monthlyUsd)} sub={`${seats} seats`} />
         <Cell label="Next invoice" value={next} sub="Auto-charge" />
         <Cell
@@ -57,7 +57,7 @@ export function CurrentPlanRow({
 
       <button
         type="button"
-        className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+        className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
         style={{
           color: 'var(--fg-default)',
           background: 'var(--bg-surface-muted)',
@@ -79,19 +79,19 @@ function Cell({
   return (
     <div className="flex flex-col gap-0.5">
       <dt
-        className="text-[10px] uppercase tracking-[0.14em] font-medium"
+        className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}
       </dt>
       <dd
-        className="text-[12px] font-medium tabular-nums"
+        className="text-base font-medium tabular-nums"
         style={{ color: 'var(--fg-strong)' }}
       >
         {value}
       </dd>
       {sub && (
-        <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
           {sub}
         </span>
       )}

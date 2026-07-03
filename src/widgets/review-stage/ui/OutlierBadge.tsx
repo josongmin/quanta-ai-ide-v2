@@ -80,7 +80,7 @@ export default function OutlierBadge({ pr, allPrs, onJumpToPr }: Props) {
           onClick={toggle}
           aria-expanded={open}
           aria-haspopup="dialog"
-          className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-mono transition-opacity hover:opacity-90"
           style={{
             background: tone + '1a',
             border: '1px solid ' + tone + '55',
@@ -89,7 +89,7 @@ export default function OutlierBadge({ pr, allPrs, onJumpToPr }: Props) {
           title={'평균 PR 대비 outlier — ' + tooltip + ' (클릭: 비슷한 PR 보기)'}
         >
           <Sigma className="w-2.5 h-2.5" strokeWidth={2.5} />
-          <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">outlier</span>
+          <span className="font-bold uppercase tracking-eyebrow">outlier</span>
           <span className="tabular-nums">
             {direction}{sigma}σ {top.noun}
           </span>

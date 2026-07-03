@@ -52,7 +52,7 @@ export function BackgroundMonitor({
 
   if (items.length === 0) {
     return (
-      <div className="px-3 py-4 text-[12px] text-[var(--fg-muted)] italic">
+      <div className="px-3 py-4 text-base text-[var(--fg-muted)] italic">
         진행 중인 작업이 없습니다.
       </div>
     );
@@ -62,10 +62,10 @@ export function BackgroundMonitor({
     <div className="flex flex-col">
       <div className="flex items-center gap-2 px-3 py-2 border-b border-[var(--border-default)]">
         <Loader2 className="w-3 h-3 text-[var(--intent-info-fg)] animate-spin" />
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           백그라운드 작업
         </span>
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)] tabular-nums">
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)] tabular-nums">
           {items.length}개 진행 중
         </span>
       </div>
@@ -84,14 +84,14 @@ export function BackgroundMonitor({
               className="w-full text-left px-3 py-2 hover:bg-[var(--bg-hover)] transition-colors"
             >
               <div className="flex items-baseline gap-2">
-                <span className="text-[12px] font-medium text-[var(--fg-strong)] truncate flex-1">
+                <span className="text-base font-medium text-[var(--fg-strong)] truncate flex-1">
                   {it.pr.title}
                 </span>
-                <span className="text-[10px] font-mono text-[var(--fg-subtle)] shrink-0">
+                <span className="text-xs font-mono text-[var(--fg-subtle)] shrink-0">
                   #{it.pr.number}
                 </span>
               </div>
-              <div className="mt-1 flex items-center gap-2 text-[10px] font-mono text-[var(--fg-muted)]">
+              <div className="mt-1 flex items-center gap-2 text-xs font-mono text-[var(--fg-muted)]">
                 <span className="tabular-nums">
                   <span style={{ color: 'color-mix(in srgb, var(--intent-success-fg) 80%, transparent)' }}>{it.passed}</span>
                   <span className="text-[var(--fg-subtle)]">/</span>
@@ -116,7 +116,7 @@ export function BackgroundMonitor({
                 </span>
               </div>
               {it.runningNames.length > 0 && (
-                <div className="mt-1 text-[10px] font-mono text-[var(--fg-subtle)] truncate">
+                <div className="mt-1 text-xs font-mono text-[var(--fg-subtle)] truncate">
                   {it.runningNames.join(' · ')}
                   {it.pending > it.runningNames.length && ` +${String(it.pending - it.runningNames.length)}`}
                 </div>

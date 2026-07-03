@@ -35,13 +35,13 @@ export function HeroTile({
         <FolderClosed className="w-3.5 h-3.5" />
       </div>
       <div
-        className="text-[12px] font-semibold mb-0.5"
+        className="text-base font-semibold mb-0.5"
         style={{ color: 'var(--fg-default)' }}
       >
         {copy.title}
       </div>
       <div
-        className="text-[10px] leading-[1.4]"
+        className="text-xs leading-[1.4]"
         style={{ color: 'var(--fg-muted)' }}
       >
         {copy.sub}

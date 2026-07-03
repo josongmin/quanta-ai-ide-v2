@@ -49,7 +49,7 @@ export function OwnershipLayer({
           <div key={layer}>
             <div className="flex items-center gap-2 mb-1">
               <span
-                className="text-[9px] font-black uppercase tracking-[0.18em]"
+                className="text-2xs font-black uppercase tracking-eyebrow"
                 style={{ color: 'var(--fg-muted)' }}
               >
                 {layer}
@@ -59,7 +59,7 @@ export function OwnershipLayer({
                 style={{ background: 'var(--border-muted)' }}
               />
               <span
-                className="text-[9px] font-mono tabular-nums"
+                className="text-2xs font-mono tabular-nums"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {items.length}
@@ -76,19 +76,19 @@ export function OwnershipLayer({
                   >
                     <PersonAvatar person={person} size={18} />
                     <span
-                      className="text-[11px] font-semibold truncate shrink-0 max-w-[110px]"
+                      className="text-sm font-semibold truncate shrink-0 max-w-[110px]"
                       style={{ color: 'var(--fg-default)' }}
                     >
                       {person?.name ?? 'Unknown'}
                     </span>
                     <span
-                      className="text-[10px] font-mono tabular-nums shrink-0"
+                      className="text-xs font-mono tabular-nums shrink-0"
                       style={{ color: 'var(--fg-subtle)' }}
                     >
                       {pct}%
                     </span>
                     <span
-                      className="text-[10px] truncate flex-1 min-w-0"
+                      className="text-xs truncate flex-1 min-w-0"
                       style={{ color: 'var(--fg-muted)' }}
                       title={item.reason}
                     >

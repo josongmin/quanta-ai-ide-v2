@@ -66,13 +66,13 @@ function WorkspaceBody({ repo, isDark }: { repo: RepoData; isDark: boolean }) {
       chips={
         <>
           <span
-            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-eyebrow"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             {t('header.main')}
           </span>
           <span
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-eyebrow"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             <span

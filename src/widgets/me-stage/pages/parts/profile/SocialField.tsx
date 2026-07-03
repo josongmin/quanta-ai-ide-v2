@@ -16,13 +16,13 @@ export function SocialField({
         style={{ borderColor: 'var(--border-muted)', color: 'var(--fg-muted)' }}
       >
         {icon}
-        <span className="text-[12px] font-mono">{prefix}</span>
+        <span className="text-base font-mono">{prefix}</span>
       </span>
       <input
         value={value}
         onChange={(e) => { onChange(e.target.value); }}
         placeholder="username"
-        className="flex-1 bg-transparent outline-none px-3 text-[12px] tabular-nums"
+        className="flex-1 bg-transparent outline-none px-3 text-base tabular-nums"
         style={{ color: 'var(--fg-strong)' }}
       />
     </div>

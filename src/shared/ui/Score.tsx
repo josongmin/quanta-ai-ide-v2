@@ -37,13 +37,13 @@ export const Score = memo(function Score({
     <div className={hero ? 'mb-1' : ''}>
       <div className={`flex items-baseline justify-between mb-1.5`}>
         <span
-          className={hero ? 'text-[11px] font-bold' : 'text-[10px]'}
+          className={hero ? 'text-sm font-bold' : 'text-xs'}
           style={{ color: 'var(--fg-default)' }}
         >{label}</span>
         <div className="flex items-baseline gap-1.5">
           {hero && trend && trend.dir !== 'flat' && (
             <span
-              className="text-[9px] font-bold tabular-nums"
+              className="text-2xs font-bold tabular-nums"
               style={{
                 color: trend.dir === 'up'
                   ? 'var(--intent-success-vivid)'
@@ -55,12 +55,12 @@ export const Score = memo(function Score({
             </span>
           )}
           {hero && (
-            <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color }}>
+            <span className="text-2xs font-bold uppercase tracking-eyebrow" style={{ color }}>
               {grade}
             </span>
           )}
           <span
-            className={`font-black tabular-nums ${hero ? 'text-[18px]' : 'text-[12px]'} leading-none`}
+            className={`font-black tabular-nums ${hero ? 'text-2xl' : 'text-base'} leading-none`}
             style={{ color }}
           >
             {value}

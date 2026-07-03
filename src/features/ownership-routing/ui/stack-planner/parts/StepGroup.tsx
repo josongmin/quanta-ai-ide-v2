@@ -18,7 +18,7 @@ const KIND_LABEL: Record<StackStepKind, string> = {
 function KindLabel({ kind }: { kind: StackStepKind }) {
   return (
     <span
-      className="inline-flex items-center text-[9px] font-black uppercase tracking-[0.22em]"
+      className="inline-flex items-center text-2xs font-black uppercase tracking-[0.22em]"
       style={{ color: 'var(--fg-subtle)' }}
     >
       {KIND_LABEL[kind]}
@@ -29,7 +29,7 @@ function KindLabel({ kind }: { kind: StackStepKind }) {
 function StepNumber({ n }: { n: number }) {
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full shrink-0 text-[11px] font-black tabular-nums"
+      className="inline-flex items-center justify-center rounded-full shrink-0 text-sm font-black tabular-nums"
       style={{
         width: 24,
         height: 24,
@@ -47,7 +47,7 @@ function StepNumber({ n }: { n: number }) {
 function CheckPill({ label }: { label: string }) {
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-mono uppercase tracking-[0.14em]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-mono uppercase tracking-eyebrow"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',
@@ -64,7 +64,7 @@ function ExitCriteria({ items }: { items: string[] }) {
   return (
     <div className="mb-2">
       <div
-        className="text-[8px] font-black uppercase tracking-[0.22em] mb-1"
+        className="text-2xs font-black uppercase tracking-[0.22em] mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         Exit criteria
@@ -98,7 +98,7 @@ function TouchedModules({ modules }: { modules: string[] }) {
       {visible.map((m) => (
         <li
           key={m}
-          className="text-[10px] font-mono leading-tight truncate"
+          className="text-xs font-mono leading-tight truncate"
           style={{ color: 'var(--fg-default)' }}
           title={m}
         >
@@ -107,7 +107,7 @@ function TouchedModules({ modules }: { modules: string[] }) {
       ))}
       {extra > 0 && (
         <li
-          className="text-[10px] font-mono leading-tight"
+          className="text-xs font-mono leading-tight"
           style={{ color: 'var(--fg-subtle)' }}
         >
           +{extra} more
@@ -123,7 +123,7 @@ function ReviewerChip({ person }: { person: Person | undefined }) {
       <div className="flex items-center gap-1.5 min-w-0">
         <PersonAvatar person={undefined} size={20} />
         <span
-          className="text-[10px] italic truncate"
+          className="text-xs italic truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
           unassigned
@@ -136,7 +136,7 @@ function ReviewerChip({ person }: { person: Person | undefined }) {
       <PersonAvatar person={person} size={20} />
       <div className="min-w-0 flex flex-col leading-tight">
         <span
-          className="text-[11px] font-semibold truncate"
+          className="text-sm font-semibold truncate"
           style={{
             color: person.active ? 'var(--fg-default)' : 'var(--fg-muted)',
           }}
@@ -144,7 +144,7 @@ function ReviewerChip({ person }: { person: Person | undefined }) {
           {person.name}
         </span>
         <span
-          className="text-[9px] font-mono truncate"
+          className="text-2xs font-mono truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {person.team}
@@ -191,7 +191,7 @@ function StepCard({
                 aria-hidden
               />
               <span
-                className="text-[9px] font-mono tabular-nums"
+                className="text-2xs font-mono tabular-nums"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 ~{step.estimatedDiffLines} LOC
@@ -208,7 +208,7 @@ function StepCard({
           </h4>
 
           <p
-            className="text-[11px] leading-snug mb-2"
+            className="text-sm leading-snug mb-2"
             style={{ color: 'var(--fg-muted)' }}
           >
             {step.goal}
@@ -229,7 +229,7 @@ function StepCard({
             </div>
             <div className="shrink-0 max-w-[160px]">
               <div
-                className="text-[8px] font-black uppercase tracking-[0.22em] mb-0.5"
+                className="text-2xs font-black uppercase tracking-[0.22em] mb-0.5"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 Reviewer

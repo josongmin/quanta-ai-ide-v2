@@ -28,7 +28,7 @@ export function SubmitBar({
       <GlassCard className="rounded-lg p-3">
         <SectionHeader title={t('submit.header')} badge={t(`submit.status.${status}`)} />
         <div
-          className="mt-2 rounded-md px-2 py-2 text-[11px]"
+          className="mt-2 rounded-md px-2 py-2 text-sm"
           style={{
             background: 'var(--bg-active)',
             color: 'var(--fg-strong)',
@@ -36,7 +36,7 @@ export function SubmitBar({
           }}
         >
           <div className="font-bold">PR #{submission?.prNumber?.toString() ?? ''}</div>
-          <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+          <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
             {t('submit.proposerLine', { by: submission?.submittedBy ?? 'system' })}
           </div>
         </div>
@@ -52,7 +52,7 @@ export function SubmitBar({
         type="button"
         onClick={onSubmit}
         disabled={action.kind === 'blocked' || status === 'submitting'}
-        className="mt-2 w-full text-[11px] font-black uppercase tracking-[0.18em] px-3 py-2 rounded-md transition-colors"
+        className="mt-2 w-full text-sm font-black uppercase tracking-eyebrow px-3 py-2 rounded-md transition-colors"
         style={{
           background: action.kind === 'blocked' ? 'var(--bg-surface-muted)' : 'var(--bg-active)',
           color: action.kind === 'blocked' ? 'var(--fg-subtle)' : 'var(--fg-strong)',
@@ -70,7 +70,7 @@ export function SubmitBar({
               : t('submit.blocked')}
       </button>
 
-      <div className="mt-2 text-[10px]" style={{ color: 'var(--fg-muted)' }}>
+      <div className="mt-2 text-xs" style={{ color: 'var(--fg-muted)' }}>
         {action.reason}
       </div>
     </GlassCard>

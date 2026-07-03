@@ -54,7 +54,7 @@ export function AnomalySentinel({ daily, label }: Props) {
         {t('anomaly.title', { defaultValue: 'Anomaly sentinel' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {label ?? t('anomaly.sub', {
           defaultValue: '30 d · EWMA α=0.3 · |z|≥2 flagged',
@@ -63,12 +63,12 @@ export function AnomalySentinel({ daily, label }: Props) {
 
       <div className="flex items-baseline gap-2 mt-3">
         <span
-          className="text-[28px] font-black tabular-nums leading-none"
+          className="text-4xl font-black tabular-nums leading-none"
           style={{ color: anomalies > 0 ? '#d98a85' : v.textHi }}
         >
           {anomalies}
         </span>
-        <span className="text-[10px] font-mono"
+        <span className="text-xs font-mono"
               style={{ color: v.textFaint }}>
           {t('anomaly.outliers', {
             n: daily.length,
@@ -139,7 +139,7 @@ export function AnomalySentinel({ daily, label }: Props) {
         )}
       </svg>
 
-      <div className="mt-2 flex items-center gap-2 text-[8.5px] font-mono"
+      <div className="mt-2 flex items-center gap-2 text-2xs font-mono"
            style={{ color: v.textFaint }}>
         <span className="inline-flex items-center gap-1">
           <span className="inline-block w-2 h-px"

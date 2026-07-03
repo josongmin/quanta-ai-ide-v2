@@ -30,7 +30,7 @@ export default function FeedbackPage() {
         <div className="flex flex-col items-center text-center gap-4 mb-10">
           <Eyebrow tone="brand"><MessageSquare className="w-3 h-3" /> Feedback</Eyebrow>
           <HeadlineGradient accent="the roadmap">Vote on</HeadlineGradient>
-          <p className="text-[14.5px] leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-lg leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
             What should we build next? File ideas, upvote others, watch them ship.
           </p>
         </div>
@@ -45,7 +45,7 @@ export default function FeedbackPage() {
                 border: '1px solid var(--border-default)',
               }}
             >
-              <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+              <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
                 Post a new idea
               </h2>
 
@@ -58,7 +58,7 @@ export default function FeedbackPage() {
                       key={k}
                       type="button"
                       onClick={() => { setKind(k); }}
-                      className="inline-flex items-center justify-center gap-1.5 h-8 rounded-md text-[11px] font-semibold transition-colors"
+                      className="inline-flex items-center justify-center gap-1.5 h-8 rounded-md text-sm font-semibold transition-colors"
                       style={{
                         color: active ? m.tone : 'var(--fg-muted)',
                         background: active ? m.bg : 'transparent',
@@ -74,7 +74,7 @@ export default function FeedbackPage() {
 
               <input
                 placeholder="One-line summary"
-                className="w-full bg-transparent outline-none text-[12px] h-9 px-3 rounded-md"
+                className="w-full bg-transparent outline-none text-base h-9 px-3 rounded-md"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
@@ -84,7 +84,7 @@ export default function FeedbackPage() {
               <textarea
                 rows={5}
                 placeholder="Details… what problem does this solve?"
-                className="w-full bg-transparent outline-none text-[12px] p-3 rounded-md resize-y"
+                className="w-full bg-transparent outline-none text-base p-3 rounded-md resize-y"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
@@ -93,7 +93,7 @@ export default function FeedbackPage() {
               />
               <button
                 type="button"
-                className="inline-flex items-center justify-center gap-2 h-9 rounded-md text-[12px] font-semibold transition-colors"
+                className="inline-flex items-center justify-center gap-2 h-9 rounded-md text-base font-semibold transition-colors"
                 style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
               >
                 <Send className="w-3.5 h-3.5" />
@@ -105,10 +105,10 @@ export default function FeedbackPage() {
           {/* Feed */}
           <div className="col-span-2 flex flex-col gap-2">
             <div className="flex items-baseline justify-between mb-2">
-              <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+              <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
                 Trending this month
               </h2>
-              <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>5 posts</span>
+              <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>5 posts</span>
             </div>
             <div
               className="rounded-xl overflow-hidden"
@@ -170,12 +170,12 @@ function FeedRow({
         }}
       >
         <ChevronUp className="w-3.5 h-3.5" />
-        <span className="text-[11px] font-bold tabular-nums leading-none">{v}</span>
+        <span className="text-sm font-bold tabular-nums leading-none">{v}</span>
       </button>
       <div className="flex flex-col gap-1 min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span
-            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-[9px] font-bold uppercase tracking-[0.14em]"
+            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-2xs font-bold uppercase tracking-eyebrow"
             style={{ color: tone, background: bg }}
           >
             <Icon className="w-2.5 h-2.5" />
@@ -183,15 +183,15 @@ function FeedRow({
           </span>
           {post.status && (
             <span
-              className="text-[9px] uppercase tracking-[0.14em] font-semibold"
+              className="text-2xs uppercase tracking-eyebrow font-semibold"
               style={{ color: 'var(--fg-subtle)' }}
             >
               · {post.status}
             </span>
           )}
         </div>
-        <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>{post.title}</span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>{post.title}</span>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           {post.author} · {post.when}
         </span>
       </div>

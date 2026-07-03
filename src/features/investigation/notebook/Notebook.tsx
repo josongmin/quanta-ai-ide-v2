@@ -118,7 +118,7 @@ export function Notebook({
                 cursor: disabled || !text.trim() ? 'not-allowed' : 'pointer',
                 opacity: disabled || !text.trim() ? 0.5 : 1,
               }}
-              className="inline-flex items-center gap-1 px-2 py-1.5 rounded text-[11px] font-medium"
+              className="inline-flex items-center gap-1 px-2 py-1.5 rounded text-sm font-medium"
             >
               <Send size={12} aria-hidden="true" />
               Ask

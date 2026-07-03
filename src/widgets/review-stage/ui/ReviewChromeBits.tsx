@@ -8,8 +8,8 @@ export function EmptyState() {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
       <GitPullRequest className="w-8 h-8 text-[var(--fg-subtle)]" />
-      <div className="text-[13px] font-bold text-[var(--fg-muted)]">{t('review.empty.noPrTitle')}</div>
-      <div className="text-[11px] max-w-[320px] text-[var(--fg-subtle)]">
+      <div className="text-md font-bold text-[var(--fg-muted)]">{t('review.empty.noPrTitle')}</div>
+      <div className="text-sm max-w-[320px] text-[var(--fg-subtle)]">
         {t('review.empty.noPrSubtitle')}
       </div>
     </div>
@@ -21,11 +21,11 @@ export function RailEmpty() {
   return (
     <>
       <div className="shrink-0 h-11 flex items-center px-4 border-b border-[var(--border-default)]">
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           {t('review.rail.prContext')}
         </span>
       </div>
-      <div className="flex-1 flex items-center justify-center text-[11px] text-[var(--fg-subtle)]">
+      <div className="flex-1 flex items-center justify-center text-sm text-[var(--fg-subtle)]">
         {t('review.rail.nothingSelected')}
       </div>
     </>
@@ -35,7 +35,7 @@ export function RailEmpty() {
 export function FooterHints() {
   const { t } = useTranslation('app');
   return (
-    <div className="flex items-center justify-between gap-3 mt-2 px-1 py-3 text-[10px] font-mono text-[var(--fg-subtle)] border-t border-[var(--border-muted)]">
+    <div className="flex items-center justify-between gap-3 mt-2 px-1 py-3 text-xs font-mono text-[var(--fg-subtle)] border-t border-[var(--border-muted)]">
       <span>{t('review.footer.left')}</span>
       <span className="flex items-center gap-1">
         <Sparkles className="w-3 h-3" />
@@ -85,13 +85,13 @@ export function CheatSheet({ onClose }: { onClose: () => void }) {
         }}
       >
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[12px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-default)]">
+          <span className="text-base font-bold uppercase tracking-eyebrow text-[var(--fg-default)]">
             Keyboard
           </span>
           <button
             type="button"
             onClick={onClose}
-            className="text-[11px] font-mono text-[var(--fg-subtle)] hover:text-white"
+            className="text-sm font-mono text-[var(--fg-subtle)] hover:text-white"
           >
             esc
           </button>
@@ -113,13 +113,13 @@ function ShortcutRow({ keys, desc }: { keys: string; desc: string }) {
         {keys.split(' ').map((k, i) => (
           <kbd
             key={`${keys}-${String(i)}`}
-            className="px-1.5 h-5 inline-flex items-center justify-center rounded-md border text-[10px] font-mono bg-[var(--bg-elevated)] text-[var(--fg-default)] border-[var(--border-default)]"
+            className="px-1.5 h-5 inline-flex items-center justify-center rounded-md border text-xs font-mono bg-[var(--bg-elevated)] text-[var(--fg-default)] border-[var(--border-default)]"
           >
             {k}
           </kbd>
         ))}
       </span>
-      <span className="text-[12px] text-[var(--fg-muted)]">{desc}</span>
+      <span className="text-base text-[var(--fg-muted)]">{desc}</span>
     </>
   );
 }

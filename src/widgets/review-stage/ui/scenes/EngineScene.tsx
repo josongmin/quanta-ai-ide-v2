@@ -70,11 +70,11 @@ export function EngineScene({
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
           <Bot className="w-3.5 h-3.5 text-[var(--intent-info-fg)]" />
-          <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+          <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
             p0 engine · auto-review
           </span>
           <span
-            className="inline-flex items-center gap-1 px-1.5 h-4 rounded text-[9px] font-mono"
+            className="inline-flex items-center gap-1 px-1.5 h-4 rounded text-2xs font-mono"
             style={{ background: 'var(--intent-info-bg)', color: 'var(--fg-link)', border: '1px solid color-mix(in srgb, var(--intent-info-fg) 35%, transparent)' }}
             title="Findings are produced by deterministic AST + dataflow rules, not an LLM. Each finding is reproducible from the diff alone."
           >
@@ -86,7 +86,7 @@ export function EngineScene({
             type="button"
             onClick={() => { setFocusMode((v) => !v); }}
             aria-pressed={focusMode}
-            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
+            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-xs font-bold uppercase tracking-eyebrow transition-colors"
             style={{
               background: focusMode ? 'color-mix(in srgb, var(--fg-link) 18%, transparent)' : 'var(--bg-hover)',
               color: focusMode ? 'var(--fg-link)' : 'var(--fg-muted)',
@@ -100,7 +100,7 @@ export function EngineScene({
             type="button"
             onClick={() => { setGrouped((v) => !v); }}
             aria-pressed={grouped}
-            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)] transition-colors"
+            className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)] hover:text-[var(--fg-strong)] transition-colors"
             style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-strong)' }}
             title={grouped ? 'Switch to flat list' : 'Group identical rules'}
           >
@@ -109,7 +109,7 @@ export function EngineScene({
           {summary.autoFix > 0 && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[11px] font-bold transition-colors text-[var(--fg-on-accent)]"
+              className="inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-sm font-bold transition-colors text-[var(--fg-on-accent)]"
               style={{
                 background: 'linear-gradient(140deg, var(--fg-link), var(--intent-info-fg))',
                 boxShadow: 'none',
@@ -143,7 +143,7 @@ export function EngineScene({
       {visible.length === 0 ? (
         <div className="mt-4 flex flex-col items-center justify-center text-center px-4 py-10 rounded-lg border border-dashed border-[var(--border-default)]">
           <ShieldCheck className="w-5 h-5 mb-2 text-[var(--fg-subtle)]" />
-          <div className="text-[12px] font-bold text-[var(--fg-subtle)]">{t('empty.noFindings')}</div>
+          <div className="text-base font-bold text-[var(--fg-subtle)]">{t('empty.noFindings')}</div>
         </div>
       ) : focusMode ? (
         <div className="mt-4">
@@ -246,13 +246,13 @@ function FindingGroup({
         className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-[var(--bg-hover)] transition-colors"
       >
         <span
-          className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+          className="inline-flex px-1.5 py-0.5 rounded-md text-2xs font-bold uppercase tracking-eyebrow"
           style={{ background: `color-mix(in srgb, ${worstColor} 15%, transparent)`, color: worstColor }}
         >
           ×{items.length}
         </span>
-        <span className="text-[11px] font-mono text-[var(--fg-strong)] truncate">{groupKey}</span>
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-sm font-mono text-[var(--fg-strong)] truncate">{groupKey}</span>
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">
           {expanded ? 'collapse' : 'expand'}
         </span>
       </button>
@@ -307,26 +307,26 @@ function FocusedFinding({
       }}
     >
       <div className="flex items-center gap-2 mb-2 flex-wrap">
-        <span className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ background: `color-mix(in srgb, ${c} 15%, transparent)`, color: c }}>
+        <span className="inline-flex px-1.5 py-0.5 rounded-md text-2xs font-bold uppercase tracking-eyebrow" style={{ background: `color-mix(in srgb, ${c} 15%, transparent)`, color: c }}>
           {severityLabels[f.severity]}
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {f.category}/{f.rule}
         </span>
         <span
-          className="inline-flex items-center gap-1 px-1.5 h-4 rounded-sm text-[9px] font-mono"
+          className="inline-flex items-center gap-1 px-1.5 h-4 rounded-sm text-2xs font-mono"
           style={{ background: `color-mix(in srgb, ${provenance.tone} 10%, transparent)`, color: provenance.tone, border: `1px solid color-mix(in srgb, ${provenance.tone} 33%, transparent)` }}
           title="Where this rule comes from"
         >
           {provenance.source}
         </span>
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-muted)] tabular-nums">
+        <span className="ml-auto text-xs font-mono text-[var(--fg-muted)] tabular-nums">
           {idx + 1} / {total}
         </span>
       </div>
       <div className="text-[15px] font-bold leading-snug text-[var(--fg-strong)]">{f.title}</div>
-      <div className="mt-1 text-[13px] leading-relaxed text-[var(--fg-default)]">{f.body}</div>
-      <div className="mt-2 text-[11px] font-mono text-[var(--fg-muted)] truncate" title={f.filePath}>
+      <div className="mt-1 text-md leading-relaxed text-[var(--fg-default)]">{f.body}</div>
+      <div className="mt-2 text-sm font-mono text-[var(--fg-muted)] truncate" title={f.filePath}>
         {f.filePath}{f.line !== null ? `:${String(f.line)}` : ''}
       </div>
       <FixPatchPreview finding={f} />
@@ -335,7 +335,7 @@ function FocusedFinding({
           type="button"
           onClick={onPrev}
           disabled={idx === 0}
-          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold bg-[var(--bg-elevated)] text-[var(--fg-strong)] hover:bg-[var(--bg-active)] disabled:opacity-40"
+          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-sm font-bold bg-[var(--bg-elevated)] text-[var(--fg-strong)] hover:bg-[var(--bg-active)] disabled:opacity-40"
         >
           ← prev
         </button>
@@ -343,14 +343,14 @@ function FocusedFinding({
           type="button"
           onClick={onNext}
           disabled={idx >= total - 1}
-          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold bg-[var(--bg-elevated)] text-[var(--fg-strong)] hover:bg-[var(--bg-active)] disabled:opacity-40"
+          className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-sm font-bold bg-[var(--bg-elevated)] text-[var(--fg-strong)] hover:bg-[var(--bg-active)] disabled:opacity-40"
         >
           next →
         </button>
         {f.autoFixable && (
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-bold"
+            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-sm font-bold"
             style={{ background: 'var(--intent-info-bg)', color: 'var(--fg-link)' }}
           >
             <Wand2 className="w-3 h-3" />
@@ -363,7 +363,7 @@ function FocusedFinding({
             onClick={() => { onVote('up'); }}
             aria-pressed={vote === 'up'}
             title="Useful — keep firing this rule"
-            className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[14px] transition-colors"
+            className="inline-flex items-center justify-center w-7 h-7 rounded-md text-lg transition-colors"
             style={{
               background: vote === 'up' ? 'color-mix(in srgb, var(--intent-success-fg) 20%, transparent)' : 'var(--bg-hover)',
               color: vote === 'up' ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
@@ -377,7 +377,7 @@ function FocusedFinding({
             onClick={() => { onVote('down'); }}
             aria-pressed={vote === 'down'}
             title="False positive — suppress this pattern"
-            className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[14px] transition-colors"
+            className="inline-flex items-center justify-center w-7 h-7 rounded-md text-lg transition-colors"
             style={{
               background: vote === 'down' ? 'color-mix(in srgb, var(--intent-danger-fg) 20%, transparent)' : 'var(--bg-hover)',
               color: vote === 'down' ? 'var(--intent-danger-fg)' : 'var(--fg-muted)',
@@ -407,7 +407,7 @@ function SevChip({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-1 px-2 h-6 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
+      className="inline-flex items-center gap-1 px-2 h-6 rounded-md text-xs font-bold uppercase tracking-eyebrow transition-colors"
       style={{
         background: active ? `color-mix(in srgb, ${color} 15%, transparent)` : 'var(--bg-hover)',
         color: active ? color : 'var(--fg-muted)',
@@ -446,40 +446,40 @@ function FindingRow({
         : { background: `linear-gradient(140deg, color-mix(in srgb, ${c} 6%, transparent), transparent 60%)`, border: `1px solid color-mix(in srgb, ${c} 19%, transparent)` }}
     >
       <div className="flex items-center gap-2 mb-1 flex-wrap">
-        <span className="inline-flex px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ background: `color-mix(in srgb, ${c} 15%, transparent)`, color: c }}>
+        <span className="inline-flex px-1.5 py-0.5 rounded-md text-2xs font-bold uppercase tracking-eyebrow" style={{ background: `color-mix(in srgb, ${c} 15%, transparent)`, color: c }}>
           {severityLabels[f.severity]}
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)] truncate">
+        <span className="text-xs font-mono text-[var(--fg-subtle)] truncate">
           {f.category}/{f.rule}
         </span>
         {!compact && (
           <span
-            className="text-[9px] font-mono px-1 h-4 inline-flex items-center rounded-sm"
+            className="text-2xs font-mono px-1 h-4 inline-flex items-center rounded-sm"
             title="Where this rule comes from"
             style={{ background: `color-mix(in srgb, ${provenance.tone} 8%, transparent)`, color: provenance.tone, border: `1px solid color-mix(in srgb, ${provenance.tone} 25%, transparent)` }}
           >
             {provenance.source}
           </span>
         )}
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)] truncate" title={f.filePath}>
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)] truncate" title={f.filePath}>
           {trimMid(f.filePath, 36)}{f.line !== null ? `:${String(f.line)}` : ''}
         </span>
       </div>
-      <div className={`${compact ? 'text-[12px]' : 'text-[13px]'} font-bold leading-snug text-[var(--fg-strong)]`}>{f.title}</div>
-      <div className="mt-0.5 text-[12px] leading-snug text-[var(--fg-muted)]">{f.body}</div>
+      <div className={`${compact ? 'text-base' : 'text-md'} font-bold leading-snug text-[var(--fg-strong)]`}>{f.title}</div>
+      <div className="mt-0.5 text-base leading-snug text-[var(--fg-muted)]">{f.body}</div>
       {!compact && <FixPatchPreview finding={f} />}
       <div className="mt-2 flex items-center gap-2">
         {f.autoFixable ? (
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-6 px-2.5 rounded-md text-[11px] font-bold transition-colors"
+            className="inline-flex items-center gap-1 h-6 px-2.5 rounded-md text-sm font-bold transition-colors"
             style={{ background: 'var(--intent-info-bg)', color: 'var(--fg-link)' }}
           >
             <Wand2 className="w-2.5 h-2.5" />
             Auto-fix
           </button>
         ) : (
-          <span className="text-[11px] text-[var(--fg-subtle)]">{t('merge.needsManualReview')}</span>
+          <span className="text-sm text-[var(--fg-subtle)]">{t('merge.needsManualReview')}</span>
         )}
         {onVote && (
           <span className="ml-auto inline-flex items-center gap-1" role="group" aria-label="Was this finding useful?">
@@ -488,7 +488,7 @@ function FindingRow({
               onClick={() => { onVote('up'); }}
               aria-pressed={vote === 'up'}
               title="Useful — keep firing this rule"
-              className="inline-flex items-center justify-center w-6 h-6 rounded-md text-[12px] transition-colors"
+              className="inline-flex items-center justify-center w-6 h-6 rounded-md text-base transition-colors"
               style={{
                 background: vote === 'up' ? 'color-mix(in srgb, var(--intent-success-fg) 20%, transparent)' : 'var(--bg-hover)',
                 color: vote === 'up' ? 'var(--intent-success-fg)' : 'var(--fg-muted)',
@@ -502,7 +502,7 @@ function FindingRow({
               onClick={() => { onVote('down'); }}
               aria-pressed={vote === 'down'}
               title="False positive — suppress this pattern"
-              className="inline-flex items-center justify-center w-6 h-6 rounded-md text-[12px] transition-colors"
+              className="inline-flex items-center justify-center w-6 h-6 rounded-md text-base transition-colors"
               style={{
                 background: vote === 'down' ? 'color-mix(in srgb, var(--intent-danger-fg) 20%, transparent)' : 'var(--bg-hover)',
                 color: vote === 'down' ? 'var(--intent-danger-fg)' : 'var(--fg-muted)',
@@ -515,7 +515,7 @@ function FindingRow({
         )}
         <button
           type="button"
-          className={`${onVote ? '' : 'ml-auto'} inline-flex items-center gap-0.5 text-[11px] font-medium text-[var(--fg-link)] hover:underline`}
+          className={`${onVote ? '' : 'ml-auto'} inline-flex items-center gap-0.5 text-sm font-medium text-[var(--fg-link)] hover:underline`}
         >
           Jump to file
           <ArrowUpRight className="w-2.5 h-2.5" />

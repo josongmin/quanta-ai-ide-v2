@@ -27,10 +27,10 @@ export function InviteLinkPanel({
     >
       <div className="flex items-center gap-2">
         <Link2 className="w-3 h-3" style={{ color: 'var(--fg-muted)' }} />
-        <span className="text-[11px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>
           Or share an invite link
         </span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           · expires in 7 days · max 50 uses
         </span>
       </div>
@@ -38,7 +38,7 @@ export function InviteLinkPanel({
       {value.inviteLink ? (
         <div className="flex items-center gap-2">
           <code
-            className="flex-1 text-[11px] font-mono px-2.5 py-1.5 rounded truncate tabular-nums"
+            className="flex-1 text-sm font-mono px-2.5 py-1.5 rounded truncate tabular-nums"
             style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)', color: 'var(--fg-default)' }}
           >
             {value.inviteLink}
@@ -46,7 +46,7 @@ export function InviteLinkPanel({
           <button
             type="button"
             onClick={() => { void copy(); }}
-            className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-[11px] font-medium"
+            className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-sm font-medium"
             style={{
               background: 'var(--bg-canvas)',
               color: 'var(--fg-default)',
@@ -59,7 +59,7 @@ export function InviteLinkPanel({
           <button
             type="button"
             onClick={onGenerate}
-            className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-[11px] font-medium"
+            className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-sm font-medium"
             style={{ color: 'var(--fg-muted)' }}
           >
             <RotateCcw className="w-3 h-3" />
@@ -70,7 +70,7 @@ export function InviteLinkPanel({
         <button
           type="button"
           onClick={onGenerate}
-          className="self-start inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-[11px] font-medium"
+          className="self-start inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-sm font-medium"
           style={{
             background: 'var(--bg-canvas)',
             color: 'var(--fg-default)',

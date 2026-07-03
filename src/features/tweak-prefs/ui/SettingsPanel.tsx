@@ -58,7 +58,7 @@ function SettingsTrigger({ compact, onOpen }: { compact: boolean; onOpen: () => 
     <button
       type="button"
       onClick={onOpen}
-      className="w-full py-2.5 border rounded-xl text-[10px] font-black uppercase tracking-[0.18em] flex items-center justify-center gap-2 transition-colors hover-surface"
+      className="w-full py-2.5 border rounded-xl text-xs font-black uppercase tracking-eyebrow flex items-center justify-center gap-2 transition-colors hover-surface"
       style={{
         background: 'var(--bg-surface-muted, transparent)',
         borderColor: 'var(--border-muted)',

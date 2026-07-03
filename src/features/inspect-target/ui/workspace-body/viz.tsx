@@ -34,15 +34,15 @@ export function VerdictStrip({ verdict }: { verdict: Verdict }) {
         <span className="block w-2 h-2 rounded-full relative" style={{ background: palette.dot }} />
       </span>
       <div className="flex-1 min-w-0">
-        <div className="text-[11px] font-bold leading-tight" style={{ color: palette.fg }}>
+        <div className="text-sm font-bold leading-tight" style={{ color: palette.fg }}>
           {title}
         </div>
-        <div className="text-[9px] truncate" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="text-2xs truncate" style={{ color: 'var(--fg-subtle)' }}>
           {hint}
         </div>
       </div>
       <span
-        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: palette.fg, opacity: 0.75 }}
       >
         {tone === 'ok' ? t('verdict.ready') : tone === 'critical' ? t('verdict.block') : tone === 'warn' ? t('verdict.review') : t('verdict.info')}
@@ -61,13 +61,13 @@ export function TopOffenders({
       style={{ borderColor: 'var(--border-muted)' }}
     >
       <div
-        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {title}
       </div>
       {rows.map((r) => (
-        <div key={r.path} className="flex items-center justify-between gap-2 text-[10px]">
+        <div key={r.path} className="flex items-center justify-between gap-2 text-xs">
           <span className="truncate font-mono" style={{ color: 'var(--fg-muted)' }}>{r.path}</span>
           <span className="shrink-0 font-mono tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
             {r.meta}
@@ -95,7 +95,7 @@ export function SafetyHistogram({
   return (
     <div className="mt-2">
       <div
-        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1"
+        className="text-2xs font-black uppercase tracking-eyebrow mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {t('histogram.title')}
@@ -107,14 +107,14 @@ export function SafetyHistogram({
             <div key={i} className="flex-1 flex flex-col items-center justify-end gap-0.5"
                  title={`${labels[i]}: ${n} (${pct(n, total)}%)`}>
               <div className="w-full rounded-sm" style={{ height: `${Math.max(2, h)}%`, background: hueAt(i), opacity: n === 0 ? 0.15 : 0.85 }} />
-              <span className="text-[8px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-2xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                 {n}
               </span>
             </div>
           );
         })}
       </div>
-      <div className="flex items-center justify-between mt-0.5 text-[8px] uppercase tracking-[var(--track-eyebrow)]">
+      <div className="flex items-center justify-between mt-0.5 text-2xs uppercase tracking-eyebrow">
         <span style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}>{t('histogram.dontTouch')}</span>
         <span style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}>{t('histogram.safe')}</span>
       </div>
@@ -132,11 +132,11 @@ export function AgentCapacityLine({
   const { t } = useTranslation('inspect');
   return (
     <div
-      className="mt-2 px-2 py-2 rounded-md text-[10px] leading-relaxed"
+      className="mt-2 px-2 py-2 rounded-md text-xs leading-relaxed"
       style={{ background: 'var(--bg-surface-muted)' }}
     >
       <span
-        className="font-black uppercase tracking-[var(--track-eyebrow)] mr-2"
+        className="font-black uppercase tracking-eyebrow mr-2"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {t('agent.label')}
@@ -161,7 +161,7 @@ export function ChipBlock({
   return (
     <div className="mt-2.5">
       <div
-        className="text-[8px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1"
+        className="text-2xs font-black uppercase tracking-eyebrow mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}
@@ -179,7 +179,7 @@ export function ChipBlock({
           return (
             <span
               key={it.text}
-              className={`px-1.5 py-0.5 rounded-md text-[10px] ${it.mono ? 'font-mono' : 'font-bold'}`}
+              className={`px-1.5 py-0.5 rounded-md text-xs ${it.mono ? 'font-mono' : 'font-bold'}`}
               style={style}
             >
               {it.text}

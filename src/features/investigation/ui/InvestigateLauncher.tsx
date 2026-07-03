@@ -31,7 +31,7 @@ export default function InvestigateLauncher() {
             style={{ color: 'var(--intent-success-vivid)' }}
           />
           <span className="flex flex-col items-start leading-tight">
-            <span className="text-[11px] font-medium">Investigate</span>
+            <span className="text-sm font-medium">Investigate</span>
             <span
               style={{ fontSize: 9, color: 'var(--fg-subtle)' }}
               className="font-mono whitespace-nowrap"

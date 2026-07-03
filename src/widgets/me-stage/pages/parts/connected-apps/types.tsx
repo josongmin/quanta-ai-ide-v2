@@ -7,7 +7,7 @@ type MarkProps = { className?: string };
 const baseMark = (label: string) => function Mark({ className }: MarkProps) {
   return (
     <span
-      className={`rounded-sm inline-flex items-center justify-center text-[7px] font-black ${className ?? 'w-3.5 h-3.5'}`}
+      className={`rounded-sm inline-flex items-center justify-center text-2xs font-black ${className ?? 'w-3.5 h-3.5'}`}
       style={{ background: 'var(--fg-default)', color: 'var(--bg-canvas)' }}
     >
       {label}

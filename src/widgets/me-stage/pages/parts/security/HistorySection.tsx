@@ -30,7 +30,7 @@ function HistoryRow({ event, top }: { event: LogEvent; top: boolean }) {
   const Icon = meta.icon;
   return (
     <div
-      className="grid grid-cols-[16px_1fr_140px_120px] items-center gap-3 px-2 py-2.5 text-[11px]"
+      className="grid grid-cols-[16px_1fr_140px_120px] items-center gap-3 px-2 py-2.5 text-sm"
       style={{ borderTop: top ? 'none' : '1px solid var(--border-muted)' }}
     >
       <Icon className="w-3.5 h-3.5" style={{ color: meta.fg }} />

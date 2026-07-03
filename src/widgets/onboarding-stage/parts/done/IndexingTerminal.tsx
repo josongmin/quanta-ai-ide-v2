@@ -38,14 +38,14 @@ export function IndexingTerminal({ repo }: { repo: string }) {
         <span className="w-2 h-2 rounded-full" style={{ background: '#febc2e' }} />
         <span className="w-2 h-2 rounded-full" style={{ background: '#28c840' }} />
         <Terminal className="w-3 h-3 ml-2" style={{ color: 'rgba(255,255,255,0.6)' }} />
-        <span className="text-[10px] font-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>
+        <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>
           se-field · indexing
         </span>
       </div>
 
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-2.5 font-mono text-[10px] leading-tight scrollbar-hide"
+        className="flex-1 overflow-y-auto p-2.5 font-mono text-xs leading-tight scrollbar-hide"
       >
         {LOG_LINES.slice(0, lineIndex).map((l, i) => (
           <LogLine

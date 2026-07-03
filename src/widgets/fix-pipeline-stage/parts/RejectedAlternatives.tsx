@@ -15,7 +15,7 @@ export function RejectedAlternatives({ rejected, t }: Props) {
     return (
       <GlassCard className="rounded-lg p-4">
         <SectionHeader title={t('rejected.header')} />
-        <p className="text-[11px] mt-1" style={{ color: 'var(--fg-subtle)' }}>
+        <p className="text-sm mt-1" style={{ color: 'var(--fg-subtle)' }}>
           {t('rejected.empty')}
         </p>
       </GlassCard>
@@ -34,11 +34,11 @@ export function RejectedAlternatives({ rejected, t }: Props) {
               border: '1px solid var(--border-muted)',
             }}
           >
-            <div className="text-[11px] font-semibold" style={{ color: 'var(--fg-default)' }}>
+            <div className="text-sm font-semibold" style={{ color: 'var(--fg-default)' }}>
               {c.title}
             </div>
             {c.rejectedReason !== undefined && (
-              <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+              <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
                 {c.rejectedReason}
               </div>
             )}

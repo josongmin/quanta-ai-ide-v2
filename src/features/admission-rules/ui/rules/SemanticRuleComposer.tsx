@@ -135,12 +135,12 @@ export function SemanticRuleComposer({
       >
         <Sparkles className="w-3 h-3" style={{ color: 'var(--fg-strong)' }} />
         <h3
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Author with natural language
         </h3>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           describe the rule, see the compiled signal
         </span>
       </header>
@@ -148,7 +148,7 @@ export function SemanticRuleComposer({
       <div className="p-4 flex flex-col gap-3">
         <label className="flex flex-col gap-1.5">
           <span
-            className="text-[10px] uppercase tracking-[0.14em] font-medium"
+            className="text-xs uppercase tracking-eyebrow font-medium"
             style={{ color: 'var(--fg-subtle)' }}
           >
             Prompt
@@ -158,7 +158,7 @@ export function SemanticRuleComposer({
             onChange={(e) => { setPrompt(e.target.value); }}
             rows={2}
             placeholder='e.g. "warn if cyclomatic complexity exceeds 30"  ·  "block hardcoded API keys"  ·  "block SQL injection from request to db"'
-            className="w-full text-[12px] px-2 py-1.5 rounded outline-none resize-none"
+            className="w-full text-base px-2 py-1.5 rounded outline-none resize-none"
             style={{
               border: '1px solid var(--border-default)',
               background: 'var(--bg-canvas)',
@@ -182,13 +182,13 @@ export function SemanticRuleComposer({
               }}
             >
               <span
-                className="text-[10px] uppercase tracking-[0.14em] font-medium"
+                className="text-xs uppercase tracking-eyebrow font-medium"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 Compiled signal
               </span>
               <span
-                className="text-[10px] font-mono ml-auto"
+                className="text-xs font-mono ml-auto"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 confidence {(compiled.confidence * 100).toFixed(0)}%
@@ -196,11 +196,11 @@ export function SemanticRuleComposer({
             </div>
             <div className="px-3 py-2 flex flex-col gap-1.5">
               <div className="flex items-baseline gap-2 flex-wrap">
-                <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {compiled.proposedName}
                 </span>
                 <span
-                  className="text-[9px] uppercase tracking-[0.14em] font-mono"
+                  className="text-2xs uppercase tracking-eyebrow font-mono"
                   style={{
                     color: compiled.proposedSeverity === 'block'
                       ? 'var(--intent-danger-fg)'
@@ -213,13 +213,13 @@ export function SemanticRuleComposer({
                 </span>
               </div>
               <code
-                className="text-[10px] font-mono"
+                className="text-xs font-mono"
                 style={{ color: 'var(--fg-muted)' }}
               >
                 {summariseSignal(compiled.signal)}
               </code>
               <p
-                className="text-[10px] leading-snug mt-1"
+                className="text-xs leading-snug mt-1"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {compiled.rationale}
@@ -233,7 +233,7 @@ export function SemanticRuleComposer({
             type="button"
             onClick={() => { setPrompt(''); }}
             disabled={!prompt}
-            className="h-7 px-3 rounded-md text-[11px]"
+            className="h-7 px-3 rounded-md text-sm"
             style={{
               border: '1px solid var(--border-default)',
               color: 'var(--fg-muted)',
@@ -252,7 +252,7 @@ export function SemanticRuleComposer({
                 : compiled.confidence < 0.5 ? 'Compiler confidence too low — refine the prompt'
                   : 'Add to the workspace as a new rule'
             }
-            className="h-7 px-3 rounded-md text-[11px] font-medium inline-flex items-center gap-1.5"
+            className="h-7 px-3 rounded-md text-sm font-medium inline-flex items-center gap-1.5"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',

@@ -50,7 +50,7 @@ export function Hero({
         {/* Headline */}
         <div className="min-w-0 flex-1">
           <div
-            className="text-[10px] font-semibold uppercase tracking-[0.18em]"
+            className="text-xs font-semibold uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             Admission decision · PR #{seed}
@@ -58,13 +58,13 @@ export function Hero({
           <div className="mt-1 flex items-baseline gap-3">
             <span
               key={outcome}
-              className="admv2-num-flip text-[28px] font-bold uppercase tracking-tight leading-none"
+              className="admv2-num-flip text-4xl font-bold uppercase tracking-tight leading-none"
               style={{ color: accent }}
             >
               {outcome}
             </span>
             <span
-              className="text-[12px]"
+              className="text-base"
               style={{ color: t.textMuted }}
             >
               {diff.changes.length} files · {diff.affected.length} ripple · {decision.ruleResults.length} rules
@@ -83,7 +83,7 @@ export function Hero({
         <div className="shrink-0 flex items-center gap-2">
           <button type="button"
             onClick={onRegenerate}
-            className="flex items-center gap-1.5 h-8 px-3 rounded-md text-[11px] font-medium transition-colors"
+            className="flex items-center gap-1.5 h-8 px-3 rounded-md text-sm font-medium transition-colors"
             style={{
               background: 'transparent',
               border: `1px solid ${t.border}`,
@@ -96,7 +96,7 @@ export function Hero({
             Resample
           </button>
           <button type="button"
-            className="flex items-center gap-1.5 h-8 px-3 rounded-md text-[11px] font-medium transition-colors"
+            className="flex items-center gap-1.5 h-8 px-3 rounded-md text-sm font-medium transition-colors"
             style={{
               background: t.textHi,
               color: t.page,

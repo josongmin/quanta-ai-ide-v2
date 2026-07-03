@@ -54,7 +54,7 @@ export function EffectSizeBar({
         {t('effect.title', { defaultValue: 'Effect size · Cohen’s d' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {metricLabel} ·
         n<sub>before</sub>={before.length} ·
@@ -63,13 +63,13 @@ export function EffectSizeBar({
 
       <div className="flex items-baseline gap-2 mt-3">
         <span
-          className="text-[28px] font-black tabular-nums leading-none"
+          className="text-4xl font-black tabular-nums leading-none"
           style={{ color: dimAccent }}
         >
           {displayD >= 0 ? '+' : ''}{displayD.toFixed(2)}
         </span>
         <span
-          className="text-[10px] font-black uppercase tracking-[0.18em]"
+          className="text-xs font-black uppercase tracking-eyebrow"
           style={{ color: dimAccent }}
         >
           {bandLabel}
@@ -107,7 +107,7 @@ export function EffectSizeBar({
         />
       </div>
 
-      <div className="flex items-center justify-between mt-1 text-[8.5px] font-mono"
+      <div className="flex items-center justify-between mt-1 text-2xs font-mono"
            style={{ color: v.textFaint }}>
         <span>−2σ</span>
         <span>0</span>

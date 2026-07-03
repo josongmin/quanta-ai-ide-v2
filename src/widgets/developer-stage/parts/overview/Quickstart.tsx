@@ -23,7 +23,7 @@ export function Quickstart() {
               key={q.lang}
               type="button"
               onClick={() => { setTab(i); }}
-              className="h-9 px-4 text-[11px] font-medium transition-colors"
+              className="h-9 px-4 text-sm font-medium transition-colors"
               style={{
                 color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)',
                 background: active ? 'var(--bg-surface-muted)' : 'transparent',
@@ -50,7 +50,7 @@ export function Quickstart() {
                 void navigator.clipboard.writeText(current.code);
               }
             }}
-            className="h-7 px-2.5 rounded text-[10px] uppercase tracking-[0.14em] font-semibold transition-colors"
+            className="h-7 px-2.5 rounded text-xs uppercase tracking-eyebrow font-semibold transition-colors"
             style={{
               color: 'var(--fg-muted)',
               background: 'transparent',
@@ -63,7 +63,7 @@ export function Quickstart() {
         </div>
       </div>
       <pre
-        className="text-[12px] leading-relaxed p-5 m-0 overflow-x-auto font-mono"
+        className="text-base leading-relaxed p-5 m-0 overflow-x-auto font-mono"
         style={{
           color: 'var(--fg-strong)',
           background: 'var(--bg-surface-muted)',

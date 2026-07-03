@@ -103,10 +103,10 @@ export default function RetentionPolicyPage() {
               max={3650}
               value={defaultDays}
               onChange={(e) => { setDefaultDays(Number(e.target.value) || 0); }}
-              className="w-20 h-full bg-transparent outline-none px-3 text-[12px] tabular-nums text-right"
+              className="w-20 h-full bg-transparent outline-none px-3 text-base tabular-nums text-right"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="px-3 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>days</span>
+            <span className="px-3 text-sm" style={{ color: 'var(--fg-subtle)' }}>days</span>
           </div>
         </Row>
       </Section>
@@ -114,7 +114,7 @@ export default function RetentionPolicyPage() {
       <Section title="Per-class overrides" hint="Tighten retention for sensitive classes; loosen for compliance-required ones.">
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
-            className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               gridTemplateColumns: '1fr 160px 80px',
               gap: 12,
@@ -132,7 +132,7 @@ export default function RetentionPolicyPage() {
             return (
               <div
                 key={c.id}
-                className="grid items-center px-3 h-14 text-[12px] [&:not(:first-child)]:border-t"
+                className="grid items-center px-3 h-14 text-base [&:not(:first-child)]:border-t"
                 style={{
                   gridTemplateColumns: '1fr 160px 80px',
                   gap: 12,
@@ -141,7 +141,7 @@ export default function RetentionPolicyPage() {
               >
                 <div className="flex flex-col gap-0.5 min-w-0">
                   <span className="font-medium" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
-                  <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{c.hint}</span>
+                  <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{c.hint}</span>
                 </div>
                 <select
                   value={inh ? 'inherit' : String(c.retention)}
@@ -150,7 +150,7 @@ export default function RetentionPolicyPage() {
                     if (v === 'inherit') setRet(c.id, 'inherit');
                     else setRet(c.id, Number(v) as RetentionDays);
                   }}
-                  className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+                  className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
                   style={{
                     background: 'var(--bg-surface-muted)',
                     border: '1px solid var(--border-default)',
@@ -163,7 +163,7 @@ export default function RetentionPolicyPage() {
                   ))}
                 </select>
                 <span
-                  className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded w-fit ml-auto"
+                  className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded w-fit ml-auto"
                   style={{
                     background: inh ? 'var(--bg-surface-muted)' : 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
                     color: inh ? 'var(--fg-subtle)' : 'var(--fg-accent)',
@@ -184,7 +184,7 @@ export default function RetentionPolicyPage() {
       >
         {holds.length === 0 ? (
           <div
-            className="text-center py-8 text-[12px] rounded-md"
+            className="text-center py-8 text-base rounded-md"
             style={{ color: 'var(--fg-subtle)', border: '1px dashed var(--border-muted)' }}
           >
             No active holds.
@@ -200,11 +200,11 @@ export default function RetentionPolicyPage() {
                 <Gavel className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
                 <div className="flex-1 flex flex-col gap-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                    <span className="font-mono text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                       {h.ref}
                     </span>
                     <span
-                      className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+                      className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                       style={{
                         background: 'var(--intent-warn-bg)',
                         color: 'var(--intent-warn-fg)',
@@ -214,8 +214,8 @@ export default function RetentionPolicyPage() {
                       active
                     </span>
                   </div>
-                  <span className="text-[11px]" style={{ color: 'var(--fg-default)' }}>{h.scope}</span>
-                  <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-sm" style={{ color: 'var(--fg-default)' }}>{h.scope}</span>
+                  <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
                     Created by {h.creator} · {h.createdAt}
                   </span>
                 </div>
@@ -257,11 +257,11 @@ export default function RetentionPolicyPage() {
         }}
       />
 
-      <p className="text-[11px] mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Archive className="w-3 h-3 mt-0.5 shrink-0" />
         Deletions are soft for 7 days, then cryptographically shredded. Archive writes happen the night before deletion.
       </p>
-      <p className="text-[11px] mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Clock className="w-3 h-3 mt-0.5 shrink-0" />
         Retention changes apply to new data. Existing records inherit their original policy until next compaction.
       </p>
@@ -293,7 +293,7 @@ function ConfirmRelease({
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Release hold {hold.ref}?
             </span>
           </div>
@@ -302,7 +302,7 @@ function ConfirmRelease({
           </button>
         </div>
         <div className="p-5 flex flex-col gap-2">
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
             Records covered by this hold will become eligible for retention-driven deletion at the next compaction window.
             This action is logged and notifies legal-ops.
           </p>

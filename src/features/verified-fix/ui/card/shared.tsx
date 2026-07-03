@@ -4,7 +4,7 @@ import { SUCCESS, DANGER, WARN, INFO } from './tokens';
 
 export function PaneHeader({ label }: { label: string }) {
   return (
-    <div className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] mb-2">
+    <div className="text-2xs font-black uppercase tracking-eyebrow text-[var(--fg-subtle)] mb-2">
       {label}
     </div>
   );
@@ -14,7 +14,7 @@ export function SubHeader({ label, tone }: { label: string; tone: 'ok' | 'warn' 
   const color = tone === 'ok' ? SUCCESS : WARN;
   return (
     <div
-      className="text-[8px] font-mono uppercase tracking-[var(--track-eyebrow)] mb-1.5 flex items-center gap-1"
+      className="text-2xs font-mono uppercase tracking-eyebrow mb-1.5 flex items-center gap-1"
       style={{ color }}
     >
       <span className="w-1 h-1 rounded-full" style={{ background: color }} />
@@ -26,8 +26,8 @@ export function SubHeader({ label, tone }: { label: string; tone: 'ok' | 'warn' 
 export function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-[8px] font-mono uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] mb-0.5">{label}</div>
-      <div className="text-[10px] text-[var(--fg-default)] leading-snug">{value}</div>
+      <div className="text-2xs font-mono uppercase tracking-eyebrow text-[var(--fg-subtle)] mb-0.5">{label}</div>
+      <div className="text-xs text-[var(--fg-default)] leading-snug">{value}</div>
     </div>
   );
 }

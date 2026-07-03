@@ -104,7 +104,7 @@ export default function OverlayPopover() {
               onClick={toggleTrigger}
               aria-expanded={open}
               aria-haspopup="dialog"
-              className={`group flex items-center gap-1.5 pl-2 pr-1.5 h-8 rounded-md text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors ${
+              className={`group flex items-center gap-1.5 pl-2 pr-1.5 h-8 rounded-md text-xs font-black uppercase tracking-eyebrow transition-colors ${
                 open ? 'bg-[var(--bg-elevated)]' : 'hover:bg-[var(--bg-hover)]'
               } ${
                 active ? 'text-[var(--fg-strong)]' : 'text-[var(--fg-muted)]'
@@ -117,7 +117,7 @@ export default function OverlayPopover() {
               <span>{t('panel.title')}</span>
               {active && (
                 <span
-                  className="inline-flex items-center justify-center min-w-[15px] h-[15px] px-[3px] rounded-full text-[9px] font-bold tabular-nums leading-none"
+                  className="inline-flex items-center justify-center min-w-[15px] h-[15px] px-[3px] rounded-full text-2xs font-bold tabular-nums leading-none"
                   style={{
                     background: ACCENT_TINT_BG,
                     color: ACCENT_TEXT,
@@ -139,10 +139,10 @@ export default function OverlayPopover() {
         {/* Header — panel title only. The reset/active summary lives in the
             footer next to the chip strip so they read as one unit. */}
         <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-default)] text-[var(--fg-subtle)]">
-          <span className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]">
+          <span className="text-2xs font-black uppercase tracking-eyebrow">
             {t('panel.heading')}
           </span>
-          <span className="text-[9px] font-mono normal-case tracking-normal text-[var(--fg-subtle)]">
+          <span className="text-2xs font-mono normal-case tracking-normal text-[var(--fg-subtle)]">
             esc
           </span>
         </div>
@@ -168,7 +168,7 @@ export default function OverlayPopover() {
         {/* Footer — what's currently painting on the dot field. Reset all
             sits at the right so the user's eye finds the active state
             and the way to clear it together. */}
-        <div className="flex items-center gap-2 px-3 py-1.5 border-t border-[var(--border-default)] text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <div className="flex items-center gap-2 px-3 py-1.5 border-t border-[var(--border-default)] text-2xs font-black uppercase tracking-eyebrow text-[var(--fg-muted)]">
           <span className="shrink-0">{t('panel.painting')}</span>
           {activeCount === 0 && previewCount === 0 ? (
             <span className="text-[var(--fg-subtle)]">
@@ -189,7 +189,7 @@ export default function OverlayPopover() {
             <button
               type="button"
               onClick={resetAll}
-              className="ml-auto shrink-0 flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] px-1.5 py-0.5 rounded transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]"
+              className="ml-auto shrink-0 flex items-center gap-1 text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)]"
             >
               <X className="w-3 h-3" />
               {t('panel.resetAll')}

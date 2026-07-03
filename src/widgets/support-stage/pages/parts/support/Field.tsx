@@ -4,7 +4,7 @@ export function Field({
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{label}</span>

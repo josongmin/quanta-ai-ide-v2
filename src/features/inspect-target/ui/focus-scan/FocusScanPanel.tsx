@@ -66,9 +66,9 @@ export default function FocusScanPanel({
       <div className="-mx-2 px-5 pt-4 pb-0">
         <div className="flex items-start gap-2 min-w-0">
           <div className="min-w-0 flex-1">
-            <h2 className="font-black text-[13px] truncate tracking-tight">{file.name}</h2>
+            <h2 className="font-black text-md truncate tracking-tight">{file.name}</h2>
             <p
-              className="text-[10px] font-mono truncate mt-0.5"
+              className="text-xs font-mono truncate mt-0.5"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {file.folderPath}/{file.name}
@@ -108,7 +108,7 @@ export default function FocusScanPanel({
                 <button type="button"
                   key={id}
                   onClick={() => { setTab(id); }}
-                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] whitespace-nowrap transition-colors"
+                  className="relative flex items-center gap-1.5 py-2.5 text-xs font-black uppercase tracking-eyebrow whitespace-nowrap transition-colors"
                   style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                 >
                   <Icon className="w-3 h-3 shrink-0" />
@@ -132,7 +132,7 @@ export default function FocusScanPanel({
         </GlassCard>
       )}
 
-      <div className="text-[11px]">
+      <div className="text-sm">
         {tab === 'profile' && <ProfileTab file={file} />}
         {tab === 'graph'   && <GraphTab   file={file} reverseDeps={reverseDeps} />}
         {tab === 'risk'    && <RiskTab    file={file} />}
@@ -141,7 +141,7 @@ export default function FocusScanPanel({
 
       <GlassCard
         tone="inner"
-        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
+        className="px-5 py-2 text-2xs font-mono uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {t('footer.focusScan', { state: file.metrics.indexState })}

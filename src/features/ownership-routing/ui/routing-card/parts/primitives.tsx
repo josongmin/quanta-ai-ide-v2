@@ -6,7 +6,7 @@ export { PersonAvatar };
 function StaleDot({ days }: { days: number }) {
   return (
     <span
-      className="inline-flex items-center gap-1 text-[9px] font-mono uppercase tracking-[0.12em]"
+      className="inline-flex items-center gap-1 text-2xs font-mono uppercase tracking-[0.12em]"
       style={{ color: 'var(--fg-subtle)' }}
       title={`stale · ${days}d since active`}
     >
@@ -33,7 +33,7 @@ export function PersonChip({
       <div className="flex items-center gap-2 min-w-0">
         <PersonAvatar person={undefined} size={size} />
         <span
-          className="text-[11px] truncate"
+          className="text-sm truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
           Unknown
@@ -46,7 +46,7 @@ export function PersonChip({
       <PersonAvatar person={person} size={size} />
       <div className="min-w-0 flex-1">
         <div
-          className={`text-[12px] leading-tight truncate ${
+          className={`text-base leading-tight truncate ${
             emphasis ? 'font-bold' : 'font-semibold'
           }`}
           style={{
@@ -56,7 +56,7 @@ export function PersonChip({
           {person.name}
         </div>
         <div
-          className="text-[10px] font-mono leading-tight truncate"
+          className="text-xs font-mono leading-tight truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {person.team}

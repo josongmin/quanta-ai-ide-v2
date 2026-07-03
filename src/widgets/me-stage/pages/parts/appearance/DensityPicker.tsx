@@ -42,7 +42,7 @@ export function DensityPicker({ value, onChange }: { value: Density; onChange: (
               ))}
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[12px] font-semibold"
+              <span className="text-base font-semibold"
                 style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-default)' }}
               >
                 {o.label}

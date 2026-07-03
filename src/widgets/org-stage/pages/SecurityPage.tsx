@@ -86,7 +86,7 @@ export default function SecurityPage() {
             value={form.mfaMethod}
             onChange={(e) => { set('mfaMethod', e.target.value as Form['mfaMethod']); }}
             disabled={!form.mfaRequired}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -122,7 +122,7 @@ export default function SecurityPage() {
           <select
             value={form.sessionInactivityMinutes}
             onChange={(e) => { set('sessionInactivityMinutes', Number(e.target.value)); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 120 }}
           >
             <option value={15}>15 min</option>
@@ -151,7 +151,7 @@ export default function SecurityPage() {
           <div className="flex flex-col gap-2">
             <ul className="flex flex-col rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
               {form.allowlist.length === 0 ? (
-                <li className="px-3 py-3 text-[11px] text-center" style={{ color: 'var(--fg-subtle)' }}>
+                <li className="px-3 py-3 text-sm text-center" style={{ color: 'var(--fg-subtle)' }}>
                   No CIDRs yet. Add one to start enforcing.
                 </li>
               ) : form.allowlist.map((c) => (
@@ -161,7 +161,7 @@ export default function SecurityPage() {
                   style={{ borderColor: 'var(--border-muted)' }}
                 >
                   <Globe className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
-                  <span className="font-mono text-[12px] flex-1" style={{ color: 'var(--fg-strong)' }}>{c}</span>
+                  <span className="font-mono text-base flex-1" style={{ color: 'var(--fg-strong)' }}>{c}</span>
                   <button
                     type="button"
                     onClick={() => { removeCidr(c); }}
@@ -180,7 +180,7 @@ export default function SecurityPage() {
                 onChange={(e) => { setNewCidr(e.target.value); setCidrError(null); }}
                 onKeyDown={(e) => { if (e.key === 'Enter') addCidr(); }}
                 placeholder="10.0.0.0/8"
-                className="flex-1 h-8 px-2.5 rounded-md text-[12px] font-mono outline-none"
+                className="flex-1 h-8 px-2.5 rounded-md text-base font-mono outline-none"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: `1px solid ${cidrError ? 'var(--intent-danger-fg)' : 'var(--border-default)'}`,
@@ -190,15 +190,15 @@ export default function SecurityPage() {
               <Button leading={<Plus className="w-3 h-3" />} onClick={addCidr}>Add CIDR</Button>
             </div>
             {cidrError && (
-              <span className="text-[11px]" style={{ color: 'var(--intent-danger-fg)' }}>{cidrError}</span>
+              <span className="text-sm" style={{ color: 'var(--intent-danger-fg)' }}>{cidrError}</span>
             )}
-            <p className="text-[11px] flex items-start gap-1.5" style={{ color: 'var(--intent-warn-fg)' }}>
+            <p className="text-sm flex items-start gap-1.5" style={{ color: 'var(--intent-warn-fg)' }}>
               <ShieldAlert className="w-3 h-3 mt-0.5 shrink-0" />
               Make sure your current IP is included before saving — otherwise you&apos;ll lock yourself out.
             </p>
           </div>
         ) : (
-          <p className="text-[11px] py-2" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-sm py-2" style={{ color: 'var(--fg-muted)' }}>
             IP allowlisting is off. Members can sign in from any network.
           </p>
         )}
@@ -209,7 +209,7 @@ export default function SecurityPage() {
           <select
             value={form.oauthInstall}
             onChange={(e) => { set('oauthInstall', e.target.value as Form['oauthInstall']); }}
-            className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+            className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 140 }}
           >
             <option value="admin-only">Admins only</option>
@@ -226,15 +226,15 @@ export default function SecurityPage() {
         onDiscard={() => { setForm(INITIAL); }}
       />
 
-      <p className="text-[11px] mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Clock className="w-3 h-3 mt-0.5 shrink-0" />
         Changes take effect immediately for new sign-ins. Existing sessions live until next refresh.
       </p>
-      <p className="text-[11px] mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Smartphone className="w-3 h-3 mt-0.5 shrink-0" />
         Members are notified by email when MFA, SSO-only, or passkey requirements change.
       </p>
-      <p className="text-[11px] mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <KeyRound className="w-3 h-3 mt-0.5 shrink-0" />
         Recovery codes are reissued whenever the MFA method changes.
       </p>
@@ -249,7 +249,7 @@ function SessionDurationSelect({
     <select
       value={value}
       onChange={(e) => { onChange(Number(e.target.value)); }}
-      className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+      className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
       style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 140 }}
     >
       <option value={8}>8 hours</option>

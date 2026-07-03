@@ -18,7 +18,7 @@ export default function IntegrationDetailPage() {
     <PublicShell width="wide">
       <Link
         to={'/integrations' as never}
-        className="inline-flex items-center gap-1.5 text-[11px] font-medium mb-6 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm font-medium mb-6 transition-colors"
         style={{ color: 'var(--fg-muted)' }}
       >
         <ArrowLeft className="w-3.5 h-3.5" />
@@ -38,12 +38,12 @@ export default function IntegrationDetailPage() {
         </div>
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <h1 className="text-[28px] font-semibold tracking-tight leading-none" style={{ color: 'var(--fg-strong)' }}>
+            <h1 className="text-4xl font-semibold tracking-tight leading-none" style={{ color: 'var(--fg-strong)' }}>
               {integration.name}
             </h1>
             {integration.verified && (
               <span
-                className="inline-flex items-center gap-1 px-2.5 h-6 rounded-full text-[10px] font-semibold"
+                className="inline-flex items-center gap-1 px-2.5 h-6 rounded-full text-xs font-semibold"
                 style={{
                   color: 'var(--fg-accent)',
                   background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
@@ -54,10 +54,10 @@ export default function IntegrationDetailPage() {
               </span>
             )}
           </div>
-          <p className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base" style={{ color: 'var(--fg-muted)' }}>
             By <span className="font-medium">{integration.vendor}</span> · {integration.category}
           </p>
-          <div className="flex items-center gap-4 mt-1 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="flex items-center gap-4 mt-1 text-sm" style={{ color: 'var(--fg-subtle)' }}>
             <span className="inline-flex items-center gap-1">
               <Star className="w-3.5 h-3.5" />
               <span className="tabular-nums font-medium" style={{ color: 'var(--fg-default)' }}>
@@ -78,7 +78,7 @@ export default function IntegrationDetailPage() {
         <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 h-10 px-5 rounded-md text-[12px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 h-10 px-5 rounded-md text-base font-semibold transition-colors"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             <Download className="w-3.5 h-3.5" />
@@ -86,7 +86,7 @@ export default function IntegrationDetailPage() {
           </button>
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-10 px-3 rounded-md text-[11px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1 h-10 px-3 rounded-md text-sm font-semibold transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -103,13 +103,13 @@ export default function IntegrationDetailPage() {
         {/* Main column */}
         <div className="col-span-2 flex flex-col gap-10">
           <section>
-            <h2 className="text-[14px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
+            <h2 className="text-lg font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
               Overview
             </h2>
-            <p className="text-[13.5px] leading-relaxed mb-3" style={{ color: 'var(--fg-default)' }}>
+            <p className="text-md leading-relaxed mb-3" style={{ color: 'var(--fg-default)' }}>
               {integration.blurb}
             </p>
-            <p className="text-[13.5px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-md leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
               This integration is maintained by {integration.vendor}. It connects {integration.name} to your se.field
               workspace using OAuth, exchanges scoped tokens, and listens for the events you opt in to. Uninstalling
               revokes the token immediately — see the audit log for every action it takes.
@@ -117,7 +117,7 @@ export default function IntegrationDetailPage() {
           </section>
 
           <section>
-            <h2 className="text-[14px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
+            <h2 className="text-lg font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
               What you can do
             </h2>
             <ul className="flex flex-col gap-2">
@@ -127,7 +127,7 @@ export default function IntegrationDetailPage() {
                 'Slash commands for triaging the latest agent runs',
                 'Per-team routing rules driven by CODEOWNERS metadata',
               ].map((line) => (
-                <li key={line} className="flex items-start gap-2 text-[12px]" style={{ color: 'var(--fg-default)' }}>
+                <li key={line} className="flex items-start gap-2 text-base" style={{ color: 'var(--fg-default)' }}>
                   <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: 'var(--intent-success-fg)' }} />
                   <span>{line}</span>
                 </li>
@@ -136,7 +136,7 @@ export default function IntegrationDetailPage() {
           </section>
 
           <section>
-            <h2 className="text-[14px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
+            <h2 className="text-lg font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
               Screenshots
             </h2>
             <div className="grid grid-cols-2 gap-3">
@@ -157,7 +157,7 @@ export default function IntegrationDetailPage() {
           </section>
 
           <section>
-            <h2 className="text-[14px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
+            <h2 className="text-lg font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
               Permissions requested
             </h2>
             <div
@@ -176,8 +176,8 @@ export default function IntegrationDetailPage() {
                   }}
                 >
                   <Lock className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
-                  <code className="text-[12px] font-mono" style={{ color: 'var(--fg-strong)' }}>{scope}</code>
-                  <span className="ml-auto text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+                  <code className="text-base font-mono" style={{ color: 'var(--fg-strong)' }}>{scope}</code>
+                  <span className="ml-auto text-sm" style={{ color: 'var(--fg-subtle)' }}>
                     {scope.endsWith(':write') ? 'Send updates back to your workspace' : 'Read events for routing'}
                   </span>
                 </div>
@@ -211,11 +211,11 @@ export default function IntegrationDetailPage() {
           >
             <div className="flex items-center gap-2 mb-1.5">
               <ShieldCheck className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
-              <span className="text-[12px] font-semibold" style={{ color: 'var(--intent-success-fg)' }}>
+              <span className="text-base font-semibold" style={{ color: 'var(--intent-success-fg)' }}>
                 Security reviewed
               </span>
             </div>
-            <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
               Verified integrations are reviewed for permissions hygiene, secret handling, and event payload exposure.
             </p>
           </div>
@@ -235,7 +235,7 @@ function SideCard({ title, children }: { title: string; children: React.ReactNod
       }}
     >
       <div
-        className="px-4 h-8 flex items-center text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="px-4 h-8 flex items-center text-xs uppercase tracking-eyebrow font-semibold"
         style={{ color: 'var(--fg-subtle)', borderBottom: '1px solid var(--border-muted)' }}
       >
         {title}
@@ -247,7 +247,7 @@ function SideCard({ title, children }: { title: string; children: React.ReactNod
 
 function SideRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between px-3 h-8 text-[11px]">
+    <div className="flex items-center justify-between px-3 h-8 text-sm">
       <span style={{ color: 'var(--fg-subtle)' }}>{label}</span>
       <span className="font-medium capitalize" style={{ color: 'var(--fg-default)' }}>{value}</span>
     </div>
@@ -258,7 +258,7 @@ function SideLink({ icon: Icon, label }: { icon: React.ComponentType<{ className
   return (
     <button
       type="button"
-      className="flex items-center gap-2 px-3 h-8 rounded text-[11px] font-medium transition-colors w-full bg-transparent border-0 text-left cursor-pointer"
+      className="flex items-center gap-2 px-3 h-8 rounded text-sm font-medium transition-colors w-full bg-transparent border-0 text-left cursor-pointer"
       style={{ color: 'var(--fg-default)' }}
       onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
       onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}

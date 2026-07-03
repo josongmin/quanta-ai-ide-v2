@@ -59,14 +59,14 @@ function PlanCell({
     >
       <div className="flex items-center justify-between">
         <span
-          className="text-[12px] font-semibold"
+          className="text-base font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           {plan.name}
         </span>
         {current && (
           <span
-            className="text-[9px] font-semibold uppercase tracking-[0.14em]"
+            className="text-2xs font-semibold uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-accent)' }}
           >
             Current
@@ -83,16 +83,16 @@ function PlanCell({
           <>
             <div className="flex items-baseline gap-1">
               <span
-                className="text-[24px] font-semibold tracking-tight tabular-nums leading-none"
+                className="text-3xl font-semibold tracking-tight tabular-nums leading-none"
                 style={{ color: 'var(--fg-strong)' }}
               >
                 ${price}
               </span>
-              <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 /seat/mo
               </span>
             </div>
-            <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
               {cycle === 'annual' ? 'Billed annually' : 'Billed monthly'}
             </span>
           </>
@@ -103,7 +103,7 @@ function PlanCell({
         {plan.highlights.map((h) => (
           <li
             key={h}
-            className="flex items-start gap-1.5 text-[11px] leading-snug"
+            className="flex items-start gap-1.5 text-sm leading-snug"
             style={{ color: 'var(--fg-default)' }}
           >
             <Check className="w-3 h-3 shrink-0 mt-[2px]" style={{ color: 'var(--fg-muted)' }} />
@@ -116,7 +116,7 @@ function PlanCell({
         type="button"
         onClick={onSelect}
         disabled={current}
-        className="h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+        className="h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
         style={{
           background: current ? 'transparent' : 'var(--bg-surface-muted)',
           color: current ? 'var(--fg-subtle)' : 'var(--fg-strong)',

@@ -61,14 +61,14 @@ export function CodeLensCard({
         }}
       >
         <code
-          className="text-[11px] font-mono truncate min-w-0 flex-1"
+          className="text-sm font-mono truncate min-w-0 flex-1"
           style={{ color: 'var(--fg-strong)' }}
         >
           {filePath}
           <span style={{ color: 'var(--fg-subtle)' }}>:{snippet.highlightLine}</span>
         </code>
         <span
-          className="text-[9px] uppercase tracking-[0.14em] font-mono shrink-0"
+          className="text-2xs uppercase tracking-eyebrow font-mono shrink-0"
           style={{ color: evidence.fg }}
           title={t(`gate.lens.${confidence}Tip`)}
         >
@@ -100,7 +100,7 @@ export function CodeLensCard({
 
       {/* Code body */}
       <pre
-        className="text-[11px] font-mono leading-[1.55] py-2 overflow-x-auto"
+        className="text-sm font-mono leading-[1.55] py-2 overflow-x-auto"
         style={{ color: 'var(--fg-strong)' }}
       >
         {snippet.lines.map((line, i) => {
@@ -143,7 +143,7 @@ export function CodeLensCard({
       {/* Footer — analyzer evidence text. Italic, fg-muted; the snippet
           above is the *what*, this is the *why-the-engine-thought-so*. */}
       <div
-        className="px-3 py-2 text-[11px] leading-snug"
+        className="px-3 py-2 text-sm leading-snug"
         style={{
           background: 'var(--bg-surface-muted)',
           borderTop: '1px solid var(--border-default)',

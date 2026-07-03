@@ -44,15 +44,15 @@ export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
         }}
       >
         <div className="flex flex-col gap-1.5">
-          <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             Save your recovery codes
           </h3>
-          <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
             Each code can only be used once. Keep them somewhere outside this app — a password manager, printed copy, or encrypted note.
           </p>
         </div>
         <div
-          className="grid grid-cols-2 gap-x-6 gap-y-1.5 p-3 rounded-md font-mono text-[12px] tabular-nums"
+          className="grid grid-cols-2 gap-x-6 gap-y-1.5 p-3 rounded-md font-mono text-base tabular-nums"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -61,7 +61,7 @@ export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
         >
           {codes.map((c, i) => (
             <div key={c} className="flex items-center gap-2">
-              <span className="text-[9px]" style={{ color: 'var(--fg-subtle)' }}>{String(i + 1).padStart(2, '0')}</span>
+              <span className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>{String(i + 1).padStart(2, '0')}</span>
               <span>{c}</span>
             </div>
           ))}

@@ -140,22 +140,22 @@ export default function FixPipelinePage() {
             className="flex items-center gap-2 h-8 px-2.5 rounded-md"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
           >
-            <span className="text-[12px]" style={{ color: 'var(--fg-subtle)' }}>$</span>
+            <span className="text-base" style={{ color: 'var(--fg-subtle)' }}>$</span>
             <input
               type="number"
               min={0}
               value={form.monthlyBudgetUsd}
               onChange={(e) => { set('monthlyBudgetUsd', Number(e.target.value) || 0); }}
-              className="w-24 bg-transparent outline-none text-[12px] tabular-nums"
+              className="w-24 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>USD / month</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>USD / month</span>
           </div>
         </Row>
 
         {overBudgetWarn && (
           <div
-            className="flex items-start gap-2 px-3 py-2 rounded-md text-[11px]"
+            className="flex items-start gap-2 px-3 py-2 rounded-md text-sm"
             style={{
               background: 'var(--intent-warn-bg)',
               color: 'var(--intent-warn-fg)',
@@ -188,10 +188,10 @@ export default function FixPipelinePage() {
               min={0}
               value={form.perRunTokenCapK}
               onChange={(e) => { set('perRunTokenCapK', Number(e.target.value) || 0); }}
-              className="w-20 bg-transparent outline-none text-[12px] tabular-nums"
+              className="w-20 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>k tokens / run</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>k tokens / run</span>
           </div>
         </Row>
 
@@ -205,10 +205,10 @@ export default function FixPipelinePage() {
               min={1}
               value={form.perRunWallMinutes}
               onChange={(e) => { set('perRunWallMinutes', Number(e.target.value) || 1); }}
-              className="w-16 bg-transparent outline-none text-[12px] tabular-nums"
+              className="w-16 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>minutes</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>minutes</span>
           </div>
         </Row>
       </Section>
@@ -223,14 +223,14 @@ export default function FixPipelinePage() {
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}
         >
           {form.branches.length === 0 && (
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
               No patterns. Fix-pipeline is effectively disabled.
             </span>
           )}
           {form.branches.map((b) => (
             <span
               key={b}
-              className="inline-flex items-center gap-1.5 h-7 pl-2 pr-1 rounded-md text-[11px] font-mono"
+              className="inline-flex items-center gap-1.5 h-7 pl-2 pr-1 rounded-md text-sm font-mono"
               style={{
                 background: 'var(--bg-canvas)',
                 color: 'var(--fg-default)',
@@ -257,7 +257,7 @@ export default function FixPipelinePage() {
             onChange={(e) => { setBranchDraft(e.target.value); }}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addBranch(); } }}
             placeholder="e.g. release/*"
-            className="flex-1 h-8 rounded-md px-2.5 text-[12px] outline-none font-mono"
+            className="flex-1 h-8 rounded-md px-2.5 text-base outline-none font-mono"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -294,10 +294,10 @@ export default function FixPipelinePage() {
                   className="w-3.5 h-3.5 mt-0.5 cursor-pointer"
                 />
                 <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                  <span className="font-mono text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+                  <span className="font-mono text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
                     {o.label}
                   </span>
-                  <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
                     {o.sub}
                   </span>
                 </div>
@@ -318,7 +318,7 @@ export default function FixPipelinePage() {
         <Row label="On failure" sub="Posted with the failing obligation, last error, and a link to the run.">
           <div className="flex items-center gap-2">
             <ChannelInput value={form.failureChannel} onChange={(v) => { set('failureChannel', v); }} />
-            <label className="inline-flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+            <label className="inline-flex items-center gap-1.5 text-sm" style={{ color: 'var(--fg-muted)' }}>
               <Toggle checked={form.failurePageOnCall} onChange={(v) => { set('failurePageOnCall', v); }} />
               Page on-call
             </label>
@@ -346,7 +346,7 @@ function ChannelInput({ value, onChange }: { value: string; onChange: (v: string
       value={value}
       onChange={(e) => { onChange(e.target.value); }}
       placeholder="#channel or person@org"
-      className="h-8 rounded-md px-2.5 text-[12px] outline-none font-mono"
+      className="h-8 rounded-md px-2.5 text-base outline-none font-mono"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-default)',

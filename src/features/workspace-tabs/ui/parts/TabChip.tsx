@@ -217,7 +217,7 @@ export const TabChip = forwardRef<HTMLDivElement, TabChipProps>(function TabChip
         {showLabel ? (
           <span
             className={`min-w-0 flex-1 truncate ${
-              density === 'comfortable' ? 'text-[12px]' : 'text-[11px]'
+              density === 'comfortable' ? 'text-base' : 'text-sm'
             }`}
             style={{
               fontWeight: active ? 650 : 500,

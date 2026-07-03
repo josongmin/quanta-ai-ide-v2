@@ -10,17 +10,17 @@ export function SecurityCta() {
       }}
     >
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-[18px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h3 className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           Want to talk to our security team?
         </h3>
-        <p className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base" style={{ color: 'var(--fg-muted)' }}>
           We respond within one business day. Vendor questionnaires, architecture diagrams, customer reference calls.
         </p>
       </div>
       <div className="flex items-center gap-2">
         <Link
           to={'/security' as never}
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-colors"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -31,7 +31,7 @@ export function SecurityCta() {
         </Link>
         <Link
           to={'/contact-sales' as never}
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-colors"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           Talk to security

@@ -133,13 +133,13 @@ export default function AdmissionPage() {
                     ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
                     : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />}
                   <CatIcon className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
-                  <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
                     {c.label}
                   </span>
-                  <span className="ml-auto flex items-center gap-2 text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="ml-auto flex items-center gap-2 text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                     {overriddenInCat > 0 && (
                       <span
-                        className="px-1.5 py-0.5 rounded text-[9px] uppercase tracking-[0.14em] font-semibold"
+                        className="px-1.5 py-0.5 rounded text-2xs uppercase tracking-eyebrow font-semibold"
                         style={{
                           background: 'var(--intent-warn-bg)',
                           color: 'var(--intent-warn-fg)',
@@ -166,7 +166,7 @@ export default function AdmissionPage() {
         </div>
       </Section>
 
-      <p className="text-[11px] mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ScrollText className="w-3 h-3 mt-0.5 shrink-0" />
         Org owners can lock a rule, which removes the override option for this workspace.
       </p>
@@ -195,15 +195,15 @@ function RuleRow({
     >
       <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
       <div className="flex flex-col gap-1 min-w-0 flex-1">
-        <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>{rule.title}</span>
-        <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{rule.description}</span>
-        <div className="flex items-center gap-2 text-[10px] mt-0.5">
+        <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>{rule.title}</span>
+        <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>{rule.description}</span>
+        <div className="flex items-center gap-2 text-xs mt-0.5">
           <InheritanceBadge orgDefault={rule.orgDefault} overridden={overridden} />
           {overridden && (
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex items-center gap-1 h-5 px-1.5 rounded text-[10px] transition-colors"
+              className="inline-flex items-center gap-1 h-5 px-1.5 rounded text-xs transition-colors"
               style={{ color: 'var(--fg-muted)' }}
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -225,12 +225,12 @@ function InheritanceBadge({
   const label = orgDefault.toUpperCase();
   return (
     <span
-      className="inline-flex items-center gap-1.5 text-[10px]"
+      className="inline-flex items-center gap-1.5 text-xs"
       style={{ color: 'var(--fg-subtle)' }}
     >
       <span>Org default:</span>
       <span
-        className="px-1 py-0.5 rounded text-[9px] uppercase tracking-[0.14em] font-semibold"
+        className="px-1 py-0.5 rounded text-2xs uppercase tracking-eyebrow font-semibold"
         style={{
           background: 'var(--bg-surface-muted)',
           color: 'var(--fg-default)',
@@ -241,7 +241,7 @@ function InheritanceBadge({
       </span>
       {overridden ? (
         <span
-          className="px-1 py-0.5 rounded text-[9px] uppercase tracking-[0.14em] font-semibold"
+          className="px-1 py-0.5 rounded text-2xs uppercase tracking-eyebrow font-semibold"
           style={{
             background: 'var(--intent-warn-bg)',
             color: 'var(--intent-warn-fg)',
@@ -252,7 +252,7 @@ function InheritanceBadge({
         </span>
       ) : (
         <span
-          className="px-1 py-0.5 rounded text-[9px] uppercase tracking-[0.14em] font-semibold"
+          className="px-1 py-0.5 rounded text-2xs uppercase tracking-eyebrow font-semibold"
           style={{
             background: 'var(--intent-success-bg)',
             color: 'var(--intent-success-fg)',
@@ -283,7 +283,7 @@ function SeverityPicker({
             key={o.id}
             type="button"
             onClick={() => { onChange(o.id); }}
-            className="h-7 px-2.5 text-[10px] uppercase tracking-[0.14em] font-semibold transition-colors"
+            className="h-7 px-2.5 text-xs uppercase tracking-eyebrow font-semibold transition-colors"
             style={{
               background: active ? o.bg : 'transparent',
               color: active ? o.fg : 'var(--fg-muted)',
@@ -302,14 +302,14 @@ function Stat({
 }: { label: string; value: string; sub?: string; tone?: 'default' | 'warn' }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{label}</span>
       <span
-        className="text-[18px] font-semibold tabular-nums"
+        className="text-2xl font-semibold tabular-nums"
         style={{ color: tone === 'warn' ? 'var(--intent-warn-fg)' : 'var(--fg-strong)' }}
       >
         {value}
       </span>
-      {sub && <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{sub}</span>}
+      {sub && <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{sub}</span>}
     </div>
   );
 }

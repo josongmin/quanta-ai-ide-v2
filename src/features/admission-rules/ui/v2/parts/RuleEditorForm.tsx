@@ -68,7 +68,7 @@ export function RuleEditorForm({
               <button type="button"
                 key={k}
                 onClick={() => { updateDraft({ signal: defaultSignalFor(k) }); }}
-                className="flex-1 px-2 py-1 text-[10px] font-mono transition-colors"
+                className="flex-1 px-2 py-1 text-xs font-mono transition-colors"
                 style={{
                   background: active ? t.hoverActive : 'transparent',
                   color: active ? t.textHi : t.textSubtle,
@@ -93,7 +93,7 @@ export function RuleEditorForm({
           />
         </div>
         <div
-          className="mt-2 text-[10px] font-mono"
+          className="mt-2 text-xs font-mono"
           style={{ color: t.textSubtle }}
         >
           uses {usesHint(draft.signal)}

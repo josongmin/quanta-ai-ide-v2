@@ -38,10 +38,10 @@ export default function ProfilePage() {
           <div className="flex items-center gap-4">
             <AvatarBig data={draft} setDraft={setDraft} />
             <div className="flex flex-col gap-1.5">
-              <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+              <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
                 {draft.avatarUrl ? 'Custom photo' : 'Generated avatar'}
               </span>
-              <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 {draft.avatarUrl
                   ? 'Will be cropped to a circle in mentions and member lists.'
                   : 'Initials are derived from your name. Upload a photo to override.'}

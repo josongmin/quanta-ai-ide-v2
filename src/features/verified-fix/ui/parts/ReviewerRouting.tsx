@@ -23,18 +23,18 @@ export function ReviewerRouting({ caseId }: { caseId: string }) {
     >
       <div className="flex items-center justify-between mb-2.5">
         <span
-          className="text-[10px] font-black uppercase tracking-[0.18em]"
+          className="text-xs font-black uppercase tracking-eyebrow"
           style={{ color: t.textMuted }}
         >
           {tr('reviewer.title')}
         </span>
-        <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+        <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
           {tr('reviewer.subtitle')}
         </span>
       </div>
 
       {reviewers.length === 0 ? (
-        <div className="text-[11px]" style={{ color: t.textFaint }}>
+        <div className="text-sm" style={{ color: t.textFaint }}>
           {tr('reviewer.empty')}
         </div>
       ) : (
@@ -73,14 +73,14 @@ function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; prima
             {reviewer.handle}
           </span>
           <span
-            className="text-2xs font-bold uppercase tracking-[0.14em] px-1 py-px rounded"
+            className="text-2xs font-bold uppercase tracking-eyebrow px-1 py-px rounded"
             style={{ background: t.badgeBg, color: t.textMuted }}
           >
             {tr(`reviewer.role.${reviewer.role}`)}
           </span>
           {primary && (
             <span
-              className="text-2xs font-bold uppercase tracking-[0.14em] px-1 py-px rounded ml-auto"
+              className="text-2xs font-bold uppercase tracking-eyebrow px-1 py-px rounded ml-auto"
               style={{ background: t.accent, color: 'var(--fg-on-accent)' }}
             >
               {tr('reviewer.suggest')}
@@ -92,10 +92,10 @@ function ReviewerRow({ reviewer, primary }: { reviewer: ReviewerCandidate; prima
         </div>
       </div>
       <div className="shrink-0 text-right">
-        <div className="text-[9px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
+        <div className="text-2xs font-bold uppercase tracking-eyebrow" style={{ color: t.textFaint }}>
           {tr('reviewer.match')}
         </div>
-        <div className="text-[12px] font-mono" style={{ color: t.textHi }}>
+        <div className="text-base font-mono" style={{ color: t.textHi }}>
           {matchPct}%
         </div>
         <div className="mt-1 flex items-center justify-end gap-1">

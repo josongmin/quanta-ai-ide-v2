@@ -33,7 +33,7 @@ me = client.me()`;
               key={t}
               type="button"
               onClick={() => { setTab(t); }}
-              className="h-6 px-2 rounded text-[10px] font-medium font-mono"
+              className="h-6 px-2 rounded text-xs font-medium font-mono"
               style={{
                 background: active ? 'var(--bg-canvas)' : 'transparent',
                 color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -45,12 +45,12 @@ me = client.me()`;
           );
         })}
         <span className="flex-1" />
-        <button type="button" className="text-[10px] inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>
+        <button type="button" className="text-xs inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>
           API docs <ExternalLink className="w-2.5 h-2.5" />
         </button>
       </div>
       <pre
-        className="p-3 text-[11px] font-mono overflow-x-auto"
+        className="p-3 text-sm font-mono overflow-x-auto"
         style={{ background: 'var(--bg-canvas)', color: 'var(--fg-default)' }}
       >
         <code>{sample}</code>

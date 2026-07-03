@@ -11,7 +11,7 @@ export function Field({ label, children, t }: { label: string; children: React.R
   return (
     <div>
       <div
-        className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.18em]"
+        className="mb-1.5 text-2xs font-bold uppercase tracking-eyebrow"
         style={{ color: tt.textSubtle }}
       >
         {label}
@@ -34,7 +34,7 @@ export function DrawerInput({
 }) {
   const tv = useV2();
   const tt = t ?? tv;
-  const cls = `w-full px-3 py-2 rounded-md text-[11px] outline-none transition-colors ${mono ? 'font-mono' : ''}`;
+  const cls = `w-full px-3 py-2 rounded-md text-sm outline-none transition-colors ${mono ? 'font-mono' : ''}`;
   const style: React.CSSProperties = {
     background: tt.inset,
     border: `1px solid ${tt.border}`,
@@ -77,7 +77,7 @@ export function DrawerSelect<T extends string>({
   const tt = t ?? tv;
   return (
     <select
-      className="w-full px-3 py-2 rounded-md text-[11px] font-mono outline-none"
+      className="w-full px-3 py-2 rounded-md text-sm font-mono outline-none"
       style={{
         background: tt.inset,
         border: `1px solid ${tt.border}`,

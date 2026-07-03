@@ -33,7 +33,7 @@ export default function FilterBar({ onOpenFolder, onOpenFile, activeKey }: Filte
             all / collapse all). */}
         <GlassCard className="px-3 py-2.5" style={{ boxShadow: 'none' }}>
           <div className="flex items-center justify-between gap-2 mb-1.5 px-0.5">
-            <h3 className="text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-muted)]">
+            <h3 className="text-xs font-black uppercase tracking-eyebrow text-[color:var(--fg-muted)]">
               {t('section.files')}
             </h3>
             <TreeToolbar

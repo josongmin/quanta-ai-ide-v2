@@ -21,7 +21,7 @@ export function PlannerLauncher({ onRun, running }: Props) {
       disabled={disabled}
       onClick={disabled ? undefined : onRun}
       style={style}
-      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] font-medium"
+      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium"
       title={running ? 'Reflection loop running…' : 'Run a multi-hop reflection over the gathered evidence'}
     >
       <GitBranch size={12} aria-hidden="true" />

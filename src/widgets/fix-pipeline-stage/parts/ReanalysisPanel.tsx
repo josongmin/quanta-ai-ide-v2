@@ -47,19 +47,19 @@ function DeltaCell({ label, before, after }: { label: string; before: number; af
   return (
     <div className="rounded-md px-2 py-1.5" style={{ background: 'var(--bg-surface-muted)' }}>
       <div
-        className="text-[9px] font-black uppercase tracking-[0.18em]"
+        className="text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}
       </div>
       <div
-        className="text-[12px] font-mono mt-0.5 flex items-baseline gap-1"
+        className="text-base font-mono mt-0.5 flex items-baseline gap-1"
         style={{ color: 'var(--fg-strong)' }}
       >
         <span style={{ color: 'var(--fg-muted)' }}>{before.toString()}</span>
         <span>→</span>
         <span>{after.toString()}</span>
-        <span className="ml-auto text-[10px]" style={{ color: 'var(--fg-muted)' }}>{arrow}</span>
+        <span className="ml-auto text-xs" style={{ color: 'var(--fg-muted)' }}>{arrow}</span>
       </div>
     </div>
   );

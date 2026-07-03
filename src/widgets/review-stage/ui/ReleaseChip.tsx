@@ -27,7 +27,7 @@ export default function ReleaseChip({ readiness }: { readiness: ReleaseReadiness
       }}
     >
       <GitCommitVertical className="w-3 h-3" style={{ color }} strokeWidth={2.25} />
-      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color }}>
+      <span className="text-xs font-bold uppercase tracking-eyebrow" style={{ color }}>
         release-bound
       </span>
     </span>

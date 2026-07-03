@@ -67,13 +67,13 @@ export default function AddTabModal({ open, onClose }: Props) {
         {/* Header */}
         <div className="px-6 pt-6 pb-5">
           <div
-            className="text-[9px] font-semibold uppercase mb-2"
+            className="text-2xs font-semibold uppercase mb-2"
             style={{ color: 'var(--fg-subtle)', letterSpacing: '0.18em' }}
           >
             Software Intelligence Platform
           </div>
           <h2
-            className="text-[22px] leading-[1.15] font-semibold tracking-tight"
+            className="text-3xl leading-[1.15] font-semibold tracking-tight"
             style={{ color: 'var(--fg-default)' }}
           >
             Where would you like to{' '}
@@ -97,7 +97,7 @@ export default function AddTabModal({ open, onClose }: Props) {
           style={{ borderColor: 'var(--border-muted)' }}
         >
           <div
-            className="text-[9px] font-semibold uppercase pt-0.5 shrink-0 w-[88px]"
+            className="text-2xs font-semibold uppercase pt-0.5 shrink-0 w-[88px]"
             style={{ color: 'var(--fg-subtle)', letterSpacing: '0.18em' }}
           >
             More
@@ -110,7 +110,7 @@ export default function AddTabModal({ open, onClose }: Props) {
                   key={kind}
                   type="button"
                   onClick={() => { handlePick(kind); }}
-                  className="text-[11px] font-medium transition-colors hover:[color:var(--fg-default)]"
+                  className="text-sm font-medium transition-colors hover:[color:var(--fg-default)]"
                   style={{ color: 'var(--fg-muted)' }}
                 >
                   {def.label}
@@ -121,7 +121,7 @@ export default function AddTabModal({ open, onClose }: Props) {
           <button
             type="button"
             onClick={() => { handlePick('catalog'); }}
-            className="inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase px-2 py-1 rounded transition-colors hover:[background:var(--bg-hover)] shrink-0"
+            className="inline-flex items-center gap-1.5 text-2xs font-semibold uppercase px-2 py-1 rounded transition-colors hover:[background:var(--bg-hover)] shrink-0"
             style={{
               color: 'var(--fg-default)',
               border: '1px solid var(--border-default)',
@@ -138,7 +138,7 @@ export default function AddTabModal({ open, onClose }: Props) {
           style={{ borderColor: 'var(--border-muted)', background: 'var(--bg-surface-muted)' }}
         >
           <div
-            className="text-[9px] font-semibold uppercase"
+            className="text-2xs font-semibold uppercase"
             style={{ color: 'var(--fg-subtle)', letterSpacing: '0.18em' }}
           >
             Recent
@@ -155,7 +155,7 @@ export default function AddTabModal({ open, onClose }: Props) {
               value={query}
               onChange={(e) => { setQuery(e.target.value); }}
               placeholder="Search repositories"
-              className="flex-1 bg-transparent outline-none text-[11px] min-w-0"
+              className="flex-1 bg-transparent outline-none text-sm min-w-0"
               style={{ color: 'var(--fg-default)' }}
             />
           </div>
@@ -165,7 +165,7 @@ export default function AddTabModal({ open, onClose }: Props) {
         <div className="max-h-[44vh] overflow-y-auto">
           {filteredRepos.length === 0 ? (
             <div
-              className="py-8 text-center text-[11px]"
+              className="py-8 text-center text-sm"
               style={{ color: 'var(--fg-subtle)' }}
             >
               No repositories match “{query}”.

@@ -41,7 +41,7 @@ export function RepoConfig({
       <button
         type="button"
         onClick={onBack}
-        className="inline-flex items-center gap-1 text-[11px] self-start"
+        className="inline-flex items-center gap-1 text-sm self-start"
         style={{ color: 'var(--fg-muted)' }}
       >
         <ArrowLeft className="w-3 h-3" />
@@ -57,10 +57,10 @@ export function RepoConfig({
       >
         <GithubIcon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-strong)' }} />
         <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-          <span className="text-[12px] font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold tabular-nums" style={{ color: 'var(--fg-strong)' }}>
             {repo.fullName}
           </span>
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             {repo.description} · {repo.language} · {repo.size}
           </span>
         </div>
@@ -94,7 +94,7 @@ function BranchPicker({
 }: { repo: Repo; value: string; onChange: (v: string) => void }) {
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-[10px] uppercase tracking-[0.14em] font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
+      <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
         Default branch to track
       </legend>
       <div className="flex flex-wrap gap-1.5">
@@ -106,7 +106,7 @@ function BranchPicker({
               key={b}
               type="button"
               onClick={() => { onChange(b); }}
-              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
               style={{
                 background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
                 color: active ? 'var(--fg-strong)' : 'var(--fg-default)',
@@ -117,7 +117,7 @@ function BranchPicker({
               <span className="font-mono">{b}</span>
               {isDefault && (
                 <span
-                  className="text-[8px] uppercase tracking-[0.14em] font-semibold"
+                  className="text-2xs uppercase tracking-eyebrow font-semibold"
                   style={{ color: 'var(--fg-subtle)' }}
                 >
                   default
@@ -144,7 +144,7 @@ function MonorepoPaths({
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-[10px] uppercase tracking-[0.14em] font-medium pb-1 flex items-center justify-between"
+      <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1 flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}>
         <span>Sub-paths to index</span>
         <button
@@ -170,7 +170,7 @@ function MonorepoPaths({
               key={p}
               type="button"
               onClick={() => { toggle(p); }}
-              className="inline-flex items-center gap-1 h-6 pl-2 pr-1.5 rounded text-[11px] font-mono transition-colors"
+              className="inline-flex items-center gap-1 h-6 pl-2 pr-1.5 rounded text-sm font-mono transition-colors"
               style={{
                 background: active ? ACCENT_TINT : 'var(--bg-canvas)',
                 color: active ? 'var(--fg-strong)' : 'var(--fg-default)',
@@ -185,7 +185,7 @@ function MonorepoPaths({
           );
         })}
       </div>
-      <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
         Leave empty to index all sub-paths. Pick specific ones if you want to scope down for performance.
       </span>
     </fieldset>
@@ -216,7 +216,7 @@ function IndexingProgress({ pct, repo, branch }: { pct: number; repo: string; br
         border: `1px solid ${done ? 'var(--fg-accent)' : 'var(--border-default)'}`,
       }}
     >
-      <div className="flex items-center justify-between text-[11px]">
+      <div className="flex items-center justify-between text-sm">
         <div className="flex items-center gap-2">
           {done
             ? <Check className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
@@ -243,7 +243,7 @@ function IndexingProgress({ pct, repo, branch }: { pct: number; repo: string; br
       </div>
 
       {/* Per-stage tick row */}
-      <ol className="flex items-center justify-between text-[10px]">
+      <ol className="flex items-center justify-between text-xs">
         {stages.map((s) => {
           const isDone = pct >= s.end;
           const isActive = !isDone && pct >= s.start;
@@ -276,7 +276,7 @@ function IndexingProgress({ pct, repo, branch }: { pct: number; repo: string; br
       </ol>
 
       {!done && (
-        <div className="flex items-start gap-2 text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="flex items-start gap-2 text-xs" style={{ color: 'var(--fg-subtle)' }}>
           <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" />
           <span>You can continue setup — indexing keeps running in the background. We&apos;ll notify you when the dot field is ready.</span>
         </div>

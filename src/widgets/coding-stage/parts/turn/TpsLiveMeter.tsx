@@ -39,7 +39,7 @@ export function TpsLiveMeter({
 
   return (
     <span
-      className="flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono tabular-nums bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-default)]"
+      className="flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono tabular-nums bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-default)]"
       title={t('tps.tooltip')}
     >
       <Zap className="w-2.5 h-2.5 coding-tps-live" />

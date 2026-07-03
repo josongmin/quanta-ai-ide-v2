@@ -29,7 +29,7 @@ export function NextActions({ data }: DoneProps) {
   ];
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
         What to try first
       </span>
       <ul className="grid grid-cols-2 gap-2">
@@ -55,10 +55,10 @@ export function NextActions({ data }: DoneProps) {
                 <it.icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
               </span>
               <div className="flex flex-col gap-0.5 min-w-0">
-                <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {it.title}
                 </span>
-                <span className="text-[10px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+                <span className="text-xs leading-snug" style={{ color: 'var(--fg-muted)' }}>
                   {it.hint}
                 </span>
               </div>

@@ -63,11 +63,11 @@ export function RepoPicker({ value, onChange }: WorkspaceStepProps) {
           value={q}
           onChange={(e) => { setQ(e.target.value); }}
           placeholder="Search your repositories…"
-          className="flex-1 bg-transparent outline-none text-[12px]"
+          className="flex-1 bg-transparent outline-none text-base"
           style={{ color: 'var(--fg-strong)' }}
           autoFocus
         />
-        <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
           {filtered.length} / {REPOS.length}
         </span>
       </div>
@@ -84,7 +84,7 @@ export function RepoPicker({ value, onChange }: WorkspaceStepProps) {
           />
         ))}
         {pageRepos.length === 0 && (
-          <div className="text-center py-10 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="text-center py-10 text-sm" style={{ color: 'var(--fg-subtle)' }}>
             No repositories match &quot;{q}&quot;.
           </div>
         )}
@@ -106,7 +106,7 @@ function ConnectedAccountStrip({
 }) {
   return (
     <div
-      className="flex items-center gap-2.5 px-3 py-2 rounded-md text-[11px]"
+      className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm"
       style={{
         background: ACCENT_TINT,
         border: '1px solid var(--fg-accent)',
@@ -121,7 +121,7 @@ function ConnectedAccountStrip({
       <button
         type="button"
         onClick={onDisconnect}
-        className="text-[10px]"
+        className="text-xs"
         style={{ color: 'var(--fg-link)' }}
       >
         Disconnect
@@ -147,13 +147,13 @@ function RepoRow({
       <GithubIcon className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
       <div className="flex flex-col flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-medium tabular-nums truncate" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-medium tabular-nums truncate" style={{ color: 'var(--fg-strong)' }}>
             {repo.fullName}
           </span>
           <Vis kind={repo.visibility} />
           {repo.monorepo && (
             <span
-              className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+              className="inline-flex items-center gap-1 text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
               style={{
                 background: ACCENT_TINT,
                 color: 'var(--fg-accent)',
@@ -165,11 +165,11 @@ function RepoRow({
             </span>
           )}
         </div>
-        <span className="text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>
           {repo.description}
         </span>
       </div>
-      <div className="flex items-center gap-3 text-[10px] tabular-nums shrink-0" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="flex items-center gap-3 text-xs tabular-nums shrink-0" style={{ color: 'var(--fg-subtle)' }}>
         <span>{repo.language}</span>
         <span>{repo.size}</span>
         <span>{repo.updatedRel}</span>
@@ -188,7 +188,7 @@ function Pagination({
   page, totalPages, onChange,
 }: { page: number; totalPages: number; onChange: (p: number) => void }) {
   return (
-    <div className="flex items-center justify-between text-[11px]">
+    <div className="flex items-center justify-between text-sm">
       <span style={{ color: 'var(--fg-subtle)' }}>
         Page <span className="tabular-nums" style={{ color: 'var(--fg-default)' }}>{page + 1}</span> of {totalPages}
       </span>
@@ -197,7 +197,7 @@ function Pagination({
           type="button"
           onClick={() => { onChange(Math.max(0, page - 1)); }}
           disabled={page === 0}
-          className="h-7 px-2 rounded-md text-[11px] font-medium transition-colors"
+          className="h-7 px-2 rounded-md text-sm font-medium transition-colors"
           style={{
             background: 'var(--bg-surface-muted)',
             color: page === 0 ? 'var(--fg-subtle)' : 'var(--fg-default)',
@@ -211,7 +211,7 @@ function Pagination({
           type="button"
           onClick={() => { onChange(Math.min(totalPages - 1, page + 1)); }}
           disabled={page === totalPages - 1}
-          className="h-7 px-2 rounded-md text-[11px] font-medium transition-colors"
+          className="h-7 px-2 rounded-md text-sm font-medium transition-colors"
           style={{
             background: 'var(--bg-surface-muted)',
             color: page === totalPages - 1 ? 'var(--fg-subtle)' : 'var(--fg-default)',
@@ -229,7 +229,7 @@ function Pagination({
 function Vis({ kind }: { kind: 'private' | 'public' }) {
   return (
     <span
-      className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+      className="inline-flex items-center gap-1 text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',

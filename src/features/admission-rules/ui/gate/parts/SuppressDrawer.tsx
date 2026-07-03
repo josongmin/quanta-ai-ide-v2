@@ -42,7 +42,7 @@ export function SuppressDrawer({
   return (
     <ModalShell title={t('gate.suppress.title', { path: target.filePath })} onClose={onClose}>
       <div className="p-4 flex flex-col gap-3">
-        <p className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base" style={{ color: 'var(--fg-muted)' }}>
           <Trans
             i18nKey="gate.suppress.intro"
             ns="admission"
@@ -62,7 +62,7 @@ export function SuppressDrawer({
             onChange={(e) => { setReason(e.target.value); }}
             rows={2}
             placeholder={t('gate.suppress.reasonPlaceholder')}
-            className="w-full text-[12px] px-2 py-1.5 rounded outline-none resize-none"
+            className="w-full text-base px-2 py-1.5 rounded outline-none resize-none"
             style={{
               border: '1px solid var(--border-default)',
               background: 'var(--bg-canvas)',
@@ -77,7 +77,7 @@ export function SuppressDrawer({
                 key={opt.key}
                 type="button"
                 onClick={() => { setExpiryIdx(i); }}
-                className="h-7 px-2.5 rounded-md text-[11px] transition-colors"
+                className="h-7 px-2.5 rounded-md text-sm transition-colors"
                 style={{
                   border: '1px solid var(--border-default)',
                   background: i === expiryIdx ? 'var(--bg-active)' : 'transparent',
@@ -94,7 +94,7 @@ export function SuppressDrawer({
           <button
             type="button"
             onClick={onClose}
-            className="h-7 px-3 rounded-md text-[11px]"
+            className="h-7 px-3 rounded-md text-sm"
             style={{
               border: '1px solid var(--border-default)',
               color: 'var(--fg-muted)',
@@ -107,7 +107,7 @@ export function SuppressDrawer({
             type="button"
             onClick={submit}
             disabled={!reason.trim()}
-            className="h-7 px-3 rounded-md text-[11px] font-medium"
+            className="h-7 px-3 rounded-md text-sm font-medium"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',

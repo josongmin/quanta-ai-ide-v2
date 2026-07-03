@@ -15,14 +15,14 @@ export function FreshnessBanner({ freshness, t }: Props) {
   const tone = freshness.stale ? STALE : FRESH;
   return (
     <div
-      className="px-3 py-1.5 text-[11px] flex items-center justify-between"
+      className="px-3 py-1.5 text-sm flex items-center justify-between"
       style={{
         background: tone.bg,
         color: tone.fg,
         borderBottom: `1px solid ${tone.border}`,
       }}
     >
-      <span className="font-bold uppercase tracking-[0.18em]">
+      <span className="font-bold uppercase tracking-eyebrow">
         {freshness.stale ? t('freshness.stale') : t('freshness.fresh')}
       </span>
       <span className="font-mono">

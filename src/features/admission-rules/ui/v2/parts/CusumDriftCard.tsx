@@ -81,7 +81,7 @@ export function CusumDriftCard({ daily, lowerIsBetter = false, metricLabel }: Pr
         {t('cusum.title', { defaultValue: 'CUSUM drift detector' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {t('cusum.sub', {
           defaultValue: 'Tabular CUSUM · K = 0.5σ · H = 4σ',
@@ -90,14 +90,14 @@ export function CusumDriftCard({ daily, lowerIsBetter = false, metricLabel }: Pr
 
       <div className="flex items-baseline gap-2 mt-3">
         <span
-          className="text-[24px] font-black tabular-nums leading-none"
+          className="text-3xl font-black tabular-nums leading-none"
           style={{ color: accent }}
         >
           {result.changePoint == null
             ? t('cusum.stable', { defaultValue: 'stable' })
             : `Δ@${result.changePoint}`}
         </span>
-        <span className="text-[9px] font-mono"
+        <span className="text-2xs font-mono"
               style={{ color: v.textFaint }}>
           {result.changePoint == null
             ? t('cusum.noAlarm', { defaultValue: 'no alarm' })
@@ -108,7 +108,7 @@ export function CusumDriftCard({ daily, lowerIsBetter = false, metricLabel }: Pr
       </div>
 
       {metricLabel && (
-        <div className="text-[9px] font-mono mt-0.5"
+        <div className="text-2xs font-mono mt-0.5"
              style={{ color: v.textFaint }}>
           {metricLabel}
         </div>
@@ -166,7 +166,7 @@ export function CusumDriftCard({ daily, lowerIsBetter = false, metricLabel }: Pr
               textAnchor="end">−H</text>
       </svg>
 
-      <div className="mt-1 flex items-center gap-3 text-[9px] font-mono"
+      <div className="mt-1 flex items-center gap-3 text-2xs font-mono"
            style={{ color: v.textFaint }}>
         <span className="inline-flex items-center gap-1">
           <span className="inline-block w-2 h-px"

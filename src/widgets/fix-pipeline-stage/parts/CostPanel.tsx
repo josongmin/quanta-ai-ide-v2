@@ -28,7 +28,7 @@ export function CostPanel({ cost, candidateCost, t }: Props) {
 
       {candidateCost && (
         <div
-          className="mt-2 rounded-md px-2 py-1.5 text-[11px] flex items-center justify-between"
+          className="mt-2 rounded-md px-2 py-1.5 text-sm flex items-center justify-between"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -47,10 +47,10 @@ export function CostPanel({ cost, candidateCost, t }: Props) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-md px-2 py-1.5" style={{ background: 'var(--bg-surface-muted)' }}>
-      <div className="text-[9px] font-black uppercase tracking-[0.18em]" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="text-2xs font-black uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </div>
-      <div className="text-[12px] font-mono mt-0.5" style={{ color: 'var(--fg-strong)' }}>
+      <div className="text-base font-mono mt-0.5" style={{ color: 'var(--fg-strong)' }}>
         {value}
       </div>
     </div>

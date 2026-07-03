@@ -105,7 +105,7 @@ export function TimelineScrubber({
   return (
     <div className={`flex flex-col gap-1 px-3 py-1.5 border-t ${border} ${bg}`}>
       <div className="flex items-center gap-2">
-        <span className={`shrink-0 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+        <span className={`shrink-0 text-2xs font-bold uppercase tracking-eyebrow ${faint}`}>
           {t('scrubber.label')}
         </span>
 
@@ -147,7 +147,7 @@ export function TimelineScrubber({
           </div>
         </div>
 
-        <span className={`shrink-0 text-[10px] font-mono tabular-nums ${muted}`}>
+        <span className={`shrink-0 text-xs font-mono tabular-nums ${muted}`}>
           {isLive
             ? t('scrubber.live')
             : t('scrubber.previewingTurn', { n: headSafe + 1, total })}
@@ -157,7 +157,7 @@ export function TimelineScrubber({
           <button
             type="button"
             onClick={() => { onScrub(null); }}
-            className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
+            className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
             title={t('scrubber.back')}
           >
             <ArrowLeft className="w-2.5 h-2.5" />
@@ -165,7 +165,7 @@ export function TimelineScrubber({
           </button>
         )}
 
-        <span className={`shrink-0 text-2xs font-mono uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+        <span className={`shrink-0 text-2xs font-mono uppercase tracking-eyebrow ${faint}`}>
           {t('scrubber.kbHint')}
         </span>
       </div>
@@ -175,20 +175,20 @@ export function TimelineScrubber({
           className="flex items-center gap-2 px-2 py-1 rounded-md bg-[color:var(--bg-surface-muted)]"
         >
           {inverse.risk === 'safe' ? (
-            <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            <span className="inline-flex items-center gap-1 text-2xs font-black uppercase tracking-eyebrow"
                   style={{ color: 'var(--intent-success-fg)' }}>
               <ShieldCheck className="w-2.5 h-2.5" />
               {t('scrubber.inverse.safe')}
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            <span className="inline-flex items-center gap-1 text-2xs font-black uppercase tracking-eyebrow"
                   style={{ color: 'var(--intent-warn-fg)' }}>
               <ShieldAlert className="w-2.5 h-2.5" />
               {t('scrubber.inverse.risky')}
             </span>
           )}
 
-          <span className={`text-[10px] truncate ${muted}`}>
+          <span className={`text-xs truncate ${muted}`}>
             {t('scrubber.inverse.summary', {
               n: targetMeta.index + 1,
               files: targetMeta.files.length,
@@ -197,7 +197,7 @@ export function TimelineScrubber({
 
           {inverse.risk === 'risky' && (
             <span
-              className="text-[9px] font-mono truncate"
+              className="text-2xs font-mono truncate"
               style={{ color: 'var(--intent-warn-fg)' }}
               title={inverse.overlappedFiles.join('\n')}
             >
@@ -217,7 +217,7 @@ export function TimelineScrubber({
                   background: 'color-mix(in srgb, var(--intent-warn-vivid) 15%, transparent)',
                   color: 'var(--intent-warn-fg)',
                 }}
-            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors"
+            className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold uppercase tracking-eyebrow transition-colors"
             title={t(
               inverse.risk === 'safe'
                 ? 'scrubber.inverse.applyTooltipSafe'
@@ -285,7 +285,7 @@ function Notch({ meta, isHead, past, total, maxCost, onClick, t }: NotchProps) {
 
       {showDiff && (
         <span
-          className="absolute left-1/2 -translate-x-1/2 -top-1 px-1 rounded-sm text-[8px] font-mono leading-none whitespace-nowrap"
+          className="absolute left-1/2 -translate-x-1/2 -top-1 px-1 rounded-sm text-2xs font-mono leading-none whitespace-nowrap"
           style={{
             background: 'var(--bg-elevated)',
             color: 'var(--fg-strong)',
@@ -303,7 +303,7 @@ function Notch({ meta, isHead, past, total, maxCost, onClick, t }: NotchProps) {
           relationship scannable from the timeline at a glance. */}
       {isInverse && (
         <span
-          className="absolute left-1/2 -translate-x-1/2 -bottom-2 text-[8px] leading-none"
+          className="absolute left-1/2 -translate-x-1/2 -bottom-2 text-2xs leading-none"
           style={{
             color: 'var(--intent-warn-fg)',
           }}
@@ -471,7 +471,7 @@ function HoverCard({
       className={`pointer-events-none absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full px-2 py-1.5 rounded-md text-left whitespace-normal ${cardBg} border z-10 shadow-lg`}
       style={{ width: 220 }}
     >
-      <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]" style={{ color: statusColor }}>
+      <span className="flex items-center gap-1 text-2xs font-black uppercase tracking-eyebrow" style={{ color: statusColor }}>
         {meta.role === 'user'
           ? <User className="w-2.5 h-2.5" />
           : <StatusIconFor status={meta.status} />}
@@ -499,7 +499,7 @@ function HoverCard({
             </span>
           ))}
           {meta.files.length > 3 && (
-            <span className={`block text-[9px] font-mono ${subText}`}>
+            <span className={`block text-2xs font-mono ${subText}`}>
               {t('scrubber.moreFiles', { n: meta.files.length - 3 })}
             </span>
           )}
@@ -507,7 +507,7 @@ function HoverCard({
       )}
 
       {meta.role === 'agent' && (
-        <span className={`mt-1 pt-1 border-t border-[color:var(--border-default)] flex items-center gap-1.5 text-[9px] font-mono ${subText}`}>
+        <span className={`mt-1 pt-1 border-t border-[color:var(--border-default)] flex items-center gap-1.5 text-2xs font-mono ${subText}`}>
           {meta.model && <span className="truncate">{meta.model}</span>}
           {elapsedLabel && (
             <>

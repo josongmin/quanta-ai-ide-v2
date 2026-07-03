@@ -413,7 +413,7 @@ export default function LeftQueue({
       </div>
 
       {/* ── 5. Footer hint ──────────────────────────────────────── */}
-      <div className="shrink-0 px-3 py-2 border-t border-[var(--border-default)] text-[10px] font-mono text-[var(--fg-subtle)] flex items-center justify-between">
+      <div className="shrink-0 px-3 py-2 border-t border-[var(--border-default)] text-xs font-mono text-[var(--fg-subtle)] flex items-center justify-between">
         <span>j/k · ⌘K · ?</span>
         <span>{totalShown} PR{totalShown === 1 ? '' : 's'}</span>
       </div>

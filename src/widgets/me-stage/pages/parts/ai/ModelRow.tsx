@@ -28,15 +28,15 @@ export function ModelRow({
         <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
       </span>
       <div className="flex flex-col flex-1 min-w-0">
-        <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {meta.label}
         </span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{meta.sub}</span>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{meta.sub}</span>
       </div>
       <select
         value={model.id}
         onChange={(e) => { onChange(e.target.value); }}
-        className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+        className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
         style={{
           background: 'var(--bg-canvas)',
           border: '1px solid var(--border-default)',

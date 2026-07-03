@@ -154,13 +154,13 @@ export default function ControlPalette({ onOpenHelp, onOpenTokens, onOpenActivit
             onChange={(e) => { setQuery(e.target.value); setCursor(0); }}
             onKeyDown={onKey}
             placeholder={t('palette.placeholder')}
-            className="flex-1 bg-transparent outline-none text-[12px] palette-input"
+            className="flex-1 bg-transparent outline-none text-base palette-input"
             style={{ color: skin.inputColor }}
             spellCheck={false}
             autoComplete="off"
           />
           <span
-            className="text-[9px] font-mono px-1.5 py-0.5 rounded shrink-0"
+            className="text-2xs font-mono px-1.5 py-0.5 rounded shrink-0"
             style={{
               background: skin.chipBg,
               color: skin.chipText,
@@ -175,7 +175,7 @@ export default function ControlPalette({ onOpenHelp, onOpenTokens, onOpenActivit
         <div ref={listRef} className="max-h-[50vh] overflow-y-auto py-1.5">
           {empty ? (
             <div
-              className="px-4 py-8 text-center text-[12px]"
+              className="px-4 py-8 text-center text-base"
               style={{ color: skin.emptyText }}
             >
               {t('palette.empty')}
@@ -198,7 +198,7 @@ export default function ControlPalette({ onOpenHelp, onOpenTokens, onOpenActivit
 
         {/* Footer — keyboard hints */}
         <div
-          className="flex items-center gap-3 px-3.5 h-8 text-[10px] font-mono"
+          className="flex items-center gap-3 px-3.5 h-8 text-xs font-mono"
           style={{
             borderTop: `1px solid ${skin.footerBorder}`,
             color: skin.footerText,

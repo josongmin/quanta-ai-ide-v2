@@ -42,7 +42,7 @@ export default function PrivacyPage() {
             className="rounded-md overflow-hidden mt-2"
             style={{ border: '1px solid var(--border-default)' }}
           >
-            <table className="w-full text-[12px]">
+            <table className="w-full text-base">
               <thead>
                 <tr style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)' }}>
                   <th className="text-left font-medium px-3 py-2 w-[28%]">Category</th>
@@ -122,9 +122,9 @@ export default function PrivacyPage() {
               >
                 <div className="flex items-center gap-2 mb-1" style={{ color: 'var(--fg-strong)' }}>
                   <r.icon size={14} style={{ color: 'var(--fg-accent)' }} />
-                  <span className="text-[12px] font-semibold">{r.label}</span>
+                  <span className="text-base font-semibold">{r.label}</span>
                 </div>
-                <p className="text-[12px] leading-5" style={{ color: 'var(--fg-muted)' }}>{r.desc}</p>
+                <p className="text-base leading-5" style={{ color: 'var(--fg-muted)' }}>{r.desc}</p>
               </li>
             ))}
           </ul>
@@ -182,7 +182,7 @@ function DocHeader() {
   return (
     <div className="mb-10">
       <div
-        className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-medium mb-4"
+        className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium mb-4"
         style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
       >
         <ShieldCheck size={12} />
@@ -191,7 +191,7 @@ function DocHeader() {
       <h1 className="text-[32px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
         Privacy Policy
       </h1>
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-5 text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-5 text-base" style={{ color: 'var(--fg-muted)' }}>
         <span>Last updated <span style={{ color: 'var(--fg-default)' }}>{LAST_UPDATED}</span></span>
         <span style={{ color: 'var(--border-default)' }}>·</span>
         <span>Effective <span style={{ color: 'var(--fg-default)' }}>{EFFECTIVE}</span></span>
@@ -199,7 +199,7 @@ function DocHeader() {
       <button
         type="button"
         onClick={() => { /* no-op */ }}
-        className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[12px] font-medium"
+        className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-base font-medium"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -217,15 +217,15 @@ function Section({ n, title, children }: { n: number; title: string; children: R
   return (
     <section>
       <h2
-        className="text-[18px] font-semibold tracking-tight mb-3 flex items-baseline gap-3"
+        className="text-2xl font-semibold tracking-tight mb-3 flex items-baseline gap-3"
         style={{ color: 'var(--fg-strong)' }}
       >
-        <span className="text-[12px] font-mono tabular-nums w-7 inline-flex justify-end" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-base font-mono tabular-nums w-7 inline-flex justify-end" style={{ color: 'var(--fg-subtle)' }}>
           {String(n).padStart(2, '0')}
         </span>
         {title}
       </h2>
-      <div className="pl-10 space-y-3.5 text-[14px] leading-7" style={{ color: 'var(--fg-default)' }}>
+      <div className="pl-10 space-y-3.5 text-lg leading-7" style={{ color: 'var(--fg-default)' }}>
         {children}
       </div>
     </section>
@@ -240,12 +240,12 @@ function Tldr({ children }: { children: ReactNode }) {
     >
       <div className="flex items-start gap-2.5">
         <span
-          className="inline-flex items-center px-1.5 h-[18px] rounded text-[10px] font-bold tracking-wide flex-shrink-0 mt-0.5"
+          className="inline-flex items-center px-1.5 h-[18px] rounded text-xs font-bold tracking-wide flex-shrink-0 mt-0.5"
           style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
         >
           TL;DR
         </span>
-        <p className="text-[12px] leading-6" style={{ color: 'var(--fg-default)' }}>{children}</p>
+        <p className="text-base leading-6" style={{ color: 'var(--fg-default)' }}>{children}</p>
       </div>
     </div>
   );

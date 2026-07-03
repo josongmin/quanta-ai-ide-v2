@@ -6,14 +6,14 @@ import { Moon } from 'lucide-react';
 export function TimeField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </span>
       <input
         type="time"
         value={value}
         onChange={(e) => { onChange(e.target.value); }}
-        className="h-8 px-2.5 rounded-md text-[12px] outline-none"
+        className="h-8 px-2.5 rounded-md text-base outline-none"
         style={{
           background: 'var(--bg-canvas)',
           border: '1px solid var(--border-default)',
@@ -54,13 +54,13 @@ export function ClockPreview({ from, to }: { from: string; to: string }) {
           color="var(--fg-accent)"
         />
       </svg>
-      <div className="flex flex-col text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <div className="flex flex-col text-sm" style={{ color: 'var(--fg-muted)' }}>
         <span>
           Mute window: <span className="font-mono tabular-nums" style={{ color: 'var(--fg-default)' }}>
             {from} → {to}
           </span>
         </span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           {durationLabel(fromMin, toMin)}
         </span>
       </div>

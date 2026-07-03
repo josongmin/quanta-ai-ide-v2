@@ -16,7 +16,7 @@ export function BackupInput({
   return (
     <div className="flex flex-col gap-2">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium"
+        className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
         Backup code
@@ -35,7 +35,7 @@ export function BackupInput({
           color: 'var(--fg-strong)',
         }}
       />
-      <p className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
         Each backup code can only be used once. Find them in your authenticator settings.
       </p>
     </div>

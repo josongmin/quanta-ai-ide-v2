@@ -30,7 +30,7 @@ export function FilterBar({
             key={id}
             type="button"
             onClick={() => { onChange(id); }}
-            className="flex items-center gap-2 px-2 h-7 rounded-md text-[12px] font-medium transition-colors"
+            className="flex items-center gap-2 px-2 h-7 rounded-md text-base font-medium transition-colors"
             style={{
               background: active ? 'var(--bg-active)' : 'transparent',
               color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -42,7 +42,7 @@ export function FilterBar({
             <span className="flex-1 text-left">{label}</span>
             {count > 0 && (
               <span
-                className="text-[10px] tabular-nums px-1.5 py-0.5 rounded font-mono"
+                className="text-xs tabular-nums px-1.5 py-0.5 rounded font-mono"
                 style={{
                   background: id === 'unread' && count > 0 ? 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' : 'var(--bg-surface-muted)',
                   color: id === 'unread' && count > 0 ? 'var(--fg-accent)' : 'var(--fg-muted)',

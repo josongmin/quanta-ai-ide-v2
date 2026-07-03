@@ -17,7 +17,7 @@ export function TaxSection() {
 
   return (
     <div className="flex flex-col gap-5">
-      <p className="text-[12px] leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
+      <p className="text-base leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
         Tax IDs registered here appear on every invoice and unlock reverse-charge
         / zero-rated VAT where applicable. Withholding tax must be claimed
         separately by your finance team.
@@ -37,7 +37,7 @@ export function TaxSection() {
 
       <button
         type="button"
-        className="self-start inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+        className="self-start inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
         style={{
           color: 'var(--fg-default)',
           background: 'transparent',
@@ -68,19 +68,19 @@ function TaxRow({
     >
       <CountryGlyph code={tax.country} />
       <span
-        className="text-[12px] font-medium w-[140px] shrink-0"
+        className="text-base font-medium w-[140px] shrink-0"
         style={{ color: 'var(--fg-strong)' }}
       >
         {tax.countryName}
       </span>
       <span
-        className="font-mono text-[10px] uppercase tracking-[0.08em] w-[70px] shrink-0"
+        className="font-mono text-xs uppercase tracking-[0.08em] w-[70px] shrink-0"
         style={{ color: 'var(--fg-muted)' }}
       >
         {tax.type}
       </span>
       <span
-        className="font-mono text-[11px] tabular-nums flex-1 truncate"
+        className="font-mono text-sm tabular-nums flex-1 truncate"
         style={{ color: 'var(--fg-default)' }}
       >
         {tax.value}
@@ -88,7 +88,7 @@ function TaxRow({
 
       {tax.verified ? (
         <span
-          className="inline-flex items-center gap-1 text-[11px]"
+          className="inline-flex items-center gap-1 text-sm"
           style={{ color: 'var(--intent-success-fg)' }}
         >
           <Check className="w-3 h-3" />
@@ -98,7 +98,7 @@ function TaxRow({
         <button
           type="button"
           onClick={onVerify}
-          className="text-[11px] font-medium transition-opacity"
+          className="text-sm font-medium transition-opacity"
           style={{ color: 'var(--fg-accent)' }}
         >
           Verify
@@ -131,7 +131,7 @@ function TaxRow({
 function CountryGlyph({ code }: { code: string }) {
   return (
     <span
-      className="w-7 h-5 rounded text-[9px] font-mono font-bold flex items-center justify-center shrink-0"
+      className="w-7 h-5 rounded text-2xs font-mono font-bold flex items-center justify-center shrink-0"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',

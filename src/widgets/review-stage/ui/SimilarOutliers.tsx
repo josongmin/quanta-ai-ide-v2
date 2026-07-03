@@ -42,7 +42,7 @@ export default function SimilarOutliers({ pr, allPrs, onJump }: Props) {
 
   if (peers.length === 0) {
     return (
-      <div className="px-3 py-4 text-[12px] text-[var(--fg-muted)] italic">
+      <div className="px-3 py-4 text-base text-[var(--fg-muted)] italic">
         비슷한 outlier PR이 없습니다.
       </div>
     );
@@ -52,10 +52,10 @@ export default function SimilarOutliers({ pr, allPrs, onJump }: Props) {
     <div className="flex flex-col">
       <div className="flex items-center gap-2 px-3 py-2 border-b border-[var(--border-default)]">
         <Sigma className="w-3 h-3 text-[var(--fg-accent)]" strokeWidth={2.5} />
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           비슷한 outlier
         </span>
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)] tabular-nums">
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)] tabular-nums">
           {peers.length}개
         </span>
       </div>
@@ -73,17 +73,17 @@ export default function SimilarOutliers({ pr, allPrs, onJump }: Props) {
               className="w-full px-3 py-2 text-left hover:bg-[var(--bg-hover)] transition-colors"
             >
               <div className="flex items-baseline gap-2">
-                <span className="text-[12px] font-medium text-[var(--fg-default)] truncate flex-1">
+                <span className="text-base font-medium text-[var(--fg-default)] truncate flex-1">
                   {peer.pr.title}
                 </span>
-                <span className="text-[10px] font-mono text-[var(--fg-subtle)] shrink-0">
+                <span className="text-xs font-mono text-[var(--fg-subtle)] shrink-0">
                   #{peer.pr.number}
                 </span>
                 {onJump && (
                   <ArrowUpRight className="w-2.5 h-2.5 text-[var(--fg-subtle)] shrink-0" />
                 )}
               </div>
-              <div className="mt-1 flex items-center gap-2 text-[10px] font-mono text-[var(--fg-muted)]">
+              <div className="mt-1 flex items-center gap-2 text-xs font-mono text-[var(--fg-muted)]">
                 <span className="tabular-nums">
                   +{peer.pr.added}/−{peer.pr.removed}
                 </span>
@@ -104,7 +104,7 @@ export default function SimilarOutliers({ pr, allPrs, onJump }: Props) {
           );
         })}
       </div>
-      <div className="px-3 py-2 border-t border-[var(--border-default)] text-[10px] font-mono text-[var(--fg-subtle)] italic leading-snug">
+      <div className="px-3 py-2 border-t border-[var(--border-default)] text-xs font-mono text-[var(--fg-subtle)] italic leading-snug">
         Bansal et al. 2021 — peer-based explanations build trust
         better than threshold warnings.
       </div>

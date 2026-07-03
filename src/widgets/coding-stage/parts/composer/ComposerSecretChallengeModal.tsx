@@ -55,19 +55,19 @@ export function SecretChallengeModal({
       <div style={toneStyle} className={`border rounded-xl ${surface}`}>
         <div className={`px-4 py-3`}>
           <div className={`flex items-center gap-2 mb-1.5`}>
-            <span className="text-[14px]" aria-hidden>{mode === 'block' ? '🔐' : '⚠'}</span>
-            <span className={`text-[12px] font-bold ${heading}`}>
+            <span className="text-lg" aria-hidden>{mode === 'block' ? '🔐' : '⚠'}</span>
+            <span className={`text-base font-bold ${heading}`}>
               {mode === 'block' ? t('secretGuard.blockTitle') : t('secretGuard.warnTitle')}
             </span>
           </div>
-          <p className={`text-[11px] ${muted} mb-2`}>
+          <p className={`text-sm ${muted} mb-2`}>
             {t('secretGuard.blockBody', { count: matches.length })}
           </p>
           <ul className="space-y-1 mb-3">
             {matches.map((m, i) => (
               <li
                 key={i}
-                className="flex items-center gap-2 px-2 py-1 rounded-md text-[11px] font-mono bg-[color:var(--bg-surface-muted)]"
+                className="flex items-center gap-2 px-2 py-1 rounded-md text-sm font-mono bg-[color:var(--bg-surface-muted)]"
               >
                 <span
                   style={{ background: m.pattern.severity === 'critical' ? 'var(--intent-danger-vivid)' : 'var(--intent-warn-vivid)' }}
@@ -86,7 +86,7 @@ export function SecretChallengeModal({
             <button
               type="button"
               onClick={onCancel}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium ${muted} hover:bg-[color:var(--bg-hover)]`}
+              className={`px-2.5 py-1 rounded-md text-sm font-medium ${muted} hover:bg-[color:var(--bg-hover)]`}
             >
               {t('secretGuard.cancel')}
             </button>
@@ -94,7 +94,7 @@ export function SecretChallengeModal({
               <button
                 type="button"
                 onClick={onSendAsIs}
-                className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[color:var(--bg-active)] text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-selected)] border border-[color:var(--border-default)]"
+                className="px-2.5 py-1 rounded-md text-sm font-semibold bg-[color:var(--bg-active)] text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-selected)] border border-[color:var(--border-default)]"
               >
                 {t('secretGuard.sendAsIs')}
               </button>
@@ -107,7 +107,7 @@ export function SecretChallengeModal({
                 color: 'var(--intent-success-fg)',
                 border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 40%, transparent)',
               }}
-              className="px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors"
+              className="px-2.5 py-1 rounded-md text-sm font-semibold transition-colors"
             >
               {t('secretGuard.maskNow')}
             </button>

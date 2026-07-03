@@ -31,7 +31,7 @@ export function ProofPanel({ validation, t, validationStatus, onRunValidation }:
           type="button"
           onClick={onRunValidation}
           disabled={validationStatus === 'running'}
-          className="text-[10px] font-black uppercase tracking-[0.18em] px-2 py-1 rounded-md transition-colors"
+          className="text-xs font-black uppercase tracking-eyebrow px-2 py-1 rounded-md transition-colors"
           style={{
             background: validationStatus === 'running' ? 'var(--bg-surface-muted)' : 'var(--bg-active)',
             color: 'var(--fg-strong)',
@@ -55,7 +55,7 @@ export function ProofPanel({ validation, t, validationStatus, onRunValidation }:
           return (
             <div key={cat}>
               <h4
-                className="text-[9px] font-black uppercase tracking-[0.18em] mb-1"
+                className="text-2xs font-black uppercase tracking-eyebrow mb-1"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {t(`proof.${cat}`)}
@@ -71,17 +71,17 @@ export function ProofPanel({ validation, t, validationStatus, onRunValidation }:
                     }}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <div className="text-[11px] font-semibold" style={{ color: 'var(--fg-default)' }}>
+                      <div className="text-sm font-semibold" style={{ color: 'var(--fg-default)' }}>
                         {ob.label}
                       </div>
                       <StatusBadge status={ob.status} t={t} />
                     </div>
-                    <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+                    <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
                       {ob.rationale}
                     </div>
                     {ob.detail !== undefined && (
                       <div
-                        className="text-[10px] font-mono mt-0.5"
+                        className="text-xs font-mono mt-0.5"
                         style={{ color: 'var(--fg-subtle)' }}
                       >
                         {ob.detail}
@@ -102,7 +102,7 @@ function StatusBadge({ status, t }: { status: ProofObligation['status']; t: TFun
   const colors = STATUS_COLORS[status];
   return (
     <span
-      className="text-[8px] font-black uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-md"
+      className="text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md"
       style={{
         background: colors.bg,
         color: colors.fg,

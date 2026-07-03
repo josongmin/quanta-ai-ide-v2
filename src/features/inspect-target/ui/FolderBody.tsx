@@ -29,7 +29,7 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
 
   if (!folder || !stats) {
     return (
-      <div className="p-6 text-[12px] text-[var(--fg-muted)]">
+      <div className="p-6 text-base text-[var(--fg-muted)]">
         {t('empty.folderNotFound')}
       </div>
     );
@@ -65,13 +65,13 @@ function FolderBody({ path, repo, isDark }: { path: string; repo: RepoData; isDa
       chips={
         <>
           <span
-            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] tabular-nums"
+            className="px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-eyebrow tabular-nums"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             {formatNumber(stats.totalFiles)} {t('focus.filesUnit')}
           </span>
           <span
-            className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] tabular-nums"
+            className="px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-eyebrow tabular-nums"
             style={{ background: 'var(--bg-elevated)', color: 'var(--fg-muted)' }}
           >
             {formatNumber(stats.totalLoc)} {t('stat.loc')}

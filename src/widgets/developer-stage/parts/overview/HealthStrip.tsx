@@ -17,11 +17,11 @@ export function HealthStrip() {
     >
       <div className="flex items-baseline justify-between mb-4">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
             p50 latency
           </span>
           <span className="text-[20px] font-semibold tracking-tight tabular-nums" style={{ color: 'var(--fg-strong)' }}>
-            18<span className="text-[12px] font-normal" style={{ color: 'var(--fg-muted)' }}>ms</span>
+            18<span className="text-base font-normal" style={{ color: 'var(--fg-muted)' }}>ms</span>
           </span>
         </div>
         <div className="flex items-center gap-4">
@@ -50,11 +50,11 @@ export function HealthStrip() {
 function Stat({ label, value, tone }: { label: string; value: string; tone?: 'success' }) {
   return (
     <div className="flex flex-col gap-0.5 text-right">
-      <span className="text-[9px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-2xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </span>
       <span
-        className="text-[12px] font-semibold tabular-nums"
+        className="text-base font-semibold tabular-nums"
         style={{ color: tone === 'success' ? 'var(--intent-success-fg)' : 'var(--fg-strong)' }}
       >
         {value}

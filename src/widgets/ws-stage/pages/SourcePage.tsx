@@ -77,7 +77,7 @@ export default function SourcePage() {
 
         <Row label="Connection" sub="The user that authorized access to this repository.">
           <div className="flex items-center gap-2">
-            <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
               Connected as <span style={{ color: 'var(--fg-strong)' }}>@sora-kim</span> · 2026-04-12
             </span>
             <Button leading={<RefreshCw className="w-3 h-3" />}>Reconnect</Button>
@@ -97,7 +97,7 @@ export default function SourcePage() {
             <button
               type="button"
               onClick={() => { void copyRepo(); }}
-              className="inline-flex items-center gap-1 h-6 px-2 rounded text-[11px] font-medium"
+              className="inline-flex items-center gap-1 h-6 px-2 rounded text-sm font-medium"
               style={{
                 background: copied ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',
                 color: copied ? 'var(--intent-success-fg)' : 'var(--fg-default)',
@@ -113,7 +113,7 @@ export default function SourcePage() {
 
         <Row label="Default branch" sub="Probed from the remote on every reconnect.">
           <span
-            className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-mono tabular-nums"
+            className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-mono tabular-nums"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-muted)',
@@ -132,7 +132,7 @@ export default function SourcePage() {
           style={{ border: '1px solid var(--border-muted)' }}
         >
           <div
-            className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               gridTemplateColumns: '1fr 80px',
               gap: 12,
@@ -148,7 +148,7 @@ export default function SourcePage() {
             <div
               key={r.id}
               role="row"
-              className="grid items-center px-3 py-2.5 text-[12px] transition-colors"
+              className="grid items-center px-3 py-2.5 text-base transition-colors"
               style={{
                 gridTemplateColumns: '1fr 80px',
                 gap: 12,
@@ -159,7 +159,7 @@ export default function SourcePage() {
             >
               <div className="flex flex-col gap-0.5 min-w-0">
                 <span className="font-medium" style={{ color: 'var(--fg-strong)' }}>{r.label}</span>
-                <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>{r.sub}</span>
+                <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{r.sub}</span>
               </div>
               <div className="flex justify-end">
                 <Toggle checked={r.enabled} onChange={() => { toggleRule(r.id); }} label={r.label} />
@@ -228,12 +228,12 @@ function HostCard({
         {Logo ? (
           <Logo className="w-4 h-4" />
         ) : (
-          <span className="text-[10px] font-bold tracking-wide">{label.slice(0, 2).toUpperCase()}</span>
+          <span className="text-xs font-bold tracking-wide">{label.slice(0, 2).toUpperCase()}</span>
         )}
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-[12px] font-semibold">{label}</span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-base font-semibold">{label}</span>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           {active ? 'Connected' : 'Switch to ' + label}
         </span>
       </div>
@@ -276,10 +276,10 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
               <Key className="w-4 h-4" style={{ color: 'var(--fg-accent)' }} />
             </div>
             <div className="flex flex-col gap-1">
-              <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+              <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
                 Save your signing secret
               </h3>
-              <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+              <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
                 <span className="font-semibold">This is the only time we&apos;ll show it.</span>{' '}
                 After you close this dialog, the secret cannot be retrieved.
               </p>
@@ -287,7 +287,7 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <div
-            className="flex items-center gap-2 p-2 rounded-md font-mono text-[11px] tabular-nums"
+            className="flex items-center gap-2 p-2 rounded-md font-mono text-sm tabular-nums"
             style={{
               background: 'var(--bg-canvas)',
               border: '1px solid var(--border-default)',
@@ -308,7 +308,7 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={() => { void copy(); }}
-              className="inline-flex items-center gap-1 h-7 px-2 rounded text-[11px] font-medium"
+              className="inline-flex items-center gap-1 h-7 px-2 rounded text-sm font-medium"
               style={{
                 background: copied ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',
                 color: copied ? 'var(--intent-success-fg)' : 'var(--fg-default)',

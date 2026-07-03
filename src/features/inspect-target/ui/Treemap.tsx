@@ -136,13 +136,13 @@ export default function Treemap({ repo, isDark, size = 280 }: Props) {
         style={{ maxWidth: size }}
       >
         {buckets.slice(0, 6).map((b, i) => (
-          <div key={b} className="flex items-center gap-1.5 text-[10px]">
+          <div key={b} className="flex items-center gap-1.5 text-xs">
             <span
               className="w-2 h-2 rounded-sm shrink-0"
               style={{ background: palette[i % palette.length] }}
             />
             <span
-              className="font-bold uppercase tracking-[var(--track-eyebrow)] truncate"
+              className="font-bold uppercase tracking-eyebrow truncate"
               style={{ color: 'var(--fg-default)' }}
             >
               {b}
@@ -151,7 +151,7 @@ export default function Treemap({ repo, isDark, size = 280 }: Props) {
         ))}
       </div>
 
-      <div className="mt-2 text-[9px] uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+      <div className="mt-2 text-2xs uppercase tracking-eyebrow text-[var(--fg-subtle)]">
         {t('deps.treemapSummary', {
           n: cells.length,
           loc: formatNumber(totalLoc),

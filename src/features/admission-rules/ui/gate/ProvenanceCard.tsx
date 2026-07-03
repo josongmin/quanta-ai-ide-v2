@@ -46,18 +46,18 @@ export function ProvenanceCard({
         }}
       >
         <h3
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Provenance
         </h3>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           how this verdict happened
         </span>
         <div className="flex-1" />
         {heldLabel && currentVerdict !== 'allow' && (
           <span
-            className="inline-flex items-center gap-1 text-[10px] font-mono"
+            className="inline-flex items-center gap-1 text-xs font-mono"
             style={{ color: 'var(--intent-warn-fg)' }}
             title="Time since the first non-passing event"
           >
@@ -102,13 +102,13 @@ export function ProvenanceCard({
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span
-                    className="text-[12px] font-medium"
+                    className="text-base font-medium"
                     style={{ color: isLast ? 'var(--fg-strong)' : 'var(--fg-muted)', fontWeight: isLast ? 600 : 500 }}
                   >
                     {e.title}
                   </span>
                   <span
-                    className="text-[10px] font-mono"
+                    className="text-xs font-mono"
                     style={{ color: 'var(--fg-subtle)' }}
                     title={formatDate(e.at, { dateStyle: 'medium', timeStyle: 'short' })}
                   >
@@ -116,7 +116,7 @@ export function ProvenanceCard({
                   </span>
                   {e.verdict && (
                     <span
-                      className="text-[9px] uppercase tracking-[0.14em] font-mono"
+                      className="text-2xs uppercase tracking-eyebrow font-mono"
                       style={{ color: verdictColor }}
                     >
                       {e.verdict}
@@ -125,7 +125,7 @@ export function ProvenanceCard({
                 </div>
                 {e.detail && (
                   <div
-                    className="mt-0.5 text-[10px] truncate"
+                    className="mt-0.5 text-xs truncate"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     {e.detail}

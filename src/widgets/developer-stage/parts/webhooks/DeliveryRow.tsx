@@ -21,13 +21,13 @@ export function DeliveryRow({
       onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'transparent'; }}
     >
       <Icon className="w-3.5 h-3.5" style={{ color: m.fg }} />
-      <code className="text-[11px] font-mono truncate" style={{ color: 'var(--fg-strong)' }}>{d.event}</code>
-      <span className="text-[11px] truncate" style={{ color: 'var(--fg-muted)' }}>{d.endpoint}</span>
-      <span className="text-[11px] tabular-nums" style={{ color: d.httpStatus && d.httpStatus >= 400 ? m.fg : 'var(--fg-muted)' }}>
+      <code className="text-sm font-mono truncate" style={{ color: 'var(--fg-strong)' }}>{d.event}</code>
+      <span className="text-sm truncate" style={{ color: 'var(--fg-muted)' }}>{d.endpoint}</span>
+      <span className="text-sm tabular-nums" style={{ color: d.httpStatus && d.httpStatus >= 400 ? m.fg : 'var(--fg-muted)' }}>
         {d.httpStatus ?? '—'}
       </span>
-      <span className="text-[11px] tabular-nums text-right" style={{ color: 'var(--fg-muted)' }}>{d.durationMs}ms</span>
-      <span className="text-[11px] tabular-nums text-right font-mono" style={{ color: 'var(--fg-subtle)' }}>{d.at}</span>
+      <span className="text-sm tabular-nums text-right" style={{ color: 'var(--fg-muted)' }}>{d.durationMs}ms</span>
+      <span className="text-sm tabular-nums text-right font-mono" style={{ color: 'var(--fg-subtle)' }}>{d.at}</span>
     </button>
   );
 }

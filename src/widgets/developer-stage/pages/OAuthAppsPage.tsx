@@ -29,7 +29,7 @@ export default function OAuthAppsPage() {
       topRight={
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-base font-semibold transition-colors"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <Plus className="w-3.5 h-3.5" />
@@ -45,7 +45,7 @@ export default function OAuthAppsPage() {
         }}
       >
         <div
-          className="grid items-center px-4 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-4 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '1.4fr 1.2fr 1.4fr 0.8fr 0.8fr 0.4fr',
             color: 'var(--fg-subtle)',
@@ -83,7 +83,7 @@ function AppRow({ app, last }: { app: App; last: boolean }) {
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <div
-          className="w-8 h-8 rounded-md flex items-center justify-center shrink-0 text-[10px] font-bold"
+          className="w-8 h-8 rounded-md flex items-center justify-center shrink-0 text-xs font-bold"
           style={{
             background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)',
             color: 'var(--fg-accent)',
@@ -92,18 +92,18 @@ function AppRow({ app, last }: { app: App; last: boolean }) {
           {app.name.slice(0, 2).toUpperCase()}
         </div>
         <div className="flex flex-col min-w-0">
-          <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
             {app.name}
           </span>
-          <code className="text-[10px] font-mono" style={{ color: 'var(--fg-subtle)' }}>{app.id}</code>
+          <code className="text-xs font-mono" style={{ color: 'var(--fg-subtle)' }}>{app.id}</code>
         </div>
       </div>
-      <span className="text-[12px]" style={{ color: 'var(--fg-default)' }}>{app.vendor}</span>
+      <span className="text-base" style={{ color: 'var(--fg-default)' }}>{app.vendor}</span>
       <div className="flex items-center gap-1 flex-wrap">
         {app.scopes.slice(0, 3).map((s) => (
           <code
             key={s}
-            className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+            className="text-xs font-mono px-1.5 py-0.5 rounded"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-muted)',
@@ -114,11 +114,11 @@ function AppRow({ app, last }: { app: App; last: boolean }) {
           </code>
         ))}
         {app.scopes.length > 3 && (
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>+{app.scopes.length - 3}</span>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>+{app.scopes.length - 3}</span>
         )}
       </div>
-      <span className="text-right text-[12px] tabular-nums" style={{ color: 'var(--fg-default)' }}>{app.installs}</span>
-      <span className="text-right text-[11px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>{app.lastUsed}</span>
+      <span className="text-right text-base tabular-nums" style={{ color: 'var(--fg-default)' }}>{app.installs}</span>
+      <span className="text-right text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{app.lastUsed}</span>
       <div className="flex justify-end">
         <button
           type="button"
@@ -148,15 +148,15 @@ function ClientSecretsCard() {
     >
       <div className="flex items-center gap-2 mb-3">
         <ShieldCheck className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
-        <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           Client secret · CI bot
         </h2>
       </div>
-      <p className="text-[11px] leading-snug mb-4" style={{ color: 'var(--fg-muted)' }}>
+      <p className="text-sm leading-snug mb-4" style={{ color: 'var(--fg-muted)' }}>
         Never commit this to source control. We rotated it 14 days ago; rotate again every 90 days as a habit.
       </p>
       <div
-        className="flex items-center gap-2 h-10 px-3 rounded-md font-mono text-[12px]"
+        className="flex items-center gap-2 h-10 px-3 rounded-md font-mono text-base"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -167,7 +167,7 @@ function ClientSecretsCard() {
         <button
           type="button"
           onClick={() => { setShown((v) => !v); }}
-          className="inline-flex items-center gap-1 h-7 px-2 rounded text-[10px] font-medium transition-colors"
+          className="inline-flex items-center gap-1 h-7 px-2 rounded text-xs font-medium transition-colors"
           style={{ color: 'var(--fg-muted)' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -182,7 +182,7 @@ function ClientSecretsCard() {
               void navigator.clipboard.writeText(real);
             }
           }}
-          className="inline-flex items-center gap-1 h-7 px-2 rounded text-[10px] font-medium transition-colors"
+          className="inline-flex items-center gap-1 h-7 px-2 rounded text-xs font-medium transition-colors"
           style={{ color: 'var(--fg-muted)' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -192,7 +192,7 @@ function ClientSecretsCard() {
         </button>
         <button
           type="button"
-          className="inline-flex items-center gap-1 h-7 px-2.5 rounded text-[10px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1 h-7 px-2.5 rounded text-xs font-semibold transition-colors"
           style={{
             color: 'var(--intent-danger-fg)',
             background: 'var(--intent-danger-bg)',

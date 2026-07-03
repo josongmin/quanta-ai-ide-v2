@@ -11,7 +11,7 @@ export function ImpactNarrativeStrip({ narrative }: { narrative: ImpactNarrative
     >
       <div className="flex items-center gap-2 mb-1.5">
         <span
-          className="text-[8px] font-black uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-md"
+          className="text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md"
           style={{
             background: 'var(--bg-elevated)',
             color: 'var(--fg-muted)',
@@ -21,10 +21,10 @@ export function ImpactNarrativeStrip({ narrative }: { narrative: ImpactNarrative
         </span>
         <span className="flex-1 h-px" style={{ background: 'var(--border-muted)' }} />
       </div>
-      <div className="text-[11px] leading-snug mb-1.5" style={{ color: 'var(--fg-default)' }}>
+      <div className="text-sm leading-snug mb-1.5" style={{ color: 'var(--fg-default)' }}>
         {narrative.summary}
       </div>
-      <div className="flex items-center flex-wrap gap-1.5 text-[9px] font-mono uppercase tracking-[0.14em]">
+      <div className="flex items-center flex-wrap gap-1.5 text-2xs font-mono uppercase tracking-eyebrow">
         <span style={{ color: 'var(--fg-subtle)' }}>owner</span>
         <span
           className="px-1.5 py-0.5 rounded-md font-bold"
@@ -71,13 +71,13 @@ export function StalePrimaryBanner({
           style={{ background: 'var(--intent-warn-vivid)' }}
         />
         <span
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--intent-warn-fg)' }}
         >
           Primary unavailable
         </span>
       </div>
-      <div className="text-[11px] leading-snug" style={{ color: 'var(--fg-default)' }}>
+      <div className="text-sm leading-snug" style={{ color: 'var(--fg-default)' }}>
         <span className="font-semibold">{primary.name}</span>
         <span style={{ color: 'var(--fg-muted)' }}>
           {' '}· last active {primary.lastActiveDays}d ago

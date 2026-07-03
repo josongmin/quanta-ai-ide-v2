@@ -260,7 +260,7 @@ export default function PreferencesPage() {
           <button
             type="button"
             onClick={() => { setDraft(INITIAL); }}
-            className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+            className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-default)',

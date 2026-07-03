@@ -18,14 +18,14 @@ export function DiffPane({ diff, t }: Props) {
         {diff.map((hunk, i) => (
           <div key={`${hunk.file}-${i.toString()}`}>
             <div
-              className="text-[10px] font-mono mb-1 px-1"
+              className="text-xs font-mono mb-1 px-1"
               style={{ color: 'var(--fg-muted)' }}
             >
               {hunk.file}
             </div>
             <div className="grid grid-cols-2 gap-2">
               <pre
-                className="text-[10px] font-mono leading-relaxed rounded-md p-2 overflow-auto"
+                className="text-xs font-mono leading-relaxed rounded-md p-2 overflow-auto"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   color: 'var(--fg-muted)',
@@ -35,7 +35,7 @@ export function DiffPane({ diff, t }: Props) {
                 <code>{hunk.before}</code>
               </pre>
               <pre
-                className="text-[10px] font-mono leading-relaxed rounded-md p-2 overflow-auto"
+                className="text-xs font-mono leading-relaxed rounded-md p-2 overflow-auto"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   color: 'var(--fg-default)',

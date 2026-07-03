@@ -52,7 +52,7 @@ export function MonoFontPicker({
     <select
       value={value}
       onChange={(e) => { onChange(e.target.value as Appearance['monoFont']); }}
-      className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+      className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-default)',
@@ -78,7 +78,7 @@ export function SyntaxPicker({
     <select
       value={value}
       onChange={(e) => { onChange(e.target.value as Appearance['syntaxTheme']); }}
-      className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+      className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-default)',

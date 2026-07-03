@@ -74,14 +74,14 @@ export function Retroactive({
                     boxShadow: `0 8px 24px rgba(0,0,0,0.6), 0 0 16px ${accent}44`,
                   }}
                 >
-                  <div className="text-[10px] font-mono" style={{ color: t.textBody }}>#{r.seed}</div>
+                  <div className="text-xs font-mono" style={{ color: t.textBody }}>#{r.seed}</div>
                   <div
-                    className="text-[10px] font-bold uppercase tracking-[0.18em]"
+                    className="text-xs font-bold uppercase tracking-eyebrow"
                     style={{ color: accent }}
                   >
                     {r.decision.outcome}
                   </div>
-                  <div className="text-[9px] font-mono mt-0.5" style={{ color: t.textSubtle }}>
+                  <div className="text-2xs font-mono mt-0.5" style={{ color: t.textSubtle }}>
                     {fired} rules fired
                   </div>
                   <div
@@ -99,7 +99,7 @@ export function Retroactive({
           );
         })}
       </div>
-      <div className="mt-2 flex items-center justify-between text-[9px] font-mono" style={{ color: t.textFaint }}>
+      <div className="mt-2 flex items-center justify-between text-2xs font-mono" style={{ color: t.textFaint }}>
         <span>30d ago</span>
         <span>{hovered ? `#${hovered.seed} · ${hovered.decision.outcome.toUpperCase()}` : 'height = rules fired'}</span>
         <span>now</span>

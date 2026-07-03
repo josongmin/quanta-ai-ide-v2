@@ -72,7 +72,7 @@ export function AnswerView({
     <div className="flex flex-col">
       {/* 0. Summary row */}
       <div
-        className="flex items-center gap-2 mb-2 text-[10px] font-mono"
+        className="flex items-center gap-2 mb-2 text-xs font-mono"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span

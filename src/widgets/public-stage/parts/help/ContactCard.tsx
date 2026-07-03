@@ -39,10 +39,10 @@ export function ContactCard({
         <Icon className="w-4 h-4" />
       </div>
       <span className="text-[15px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>{title}</span>
-      <p className="text-[12px] leading-relaxed flex-1" style={{ color: 'var(--fg-muted)' }}>{description}</p>
+      <p className="text-base leading-relaxed flex-1" style={{ color: 'var(--fg-muted)' }}>{description}</p>
       <button
         type="button"
-        className="inline-flex items-center gap-1 text-[12px] font-semibold mt-2 bg-transparent border-0 p-0 cursor-pointer"
+        className="inline-flex items-center gap-1 text-base font-semibold mt-2 bg-transparent border-0 p-0 cursor-pointer"
         style={{ color: fg, font: 'inherit' }}
       >
         {cta} <ExternalLink className="w-3 h-3" />

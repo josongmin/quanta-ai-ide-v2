@@ -51,8 +51,8 @@ export function SeedRail({
                     borderColor: selected ? 'var(--border-default)' : 'transparent',
                   }}
                 >
-                  <div className="text-[11px] font-bold mb-0.5">{seed.kind.toUpperCase()}</div>
-                  <div className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+                  <div className="text-sm font-bold mb-0.5">{seed.kind.toUpperCase()}</div>
+                  <div className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
                     {seed.symptom}
                   </div>
                 </button>
@@ -65,12 +65,12 @@ export function SeedRail({
       <GlassCard className="rounded-lg p-3">
         <SectionHeader title={t('seedRail.candidatesHeader')} />
         {generationStatus === 'idle' && (
-          <p className="text-[11px] mt-1" style={{ color: 'var(--fg-subtle)' }}>
+          <p className="text-sm mt-1" style={{ color: 'var(--fg-subtle)' }}>
             {t('seedRail.noSeed')}
           </p>
         )}
         {generationStatus === 'generating' && (
-          <p className="text-[11px] mt-1" style={{ color: 'var(--fg-subtle)' }}>
+          <p className="text-sm mt-1" style={{ color: 'var(--fg-subtle)' }}>
             {t('seedRail.generating')}
           </p>
         )}
@@ -83,8 +83,8 @@ export function SeedRail({
               color: 'var(--fg-default)',
             }}
           >
-            <div className="text-[11px] font-bold">{t('seedRail.rejected')}</div>
-            <div className="text-[10px] mt-0.5" style={{ color: 'var(--fg-muted)' }}>
+            <div className="text-sm font-bold">{t('seedRail.rejected')}</div>
+            <div className="text-xs mt-0.5" style={{ color: 'var(--fg-muted)' }}>
               {generationError ?? t('seedRail.rejectedHint')}
             </div>
           </div>
@@ -111,7 +111,7 @@ export function SeedRail({
                     <div className="flex items-center gap-1.5 mb-0.5">
                       {c.isRecommended && (
                         <span
-                          className="text-[8px] font-black uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-md"
+                          className="text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md"
                           style={{
                             background: 'var(--intent-success-vivid)',
                             color: 'var(--bg-canvas)',
@@ -122,7 +122,7 @@ export function SeedRail({
                       )}
                       {!c.isRecommended && (
                         <span
-                          className="text-[8px] font-black uppercase tracking-[0.18em] px-1.5 py-0.5 rounded-md"
+                          className="text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md"
                           style={{
                             background: 'var(--bg-surface-muted)',
                             color: 'var(--fg-subtle)',
@@ -134,16 +134,16 @@ export function SeedRail({
                       )}
                       {dismissed && (
                         <span
-                          className="text-[8px] font-bold uppercase tracking-[0.18em]"
+                          className="text-2xs font-bold uppercase tracking-eyebrow"
                           style={{ color: 'var(--fg-subtle)' }}
                         >
                           · {t('seedRail.dismissed')}
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] font-semibold">{c.title}</div>
+                    <div className="text-sm font-semibold">{c.title}</div>
                     <div
-                      className="text-[10px] mt-0.5"
+                      className="text-xs mt-0.5"
                       style={{ color: 'var(--fg-muted)' }}
                     >
                       Δ {c.metrics.linesChanged} lines · {c.metrics.filesChanged}f · {c.metrics.modulesAffected}m

@@ -51,7 +51,7 @@ export function Pill({
       onClick={onClick}
       disabled={disabled}
       style={style}
-      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-[0.18em] transition-colors ${
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-eyebrow transition-colors ${
         selected || disabled ? '' : 'hover:[background:var(--bg-hover)]'
       }`}
     >

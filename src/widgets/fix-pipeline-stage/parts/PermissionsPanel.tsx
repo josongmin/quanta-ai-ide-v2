@@ -19,7 +19,7 @@ export function PermissionsPanel({ permissions, t }: Props) {
         badge={permissions.graduated ? t('permissions.graduated') : t('permissions.gated')}
       />
 
-      <div className="text-[11px] mt-1" style={{ color: 'var(--fg-default)' }}>
+      <div className="text-sm mt-1" style={{ color: 'var(--fg-default)' }}>
         {permissions.graduated
           ? t('permissions.graduatedHint')
           : t('permissions.gatedHint', {

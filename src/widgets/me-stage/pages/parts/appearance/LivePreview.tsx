@@ -23,7 +23,7 @@ export function LivePreview({ settings }: { settings: Appearance }) {
           PR #4821 · Add admission rule for SSO-only prod
         </span>
         <span
-          className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded ml-auto"
+          className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded ml-auto"
           style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', color: 'var(--fg-accent)' }}
         >
           Approved
@@ -49,7 +49,7 @@ export function LivePreview({ settings }: { settings: Appearance }) {
           <span>    branch: main</span>
         </code>
       </pre>
-      <div className="flex items-center gap-1.5 text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--fg-subtle)' }}>
         <Eye className="w-3 h-3" /> Preview rendered with your current selections
       </div>
     </div>

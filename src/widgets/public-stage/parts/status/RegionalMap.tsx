@@ -14,9 +14,9 @@ export function RegionalMap() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Globe className="w-4 h-4" style={{ color: 'var(--fg-muted)' }} />
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>Edge regions</span>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>Edge regions</span>
         </div>
-        <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
           Median latency from your nearest probe
         </span>
       </div>
@@ -52,7 +52,7 @@ export function RegionalMap() {
             >
               <PulseDot status={r.status} />
               <div
-                className="absolute left-1/2 top-full -translate-x-1/2 mt-2 px-2 py-1 rounded-md whitespace-nowrap text-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                className="absolute left-1/2 top-full -translate-x-1/2 mt-2 px-2 py-1 rounded-md whitespace-nowrap text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
                 style={{
                   background: 'var(--bg-elevated)',
                   border: '1px solid var(--border-default)',
@@ -71,7 +71,7 @@ export function RegionalMap() {
       {/* Region table strip below the map */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1.5 mt-4 pt-4" style={{ borderTop: '1px solid var(--border-muted)' }}>
         {REGIONS.map((r) => (
-          <div key={r.id} className="flex items-center justify-between gap-3 text-[11px]">
+          <div key={r.id} className="flex items-center justify-between gap-3 text-sm">
             <span className="flex items-center gap-1.5 min-w-0">
               <StatusDot color={STATUS_FG[r.status]} size="xs" />
               <span className="truncate" style={{ color: 'var(--fg-default)' }}>{r.label}</span>

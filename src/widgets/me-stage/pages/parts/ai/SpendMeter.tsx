@@ -20,7 +20,7 @@ export function SpendMeter({
         border: '1px solid var(--border-muted)',
       }}
     >
-      <div className="flex items-center justify-between text-[11px]">
+      <div className="flex items-center justify-between text-sm">
         <div className="flex items-center gap-1.5">
           <Activity className="w-3 h-3" style={{ color: 'var(--fg-muted)' }} />
           <span style={{ color: 'var(--fg-default)' }}>
@@ -50,7 +50,7 @@ export function SpendMeter({
         />
       </div>
       {triggered && (
-        <div className="flex items-center gap-2 text-[10px]" style={{ color: 'var(--intent-warn-fg)' }}>
+        <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--intent-warn-fg)' }}>
           <AlertTriangle className="w-2.5 h-2.5" />
           Crossed your alert threshold ({alertAt}% of cap). Inbox notification sent.
         </div>

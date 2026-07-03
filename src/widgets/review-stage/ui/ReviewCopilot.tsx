@@ -41,7 +41,7 @@ export function CopilotTake({ pr, repo }: { pr: PullRequest; repo: RepoData }) {
   const take = useMemo(() => buildOneLineTake(pr, repo), [pr, repo]);
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono min-w-0 max-w-full"
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono min-w-0 max-w-full"
       style={{
         background: 'color-mix(in srgb, var(--fg-accent) 10%, transparent)',
         border: '1px solid color-mix(in srgb, var(--fg-accent) 35%, transparent)',
@@ -139,11 +139,11 @@ export function InspectionPath({
         className="relative w-full flex items-center gap-2 mb-3 text-left"
       >
         <ListOrdered className="w-3.5 h-3.5 text-[var(--fg-muted)]" />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Recommended inspection path
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {steps.length} {steps.length === 1 ? 'stop' : 'stops'}
         </span>
         <ChevronRight
@@ -161,7 +161,7 @@ export function InspectionPath({
                 className="w-full flex items-start gap-3 px-2 py-2 rounded-md text-left hover:bg-[var(--bg-hover)] transition-colors"
               >
                 <span
-                  className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-mono font-bold tabular-nums"
+                  className="shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-mono font-bold tabular-nums"
                   style={{
                     background: 'color-mix(in srgb, var(--fg-accent) 18%, transparent)',
                     color: 'var(--fg-accent)',
@@ -171,10 +171,10 @@ export function InspectionPath({
                   {s.rank}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[12px] font-mono text-[var(--fg-strong)] truncate">
+                  <span className="block text-base font-mono text-[var(--fg-strong)] truncate">
                     {s.filePath}
                   </span>
-                  <span className="block mt-0.5 text-[11px] text-[var(--fg-muted)] leading-snug">
+                  <span className="block mt-0.5 text-sm text-[var(--fg-muted)] leading-snug">
                     {s.reason}
                   </span>
                 </span>
@@ -296,7 +296,7 @@ function SignalTag({ signal }: { signal: InspectionStep['signal'] }) {
   const m = map[signal];
   return (
     <span
-      className="shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+      className="shrink-0 inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-bold uppercase tracking-eyebrow"
       style={{ background: `color-mix(in srgb, ${m.color} 15%, transparent)`, color: m.color }}
     >
       {m.label}
@@ -310,7 +310,7 @@ export function ProvenanceBadge({ kind }: { kind: 'ai' | 'static' }) {
   if (kind === 'ai') {
     return (
       <span
-        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-[var(--track-eyebrow)]"
+        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-eyebrow"
         style={{
           background: 'color-mix(in srgb, var(--fg-accent) 18%, transparent)',
           color: 'var(--fg-accent)',
@@ -325,7 +325,7 @@ export function ProvenanceBadge({ kind }: { kind: 'ai' | 'static' }) {
   }
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]"
       style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-strong)' }}
       title="Deterministic static analysis"
     >

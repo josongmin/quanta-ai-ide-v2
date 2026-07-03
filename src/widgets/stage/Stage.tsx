@@ -216,7 +216,7 @@ function FileTooltip({ x, y, file, isDark }: { x: number; y: number; file: FileR
   const { t } = useTranslation('app');
   return (
     <div
-      className={`fixed z-[100] pointer-events-none text-[11px] px-3 py-2.5 rounded-xl border shadow-2xl ${
+      className={`fixed z-[100] pointer-events-none text-sm px-3 py-2.5 rounded-xl border shadow-2xl ${
         isDark
           ? 'bg-black/70 border-white/10 text-white/85 backdrop-blur-2xl'
           : 'bg-white border-black/10 text-black/85'
@@ -224,10 +224,10 @@ function FileTooltip({ x, y, file, isDark }: { x: number; y: number; file: FileR
       style={{ left: x, top: y }}
     >
       <div className="font-bold mb-1">{file.name}</div>
-      <div className={`text-[9px] mb-2 ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+      <div className={`text-2xs mb-2 ${isDark ? 'text-white/40' : 'text-black/40'}`}>
         {file.folderPath || 'root'}
       </div>
-      <div className={`space-y-1 border-t pt-2 text-[10px] ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+      <div className={`space-y-1 border-t pt-2 text-xs ${isDark ? 'border-white/10' : 'border-black/10'}`}>
         <Row label={t('tooltip.loc')} value={file.metrics.loc} />
         <Row label={t('tooltip.complexity')} value={file.metrics.complexity} valueClass="text-[#4f9a5c]" />
         <Row label={t('tooltip.fanInOut')} value={`${file.metrics.fanIn} / ${file.metrics.fanOut}`} />
@@ -246,7 +246,7 @@ function FileTooltip({ x, y, file, isDark }: { x: number; y: number; file: FileR
         {file.metrics.unknownReasons.length > 0 && (
           <div
             style={{ color: 'color-mix(in srgb, var(--intent-warn-fg) 80%, transparent)' }}
-            className="text-[9px] mt-1 italic"
+            className="text-2xs mt-1 italic"
           >
             {t('tooltip.warning', { reasons: file.metrics.unknownReasons.join(' · ') })}
           </div>

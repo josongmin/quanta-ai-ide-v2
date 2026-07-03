@@ -151,7 +151,7 @@ export default function FatigueMeter({ pr }: { pr: PullRequest }) {
       title={`Cognitive-load estimate based on ${formatMinutes(minutes)} on this PR (Cohen 2006: defect-find rate halves past 60 min).`}
     >
       <Brain className="w-3 h-3" style={{ color: tone }} strokeWidth={2.5} />
-      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color: tone }}>
+      <span className="text-xs font-bold uppercase tracking-eyebrow" style={{ color: tone }}>
         {TIER_LABEL[tier]}
       </span>
       {/* Mini progress bar — visualises remaining budget within the
@@ -165,12 +165,12 @@ export default function FatigueMeter({ pr }: { pr: PullRequest }) {
           style={{ width: `${String(Math.round(progress * 100))}%`, background: tone }}
         />
       </span>
-      <span className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)]">
+      <span className="text-xs font-mono tabular-nums text-[var(--fg-muted)]">
         {formatMinutes(minutes)}
       </span>
       {showBreakNudge && (
         <span
-          className="inline-flex items-center gap-1 ml-0.5 pl-1.5 text-[10px] font-mono"
+          className="inline-flex items-center gap-1 ml-0.5 pl-1.5 text-xs font-mono"
           style={{ borderLeft: `1px solid color-mix(in srgb, ${tone} 33%, transparent)`, color: tone }}
         >
           <Coffee className="w-2.5 h-2.5" />

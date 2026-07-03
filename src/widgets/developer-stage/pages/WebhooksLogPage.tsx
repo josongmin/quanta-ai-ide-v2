@@ -30,7 +30,7 @@ export default function WebhooksLogPage() {
       topRight={
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[11px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -60,7 +60,7 @@ export default function WebhooksLogPage() {
               key={f.id}
               type="button"
               onClick={() => { setFilter(f.id); }}
-              className="h-7 px-3 rounded-full text-[11px] font-medium transition-colors"
+              className="h-7 px-3 rounded-full text-sm font-medium transition-colors"
               style={{
                 background: active ? 'color-mix(in srgb, var(--fg-accent) 12%, transparent)' : 'transparent',
                 color: active ? 'var(--fg-accent)' : 'var(--fg-muted)',
@@ -93,7 +93,7 @@ export default function WebhooksLogPage() {
             />
           ))}
           {filtered.length === 0 && (
-            <div className="py-14 text-center text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+            <div className="py-14 text-center text-base" style={{ color: 'var(--fg-subtle)' }}>
               No deliveries match this filter.
             </div>
           )}

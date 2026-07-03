@@ -82,7 +82,7 @@ export function RevealOnceModal({
           <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
             <div className="flex items-center gap-2">
               <Check className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
-              <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{title}</span>
+              <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{title}</span>
             </div>
             <button type="button" onClick={onDismiss} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
               <X className="w-4 h-4" />
@@ -94,14 +94,14 @@ export function RevealOnceModal({
             <div className="flex items-center gap-2">
               <Check className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
               <span
-                className={`text-[12px] font-semibold${titleMono ? ' font-mono' : ''}`}
+                className={`text-base font-semibold${titleMono ? ' font-mono' : ''}`}
                 style={{ color: 'var(--fg-strong)' }}
               >
                 {title}
               </span>
             </div>
           )}
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
             {description}
           </p>
           <CopyableCode value={value} />

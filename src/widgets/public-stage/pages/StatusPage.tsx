@@ -29,11 +29,11 @@ export default function StatusPage() {
             {overall === 'operational' ? 'All systems operational.' : overall === 'degraded' ? 'Some systems degraded.' : 'Major outage in progress.'}
           </h1>
 
-          <p className="text-[14.5px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-lg" style={{ color: 'var(--fg-muted)' }}>
             Updated <span className="font-mono">2026-05-11 17:42 UTC</span> · Refreshes every 60 seconds
           </p>
 
-          <div className="flex items-center gap-6 mt-3 text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+          <div className="flex items-center gap-6 mt-3 text-base" style={{ color: 'var(--fg-muted)' }}>
             <UptimeStat label="90-day uptime"  value="99.97%" />
             <Divider />
             <UptimeStat label="Last incident"  value="3 days ago" />
@@ -69,7 +69,7 @@ export default function StatusPage() {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 mt-3 px-1 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="flex items-center gap-4 mt-3 px-1 text-sm" style={{ color: 'var(--fg-subtle)' }}>
           <span>Last 90 days</span>
           <Legend color="var(--intent-success-fg)" label="Operational" />
           <Legend color="var(--intent-warn-fg)"    label="Degraded" />

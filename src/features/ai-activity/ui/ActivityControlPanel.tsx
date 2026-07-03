@@ -50,10 +50,10 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
           className="px-4 py-3 border-b"
           style={{ borderColor: 'var(--border-default)' }}
         >
-          <h2 id="ai-activity-panel-title" className="text-[12px] font-black uppercase tracking-[0.18em]">
+          <h2 id="ai-activity-panel-title" className="text-base font-black uppercase tracking-eyebrow">
             {t('aiActivity.title', { defaultValue: 'AI Activity' })}
           </h2>
-          <p className="text-[10px] mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
             {t('aiActivity.hint', { defaultValue: 'Show what the AI is touching, in real time.' })}
           </p>
         </header>
@@ -73,7 +73,7 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
               onChange={(v) => { setPref('demoMode', v); }}
               disabled={!prefs.enabled}
             />
-            <p className="text-[10px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+            <p className="text-xs leading-snug" style={{ color: 'var(--fg-subtle)' }}>
               {t('aiActivity.demoModeHint', {
                 defaultValue: 'Synthesize fake chat sessions when no real ChatAgent activity is being produced. Turn off to see only real activity.',
               })}
@@ -125,7 +125,7 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
           </Section>
 
           <Section title={t('aiActivity.cap', { defaultValue: 'Limits' })}>
-            <div className="flex items-center justify-between text-[11px]">
+            <div className="flex items-center justify-between text-sm">
               <span style={{ color: 'var(--fg-muted)' }}>
                 {t('aiActivity.maxConcurrent', { defaultValue: 'Max concurrent' })}
               </span>
@@ -133,7 +133,7 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
                 value={prefs.maxConcurrent}
                 onChange={(e) => { setPref('maxConcurrent', Number(e.target.value)); }}
                 disabled={!prefs.enabled}
-                className="text-[11px] tabular-nums px-2 py-1 rounded-md border disabled:opacity-50"
+                className="text-sm tabular-nums px-2 py-1 rounded-md border disabled:opacity-50"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   borderColor: 'var(--border-default)',
@@ -152,7 +152,7 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
             <button
               type="button"
               onClick={reset}
-              className="text-[11px] uppercase tracking-[0.18em] font-bold hover:opacity-100"
+              className="text-sm uppercase tracking-eyebrow font-bold hover:opacity-100"
               style={{ color: 'var(--fg-muted)' }}
             >
               {t('aiActivity.resetDefaults', { defaultValue: 'Reset to defaults' })}
@@ -160,7 +160,7 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
             <button
               type="button"
               onClick={onClose}
-              className="text-[11px] uppercase tracking-[0.18em] font-bold px-3 py-1.5 rounded-md hover-surface"
+              className="text-sm uppercase tracking-eyebrow font-bold px-3 py-1.5 rounded-md hover-surface"
               style={{
                 background: 'var(--bg-surface-muted)',
                 color: 'var(--fg-default)',
@@ -181,7 +181,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section className="space-y-2">
       <h3
-        className="text-[9px] font-black uppercase tracking-[0.18em]"
+        className="text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {title}

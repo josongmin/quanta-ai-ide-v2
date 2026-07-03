@@ -45,11 +45,11 @@ export default function IncidentProximityCard({
       />
       <div className="relative flex items-center gap-2 mb-3">
         <History className="w-3.5 h-3.5" style={{ color: accent }} strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)]" style={{ color: accent }}>
+        <span className="text-sm font-bold uppercase tracking-eyebrow" style={{ color: accent }}>
           Past-incident proximity
         </span>
         <ProvenanceBadge kind="static" />
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {visible.length} {visible.length === 1 ? 'match' : 'matches'}
         </span>
       </div>
@@ -66,13 +66,13 @@ export default function IncidentProximityCard({
               className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-3 px-2 py-2 rounded-md hover:bg-[var(--bg-surface-muted)]"
             >
               <span
-                className="shrink-0 inline-flex items-center justify-center px-2 h-6 rounded-md text-[10px] font-mono font-bold tabular-nums"
+                className="shrink-0 inline-flex items-center justify-center px-2 h-6 rounded-md text-xs font-mono font-bold tabular-nums"
                 style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone, border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)` }}
               >
                 {inc.id}
               </span>
               <div className="min-w-0">
-                <div className="text-[12px] text-[var(--fg-default)] truncate" title={inc.title}>
+                <div className="text-base text-[var(--fg-default)] truncate" title={inc.title}>
                   {inc.title}
                 </div>
                 <div className="mt-1 h-1 rounded-full bg-[var(--bg-hover)] overflow-hidden">
@@ -82,10 +82,10 @@ export default function IncidentProximityCard({
                   />
                 </div>
               </div>
-              <span className="shrink-0 text-[10px] font-mono tabular-nums" style={{ color: tone }}>
+              <span className="shrink-0 text-xs font-mono tabular-nums" style={{ color: tone }}>
                 {sim}%
               </span>
-              <span className="shrink-0 text-[10px] font-mono text-[var(--fg-subtle)]">
+              <span className="shrink-0 text-xs font-mono text-[var(--fg-subtle)]">
                 {inc.date}
               </span>
               <button

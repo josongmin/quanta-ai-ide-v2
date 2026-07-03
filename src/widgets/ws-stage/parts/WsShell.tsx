@@ -101,7 +101,7 @@ function WsCard({ orgSlug, wsName, wsSlug }: { orgSlug: string; wsName: string; 
   return (
     <div className="flex items-center gap-2">
       <div
-        className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-black"
+        className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-black"
         style={{
           backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
           color: 'var(--bg-canvas)',
@@ -110,10 +110,10 @@ function WsCard({ orgSlug, wsName, wsSlug }: { orgSlug: string; wsName: string; 
         {wsName.slice(0, 2).toUpperCase()}
       </div>
       <div className="flex flex-col min-w-0">
-        <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
           {wsName}
         </span>
-        <span className="text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>
           {orgSlug}/{wsSlug}
         </span>
       </div>
@@ -127,7 +127,7 @@ function Breadcrumb({
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex items-center gap-1 text-[11px]"
+      className="flex items-center gap-1 text-sm"
       style={{ color: 'var(--fg-subtle)' }}
     >
       <span>{orgName}</span>

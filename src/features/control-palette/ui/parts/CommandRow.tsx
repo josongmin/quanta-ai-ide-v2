@@ -64,15 +64,15 @@ export function CommandRow({
           : Icon ? <Icon className="w-3.5 h-3.5" />
           : <ArrowRight className="w-3 h-3" />}
       </span>
-      <span className="flex-1 min-w-0 text-[12px] truncate">{cmd.label}</span>
+      <span className="flex-1 min-w-0 text-base truncate">{cmd.label}</span>
       {cmd.hint !== undefined && (
-        <span className="text-[10px] font-mono shrink-0" style={{ color: skin.chipText }}>
+        <span className="text-xs font-mono shrink-0" style={{ color: skin.chipText }}>
           {cmd.hint}
         </span>
       )}
       {cmd.shortcut !== undefined && (
         <span
-          className="text-[9px] font-mono px-1.5 py-0.5 rounded shrink-0"
+          className="text-2xs font-mono px-1.5 py-0.5 rounded shrink-0"
           style={{
             background: skin.chipBg,
             color: skin.chipText,

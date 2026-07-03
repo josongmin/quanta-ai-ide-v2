@@ -168,10 +168,10 @@ export default function DependencyContext({
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <Network className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Dependency context
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {touchedCount} touched · {laneSpread} {laneSpread === 1 ? 'layer' : 'layers'}
         </span>
         <Badge variant={reachLabel.variant} fill="soft" className="ml-auto">
@@ -358,7 +358,7 @@ export default function DependencyContext({
       </div>
 
       {/* Legend */}
-      <div className="mt-3 flex items-center gap-4 flex-wrap text-[10px] font-mono text-[var(--fg-muted)]">
+      <div className="mt-3 flex items-center gap-4 flex-wrap text-xs font-mono text-[var(--fg-muted)]">
         <span className="inline-flex items-center gap-1.5">
           <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: 'var(--fg-accent)' }} />
           touched
@@ -376,9 +376,9 @@ export default function DependencyContext({
           touched ↔ touched
         </span>
         <span className="ml-auto inline-flex items-center gap-1.5 text-[var(--fg-subtle)]">
-          <kbd className="px-1 rounded text-[9px] font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)]">↑↓←→</kbd>
+          <kbd className="px-1 rounded text-2xs font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)]">↑↓←→</kbd>
           navigate
-          <kbd className="ml-1 px-1 rounded text-[9px] font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)]">↵</kbd>
+          <kbd className="ml-1 px-1 rounded text-2xs font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)]">↵</kbd>
           open
         </span>
       </div>

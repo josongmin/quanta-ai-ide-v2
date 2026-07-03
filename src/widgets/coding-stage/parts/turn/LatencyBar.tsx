@@ -54,7 +54,7 @@ export function LatencyBar({
       baselineChip = (
         <span
           style={toneStyle}
-          className={`shrink-0 text-[9px] font-mono tabular-nums ${toneClass}`}
+          className={`shrink-0 text-2xs font-mono tabular-nums ${toneClass}`}
           title={t('latencyBaseline.tooltip')}
         >
           {label}
@@ -82,7 +82,7 @@ export function LatencyBar({
           );
         })}
       </div>
-      <span className={`shrink-0 text-[9px] font-mono tabular-nums ${muted}`}>
+      <span className={`shrink-0 text-2xs font-mono tabular-nums ${muted}`}>
         {t('latency.totalLabel', { ms: total })}
       </span>
       {baselineChip}

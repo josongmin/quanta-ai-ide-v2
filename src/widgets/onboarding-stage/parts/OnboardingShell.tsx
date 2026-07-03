@@ -57,7 +57,7 @@ export function OnboardingShell({
     >
       <header className="flex items-center justify-between px-8 h-14 shrink-0">
         <BrandMark />
-        <div className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
           {topRight ?? (
             <span>Step <span style={{ color: 'var(--fg-default)' }}>{current + 1}</span> of {steps.length}</span>
           )}
@@ -75,13 +75,13 @@ export function OnboardingShell({
           <StepBody index={current}>
             <header className="flex flex-col gap-2">
               <h1
-                className="text-[26px] font-semibold tracking-tight leading-tight"
+                className="text-4xl font-semibold tracking-tight leading-tight"
                 style={{ color: 'var(--fg-strong)' }}
               >
                 {steps[current].title}
               </h1>
               {steps[current].subtitle && (
-                <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+                <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
                   {steps[current].subtitle}
                 </p>
               )}
@@ -99,7 +99,7 @@ export function OnboardingShell({
           type="button"
           onClick={onPrev}
           disabled={current === 0 || !onPrev}
-          className="text-[12px] font-medium px-2 py-1 rounded-md transition-colors"
+          className="text-base font-medium px-2 py-1 rounded-md transition-colors"
           style={{
             color: current === 0 ? 'var(--fg-subtle)' : 'var(--fg-default)',
             opacity: current === 0 ? 0.5 : 1,
@@ -122,16 +122,16 @@ function BrandMark() {
   return (
     <div className="flex items-center gap-2">
       <div
-        className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black"
+        className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-black"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
       >
         SE
       </div>
-      <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+      <span className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
         se · field
       </span>
       <span
-        className="ml-2 text-[10px] uppercase tracking-[0.14em] px-1.5 py-0.5 rounded"
+        className="ml-2 text-xs uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
         style={{
           color: 'var(--fg-subtle)',
           background: 'var(--bg-surface-muted)',
@@ -174,7 +174,7 @@ function Stepper({ steps, current }: { steps: OnboardingStep[]; current: number 
         return (
           <li key={s.id} className="flex items-center gap-2">
             <span
-              className="relative w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold tabular-nums transition-colors"
+              className="relative w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold tabular-nums transition-colors"
               style={{
                 background: done
                   ? 'var(--fg-accent)'
@@ -198,7 +198,7 @@ function Stepper({ steps, current }: { steps: OnboardingStep[]; current: number 
               )}
             </span>
             <span
-              className="text-[11px] font-medium tracking-tight hidden sm:inline transition-colors"
+              className="text-sm font-medium tracking-tight hidden sm:inline transition-colors"
               style={{
                 color: active
                   ? 'var(--fg-strong)'

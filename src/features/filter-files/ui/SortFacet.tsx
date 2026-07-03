@@ -39,17 +39,17 @@ export default function SortFacet() {
           const v = e.target.value;
           setSort(isSortKey(v) ? v : 'none');
         }}
-        className="w-full rounded-xl text-[11px] px-3 py-2 focus:outline-none transition-colors border bg-[color:var(--bg-surface-muted)] border-[color:var(--border-default)] text-[color:var(--fg-default)] focus:border-[color:var(--border-strong)]"
+        className="w-full rounded-xl text-sm px-3 py-2 focus:outline-none transition-colors border bg-[color:var(--bg-surface-muted)] border-[color:var(--border-default)] text-[color:var(--fg-default)] focus:border-[color:var(--border-strong)]"
       >
         {SORT_KEYS.map((k) => <option key={k} value={k}>{t(`sort.options.${k}`)}</option>)}
       </select>
       {state.sort !== 'none' && (
-        <div className="flex items-center justify-between text-[10px] text-[color:var(--fg-muted)]">
-          <span className="uppercase tracking-[var(--track-eyebrow)] font-bold">{t('sort.glowTop')}</span>
+        <div className="flex items-center justify-between text-xs text-[color:var(--fg-muted)]">
+          <span className="uppercase tracking-eyebrow font-bold">{t('sort.glowTop')}</span>
           <select
             value={state.topNHighlight}
             onChange={(e) => { setTopN(+e.target.value); }}
-            className="rounded-md px-2 py-1 text-[10px] focus:outline-none bg-[color:var(--bg-surface-muted)] border border-[color:var(--border-default)] text-[color:var(--fg-strong)]"
+            className="rounded-md px-2 py-1 text-xs focus:outline-none bg-[color:var(--bg-surface-muted)] border border-[color:var(--border-default)] text-[color:var(--fg-strong)]"
           >
             <option value={0}>{t('sort.off')}</option>
             <option value={5}>5</option>

@@ -12,14 +12,14 @@ export function SectionHeader({ title, sub }: { title: string; sub?: string }) {
   return (
     <div>
       <div
-        className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {title}
       </div>
       {sub && (
         <div
-          className="text-[9px] mt-0.5"
+          className="text-2xs mt-0.5"
           style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
         >{sub}</div>
       )}
@@ -31,7 +31,7 @@ export function SectionHeader({ title, sub }: { title: string; sub?: string }) {
 export function Note({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="px-3 py-2.5 rounded-xl border text-[10px] leading-relaxed"
+      className="px-3 py-2.5 rounded-xl border text-xs leading-relaxed"
       style={{
         background: 'var(--bg-surface-muted)',
         borderColor: 'var(--border-default)',
@@ -46,7 +46,7 @@ export function Note({ children }: { children: React.ReactNode }) {
 // MiniStat — label/value row used in Profile, Graph, Risk stat grids.
 export function MiniStat({ label, value, valueClass }: { label: string; value: string | number; valueClass?: string }) {
   return (
-    <div className="flex items-center justify-between text-[10px]" style={{ color: 'var(--fg-muted)' }}>
+    <div className="flex items-center justify-between text-xs" style={{ color: 'var(--fg-muted)' }}>
       <span>{label}</span>
       <span
         className={`font-bold tabular-nums ${valueClass ?? ''}`}
@@ -61,7 +61,7 @@ export function Section({ title, children }: { title: string; children: React.Re
   return (
     <div>
       <div
-        className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] mb-1.5"
+        className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {title}
@@ -75,7 +75,7 @@ export function Section({ title, children }: { title: string; children: React.Re
 export function Empty({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="text-[10px] italic px-2 py-1"
+      className="text-xs italic px-2 py-1"
       style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
     >{children}</div>
   );

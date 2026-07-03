@@ -71,7 +71,7 @@ function LogoUpload({ value, onChange }: OrgStepProps) {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
         Logo
       </span>
       <button
@@ -79,7 +79,7 @@ function LogoUpload({ value, onChange }: OrgStepProps) {
         onClick={() => { inputRef.current?.click(); }}
         onDragOver={(e) => { e.preventDefault(); }}
         onDrop={(e) => { e.preventDefault(); accept(e.dataTransfer.files[0]); }}
-        className="relative w-16 h-16 rounded-md overflow-hidden flex items-center justify-center text-[16px] font-bold tracking-tight transition-colors"
+        className="relative w-16 h-16 rounded-md overflow-hidden flex items-center justify-center text-xl font-bold tracking-tight transition-colors"
         style={{
           background: value.logoUrl ? 'transparent' : 'var(--fg-strong)',
           color: 'var(--bg-canvas)',
@@ -101,7 +101,7 @@ function LogoUpload({ value, onChange }: OrgStepProps) {
         <button
           type="button"
           onClick={remove}
-          className="text-[10px] inline-flex items-center gap-1 onb-stagger self-start"
+          className="text-xs inline-flex items-center gap-1 onb-stagger self-start"
           style={{ color: 'var(--fg-muted)' }}
         >
           <X className="w-2.5 h-2.5" />
@@ -130,7 +130,7 @@ function SlugField({
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>URL slug</span>
@@ -160,10 +160,10 @@ function SlugField({
           onChange={(e) => { onChange(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 32)); }}
           placeholder="acme"
           required
-          className="flex-1 bg-transparent outline-none px-3 text-[12px] tabular-nums"
+          className="flex-1 bg-transparent outline-none px-3 text-base tabular-nums"
           style={{ color: 'var(--fg-strong)' }}
         />
-        <span className="text-[11px] font-mono" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-sm font-mono" style={{ color: 'var(--fg-subtle)' }}>
           .se-field.app
         </span>
         <div className="px-2.5">
@@ -182,7 +182,7 @@ function UrlPreview({ slug, state }: { slug: string; state: ReturnType<typeof us
   return (
     <div
       key={slug}
-      className="flex items-center gap-2 px-3 py-2 rounded-md font-mono text-[12px] tabular-nums onb-stagger"
+      className="flex items-center gap-2 px-3 py-2 rounded-md font-mono text-base tabular-nums onb-stagger"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-muted)',
@@ -209,7 +209,7 @@ function IndustryGrid({
   return (
     <fieldset className="flex flex-col gap-2">
       <legend
-        className="text-[10px] uppercase tracking-[0.14em] font-medium pb-1"
+        className="text-xs uppercase tracking-eyebrow font-medium pb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         Industry
@@ -222,7 +222,7 @@ function IndustryGrid({
               key={ind.id}
               type="button"
               onClick={() => { onChange(ind.id); }}
-              className="h-8 rounded-md text-[11px] font-medium transition-colors"
+              className="h-8 rounded-md text-sm font-medium transition-colors"
               style={{
                 background: active ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
                 color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -250,7 +250,7 @@ function SizeRow({
   return (
     <fieldset className="flex flex-col gap-2">
       <legend
-        className="text-[10px] uppercase tracking-[0.14em] font-medium pb-1"
+        className="text-xs uppercase tracking-eyebrow font-medium pb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
         Team size
@@ -276,12 +276,12 @@ function SizeRow({
               }}
             >
               <span
-                className="text-[12px] font-semibold tabular-nums"
+                className="text-base font-semibold tabular-nums"
                 style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-default)' }}
               >
                 {s.label}
               </span>
-              <span className="text-[9px]" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>
                 {s.sub}
               </span>
             </button>

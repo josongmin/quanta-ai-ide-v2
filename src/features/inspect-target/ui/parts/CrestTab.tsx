@@ -66,7 +66,7 @@ export function CrestTab({
     >
       <span
         style={isActive ? { color: 'var(--intent-success-fg)' } : undefined}
-        className={`shrink-0 text-[9px] font-mono tabular-nums ${
+        className={`shrink-0 text-2xs font-mono tabular-nums ${
         isActive
           ? ''
           : 'text-[var(--fg-subtle)]'

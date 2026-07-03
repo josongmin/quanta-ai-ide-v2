@@ -50,7 +50,7 @@ export function EmailInputBox({
           }}
           onBlur={() => { if (draft.trim()) onCommit(); }}
           placeholder={entries.length === 0 ? 'name@company.com, another@company.com…' : ''}
-          className="flex-1 min-w-[180px] bg-transparent outline-none text-[12px] py-1 px-1"
+          className="flex-1 min-w-[180px] bg-transparent outline-none text-base py-1 px-1"
           style={{ color: 'var(--fg-strong)' }}
         />
       </div>
@@ -68,7 +68,7 @@ function EmailChip({
   const [open, setOpen] = useState(false);
   return (
     <span
-      className="relative inline-flex items-center gap-1 h-6 pl-2 pr-1 rounded text-[11px] tabular-nums onb-stagger"
+      className="relative inline-flex items-center gap-1 h-6 pl-2 pr-1 rounded text-sm tabular-nums onb-stagger"
       style={{
         background: 'var(--bg-canvas)',
         color: 'var(--fg-strong)',
@@ -129,10 +129,10 @@ function EmailChip({
                 onMouseLeave={(e) => { e.currentTarget.style.background = active ? 'var(--bg-active)' : 'transparent'; }}
               >
                 <span className="flex flex-col">
-                  <span className="text-[11px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+                  <span className="text-sm font-medium" style={{ color: 'var(--fg-strong)' }}>
                     {ROLE_META[r].label}
                   </span>
-                  <span className="text-[9px]" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>
                     {ROLE_META[r].sub}
                   </span>
                 </span>

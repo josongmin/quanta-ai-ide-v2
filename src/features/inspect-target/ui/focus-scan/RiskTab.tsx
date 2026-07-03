@@ -65,18 +65,18 @@ export function RiskTab({ file }: { file: FileRecord }) {
               border: `1.5px solid ${severe ? 'rgba(194,90,85,0.4)' : 'var(--border-strong)'}`,
             }}
           >
-            <div className="text-[22px] font-black leading-none tabular-nums" style={{ color: ringColor }}>
+            <div className="text-3xl font-black leading-none tabular-nums" style={{ color: ringColor }}>
               {total}
             </div>
             <div
-              className="mt-1 text-[8px] font-black uppercase tracking-[var(--track-eyebrow)]"
+              className="mt-1 text-2xs font-black uppercase tracking-eyebrow"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {t('focus.filesUnit')}
             </div>
           </div>
           <p
-            className="text-[10px] mt-2 text-center leading-snug max-w-[100px]"
+            className="text-xs mt-2 text-center leading-snug max-w-[100px]"
             style={{ color: 'var(--fg-muted)' }}
           >
             {t('focus.blastHeadline')}
@@ -85,7 +85,7 @@ export function RiskTab({ file }: { file: FileRecord }) {
 
         <div>
           <div
-            className="flex items-center gap-1.5 mb-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="flex items-center gap-1.5 mb-1.5 text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             <Radio className="w-2.5 h-2.5" />
@@ -133,7 +133,7 @@ export function RiskTab({ file }: { file: FileRecord }) {
                 })}
                 {overflow > 0 && (
                   <div
-                    className="text-[10px] italic px-2 py-1"
+                    className="text-xs italic px-2 py-1"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     {t('focus.blastMore', { count: overflow })}
@@ -193,7 +193,7 @@ function ChannelRow({
       type="button"
       onClick={ch.count > 0 ? onSelect : undefined}
       disabled={ch.count === 0}
-      className={`w-full flex items-center justify-between gap-2 px-2 py-1 rounded-md border text-[10px] transition-colors ${
+      className={`w-full flex items-center justify-between gap-2 px-2 py-1 rounded-md border text-xs transition-colors ${
         dim ? 'opacity-50' : 'hover:brightness-110'
       } ${active ? 'ring-1' : ''}`}
       style={{
@@ -201,11 +201,11 @@ function ChannelRow({
         ...(active ? { boxShadow: '0 0 0 1px var(--border-strong)' } : null),
       }}
     >
-      <span className="font-bold uppercase tracking-[var(--track-eyebrow)] text-[9px]">{t(CHANNEL_LABEL_KEY[ch.key])}</span>
+      <span className="font-bold uppercase tracking-eyebrow text-2xs">{t(CHANNEL_LABEL_KEY[ch.key])}</span>
       <div className="flex items-center gap-1.5">
         {ch.count > 0 ? (
           <>
-            <span className="font-mono tabular-nums text-[10px]">{ch.count}</span>
+            <span className="font-mono tabular-nums text-xs">{ch.count}</span>
             <span className="flex gap-0.5">
               {[0, 1, 2].map((i) => (
                 <span
@@ -221,7 +221,7 @@ function ChannelRow({
             </span>
           </>
         ) : (
-          <span className="font-mono text-[9px]">·</span>
+          <span className="font-mono text-2xs">·</span>
         )}
       </div>
     </button>
@@ -242,7 +242,7 @@ function ChannelHits({ summary }: { summary: RiskChannelSummary }) {
       {summary.hits.map((h, i) => (
         <div
           key={`${summary.key}-${i}`}
-          className="px-2.5 py-1.5 rounded-md border text-[10px]"
+          className="px-2.5 py-1.5 rounded-md border text-xs"
           style={{
             background: 'var(--bg-surface-muted)',
             borderColor: 'var(--border-default)',
@@ -253,7 +253,7 @@ function ChannelHits({ summary }: { summary: RiskChannelSummary }) {
             <SeverityChip severity={h.severity} />
             {h.depth !== undefined && (
               <span
-                className="text-[9px] font-mono"
+                className="text-2xs font-mono"
                 style={{ color: 'var(--fg-subtle)' }}
               >depth {h.depth}</span>
             )}
@@ -274,7 +274,7 @@ function SeverityChip({ severity }: { severity: number }) {
       : { background: 'rgb(from var(--intent-success-fg) r g b / 0.20)', color: 'var(--intent-success-fg)' };
   return (
     <span
-      className="px-1.5 py-0.5 rounded-md font-mono text-[9px] uppercase tracking-[var(--track-eyebrow)]"
+      className="px-1.5 py-0.5 rounded-md font-mono text-2xs uppercase tracking-eyebrow"
       style={style}
     >
       {band} · {(severity * 100).toFixed(0)}%
@@ -285,7 +285,7 @@ function SeverityChip({ severity }: { severity: number }) {
 function FileRow({ f }: { f: FileRecord }) {
   return (
     <div
-      className="flex items-center justify-between px-2 py-1 rounded-md text-[10px] hover-surface"
+      className="flex items-center justify-between px-2 py-1 rounded-md text-xs hover-surface"
       style={{ background: 'var(--bg-surface-muted)' }}
     >
       <span className="font-mono truncate">{f.folderPath}/{f.name}</span>

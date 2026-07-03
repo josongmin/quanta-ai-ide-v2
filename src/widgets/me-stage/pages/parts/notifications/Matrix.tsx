@@ -20,7 +20,7 @@ export function Matrix({
       style={{ border: '1px solid var(--border-muted)' }}
     >
       <div
-        className="grid items-center gap-2 px-3 py-2 text-[9px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center gap-2 px-3 py-2 text-2xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '1fr 80px 80px 80px 80px',
           background: 'var(--bg-surface-muted)',
@@ -43,7 +43,7 @@ export function Matrix({
       {groups.map(([groupTitle, events], gi) => (
         <div key={groupTitle}>
           <div
-            className="px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="px-3 py-1.5 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               color: 'var(--fg-muted)',
               background: 'var(--bg-canvas)',
@@ -72,10 +72,10 @@ export function Matrix({
                   className="flex flex-col gap-0.5 text-left transition-colors"
                   title={allOn ? 'Disable all channels for this event' : 'Enable all channels for this event'}
                 >
-                  <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+                  <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
                     {e.label}
                   </span>
-                  <span className="text-[10px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-xs leading-snug" style={{ color: 'var(--fg-subtle)' }}>
                     {e.sub}
                   </span>
                 </button>

@@ -50,7 +50,7 @@ export function Summary({
         style={{ background: 'var(--intent-success-bg)', border: '1px solid var(--intent-success-fg)' }}
       >
         <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-success-fg)' }} />
-        <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
+        <div className="flex flex-col gap-0.5 text-sm leading-snug">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
             Free forever
           </span>
@@ -72,12 +72,12 @@ export function Summary({
     >
       <div className="flex items-center gap-2">
         <Receipt className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
-        <span className="text-[11px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {value.cycle === 'annual' ? 'Annual subscription' : 'Monthly subscription'}
         </span>
         {plan.trial && (
           <span
-            className="ml-auto text-[9px] uppercase tracking-[0.14em] font-semibold inline-flex items-center gap-1"
+            className="ml-auto text-2xs uppercase tracking-eyebrow font-semibold inline-flex items-center gap-1"
             style={{ color: 'var(--fg-accent)' }}
           >
             <Clock className="w-2.5 h-2.5" />
@@ -86,7 +86,7 @@ export function Summary({
         )}
       </div>
 
-      <dl className="grid grid-cols-1 gap-1 text-[11px] tabular-nums">
+      <dl className="grid grid-cols-1 gap-1 text-sm tabular-nums">
         <SummaryRow
           label={`${plan.name} · ${value.seats} seats × $${value.cycle === 'annual' ? plan.annual : plan.monthly}/mo`}
           value={`$${calc.baseMonthly.toFixed(0)}`}
@@ -114,7 +114,7 @@ export function Summary({
         )}
       </dl>
 
-      <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
         Pro-rated when you change plans or seat count. Taxes calculated at checkout.
       </span>
     </div>

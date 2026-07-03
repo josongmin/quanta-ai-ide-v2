@@ -26,7 +26,7 @@ function UsageCell({ row }: { row: UsageRow }) {
   return (
     <div className="flex flex-col gap-2">
       <div
-        className="text-[10px] uppercase tracking-[0.14em] font-medium"
+        className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {row.label}
@@ -34,12 +34,12 @@ function UsageCell({ row }: { row: UsageRow }) {
 
       <div className="flex items-baseline gap-1">
         <span
-          className="text-[22px] font-semibold tracking-tight tabular-nums leading-none"
+          className="text-3xl font-semibold tracking-tight tabular-nums leading-none"
           style={{ color: 'var(--fg-strong)' }}
         >
           {fmt(row.used)}
         </span>
-        <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
           / {row.limit == null ? '∞' : fmt(row.limit)} {row.unit}
         </span>
       </div>
@@ -54,7 +54,7 @@ function UsageCell({ row }: { row: UsageRow }) {
         />
       </div>
 
-      <div className="flex items-center justify-between text-[10px] tabular-nums">
+      <div className="flex items-center justify-between text-xs tabular-nums">
         <span style={{ color: 'var(--fg-subtle)' }}>{Math.round(pct)}% used</span>
         {row.hint && <span style={{ color: 'var(--fg-subtle)' }}>{row.hint}</span>}
       </div>

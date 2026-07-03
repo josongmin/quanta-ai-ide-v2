@@ -69,7 +69,7 @@ export default function AuthorVelocity({ pr, allPrs }: Props) {
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono"
+      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-mono"
       style={{
         background: `color-mix(in srgb, ${tone} 10%, transparent)`,
         border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)`,
@@ -78,7 +78,7 @@ export default function AuthorVelocity({ pr, allPrs }: Props) {
       title={`@${pr.author} · 중앙값 ${formatHoursCompact(stats.medianHours)} · p95 ${formatHoursCompact(stats.p95Hours)} · 평균 ${String(Math.round(stats.meanLoc))} LOC (n=${String(stats.prCount)})`}
     >
       <Gauge className="w-2.5 h-2.5" strokeWidth={2.5} />
-      <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">
+      <span className="font-bold uppercase tracking-eyebrow">
         @{pr.author}
       </span>
       <span className="tabular-nums">

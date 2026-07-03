@@ -16,11 +16,11 @@ export function PlanFooter({
       style={{ borderColor: 'var(--border-muted)' }}
     >
       <div
-        className="text-[11px] font-semibold"
+        className="text-sm font-semibold"
         style={{ color: 'var(--fg-default)' }}
       >
         <span
-          className="text-[9px] font-black uppercase tracking-[0.22em] mr-1.5"
+          className="text-2xs font-black uppercase tracking-[0.22em] mr-1.5"
           style={{ color: 'var(--fg-subtle)' }}
         >
           Plan ready

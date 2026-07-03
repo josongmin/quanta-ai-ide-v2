@@ -86,7 +86,7 @@ export default function InboxPage() {
         <div className="flex items-center gap-1.5">
           {bulkSel.size > 0 ? (
             <>
-              <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+              <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
                 {bulkSel.size} selected
               </span>
               <Button leading={<Check className="w-3 h-3" />} onClick={bulkMarkRead}>Mark read</Button>
@@ -122,7 +122,7 @@ export default function InboxPage() {
               {groups.map(([group, list]) => (
                 <div key={group}>
                   <div
-                    className="px-3 py-1.5 text-[9px] uppercase tracking-[0.14em] font-semibold"
+                    className="px-3 py-1.5 text-2xs uppercase tracking-eyebrow font-semibold"
                     style={{
                       background: 'var(--bg-surface-muted)',
                       color: 'var(--fg-subtle)',

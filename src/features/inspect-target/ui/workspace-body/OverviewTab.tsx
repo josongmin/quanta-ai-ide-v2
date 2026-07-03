@@ -94,12 +94,12 @@ export const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats:
             {langEntries.map(([lang, n]) => (
               <span
                 key={lang}
-                className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px]"
+                className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs"
                 style={{ background: 'var(--bg-surface-muted)' }}
               >
                 <span className="font-mono font-bold" style={{ color: 'var(--fg-default)' }}>{lang}</span>
                 <span className="tabular-nums" style={{ color: 'var(--fg-muted)' }}>{n}</span>
-                <span className="tabular-nums text-[9px]" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="tabular-nums text-2xs" style={{ color: 'var(--fg-subtle)' }}>
                   {Math.round((n / langTotal) * 100)}%
                 </span>
               </span>
@@ -118,12 +118,12 @@ export const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats:
             />
             <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 mt-2">
               {langEntries.map(([lang, n]) => (
-                <div key={lang} className="flex items-center gap-1.5 text-[10px]">
+                <div key={lang} className="flex items-center gap-1.5 text-xs">
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: languageHue(lang, isDark) }} />
                   <span className="flex-1" style={{ color: 'var(--fg-muted)' }}>{lang}</span>
                   <span className="tabular-nums font-bold" style={{ color: 'var(--fg-default)' }}>{n}</span>
                   <span
-                    className="tabular-nums text-[9px] w-7 text-right"
+                    className="tabular-nums text-2xs w-7 text-right"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     {Math.round((n / langTotal) * 100)}%
@@ -157,7 +157,7 @@ export const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats:
           <ChipBlock label={t('stack.testRunner')} items={[{ text: stats.testRunner }]} />
         ) : (
           <div
-            className="mt-2 px-2 py-1.5 rounded-md text-[10px] flex items-center gap-2"
+            className="mt-2 px-2 py-1.5 rounded-md text-xs flex items-center gap-2"
             style={{
               background: 'rgb(from var(--intent-warn-vivid) r g b / 0.12)',
               color: 'var(--intent-warn-fg)',
@@ -167,7 +167,7 @@ export const OverviewTab = memo(function OverviewTab({ stats, isDark }: { stats:
               className="w-1.5 h-1.5 rounded-full shrink-0"
               style={{ background: 'var(--intent-warn-vivid)' }}
             />
-            <span className="font-bold uppercase tracking-[var(--track-eyebrow)]">{t('stack.noTestRunner')}</span>
+            <span className="font-bold uppercase tracking-eyebrow">{t('stack.noTestRunner')}</span>
             <span className="ml-auto" style={{ opacity: 0.7 }}>
               {t('stack.addTestRunner')}
             </span>

@@ -20,7 +20,7 @@ export function CounterEvidenceRow({ item }: { item: CounterEvidence }) {
     >
       <div className="flex items-center gap-1.5 mb-1">
         <span
-          className="text-2xs font-bold uppercase tracking-[0.14em] px-1 py-px rounded font-mono"
+          className="text-2xs font-bold uppercase tracking-eyebrow px-1 py-px rounded font-mono"
           style={{ background: sevBg, color: sevColor }}
         >
           {tr(`trust.counterSeverity.${item.severity}`)}

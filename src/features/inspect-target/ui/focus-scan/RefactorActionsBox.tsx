@@ -56,14 +56,14 @@ export function RefactorActionsBox({ file }: { file: FileRecord }) {
         <div className="flex items-center gap-1.5">
           <Wand2 className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
           <div
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('refactor.title', { defaultValue: 'Refactor actions' })}
           </div>
         </div>
         <div
-          className="mt-2 text-[10px] italic"
+          className="mt-2 text-xs italic"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('refactor.empty', { defaultValue: 'No automatic refactors available — this file is in good shape.' })}
@@ -84,13 +84,13 @@ export function RefactorActionsBox({ file }: { file: FileRecord }) {
            style={{ borderColor: 'var(--border-muted)' }}>
         <Wand2 className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('refactor.title', { defaultValue: 'Refactor actions' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="ml-auto text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('refactor.summary', {
@@ -110,7 +110,7 @@ export function RefactorActionsBox({ file }: { file: FileRecord }) {
       {/* Batch hint — production would read similar files from the engine */}
       <button
         type="button"
-        className="w-full px-3 py-2 text-left text-[10px] flex items-center gap-1.5 transition-colors hover-surface border-t"
+        className="w-full px-3 py-2 text-left text-xs flex items-center gap-1.5 transition-colors hover-surface border-t"
         style={{
           color: 'var(--fg-muted)',
           borderColor: 'var(--border-muted)',
@@ -150,7 +150,7 @@ function ActionRow({ action }: { action: Action }) {
           className="min-w-0 flex-1 text-left transition-colors hover-surface rounded-md -mx-1 px-1"
         >
           <div
-            className="text-[11px] font-bold leading-tight flex items-center gap-1"
+            className="text-sm font-bold leading-tight flex items-center gap-1"
             style={{ color: 'var(--fg-default)' }}
           >
             {action.title}
@@ -183,7 +183,7 @@ function ActionRow({ action }: { action: Action }) {
         </button>
         <button
           type="button"
-          className="shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
+          className="shrink-0 px-2 py-1 rounded-md text-2xs font-black uppercase tracking-eyebrow transition-colors hover-surface"
           style={{
             background: isAuto
               ? 'rgb(from var(--intent-success-vivid) r g b / 0.15)'
@@ -205,7 +205,7 @@ function ActionRow({ action }: { action: Action }) {
 function DiffPreview({ diff }: { diff: DiffLine[] }) {
   return (
     <div
-      className="mx-3 mb-2 rounded-md overflow-hidden text-[10px] font-mono leading-snug border"
+      className="mx-3 mb-2 rounded-md overflow-hidden text-xs font-mono leading-snug border"
       style={{
         background: 'var(--bg-elevated)',
         borderColor: 'var(--border-muted)',

@@ -10,7 +10,7 @@ export function PlanCard({ plan, cycle }: { plan: Plan; cycle: Cycle }) {
       {plan.featured && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
           <span
-            className="inline-flex items-center gap-1 px-2.5 h-6 text-[10px] uppercase tracking-[0.18em] font-semibold rounded-full"
+            className="inline-flex items-center gap-1 px-2.5 h-6 text-xs uppercase tracking-eyebrow font-semibold rounded-full"
             style={{
               background: 'var(--fg-accent)',
               color: 'var(--bg-canvas)',
@@ -25,7 +25,7 @@ export function PlanCard({ plan, cycle }: { plan: Plan; cycle: Cycle }) {
       <LiftCard featured={plan.featured} className="p-6 h-full">
         <div className="flex flex-col gap-1 min-h-[60px]">
           <span className="text-[15px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>{plan.name}</span>
-          <span className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>{plan.tagline}</span>
+          <span className="text-base" style={{ color: 'var(--fg-muted)' }}>{plan.tagline}</span>
         </div>
 
         <div className="mt-4 mb-5 flex items-baseline gap-1.5">
@@ -35,16 +35,16 @@ export function PlanCard({ plan, cycle }: { plan: Plan; cycle: Cycle }) {
             </span>
           ) : (
             <>
-              <span className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>$</span>
+              <span className="text-lg" style={{ color: 'var(--fg-muted)' }}>$</span>
               <span className="text-[42px] font-semibold tracking-[-0.02em] tabular-nums leading-none" style={{ color: 'var(--fg-strong)' }}>
                 {price}
               </span>
-              <span className="text-[12px] ml-1" style={{ color: 'var(--fg-muted)' }}>{plan.unit}</span>
+              <span className="text-base ml-1" style={{ color: 'var(--fg-muted)' }}>{plan.unit}</span>
             </>
           )}
         </div>
         {cycle === 'annual' && plan.monthly && plan.annual && plan.monthly > plan.annual && (
-          <p className="text-[11px] -mt-3 mb-4" style={{ color: 'var(--intent-success-fg)' }}>
+          <p className="text-sm -mt-3 mb-4" style={{ color: 'var(--intent-success-fg)' }}>
             ${plan.monthly}/mo billed monthly
           </p>
         )}
@@ -57,7 +57,7 @@ export function PlanCard({ plan, cycle }: { plan: Plan; cycle: Cycle }) {
 
         <ul className="flex flex-col gap-2.5 mt-6">
           {plan.features.map((f, i) => (
-            <li key={i} className="flex items-start gap-2 text-[12px]" style={{ color: 'var(--fg-default)' }}>
+            <li key={i} className="flex items-start gap-2 text-base" style={{ color: 'var(--fg-default)' }}>
               <Check className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: 'var(--intent-success-fg)' }} />
               <span>{f}</span>
             </li>

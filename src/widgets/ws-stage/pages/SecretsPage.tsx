@@ -98,7 +98,7 @@ export default function SecretsPage() {
           value={query}
           onChange={(e) => { setQuery(e.target.value); }}
           placeholder="Search by name or scope…"
-          className="flex-1 bg-transparent outline-none text-[12px]"
+          className="flex-1 bg-transparent outline-none text-base"
           style={{ color: 'var(--fg-strong)' }}
         />
         {query && (
@@ -117,7 +117,7 @@ export default function SecretsPage() {
       {/* Table */}
       <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
         <div
-          className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '1fr 220px 110px 100px 32px',
             gap: 12,
@@ -133,7 +133,7 @@ export default function SecretsPage() {
           <span />
         </div>
         {filtered.length === 0 ? (
-          <div className="text-center py-12 text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="text-center py-12 text-base" style={{ color: 'var(--fg-subtle)' }}>
             No secrets match &quot;{query}&quot;.
           </div>
         ) : (
@@ -158,10 +158,10 @@ export default function SecretsPage() {
       >
         <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-danger-fg)' }} />
         <div className="flex flex-col gap-1 flex-1 min-w-0">
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--intent-danger-fg)' }}>
+          <span className="text-base font-semibold" style={{ color: 'var(--intent-danger-fg)' }}>
             Rotate all secrets
           </span>
-          <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
             Generates new values for every secret in this workspace. Any CI run / agent run still using the old value will fail until it picks up the new one.
           </span>
         </div>

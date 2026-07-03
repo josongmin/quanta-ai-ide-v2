@@ -27,7 +27,7 @@ export function CostTelemetry({ fixCase }: { fixCase: FixCase }) {
       style={{ background: t.inset, borderColor: t.borderSoft }}
     >
       <span
-        className="text-[10px] font-black uppercase tracking-[0.18em] shrink-0"
+        className="text-xs font-black uppercase tracking-eyebrow shrink-0"
         style={{ color: t.textMuted }}
       >
         {tr('cost.title')}
@@ -40,7 +40,7 @@ export function CostTelemetry({ fixCase }: { fixCase: FixCase }) {
       <div className="ml-auto flex items-center gap-2">
         <TrendingUp className="w-3 h-3" style={{ color: profitable ? t.ok : t.warn }} />
         <span
-          className="text-[10px] font-mono"
+          className="text-xs font-mono"
           style={{ color: profitable ? t.ok : t.warn }}
         >
           {profitable
@@ -62,10 +62,10 @@ function Cell({
     <div className="flex items-center gap-1.5 shrink-0">
       <Icon className="w-3 h-3" style={{ color: t.textFaint }} />
       <div>
-        <div className="text-2xs font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
+        <div className="text-2xs font-bold uppercase tracking-eyebrow" style={{ color: t.textFaint }}>
           {label}
         </div>
-        <div className="text-[11px] font-mono" style={{ color: t.textHi }}>
+        <div className="text-sm font-mono" style={{ color: t.textHi }}>
           {value}
           <span className="ml-1.5" style={{ color: t.textFaint }}>{sub}</span>
         </div>

@@ -32,24 +32,24 @@ export function PrPackagePreview({ candidate, validation, decision, confidence, 
 
       <div className="mt-2">
         <h4
-          className="text-[9px] font-black uppercase tracking-[0.18em] mb-0.5"
+          className="text-2xs font-black uppercase tracking-eyebrow mb-0.5"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('pr.summary')}
         </h4>
-        <p className="text-[11px]" style={{ color: 'var(--fg-default)' }}>
+        <p className="text-sm" style={{ color: 'var(--fg-default)' }}>
           {candidate.title}
         </p>
       </div>
 
       <div className="mt-2">
         <h4
-          className="text-[9px] font-black uppercase tracking-[0.18em] mb-0.5"
+          className="text-2xs font-black uppercase tracking-eyebrow mb-0.5"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('pr.why')}
         </h4>
-        <p className="text-[11px]" style={{ color: 'var(--fg-default)' }}>
+        <p className="text-sm" style={{ color: 'var(--fg-default)' }}>
           {candidate.rationale}
         </p>
       </div>
@@ -57,17 +57,17 @@ export function PrPackagePreview({ candidate, validation, decision, confidence, 
       <div className="mt-2 grid grid-cols-2 gap-2">
         <div>
           <h4
-            className="text-[9px] font-black uppercase tracking-[0.18em] mb-0.5"
+            className="text-2xs font-black uppercase tracking-eyebrow mb-0.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('pr.validated')}
           </h4>
           <ul className="flex flex-col gap-0.5">
             {passed.length === 0 && (
-              <li className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>—</li>
+              <li className="text-xs" style={{ color: 'var(--fg-subtle)' }}>—</li>
             )}
             {passed.map((ob) => (
-              <li key={ob.id} className="text-[10px]" style={{ color: 'var(--fg-default)' }}>
+              <li key={ob.id} className="text-xs" style={{ color: 'var(--fg-default)' }}>
                 ✓ {ob.label}
               </li>
             ))}
@@ -75,17 +75,17 @@ export function PrPackagePreview({ candidate, validation, decision, confidence, 
         </div>
         <div>
           <h4
-            className="text-[9px] font-black uppercase tracking-[0.18em] mb-0.5"
+            className="text-2xs font-black uppercase tracking-eyebrow mb-0.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('pr.unverified')}
           </h4>
           <ul className="flex flex-col gap-0.5">
             {unverified.length === 0 && (
-              <li className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>—</li>
+              <li className="text-xs" style={{ color: 'var(--fg-subtle)' }}>—</li>
             )}
             {unverified.map((ob) => (
-              <li key={ob.id} className="text-[10px]" style={{ color: 'var(--fg-default)' }}>
+              <li key={ob.id} className="text-xs" style={{ color: 'var(--fg-default)' }}>
                 · {ob.label} ({ob.status})
               </li>
             ))}
@@ -94,7 +94,7 @@ export function PrPackagePreview({ candidate, validation, decision, confidence, 
       </div>
 
       <div
-        className="mt-3 pt-2 flex items-center justify-between text-[10px] font-mono"
+        className="mt-3 pt-2 flex items-center justify-between text-xs font-mono"
         style={{ color: 'var(--fg-subtle)', borderTop: '1px solid var(--border-muted)' }}
       >
         <span>{t('pr.proposer')}</span>

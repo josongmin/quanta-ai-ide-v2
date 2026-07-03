@@ -20,7 +20,7 @@ export function ConnectionList({
   if (items.length === 0) {
     return (
       <div
-        className="text-center py-6 text-[11px] rounded-md"
+        className="text-center py-6 text-sm rounded-md"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px dashed var(--border-default)',
@@ -80,19 +80,19 @@ function ConnectionRow({
         </span>
         <div className="flex flex-col flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
               {conn.provider}
             </span>
             {conn.primary && (
               <span
-                className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+                className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                 style={{ color: 'var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
               >
                 Primary
               </span>
             )}
           </div>
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             {conn.account} · Connected {conn.connectedAt} · {conn.lastUsed}
           </span>
         </div>
@@ -101,7 +101,7 @@ function ConnectionRow({
           <button
             type="button"
             onClick={onToggle}
-            className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-[11px] font-medium transition-colors"
+            className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-sm font-medium transition-colors"
             style={{
               background: expanded ? 'var(--bg-active)' : 'var(--bg-surface-muted)',
               color: 'var(--fg-default)',
@@ -120,7 +120,7 @@ function ConnectionRow({
 
       {conn.warning && (
         <div
-          className="flex items-start gap-2 mx-3 mb-2 px-2.5 py-1.5 rounded text-[10px]"
+          className="flex items-start gap-2 mx-3 mb-2 px-2.5 py-1.5 rounded text-xs"
           style={{
             background: 'var(--intent-warn-bg)',
             border: '1px solid var(--intent-warn-fg)',
@@ -138,20 +138,20 @@ function ConnectionRow({
           style={{ borderTop: '1px dashed var(--border-muted)' }}
         >
           <div
-            className="text-[9px] uppercase tracking-[0.14em] font-semibold pt-2.5 pb-1.5"
+            className="text-2xs uppercase tracking-eyebrow font-semibold pt-2.5 pb-1.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
             Authorized scopes
           </div>
           <ul className="grid grid-cols-1 gap-1">
             {conn.scopes.map((s) => (
-              <li key={s.id} className="flex items-center gap-2 text-[11px]">
+              <li key={s.id} className="flex items-center gap-2 text-sm">
                 <Check className="w-3 h-3" style={{ color: s.required ? 'var(--intent-success-fg)' : 'var(--fg-subtle)' }} />
                 <span style={{ color: 'var(--fg-default)' }}>{s.label}</span>
-                <code className="font-mono text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{s.id}</code>
+                <code className="font-mono text-xs" style={{ color: 'var(--fg-subtle)' }}>{s.id}</code>
                 {s.required && (
                   <span
-                    className="text-[8px] uppercase tracking-[0.14em] font-semibold ml-auto"
+                    className="text-2xs uppercase tracking-eyebrow font-semibold ml-auto"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     Required
@@ -160,7 +160,7 @@ function ConnectionRow({
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-3 mt-3 text-[11px]">
+          <div className="flex items-center gap-3 mt-3 text-sm">
             <button type="button" className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>
               View on {conn.provider}
               <ExternalLink className="w-2.5 h-2.5" />

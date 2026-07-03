@@ -76,7 +76,7 @@ export default function SignUpPage() {
           style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
         >
           <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
-          <div className="flex flex-col gap-0.5 text-[12px] leading-snug">
+          <div className="flex flex-col gap-0.5 text-base leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Identity provider: {PROVIDER_LABEL[idp.provider]}
             </span>
@@ -89,7 +89,7 @@ export default function SignUpPage() {
 
         <Link
           to={'/auth/sso' as never}
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold w-full"
+          className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <KeyRound className="w-3.5 h-3.5" />
@@ -124,7 +124,7 @@ export default function SignUpPage() {
             <Mail className="w-5 h-5" style={{ color: 'var(--fg-accent)' }} />
           </div>
           <div
-            className="text-[11px] font-mono tabular-nums px-3 py-1.5 rounded"
+            className="text-sm font-mono tabular-nums px-3 py-1.5 rounded"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-default)',
@@ -177,7 +177,7 @@ export default function SignUpPage() {
           {/* Soft suggestion when domain is known but SSO not enforced. */}
           {idp && !idp.enforced && (
             <div
-              className="text-[11px] flex items-start gap-2 -mt-2 px-2.5 py-1.5 rounded onb-stagger"
+              className="text-sm flex items-start gap-2 -mt-2 px-2.5 py-1.5 rounded onb-stagger"
               style={{
                 background: 'var(--bg-surface-muted)',
                 color: 'var(--fg-muted)',
@@ -254,7 +254,7 @@ export default function SignUpPage() {
 function GitLabMark() {
   return (
     <span
-      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-[7px] font-black"
+      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-2xs font-black"
       style={{ background: 'var(--fg-default)', color: 'var(--bg-canvas)' }}
     >
       GL
@@ -294,7 +294,7 @@ function TermsCheck({
           </svg>
         )}
       </span>
-      <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+      <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
         I agree to the{' '}
         <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Terms of Service</button>
         {' '}and{' '}

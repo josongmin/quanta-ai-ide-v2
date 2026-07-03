@@ -12,25 +12,25 @@ export function RootCausePane({ seed, candidate, t }: Props) {
   return (
     <GlassCard className="rounded-lg p-4">
       <SectionHeader title={t('rootCause.header')} />
-      <p className="text-[12px] leading-relaxed mt-1" style={{ color: 'var(--fg-default)' }}>
+      <p className="text-base leading-relaxed mt-1" style={{ color: 'var(--fg-default)' }}>
         {seed.suspectedRootCause ?? seed.symptom}
       </p>
 
       <div className="mt-4">
         <h4
-          className="text-[10px] font-black uppercase tracking-[0.18em] mb-1.5"
+          className="text-xs font-black uppercase tracking-eyebrow mb-1.5"
           style={{ color: 'var(--fg-muted)' }}
         >
           {t('rootCause.rationale')}
         </h4>
-        <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-default)' }}>
+        <p className="text-base leading-relaxed" style={{ color: 'var(--fg-default)' }}>
           {candidate.rationale}
         </p>
       </div>
 
       <div className="mt-4">
         <h4
-          className="text-[10px] font-black uppercase tracking-[0.18em] mb-1.5"
+          className="text-xs font-black uppercase tracking-eyebrow mb-1.5"
           style={{ color: 'var(--fg-muted)' }}
         >
           {t('rootCause.evidence')}
@@ -39,11 +39,11 @@ export function RootCausePane({ seed, candidate, t }: Props) {
           {seed.evidenceRefs.map((ref, i) => (
             <li
               key={`${ref.kind}-${i.toString()}`}
-              className="text-[11px] font-mono px-2 py-1 rounded-md"
+              className="text-sm font-mono px-2 py-1 rounded-md"
               style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-default)' }}
             >
               <span
-                className="text-[9px] font-black uppercase tracking-[0.18em] mr-2"
+                className="text-2xs font-black uppercase tracking-eyebrow mr-2"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {ref.kind}
@@ -57,7 +57,7 @@ export function RootCausePane({ seed, candidate, t }: Props) {
       {seed.constraints && (
         <div className="mt-4">
           <h4
-            className="text-[10px] font-black uppercase tracking-[0.18em] mb-1.5"
+            className="text-xs font-black uppercase tracking-eyebrow mb-1.5"
             style={{ color: 'var(--fg-muted)' }}
           >
             {t('rootCause.constraints')}
@@ -65,7 +65,7 @@ export function RootCausePane({ seed, candidate, t }: Props) {
           <div className="flex gap-1.5 flex-wrap">
             {seed.constraints.publicApi === true && (
               <span
-                className="text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+                className="text-xs font-bold uppercase tracking-eyebrow px-2 py-0.5 rounded-md"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   color: 'var(--fg-default)',
@@ -77,7 +77,7 @@ export function RootCausePane({ seed, candidate, t }: Props) {
             )}
             {seed.constraints.securityPath === true && (
               <span
-                className="text-[10px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+                className="text-xs font-bold uppercase tracking-eyebrow px-2 py-0.5 rounded-md"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   color: 'var(--fg-default)',
@@ -90,7 +90,7 @@ export function RootCausePane({ seed, candidate, t }: Props) {
             {(seed.constraints.forbidden ?? []).map((f) => (
               <span
                 key={f}
-                className="text-[10px] font-bold px-2 py-0.5 rounded-md"
+                className="text-xs font-bold px-2 py-0.5 rounded-md"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   color: 'var(--fg-muted)',

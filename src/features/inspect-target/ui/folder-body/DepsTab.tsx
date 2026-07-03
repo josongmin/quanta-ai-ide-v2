@@ -51,7 +51,7 @@ export const DepsTab = memo(function DepsTab({
                 className="h-full"
               />
             </div>
-            <div className="flex justify-between text-[9px] font-mono mt-1 text-[var(--fg-subtle)]">
+            <div className="flex justify-between text-2xs font-mono mt-1 text-[var(--fg-subtle)]">
               <span>{t('deps.inboundArrow')}</span>
               <span>{t('deps.outboundArrow')}</span>
             </div>

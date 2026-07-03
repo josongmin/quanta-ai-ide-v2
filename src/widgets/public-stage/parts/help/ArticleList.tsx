@@ -12,7 +12,7 @@ export function ArticleList({
       style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
     >
       <div
-        className="flex items-center gap-1.5 px-4 h-10 text-[10px] uppercase tracking-[0.18em] font-semibold"
+        className="flex items-center gap-1.5 px-4 h-10 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           background: 'var(--bg-canvas)',
           color: 'var(--fg-subtle)',
@@ -37,21 +37,21 @@ export function ArticleList({
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
               >
                 <span
-                  className="font-mono text-[10px] tabular-nums shrink-0 w-6"
+                  className="font-mono text-xs tabular-nums shrink-0 w-6"
                   style={{ color: 'var(--fg-subtle)' }}
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <BookOpen className="w-3 h-3 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
-                <span className="text-[12px] flex-1 min-w-0 truncate" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base flex-1 min-w-0 truncate" style={{ color: 'var(--fg-strong)' }}>
                   {a.title}
                 </span>
                 {showCategory && (
-                  <span className="text-[10px] uppercase tracking-[0.14em] font-semibold shrink-0" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-xs uppercase tracking-eyebrow font-semibold shrink-0" style={{ color: 'var(--fg-subtle)' }}>
                     {cat.title}
                   </span>
                 )}
-                <span className="text-[10px] tabular-nums shrink-0" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="text-xs tabular-nums shrink-0" style={{ color: 'var(--fg-subtle)' }}>
                   {formatNumber(a.views)} views
                 </span>
               </button>

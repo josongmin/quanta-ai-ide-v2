@@ -61,7 +61,7 @@ export function DriftBadge({
   return (
     <span
       style={toneStyle}
-      className="shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border"
+      className="shrink-0 inline-flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono border"
       title={ago ? `${label} · ${t('drift.lastTouched', { ago })}` : label}
     >
       <span aria-hidden>{glyph}</span>

@@ -6,7 +6,7 @@ import { Fragment, type CSSProperties, type ReactNode } from 'react';
 // exactly:
 //   • wrapper:  rounded-md overflow-hidden, 1px --border-muted
 //   • header:   h-9 px-3 gap-12, --bg-surface-muted, --fg-subtle uppercase,
-//               tracking-[0.14em], 10px semibold, borderBottom --border-muted
+//               tracking-eyebrow, 10px semibold, borderBottom --border-muted
 //   • row:      h-12 px-3 gap-12, hover → --bg-hover, borderTop --border-muted
 //               (omitted on the first row so it doesn't double the header line)
 //
@@ -48,7 +48,7 @@ export function DataTable<T>({
   return (
     <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
       <div
-        className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: columns,
           gap,
@@ -71,7 +71,7 @@ export function DataTable<T>({
           <div
             key={rowKey(row, i)}
             role="row"
-            className="grid items-center px-3 text-[12px] transition-colors"
+            className="grid items-center px-3 text-base transition-colors"
             style={{
               height: rowHeight,
               gridTemplateColumns: columns,

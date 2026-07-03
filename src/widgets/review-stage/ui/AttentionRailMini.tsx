@@ -105,11 +105,11 @@ export default function AttentionRailMini({
   return (
     <div>
       <div className="mb-2 flex items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">
           Attention
         </span>
         <span
-          className="text-[10px] font-mono tabular-nums text-[var(--fg-muted)] ml-auto"
+          className="text-xs font-mono tabular-nums text-[var(--fg-muted)] ml-auto"
           title={`Total foreground time on this PR: ${formatMs(totalMs)}`}
         >
           {formatMs(totalMs)}

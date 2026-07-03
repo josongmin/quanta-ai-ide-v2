@@ -82,12 +82,12 @@ export function CounterfactualCard({
       >
         <GitCompareArrows className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <h3
-          className="text-[11px] uppercase tracking-[0.14em] font-semibold"
+          className="text-sm uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
           Counterfactual
         </h3>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           what if this rule were disabled?
         </span>
       </header>
@@ -95,7 +95,7 @@ export function CounterfactualCard({
       <div className="p-4 flex flex-col gap-3">
         <label className="flex flex-col gap-1.5">
           <span
-            className="text-[10px] uppercase tracking-[0.14em] font-medium"
+            className="text-xs uppercase tracking-eyebrow font-medium"
             style={{ color: 'var(--fg-subtle)' }}
           >
             Hypothetical disable
@@ -103,7 +103,7 @@ export function CounterfactualCard({
           <select
             value={effectiveId ?? ''}
             onChange={(e) => { setSelectedId(e.target.value || null); }}
-            className="h-8 px-2 rounded-md text-[12px] outline-none"
+            className="h-8 px-2 rounded-md text-base outline-none"
             style={{
               background: 'var(--bg-canvas)',
               border: '1px solid var(--border-default)',
@@ -130,7 +130,7 @@ export function CounterfactualCard({
             tone={deltaColor}
           />
           <div
-            className="text-[11px] font-mono tabular-nums shrink-0 px-2 py-1 rounded"
+            className="text-sm font-mono tabular-nums shrink-0 px-2 py-1 rounded"
             style={{
               color: deltaColor,
               background: 'var(--bg-surface-muted)',
@@ -140,7 +140,7 @@ export function CounterfactualCard({
           </div>
         </div>
 
-        <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
           {delta < 0 && selectedRule ? (
             <>
               Disabling <strong style={{ color: 'var(--fg-strong)' }}>{selectedRule.ruleName}</strong>{' '}
@@ -160,14 +160,14 @@ export function CounterfactualCard({
 function RiskFigure({ label, value, tone }: { label: string; value: number; tone?: string }) {
   return (
     <div className="flex flex-col items-start">
-      <span className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </span>
       <span
-        className="text-[18px] font-semibold tabular-nums tracking-tight"
+        className="text-2xl font-semibold tabular-nums tracking-tight"
         style={{ color: tone ?? 'var(--fg-strong)' }}
       >
-        {value}<span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>/100</span>
+        {value}<span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>/100</span>
       </span>
     </div>
   );

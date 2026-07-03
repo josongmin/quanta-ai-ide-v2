@@ -9,12 +9,12 @@ export function SectionTitle({
     <header className="flex items-baseline justify-between mb-3">
       <div className="flex items-center gap-2">
         <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
-        <h2 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           {title}
         </h2>
       </div>
       {hint && (
-        <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>{hint}</span>
+        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{hint}</span>
       )}
     </header>
   );
@@ -58,13 +58,13 @@ export function BigCard({ card }: { card: Card }) {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           {title}
         </h3>
-        <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{blurb}</p>
+        <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>{blurb}</p>
       </div>
       {meta && (
-        <code className="text-[10px] font-mono tabular-nums mt-1" style={{ color: 'var(--fg-subtle)' }}>
+        <code className="text-xs font-mono tabular-nums mt-1" style={{ color: 'var(--fg-subtle)' }}>
           {meta}
         </code>
       )}
@@ -91,13 +91,13 @@ export function SmallCard({ card }: { card: Card }) {
     >
       <div className="flex items-center gap-2">
         <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
-        <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{title}</span>
+        <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{title}</span>
         <ArrowUpRight
           className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity"
           style={{ color: 'var(--fg-link)' }}
         />
       </div>
-      <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{blurb}</p>
+      <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>{blurb}</p>
     </Link>
   );
 }

@@ -62,7 +62,7 @@ export function ReliabilityDiagramCard({ predictions, nBins = 10 }: Props) {
         {t('reliability.title', { defaultValue: 'Reliability diagram' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {t('reliability.sub', {
           n: nBins,
@@ -72,16 +72,16 @@ export function ReliabilityDiagramCard({ predictions, nBins = 10 }: Props) {
 
       <div className="flex items-baseline gap-2 mt-3">
         <span
-          className="text-[28px] font-black tabular-nums leading-none"
+          className="text-4xl font-black tabular-nums leading-none"
           style={{ color: eceColor }}
         >
           {result.ece.toFixed(3)}
         </span>
-        <span className="text-[9px] font-mono uppercase tracking-[0.16em]"
+        <span className="text-2xs font-mono uppercase tracking-[0.16em]"
               style={{ color: eceColor }}>
           ECE
         </span>
-        <span className="ml-auto text-[9px] font-mono"
+        <span className="ml-auto text-2xs font-mono"
               style={{ color: v.textFaint }}>
           n={result.totalN}
         </span>
@@ -168,7 +168,7 @@ export function ReliabilityDiagramCard({ predictions, nBins = 10 }: Props) {
               textAnchor="end">1.0</text>
       </svg>
 
-      <div className="mt-1 grid grid-cols-2 gap-x-3 text-[9px] font-mono"
+      <div className="mt-1 grid grid-cols-2 gap-x-3 text-2xs font-mono"
            style={{ color: v.textFaint }}>
         <span className="inline-flex items-center gap-1">
           <span className="inline-block w-1.5 h-1.5 rounded-full"

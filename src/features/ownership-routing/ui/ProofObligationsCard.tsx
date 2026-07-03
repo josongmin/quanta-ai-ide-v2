@@ -70,7 +70,7 @@ function PhasePreviewBanner({ phase, text }: { phase: string; text: string }) {
       }}
     >
       <span
-        className="text-[8px] font-black uppercase tracking-[0.22em] px-1.5 py-0.5 rounded"
+        className="text-2xs font-black uppercase tracking-[0.22em] px-1.5 py-0.5 rounded"
         style={{
           background: 'var(--bg-elevated)',
           color: 'var(--fg-muted)',
@@ -121,7 +121,7 @@ export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Elem
               ]}
             />
             <div
-              className="flex items-center gap-3 mt-1.5 text-[9px] tracking-[0.14em] uppercase font-semibold"
+              className="flex items-center gap-3 mt-1.5 text-2xs tracking-eyebrow uppercase font-semibold"
               style={{ color: 'var(--fg-subtle)' }}
             >
               <LegendDot color={STATUS_COLOR.satisfied} text={`Sat ${satisfiedCount}`} />
@@ -150,20 +150,20 @@ export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Elem
                   </div>
                   <div className="flex-1 min-w-0">
                     <div
-                      className="text-[9px] font-bold tracking-[0.18em]"
+                      className="text-2xs font-bold tracking-eyebrow"
                       style={{ color: STATUS_FG[o.status] }}
                     >
                       {STATUS_LABEL[o.status]}
                     </div>
                     <div
-                      className={`text-[12px] font-semibold ${isSlot ? 'italic' : ''}`}
+                      className={`text-base font-semibold ${isSlot ? 'italic' : ''}`}
                       style={{ color: isSlot ? 'var(--fg-muted)' : 'var(--fg-default)' }}
                     >
                       {isSlot ? 'future input — AI not yet able to derive' : o.label}
                     </div>
                     {o.detail && (
                       <div
-                        className="text-[11px] leading-snug mt-0.5"
+                        className="text-sm leading-snug mt-0.5"
                         style={{ color: 'var(--fg-muted)' }}
                       >
                         {o.detail}

@@ -68,7 +68,7 @@ export function DismissModal({
         >
           <Trash2 className="w-3.5 h-3.5" style={{ color: t.textMuted }} />
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('dismissModal.title')}
@@ -85,10 +85,10 @@ export function DismissModal({
 
         <div className="px-4 py-4 space-y-4">
           <div>
-            <div className="text-[11px] mb-1" style={{ color: t.textMuted }}>
+            <div className="text-sm mb-1" style={{ color: t.textMuted }}>
               {tr('dismissModal.dismissing')}
             </div>
-            <div className="text-[12px] font-semibold" style={{ color: t.textHi }}>
+            <div className="text-base font-semibold" style={{ color: t.textHi }}>
               {candidate.title}
             </div>
             <div className="text-sm mt-1" style={{ color: t.textFaint }}>
@@ -98,7 +98,7 @@ export function DismissModal({
 
           {/* reason chips */}
           <div>
-            <div className="text-[9px] font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.textFaint }}>
+            <div className="text-2xs font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.textFaint }}>
               {tr('dismissModal.reasonTag')}
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -109,7 +109,7 @@ export function DismissModal({
                     key={r}
                     type="button"
                     onClick={() => { setReason(r); }}
-                    className="text-[10px] font-mono px-2 py-1 rounded transition-colors"
+                    className="text-xs font-mono px-2 py-1 rounded transition-colors"
                     style={{
                       background: active ? t.accentSoft : t.badgeBg,
                       color: active ? t.accent : t.textMuted,
@@ -125,7 +125,7 @@ export function DismissModal({
 
           {/* note */}
           <div>
-            <div className="text-[9px] font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.textFaint }}>
+            <div className="text-2xs font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.textFaint }}>
               {tr('dismissModal.optionalNote')}
             </div>
             <textarea
@@ -133,7 +133,7 @@ export function DismissModal({
               onChange={(e) => { setNote(e.target.value); }}
               placeholder={tr('dismissModal.notePlaceholder')}
               rows={3}
-              className="w-full rounded border px-2.5 py-2 text-[11px] font-mono outline-none transition-colors"
+              className="w-full rounded border px-2.5 py-2 text-sm font-mono outline-none transition-colors"
               style={{
                 background: t.inset,
                 color: t.textHi,
@@ -148,7 +148,7 @@ export function DismissModal({
             <button
               type="button"
               onClick={onCancel}
-              className="rounded px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors"
+              className="rounded px-3 py-1.5 text-sm font-bold uppercase tracking-eyebrow transition-colors"
               style={{ color: t.textMuted, border: `1px solid ${t.borderSoft}` }}
             >
               {tr('dismissModal.cancel')}
@@ -156,7 +156,7 @@ export function DismissModal({
             <button
               type="button"
               onClick={() => { onConfirm(reason, note); }}
-              className="rounded px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-90 inline-flex items-center gap-1.5"
+              className="rounded px-3 py-1.5 text-sm font-bold uppercase tracking-eyebrow transition-opacity hover:opacity-90 inline-flex items-center gap-1.5"
               style={{ background: t.bad, color: 'var(--fg-on-accent)' }}
             >
               <Trash2 className="w-3 h-3" /> {tr('dismissModal.dismiss')}

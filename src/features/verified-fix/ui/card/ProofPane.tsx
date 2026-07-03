@@ -45,15 +45,15 @@ function ObligationRow({ o }: { o: ProofObligation }) {
       <Icon className="w-3 h-3 shrink-0 mt-0.5" style={{ color }} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
-          <span className="text-[10px] font-semibold text-[var(--fg-default)] truncate">{o.label}</span>
+          <span className="text-xs font-semibold text-[var(--fg-default)] truncate">{o.label}</span>
           <span
-            className="text-[8px] font-mono uppercase tracking-[var(--track-eyebrow)] shrink-0"
+            className="text-2xs font-mono uppercase tracking-eyebrow shrink-0"
             style={{ color }}
           >
             {label}
           </span>
         </div>
-        <div className="text-[9px] text-[var(--fg-subtle)] mt-0.5 leading-snug">{o.detail}</div>
+        <div className="text-2xs text-[var(--fg-subtle)] mt-0.5 leading-snug">{o.detail}</div>
       </div>
     </div>
   );
@@ -69,8 +69,8 @@ function CounterRow({ c }: { c: CounterEvidence }) {
     >
       <Icon className="w-3 h-3 shrink-0 mt-0.5" style={{ color }} />
       <div className="min-w-0 flex-1">
-        <div className="text-[10px] font-semibold text-[var(--fg-default)] leading-snug">{c.label}</div>
-        <div className="text-[9px] text-[var(--fg-subtle)] mt-0.5 leading-snug">{c.detail}</div>
+        <div className="text-xs font-semibold text-[var(--fg-default)] leading-snug">{c.label}</div>
+        <div className="text-2xs text-[var(--fg-subtle)] mt-0.5 leading-snug">{c.detail}</div>
       </div>
     </div>
   );

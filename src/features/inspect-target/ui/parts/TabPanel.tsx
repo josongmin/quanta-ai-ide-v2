@@ -63,16 +63,16 @@ export function TabPanel<Id extends string>({
         <div className="flex items-start gap-2 min-w-0">
           <div className="min-w-0 flex-1">
             <div
-              className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+              className="flex items-center gap-1.5 text-2xs font-black uppercase tracking-eyebrow"
               style={{ color: 'var(--fg-subtle)' }}
             >
               <EyebrowIcon className="w-3 h-3" /> {eyebrowLabel}
             </div>
-            <h2 className="font-black text-[13px] truncate tracking-tight mt-1">
+            <h2 className="font-black text-md truncate tracking-tight mt-1">
               {title}
             </h2>
             <p
-              className="text-[10px] font-mono truncate mt-0.5"
+              className="text-xs font-mono truncate mt-0.5"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {subtitle}
@@ -94,7 +94,7 @@ export function TabPanel<Id extends string>({
                   type="button"
                   key={id}
                   onClick={() => { setTab(id); }}
-                  className="relative flex items-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] whitespace-nowrap transition-colors"
+                  className="relative flex items-center gap-1.5 py-2.5 text-xs font-black uppercase tracking-eyebrow whitespace-nowrap transition-colors"
                   style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                 >
                   <Icon className="w-3 h-3 shrink-0" />
@@ -106,7 +106,7 @@ export function TabPanel<Id extends string>({
                         return (
                           <span
                             key={i}
-                            className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-black tabular-nums"
+                            className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-2xs font-black tabular-nums"
                             style={{ background: `${c}22`, color: c }}
                           >
                             {b.n}
@@ -128,13 +128,13 @@ export function TabPanel<Id extends string>({
         </nav>
       </div>
 
-      <div className="text-[11px]">
+      <div className="text-sm">
         {renderTab(tab)}
       </div>
 
       <GlassCard
         tone="inner"
-        className="px-5 py-2 text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
+        className="px-5 py-2 text-2xs font-mono uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {footer(tab)}
@@ -168,14 +168,14 @@ export function SubCard({
     >
       <div className="flex items-baseline gap-2">
         <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {title}
         </div>
         {subtitle && (
           <div
-            className="text-[9px] font-mono truncate"
+            className="text-2xs font-mono truncate"
             style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
           >
             {subtitle}

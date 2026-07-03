@@ -50,23 +50,23 @@ export default function CatalogStage() {
       <div className="max-w-[960px] mx-auto px-10 pt-12 pb-32">
         <header className="flex flex-col gap-3 mb-10">
           <span
-            className="text-[11px] uppercase tracking-[0.14em] font-medium"
+            className="text-sm uppercase tracking-eyebrow font-medium"
             style={{ color: 'var(--fg-subtle)' }}
           >
             Internal · catalog
           </span>
           <div className="flex items-baseline gap-3">
             <h1
-              className="text-[24px] font-semibold tracking-tight leading-none"
+              className="text-3xl font-semibold tracking-tight leading-none"
               style={{ color: 'var(--fg-strong)' }}
             >
               SaaS feature catalog
             </h1>
-            <span className="text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-base" style={{ color: 'var(--fg-subtle)' }}>
               {stats.live} live · {stats.stub} stub · {stats.planned} planned
             </span>
           </div>
-          <p className="text-[12px] leading-snug max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base leading-snug max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
             Every generic-SaaS surface this app needs (auth, settings, billing, admin).
             Click a live entry to open the page. Planned entries are not yet wired.
           </p>
@@ -85,14 +85,14 @@ export default function CatalogStage() {
               value={q}
               onChange={(e) => { setQ(e.target.value); }}
               placeholder="Filter by name, group, or keyword…"
-              className="flex-1 bg-transparent outline-none text-[12px]"
+              className="flex-1 bg-transparent outline-none text-base"
               style={{ color: 'var(--fg-strong)' }}
             />
             {q && (
               <button
                 type="button"
                 onClick={() => { setQ(''); }}
-                className="text-[10px] uppercase tracking-[0.14em] font-medium px-1.5 py-0.5 rounded"
+                className="text-xs uppercase tracking-eyebrow font-medium px-1.5 py-0.5 rounded"
                 style={{ color: 'var(--fg-subtle)', background: 'var(--bg-active)' }}
               >
                 Clear
@@ -111,17 +111,17 @@ export default function CatalogStage() {
                 <header className="flex items-baseline justify-between">
                   <div className="flex flex-col gap-0.5">
                     <h2
-                      className="text-[12px] font-semibold tracking-tight"
+                      className="text-base font-semibold tracking-tight"
                       style={{ color: 'var(--fg-strong)' }}
                     >
                       {meta.title}
                     </h2>
-                    <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+                    <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
                       {meta.hint}
                     </span>
                   </div>
                   <span
-                    className="text-[10px] uppercase tracking-[0.14em] font-medium tabular-nums"
+                    className="text-xs uppercase tracking-eyebrow font-medium tabular-nums"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     {items.length}
@@ -142,7 +142,7 @@ export default function CatalogStage() {
 
           {filtered.length === 0 && (
             <div
-              className="text-center py-16 text-[12px]"
+              className="text-center py-16 text-base"
               style={{ color: 'var(--fg-subtle)' }}
             >
               No entries match &quot;{q}&quot;.
@@ -179,7 +179,7 @@ function CatalogCell({ entry, isDark }: { entry: CatalogEntry; isDark: boolean }
     >
       <div className="flex items-start justify-between gap-2">
         <span
-          className="text-[12px] font-semibold leading-snug"
+          className="text-base font-semibold leading-snug"
           style={{ color: live ? 'var(--fg-strong)' : 'var(--fg-muted)' }}
         >
           {entry.title}
@@ -187,14 +187,14 @@ function CatalogCell({ entry, isDark }: { entry: CatalogEntry; isDark: boolean }
         <StatusPill status={entry.status} />
       </div>
       <span
-        className="text-[11px] leading-snug"
+        className="text-sm leading-snug"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {entry.blurb}
       </span>
       <div className="flex items-center justify-between mt-1">
         <code
-          className="text-[10px] font-mono tabular-nums truncate"
+          className="text-xs font-mono tabular-nums truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {entry.path}
@@ -242,7 +242,7 @@ function StatusPill({ status }: { status: CatalogStatus }) {
   const m = STATUS_META[status];
   return (
     <span
-      className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.14em] font-semibold shrink-0"
+      className="inline-flex items-center gap-1 text-2xs uppercase tracking-eyebrow font-semibold shrink-0"
       style={{ color: m.fg }}
     >
       <span

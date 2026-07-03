@@ -27,7 +27,7 @@ export function CookiesPage() {
       <div className="flex flex-col gap-4 mb-10">
         <Eyebrow tone="info"><Cookie className="w-3 h-3" /> Cookies</Eyebrow>
         <HeadlineGradient accent="cookies">Manage your</HeadlineGradient>
-        <p className="text-[13.5px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-md leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
           We use the minimum cookies needed to keep things working. Everything beyond essentials is optional and changeable any time.
         </p>
       </div>
@@ -44,14 +44,14 @@ export function CookiesPage() {
               style={{ borderBottom: i === COOKIE_GROUPS.length - 1 ? 'none' : '1px solid var(--border-muted)' }}
             >
               <div className="flex flex-col gap-1 flex-1 min-w-0">
-                <span className="text-[13.5px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-md font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {g.label} {g.required && (
-                    <span className="text-[10px] uppercase tracking-[0.14em] font-semibold ml-1.5" style={{ color: 'var(--fg-subtle)' }}>
+                    <span className="text-xs uppercase tracking-eyebrow font-semibold ml-1.5" style={{ color: 'var(--fg-subtle)' }}>
                       required
                     </span>
                   )}
                 </span>
-                <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{g.blurb}</span>
+                <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>{g.blurb}</span>
               </div>
               <button
                 type="button"
@@ -82,7 +82,7 @@ export function CookiesPage() {
       <div className="flex items-center gap-2">
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-colors"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           Save preferences
@@ -90,7 +90,7 @@ export function CookiesPage() {
         <button
           type="button"
           onClick={() => { setEnabled({ essential: true, preferences: false, analytics: false, marketing: false }); }}
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-medium transition-colors"
+          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-medium transition-colors"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -121,7 +121,7 @@ export function AccessibilityPage() {
       <div className="flex flex-col gap-4 mb-10">
         <Eyebrow tone="info"><AccessIcon className="w-3 h-3" /> Accessibility</Eyebrow>
         <HeadlineGradient accent="usable by everyone">Built to be</HeadlineGradient>
-        <p className="text-[13.5px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-md leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
           Accessibility is part of the definition of done. If something blocks you, mail us at <a href="mailto:a11y@acme.dev" className="underline" style={{ color: 'var(--fg-link)' }}>a11y@acme.dev</a> — we treat it as a bug.
         </p>
       </div>
@@ -141,8 +141,8 @@ export function AccessibilityPage() {
             >
               <a.icon className="w-4 h-4" />
             </div>
-            <h3 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>{a.title}</h3>
-            <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{a.blurb}</p>
+            <h3 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>{a.title}</h3>
+            <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>{a.blurb}</p>
           </div>
         ))}
       </div>
@@ -159,12 +159,12 @@ export function AccessibilityPage() {
           <ShieldCheck className="w-4 h-4" />
         </div>
         <div className="flex flex-col gap-0.5 flex-1">
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>VPAT 2.5 · Q2 2026</span>
-          <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>WCAG 2.2 AA · Section 508 · EN 301 549</span>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>VPAT 2.5 · Q2 2026</span>
+          <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>WCAG 2.2 AA · Section 508 · EN 301 549</span>
         </div>
         <button
           type="button"
-          className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-[11px] font-semibold transition-colors"
+          className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -225,7 +225,7 @@ export function WhatsNewPage() {
       <div className="flex flex-col gap-4 mb-10">
         <Eyebrow tone="brand"><Megaphone className="w-3 h-3" /> What&apos;s new</Eyebrow>
         <HeadlineGradient accent="this week">Shipped</HeadlineGradient>
-        <p className="text-[13.5px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-md leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
           A high-signal stream of recent ships. For the full ledger, see the <a href="/changelog" className="underline" style={{ color: 'var(--fg-link)' }}>changelog</a>.
         </p>
       </div>
@@ -250,17 +250,17 @@ export function WhatsNewPage() {
               <div className="flex flex-col gap-1.5 flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-[9px] uppercase tracking-[0.14em] font-bold px-1.5 h-5 inline-flex items-center rounded"
+                    className="text-2xs uppercase tracking-eyebrow font-bold px-1.5 h-5 inline-flex items-center rounded"
                     style={{ color: tone.fg, background: tone.bg }}
                   >
                     {w.tag}
                   </span>
-                  <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{w.date}</span>
+                  <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{w.date}</span>
                 </div>
-                <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+                <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
                   {w.title}
                 </h3>
-                <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{w.body}</p>
+                <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>{w.body}</p>
               </div>
             </article>
           );
@@ -305,12 +305,12 @@ export function RoadmapPage() {
         <div className="flex flex-col items-center text-center gap-4 mb-10">
           <Eyebrow tone="brand"><Map className="w-3 h-3" /> Roadmap</Eyebrow>
           <HeadlineGradient accent="next">What we&apos;re building</HeadlineGradient>
-          <p className="text-[14.5px] leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-lg leading-relaxed max-w-[600px]" style={{ color: 'var(--fg-muted)' }}>
             Honest, scoped to what&apos;s likely. Vote on what you want — votes inform priority, not promises.
           </p>
           <a
             href="/feedback"
-            className="mt-2 inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold transition-colors"
+            className="mt-2 inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold transition-colors"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             Vote & request features
@@ -340,11 +340,11 @@ export function RoadmapPage() {
                       className="w-2 h-2 rounded-full"
                       style={{ background: tone }}
                     />
-                    <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+                    <span className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
                       {col}
                     </span>
                   </div>
-                  <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                     {items.length}
                   </span>
                 </div>
@@ -352,12 +352,12 @@ export function RoadmapPage() {
                   {items.map((it, i) => (
                     <RoadmapItemCard key={i} tone={tone}>
                       <div className="flex items-start justify-between gap-2">
-                        <span className="text-[12px] font-semibold leading-snug" style={{ color: 'var(--fg-strong)' }}>
+                        <span className="text-base font-semibold leading-snug" style={{ color: 'var(--fg-strong)' }}>
                           {it.title}
                         </span>
                         {it.eta && (
                           <span
-                            className="text-[9px] uppercase tracking-[0.14em] font-bold shrink-0"
+                            className="text-2xs uppercase tracking-eyebrow font-bold shrink-0"
                             style={{ color: tone }}
                           >
                             {it.eta}
@@ -366,13 +366,13 @@ export function RoadmapPage() {
                       </div>
                       <div className="flex items-center justify-between mt-1">
                         <span
-                          className="text-[10px] uppercase tracking-[0.14em] font-semibold"
+                          className="text-xs uppercase tracking-eyebrow font-semibold"
                           style={{ color: 'var(--fg-subtle)' }}
                         >
                           {it.tag}
                         </span>
                         <span
-                          className="inline-flex items-center gap-1 text-[10px] font-semibold tabular-nums"
+                          className="inline-flex items-center gap-1 text-xs font-semibold tabular-nums"
                           style={{ color: 'var(--fg-muted)' }}
                         >
                           <CheckCircle2 className="w-3 h-3" />

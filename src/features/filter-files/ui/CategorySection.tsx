@@ -26,8 +26,8 @@ export default function CategorySection({ category }: Props) {
         className="w-full flex items-center justify-between mb-1.5 group"
       >
         <div className="flex items-center gap-2">
-          <h3 className="text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] text-[color:var(--fg-muted)]">{t(`category.${category}`)}</h3>
-          <span className="text-[8px] tabular-nums text-[color:var(--fg-subtle)]">
+          <h3 className="text-xs font-black uppercase tracking-eyebrow text-[color:var(--fg-muted)]">{t(`category.${category}`)}</h3>
+          <span className="text-2xs tabular-nums text-[color:var(--fg-subtle)]">
             {visibleFacets.length}{lockedFacets.length > 0 && <span> + {lockedFacets.length}🔒</span>}
           </span>
         </div>

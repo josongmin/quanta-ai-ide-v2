@@ -76,11 +76,11 @@ export const OverviewTab = memo(function OverviewTab({
               {langEntries.map(([lang, n]) => (
                 <span
                   key={lang}
-                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] bg-[var(--bg-hover)]"
+                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs bg-[var(--bg-hover)]"
                 >
                   <span className="font-mono font-bold text-[var(--fg-strong)]">{lang}</span>
                   <span className="tabular-nums text-[var(--fg-muted)]">{n}</span>
-                  <span className="tabular-nums text-[9px] text-[var(--fg-subtle)]">
+                  <span className="tabular-nums text-2xs text-[var(--fg-subtle)]">
                     {Math.round((n / langTotal) * 100)}%
                   </span>
                 </span>
@@ -95,11 +95,11 @@ export const OverviewTab = memo(function OverviewTab({
               />
               <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 mt-2">
                 {langEntries.map(([lang, n]) => (
-                  <div key={lang} className="flex items-center gap-1.5 text-[10px]">
+                  <div key={lang} className="flex items-center gap-1.5 text-xs">
                     <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: languageHue(lang, isDark) }} />
                     <span className="flex-1 text-[var(--fg-muted)]">{lang}</span>
                     <span className="tabular-nums font-bold text-[var(--fg-strong)]">{n}</span>
-                    <span className="tabular-nums text-[9px] w-7 text-right text-[var(--fg-subtle)]">
+                    <span className="tabular-nums text-2xs w-7 text-right text-[var(--fg-subtle)]">
                       {Math.round((n / langTotal) * 100)}%
                     </span>
                   </div>

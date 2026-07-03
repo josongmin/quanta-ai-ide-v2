@@ -17,7 +17,7 @@ export function OwnerSplit({
     <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-stretch">
       <GlassCard tone="inner" className="px-3 py-2.5 min-w-0">
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5"
+          className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
           style={{ color: 'var(--fg-muted)' }}
         >
           Implements
@@ -26,7 +26,7 @@ export function OwnerSplit({
       </GlassCard>
       <div className="flex flex-col items-center justify-center px-1">
         <span
-          className="text-[14px] leading-none font-bold"
+          className="text-lg leading-none font-bold"
           style={{
             color: samePerson
               ? 'var(--fg-subtle)'
@@ -46,7 +46,7 @@ export function OwnerSplit({
         </span>
         {!samePerson && (
           <span
-            className="mt-1 text-[8px] font-mono uppercase tracking-[0.18em]"
+            className="mt-1 text-2xs font-mono uppercase tracking-eyebrow"
             style={{
               color: sameTeam ? 'var(--fg-subtle)' : 'var(--intent-warn-fg)',
             }}
@@ -57,7 +57,7 @@ export function OwnerSplit({
       </div>
       <GlassCard tone="inner" className="px-3 py-2.5 min-w-0">
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5"
+          className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
           style={{ color: 'var(--fg-muted)' }}
         >
           Approves
@@ -83,7 +83,7 @@ export function RoleColumn({
       style={{ opacity: dimmed ? 0.55 : 1 }}
     >
       <div
-        className="text-[9px] font-black uppercase tracking-[0.18em]"
+        className="text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}
@@ -106,7 +106,7 @@ export function RoleColumn({
             —
           </span>
           <span
-            className="text-[11px] italic"
+            className="text-sm italic"
             style={{ color: 'var(--fg-subtle)' }}
           >
             none

@@ -40,7 +40,7 @@ export function BackupCodesGenerated({ onClose }: { onClose: () => void }) {
       }
     >
       <div
-        className="p-4 rounded-md font-mono text-[12px] tabular-nums grid grid-cols-2 gap-x-6 gap-y-1.5"
+        className="p-4 rounded-md font-mono text-base tabular-nums grid grid-cols-2 gap-x-6 gap-y-1.5"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
@@ -49,7 +49,7 @@ export function BackupCodesGenerated({ onClose }: { onClose: () => void }) {
       >
         {codes.map((c, i) => (
           <div key={c} className="flex items-center gap-2">
-            <span className="text-[9px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-2xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
               {String(i + 1).padStart(2, '0')}
             </span>
             <span>{c}</span>

@@ -152,15 +152,15 @@ export default function ReviewPage() {
               style={{ borderTop: i === 0 ? 'none' : '1px solid var(--border-muted)' }}
             >
               <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
                   {t.name}
                 </span>
-                <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+                <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
                   {t.description}
                 </span>
               </div>
               <span
-                className="text-[10px] uppercase tracking-[0.14em] font-semibold"
+                className="text-xs uppercase tracking-eyebrow font-semibold"
                 style={{ color: t.inPool ? 'var(--intent-success-fg)' : 'var(--fg-subtle)' }}
               >
                 {t.inPool ? 'in pool' : 'excluded'}
@@ -181,7 +181,7 @@ export default function ReviewPage() {
           style={{ border: '1px solid var(--border-muted)' }}
         >
           <div
-            className="grid items-center px-3 h-8 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="grid items-center px-3 h-8 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               gridTemplateColumns: '1fr 140px 56px',
               gap: 12,
@@ -197,7 +197,7 @@ export default function ReviewPage() {
           {form.overrides.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-2 py-8 px-4 text-center">
               <GitBranch className="w-5 h-5" style={{ color: 'var(--fg-subtle)' }} />
-              <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 No overrides — every branch uses the default minimum.
               </span>
             </div>
@@ -216,7 +216,7 @@ export default function ReviewPage() {
                   value={o.pattern}
                   onChange={(e) => { updateOverride(o.id, { pattern: e.target.value }); }}
                   placeholder="release/*"
-                  className="h-7 px-2 rounded-md text-[12px] font-mono outline-none"
+                  className="h-7 px-2 rounded-md text-base font-mono outline-none"
                   style={{
                     background: 'var(--bg-surface-muted)',
                     border: '1px solid var(--border-default)',
@@ -260,7 +260,7 @@ export default function ReviewPage() {
         </Row>
       </Section>
 
-      <p className="text-[11px] mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Eye className="w-3 h-3 mt-0.5 shrink-0" />
         Changes apply to PRs opened after save. Existing PRs keep the policy that was active when they opened.
       </p>
@@ -292,7 +292,7 @@ function NumberStepper({
         type="button"
         onClick={dec}
         disabled={value <= min}
-        className="w-7 inline-flex items-center justify-center text-[14px] transition-colors"
+        className="w-7 inline-flex items-center justify-center text-lg transition-colors"
         style={{
           background: 'var(--bg-surface-muted)',
           color: 'var(--fg-default)',
@@ -303,7 +303,7 @@ function NumberStepper({
         −
       </button>
       <span
-        className="w-10 inline-flex items-center justify-center text-[12px] tabular-nums font-medium"
+        className="w-10 inline-flex items-center justify-center text-base tabular-nums font-medium"
         style={{ background: 'var(--bg-canvas)', color: 'var(--fg-strong)' }}
       >
         {value}
@@ -312,7 +312,7 @@ function NumberStepper({
         type="button"
         onClick={inc}
         disabled={value >= max}
-        className="w-7 inline-flex items-center justify-center text-[14px] transition-colors"
+        className="w-7 inline-flex items-center justify-center text-lg transition-colors"
         style={{
           background: 'var(--bg-surface-muted)',
           color: 'var(--fg-default)',
@@ -338,7 +338,7 @@ function RadioGroup<T extends string>({
             key={o.id}
             type="button"
             onClick={() => { onChange(o.id); }}
-            className="h-8 px-3 text-[11px] font-medium transition-colors"
+            className="h-8 px-3 text-sm font-medium transition-colors"
             style={{
               background: active ? 'var(--bg-active)' : 'transparent',
               color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -367,7 +367,7 @@ function Slider({
         style={{ accentColor: 'var(--fg-accent)' }}
       />
       <span
-        className="text-[12px] tabular-nums font-medium w-6 text-right"
+        className="text-base tabular-nums font-medium w-6 text-right"
         style={{ color: 'var(--fg-strong)' }}
       >
         {value}

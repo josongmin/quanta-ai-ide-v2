@@ -93,13 +93,13 @@ export default function DepsCarousel({ repo, isDark, size = 260 }: Props) {
       <div className="flex items-center justify-between mb-2">
         <div className="flex flex-col">
           <span
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-default)' }}
           >
             {cur.label}
           </span>
           <span
-            className="text-[9px]"
+            className="text-2xs"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {cur.hint}
@@ -116,7 +116,7 @@ export default function DepsCarousel({ repo, isDark, size = 260 }: Props) {
             <ChevronLeft className="w-3 h-3" />
           </button>
           <span
-            className="text-[9px] font-mono tabular-nums px-1"
+            className="text-2xs font-mono tabular-nums px-1"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {idx + 1}/{slides.length}

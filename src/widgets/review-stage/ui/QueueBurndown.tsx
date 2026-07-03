@@ -101,7 +101,7 @@ export default function QueueBurndown({ prs }: Props) {
         <circle cx={lastPoint[0]} cy={lastPoint[1]} r={1.8} fill={tone} />
       </svg>
       <span
-        className="inline-flex items-center gap-0.5 text-[10px] font-mono tabular-nums"
+        className="inline-flex items-center gap-0.5 text-xs font-mono tabular-nums"
         style={{ color: tone }}
       >
         <TrendIcon className="w-2.5 h-2.5" strokeWidth={2.5} />

@@ -35,13 +35,13 @@ export default function FixModePanel({ onAction, recommended }: Props) {
   return (
     <div className="rounded-2xl px-3 py-3 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5">
       <div className="flex items-center gap-2 px-1 mb-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-700 dark:text-zinc-300">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-zinc-700 dark:text-zinc-300">
           Fix mode
         </span>
         {recommended && (
           <span
             style={{ color: 'var(--intent-success-fg)' }}
-            className="font-mono text-[10px]"
+            className="font-mono text-xs"
           >
             recommended: {recommended}
           </span>
@@ -64,7 +64,7 @@ export default function FixModePanel({ onAction, recommended }: Props) {
               type="button"
               onClick={() => { onAction(b.action); }}
               style={style}
-              className={`text-[11px] font-medium px-2.5 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${ring} ${text}`}
+              className={`text-sm font-medium px-2.5 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${ring} ${text}`}
             >
               {b.label}
             </button>

@@ -10,7 +10,7 @@ import type { CodingDiffHunk } from '../../types';
 // a window event the parent (CodingStage) listens for.
 export function UnifiedHunkBody({ hunk }: { hunk: CodingDiffHunk }) {
   return (
-    <div className="font-mono text-[11px] leading-[1.55]">
+    <div className="font-mono text-sm leading-[1.55]">
       {hunk.lines.map((line, j) => (
         <DiffLine key={j} line={line} />
       ))}
@@ -26,7 +26,7 @@ export function SplitHunkBody({ hunk }: { hunk: CodingDiffHunk }) {
   const rows = useMemo(() => buildSplitRows(hunk.lines), [hunk.lines]);
   const divider = 'border-[color:var(--border-muted)]';
   return (
-    <div className={`grid grid-cols-2 divide-x ${divider} font-mono text-[11px] leading-[1.55]`}>
+    <div className={`grid grid-cols-2 divide-x ${divider} font-mono text-sm leading-[1.55]`}>
       <div>
         {rows.map((r, i) => (
           <DiffSplitCell key={`L${i}`} side="left" line={r.left} />
@@ -162,12 +162,12 @@ function DiffLine({
               if (e.key === 'Escape') { e.preventDefault(); setEditing(false); setText(''); return; }
               if (e.key === 'Enter') { e.preventDefault(); dispatchRewrite(); }
             }}
-            className="flex-1 bg-transparent outline-none text-[11px] text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
+            className="flex-1 bg-transparent outline-none text-sm text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
           />
           <button
             type="button"
             onClick={() => { setEditing(false); setText(''); }}
-            className="px-1.5 py-0.5 rounded text-[10px] text-[color:var(--fg-muted)]"
+            className="px-1.5 py-0.5 rounded text-xs text-[color:var(--fg-muted)]"
           >
             {t('lineEdit.cancel')}
           </button>
@@ -175,7 +175,7 @@ function DiffLine({
             type="button"
             onClick={dispatchRewrite}
             disabled={!text.trim()}
-            className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
+            className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors ${
               text.trim()
                 ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] hover:opacity-90'
                 : 'bg-[color:var(--bg-elevated)] text-[color:var(--fg-subtle)] cursor-not-allowed'

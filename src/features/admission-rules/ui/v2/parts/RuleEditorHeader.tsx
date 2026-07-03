@@ -18,13 +18,13 @@ export function RuleEditorHeader({
       style={{ borderColor: t.borderSoft }}
     >
       <h2
-        className="text-[11px] font-bold uppercase tracking-[0.18em]"
+        className="text-sm font-bold uppercase tracking-eyebrow"
         style={{ color: t.textHi }}
       >
         {editingId === null ? 'New rule' : 'Edit rule'}
       </h2>
       <span
-        className="text-[9px] font-mono uppercase tracking-[0.18em] px-1.5 py-px rounded-md"
+        className="text-2xs font-mono uppercase tracking-eyebrow px-1.5 py-px rounded-md"
         style={{
           color: t.textMuted,
           background: t.inset,
@@ -34,7 +34,7 @@ export function RuleEditorHeader({
       </span>
       {versionCount > 0 && (
         <span
-          className="text-[9px] font-mono px-1.5 py-px rounded-md"
+          className="text-2xs font-mono px-1.5 py-px rounded-md"
           style={{
             color: t.accent,
             background: `${t.accent}15`,
@@ -47,7 +47,7 @@ export function RuleEditorHeader({
       <div className="flex-1" />
       <button type="button"
         onClick={onSave}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.18em]"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-eyebrow"
         style={{ background: t.textHi, color: t.page }}
       >
         <Save className="w-3 h-3" />

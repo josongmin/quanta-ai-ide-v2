@@ -100,7 +100,7 @@ export function SurvivalCurveCard({
         {t('survival.title', { defaultValue: 'Time-to-merge survival' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {t('survival.sub', {
           defaultValue: 'Kaplan-Meier · Greenwood 95% CI band',
@@ -109,17 +109,17 @@ export function SurvivalCurveCard({
 
       <div className="flex items-baseline gap-2 mt-3">
         <span
-          className="text-[24px] font-black tabular-nums leading-none"
+          className="text-3xl font-black tabular-nums leading-none"
           style={{ color: v.textHi }}
         >
           {tMedian == null ? '—' : `${tMedian.toFixed(1)}${timeUnit}`}
         </span>
-        <span className="text-[9px] font-mono"
+        <span className="text-2xs font-mono"
               style={{ color: v.textFaint }}>
           {t('survival.median', { defaultValue: 'median' })}
         </span>
         {cMedian != null && ctrl.length > 0 && (
-          <span className="ml-auto text-[9px] font-mono"
+          <span className="ml-auto text-2xs font-mono"
                 style={{ color: v.textFaint }}>
             {t('survival.vs', { defaultValue: 'vs' })} {cMedian.toFixed(1)}{timeUnit}
           </span>
@@ -203,7 +203,7 @@ export function SurvivalCurveCard({
         </text>
       </svg>
 
-      <div className="mt-1 flex items-center gap-3 text-[9px] font-mono"
+      <div className="mt-1 flex items-center gap-3 text-2xs font-mono"
            style={{ color: v.textFaint }}>
         <span className="inline-flex items-center gap-1">
           <span className="inline-block w-2 h-px"

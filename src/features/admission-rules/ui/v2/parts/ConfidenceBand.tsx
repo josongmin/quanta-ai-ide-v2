@@ -36,7 +36,7 @@ export function ConfidenceBand({ passes, total, level = 0.95 }: Props) {
         {t('confidence.title', { defaultValue: 'Pass-rate confidence' })}
       </SectionTitle>
 
-      <div className="text-[9px] font-mono mt-0.5"
+      <div className="text-2xs font-mono mt-0.5"
            style={{ color: v.textFaint }}>
         {t('confidence.sub', {
           level: Math.round(level * 100),
@@ -47,12 +47,12 @@ export function ConfidenceBand({ passes, total, level = 0.95 }: Props) {
 
       <div className="flex items-baseline gap-2 mt-3">
         <span
-          className="text-[28px] font-black tabular-nums leading-none"
+          className="text-4xl font-black tabular-nums leading-none"
           style={{ color: v.textHi }}
         >
           {pct(ci.point)}
         </span>
-        <span className="text-[10px] font-mono"
+        <span className="text-xs font-mono"
               style={{ color: v.textFaint }}>
           {passes}/{total}
         </span>
@@ -77,14 +77,14 @@ export function ConfidenceBand({ passes, total, level = 0.95 }: Props) {
         />
       </div>
 
-      <div className="mt-2 flex items-center justify-between text-[10px] font-mono"
+      <div className="mt-2 flex items-center justify-between text-xs font-mono"
            style={{ color: v.textFaint }}>
         <span>↳ {pct(ci.lo)}</span>
         <span style={{ color: v.textBody }}>±{((hiPct - loPct) / 2).toFixed(1)}pp</span>
         <span>{pct(ci.hi)} ↰</span>
       </div>
 
-      <div className="mt-2 text-[9px] leading-relaxed"
+      <div className="mt-2 text-2xs leading-relaxed"
            style={{ color: v.textFaint }}>
         {t('confidence.note', {
           defaultValue: 'Narrower band = more samples. Wide band on a small N is honest, not noisy.',

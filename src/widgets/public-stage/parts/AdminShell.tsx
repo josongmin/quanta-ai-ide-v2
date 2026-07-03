@@ -35,7 +35,7 @@ export function AdminShell({ active = 'overview', children }: Props) {
           "you are operating on real data" signal stays unmissable, but
           shed the loud danger-red fill + caps treatment. */}
       <div
-        className="flex items-center justify-between gap-3 px-5 h-9 text-[11px] tabular-nums"
+        className="flex items-center justify-between gap-3 px-5 h-9 text-sm tabular-nums"
         style={{
           background: 'var(--bg-elevated)',
           color: 'var(--fg-muted)',
@@ -48,7 +48,7 @@ export function AdminShell({ active = 'overview', children }: Props) {
           <span style={{ color: 'var(--border-strong)' }}>·</span>
           <span>Acting as <span style={{ color: 'var(--fg-default)' }}>Sora Kim</span></span>
           <span style={{ color: 'var(--border-strong)' }}>·</span>
-          <span className="font-mono text-[10px]">8m session</span>
+          <span className="font-mono text-xs">8m session</span>
         </div>
         <Link
           to="/intelligence"
@@ -68,7 +68,7 @@ export function AdminShell({ active = 'overview', children }: Props) {
         >
           <div className="px-3 py-4 flex flex-col gap-0.5">
             <span
-              className="px-2 mb-2 text-[9px] uppercase tracking-[0.14em] font-semibold"
+              className="px-2 mb-2 text-2xs uppercase tracking-eyebrow font-semibold"
               style={{ color: 'var(--fg-subtle)' }}
             >
               Admin
@@ -79,7 +79,7 @@ export function AdminShell({ active = 'overview', children }: Props) {
                 <Link
                   key={id}
                   to={to as never}
-                  className="flex items-center gap-2 px-2 h-7 rounded-md text-[12px] font-medium transition-colors"
+                  className="flex items-center gap-2 px-2 h-7 rounded-md text-base font-medium transition-colors"
                   style={{
                     background: isActive ? 'var(--bg-active)' : 'transparent',
                     color: isActive ? 'var(--fg-strong)' : 'var(--fg-muted)',

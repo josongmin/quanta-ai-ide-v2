@@ -124,7 +124,7 @@ export default function ApiReferencePage() {
                 value={q}
                 onChange={(e) => { setQ(e.target.value); }}
                 placeholder="Filter endpoints…"
-                className="flex-1 bg-transparent outline-none text-[11px]"
+                className="flex-1 bg-transparent outline-none text-sm"
                 style={{ color: 'var(--fg-strong)' }}
               />
             </div>
@@ -136,7 +136,7 @@ export default function ApiReferencePage() {
               return (
                 <div key={g} className="mb-2">
                   <div
-                    className="px-2 py-1.5 text-[9px] uppercase tracking-[0.18em] font-semibold"
+                    className="px-2 py-1.5 text-2xs uppercase tracking-eyebrow font-semibold"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     {g}
@@ -162,13 +162,13 @@ export default function ApiReferencePage() {
                         }}
                       >
                         <span
-                          className="text-[9px] font-bold tabular-nums"
+                          className="text-2xs font-bold tabular-nums"
                           style={{ color: tone.fg, minWidth: 38 }}
                         >
                           {e.method}
                         </span>
                         <code
-                          className="text-[11px] font-mono truncate"
+                          className="text-sm font-mono truncate"
                           style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-muted)' }}
                         >
                           {e.path.replace('/v1', '')}
@@ -180,7 +180,7 @@ export default function ApiReferencePage() {
               );
             })}
             {filtered.length === 0 && (
-              <div className="text-center py-12 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+              <div className="text-center py-12 text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 No matches.
               </div>
             )}
@@ -202,16 +202,16 @@ function EndpointDetail({ endpoint }: { endpoint: Endpoint }) {
     <div className="overflow-y-auto p-8">
       <div className="flex items-center gap-3 mb-5">
         <span
-          className="inline-flex items-center justify-center px-2.5 h-6 rounded text-[10px] font-bold tabular-nums"
+          className="inline-flex items-center justify-center px-2.5 h-6 rounded text-xs font-bold tabular-nums"
           style={{ color: tone.fg, background: tone.bg }}
         >
           {endpoint.method}
         </span>
-        <code className="text-[14px] font-mono" style={{ color: 'var(--fg-strong)' }}>
+        <code className="text-lg font-mono" style={{ color: 'var(--fg-strong)' }}>
           {endpoint.path}
         </code>
       </div>
-      <p className="text-[12px] leading-snug mb-6" style={{ color: 'var(--fg-muted)' }}>
+      <p className="text-base leading-snug mb-6" style={{ color: 'var(--fg-muted)' }}>
         {endpoint.summary}
       </p>
 
@@ -221,7 +221,7 @@ function EndpointDetail({ endpoint }: { endpoint: Endpoint }) {
       )}
       <CodeBlock label="Response" code={endpoint.response} muted />
 
-      <div className="mt-8 flex items-center gap-3 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="mt-8 flex items-center gap-3 text-sm" style={{ color: 'var(--fg-subtle)' }}>
         <span>Rate limit: <span style={{ color: 'var(--fg-default)' }}>5000 req/min</span></span>
         <span>·</span>
         <span>Idempotency: <span style={{ color: 'var(--fg-default)' }}>{endpoint.method === 'POST' ? 'header supported' : 'native'}</span></span>
@@ -246,7 +246,7 @@ function CodeBlock({ label, code, muted }: { label: string; code: string; muted?
         className="flex items-center justify-between px-3 h-8"
         style={{ borderBottom: '1px solid var(--border-muted)' }}
       >
-        <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
           {label}
         </span>
         <button
@@ -258,7 +258,7 @@ function CodeBlock({ label, code, muted }: { label: string; code: string; muted?
               window.setTimeout(() => { setCopied(false); }, 1200);
             }
           }}
-          className="inline-flex items-center gap-1 px-2 h-6 rounded text-[10px] font-medium transition-colors"
+          className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-medium transition-colors"
           style={{ color: 'var(--fg-muted)' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -268,7 +268,7 @@ function CodeBlock({ label, code, muted }: { label: string; code: string; muted?
         </button>
       </div>
       <pre
-        className="text-[12px] leading-relaxed font-mono p-4 m-0 overflow-x-auto"
+        className="text-base leading-relaxed font-mono p-4 m-0 overflow-x-auto"
         style={{ color: 'var(--fg-strong)' }}
       >
         {code}

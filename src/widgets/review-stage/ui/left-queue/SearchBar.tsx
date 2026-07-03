@@ -23,7 +23,7 @@ export function SearchBar({ value, onChange }: { value: string; onChange: (s: st
           onFocus={() => { setFocused(true); }}
           onBlur={() => { setFocused(false); }}
           placeholder="검색..."
-          className="flex-1 min-w-0 bg-transparent outline-none text-[12px] text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)]"
+          className="flex-1 min-w-0 bg-transparent outline-none text-base text-[var(--fg-strong)] placeholder:text-[var(--fg-subtle)]"
         />
         {value.length > 0 ? (
           <button
@@ -35,7 +35,7 @@ export function SearchBar({ value, onChange }: { value: string; onChange: (s: st
             <X className="w-3 h-3" strokeWidth={2.5} />
           </button>
         ) : (
-          <span className="shrink-0 text-[10px] font-mono text-[var(--fg-subtle)] leading-none">
+          <span className="shrink-0 text-xs font-mono text-[var(--fg-subtle)] leading-none">
             ⌘K
           </span>
         )}

@@ -28,7 +28,7 @@ export function ModeToggle({
                 {o.icon}
               </span>
               <span
-                className="text-[12px] font-semibold"
+                className="text-base font-semibold"
                 style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-default)' }}
               >
                 {o.title}
@@ -41,7 +41,7 @@ export function ModeToggle({
                 />
               )}
             </div>
-            <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
               {o.sub}
             </span>
           </button>

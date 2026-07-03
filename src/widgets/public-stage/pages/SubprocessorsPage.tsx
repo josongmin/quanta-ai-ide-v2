@@ -70,7 +70,7 @@ export default function SubprocessorsPage() {
         <h1 className="text-[32px] font-semibold tracking-tight mb-3" style={{ color: 'var(--fg-strong)' }}>
           Subprocessors
         </h1>
-        <p className="text-[14px] leading-7" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-lg leading-7" style={{ color: 'var(--fg-muted)' }}>
           To deliver the ACME service we rely on a small set of carefully vetted third parties (&quot;Subprocessors&quot;).
           The list below is current as of the date shown and is updated whenever a Subprocessor is added,
           removed or materially changed. We notify subscribers at least <strong style={{ color: 'var(--fg-default)' }}>30 days</strong> before any addition takes effect.
@@ -86,14 +86,14 @@ export default function SubprocessorsPage() {
       >
         <div className="flex items-center gap-2 mb-2" style={{ color: 'var(--fg-strong)' }}>
           <Bell size={14} style={{ color: 'var(--fg-accent)' }} />
-          <span className="text-[12px] font-semibold">Get notified of changes</span>
+          <span className="text-base font-semibold">Get notified of changes</span>
         </div>
-        <p className="text-[12px] leading-5 mb-3" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base leading-5 mb-3" style={{ color: 'var(--fg-muted)' }}>
           We&apos;ll email you at least 30 days before adding any new subprocessor. Unsubscribe anytime.
         </p>
         {subscribed ? (
           <div
-            className="rounded-md px-3 py-2 text-[12px]"
+            className="rounded-md px-3 py-2 text-base"
             style={{
               background: 'var(--intent-success-bg)',
               color: 'var(--intent-success-fg)',
@@ -110,7 +110,7 @@ export default function SubprocessorsPage() {
               placeholder="you@company.com"
               value={email}
               onChange={(e) => { setEmail(e.target.value); }}
-              className="flex-1 h-9 px-3 rounded-md text-[12px] outline-none"
+              className="flex-1 h-9 px-3 rounded-md text-base outline-none"
               style={{
                 background: 'var(--bg-canvas)',
                 border: '1px solid var(--border-default)',
@@ -119,7 +119,7 @@ export default function SubprocessorsPage() {
             />
             <button
               type="submit"
-              className="h-9 px-4 rounded-md text-[12px] font-semibold whitespace-nowrap"
+              className="h-9 px-4 rounded-md text-base font-semibold whitespace-nowrap"
               style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
             >
               Notify me
@@ -130,10 +130,10 @@ export default function SubprocessorsPage() {
 
       <section className="mb-12">
         <div className="flex items-baseline justify-between mb-3">
-          <h2 className="text-[16px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <h2 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             Current subprocessors
           </h2>
-          <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
             {SUBPROCESSORS.length} active · last reviewed 2026-04-22
           </span>
         </div>
@@ -142,7 +142,7 @@ export default function SubprocessorsPage() {
           className="rounded-lg overflow-hidden"
           style={{ border: '1px solid var(--border-default)' }}
         >
-          <table className="w-full text-[12px]">
+          <table className="w-full text-base">
             <thead>
               <tr style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)' }}>
                 <th className="text-left font-medium px-3 py-2.5">Name</th>
@@ -190,7 +190,7 @@ export default function SubprocessorsPage() {
                       href={s.dpaUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[12px] underline underline-offset-2"
+                      className="inline-flex items-center gap-1 text-base underline underline-offset-2"
                       style={{ color: 'var(--fg-link)' }}
                     >
                       View
@@ -205,10 +205,10 @@ export default function SubprocessorsPage() {
       </section>
 
       <section>
-        <h2 className="text-[16px] font-semibold tracking-tight mb-2" style={{ color: 'var(--fg-strong)' }}>
+        <h2 className="text-xl font-semibold tracking-tight mb-2" style={{ color: 'var(--fg-strong)' }}>
           How we vet subprocessors
         </h2>
-        <p className="text-[12px] leading-6 mb-4" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base leading-6 mb-4" style={{ color: 'var(--fg-muted)' }}>
           Every vendor on the list above is reviewed against the four criteria below before they go live, and
           re-reviewed annually. We document each assessment in our internal vendor register.
         </p>
@@ -221,9 +221,9 @@ export default function SubprocessorsPage() {
             >
               <div className="flex items-center gap-2 mb-1">
                 <c.icon size={14} style={{ color: 'var(--fg-accent)' }} />
-                <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
+                <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
               </div>
-              <p className="text-[12px] leading-5" style={{ color: 'var(--fg-muted)' }}>{c.desc}</p>
+              <p className="text-base leading-5" style={{ color: 'var(--fg-muted)' }}>{c.desc}</p>
             </li>
           ))}
         </ul>
@@ -235,7 +235,7 @@ export default function SubprocessorsPage() {
 function CategoryChip({ label }: { label: string }) {
   return (
     <span
-      className="inline-flex items-center px-1.5 h-[18px] rounded text-[10px] font-medium"
+      className="inline-flex items-center px-1.5 h-[18px] rounded text-xs font-medium"
       style={{
         background: 'var(--bg-active)',
         color: 'var(--fg-muted)',
@@ -250,7 +250,7 @@ function CategoryChip({ label }: { label: string }) {
 function LocationBadge({ location }: { location: 'US' | 'EU' | 'Global' | 'US/EU' }) {
   return (
     <span
-      className="inline-flex items-center px-2 h-[20px] rounded-full text-[11px] font-medium"
+      className="inline-flex items-center px-2 h-[20px] rounded-full text-sm font-medium"
       style={{
         background: 'var(--bg-canvas)',
         color: 'var(--fg-default)',

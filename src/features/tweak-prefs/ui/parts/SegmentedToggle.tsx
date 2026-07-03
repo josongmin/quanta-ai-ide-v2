@@ -102,7 +102,7 @@ export function SegmentedToggle<V extends string>({
             aria-checked={active}
             disabled={opt.disabled}
             onClick={() => { if (!opt.disabled) onChange(opt.value); }}
-            className="relative z-[1] px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-[0.18em] outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="relative z-[1] px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-eyebrow outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
               color: active ? 'var(--bg-canvas)' : 'var(--fg-muted)',
             }}

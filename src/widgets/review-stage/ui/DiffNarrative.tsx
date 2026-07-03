@@ -85,7 +85,7 @@ export default function DiffNarrative({
       />
       <div className="relative flex items-center gap-2 mb-3">
         <GitCompare className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Claimed vs observed
         </span>
         <ProvenanceBadge kind="static" />
@@ -99,21 +99,21 @@ export default function DiffNarrative({
         {/* Claimed column — author's intent */}
         <div className="rounded-md border border-[var(--border-default)] p-3">
           <div className="flex items-center gap-1.5 mb-2">
-            <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+            <span className="text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
               Claimed
             </span>
-            <span className="text-[9px] font-mono text-[var(--fg-subtle)]">
+            <span className="text-2xs font-mono text-[var(--fg-subtle)]">
               · from description
             </span>
           </div>
           {claimed.length === 0 ? (
-            <div className="text-[11px] italic text-[var(--fg-subtle)]">
+            <div className="text-sm italic text-[var(--fg-subtle)]">
               No description provided — only the diff to go on.
             </div>
           ) : (
             <ul className="space-y-1">
               {claimed.map((c, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-[12px] text-[var(--fg-muted)] leading-snug">
+                <li key={i} className="flex items-start gap-1.5 text-base text-[var(--fg-muted)] leading-snug">
                   <span className="shrink-0 text-[var(--fg-subtle)] mt-0.5">·</span>
                   <span>{c}</span>
                 </li>
@@ -125,16 +125,16 @@ export default function DiffNarrative({
         {/* Observed column — derived from diff facts */}
         <div className="rounded-md border border-[var(--border-default)] p-3">
           <div className="flex items-center gap-1.5 mb-2">
-            <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+            <span className="text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
               Observed
             </span>
-            <span className="text-[9px] font-mono text-[var(--fg-subtle)]">
+            <span className="text-2xs font-mono text-[var(--fg-subtle)]">
               · derived from diff
             </span>
           </div>
           <ul className="space-y-1">
             {observed.map((o, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-[12px] text-[var(--fg-muted)] leading-snug">
+              <li key={i} className="flex items-start gap-1.5 text-base text-[var(--fg-muted)] leading-snug">
                 <span className="shrink-0 mt-0.5" style={{ color: verdictTone }}>▸</span>
                 <span dangerouslySetInnerHTML={{ __html: highlightInlineCode(o) }} />
               </li>
@@ -145,7 +145,7 @@ export default function DiffNarrative({
 
       {mismatch.detected && mismatch.reason !== null && (
         <div
-          className="relative mt-3 px-3 py-2 rounded-md text-[12px]"
+          className="relative mt-3 px-3 py-2 rounded-md text-base"
           style={{
             background: 'var(--intent-danger-bg)',
             color: 'var(--intent-danger-fg)',

@@ -48,7 +48,7 @@ export function HotspotSummaryCard({ file }: { file: FileRecord }) {
       <div className="flex items-center gap-2">
         <Flame className="w-3 h-3" style={{ color: chipColor }} />
         <span
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('hotspot.title')}
@@ -62,7 +62,7 @@ export function HotspotSummaryCard({ file }: { file: FileRecord }) {
         {top3.map((c) => (
           <div key={c.key} className="flex items-center gap-2">
             <span
-              className="text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)] w-[88px] shrink-0 truncate"
+              className="text-2xs font-mono uppercase tracking-eyebrow w-[88px] shrink-0 truncate"
               style={{ color: 'var(--fg-muted)' }}
             >
               {t(SIGNAL_LABEL_KEY[c.key])}
@@ -81,7 +81,7 @@ export function HotspotSummaryCard({ file }: { file: FileRecord }) {
               />
             </div>
             <span
-              className="text-[9px] font-mono tabular-nums w-7 text-right"
+              className="text-2xs font-mono tabular-nums w-7 text-right"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {Math.round(c.value * 100)}
@@ -91,7 +91,7 @@ export function HotspotSummaryCard({ file }: { file: FileRecord }) {
       </div>
 
       <p
-        className="text-[10px] leading-snug"
+        className="text-xs leading-snug"
         style={{ color: 'var(--fg-muted)' }}
       >
         {t(explanation.narrativeKey, explanation.narrativeParams)}

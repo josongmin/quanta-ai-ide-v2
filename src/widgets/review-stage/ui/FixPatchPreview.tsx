@@ -64,11 +64,11 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
           ? <ChevronDown className="w-3 h-3 text-[var(--fg-muted)]" />
           : <ChevronRight className="w-3 h-3 text-[var(--fg-muted)]" />}
         <Wand2 className="w-3 h-3" style={{ color: 'var(--fg-accent)' }} />
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Suggested fix
         </span>
         <ProvenanceBadge kind={provenance} />
-        <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)] tabular-nums">
+        <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)] tabular-nums">
           {patch.added} +  ·  {patch.removed} −
         </span>
       </button>
@@ -78,8 +78,8 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
           {/* Patch body — monospace 2-column-ish layout: left gutter for line
               status, right area for code text. We don't use a real diff
               parser since the patch is already a structured array. */}
-          <div className="font-mono text-[11px] leading-[1.5] border-t border-[var(--border-default)]">
-            <div className="px-3 py-1 text-[10px] font-mono text-[var(--fg-subtle)] bg-[var(--bg-surface-muted)]">
+          <div className="font-mono text-sm leading-[1.5] border-t border-[var(--border-default)]">
+            <div className="px-3 py-1 text-xs font-mono text-[var(--fg-subtle)] bg-[var(--bg-surface-muted)]">
               {finding.filePath}{finding.line !== null ? `:${String(finding.line)}` : ''}
             </div>
             {patch.lines.map((ln, i) => {
@@ -112,7 +112,7 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
           {/* Why-safe rationale — pulled from finding.fixRationale when
               present, otherwise a generic note. We never invent rationales. */}
           {finding.fixRationale !== null && (
-            <div className="px-3 py-2 text-[11px] italic text-[var(--fg-muted)] border-t border-[var(--border-default)]">
+            <div className="px-3 py-2 text-sm italic text-[var(--fg-muted)] border-t border-[var(--border-default)]">
               <span className="text-[var(--fg-subtle)] mr-1">why safe —</span>
               {finding.fixRationale}
             </div>
@@ -123,7 +123,7 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
             <button
               type="button"
               onClick={() => { onApply?.(finding.id); }}
-              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-xs font-bold uppercase tracking-eyebrow"
               style={{
                 background: 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)',
                 color: 'var(--intent-success-fg)',
@@ -136,13 +136,13 @@ export default function FixPatchPreview({ finding, onApply, onDismiss }: Props) 
             <button
               type="button"
               onClick={() => { onDismiss?.(finding.id); }}
-              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-default)] transition-colors"
+              className="inline-flex items-center gap-1 h-6 px-2.5 rounded text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)] hover:text-[var(--fg-default)] transition-colors"
               style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}
             >
               <X className="w-2.5 h-2.5" />
               Dismiss
             </button>
-            <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
+            <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">
               {finding.category}/{finding.rule}
             </span>
           </div>

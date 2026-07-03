@@ -49,7 +49,7 @@ export function GraphTab({ file, reverseDeps }: { file: FileRecord; reverseDeps:
               key={m.key}
               type="button"
               onClick={() => { setMode(m.key); }}
-              className="px-2.5 py-1 text-[10px] font-black uppercase tracking-[var(--track-eyebrow)] rounded-md transition-colors"
+              className="px-2.5 py-1 text-xs font-black uppercase tracking-eyebrow rounded-md transition-colors"
               style={
                 active
                   ? { background: 'var(--bg-active)', color: 'var(--fg-strong)' }
@@ -70,7 +70,7 @@ export function GraphTab({ file, reverseDeps }: { file: FileRecord; reverseDeps:
       <div className="space-y-3">
         <div>
           <div
-            className="flex items-center gap-1.5 mb-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="flex items-center gap-1.5 mb-1.5 text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             <ArrowUpFromLine className="w-2.5 h-2.5" />
@@ -87,7 +87,7 @@ export function GraphTab({ file, reverseDeps }: { file: FileRecord; reverseDeps:
         </div>
         <div>
           <div
-            className="flex items-center gap-1.5 mb-1.5 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="flex items-center gap-1.5 mb-1.5 text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             <ArrowDownToLine className="w-2.5 h-2.5" />
@@ -117,13 +117,13 @@ function EdgeRow({
     edge.confidence === 'exact' ? C.ok : edge.confidence === 'overapprox' ? C.warning : C.critical;
   return (
     <div
-      className="flex items-center gap-2 px-2 py-1 rounded-md text-[10px] hover-surface"
+      className="flex items-center gap-2 px-2 py-1 rounded-md text-xs hover-surface"
       style={{ background: 'var(--bg-surface-muted)' }}
     >
       <span className="font-mono truncate flex-1 min-w-0">{f.folderPath}/{f.name}</span>
       {edge.note && (
         <span
-          className="shrink-0 text-[9px] italic"
+          className="shrink-0 text-2xs italic"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {edge.note}

@@ -19,14 +19,14 @@ export function Section({
     <div className="space-y-1.5">
       <div className="flex items-baseline gap-2 px-0.5">
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-muted)' }}
         >
           {title}
         </div>
         {subtitle && (
           <div
-            className="text-[9px] font-mono truncate"
+            className="text-2xs font-mono truncate"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {subtitle}

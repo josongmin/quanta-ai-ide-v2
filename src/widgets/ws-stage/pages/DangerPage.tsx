@@ -114,23 +114,23 @@ function ConfirmTransfer({
         <div className="p-5 flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-warn-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Transfer {wsName}?
             </span>
           </div>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
             This moves the workspace to the destination org and re-attaches billing.
             Type <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{wsName}</span> below to confirm.
           </p>
 
           <label className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Destination org
             </span>
             <select
               value={target}
               onChange={(e) => { setTarget(e.target.value); }}
-              className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+              className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
               style={{
                 background: 'var(--bg-surface-muted)',
                 border: '1px solid var(--border-default)',
@@ -142,14 +142,14 @@ function ConfirmTransfer({
           </label>
 
           <label className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Type to confirm
             </span>
             <input
               value={typed}
               onChange={(e) => { setTyped(e.target.value); }}
               placeholder={wsName}
-              className="h-9 rounded-md px-3 text-[12px] outline-none font-mono"
+              className="h-9 rounded-md px-3 text-base outline-none font-mono"
               style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
             />
           </label>

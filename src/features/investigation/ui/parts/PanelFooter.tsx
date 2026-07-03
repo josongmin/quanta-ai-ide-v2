@@ -36,7 +36,7 @@ export function PanelFooter({
           type="button"
           onClick={onRegenerate}
           disabled={status === 'gathering'}
-          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-medium transition-colors hover:[background:var(--bg-hover)] disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium transition-colors hover:[background:var(--bg-hover)] disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           style={{
             background: 'transparent',
             color: 'var(--fg-muted)',

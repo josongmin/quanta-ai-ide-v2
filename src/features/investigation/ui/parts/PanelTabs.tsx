@@ -18,7 +18,7 @@ function ModeTab({
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.12em] transition-colors hover:[background:var(--bg-hover)]"
+      className="px-2 py-0.5 rounded text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:[background:var(--bg-hover)]"
       style={{
         background: active ? 'var(--bg-active)' : 'transparent',
         color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
@@ -44,7 +44,7 @@ function QuestionTab({
     <button
       type="button"
       onClick={onClick}
-      className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.12em] transition-colors hover:[background:var(--bg-hover)]"
+      className="px-2 py-1 rounded-md text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:[background:var(--bg-hover)]"
       style={{
         background: active ? 'var(--bg-active)' : 'transparent',
         color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',

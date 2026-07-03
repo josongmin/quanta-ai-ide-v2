@@ -26,7 +26,7 @@ export function ChatHeader({
     >
       <div className="shrink-0 flex items-center pl-3 pr-3">
         <span
-          className="font-mono font-black tracking-tight text-[12px] leading-none"
+          className="font-mono font-black tracking-tight text-base leading-none"
           style={{ color: 'var(--fg-strong)' }}
         >
           p0
@@ -44,7 +44,7 @@ export function ChatHeader({
                 role="tab"
                 aria-selected={a}
                 tabIndex={0}
-                className="group relative flex items-center gap-1.5 px-2.5 text-[11px] font-bold cursor-pointer transition-colors whitespace-nowrap"
+                className="group relative flex items-center gap-1.5 px-2.5 text-sm font-bold cursor-pointer transition-colors whitespace-nowrap"
                 style={{ color: a ? 'var(--fg-strong)' : 'var(--fg-subtle)' }}
                 onClick={() => { onSelect(s.id); }}
                 onKeyDown={(e) => {

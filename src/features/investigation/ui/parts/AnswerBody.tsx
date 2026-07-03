@@ -119,7 +119,7 @@ export function AnswerBody({
     return (
       <div className="flex flex-col items-start gap-2">
         <div
-          className="text-[11px]"
+          className="text-sm"
           style={{ color: 'var(--intent-danger-vivid)' }}
         >
           Investigation failed.
@@ -127,7 +127,7 @@ export function AnswerBody({
         <button
           type="button"
           onClick={onRegenerate}
-          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.16em] border transition-colors hover:[background:var(--bg-hover)]"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-bold uppercase tracking-[0.16em] border transition-colors hover:[background:var(--bg-hover)]"
           style={{
             background: 'var(--bg-surface-muted)',
             color: 'var(--fg-default)',

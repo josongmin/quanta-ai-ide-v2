@@ -22,13 +22,13 @@ export function LivePreviewCard({
       <div className="flex items-center gap-2 mb-3">
         <Eye className="w-3 h-3" style={{ color: t.textMuted }} />
         <span
-          className="text-[10px] font-bold uppercase tracking-[0.18em]"
+          className="text-xs font-bold uppercase tracking-eyebrow"
           style={{ color: t.textBody }}
         >
           live preview
         </span>
         <span
-          className="ml-auto text-[9px] font-mono"
+          className="ml-auto text-2xs font-mono"
           style={{ color: t.textSubtle }}
         >
           {preview.elapsedMs.toFixed(1)}ms · {preview.cost}
@@ -36,27 +36,27 @@ export function LivePreviewCard({
       </div>
       <div className="flex items-baseline gap-3 mb-2">
         <span
-          className="text-[24px] font-black tabular-nums leading-none"
+          className="text-3xl font-black tabular-nums leading-none"
           style={{ color: t.textHi }}
         >
           {preview.matches.length}
         </span>
         <span
-          className="text-[10px] font-bold uppercase tracking-[0.18em]"
+          className="text-xs font-bold uppercase tracking-eyebrow"
           style={{ color: t.textSubtle }}
         >
           matches{preview.truncated ? ' (capped)' : ''}
         </span>
       </div>
       <div
-        className="text-[10px] font-mono mb-2"
+        className="text-xs font-mono mb-2"
         style={{ color: t.textSubtle }}
       >
         exact {preview.confidenceMix.exact} · over {preview.confidenceMix.overapprox} · unk {preview.confidenceMix.unknown}
       </div>
       {preview.matches.length === 0 ? (
         <div
-          className="text-[11px] font-mono"
+          className="text-sm font-mono"
           style={{ color: t.textSubtle }}
         >
           No files match. Rule is ready to enable.
@@ -68,7 +68,7 @@ export function LivePreviewCard({
             return (
               <li
                 key={m.fileId}
-                className="flex items-center gap-2 text-[10px] font-mono px-2 py-1 rounded-md"
+                className="flex items-center gap-2 text-xs font-mono px-2 py-1 rounded-md"
                 style={{ background: t.inset }}
               >
                 <span
@@ -92,7 +92,7 @@ export function LivePreviewCard({
           })}
           {preview.matches.length > 6 && (
             <li
-              className="text-[10px] font-mono px-2"
+              className="text-xs font-mono px-2"
               style={{ color: t.textSubtle }}
             >
               … {preview.matches.length - 6} more
@@ -111,7 +111,7 @@ export function RetroImpactCard({ retroImpact, t }: { retroImpact: RetroImpact; 
       <div className="flex items-center gap-2 mb-3">
         <Activity className="w-3 h-3" style={{ color: t.textMuted }} />
         <span
-          className="text-[10px] font-bold uppercase tracking-[0.18em]"
+          className="text-xs font-bold uppercase tracking-eyebrow"
           style={{ color: t.textBody }}
         >
           if enabled (last 30d sim)
@@ -139,7 +139,7 @@ function RetroBadge({ label, value, color, t }: { label: string; value: number; 
         {value}
       </div>
       <div
-        className="text-[9px] font-bold uppercase tracking-[0.18em] mt-1"
+        className="text-2xs font-bold uppercase tracking-eyebrow mt-1"
         style={{ color: t.textSubtle }}
       >
         {label}
@@ -155,13 +155,13 @@ export function VersionHistoryCard({ versions, t }: { versions: RuleVersion[]; t
       <div className="flex items-center gap-2 mb-3">
         <Clock className="w-3 h-3" style={{ color: t.textMuted }} />
         <span
-          className="text-[10px] font-bold uppercase tracking-[0.18em]"
+          className="text-xs font-bold uppercase tracking-eyebrow"
           style={{ color: t.textBody }}
         >
           history
         </span>
         <span
-          className="ml-auto text-[9px] font-mono"
+          className="ml-auto text-2xs font-mono"
           style={{ color: t.textSubtle }}
         >
           {versions.length} revision{versions.length === 1 ? '' : 's'}
@@ -169,7 +169,7 @@ export function VersionHistoryCard({ versions, t }: { versions: RuleVersion[]; t
       </div>
       <ul className="space-y-1.5">
         {versions.slice().reverse().slice(0, 6).map((v) => (
-          <li key={v.version} className="flex items-center gap-2 text-[10px] font-mono">
+          <li key={v.version} className="flex items-center gap-2 text-xs font-mono">
             <span
               className="px-1.5 py-px rounded-md"
               style={{

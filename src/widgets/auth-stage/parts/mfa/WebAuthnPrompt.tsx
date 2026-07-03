@@ -29,12 +29,12 @@ export function WebAuthnPrompt({ phase, onActivate }: { phase: Phase; onActivate
         )}
       </div>
       <div className="flex flex-col items-center gap-1 text-center">
-        <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {phase === 'challenge'  && 'Touch your security key or authenticator'}
           {phase === 'verifying'  && 'Verifying signature…'}
           {phase === 'success'    && 'Authenticator confirmed'}
         </span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           Compatible: Touch ID · Windows Hello · YubiKey · Apple Passkey
         </span>
       </div>

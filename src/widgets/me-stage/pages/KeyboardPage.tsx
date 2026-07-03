@@ -73,12 +73,12 @@ export default function KeyboardPage() {
           value={q}
           onChange={(e) => { setQ(e.target.value); }}
           placeholder="Search by command, group, or keystroke…"
-          className="flex-1 bg-transparent outline-none text-[12px]"
+          className="flex-1 bg-transparent outline-none text-base"
           style={{ color: 'var(--fg-strong)' }}
         />
         {q && (
           <button type="button" onClick={() => { setQ(''); }}
-            className="text-[10px] uppercase tracking-[0.14em] font-medium px-1.5 py-0.5 rounded"
+            className="text-xs uppercase tracking-eyebrow font-medium px-1.5 py-0.5 rounded"
             style={{ color: 'var(--fg-subtle)', background: 'var(--bg-active)' }}>
             Clear
           </button>
@@ -94,7 +94,7 @@ export default function KeyboardPage() {
           }}
         >
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
-          <div className="flex flex-col gap-1 text-[11px]">
+          <div className="flex flex-col gap-1 text-sm">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
               {conflicts.length} conflict{conflicts.length === 1 ? '' : 's'} detected
             </span>
@@ -127,7 +127,7 @@ export default function KeyboardPage() {
       ))}
 
       {groups.length === 0 && (
-        <div className="text-center py-12 text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="text-center py-12 text-base" style={{ color: 'var(--fg-subtle)' }}>
           No shortcuts match &quot;{q}&quot;.
         </div>
       )}

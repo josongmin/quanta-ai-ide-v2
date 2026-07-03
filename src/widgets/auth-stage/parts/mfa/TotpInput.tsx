@@ -44,7 +44,7 @@ export function TotpInput({
   return (
     <div className="flex flex-col gap-2.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium"
+        className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
         Enter the 6-digit code from your app
@@ -67,7 +67,7 @@ export function TotpInput({
             onChange={(e) => { setAt(i, e.target.value); }}
             onKeyDown={(e) => { onKey(i, e); }}
             disabled={success}
-            className="w-11 h-12 text-center text-[18px] font-semibold tabular-nums rounded-md outline-none transition-colors"
+            className="w-11 h-12 text-center text-2xl font-semibold tabular-nums rounded-md outline-none transition-colors"
             style={{
               background: success ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',
               border: `1px solid ${
@@ -80,7 +80,7 @@ export function TotpInput({
           />
         ))}
       </div>
-      <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
         Demo: code is <span className="font-mono" style={{ color: 'var(--fg-default)' }}>{DEMO_TOTP}</span>.
         Try anything else to see the wrong-code state.
       </span>

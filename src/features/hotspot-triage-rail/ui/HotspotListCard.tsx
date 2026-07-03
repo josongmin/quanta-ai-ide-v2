@@ -51,13 +51,13 @@ export function HotspotListCard({
     >
       <div className="flex items-center gap-2">
         <span
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {title}
         </span>
         <span
-          className="ml-auto text-[9px] font-mono tabular-nums"
+          className="ml-auto text-2xs font-mono tabular-nums"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {entries.length}
@@ -72,7 +72,7 @@ export function HotspotListCard({
               key={k}
               type="button"
               onClick={() => { setSortKey(k); }}
-              className="px-1.5 py-0.5 rounded-full border text-[9px] font-mono uppercase tracking-[0.14em]"
+              className="px-1.5 py-0.5 rounded-full border text-2xs font-mono uppercase tracking-eyebrow"
               style={{
                 color: active ? 'var(--fg-default)' : 'var(--fg-subtle)',
                 borderColor: active ? 'var(--border-default)' : 'var(--border-muted)',
@@ -86,7 +86,7 @@ export function HotspotListCard({
       </div>
 
       {sorted.length === 0 ? (
-        <p className="text-[10px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
           {emptyText}
         </p>
       ) : (
@@ -101,21 +101,21 @@ export function HotspotListCard({
                 style={{ background: 'var(--bg-surface)' }}
               >
                 <span
-                  className="text-[10px] font-mono truncate flex-1"
+                  className="text-xs font-mono truncate flex-1"
                   style={{ color: 'var(--fg-default)' }}
                   title={label}
                 >
                   {label}
                 </span>
                 <span
-                  className="text-[9px] font-mono tabular-nums"
+                  className="text-2xs font-mono tabular-nums"
                   style={{ color: 'var(--fg-muted)' }}
                 >
                   {topPctText(entry.percentile)}
                 </span>
                 {primary ? (
                   <span
-                    className="text-[9px] font-mono uppercase tracking-[0.12em]"
+                    className="text-2xs font-mono uppercase tracking-[0.12em]"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     {SIGNAL_LABEL[primary.key]}

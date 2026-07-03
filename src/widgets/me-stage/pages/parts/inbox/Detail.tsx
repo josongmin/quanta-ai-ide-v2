@@ -14,14 +14,14 @@ export function Detail({
       >
         <div className="flex items-center gap-2 flex-wrap min-w-0">
           <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: tintFor(item.type) }} />
-          <span className="text-[10px] uppercase tracking-[0.14em] font-semibold"
+          <span className="text-xs uppercase tracking-eyebrow font-semibold"
             style={{ color: 'var(--fg-muted)' }}>
             {item.type}
           </span>
           {item.meta?.map((m, i) => (
             <span
               key={i}
-              className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded whitespace-nowrap"
+              className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded whitespace-nowrap"
               style={{
                 background:
                   m.tone === 'success' ? 'var(--intent-success-bg)'
@@ -55,10 +55,10 @@ export function Detail({
       </div>
 
       <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-4">
-        <h2 className="text-[16px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h2 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           {item.title}
         </h2>
-        <div className="flex items-center gap-2 text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--fg-subtle)' }}>
           <span>From <span style={{ color: 'var(--fg-default)' }}>{item.who}</span></span>
           <span>·</span>
           <span>In <span style={{ color: 'var(--fg-default)' }}>{item.where}</span></span>
@@ -67,7 +67,7 @@ export function Detail({
         </div>
 
         <div
-          className="px-4 py-3 rounded-md text-[12px] leading-relaxed"
+          className="px-4 py-3 rounded-md text-base leading-relaxed"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -80,13 +80,13 @@ export function Detail({
         <ContextSnippet item={item} />
 
         <div className="flex flex-col gap-1.5 mt-2">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
             Quick reply
           </span>
           <textarea
             placeholder="Type a reply or command (Cmd+Enter to send)…"
             rows={3}
-            className="rounded-md p-2.5 text-[12px] outline-none resize-none"
+            className="rounded-md p-2.5 text-base outline-none resize-none"
             style={{
               background: 'var(--bg-canvas)',
               border: '1px solid var(--border-default)',
@@ -111,7 +111,7 @@ function ContextSnippet({ item }: { item: Item }) {
         style={{ border: '1px solid var(--border-muted)' }}
       >
         <div
-          className="px-2.5 py-1.5 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="px-2.5 py-1.5 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             background: 'var(--bg-surface-muted)',
             color: 'var(--fg-subtle)',
@@ -121,7 +121,7 @@ function ContextSnippet({ item }: { item: Item }) {
           Diff context
         </div>
         <pre
-          className="p-2.5 text-[11px] font-mono"
+          className="p-2.5 text-sm font-mono"
           style={{ background: 'var(--bg-canvas)', color: 'var(--fg-default)', margin: 0 }}
         >
           <code>
@@ -147,7 +147,7 @@ function ContextSnippet({ item }: { item: Item }) {
           { label: 'review-approval-2',  pass: true  },
           { label: 'no-prod-config',     pass: false },
         ].map((o) => (
-          <li key={o.label} className="flex items-center gap-2 text-[11px] font-mono"
+          <li key={o.label} className="flex items-center gap-2 text-sm font-mono"
             style={{ color: o.pass ? 'var(--intent-success-fg)' : 'var(--intent-danger-fg)' }}>
             {o.pass ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
             {o.label}

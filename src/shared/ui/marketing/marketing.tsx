@@ -68,7 +68,7 @@ export function Eyebrow({
     : 'color-mix(in srgb, var(--fg-accent) 14%, transparent)';
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 h-6 text-[10px] uppercase tracking-[0.18em] font-semibold rounded-full"
+      className="inline-flex items-center gap-1.5 px-2.5 h-6 text-xs uppercase tracking-eyebrow font-semibold rounded-full"
       style={{
         background: bg,
         color: fg,
@@ -194,7 +194,7 @@ export function LogoMarquee({ items }: { items: { label: string; mark: string }[
             style={{ color: 'var(--fg-subtle)' }}
           >
             <div
-              className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-black"
+              className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-black"
               style={{
                 background: 'color-mix(in srgb, var(--fg-strong) 8%, transparent)',
                 border: '1px solid var(--border-muted)',
@@ -203,7 +203,7 @@ export function LogoMarquee({ items }: { items: { label: string; mark: string }[
             >
               {it.mark}
             </div>
-            <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-muted)' }}>
               {it.label}
             </span>
           </div>
@@ -237,7 +237,7 @@ export function SectionHead({
     <div className={`flex flex-col gap-3 ${align === 'center' ? 'items-center text-center' : 'items-start text-left'} mb-10`}>
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
       <h2
-        className="text-[28px] sm:text-[34px] leading-tight font-semibold tracking-[-0.018em] max-w-[680px]"
+        className="text-4xl sm:text-[34px] leading-tight font-semibold tracking-[-0.018em] max-w-[680px]"
         style={{ color: 'var(--fg-strong)' }}
       >
         {title}

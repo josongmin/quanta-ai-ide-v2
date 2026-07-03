@@ -118,7 +118,7 @@ export default function ScimPage() {
       >
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)', opacity: syncGroups ? 1 : 0.5 }}>
           <div
-            className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               gridTemplateColumns: '1fr 200px 32px',
               gap: 12,
@@ -134,7 +134,7 @@ export default function ScimPage() {
           {groups.map((g) => (
             <div
               key={g.id}
-              className="grid items-center px-3 h-12 text-[12px]"
+              className="grid items-center px-3 h-12 text-base"
               style={{
                 gridTemplateColumns: '1fr 200px 32px',
                 gap: 12,
@@ -145,7 +145,7 @@ export default function ScimPage() {
                 value={g.idpGroup}
                 onChange={(e) => { setGroup(g.id, { idpGroup: e.target.value }); }}
                 placeholder="okta-group-name"
-                className="h-8 px-2.5 rounded-md text-[11px] font-mono outline-none"
+                className="h-8 px-2.5 rounded-md text-sm font-mono outline-none"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
@@ -155,7 +155,7 @@ export default function ScimPage() {
               <select
                 value={g.team}
                 onChange={(e) => { setGroup(g.id, { team: e.target.value }); }}
-                className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+                className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   border: '1px solid var(--border-default)',
@@ -181,7 +181,7 @@ export default function ScimPage() {
       <Section title="Recent sync activity" hint="Last 6 SCIM events. Older events are in the audit log.">
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
-            className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+            className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               gridTemplateColumns: '160px 110px 1fr 60px 24px',
               gap: 12,
@@ -201,19 +201,19 @@ export default function ScimPage() {
             return (
               <div
                 key={e.id}
-                className="grid items-center px-3 h-11 text-[12px]"
+                className="grid items-center px-3 h-11 text-base"
                 style={{
                   gridTemplateColumns: '160px 110px 1fr 60px 24px',
                   gap: 12,
                   borderTop: '1px solid var(--border-muted)',
                 }}
               >
-                <span className="font-mono text-[11px]" style={{ color: 'var(--fg-muted)' }}>{e.ts}</span>
-                <span className="inline-flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--fg-default)' }}>
+                <span className="font-mono text-sm" style={{ color: 'var(--fg-muted)' }}>{e.ts}</span>
+                <span className="inline-flex items-center gap-1.5 text-sm" style={{ color: 'var(--fg-default)' }}>
                   <ActionIcon className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
                   {e.action}
                 </span>
-                <span className="truncate font-mono text-[11px]" style={{ color: 'var(--fg-strong)' }}>{e.target}</span>
+                <span className="truncate font-mono text-sm" style={{ color: 'var(--fg-strong)' }}>{e.target}</span>
                 <span className="font-mono tabular-nums text-right" style={{ color: 'var(--fg-default)' }}>{e.count}</span>
                 {e.ok ? (
                   <CheckCircle2 className="w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />
@@ -274,14 +274,14 @@ function StatusBand({
         <Icon className="w-5 h-5" style={{ color: meta.fg }} />
       </div>
       <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-        <span className="text-[14px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{meta.label}</span>
-        <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>{meta.sub}</span>
+        <span className="text-lg font-semibold" style={{ color: 'var(--fg-strong)' }}>{meta.label}</span>
+        <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{meta.sub}</span>
       </div>
       <div className="flex flex-col items-end gap-1.5 shrink-0">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Last sync
         </span>
-        <span className="font-mono text-[11px]" style={{ color: 'var(--fg-default)' }}>{lastSync}</span>
+        <span className="font-mono text-sm" style={{ color: 'var(--fg-default)' }}>{lastSync}</span>
       </div>
       <Button leading={<RefreshCcw className="w-3 h-3" />} onClick={onSync}>Sync now</Button>
     </div>
@@ -298,10 +298,10 @@ function CopyRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-3 py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
       <div className="flex flex-col min-w-0 flex-1 gap-1">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           {label}
         </span>
-        <code className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-strong)' }}>{value}</code>
+        <code className="font-mono text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{value}</code>
       </div>
       <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={copy}>
         {copied ? 'Copied' : 'Copy'}

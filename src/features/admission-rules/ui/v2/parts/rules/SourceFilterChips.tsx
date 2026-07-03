@@ -24,7 +24,7 @@ export function SourceFilterChips({
           <button type="button"
             key={o}
             onClick={() => { onChange(o); }}
-            className="px-2 py-1 text-[10px] font-mono transition-colors"
+            className="px-2 py-1 text-xs font-mono transition-colors"
             style={{
               background: active ? t.hoverActive : 'transparent',
               color: active ? t.textHi : t.textSubtle,

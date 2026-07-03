@@ -58,7 +58,7 @@ export function RoutineRail({
       style={{ width }}
     >
       <div className={`shrink-0 h-12 flex items-center justify-between px-4 border-b ${border}`}>
-        <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+        <span className={`text-xs font-bold uppercase tracking-eyebrow ${textFaint}`}>
           {t('rail.title')}
         </span>
         <button
@@ -83,7 +83,7 @@ export function RoutineRail({
             value={query}
             onChange={(e) => { setQuery(e.target.value); }}
             placeholder={t('rail.search')}
-            className={`flex-1 bg-transparent outline-none text-[12px] font-mono ${
+            className={`flex-1 bg-transparent outline-none text-base font-mono ${
               isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
             }`}
           />
@@ -97,7 +97,7 @@ export function RoutineRail({
               type="button"
               onClick={() => { setFilter(f); }}
               aria-pressed={filter === f}
-              className={`flex-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+              className={`flex-1 px-2 py-1 rounded text-xs font-mono transition-colors ${
                 filter === f
                   ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black')
                   : (isDark ? 'text-white/45 hover:text-white/75' : 'text-black/45 hover:text-black/75')
@@ -111,7 +111,7 @@ export function RoutineRail({
 
       <div className="flex-1 min-h-0 overflow-auto scrollbar-thin">
         {visible.length === 0 ? (
-          <div className={`px-4 py-8 text-center text-[11px] ${textMuted}`}>
+          <div className={`px-4 py-8 text-center text-sm ${textMuted}`}>
             {t('rail.empty')}
           </div>
         ) : (
@@ -177,12 +177,12 @@ function RoutineRow({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-0.5">
               <StatusDot color={statusDotColor} size="xs" pulse={routine.status === 'active'} />
-              <span className={`text-[12px] font-semibold truncate ${heading}`}>{routine.name}</span>
+              <span className={`text-base font-semibold truncate ${heading}`}>{routine.name}</span>
             </div>
-            <div className={`text-[10px] font-mono truncate ${faint} mb-1`}>
+            <div className={`text-xs font-mono truncate ${faint} mb-1`}>
               {nextLabel}
             </div>
-            <div className={`flex items-center gap-1.5 text-[10px] font-mono tabular-nums ${muted}`}>
+            <div className={`flex items-center gap-1.5 text-xs font-mono tabular-nums ${muted}`}>
               <span className="flex items-center gap-1" title={t('metrics.successRate')}>
                 <Sparkles className="w-2.5 h-2.5 opacity-70" />
                 {Math.round(routine.metrics.successRate * 100)}%

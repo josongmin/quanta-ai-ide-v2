@@ -31,10 +31,10 @@ export function DataToolsGrid() {
                 <Icon className="w-4 h-4" />
               </div>
               <div className="flex flex-col min-w-0 gap-0.5">
-                <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {t.title}
                 </span>
-                <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+                <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
                   {t.desc}
                 </span>
               </div>
@@ -82,10 +82,10 @@ export function DangerBand() {
     >
       <ShieldAlert className="w-4 h-4 mt-0.5 shrink-0" />
       <div className="flex flex-col gap-1 min-w-0">
-        <span className="text-[12px] font-semibold uppercase tracking-[0.14em]">
+        <span className="text-base font-semibold uppercase tracking-eyebrow">
           Audit logging is mandatory
         </span>
-        <p className="text-[12px] leading-snug" style={{ opacity: 0.9 }}>
+        <p className="text-base leading-snug" style={{ opacity: 0.9 }}>
           Every action here is logged with operator identity, IP, and timestamp.
           Impersonation sessions are visible to the target organization&apos;s owners
           and security contacts. Treat this surface as a recorded environment.

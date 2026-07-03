@@ -38,7 +38,7 @@ export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
               <div className="flex items-center gap-2">
                 <span style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-default)' }}>{p.icon}</span>
                 <span
-                  className="text-[12px] font-semibold"
+                  className="text-base font-semibold"
                   style={{ color: active ? 'var(--fg-strong)' : 'var(--fg-default)' }}
                 >
                   {p.label}
@@ -50,7 +50,7 @@ export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
                   />
                 )}
               </div>
-              <span className="text-[10px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-xs leading-snug" style={{ color: 'var(--fg-subtle)' }}>
                 {p.perm}
               </span>
             </button>
@@ -63,7 +63,7 @@ export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
       <button
         type="button"
         onClick={() => { setOauth(value.provider === 'bitbucket' ? 'gitlab' : value.provider); }}
-        className="inline-flex items-center justify-center gap-1.5 h-10 rounded-md text-[12px] font-semibold transition-colors"
+        className="inline-flex items-center justify-center gap-1.5 h-10 rounded-md text-base font-semibold transition-colors"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
       >
         Connect to {providerLabel(value.provider)}
@@ -100,14 +100,14 @@ function PermissionsCard({ provider }: { provider: WizardData['workspace']['prov
         border: '1px solid var(--border-muted)',
       }}
     >
-      <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
         What se · field will request from {providerLabel(provider)}
       </span>
       <ul className="grid grid-cols-1 gap-1">
         {items.map((it, i) => (
           <li
             key={i}
-            className="flex items-start gap-2 text-[11px] leading-snug"
+            className="flex items-start gap-2 text-sm leading-snug"
             style={{ color: it.ok ? 'var(--fg-default)' : 'var(--fg-subtle)' }}
           >
             <span

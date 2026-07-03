@@ -74,11 +74,11 @@ export default function SymbolExplainer({ pr, onJumpToFile }: Props) {
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <BookOpen className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Symbol explainer
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {visible.length}{overflow > 0 ? ` / ${String(symbols.length)}` : ''} {symbols.length === 1 ? 'symbol' : 'symbols'} · what to verify
         </span>
       </div>
@@ -108,32 +108,32 @@ export default function SymbolExplainer({ pr, onJumpToFile }: Props) {
                   ? <ChevronDown className="w-3 h-3 text-[var(--fg-muted)] shrink-0" />
                   : <ChevronRight className="w-3 h-3 text-[var(--fg-muted)] shrink-0" />}
                 <span
-                  className="shrink-0 inline-flex items-center px-1.5 h-4 rounded-sm text-[9px] font-mono font-bold uppercase tracking-[var(--track-eyebrow)]"
+                  className="shrink-0 inline-flex items-center px-1.5 h-4 rounded-sm text-2xs font-mono font-bold uppercase tracking-eyebrow"
                   style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone }}
                 >
                   {CHANGE_LABEL[s.change]}
                 </span>
-                <span className="shrink-0 text-[9px] font-mono text-[var(--fg-subtle)] uppercase">
+                <span className="shrink-0 text-2xs font-mono text-[var(--fg-subtle)] uppercase">
                   {KIND_TAG[s.kind]}
                 </span>
-                <span className="text-[12px] font-mono text-[var(--fg-default)] truncate">
+                <span className="text-base font-mono text-[var(--fg-default)] truncate">
                   {s.name}
                 </span>
-                <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)] truncate max-w-[180px]" title={s.filePath}>
+                <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)] truncate max-w-[180px]" title={s.filePath}>
                   {trimMid(s.filePath, 28)}
                 </span>
               </button>
               {open && (
                 <div className="px-3 pb-3 pt-1 border-t border-[var(--border-muted)]">
-                  <div className="text-[12px] leading-relaxed text-[var(--fg-muted)] mb-3">
+                  <div className="text-base leading-relaxed text-[var(--fg-muted)] mb-3">
                     {explanation.summary}
                   </div>
-                  <div className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] mb-1.5">
+                  <div className="text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)] mb-1.5">
                     Verify
                   </div>
                   <ul className="space-y-1">
                     {explanation.checks.map((c, ci) => (
-                      <li key={ci} className="flex items-start gap-2 text-[11px] leading-snug text-[var(--fg-muted)]">
+                      <li key={ci} className="flex items-start gap-2 text-sm leading-snug text-[var(--fg-muted)]">
                         <CircleCheck className="w-2.5 h-2.5 text-[var(--fg-subtle)] shrink-0 mt-0.5" />
                         <span>{c}</span>
                       </li>
@@ -143,7 +143,7 @@ export default function SymbolExplainer({ pr, onJumpToFile }: Props) {
                     <button
                       type="button"
                       onClick={() => { onJumpToFile(s.filePath); }}
-                      className="mt-3 inline-flex items-center gap-1 h-6 px-2.5 rounded text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors"
+                      className="mt-3 inline-flex items-center gap-1 h-6 px-2.5 rounded text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors"
                       style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}
                     >
                       Jump to file
@@ -156,7 +156,7 @@ export default function SymbolExplainer({ pr, onJumpToFile }: Props) {
         })}
       </ul>
       {overflow > 0 && (
-        <div className="mt-2 text-[10px] font-mono text-[var(--fg-subtle)]">
+        <div className="mt-2 text-xs font-mono text-[var(--fg-subtle)]">
           +{String(overflow)} more — Symbol Changes card lists the rest.
         </div>
       )}

@@ -51,7 +51,7 @@ export function OAuthRedirectOverlay({ provider, onCancel, onComplete }: Props) 
             {phase === 'on-provider'  && `Waiting for ${PROVIDER_LABEL[provider]}`}
             {phase === 'returning'    && 'Almost there…'}
           </h2>
-          <p className="text-[12px] max-w-[320px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base max-w-[320px]" style={{ color: 'var(--fg-muted)' }}>
             {phase === 'redirecting'  && 'Opening their secure sign-in page in this window.'}
             {phase === 'on-provider'  && `Approve the request on ${PROVIDER_LABEL[provider]} to come back here.`}
             {phase === 'returning'    && 'Validating the response and signing you in.'}
@@ -59,7 +59,7 @@ export function OAuthRedirectOverlay({ provider, onCancel, onComplete }: Props) 
         </div>
 
         <div
-          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-[10px] font-mono tabular-nums"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-mono tabular-nums"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -73,7 +73,7 @@ export function OAuthRedirectOverlay({ provider, onCancel, onComplete }: Props) 
         <button
           type="button"
           onClick={onCancel}
-          className="text-[11px] font-medium underline-offset-2 hover:underline"
+          className="text-sm font-medium underline-offset-2 hover:underline"
           style={{ color: 'var(--fg-muted)' }}
         >
           Cancel and use a different method
@@ -103,7 +103,7 @@ function ProviderGlyph({ provider, active }: { provider: Provider; active: boole
     >
       {Icon
         ? <Icon className="w-5 h-5" style={{ color: 'var(--fg-strong)' }} />
-        : <span className="text-[10px] font-mono font-bold" style={{ color: 'var(--fg-strong)' }}>GL</span>}
+        : <span className="text-xs font-mono font-bold" style={{ color: 'var(--fg-strong)' }}>GL</span>}
     </div>
   );
 }
@@ -111,7 +111,7 @@ function ProviderGlyph({ provider, active }: { provider: Provider; active: boole
 function BrandGlyph({ active }: { active: boolean }) {
   return (
     <div
-      className="w-12 h-12 rounded-full flex items-center justify-center text-[12px] font-black transition-all"
+      className="w-12 h-12 rounded-full flex items-center justify-center text-base font-black transition-all"
       style={{
         background: 'var(--fg-strong)',
         color: 'var(--bg-canvas)',

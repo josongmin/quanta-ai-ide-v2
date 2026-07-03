@@ -32,7 +32,7 @@ export function Composer({
           onKeyDown={onKeyDown}
           placeholder={t('composer.placeholder')}
           spellCheck={false}
-          className="w-full bg-transparent resize-none text-[12px] leading-relaxed font-medium focus:outline-none placeholder:text-[color:var(--fg-subtle)]"
+          className="w-full bg-transparent resize-none text-base leading-relaxed font-medium focus:outline-none placeholder:text-[color:var(--fg-subtle)]"
           style={{ maxHeight: 120, color: 'var(--fg-strong)' }}
         />
       </div>
@@ -49,7 +49,7 @@ export function Composer({
         </div>
         <div className="flex items-center gap-2">
           <span
-            className="text-[9px] font-mono"
+            className="text-2xs font-mono"
             style={{ color: 'var(--fg-subtle)', opacity: 0.7 }}
           >
             <kbd
@@ -99,7 +99,7 @@ function ModelChip({
         type="button"
         onClick={() => { setOpen((v) => !v); }}
         title={t('composer.model')}
-        className="flex items-center gap-1 px-1.5 py-1 rounded-md text-[9px] font-mono transition-colors hover-surface"
+        className="flex items-center gap-1 px-1.5 py-1 rounded-md text-2xs font-mono transition-colors hover-surface"
         style={{
           background: 'var(--bg-elevated)',
           color: 'var(--fg-muted)',
@@ -124,7 +124,7 @@ function ModelChip({
               <button type="button"
                 key={m}
                 onClick={() => { setModel(m); setOpen(false); }}
-                className="w-full text-left px-2.5 py-1.5 text-[10px] font-mono transition-colors hover-surface"
+                className="w-full text-left px-2.5 py-1.5 text-xs font-mono transition-colors hover-surface"
                 style={
                   a
                     ? { background: 'var(--bg-active)', color: 'var(--fg-strong)' }

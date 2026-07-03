@@ -18,19 +18,19 @@ export function RootCausePane({ seed, rootCause }: { seed: Seed; rootCause: stri
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-0.5">
             <span
-              className="text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)]"
+              className="text-2xs font-mono uppercase tracking-eyebrow"
               style={{ color: sevColor }}
             >
               {seed.severity}
             </span>
-            <span className="text-[9px] font-mono uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+            <span className="text-2xs font-mono uppercase tracking-eyebrow text-[var(--fg-subtle)]">
               · {seed.kind}
             </span>
           </div>
-          <div className="text-[12px] font-semibold text-[var(--fg-default)] leading-snug truncate">
+          <div className="text-base font-semibold text-[var(--fg-default)] leading-snug truncate">
             {seed.title}
           </div>
-          <div className="text-[11px] text-[var(--fg-muted)] leading-relaxed mt-1">
+          <div className="text-sm text-[var(--fg-muted)] leading-relaxed mt-1">
             <span className="text-[var(--fg-subtle)] mr-1">root cause —</span>{rootCause}
           </div>
           {seed.evidenceRefs.length > 0 && (
@@ -38,7 +38,7 @@ export function RootCausePane({ seed, rootCause }: { seed: Seed; rootCause: stri
               {seed.evidenceRefs.map((e, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1 px-1.5 h-4 rounded-sm text-[9px] font-mono text-[var(--fg-muted)]"
+                  className="inline-flex items-center gap-1 px-1.5 h-4 rounded-sm text-2xs font-mono text-[var(--fg-muted)]"
                   style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}
                   title={e.path}
                 >

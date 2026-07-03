@@ -20,7 +20,7 @@ export function DeliveryGatePanel({ decision, t }: Props) {
           border: `1px solid ${tone.border}`,
         }}
       >
-        <span className="text-[12px] font-black uppercase tracking-[0.18em]">
+        <span className="text-base font-black uppercase tracking-eyebrow">
           {t(`gate.tier.${decision.tier}`)}
         </span>
       </div>
@@ -28,7 +28,7 @@ export function DeliveryGatePanel({ decision, t }: Props) {
       {decision.reasons.length > 0 && (
         <div className="mt-2">
           <h4
-            className="text-[9px] font-black uppercase tracking-[0.18em] mb-1"
+            className="text-2xs font-black uppercase tracking-eyebrow mb-1"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('gate.reasons')}
@@ -37,7 +37,7 @@ export function DeliveryGatePanel({ decision, t }: Props) {
             {decision.reasons.map((r, i) => (
               <li
                 key={`r-${i.toString()}`}
-                className="text-[11px]"
+                className="text-sm"
                 style={{ color: 'var(--fg-default)' }}
               >
                 · {r}
@@ -50,7 +50,7 @@ export function DeliveryGatePanel({ decision, t }: Props) {
       {decision.blockers.length > 0 && (
         <div className="mt-2">
           <h4
-            className="text-[9px] font-black uppercase tracking-[0.18em] mb-1"
+            className="text-2xs font-black uppercase tracking-eyebrow mb-1"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('gate.blockers')}
@@ -59,7 +59,7 @@ export function DeliveryGatePanel({ decision, t }: Props) {
             {decision.blockers.map((b, i) => (
               <li
                 key={`b-${i.toString()}`}
-                className="text-[11px]"
+                className="text-sm"
                 style={{ color: 'var(--fg-default)' }}
               >
                 · {b}

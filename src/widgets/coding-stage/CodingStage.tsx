@@ -505,10 +505,10 @@ function BudgetSoftCapModal({
       >
         <div className="px-5 py-4">
           <div className={`flex items-center gap-2 mb-1`}>
-            <span className="text-[16px]" aria-hidden>🛑</span>
-            <h2 className={`text-[14px] font-bold ${heading}`}>{t('budgetV2.softCapModalTitle')}</h2>
+            <span className="text-xl" aria-hidden>🛑</span>
+            <h2 className={`text-lg font-bold ${heading}`}>{t('budgetV2.softCapModalTitle')}</h2>
           </div>
-          <p className={`text-[12px] ${muted} mb-4`}>
+          <p className={`text-base ${muted} mb-4`}>
             {t('budgetV2.softCapModalBody', { used: used.toFixed(2), cap: cap.toFixed(2) })}
           </p>
           <div className="space-y-1.5">
@@ -523,7 +523,7 @@ function BudgetSoftCapModal({
               }}
               className="w-full text-left px-3 py-2.5 rounded-md border transition-colors"
             >
-              <div className="text-[12px] font-semibold">
+              <div className="text-base font-semibold">
                 {t('budgetV2.softCapAutoDown', { model: modelLabel(downgrade), est: estDown })}
               </div>
             </button>
@@ -537,17 +537,17 @@ function BudgetSoftCapModal({
               }}
               className="w-full text-left px-3 py-2.5 rounded-md border transition-colors"
             >
-              <div className="text-[12px] font-semibold">
+              <div className="text-base font-semibold">
                 {t('budgetV2.softCapOverride', { newCap })}
               </div>
-              <div className="text-[10px] opacity-70 mt-0.5">{modelLabel(primary)}</div>
+              <div className="text-xs opacity-70 mt-0.5">{modelLabel(primary)}</div>
             </button>
             <button
               type="button"
               onClick={onStop}
               className="w-full text-left px-3 py-2.5 rounded-md border transition-colors border-[color:var(--border-default)] hover:bg-[color:var(--bg-hover)] text-[color:var(--fg-strong)]"
             >
-              <div className="text-[12px] font-semibold">{t('budgetV2.softCapStop')}</div>
+              <div className="text-base font-semibold">{t('budgetV2.softCapStop')}</div>
             </button>
           </div>
         </div>

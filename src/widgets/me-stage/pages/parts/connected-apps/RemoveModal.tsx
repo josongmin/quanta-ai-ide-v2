@@ -37,10 +37,10 @@ export function RemoveModal({
             <X className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               Disconnect {connection.provider}?
             </h3>
-            <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
               {connection.category === 'identity'
                 ? `You won't be able to sign in with ${connection.provider} after this. Make sure you have another sign-in method first.`
                 : `Stops all ${connection.provider} actions and notifications. Anything queued will be canceled.`}

@@ -84,10 +84,10 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <Activity className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Review timeline
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {events.length} events · {fmtFromTo}
         </span>
         <Badge variant={isStuck.variant} fill="soft" className="ml-auto gap-1">
@@ -225,7 +225,7 @@ export default function ReviewTimeline({ pr }: { pr: PullRequest }) {
       </div>
 
       {/* Legend — lane density chips */}
-      <div className="mt-3 flex items-center gap-3 flex-wrap text-[10px] font-mono text-[var(--fg-muted)]">
+      <div className="mt-3 flex items-center gap-3 flex-wrap text-xs font-mono text-[var(--fg-muted)]">
         {LANE_DEF.map((lane) => {
           const c = densityByLane[lane.key];
           const dim = c === 0;

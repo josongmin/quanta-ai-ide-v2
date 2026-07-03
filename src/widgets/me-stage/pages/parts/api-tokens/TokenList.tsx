@@ -13,7 +13,7 @@ export function TokenList({ tokens, onRemove }: { tokens: Token[]; onRemove: (t:
         }}
       >
         <Key className="w-5 h-5" style={{ color: 'var(--fg-subtle)' }} />
-        <span className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+        <span className="text-base" style={{ color: 'var(--fg-muted)' }}>
           No tokens yet. Create one to use the API.
         </span>
       </div>
@@ -53,15 +53,15 @@ function TokenRow({ token, top, onRemove }: { token: Token; top: boolean; onRemo
 
       <div className="flex flex-col flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
             {token.name}
           </span>
-          <code className="font-mono text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <code className="font-mono text-xs" style={{ color: 'var(--fg-subtle)' }}>
             {token.prefix}…{Array.from({ length: 24 }, () => '•').join('')}
           </code>
           {(stale || expired) && (
             <span
-              className="text-[8px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+              className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
               style={{
                 background: 'var(--intent-warn-bg)',
                 color: 'var(--intent-warn-fg)',
@@ -73,7 +73,7 @@ function TokenRow({ token, top, onRemove }: { token: Token; top: boolean; onRemo
           )}
         </div>
 
-        <div className="flex items-center gap-2.5 text-[10px] mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="flex items-center gap-2.5 text-xs mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
           <span>Created {token.createdAt}</span>
           {token.expiresAt && <span>· Expires {token.expiresAt}</span>}
           {!token.expiresAt && <span style={{ color: 'var(--intent-warn-fg)' }}>· Never expires</span>}
@@ -100,7 +100,7 @@ function ScopeChips({ scopes }: { scopes: ScopeId[] }) {
         return (
           <span
             key={s}
-            className="inline-flex items-center text-[9px] font-mono px-1.5 py-0.5 rounded"
+            className="inline-flex items-center text-2xs font-mono px-1.5 py-0.5 rounded"
             style={{
               background: dangerous ? 'var(--intent-warn-bg)' : 'var(--bg-surface-muted)',
               color: dangerous ? 'var(--intent-warn-fg)' : 'var(--fg-muted)',

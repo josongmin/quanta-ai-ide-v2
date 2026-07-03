@@ -67,7 +67,7 @@ export default function SessionExpiredPage() {
         <ResumeButton route={lastRoute} icon={meta.icon} resumeCta={meta.resumeCta} />
 
         <div
-          className="grid grid-cols-2 gap-x-6 gap-y-2 px-3 py-3 rounded-md text-[11px]"
+          className="grid grid-cols-2 gap-x-6 gap-y-2 px-3 py-3 rounded-md text-sm"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -85,7 +85,7 @@ export default function SessionExpiredPage() {
 
         <Link
           to={'/auth/login' as never}
-          className="text-center text-[11px] underline-offset-2 hover:underline"
+          className="text-center text-sm underline-offset-2 hover:underline"
           style={{ color: 'var(--fg-muted)' }}
         >
           Sign in as a different user
@@ -118,7 +118,7 @@ function ReasonBanner({ reason, meta }: {
       style={{ background: bg, border: `1px solid ${border}` }}
     >
       <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: fg }} />
-      <div className="flex flex-col gap-0.5 text-[11px] leading-snug">
+      <div className="flex flex-col gap-0.5 text-sm leading-snug">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
           {meta.title}
         </span>
@@ -155,15 +155,15 @@ function DraftsCard({
           <FileText className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
         </span>
         <div className="flex flex-col flex-1 min-w-0 text-left">
-          <span className="text-[11px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>
             {drafts.length} draft{drafts.length === 1 ? '' : 's'} preserved
           </span>
-          <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
             {ROUTE_META[route].draftLabel} · stored locally on this device
           </span>
         </div>
         <span
-          className="text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="text-xs uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-accent)' }}
         >
           {showing ? 'Hide' : 'Show'}
@@ -175,7 +175,7 @@ function DraftsCard({
           {drafts.map((d, i) => (
             <li
               key={i}
-              className="flex items-start gap-3 px-3 py-2.5 text-[11px] [&:not(:first-child)]:border-t"
+              className="flex items-start gap-3 px-3 py-2.5 text-sm [&:not(:first-child)]:border-t"
               style={{ borderColor: 'var(--border-muted)' }}
             >
               <DraftIcon kind={d.kind} />
@@ -186,7 +186,7 @@ function DraftsCard({
                 <span className="truncate" style={{ color: 'var(--fg-muted)' }}>
                   {d.preview}
                 </span>
-                <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                   saved {d.savedMin}m ago · {d.bytes} bytes
                 </span>
               </div>
@@ -219,7 +219,7 @@ function ResumeButton({
     <Link
       to={'/auth/login' as never}
       search={{ next: route } as never}
-      className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-md text-[12px] font-semibold transition-opacity hover:opacity-90"
+      className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-md text-base font-semibold transition-opacity hover:opacity-90"
       style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
     >
       <Icon className="w-3.5 h-3.5" />
@@ -237,7 +237,7 @@ function SecurityActions() {
   ];
   return (
     <div
-      className="flex items-center gap-3 text-[11px]"
+      className="flex items-center gap-3 text-sm"
       style={{ color: 'var(--fg-subtle)' }}
     >
       <ShieldCheck className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
@@ -256,7 +256,7 @@ function Meta({ label, value, mono = false }: { label: string; value: string; mo
   return (
     <div className="flex flex-col gap-0.5">
       <dt
-        className="text-[9px] uppercase tracking-[0.14em] font-medium"
+        className="text-2xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}
@@ -273,7 +273,7 @@ function DemoStatePicker() {
   // banner / drafts / cta change with the route the user came from.
   const routes: LastRoute[] = ['/coding', '/reviews', '/agents'];
   return (
-    <span className="inline-flex items-center gap-1 text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+    <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--fg-subtle)' }}>
       Demo from:{' '}
       {routes.map((r, i) => (
         <span key={r}>

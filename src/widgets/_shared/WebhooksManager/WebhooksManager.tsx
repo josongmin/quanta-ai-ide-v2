@@ -103,12 +103,12 @@ export function WebhooksManager({
   const body = (
     <>
       {/* Endpoints */}
-      <h2 className="text-[10px] uppercase tracking-[0.14em] font-semibold mb-2" style={{ color: 'var(--fg-subtle)' }}>
+      <h2 className="text-xs uppercase tracking-eyebrow font-semibold mb-2" style={{ color: 'var(--fg-subtle)' }}>
         Endpoints · {endpoints.length}
       </h2>
       <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
         {endpoints.length === 0 ? (
-          <div className="px-4 py-8 text-center text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="px-4 py-8 text-center text-base" style={{ color: 'var(--fg-subtle)' }}>
             No endpoints yet. Add one to start receiving events.
           </div>
         ) : endpoints.map((e) => (
@@ -123,7 +123,7 @@ export function WebhooksManager({
       </div>
 
       {/* Recent deliveries */}
-      <h2 className="text-[10px] uppercase tracking-[0.14em] font-semibold mt-8 mb-2 flex items-center gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <h2 className="text-xs uppercase tracking-eyebrow font-semibold mt-8 mb-2 flex items-center gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Activity className="w-3 h-3" />
         Recent deliveries
       </h2>
@@ -216,10 +216,10 @@ function EndpointRow({
         </button>
         <Webhook className="w-4 h-4 shrink-0" style={{ color: 'var(--fg-muted)' }} />
         <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-          <span className="text-[12px] font-mono truncate" style={{ color: 'var(--fg-strong)' }}>
+          <span className="text-base font-mono truncate" style={{ color: 'var(--fg-strong)' }}>
             {endpoint.url}
           </span>
-          <div className="flex items-center gap-3 text-[10px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>
+          <div className="flex items-center gap-3 text-xs tabular-nums" style={{ color: 'var(--fg-muted)' }}>
             <span>{endpoint.events.length} events</span>
             <span>·</span>
             <span style={{ color: successRate < 95 ? 'var(--intent-warn-fg)' : 'var(--fg-muted)' }}>
@@ -248,22 +248,22 @@ function EndpointRow({
       {expanded && (
         <div className="px-3 py-3 flex flex-col gap-3" style={{ background: 'var(--bg-surface-muted)' }}>
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
               Description
             </span>
-            <span className="text-[12px]" style={{ color: 'var(--fg-default)' }}>
+            <span className="text-base" style={{ color: 'var(--fg-default)' }}>
               {endpoint.description || '—'}
             </span>
           </div>
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
               Subscribed events
             </span>
             <div className="flex flex-wrap gap-1.5">
               {endpoint.events.map((ev) => (
                 <span
                   key={ev}
-                  className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+                  className="text-xs font-mono px-1.5 py-0.5 rounded"
                   style={{
                     background: 'var(--bg-canvas)',
                     border: '1px solid var(--border-muted)',
@@ -300,18 +300,18 @@ function DeliveryCells({
         : <X className="w-3.5 h-3.5" style={{ color: 'var(--intent-danger-fg)' }} />}
       <div className="flex flex-col min-w-0 gap-0.5">
         <span className="font-mono truncate" style={{ color: 'var(--fg-strong)' }}>{delivery.event}</span>
-        <span className="text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>{endpointUrl}</span>
+        <span className="text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>{endpointUrl}</span>
       </div>
       <span
-        className="font-mono tabular-nums text-[11px]"
+        className="font-mono tabular-nums text-sm"
         style={{ color: ok ? 'var(--intent-success-fg)' : 'var(--intent-danger-fg)' }}
       >
         {delivery.statusCode}
       </span>
-      <span className="font-mono tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="font-mono tabular-nums text-sm" style={{ color: 'var(--fg-muted)' }}>
         {delivery.durationMs}ms
       </span>
-      <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>{delivery.at}</span>
+      <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{delivery.at}</span>
       <div />
       <div className="flex justify-end">
         <Button leading={<RefreshCw className="w-3 h-3" />} onClick={onRedeliver} disabled={ok}>
@@ -362,27 +362,27 @@ function CreateEndpointModal({
       )}
     >
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>URL</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>URL</span>
         <input
           value={url}
           onChange={(e) => { setUrl(e.target.value); }}
           placeholder={urlPlaceholder}
-          className="h-9 rounded-md px-3 text-[12px] font-mono outline-none"
+          className="h-9 rounded-md px-3 text-base font-mono outline-none"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         />
       </label>
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>Description</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Description</span>
         <input
           value={desc}
           onChange={(e) => { setDesc(e.target.value); }}
           placeholder={descPlaceholder}
-          className="h-9 rounded-md px-3 text-[12px] outline-none"
+          className="h-9 rounded-md px-3 text-base outline-none"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         />
       </label>
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
           <span>Events</span>
           <span className="lowercase tracking-normal tabular-nums">{selected.size} selected</span>
         </span>
@@ -404,8 +404,8 @@ function CreateEndpointModal({
                   onChange={() => { toggle(e.id); }}
                   className="w-3.5 h-3.5 cursor-pointer"
                 />
-                <span className="font-mono text-[11px] flex-1" style={{ color: 'var(--fg-default)' }}>{e.id}</span>
-                <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{e.label}</span>
+                <span className="font-mono text-sm flex-1" style={{ color: 'var(--fg-default)' }}>{e.id}</span>
+                <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{e.label}</span>
               </label>
             );
           })}

@@ -45,19 +45,19 @@ export function PlanBody({
             <StrategyPill strategy={advice.strategy} />
           </div>
           <p
-            className="text-[12px] leading-snug"
+            className="text-base leading-snug"
             style={{ color: 'var(--fg-default)' }}
           >
             {advice.reason}
           </p>
           {advice.alternative && (
             <p
-              className="text-[11px] leading-snug italic"
+              className="text-sm leading-snug italic"
               style={{ color: 'var(--fg-subtle)' }}
             >
               Considered alternative:{' '}
               <span
-                className="not-italic font-black uppercase tracking-[0.18em]"
+                className="not-italic font-black uppercase tracking-eyebrow"
                 style={{ color: 'var(--fg-muted)' }}
               >
                 {MERGE_STRATEGY_LABEL[advice.alternative.strategy]}

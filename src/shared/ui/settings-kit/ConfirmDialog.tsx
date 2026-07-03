@@ -97,14 +97,14 @@ export function ConfirmDialog({
           <div className="flex items-center gap-2">
             {leadingIcon}
             <span
-              className={`text-[12px] font-semibold${monoTitle ? ' font-mono' : ''}`}
+              className={`text-base font-semibold${monoTitle ? ' font-mono' : ''}`}
               style={{ color: 'var(--fg-strong)' }}
             >
               {title}
             </span>
           </div>
           {description && (
-            <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
+            <p className="text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
               {description}
             </p>
           )}
@@ -114,7 +114,7 @@ export function ConfirmDialog({
               value={typed}
               onChange={(e) => { setTyped(e.target.value); }}
               placeholder={requireTypedConfirmation}
-              className="h-9 rounded-md px-3 text-[12px] outline-none font-mono"
+              className="h-9 rounded-md px-3 text-base outline-none font-mono"
               style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
             />
           )}

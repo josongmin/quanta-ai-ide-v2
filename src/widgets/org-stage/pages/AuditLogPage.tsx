@@ -87,14 +87,14 @@ export default function AuditLogPage() {
             value={q}
             onChange={(e) => { setQ(e.target.value); }}
             placeholder="Search actor, target, IP…"
-            className="flex-1 bg-transparent outline-none text-[12px]"
+            className="flex-1 bg-transparent outline-none text-base"
             style={{ color: 'var(--fg-strong)' }}
           />
         </div>
         <select
           value={actor}
           onChange={(e) => { setActor(e.target.value); }}
-          className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+          className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 140 }}
         >
           {ACTORS.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -102,7 +102,7 @@ export default function AuditLogPage() {
         <select
           value={action}
           onChange={(e) => { setAction(e.target.value); }}
-          className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+          className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 180 }}
         >
           {ACTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -111,22 +111,22 @@ export default function AuditLogPage() {
           type="date"
           value={from}
           onChange={(e) => { setFrom(e.target.value); }}
-          className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+          className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-default)' }}
         />
-        <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>→</span>
+        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>→</span>
         <input
           type="date"
           value={to}
           onChange={(e) => { setTo(e.target.value); }}
-          className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+          className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-default)' }}
         />
       </div>
 
       <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
         <div
-          className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+          className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
           style={{
             gridTemplateColumns: '20px 160px 160px 200px 1fr 130px 80px',
             gap: 12,
@@ -150,7 +150,7 @@ export default function AuditLogPage() {
               <button
                 type="button"
                 onClick={() => { setExpanded(open ? null : e.id); }}
-                className="grid items-center px-3 h-12 text-[12px] w-full text-left transition-colors"
+                className="grid items-center px-3 h-12 text-base w-full text-left transition-colors"
                 style={{
                   gridTemplateColumns: '20px 160px 160px 200px 1fr 130px 80px',
                   gap: 12,
@@ -162,10 +162,10 @@ export default function AuditLogPage() {
                   ? <ChevronDown className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
                   : <ChevronRight className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
                 }
-                <span className="font-mono text-[11px]" style={{ color: 'var(--fg-muted)' }}>{e.ts}</span>
+                <span className="font-mono text-sm" style={{ color: 'var(--fg-muted)' }}>{e.ts}</span>
                 <div className="flex items-center gap-2 min-w-0">
                   <div
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0"
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-2xs font-bold shrink-0"
                     style={{
                       backgroundImage: 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
                       color: 'var(--bg-canvas)',
@@ -175,11 +175,11 @@ export default function AuditLogPage() {
                   </div>
                   <span className="truncate" style={{ color: 'var(--fg-strong)' }}>{e.actor}</span>
                 </div>
-                <span className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-default)' }}>{e.action}</span>
-                <span className="font-mono text-[11px] truncate" style={{ color: 'var(--fg-strong)' }}>{e.target}</span>
-                <span className="font-mono text-[11px]" style={{ color: 'var(--fg-muted)' }}>{e.ip}</span>
+                <span className="font-mono text-sm truncate" style={{ color: 'var(--fg-default)' }}>{e.action}</span>
+                <span className="font-mono text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{e.target}</span>
+                <span className="font-mono text-sm" style={{ color: 'var(--fg-muted)' }}>{e.ip}</span>
                 <span
-                  className="text-[10px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded w-fit"
+                  className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded w-fit"
                   style={{
                     background: e.result === 'success' ? 'var(--intent-success-bg)' : 'var(--intent-danger-bg)',
                     color: e.result === 'success' ? 'var(--intent-success-fg)' : 'var(--intent-danger-fg)',
@@ -203,7 +203,7 @@ export default function AuditLogPage() {
       </div>
 
       <div className="flex items-center justify-between mt-3 px-1">
-        <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
           Showing 1–15 of 8,421 events
         </span>
         <div className="flex items-center gap-2">
@@ -218,11 +218,11 @@ export default function AuditLogPage() {
 function DiffBlock({ label, data }: { label: string; data?: Record<string, unknown> }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+      <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
         {label}
       </span>
       <pre
-        className="font-mono text-[11px] p-2.5 rounded-md overflow-x-auto whitespace-pre-wrap"
+        className="font-mono text-sm p-2.5 rounded-md overflow-x-auto whitespace-pre-wrap"
         style={{
           background: 'var(--bg-canvas)',
           border: '1px solid var(--border-muted)',

@@ -31,14 +31,14 @@ export function ServiceRow({ service, idx }: { service: Service; idx: number }) 
           <Icon className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
         </div>
         <div className="flex flex-col min-w-0">
-          <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>{service.name}</span>
-          <span className="text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>{service.description}</span>
+          <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>{service.name}</span>
+          <span className="text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>{service.description}</span>
         </div>
       </div>
 
       <SparkBar history={history} />
 
-      <span className="text-[12px] tabular-nums text-right" style={{ color: 'var(--fg-muted)' }}>
+      <span className="text-base tabular-nums text-right" style={{ color: 'var(--fg-muted)' }}>
         {uptime.toFixed(2)}%
       </span>
 
@@ -95,7 +95,7 @@ function StatusPill({ status }: { status: Status }) {
   const label = STATUS_LABEL[status];
   return (
     <span
-      className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] uppercase tracking-[0.14em] font-semibold w-fit ml-auto"
+      className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs uppercase tracking-eyebrow font-semibold w-fit ml-auto"
       style={{
         background: bg,
         color: fg,

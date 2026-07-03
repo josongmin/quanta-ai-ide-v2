@@ -18,14 +18,14 @@ export function FixtureRow({
       <TargetKindBadge kind={target.kind} />
       <span className="flex-1 min-w-0">
         <span
-          className="block truncate text-[11px] font-semibold"
+          className="block truncate text-sm font-semibold"
           style={{ color: 'var(--fg-default)' }}
         >
           {target.label}
         </span>
         {target.subtitle && (
           <span
-            className="block truncate text-[10px]"
+            className="block truncate text-xs"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {target.subtitle}

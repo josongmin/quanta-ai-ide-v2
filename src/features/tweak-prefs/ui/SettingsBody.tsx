@@ -35,14 +35,14 @@ export default function SettingsBody({
         <div className="min-w-0">
           <h2
             id="settings-title"
-            className="text-[15px] font-black uppercase tracking-[0.18em]"
+            className="text-[15px] font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-strong)' }}
           >
             {t('title')}
           </h2>
           <p
             id="settings-subtitle"
-            className="text-[11px] mt-1"
+            className="text-sm mt-1"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('subtitle')}

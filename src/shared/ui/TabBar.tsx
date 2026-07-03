@@ -81,7 +81,7 @@ export function TabBar<T extends string>({
               aria-selected={isActive}
               tabIndex={isActive ? 0 : -1}
               onClick={(e) => { onTabClick(t.id, e); }}
-              className="shrink-0 relative flex items-center justify-center gap-1.5 px-3 py-2 min-w-[88px] text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
+              className="shrink-0 relative flex items-center justify-center gap-1.5 px-3 py-2 min-w-[88px] text-xs font-bold uppercase tracking-eyebrow transition-colors"
               style={{
                 color: isActive ? 'var(--fg-strong)' : 'var(--fg-subtle)',
               }}
@@ -95,7 +95,7 @@ export function TabBar<T extends string>({
                     return (
                       <span
                         key={i}
-                        className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-black tabular-nums"
+                        className="inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full text-2xs font-black tabular-nums"
                         style={{ background: `${c}22`, color: c }}
                       >
                         {b.n}

@@ -10,7 +10,7 @@ export function FeatureMatrix() {
       style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
     >
       <div
-        className="grid items-center px-4 sm:px-6 h-12 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-4 sm:px-6 h-12 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '1.6fr repeat(4, 1fr)',
           gap: 12,
@@ -30,7 +30,7 @@ export function FeatureMatrix() {
       {MATRIX.map((g, gi) => (
         <div key={g.group}>
           <div
-            className="px-4 sm:px-6 py-2 text-[10px] uppercase tracking-[0.18em] font-semibold"
+            className="px-4 sm:px-6 py-2 text-xs uppercase tracking-eyebrow font-semibold"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-subtle)',
@@ -49,7 +49,7 @@ export function FeatureMatrix() {
                   {r.label}
                 </span>
                 {r.cells.map((c, ci) => (
-                  <span key={ci} className="flex items-center justify-center text-[12px] tabular-nums">
+                  <span key={ci} className="flex items-center justify-center text-base tabular-nums">
                     {typeof c === 'boolean' ? (
                       c
                         ? <Check className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
@@ -74,7 +74,7 @@ function FeatureRow({ isFirst, children }: { isFirst: boolean; children: ReactNo
   return (
     <div
       ref={ref}
-      className="grid items-center px-4 sm:px-6 h-12 text-[12px] transition-colors"
+      className="grid items-center px-4 sm:px-6 h-12 text-base transition-colors"
       style={{
         gridTemplateColumns: '1.6fr repeat(4, 1fr)',
         gap: 12,

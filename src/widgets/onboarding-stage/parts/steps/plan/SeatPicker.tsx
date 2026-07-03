@@ -8,10 +8,10 @@ export function SeatPicker({
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Seats
         </span>
-        <div className="flex items-center gap-2 text-[11px]">
+        <div className="flex items-center gap-2 text-sm">
           <button
             type="button"
             onClick={() => { onChange(Math.max(minSeats, value - 1)); }}
@@ -34,7 +34,7 @@ export function SeatPicker({
               const n = Math.max(minSeats, Math.min(max, Number(e.target.value) || minSeats));
               onChange(n);
             }}
-            className="w-16 h-6 text-center text-[12px] font-mono tabular-nums rounded-md outline-none"
+            className="w-16 h-6 text-center text-base font-mono tabular-nums rounded-md outline-none"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-strong)',
@@ -71,7 +71,7 @@ export function SeatPicker({
         aria-label="Seats"
       />
 
-      <div className="flex justify-between text-[9px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="flex justify-between text-2xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
         <span>{minSeats}</span>
         <span>{Math.floor(max / 2)}</span>
         <span>{max}+</span>

@@ -49,10 +49,10 @@ export function EngineFindingsPanel({
           className="w-3.5 h-3.5 shrink-0"
           style={{ color: accentTone }}
         />
-        <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] shrink-0">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)] shrink-0">
           Engine
         </span>
-        <span className="flex items-center gap-1.5 ml-auto text-[10px] font-mono">
+        <span className="flex items-center gap-1.5 ml-auto text-xs font-mono">
           <SevCount n={summary.blocker} color={severityColors.blocker} />
           <SevCount n={summary.high} color={severityColors.high} />
           <SevCount n={summary.medium} color={severityColors.medium} />
@@ -65,7 +65,7 @@ export function EngineFindingsPanel({
       {expanded && (
         <div className="max-h-[260px] overflow-auto px-2 pb-2 space-y-1">
           {findings.length === 0 ? (
-            <div className="px-2 py-3 text-[11px] italic text-[var(--fg-subtle)]">
+            <div className="px-2 py-3 text-sm italic text-[var(--fg-subtle)]">
               No findings.
             </div>
           ) : (
@@ -81,10 +81,10 @@ export function EngineFindingsPanel({
                   style={{ background: severityColors[f.severity] }}
                 />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[11px] font-bold text-[var(--fg-default)] leading-snug truncate">
+                  <span className="block text-sm font-bold text-[var(--fg-default)] leading-snug truncate">
                     {f.title}
                   </span>
-                  <span className="block text-[10px] font-mono text-[var(--fg-subtle)] truncate">
+                  <span className="block text-xs font-mono text-[var(--fg-subtle)] truncate">
                     {f.category}/{f.rule}
                   </span>
                 </span>
@@ -95,7 +95,7 @@ export function EngineFindingsPanel({
             <button
               type="button"
               onClick={onJumpToFinding}
-              className="w-full mt-1 px-2 py-1.5 text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] rounded text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors flex items-center justify-center gap-1"
+              className="w-full mt-1 px-2 py-1.5 text-xs font-bold uppercase tracking-eyebrow rounded text-[var(--fg-muted)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-hover)] transition-colors flex items-center justify-center gap-1"
             >
               View in spine
               <ArrowUpRight className="w-2.5 h-2.5" />
@@ -183,23 +183,23 @@ export function StatusBar({
       className="shrink-0 h-7 flex items-center gap-4 px-3 border-b border-[var(--border-default)]"
       style={{ backgroundColor: 'var(--bg-surface)' }}
     >
-      <span className="text-[10px] font-semibold tracking-[0.08em] uppercase text-[var(--fg-muted)]">
+      <span className="text-xs font-semibold tracking-[0.08em] uppercase text-[var(--fg-muted)]">
         Review
       </span>
       {items.map((it) => (
         <span key={it.label} className="inline-flex items-baseline gap-1.5">
           <span
-            className="text-[11px] font-semibold tabular-nums"
+            className="text-sm font-semibold tabular-nums"
             style={{ color: toneColor(it.tone) }}
           >
             {it.value}
           </span>
-          <span className="text-[10px] text-[var(--fg-muted)] lowercase">
+          <span className="text-xs text-[var(--fg-muted)] lowercase">
             {it.label}
           </span>
         </span>
       ))}
-      <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">@{viewerLogin}</span>
+      <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">@{viewerLogin}</span>
     </div>
   );
 }

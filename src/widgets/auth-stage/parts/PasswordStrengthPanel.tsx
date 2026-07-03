@@ -14,7 +14,7 @@ export function PasswordStrengthPanel({ report }: { report: PasswordReport }) {
     <div className="flex flex-col gap-2.5">
       <Meter score={report.score} />
 
-      <div className="flex items-baseline justify-between text-[10px] tabular-nums">
+      <div className="flex items-baseline justify-between text-xs tabular-nums">
         <span style={{ color: STRENGTH_FG[report.score] }}>
           {report.label}
         </span>
@@ -50,7 +50,7 @@ function Meter({ score }: { score: PasswordReport['score'] }) {
 function BreachWarning() {
   return (
     <div
-      className="flex items-start gap-2 px-2.5 py-2 rounded-md text-[11px] leading-snug onb-stagger"
+      className="flex items-start gap-2 px-2.5 py-2 rounded-md text-sm leading-snug onb-stagger"
       style={{
         background: 'var(--intent-danger-bg)',
         border: '1px solid var(--intent-danger-fg)',
@@ -76,7 +76,7 @@ function RuleList({ rules }: { rules: PasswordReport['rules'] }) {
       {rules.map((r) => (
         <li
           key={r.id}
-          className="flex items-center gap-1.5 text-[10px] transition-colors"
+          className="flex items-center gap-1.5 text-xs transition-colors"
           style={{ color: r.pass ? 'var(--intent-success-fg)' : 'var(--fg-subtle)' }}
         >
           {r.pass

@@ -9,7 +9,7 @@ import type { Pat } from './types';
 export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) => void }) {
   if (pats.length === 0) {
     return (
-      <div className="text-center py-12 text-[12px]" style={{ color: 'var(--fg-subtle)' }}>
+      <div className="text-center py-12 text-base" style={{ color: 'var(--fg-subtle)' }}>
         No tokens yet. Create one to authenticate machine clients to the org API.
       </div>
     );
@@ -17,7 +17,7 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
   return (
     <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
       <div
-        className="grid items-center px-3 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '1fr 200px 110px 100px 32px',
           gap: 12,
@@ -37,7 +37,7 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
           <div
             key={p.id}
             role="presentation"
-            className="grid items-center px-3 h-14 text-[12px] transition-colors"
+            className="grid items-center px-3 h-14 text-base transition-colors"
             style={{
               gridTemplateColumns: '1fr 200px 110px 100px 32px',
               gap: 12,
@@ -51,13 +51,13 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
               <div className="flex items-center gap-1.5 min-w-0">
                 <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>{p.name}</span>
                 {expired && (
-                  <span className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+                  <span className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                     style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)', border: '1px solid var(--intent-danger-fg)' }}>
                     expired
                   </span>
                 )}
               </div>
-              <span className="font-mono text-[10px] truncate" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="font-mono text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>
                 {p.prefix}…  · created by {p.createdBy} · {p.createdAt}
               </span>
             </div>
@@ -65,22 +65,22 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
               {p.scopes.slice(0, 2).map((s) => (
                 <span
                   key={s}
-                  className="text-[10px] font-mono px-1.5 py-0.5 rounded truncate"
+                  className="text-xs font-mono px-1.5 py-0.5 rounded truncate"
                   style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-default)', border: '1px solid var(--border-muted)' }}
                 >
                   {s}
                 </span>
               ))}
               {p.scopes.length > 2 && (
-                <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                   +{p.scopes.length - 2}
                 </span>
               )}
             </div>
-            <span className="text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
               {p.expiresAt ?? 'Never'}
             </span>
-            <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-muted)' }}>
+            <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>
               {p.lastUsed}
             </span>
             <button

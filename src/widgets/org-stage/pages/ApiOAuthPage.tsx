@@ -77,7 +77,7 @@ export default function ApiOAuthPage() {
               key={id}
               type="button"
               onClick={() => { setTab(id); }}
-              className="inline-flex items-center gap-2 h-9 px-3 text-[12px] font-medium transition-colors -mb-px"
+              className="inline-flex items-center gap-2 h-9 px-3 text-base font-medium transition-colors -mb-px"
               style={{
                 color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',
                 borderBottom: `2px solid ${active ? 'var(--fg-accent)' : 'transparent'}`,
@@ -86,7 +86,7 @@ export default function ApiOAuthPage() {
               <Icon className="w-3.5 h-3.5" />
               {label}
               <span
-                className="text-[10px] tabular-nums px-1.5 py-0.5 rounded"
+                className="text-xs tabular-nums px-1.5 py-0.5 rounded"
                 style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-subtle)' }}
               >
                 {count}
@@ -108,7 +108,7 @@ export default function ApiOAuthPage() {
         />
       )}
 
-      <p className="text-[11px] mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ShieldAlert className="w-3 h-3 mt-0.5 shrink-0" />
         Tokens authenticate as the org. Anything they do is auditable but not always reversible.
       </p>

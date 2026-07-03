@@ -31,7 +31,7 @@ export function FleetRail({
   return (
     <aside className={`shrink-0 w-[300px] flex flex-col ${panel} border-l ${border}`}>
       <div className={`shrink-0 h-12 flex items-center px-4 border-b ${border}`}>
-        <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${textFaint}`}>
+        <span className={`text-xs font-bold uppercase tracking-eyebrow ${textFaint}`}>
           {t('fleet.title')}
         </span>
       </div>
@@ -84,7 +84,7 @@ export function FleetRail({
         )}
       </div>
 
-      <div className={`shrink-0 px-4 py-3 border-t ${border} text-[10px] font-mono ${textFaint}`}>
+      <div className={`shrink-0 px-4 py-3 border-t ${border} text-xs font-mono ${textFaint}`}>
         {t('footer')}
       </div>
     </aside>
@@ -95,14 +95,14 @@ function Section({ label, isDark, children }: { label: string; isDark: boolean; 
   const color = isDark ? 'text-white/40' : 'text-black/40';
   return (
     <div>
-      <div className={`mb-2.5 text-[10px] font-bold uppercase tracking-[0.18em] ${color}`}>{label}</div>
+      <div className={`mb-2.5 text-xs font-bold uppercase tracking-eyebrow ${color}`}>{label}</div>
       <div className="space-y-1.5">{children}</div>
     </div>
   );
 }
 
 function Empty({ text, isDark }: { text: string; isDark: boolean }) {
-  return <div className={`px-2 py-2 text-[11px] ${isDark ? 'text-white/40' : 'text-black/45'}`}>{text}</div>;
+  return <div className={`px-2 py-2 text-sm ${isDark ? 'text-white/40' : 'text-black/45'}`}>{text}</div>;
 }
 
 function ConcurrencyRow({ health, isDark, t }: { health: FleetHealth; isDark: boolean; t: TranslateFn }) {
@@ -113,9 +113,9 @@ function ConcurrencyRow({ health, isDark, t }: { health: FleetHealth; isDark: bo
   const pct = Math.min(100, (health.running / Math.max(1, health.maxConcurrency)) * 100);
   return (
     <div>
-      <div className={`flex items-center justify-between text-[11px] ${heading}`}>
+      <div className={`flex items-center justify-between text-sm ${heading}`}>
         <span className="flex items-center gap-1.5"><Activity className="w-3 h-3 opacity-70" />{t('fleet.concurrency', { running: health.running, queued: health.queued })}</span>
-        <span className={`text-[10px] font-mono ${muted}`}>{t('fleet.concurrencyMax', { n: health.maxConcurrency })}</span>
+        <span className={`text-xs font-mono ${muted}`}>{t('fleet.concurrencyMax', { n: health.maxConcurrency })}</span>
       </div>
       <div className={`mt-1 h-1 rounded-full ${trackBg} overflow-hidden`}>
         <div className={`h-full rounded-full ${fill}`} style={{ width: `${pct}%` }} />
@@ -127,7 +127,7 @@ function ConcurrencyRow({ health, isDark, t }: { health: FleetHealth; isDark: bo
 function SpendRow({ health, isDark, t }: { health: FleetHealth; isDark: boolean; t: TranslateFn }) {
   const heading = isDark ? 'text-white/85' : 'text-black/85';
   return (
-    <div className={`flex items-center gap-1.5 text-[11px] font-mono tabular-nums ${heading}`}>
+    <div className={`flex items-center gap-1.5 text-sm font-mono tabular-nums ${heading}`}>
       <Coins className="w-3 h-3 opacity-70" />
       {t('fleet.spendHour', { usd: health.spendLastHourUsd.toFixed(2), day: health.projectedDailyUsd.toFixed(2) })}
     </div>
@@ -144,10 +144,10 @@ function AttentionRow({ health, isDark, t }: { health: FleetHealth; isDark: bool
     : 'bg-[color:var(--intent-danger-vivid)]';
   return (
     <div>
-      <div className={`flex items-center justify-between text-[11px] ${heading}`}>
+      <div className={`flex items-center justify-between text-sm ${heading}`}>
         <span className="flex items-center gap-1.5"><Zap className="w-3 h-3 opacity-70" />{t('fleet.attention')}</span>
       </div>
-      <div className={`mt-0.5 text-[10px] font-mono tabular-nums ${muted}`}>
+      <div className={`mt-0.5 text-xs font-mono tabular-nums ${muted}`}>
         {t('fleet.attentionSpent', { h: health.attention.spentHours.toFixed(1), budget: health.attention.budgetHours.toFixed(0) })}
       </div>
       <div className={`mt-1 h-1 rounded-full ${trackBg} overflow-hidden`}>
@@ -169,7 +169,7 @@ function HitlList({
 }) {
   if (items.length === 0) {
     return (
-      <div className={`flex items-center gap-2 px-2 py-2 text-[11px] ${isDark ? 'text-white/40' : 'text-black/45'}`}>
+      <div className={`flex items-center gap-2 px-2 py-2 text-sm ${isDark ? 'text-white/40' : 'text-black/45'}`}>
         <Inbox className="w-3 h-3 opacity-60" />
         {t('hitl.empty')}
       </div>
@@ -194,15 +194,15 @@ function HitlList({
           <div key={it.id} className={`px-2 py-1.5 rounded-md border ${tone}`}>
             <div className="flex items-center gap-1.5 mb-0.5">
               <Hand className={`w-3 h-3 shrink-0 ${stale ? 'text-[color:var(--intent-warn-fg)]' : (isDark ? 'text-white/55' : 'text-black/55')}`} />
-              <span className={`text-[11px] font-semibold truncate ${heading}`}>{rname}</span>
-              <span className={`ml-auto text-[10px] font-mono ${faint}`}>{wait}</span>
+              <span className={`text-sm font-semibold truncate ${heading}`}>{rname}</span>
+              <span className={`ml-auto text-xs font-mono ${faint}`}>{wait}</span>
             </div>
-            <div className={`text-[10px] leading-snug ${muted} mb-1`}>{it.reason}</div>
+            <div className={`text-xs leading-snug ${muted} mb-1`}>{it.reason}</div>
             <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => { onApprove(it.id); }}
-                className={`flex-1 text-[10px] font-mono px-2 py-1 rounded-md transition-colors ${
+                className={`flex-1 text-xs font-mono px-2 py-1 rounded-md transition-colors ${
                   isDark ? 'bg-white/[0.06] hover:bg-white/[0.10] text-white/85' : 'bg-black/[0.05] hover:bg-black/[0.08] text-black/85'
                 }`}
               >
@@ -238,9 +238,9 @@ function AlertRow({ alert, isDark, t }: { alert: FleetAlert; isDark: boolean; t:
     <div className={`flex items-start gap-2 px-2 py-1.5 rounded-md border ${tone}`}>
       <Icon className="w-3 h-3 shrink-0 mt-0.5 opacity-80" />
       <div className="flex-1 min-w-0">
-        <div className="text-[10px] font-bold uppercase tracking-[0.18em] opacity-80">{t(`fleet.alertKind.${alert.kind}`)}</div>
-        <div className="text-[11px] leading-snug">{alert.message}</div>
-        <div className={`text-[10px] font-mono ${faint}`}>{relativeFromMs(alert.atMs)}</div>
+        <div className="text-xs font-bold uppercase tracking-eyebrow opacity-80">{t(`fleet.alertKind.${alert.kind}`)}</div>
+        <div className="text-sm leading-snug">{alert.message}</div>
+        <div className={`text-xs font-mono ${faint}`}>{relativeFromMs(alert.atMs)}</div>
       </div>
     </div>
   );
@@ -255,8 +255,8 @@ function ConflictRow({ a, b, path, isDark, t }: { a: string; b: string; path: st
     }`}>
       <GitMerge className={`w-3 h-3 shrink-0 mt-0.5 ${muted}`} />
       <div className="flex-1 min-w-0">
-        <div className={`text-[11px] truncate ${heading}`}>{t('fleet.conflictRow', { a, b })}</div>
-        <div className={`text-[10px] font-mono truncate ${muted}`}>{path}</div>
+        <div className={`text-sm truncate ${heading}`}>{t('fleet.conflictRow', { a, b })}</div>
+        <div className={`text-xs font-mono truncate ${muted}`}>{path}</div>
       </div>
       <button
         type="button"

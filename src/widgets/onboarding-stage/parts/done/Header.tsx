@@ -9,12 +9,12 @@ export function Header({ data }: DoneProps) {
       <SuccessGlyph />
       <div className="flex flex-col gap-1.5">
         <h1
-          className="text-[28px] font-semibold tracking-tight leading-tight"
+          className="text-4xl font-semibold tracking-tight leading-tight"
           style={{ color: 'var(--fg-strong)' }}
         >
           You&apos;re all set, {first}.
         </h1>
-        <p className="text-[12px] leading-snug max-w-[440px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base leading-snug max-w-[440px]" style={{ color: 'var(--fg-muted)' }}>
           We&apos;re indexing <span className="font-mono">{data.workspace.repo || 'your repo'}</span> right now.
           You can jump in already — signals appear on the dot field as soon as the first parse pass finishes.
         </p>

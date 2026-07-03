@@ -42,8 +42,8 @@ export function RunTimeline({
     return (
       <section className="flex-1 min-w-0 flex items-center justify-center">
         <div className={`text-center ${muted}`}>
-          <div className={`text-[14px] font-semibold ${heading} mb-1`}>{t('empty.title')}</div>
-          <div className="text-[12px] max-w-[320px]">{t('empty.subtitle')}</div>
+          <div className={`text-lg font-semibold ${heading} mb-1`}>{t('empty.title')}</div>
+          <div className="text-base max-w-[320px]">{t('empty.subtitle')}</div>
         </div>
       </section>
     );
@@ -53,7 +53,7 @@ export function RunTimeline({
     <section className="flex-1 min-w-0 flex flex-col">
       <div className={`shrink-0 h-12 flex items-center justify-between px-5 border-b ${border}`}>
         <div className="flex items-center gap-2 min-w-0">
-          <span className={`text-[12px] font-semibold truncate ${heading}`}>{routine.name}</span>
+          <span className={`text-base font-semibold truncate ${heading}`}>{routine.name}</span>
           <span className={faint}>·</span>
           <StatusPill status={routine.status} isDark={isDark} t={t} />
           <span className={faint}>·</span>
@@ -63,7 +63,7 @@ export function RunTimeline({
           <button
             type="button"
             onClick={onEditRoutine}
-            className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-mono transition-colors ${
+            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors ${
               isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
             }`}
           >
@@ -71,7 +71,7 @@ export function RunTimeline({
           </button>
           <button
             type="button"
-            className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-mono transition-colors ${
+            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors ${
               isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
             }`}
           >
@@ -95,11 +95,11 @@ export function RunTimeline({
           <RoutineSummary routine={routine} isDark={isDark} t={t} />
 
           <div>
-            <div className={`mb-2 text-[10px] font-bold uppercase tracking-[0.18em] ${faint}`}>
+            <div className={`mb-2 text-xs font-bold uppercase tracking-eyebrow ${faint}`}>
               {t('run.header')}
             </div>
             {runs.length === 0 ? (
-              <div className={`px-3 py-6 text-center text-[11px] ${muted}`}>
+              <div className={`px-3 py-6 text-center text-sm ${muted}`}>
                 {t('run.empty')}
               </div>
             ) : (

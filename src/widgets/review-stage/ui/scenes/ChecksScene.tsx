@@ -22,7 +22,7 @@ export function ChecksScene({
     return (
       <V2Card className="p-5">
         <SceneHeader icon={Activity} title="CI checks" />
-        <div className="mt-3 text-[12px] italic text-[var(--fg-subtle)]">{t('empty.noCi')}</div>
+        <div className="mt-3 text-base italic text-[var(--fg-subtle)]">{t('empty.noCi')}</div>
       </V2Card>
     );
   }
@@ -48,9 +48,9 @@ function CheckRow({
   return (
     <li className="grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-x-4 py-2">
       <div className="min-w-0">
-        <div className="text-[12px] font-mono truncate text-[var(--fg-strong)]">{c.name}</div>
+        <div className="text-base font-mono truncate text-[var(--fg-strong)]">{c.name}</div>
         {c.summary !== null && c.summary.length > 0 && (
-          <div className="text-[11px] truncate text-[var(--fg-subtle)]">{c.summary}</div>
+          <div className="text-sm truncate text-[var(--fg-subtle)]">{c.summary}</div>
         )}
       </div>
       <Badge variant={c.required ? 'danger' : 'neutral'} fill="soft">
@@ -60,12 +60,12 @@ function CheckRow({
         <meta.Icon className={`w-2.5 h-2.5 ${c.status === 'running' ? 'animate-spin' : ''}`} />
         {meta.label}
       </Badge>
-      <span className="text-right text-[11px] font-mono tabular-nums text-[var(--fg-subtle)]">
+      <span className="text-right text-sm font-mono tabular-nums text-[var(--fg-subtle)]">
         {formatDuration(c.durationMs)}
       </span>
       <button
         type="button"
-        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-[var(--bg-elevated)] text-[var(--fg-default)] hover:bg-[var(--bg-active)]"
+        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-sm font-bold bg-[var(--bg-elevated)] text-[var(--fg-default)] hover:bg-[var(--bg-active)]"
       >
         <RefreshCw className="w-3 h-3" />
         Re-run

@@ -23,7 +23,7 @@ export function EnvCard({
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               {env.name}
             </span>
             <TierBadge tier={env.tier} />
@@ -33,7 +33,7 @@ export function EnvCard({
             href={env.url}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-[11px] font-mono truncate"
+            className="inline-flex items-center gap-1 text-sm font-mono truncate"
             style={{ color: 'var(--fg-link)' }}
           >
             <Globe className="w-3 h-3 shrink-0" />
@@ -48,18 +48,18 @@ export function EnvCard({
         style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}
       >
         <div className="flex flex-col gap-0.5 min-w-0">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             Current deploy
           </span>
-          <span className="font-mono text-[12px] truncate" style={{ color: 'var(--fg-strong)' }}>
+          <span className="font-mono text-base truncate" style={{ color: 'var(--fg-strong)' }}>
             {env.sha}
           </span>
         </div>
         <div className="flex flex-col gap-0.5 items-end">
-          <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
             Deployed
           </span>
-          <span className="text-[11px] tabular-nums" style={{ color: 'var(--fg-default)' }}>
+          <span className="text-sm tabular-nums" style={{ color: 'var(--fg-default)' }}>
             {env.deployedAt}
           </span>
         </div>
@@ -88,7 +88,7 @@ export function TierBadge({ tier }: { tier: Tier }) {
       : { label: 'dev',        bg: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', fg: 'var(--fg-accent)' };
   return (
     <span
-      className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+      className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
       style={{ background: cfg.bg, color: cfg.fg }}
     >
       {cfg.label}
@@ -99,7 +99,7 @@ export function TierBadge({ tier }: { tier: Tier }) {
 export function RegionChip({ region }: { region: Region }) {
   return (
     <span
-      className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+      className="text-xs font-mono px-1.5 py-0.5 rounded"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',

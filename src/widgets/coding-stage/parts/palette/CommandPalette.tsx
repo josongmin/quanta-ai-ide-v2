@@ -161,15 +161,15 @@ export function CommandPalette({
             onChange={(e) => { setQuery(e.target.value); setIndex(0); }}
             onKeyDown={onKeyDown}
             placeholder={t('palette.placeholder')}
-            className="flex-1 bg-transparent outline-none text-[13px] text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
+            className="flex-1 bg-transparent outline-none text-md text-[color:var(--fg-strong)] placeholder:text-[color:var(--fg-subtle)]"
             spellCheck={false}
           />
-          <span className={`text-[10px] font-mono ${faint}`}>{t('palette.hint')}</span>
+          <span className={`text-xs font-mono ${faint}`}>{t('palette.hint')}</span>
         </div>
 
         <div className="max-h-[55vh] overflow-auto scrollbar-thin py-1">
           {rows.length === 0 ? (
-            <div className={`px-3 py-6 text-center text-[12px] ${muted}`}>
+            <div className={`px-3 py-6 text-center text-base ${muted}`}>
               {t('palette.noResults')}
             </div>
           ) : (
@@ -184,7 +184,7 @@ export function CommandPalette({
               return (
                 <div key={`${row.section}:${i}`}>
                   {showHeader && (
-                    <div className={`px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${faint}`}>
+                    <div className={`px-3 pt-2 pb-1 text-2xs font-bold uppercase tracking-eyebrow ${faint}`}>
                       {headerLabel}
                     </div>
                   )}
@@ -199,16 +199,16 @@ export function CommandPalette({
                     }`}
                   >
                     <PaletteRowIcon row={row} />
-                    <span className={`flex-1 truncate text-[12px] text-[color:var(--fg-strong)] ${row.kind !== 'action' ? 'font-mono' : ''}`}>
+                    <span className={`flex-1 truncate text-base text-[color:var(--fg-strong)] ${row.kind !== 'action' ? 'font-mono' : ''}`}>
                       {row.kind === 'action' ? row.action.label
                         : row.kind === 'task'  ? row.task.title
                         : row.cmd}
                     </span>
                     {row.kind === 'action' && row.action.hint && (
-                      <span className={`text-[10px] font-mono ${faint}`}>{row.action.hint}</span>
+                      <span className={`text-xs font-mono ${faint}`}>{row.action.hint}</span>
                     )}
                     {row.kind === 'task' && (
-                      <span className={`text-[10px] font-mono ${faint}`}>{row.task.branch}</span>
+                      <span className={`text-xs font-mono ${faint}`}>{row.task.branch}</span>
                     )}
                     {active && (
                       <ArrowRight className={`w-3 h-3 ${faint}`} />

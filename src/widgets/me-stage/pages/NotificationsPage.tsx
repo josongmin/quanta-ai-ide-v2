@@ -127,13 +127,13 @@ export default function NotificationsPage() {
                 onChange={(v) => { setDraft({ ...draft, quietHours: { ...draft.quietHours, to: v } }); }}
               />
               <label className="flex flex-col gap-1.5">
-                <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
                   Time zone
                 </span>
                 <select
                   value={draft.quietHours.timezone}
                   onChange={(e) => { setDraft({ ...draft, quietHours: { ...draft.quietHours, timezone: e.target.value } }); }}
-                  className="h-8 rounded-md px-2.5 text-[12px] outline-none"
+                  className="h-8 rounded-md px-2.5 text-base outline-none"
                   style={{
                     background: 'var(--bg-canvas)',
                     border: '1px solid var(--border-default)',

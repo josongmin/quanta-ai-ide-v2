@@ -85,9 +85,9 @@ function BoundaryRow({
         style={{ background: active ? 'var(--intent-danger-fg)' : 'transparent' }}
       />
       <div className="min-w-0 flex-1">
-        <div className="text-[11px] font-bold leading-tight text-[var(--fg-default)]">{label}</div>
+        <div className="text-sm font-bold leading-tight text-[var(--fg-default)]">{label}</div>
         {!active && (
-          <div className="text-[9px] leading-tight mt-0.5 text-[var(--fg-subtle)]">{caption}</div>
+          <div className="text-2xs leading-tight mt-0.5 text-[var(--fg-subtle)]">{caption}</div>
         )}
       </div>
     </button>
@@ -106,7 +106,7 @@ function ProtocolPill({
 }: { active: boolean; label: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-pressed={active}
-      className="px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors border"
+      className="px-1.5 py-0.5 rounded-md text-2xs font-bold uppercase tracking-eyebrow transition-colors border"
       style={active
         ? { background: ACCENT_TINT_BG, color: ACCENT_TEXT, borderColor: ACCENT_TINT_RING }
         : undefined

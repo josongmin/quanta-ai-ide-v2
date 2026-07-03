@@ -26,21 +26,21 @@ export function SelfCritiquePanel({ history, t }: Props) {
             }}
           >
             <div
-              className="text-[9px] font-black uppercase tracking-[0.18em]"
+              className="text-2xs font-black uppercase tracking-eyebrow"
               style={{ color: 'var(--fg-subtle)' }}
             >
               {t('critique.iteration', { n: h.iteration })}
             </div>
-            <div className="text-[10px] mt-1" style={{ color: 'var(--fg-muted)' }}>
+            <div className="text-xs mt-1" style={{ color: 'var(--fg-muted)' }}>
               {t('critique.failed')}
             </div>
-            <div className="text-[11px]" style={{ color: 'var(--fg-default)' }}>
+            <div className="text-sm" style={{ color: 'var(--fg-default)' }}>
               {h.failureSummary}
             </div>
-            <div className="text-[10px] mt-1" style={{ color: 'var(--fg-muted)' }}>
+            <div className="text-xs mt-1" style={{ color: 'var(--fg-muted)' }}>
               {t('critique.adjusted')}
             </div>
-            <div className="text-[11px]" style={{ color: 'var(--fg-default)' }}>
+            <div className="text-sm" style={{ color: 'var(--fg-default)' }}>
               {h.adjustment}
             </div>
           </li>

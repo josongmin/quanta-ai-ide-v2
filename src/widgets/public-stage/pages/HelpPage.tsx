@@ -31,7 +31,7 @@ export default function HelpPage() {
         <div className="relative max-w-[1080px] mx-auto px-8 pt-20 pb-10 flex flex-col items-center text-center gap-6">
           <Eyebrow>Help center</Eyebrow>
           <HeadlineGradient accent="working again.">Get back to</HeadlineGradient>
-          <p className="text-[16px] leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-xl leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
             126 articles, written by the engineers who shipped the feature. Cmd-K from
             anywhere in the app, or search below.
           </p>

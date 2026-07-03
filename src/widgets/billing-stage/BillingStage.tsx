@@ -141,7 +141,7 @@ function CycleToggle({
             key={c}
             type="button"
             onClick={() => { onChange(c); }}
-            className="px-2.5 h-6 rounded text-[11px] font-medium transition-colors"
+            className="px-2.5 h-6 rounded text-sm font-medium transition-colors"
             style={{
               background: active ? 'var(--bg-canvas)' : 'transparent',
               color: active ? 'var(--fg-strong)' : 'var(--fg-muted)',

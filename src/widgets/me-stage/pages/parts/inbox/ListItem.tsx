@@ -55,16 +55,16 @@ export function ListItem({
             />
           )}
           <span
-            className={`text-[11px] truncate ${item.status === 'unread' ? 'font-semibold' : ''}`}
+            className={`text-sm truncate ${item.status === 'unread' ? 'font-semibold' : ''}`}
             style={{ color: 'var(--fg-strong)' }}
           >
             {item.title}
           </span>
         </div>
-        <span className="text-[10px] truncate" style={{ color: 'var(--fg-muted)' }}>
+        <span className="text-xs truncate" style={{ color: 'var(--fg-muted)' }}>
           {item.preview}
         </span>
-        <div className="flex items-center gap-2 text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+        <div className="flex items-center gap-2 text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
           <span>{item.who}</span>
           <span>·</span>
           <span>{item.where}</span>

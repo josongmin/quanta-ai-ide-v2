@@ -42,20 +42,20 @@ export function SemanticConflictCard({ file }: { file: FileRecord }) {
           <ShieldCheck className="w-3 h-3"
                        style={{ color: 'var(--intent-success-fg)' }} />
           <div
-            className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {t('semanticConflict.title', { defaultValue: 'Semantic conflict' })}
           </div>
           <span
-            className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+            className="ml-auto text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--intent-success-fg)' }}
           >
             {t('semanticConflict.clear', { defaultValue: 'Clear' })}
           </span>
         </div>
         <div
-          className="mt-1.5 text-[10px] leading-relaxed"
+          className="mt-1.5 text-xs leading-relaxed"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('semanticConflict.cleanHint', {
@@ -85,13 +85,13 @@ export function SemanticConflictCard({ file }: { file: FileRecord }) {
       >
         <GitMerge className="w-3 h-3" style={{ color: headerAccent }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('semanticConflict.title', { defaultValue: 'Semantic conflict' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="ml-auto text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: headerAccent }}
         >
           {t('semanticConflict.summary', {
@@ -108,7 +108,7 @@ export function SemanticConflictCard({ file }: { file: FileRecord }) {
       </div>
 
       <div
-        className="px-3 py-2 border-t text-[9px] leading-relaxed"
+        className="px-3 py-2 border-t text-2xs leading-relaxed"
         style={{
           borderColor: 'var(--border-muted)',
           color: 'var(--fg-subtle)',
@@ -156,7 +156,7 @@ function ConflictRow({ c }: { c: ConflictCandidate }) {
           </span>
         </div>
         <div
-          className="mt-0.5 text-[9px] font-mono"
+          className="mt-0.5 text-2xs font-mono"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {c.author} · {c.branch}
@@ -173,7 +173,7 @@ function ConflictRow({ c }: { c: ConflictCandidate }) {
         </div>
       </div>
       <span
-        className="shrink-0 text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+        className="shrink-0 text-2xs font-black uppercase tracking-eyebrow"
         style={{ color: sevColor }}
       >
         {sevLabel}

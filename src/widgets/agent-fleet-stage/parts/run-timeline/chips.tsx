@@ -10,7 +10,7 @@ export function StatusPill({ status, isDark, t }: { status: 'active' | 'paused' 
     : status === 'paused' ? 'border-[color:var(--intent-warn-fg)] bg-[color:var(--intent-warn-bg)] text-[color:var(--intent-warn-fg)]'
     : (isDark ? 'border-white/[0.10] bg-white/[0.04] text-white/55' : 'border-black/[0.10] bg-black/[0.04] text-black/55');
   return (
-    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-[10px] font-bold uppercase tracking-[0.18em] border ${tone}`}>
+    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-xs font-bold uppercase tracking-eyebrow border ${tone}`}>
       {t(`status.${status}`)}
     </span>
   );
@@ -20,7 +20,7 @@ export function TrustChip({ level, isDark, t }: { level: 1 | 2 | 3 | 4 | 5; isDa
   const tone = isDark ? 'bg-white/[0.04] text-white/65 border-white/[0.10]' : 'bg-black/[0.04] text-black/65 border-black/[0.10]';
   return (
     <span
-      className={`flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border ${tone}`}
+      className={`flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono border ${tone}`}
       title={t('trust.tooltip')}
     >
       <Shield className="w-2.5 h-2.5" />
@@ -41,7 +41,7 @@ export function BlastChip({ tier, isDark, t, compact = false }: {
     : 'border-[color:var(--intent-danger-fg)] bg-[color:var(--intent-danger-bg)] text-[color:var(--intent-danger-fg)]';
   const Icon = tier === 'safe' ? Shield : tier === 'review' ? Eye : AlertTriangle;
   return (
-    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[9px] font-mono border ${tone}`}>
+    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-2xs font-mono border ${tone}`}>
       <Icon className="w-2.5 h-2.5" />
       {!compact && t(`run.br.${tier}`)}
       {compact && t(`run.br.${tier}`)}
@@ -66,7 +66,7 @@ function runStatusMap(isDark: boolean): Record<RunStatus, { tone: string; Icon: 
 export function RunStatusBadge({ status, isDark, t }: { status: RunStatus; isDark: boolean; t: TranslateFn }) {
   const { tone, Icon } = runStatusMap(isDark)[status];
   return (
-    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-[9px] font-bold uppercase tracking-[0.18em] border ${tone}`}>
+    <span className={`inline-flex items-center gap-1 px-1.5 py-px rounded-full text-2xs font-bold uppercase tracking-eyebrow border ${tone}`}>
       <Icon className={`w-2.5 h-2.5 ${status === 'running' ? 'animate-pulse' : ''}`} />
       {t(`runStatus.${status}`)}
     </span>

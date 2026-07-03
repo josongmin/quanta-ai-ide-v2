@@ -45,20 +45,20 @@ export function NewSecretModal({
       )}
     >
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Name (uppercase, snake_case)
         </span>
         <input
           value={name}
           onChange={(e) => { setName(e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, '')); }}
           placeholder="e.g. STRIPE_API_KEY"
-          className="h-9 rounded-md px-3 text-[12px] outline-none font-mono"
+          className="h-9 rounded-md px-3 text-base outline-none font-mono"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         />
       </label>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
           <span>Value</span>
           <button
             type="button"
@@ -75,7 +75,7 @@ export function NewSecretModal({
           onChange={(e) => { setValue(e.target.value); }}
           placeholder="paste secret value"
           rows={3}
-          className="w-full rounded-md p-2.5 text-[12px] outline-none resize-none font-mono"
+          className="w-full rounded-md p-2.5 text-base outline-none resize-none font-mono"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-default)',
@@ -86,7 +86,7 @@ export function NewSecretModal({
       </label>
 
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Scopes
         </span>
         <div className="grid grid-cols-2 gap-1.5">
@@ -107,7 +107,7 @@ export function NewSecretModal({
                   onChange={() => { toggle(s); }}
                   className="w-3.5 h-3.5 cursor-pointer"
                 />
-                <span className="font-mono text-[11px]" style={{ color: 'var(--fg-default)' }}>{s}</span>
+                <span className="font-mono text-sm" style={{ color: 'var(--fg-default)' }}>{s}</span>
               </label>
             );
           })}
@@ -115,13 +115,13 @@ export function NewSecretModal({
       </div>
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
           Expiration
         </span>
         <select
           value={exp == null ? 'never' : String(exp)}
           onChange={(e) => { setExp(e.target.value === 'never' ? null : Number(e.target.value)); }}
-          className="h-9 rounded-md px-3 text-[12px] outline-none cursor-pointer"
+          className="h-9 rounded-md px-3 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         >
           <option value="never">Never</option>

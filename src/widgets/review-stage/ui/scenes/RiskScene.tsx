@@ -45,7 +45,7 @@ export function RiskScene({
     <V2Card className="p-5">
       <div className="flex items-center gap-2">
         <ShieldAlert className="w-3.5 h-3.5 text-[var(--fg-muted)]" />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Risk profile
         </span>
         <Badge variant={TIER_VARIANT[risk.tier]} fill="soft" className="ml-auto gap-1">
@@ -65,7 +65,7 @@ export function RiskScene({
 
       {risk.secretsRisk && (
         <div
-          className="mt-3 flex items-center gap-2 px-3 py-2 rounded-md text-[12px]"
+          className="mt-3 flex items-center gap-2 px-3 py-2 rounded-md text-base"
           style={{ background: `color-mix(in srgb, ${severityColors.blocker} 10%, transparent)`, color: severityColors.blocker, border: `1px solid color-mix(in srgb, ${severityColors.blocker} 33%, transparent)` }}
         >
           <KeyRound className="w-3.5 h-3.5 shrink-0" />
@@ -75,10 +75,10 @@ export function RiskScene({
 
       {risk.reasons.length > 0 && (
         <div className="mt-4">
-          <div className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+          <div className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">
             Why this score
           </div>
-          <ul className="mt-1.5 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[12px] text-[var(--fg-default)]">
+          <ul className="mt-1.5 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-base text-[var(--fg-default)]">
             {risk.reasons.map((r, i) => (
               <li key={i} className="flex items-start gap-1.5">
                 <span style={{ color: accent }}>▸</span>
@@ -91,7 +91,7 @@ export function RiskScene({
 
       {cov.length > 0 && (
         <div className="mt-5">
-          <div className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+          <div className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">
             Coverage delta
           </div>
           <div className="mt-2 flex flex-col gap-1.5">
@@ -100,12 +100,12 @@ export function RiskScene({
               return (
                 <div key={r.filePath} className="grid grid-cols-[1fr_auto] items-center gap-3">
                   <div className="min-w-0">
-                    <div className="truncate font-mono text-[11px] text-[var(--fg-default)]">{r.filePath}</div>
+                    <div className="truncate font-mono text-sm text-[var(--fg-default)]">{r.filePath}</div>
                     <div className="mt-1 h-1 rounded-full overflow-hidden" style={{ background: `color-mix(in srgb, ${severityColors.blocker} 13%, transparent)` }}>
                       <div className="h-full" style={{ width: `${String(dropPct)}%`, background: severityColors.blocker }} />
                     </div>
                   </div>
-                  <div className="shrink-0 flex items-center gap-2 font-mono text-[11px] tabular-nums">
+                  <div className="shrink-0 flex items-center gap-2 font-mono text-sm tabular-nums">
                     <span className="text-[var(--fg-subtle)]">{r.before}%</span>
                     <span className="text-[var(--fg-subtle)]">→</span>
                     <span className="text-[var(--fg-strong)]">{r.after}%</span>
@@ -121,7 +121,7 @@ export function RiskScene({
       )}
 
       {testRatio.total > 0 && (
-        <div className="mt-4 text-[12px] text-[var(--fg-default)]">
+        <div className="mt-4 text-base text-[var(--fg-default)]">
           <span className="font-bold text-[var(--fg-strong)]">{Math.round(testRatio.ratio * 100)}%</span> of
           {' '}{testRatio.total} touched source {testRatio.total === 1 ? 'file has' : 'files have'} a co-changed test
           {testRatio.ratio < 0.5 && (
@@ -135,10 +135,10 @@ export function RiskScene({
       {incidents.length > 0 && (
         <div className="mt-5">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+            <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">
               Past incident proximity
             </span>
-            <span className="ml-auto text-[10px] font-mono text-[var(--fg-subtle)]">
+            <span className="ml-auto text-xs font-mono text-[var(--fg-subtle)]">
               {incidents.length} prior {incidents.length === 1 ? 'match' : 'matches'}
             </span>
           </div>
@@ -151,11 +151,11 @@ export function RiskScene({
       {tests !== null && (
         <div className="mt-5">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+            <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">
               Failed tests
             </span>
             <span
-              className="ml-auto inline-flex items-center px-2 h-5 rounded-full text-[10px] font-mono tabular-nums"
+              className="ml-auto inline-flex items-center px-2 h-5 rounded-full text-xs font-mono tabular-nums"
               style={{ background: 'var(--intent-success-bg)', color: 'var(--intent-success-fg)' }}
             >
               {tests.passed}/{tests.passed + tests.failed} passing
@@ -165,10 +165,10 @@ export function RiskScene({
             <ul className="mt-2 flex flex-col gap-1">
               {tests.failingNames.map((name) => (
                 <li key={name} className="flex items-center justify-between gap-3 px-2 py-1 rounded-md bg-[var(--bg-surface-muted)]">
-                  <span className="font-mono text-[11px] truncate text-[var(--fg-strong)]">{name}</span>
+                  <span className="font-mono text-sm truncate text-[var(--fg-strong)]">{name}</span>
                   <button
                     type="button"
-                    className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] font-bold bg-[var(--bg-elevated)] text-[var(--fg-default)] hover:bg-[var(--bg-active)]"
+                    className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-md text-xs font-bold bg-[var(--bg-elevated)] text-[var(--fg-default)] hover:bg-[var(--bg-active)]"
                   >
                     <Play className="w-3 h-3" />
                     Run
@@ -201,9 +201,9 @@ function RiskStat({
         boxShadow: 'none',
       }}
     >
-      <div className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">{label}</div>
+      <div className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">{label}</div>
       <div
-        className="mt-0.5 text-[18px] font-black tabular-nums leading-none"
+        className="mt-0.5 text-2xl font-black tabular-nums leading-none"
         style={{ color: accent ?? 'var(--fg-strong)' }}
       >
         {value}
@@ -225,14 +225,14 @@ function IncidentMatchRow({
       : 'var(--fg-muted)';
   return (
     <li className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-1.5 rounded-md bg-[var(--bg-surface-muted)]">
-      <span className="font-mono text-[10px] text-[var(--fg-muted)] shrink-0">{m.id}</span>
+      <span className="font-mono text-xs text-[var(--fg-muted)] shrink-0">{m.id}</span>
       <span className="min-w-0">
-        <span className="block truncate text-[12px] text-[var(--fg-strong)]">{m.title}</span>
+        <span className="block truncate text-base text-[var(--fg-strong)]">{m.title}</span>
         <span className="block mt-1 h-1 rounded-full overflow-hidden" style={{ background: 'var(--bg-active)' }}>
           <span className="block h-full" style={{ width: `${String(pct)}%`, background: fill }} />
         </span>
       </span>
-      <span className="shrink-0 inline-flex items-center gap-2 text-[10px] font-mono tabular-nums">
+      <span className="shrink-0 inline-flex items-center gap-2 text-xs font-mono tabular-nums">
         <span className="text-[var(--fg-subtle)]">{m.date}</span>
         <span style={{ color: fill }}>{pct}%</span>
       </span>

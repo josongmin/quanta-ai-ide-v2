@@ -35,14 +35,14 @@ export default function MetricRangeSlider({
             </span>
           )}
           <span
-            className="text-[9px] font-bold uppercase tracking-[0.18em]"
+            className="text-2xs font-bold uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
             {label}
           </span>
         </div>
         <span
-          className="text-[10px] font-black font-mono tabular-nums"
+          className="text-xs font-black font-mono tabular-nums"
           style={{ color: 'var(--fg-default)' }}
         >
           {fmt(value[0])} – {fmt(value[1])}

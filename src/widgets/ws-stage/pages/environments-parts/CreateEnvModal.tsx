@@ -23,7 +23,7 @@ export function CreateEnvModal({
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>New environment</span>
+            <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>New environment</span>
           </div>
           <button type="button" onClick={onCancel} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
             <X className="w-4 h-4" />
@@ -43,13 +43,13 @@ export function CreateEnvModal({
             onChange={(e) => { setUrl(e.target.value); }}
           />
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Region
             </span>
             <select
               value={region}
               onChange={(e) => { setRegion(e.target.value as Region); }}
-              className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+              className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
               style={{
                 background: 'var(--bg-surface-muted)',
                 border: '1px solid var(--border-default)',

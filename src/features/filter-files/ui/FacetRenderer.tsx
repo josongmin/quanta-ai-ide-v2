@@ -51,8 +51,8 @@ function LockedRow({ facet }: { facet: Facet }) {
   return (
     <div className="flex items-center gap-2 p-2 rounded-xl mb-2 bg-[color:var(--bg-surface-muted)] text-[color:var(--fg-subtle)]">
       <Lock className="w-3 h-3" />
-      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] truncate">{facet.label}</span>
-      <span className="ml-auto text-[8px] px-1.5 py-0.5 rounded-md uppercase font-black bg-[color:var(--bg-surface)] text-[color:var(--fg-muted)]">{facet.requiredPlan}</span>
+      <span className="text-xs font-bold uppercase tracking-eyebrow truncate">{facet.label}</span>
+      <span className="ml-auto text-2xs px-1.5 py-0.5 rounded-md uppercase font-black bg-[color:var(--bg-surface)] text-[color:var(--fg-muted)]">{facet.requiredPlan}</span>
     </div>
   );
 }
@@ -89,8 +89,8 @@ function BoolRow({ facet }: { facet: BoolFacet }) {
         v ? SELECTED_CLASS : IDLE_CLASS
       }`}
     >
-      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] truncate">{facet.label}</span>
-      <span className={`text-[9px] font-mono ${v ? '' : 'opacity-50'}`}>{v ? t('toggle.on') : t('toggle.off')}</span>
+      <span className="text-xs font-bold uppercase tracking-eyebrow truncate">{facet.label}</span>
+      <span className={`text-2xs font-mono ${v ? '' : 'opacity-50'}`}>{v ? t('toggle.on') : t('toggle.off')}</span>
     </button>
   );
 }
@@ -108,8 +108,8 @@ function BinaryToggleRow({ facet }: { facet: BinaryToggleFacet }) {
           : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)]'
       }`}
     >
-      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)]">{facet.label}</span>
-      <span className="text-[9px] font-mono">{v ? t('toggle.on') : t('toggle.off')}</span>
+      <span className="text-xs font-bold uppercase tracking-eyebrow">{facet.label}</span>
+      <span className="text-2xs font-mono">{v ? t('toggle.on') : t('toggle.off')}</span>
     </button>
   );
 }
@@ -136,8 +136,8 @@ function TriToggleRow({ facet }: { facet: TriToggleFacet }) {
           : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'
       }`}
     >
-      <span className="text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] truncate">{facet.label}</span>
-      <span className={`text-[9px] font-mono uppercase ${styleOn ? '' : 'opacity-50'}`}>{labelFor}</span>
+      <span className="text-xs font-bold uppercase tracking-eyebrow truncate">{facet.label}</span>
+      <span className={`text-2xs font-mono uppercase ${styleOn ? '' : 'opacity-50'}`}>{labelFor}</span>
     </button>
   );
 }
@@ -148,7 +148,7 @@ function EnumRow({ facet }: { facet: EnumFacet }) {
   const { options, selected, toggle } = useEnumFacet(facet);
   return (
     <div className="mb-2">
-      <div className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] mb-1.5 text-[color:var(--fg-subtle)]">
+      <div className="text-2xs font-bold uppercase tracking-eyebrow mb-1.5 text-[color:var(--fg-subtle)]">
         {facet.label}
       </div>
       <div className="flex flex-wrap gap-1.5">
@@ -158,7 +158,7 @@ function EnumRow({ facet }: { facet: EnumFacet }) {
             <button type="button"
               key={o}
               onClick={() => { toggle(o); }}
-              className={`text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] px-2 py-1 rounded-md border transition-colors ${
+              className={`text-xs font-bold uppercase tracking-eyebrow px-2 py-1 rounded-md border transition-colors ${
                 active
                   ? 'bg-[color:var(--fg-strong)] text-[color:var(--bg-surface)] border-[color:var(--fg-strong)]'
                   : 'bg-[color:var(--bg-surface-muted)] border-[color:var(--border-muted)] text-[color:var(--fg-muted)] hover:bg-[color:var(--bg-active)]'

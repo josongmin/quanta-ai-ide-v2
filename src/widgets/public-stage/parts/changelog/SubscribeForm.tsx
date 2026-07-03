@@ -25,13 +25,13 @@ export function SubscribeForm() {
           onChange={(e) => { setEmail(e.target.value); setSubscribed(false); }}
           required
           placeholder="you@company.com"
-          className="flex-1 bg-transparent outline-none text-[12px] pr-3"
+          className="flex-1 bg-transparent outline-none text-base pr-3"
           style={{ color: 'var(--fg-strong)' }}
         />
       </div>
       <button
         type="submit"
-        className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold transition-transform"
+        className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold transition-transform"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}

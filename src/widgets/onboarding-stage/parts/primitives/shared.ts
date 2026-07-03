@@ -7,4 +7,4 @@ export const ACCENT_TINT = 'color-mix(in srgb, var(--fg-accent) 14%, transparent
 
 // The terse uppercase section/field label shared by fieldsets and labels.
 export const SECTION_LABEL_CLASS =
-  'text-[10px] uppercase tracking-[0.14em] font-medium';
+  'text-xs uppercase tracking-eyebrow font-medium';

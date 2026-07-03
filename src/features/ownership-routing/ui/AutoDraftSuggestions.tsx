@@ -68,7 +68,7 @@ function ActionPill({ action }: { action: ActionKey }) {
   const tone = actionTone(action);
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.22em]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
       style={{ background: tone.bg, color: tone.fg }}
     >
       {ACTION_LABEL[action]}
@@ -83,13 +83,13 @@ function ConfidenceBar({ value }: { value: number }) {
     <div className="flex flex-col flex-1 min-w-0 max-w-[200px]">
       <div className="flex items-center justify-between mb-1">
         <span
-          className="text-[9px] font-black uppercase tracking-[0.18em]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-muted)' }}
         >
           Confidence
         </span>
         <span
-          className="text-[9px] font-mono tabular-nums"
+          className="text-2xs font-mono tabular-nums"
           style={{ color: tone.fg }}
         >
           {pct}%
@@ -126,7 +126,7 @@ function ActionButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-[0.16em] transition-colors"
+      className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-[0.16em] transition-colors"
       style={baseStyle}
       onMouseEnter={(e) => {
         if (!primary) e.currentTarget.style.background = 'var(--bg-hover)';
@@ -154,7 +154,7 @@ function SuggestionItem({
       <div className="flex items-center gap-2 mb-2">
         <ActionPill action={suggestion.proposedAction} />
         <span
-          className="ml-auto text-[9px] font-mono tabular-nums"
+          className="ml-auto text-2xs font-mono tabular-nums"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {formatRelative(suggestion.detectedAt)}
@@ -162,13 +162,13 @@ function SuggestionItem({
       </div>
 
       <div
-        className="text-[13px] font-semibold leading-snug mb-1"
+        className="text-md font-semibold leading-snug mb-1"
         style={{ color: 'var(--fg-default)' }}
       >
         {suggestion.hook}
       </div>
       <div
-        className="text-[11px] leading-snug mb-3"
+        className="text-sm leading-snug mb-3"
         style={{ color: 'var(--fg-muted)' }}
       >
         {suggestion.why}
@@ -178,7 +178,7 @@ function SuggestionItem({
         <ConfidenceBar value={suggestion.confidence} />
         <div className="flex flex-col items-end gap-1 ml-auto">
           <span
-            className="text-[9px] font-mono lowercase"
+            className="text-2xs font-mono lowercase"
             style={{ color: 'var(--fg-subtle)' }}
             title={`Accept ${ACTION_RESULT_HINT[suggestion.proposedAction]}`}
           >

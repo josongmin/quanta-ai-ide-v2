@@ -8,7 +8,7 @@ export function RepoRow({ repo }: { repo: RecentRepo }) {
       style={{ borderColor: 'var(--border-muted)' }}
     >
       <div
-        className="w-6 h-6 rounded inline-flex items-center justify-center text-[10px] font-semibold uppercase"
+        className="w-6 h-6 rounded inline-flex items-center justify-center text-xs font-semibold uppercase"
         style={{
           background: 'var(--bg-surface)',
           border: '1px solid var(--border-muted)',
@@ -20,14 +20,14 @@ export function RepoRow({ repo }: { repo: RecentRepo }) {
 
       <div className="min-w-0">
         <div
-          className="text-[12px] font-semibold truncate"
+          className="text-base font-semibold truncate"
           style={{ color: 'var(--fg-default)' }}
         >
           {repo.slug}
         </div>
         {repo.quiet ? (
           <div
-            className="text-[10px] italic mt-0.5"
+            className="text-xs italic mt-0.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
             quiet
@@ -43,7 +43,7 @@ export function RepoRow({ repo }: { repo: RecentRepo }) {
       </div>
 
       <div
-        className="flex items-center gap-1.5 text-[10px] font-mono min-w-0"
+        className="flex items-center gap-1.5 text-xs font-mono min-w-0"
         style={{ color: 'var(--fg-muted)' }}
       >
         <BranchGlyph />
@@ -56,7 +56,7 @@ export function RepoRow({ repo }: { repo: RecentRepo }) {
       </div>
 
       <div
-        className="text-[10px] font-mono whitespace-nowrap text-right"
+        className="text-xs font-mono whitespace-nowrap text-right"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {repo.lastTouched}

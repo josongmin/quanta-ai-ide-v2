@@ -30,10 +30,10 @@ export default function AdminPage() {
     <AdminShell active="overview">
       {/* Header */}
       <header className="flex flex-col gap-1 mb-6">
-        <h1 className="text-[22px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h1 className="text-3xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           Super-admin
         </h1>
-        <p className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base" style={{ color: 'var(--fg-muted)' }}>
           Internal operator dashboard
         </p>
       </header>

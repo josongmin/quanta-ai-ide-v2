@@ -23,7 +23,7 @@ export function CostLedger({ rules }: { rules: AdmissionRule[] }) {
         if (n === 0) return null;
         const heavy = c === 'slow' || c === 'background';
         return (
-          <div key={c} className="flex items-center gap-2 text-[11px] font-mono">
+          <div key={c} className="flex items-center gap-2 text-sm font-mono">
             <span className={heavy ? 'font-bold' : ''} style={{ color: heavy ? t.textBody : t.textMuted }}>{c}</span>
             <div className="flex-1 h-px" style={{ background: t.inset }} />
             <div

@@ -29,7 +29,7 @@ export function DangerSection() {
         >
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-3.5 h-3.5" style={{ color: 'var(--intent-danger-fg)' }} />
-            <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
               Danger zone
             </span>
           </div>
@@ -75,7 +75,7 @@ export function DangerSection() {
                 <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
                   Delete your account?
                 </h3>
-                <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+                <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
                   This permanently deletes <span className="font-mono">sora@acme.com</span>,
                   your reviews, comments, AI usage history, and personal access tokens. You&apos;ll be removed from
                   3 organizations. Your contributions remain attributed to a deleted user.
@@ -93,13 +93,13 @@ export function DangerSection() {
                 error={confirmText.length > 0 && !matched ? 'Doesn\'t match exactly.' : undefined}
               />
               <label className="flex flex-col gap-1.5">
-                <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
                   Reason for leaving (optional)
                 </span>
                 <select
                   value={reason}
                   onChange={(e) => { setReason(e.target.value); }}
-                  className="h-8 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+                  className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
                   style={{
                     background: 'var(--bg-surface-muted)',
                     border: '1px solid var(--border-default)',

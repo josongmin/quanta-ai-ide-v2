@@ -19,7 +19,7 @@ export function CitationStrip({
 
   return (
     <div className="mb-2 flex items-center gap-1.5 flex-wrap">
-      <span className={`text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] ${muted}`}>
+      <span className={`text-2xs font-bold uppercase tracking-eyebrow ${muted}`}>
         {t('citations.label')}
       </span>
       {visible.map((c, i) => {
@@ -43,7 +43,7 @@ export function CitationStrip({
           <span
             key={`${c.path}:${i}`}
             title={fullTitle}
-            className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-[10px] font-mono cursor-help ${chip} ${
+            className={`inline-flex items-center gap-1 px-1.5 py-px rounded-md text-xs font-mono cursor-help ${chip} ${
               isStale ? 'opacity-75' : ''
             }`}
           >
@@ -54,7 +54,7 @@ export function CitationStrip({
             {isStale && (
               <span
                 style={staleChipStyle}
-                className="ml-0.5 px-1 rounded-sm text-2xs font-bold uppercase tracking-[var(--track-eyebrow)] border"
+                className="ml-0.5 px-1 rounded-sm text-2xs font-bold uppercase tracking-eyebrow border"
               >
                 {t('citationStale.label')}
               </span>
@@ -66,7 +66,7 @@ export function CitationStrip({
         <button
           type="button"
           onClick={() => { setExpanded(true); }}
-          className={`text-[10px] font-mono underline ${muted}`}
+          className={`text-xs font-mono underline ${muted}`}
         >
           {t('citations.more', { count: overflow })}
         </button>

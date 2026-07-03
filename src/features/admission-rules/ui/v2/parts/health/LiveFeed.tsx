@@ -25,7 +25,7 @@ export function LiveFeed({
     <V2Card className="p-4 relative overflow-hidden">
       <div className="flex items-center gap-2 mb-3">
         <SectionTitle icon={Clock}>{tA('section.livePrFeed')}</SectionTitle>
-        <span className="ml-1 inline-flex items-center gap-1 text-[9px] font-mono" style={{ color: t.textSubtle }}>
+        <span className="ml-1 inline-flex items-center gap-1 text-2xs font-mono" style={{ color: t.textSubtle }}>
           <StatusDot color={t.ok} size="xs" className="admv2-blink" />
           live
         </span>
@@ -35,7 +35,7 @@ export function LiveFeed({
           <FeedRow key={r.seed} index={i} seed={r.seed} diff={r.diff} decision={r.decision} />
         ))}
       </div>
-      <div className="mt-3 pt-3 border-t text-[10px] font-mono leading-relaxed" style={{ borderColor: t.borderSoft, color: t.textSubtle }}>
+      <div className="mt-3 pt-3 border-t text-xs font-mono leading-relaxed" style={{ borderColor: t.borderSoft, color: t.textSubtle }}>
         Synthetic stream · current ruleset replayed against deterministic seeds.
       </div>
     </V2Card>

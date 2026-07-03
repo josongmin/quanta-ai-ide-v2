@@ -31,7 +31,7 @@ export function AuthShell({ title, subtitle, footer, topRight, children }: Props
       <header className="flex items-center justify-between px-8 h-14 shrink-0">
         <BrandMark />
         {topRight && (
-          <div className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+          <div className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
             {topRight}
           </div>
         )}
@@ -41,13 +41,13 @@ export function AuthShell({ title, subtitle, footer, topRight, children }: Props
         <div className="w-full max-w-[380px] flex flex-col gap-7">
           <header className="flex flex-col gap-2">
             <h1
-              className="text-[22px] font-semibold tracking-tight leading-tight"
+              className="text-3xl font-semibold tracking-tight leading-tight"
               style={{ color: 'var(--fg-strong)' }}
             >
               {title}
             </h1>
             {subtitle && (
-              <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+              <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
                 {subtitle}
               </p>
             )}
@@ -57,7 +57,7 @@ export function AuthShell({ title, subtitle, footer, topRight, children }: Props
 
           {footer && (
             <div
-              className="pt-5 text-[12px] flex items-center justify-center gap-1"
+              className="pt-5 text-base flex items-center justify-center gap-1"
               style={{
                 color: 'var(--fg-subtle)',
                 borderTop: '1px solid var(--border-muted)',
@@ -70,7 +70,7 @@ export function AuthShell({ title, subtitle, footer, topRight, children }: Props
       </main>
 
       <footer
-        className="px-8 h-12 shrink-0 flex items-center justify-between text-[10px] uppercase tracking-[0.14em]"
+        className="px-8 h-12 shrink-0 flex items-center justify-between text-xs uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>© ACME, Inc.</span>
@@ -88,13 +88,13 @@ function BrandMark() {
   return (
     <div className="flex items-center gap-2">
       <div
-        className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black"
+        className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-black"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
       >
         SE
       </div>
       <span
-        className="text-[12px] font-semibold tracking-tight"
+        className="text-base font-semibold tracking-tight"
         style={{ color: 'var(--fg-strong)' }}
       >
         se · field

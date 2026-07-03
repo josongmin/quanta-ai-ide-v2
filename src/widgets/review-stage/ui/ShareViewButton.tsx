@@ -52,7 +52,7 @@ export default function ShareViewButton({ scope, query }: Props) {
       type="button"
       onClick={() => { void onClick(); }}
       title={copied ? '클립보드에 복사됨' : '이 뷰의 공유 링크 복사'}
-      className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] font-mono transition-colors"
+      className="shrink-0 inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs font-mono transition-colors"
       style={{
         background: copied ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)' : 'var(--bg-surface-muted)',
         border: copied

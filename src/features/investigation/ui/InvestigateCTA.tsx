@@ -17,7 +17,7 @@ export default function InvestigateCTA({ target, onClick }: Props) {
     <button
       type="button"
       onClick={handleClick}
-      className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded transition-colors hover:[background:var(--bg-hover)]"
+      className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded transition-colors hover:[background:var(--bg-hover)]"
       style={{
         background: 'transparent',
         color: 'var(--fg-default)',

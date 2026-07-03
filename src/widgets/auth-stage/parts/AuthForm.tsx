@@ -21,7 +21,7 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{label}</span>
@@ -48,13 +48,13 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
         <input
           ref={ref}
           {...rest}
-          className="flex-1 bg-transparent outline-none px-3 text-[12px] tabular-nums"
+          className="flex-1 bg-transparent outline-none px-3 text-base tabular-nums"
           style={{ color: 'var(--fg-strong)' }}
         />
         {trailing && <div className="pr-2">{trailing}</div>}
       </div>
       {error && (
-        <span className="text-[11px]" style={{ color: 'var(--intent-danger-fg)' }}>
+        <span className="text-sm" style={{ color: 'var(--intent-danger-fg)' }}>
           {error}
         </span>
       )}
@@ -76,7 +76,7 @@ export function Button({
   children, variant = 'primary', full = true, type = 'button',
   onClick, leading, disabled,
 }: ButtonProps) {
-  const base = `inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-[12px] font-semibold tracking-tight transition-colors ${full ? 'w-full' : ''}`;
+  const base = `inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-colors ${full ? 'w-full' : ''}`;
 
   const styles =
     variant === 'primary'
@@ -112,7 +112,7 @@ export function Button({
 
 export function HRule({ label = 'or' }: { label?: string }) {
   return (
-    <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.14em]"
+    <div className="flex items-center gap-3 text-xs uppercase tracking-eyebrow"
       style={{ color: 'var(--fg-subtle)' }}
     >
       <span className="flex-1 h-px" style={{ background: 'var(--border-muted)' }} />
@@ -145,7 +145,7 @@ export function OAuthGrid() {
 function GitLabMark() {
   return (
     <span
-      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-[7px] font-black"
+      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-2xs font-black"
       style={{ background: 'var(--fg-default)', color: 'var(--bg-canvas)' }}
     >
       GL

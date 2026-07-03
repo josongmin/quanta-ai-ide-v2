@@ -25,7 +25,7 @@ export function ReviewerRow({ rationale }: { rationale: ReviewerRationale }) {
         return (
           <div
             key={key}
-            className={`flex items-center gap-2 text-[11px] ${isDominant ? 'font-bold' : ''}`}
+            className={`flex items-center gap-2 text-sm ${isDominant ? 'font-bold' : ''}`}
             style={{
               color: isDominant ? 'var(--fg-strong)' : 'var(--fg-default)',
             }}
@@ -51,14 +51,14 @@ export function ReviewerRow({ rationale }: { rationale: ReviewerRationale }) {
               />
             </div>
             <span
-              className="w-8 text-right tabular-nums font-bold text-[11px]"
+              className="w-8 text-right tabular-nums font-bold text-sm"
               style={{ color: 'var(--fg-default)' }}
             >
               {pct}%
             </span>
             {isDominant && (
               <span
-                className="text-[8px] font-black uppercase tracking-[0.18em] px-1 py-0.5 rounded shrink-0"
+                className="text-2xs font-black uppercase tracking-eyebrow px-1 py-0.5 rounded shrink-0"
                 style={{
                   background: 'var(--bg-surface-muted)',
                   color: 'var(--fg-muted)',

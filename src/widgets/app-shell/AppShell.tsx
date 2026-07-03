@@ -144,7 +144,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
           }}
         >
           <div
-            className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-black"
+            className="w-5 h-5 rounded-md flex items-center justify-center text-xs font-black"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',
@@ -152,7 +152,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
           >
             CF
           </div>
-          <span className="text-[12px] font-bold">acme-monorepo</span>
+          <span className="text-base font-bold">acme-monorepo</span>
           <ChevronDown className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         </button>
 
@@ -186,7 +186,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             onClick={() => { setPaletteOpen(true); }}
             aria-label={t('palette.trigger')}
             title={t('palette.trigger')}
-            className="hidden sm:inline-flex items-center gap-2 h-7 pl-2.5 pr-1.5 rounded-md text-[11px] transition-colors focus-ring"
+            className="hidden sm:inline-flex items-center gap-2 h-7 pl-2.5 pr-1.5 rounded-md text-sm transition-colors focus-ring"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-muted)',
@@ -194,9 +194,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
             }}
           >
             <Search className="w-3.5 h-3.5" />
-            <span className="text-[10px]">{t('palette.placeholder')}</span>
+            <span className="text-xs">{t('palette.placeholder')}</span>
             <span
-              className="ml-2 text-[9px] font-mono px-1.5 py-0.5 rounded"
+              className="ml-2 text-2xs font-mono px-1.5 py-0.5 rounded"
               style={{
                 background: 'var(--bg-canvas)',
                 color: 'var(--fg-subtle)',
@@ -218,7 +218,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             tone="muted"
           />
           <div
-            className="w-7 h-7 rounded-full bg-gradient-to-br flex items-center justify-center text-[10px] font-black ml-1"
+            className="w-7 h-7 rounded-full bg-gradient-to-br flex items-center justify-center text-xs font-black ml-1"
             style={{
               backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
               color: 'var(--bg-canvas)',

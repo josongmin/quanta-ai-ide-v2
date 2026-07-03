@@ -90,17 +90,17 @@ export default function SdksPage() {
           <Package className="w-4 h-4" />
         </div>
         <div className="flex flex-col gap-1">
-          <h3 className="text-[12px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+          <h3 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             Don&apos;t see your language?
           </h3>
-          <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+          <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
             The REST API is generated from an OpenAPI spec — vote on the next SDK, or generate your own client.
           </p>
         </div>
         <div className="ml-auto flex items-center gap-2">
           <a
             href="https://api.acme.dev/openapi.json"
-            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-sm font-semibold transition-colors"
             style={{
               background: 'var(--bg-surface-muted)',
               border: '1px solid var(--border-default)',
@@ -112,7 +112,7 @@ export default function SdksPage() {
           </a>
           <button
             type="button"
-            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-[11px] font-semibold transition-colors"
+            className="inline-flex items-center gap-1 h-7 px-3 rounded-md text-sm font-semibold transition-colors"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             Request an SDK
@@ -135,7 +135,7 @@ function SdkCard({ sdk }: { sdk: SDK }) {
       <div className="p-5 flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center text-[12px] font-bold"
+            className="w-10 h-10 rounded-lg flex items-center justify-center text-base font-bold"
             style={{
               backgroundImage: `linear-gradient(135deg, ${sdk.tone.from}, ${sdk.tone.to})`,
               color: '#fff',
@@ -144,14 +144,14 @@ function SdkCard({ sdk }: { sdk: SDK }) {
             {sdk.lang.slice(0, 2)}
           </div>
           <div className="flex flex-col">
-            <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+            <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
               {sdk.lang}
             </h3>
-            <code className="text-[11px] font-mono" style={{ color: 'var(--fg-subtle)' }}>{sdk.pkg}</code>
+            <code className="text-sm font-mono" style={{ color: 'var(--fg-subtle)' }}>{sdk.pkg}</code>
           </div>
         </div>
         <span
-          className="inline-flex items-center gap-1 px-2 h-5 rounded text-[10px] font-bold tabular-nums"
+          className="inline-flex items-center gap-1 px-2 h-5 rounded text-xs font-bold tabular-nums"
           style={{
             color: 'var(--intent-success-fg)',
             background: 'var(--intent-success-bg)',
@@ -161,7 +161,7 @@ function SdkCard({ sdk }: { sdk: SDK }) {
         </span>
       </div>
 
-      <div className="px-5 pb-3 flex items-center gap-4 text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <div className="px-5 pb-3 flex items-center gap-4 text-sm" style={{ color: 'var(--fg-muted)' }}>
         <span className="inline-flex items-center gap-1">
           <Star className="w-3 h-3" />
           <span className="tabular-nums">{sdk.stars}</span>
@@ -175,7 +175,7 @@ function SdkCard({ sdk }: { sdk: SDK }) {
       <CopyableField value={sdk.install} layout="row" button="icon" className="mx-5 mb-3" />
 
       <pre
-        className="px-5 pb-5 m-0 text-[11px] font-mono overflow-x-auto"
+        className="px-5 pb-5 m-0 text-sm font-mono overflow-x-auto"
         style={{ color: 'var(--fg-strong)' }}
       >
         {sdk.example}

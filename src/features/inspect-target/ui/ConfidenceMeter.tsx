@@ -35,7 +35,7 @@ export const ConfidenceMeter = memo(function ConfidenceMeter({
       {/* Caption-weight, not section-weight — the bar itself carries the
           attention; this just disambiguates it from the gauge above. */}
       <div
-        className="flex items-baseline justify-between text-[9px] font-mono"
+        className="flex items-baseline justify-between text-2xs font-mono"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>{t('filesByConfidence')}</span>
@@ -58,12 +58,12 @@ export const ConfidenceMeter = memo(function ConfidenceMeter({
         {segs.map((s) => {
           const segPct = Math.round((s.n / safeTotal) * 100);
           return (
-            <div key={s.k} className="flex items-center gap-1.5 text-[10px]">
+            <div key={s.k} className="flex items-center gap-1.5 text-xs">
               <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: s.hue }} />
               <span className="flex-1" style={{ color: 'var(--fg-muted)' }}>{s.k}</span>
               <span className="tabular-nums font-bold" style={{ color: 'var(--fg-default)' }}>{s.n}</span>
               <span
-                className="tabular-nums text-[9px] w-7 text-right"
+                className="tabular-nums text-2xs w-7 text-right"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 {segPct}%

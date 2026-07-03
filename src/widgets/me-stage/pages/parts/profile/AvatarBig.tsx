@@ -33,7 +33,7 @@ export function AvatarBig({ data, setDraft }: { data: ProfileData; setDraft: (v:
         onClick={() => { inputRef.current?.click(); }}
         onDragOver={(e) => { e.preventDefault(); }}
         onDrop={(e) => { e.preventDefault(); accept(e.dataTransfer.files[0]); }}
-        className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-[24px] font-bold tracking-tight transition-colors"
+        className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-3xl font-bold tracking-tight transition-colors"
         style={{
           background: data.avatarUrl ? 'transparent' : 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
           color: 'var(--bg-canvas)',

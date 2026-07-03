@@ -20,13 +20,13 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
         <div className="flex items-center gap-2 mb-1.5">
           <GitPullRequest className="w-3.5 h-3.5" style={{ color: t.textFaint }} />
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('draft.title')}
           </span>
         </div>
-        <div className="text-[11px]" style={{ color: t.textFaint }}>
+        <div className="text-sm" style={{ color: t.textFaint }}>
           {fixCase.loop.aborted ? tr('draft.abortedBody') : tr('draft.pendingBody')}
         </div>
       </div>
@@ -62,20 +62,20 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
       >
         <GitPullRequest className="w-3.5 h-3.5" style={{ color: t.textMuted }} />
         <span
-          className="text-[10px] font-black uppercase tracking-[0.18em]"
+          className="text-xs font-black uppercase tracking-eyebrow"
           style={{ color: t.textMuted }}
         >
           {tr('draft.title')}
         </span>
         <span
-          className="text-[9px] font-mono px-1.5 py-0.5 rounded ml-1"
+          className="text-2xs font-mono px-1.5 py-0.5 rounded ml-1"
           style={{ background: gateBg, color: gateColor }}
         >
           {tr(`gateDecision.${draft.gateDecision}`)}
         </span>
         <button
           type="button"
-          className="ml-auto inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded transition-colors"
+          className="ml-auto inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded transition-colors"
           style={{ background: 'transparent', color: t.textMuted, border: `1px solid ${t.borderSoft}` }}
           title={tr('draft.copyTitle')}
         >
@@ -110,7 +110,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
         <div>
           <Label>{tr('draft.field.why')}</Label>
           <div
-            className="text-[11px] leading-relaxed mt-0.5"
+            className="text-sm leading-relaxed mt-0.5"
             style={{ color: t.textBody }}
           >
             {draft.whyThisFix}
@@ -121,7 +121,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
         <div>
           <Label>{tr('draft.field.validation')}</Label>
           <div
-            className="text-[11px] leading-relaxed mt-0.5 font-mono"
+            className="text-sm leading-relaxed mt-0.5 font-mono"
             style={{ color: t.textBody }}
           >
             {draft.validationSummary}
@@ -164,7 +164,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
           style={{ background: gateBg, borderColor: gateColor + '40' }}
         >
           <div
-            className="text-[9px] font-bold uppercase tracking-[0.14em] mb-0.5"
+            className="text-2xs font-bold uppercase tracking-eyebrow mb-0.5"
             style={{ color: gateColor }}
           >
             {tr('draft.gateLine', { decision: tr(`gateDecision.${draft.gateDecision}`) })}
@@ -177,7 +177,7 @@ export function DraftPackageCard({ fixCase }: { fixCase: FixCase }) {
         {/* primary action */}
         <button
           type="button"
-          className="w-full rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.14em] flex items-center justify-center gap-1.5 transition-opacity hover:opacity-90"
+          className="w-full rounded-md py-2 text-sm font-bold uppercase tracking-eyebrow flex items-center justify-center gap-1.5 transition-opacity hover:opacity-90"
           style={
             draft.gateDecision === 'auto-submit'
               ? { background: t.ok, color: 'var(--fg-on-accent)' }
@@ -196,7 +196,7 @@ function Label({ children }: { children: React.ReactNode }) {
   const t = useVfx();
   return (
     <div
-      className="text-[9px] font-bold uppercase tracking-[0.16em] flex items-center gap-1"
+      className="text-2xs font-bold uppercase tracking-[0.16em] flex items-center gap-1"
       style={{ color: t.textFaint }}
     >
       {children}

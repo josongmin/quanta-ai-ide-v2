@@ -67,13 +67,13 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
       <div className="flex items-center gap-1.5 px-3 py-2.5">
         <History className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         <div
-          className="text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('timeMachine.title', { defaultValue: 'Symbol time machine' })}
         </div>
         <span
-          className="ml-auto text-[9px] font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="ml-auto text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: trendColor }}
         >
           {delta > 0 ? '+' : ''}{delta} cyc · {trendLabel}
@@ -140,7 +140,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
                style={{ color: 'var(--intent-danger-fg)' }} />
           <div className="min-w-0 flex-1">
             <div
-              className="text-[10px] font-bold leading-tight"
+              className="text-xs font-bold leading-tight"
               style={{ color: 'var(--fg-default)' }}
             >
               {t('timeMachine.bisect.title', {
@@ -164,7 +164,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
           </div>
           <button
             type="button"
-            className="shrink-0 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-[var(--track-eyebrow)] transition-colors hover-surface"
+            className="shrink-0 px-2 py-1 rounded-md text-2xs font-black uppercase tracking-eyebrow transition-colors hover-surface"
             style={{
               background: 'var(--bg-elevated)',
               color: 'var(--fg-muted)',
@@ -181,7 +181,7 @@ export function SymbolTimeMachine({ file }: { file: FileRecord }) {
         style={{ borderColor: 'var(--border-muted)' }}
       >
         <div
-          className="text-2xs font-black uppercase tracking-[var(--track-eyebrow)]"
+          className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {t('timeMachine.recent', { defaultValue: 'Recent commits' })}

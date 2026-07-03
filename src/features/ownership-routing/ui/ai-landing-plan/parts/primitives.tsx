@@ -44,7 +44,7 @@ export function RevealedBlock({
 export function PhaseLabel({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="text-[9px] font-black uppercase tracking-[0.22em] mb-1.5"
+      className="text-2xs font-black uppercase tracking-[0.22em] mb-1.5"
       style={{ color: 'var(--fg-subtle)' }}
     >
       {children}
@@ -55,7 +55,7 @@ export function PhaseLabel({ children }: { children: React.ReactNode }) {
 export function StrategyPill({ strategy }: { strategy: MergeStrategy }) {
   return (
     <span
-      className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-[0.18em]"
+      className="inline-flex items-center px-2 py-1 rounded-md text-xs font-black uppercase tracking-eyebrow"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-strong)',
@@ -71,7 +71,7 @@ export function RiskPill({ risk }: { risk: RiskBadge }) {
   const tone = riskTone(risk);
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.18em] shrink-0"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-eyebrow shrink-0"
       style={{
         background: tone.bg,
         color: tone.fg,
@@ -86,7 +86,7 @@ export function RiskPill({ risk }: { risk: RiskBadge }) {
 export function KindPill({ kind }: { kind: StackStepKind }) {
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.22em]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',
@@ -103,7 +103,7 @@ export function ReviewerChip({ person }: { person: Person | undefined }) {
     return (
       <div className="flex items-center gap-1.5 min-w-0">
         <PersonAvatar person={undefined} size={22} />
-        <span className="text-[10px] italic" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs italic" style={{ color: 'var(--fg-subtle)' }}>
           unassigned
         </span>
       </div>
@@ -117,13 +117,13 @@ export function ReviewerChip({ person }: { person: Person | undefined }) {
       <PersonAvatar person={person} size={22} />
       <div className="min-w-0 flex flex-col leading-tight">
         <span
-          className="text-[11px] font-semibold truncate"
+          className="text-sm font-semibold truncate"
           style={{ color: person.active ? 'var(--fg-default)' : 'var(--fg-muted)' }}
         >
           {person.name}
         </span>
         <span
-          className="text-[9px] font-mono truncate"
+          className="text-2xs font-mono truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {person.team}
@@ -136,7 +136,7 @@ export function ReviewerChip({ person }: { person: Person | undefined }) {
 export function StepNumber({ n }: { n: number }) {
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full shrink-0 text-[11px] font-black tabular-nums"
+      className="inline-flex items-center justify-center rounded-full shrink-0 text-sm font-black tabular-nums"
       style={{
         width: 24,
         height: 24,
@@ -154,7 +154,7 @@ export function StepNumber({ n }: { n: number }) {
 export function GeneratedPill() {
   return (
     <span
-      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-[0.22em]"
+      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',
@@ -184,7 +184,7 @@ export function FooterButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center px-2.5 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.16em] transition-colors"
+      className="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-[0.16em] transition-colors"
       style={{
         background: primary ? 'var(--bg-active)' : 'transparent',
         color: primary ? 'var(--fg-strong)' : 'var(--fg-default)',

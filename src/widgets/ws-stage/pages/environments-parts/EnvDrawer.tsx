@@ -27,7 +27,7 @@ export function EnvDrawer({
       >
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-muted)' }}>
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="text-[12px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
+            <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
               {env.name}
             </span>
             <TierBadge tier={env.tier} />
@@ -52,13 +52,13 @@ export function EnvDrawer({
           />
 
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Region
             </span>
             <select
               value={env.region}
               onChange={(e) => { onChange({ region: e.target.value as Region }); }}
-              className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+              className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
               style={{
                 background: 'var(--bg-surface-muted)',
                 border: '1px solid var(--border-default)',
@@ -85,10 +85,10 @@ export function EnvDrawer({
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}
           >
             <div className="flex flex-col gap-0.5 min-w-0">
-              <span className="text-[12px] font-medium" style={{ color: 'var(--fg-strong)' }}>
+              <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
                 Block direct push
               </span>
-              <span className="text-[11px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+              <span className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
                 Only the promotion gate can deploy here. Direct pushes are rejected.
               </span>
             </div>
@@ -100,13 +100,13 @@ export function EnvDrawer({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-medium" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
               Promotes from
             </span>
             <select
               value={env.promotesFrom}
               onChange={(e) => { onChange({ promotesFrom: e.target.value }); }}
-              className="h-9 rounded-md px-2.5 text-[12px] outline-none cursor-pointer"
+              className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
               style={{
                 background: 'var(--bg-surface-muted)',
                 border: '1px solid var(--border-default)',
@@ -120,12 +120,12 @@ export function EnvDrawer({
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: 'var(--fg-subtle)' }}>
+            <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
               Recent deploys
             </span>
             <ul className="flex flex-col rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
               {env.deploys.length === 0 ? (
-                <li className="px-3 py-3 text-[11px] text-center" style={{ color: 'var(--fg-subtle)' }}>
+                <li className="px-3 py-3 text-sm text-center" style={{ color: 'var(--fg-subtle)' }}>
                   No deploys yet.
                 </li>
               ) : env.deploys.slice(0, 5).map((d) => (
@@ -135,13 +135,13 @@ export function EnvDrawer({
                   style={{ borderColor: 'var(--border-muted)' }}
                 >
                   <DeployStatusIcon status={d.status} />
-                  <span className="font-mono text-[11px] shrink-0" style={{ color: 'var(--fg-strong)' }}>
+                  <span className="font-mono text-sm shrink-0" style={{ color: 'var(--fg-strong)' }}>
                     {d.sha}
                   </span>
-                  <span className="text-[11px] truncate flex-1" style={{ color: 'var(--fg-muted)' }}>
+                  <span className="text-sm truncate flex-1" style={{ color: 'var(--fg-muted)' }}>
                     {d.by}
                   </span>
-                  <span className="text-[10px] tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
+                  <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                     {d.at}
                   </span>
                 </li>

@@ -38,7 +38,7 @@ export function StepReveal({
             <div className="flex items-center gap-2 min-w-0">
               <KindPill kind={step.kind} />
               <h4
-                className="text-[12px] font-semibold leading-snug truncate"
+                className="text-base font-semibold leading-snug truncate"
                 style={{ color: 'var(--fg-strong)' }}
               >
                 {step.title}
@@ -49,7 +49,7 @@ export function StepReveal({
           <div className="flex items-center justify-between gap-2 pt-0.5">
             <ReviewerChip person={reviewer} />
             <span
-              className="text-[9px] font-mono tabular-nums shrink-0"
+              className="text-2xs font-mono tabular-nums shrink-0"
               style={{ color: 'var(--fg-subtle)' }}
             >
               ~{step.estimatedDiffLines} LOC

@@ -101,7 +101,7 @@ export function DecisionHeadsUp({
         >
           {verdictLabel}
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)] tabular-nums">
+        <span className="text-xs font-mono text-[var(--fg-subtle)] tabular-nums">
           #{pr.number}
         </span>
       </span>
@@ -127,7 +127,7 @@ export function DecisionHeadsUp({
         ))}
         {pr.hasConflicts && (
           <span
-            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-xs font-bold uppercase tracking-[var(--track-eyebrow)]"
+            className="inline-flex items-center gap-1 px-1.5 h-5 rounded text-xs font-bold uppercase tracking-eyebrow"
             style={{ background: `color-mix(in srgb, ${severityColors.blocker} 11%, transparent)`, color: severityColors.blocker, border: `1px solid color-mix(in srgb, ${severityColors.blocker} 33%, transparent)` }}
           >
             conflict
@@ -141,7 +141,7 @@ export function DecisionHeadsUp({
           type="button"
           disabled={!canDecide}
           onClick={() => { submitReview(pr.number, 'approve', 'Looks good!', viewerLogin); }}
-          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
+          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-bold uppercase tracking-eyebrow transition-colors disabled:opacity-40 hover:brightness-110"
           style={{
             background: 'var(--intent-success-bg)',
             color: 'var(--intent-success-fg)',
@@ -155,7 +155,7 @@ export function DecisionHeadsUp({
           type="button"
           disabled={!canDecide}
           onClick={() => { submitReview(pr.number, 'request-changes', 'Please address findings.', viewerLogin); }}
-          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-40 hover:brightness-110"
+          className="inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-sm font-bold uppercase tracking-eyebrow transition-colors disabled:opacity-40 hover:brightness-110"
           style={{
             background: 'var(--intent-danger-bg)',
             color: 'var(--intent-danger-fg)',
@@ -184,12 +184,12 @@ function HeadsUpStat({
   return (
     <span className="inline-flex items-baseline gap-1 shrink-0">
       <span
-        className="text-[12px] font-bold tabular-nums leading-none"
+        className="text-base font-bold tabular-nums leading-none"
         style={{ color: color ?? 'var(--fg-default)' }}
       >
         {value}{unit ?? ''}
       </span>
-      <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]">
+      <span className="text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]">
         {label}
       </span>
     </span>

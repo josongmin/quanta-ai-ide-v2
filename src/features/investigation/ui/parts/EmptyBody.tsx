@@ -27,13 +27,13 @@ export function EmptyBody({ onPick }: { onPick: (target: InvestigationTarget) =>
         />
         <div>
           <div
-            className="text-[12px] font-bold"
+            className="text-base font-bold"
             style={{ color: 'var(--fg-default)' }}
           >
             No investigation in progress
           </div>
           <div
-            className="text-[10px] mt-1"
+            className="text-xs mt-1"
             style={{ color: 'var(--fg-subtle)' }}
           >
             Pick a demo target — files, symbols, or incidents.
@@ -43,7 +43,7 @@ export function EmptyBody({ onPick }: { onPick: (target: InvestigationTarget) =>
       {grouped.map(({ kind, items }) => (
         <div key={kind}>
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em] mb-1 px-0.5 flex items-center justify-between"
+            className="text-2xs font-black uppercase tracking-eyebrow mb-1 px-0.5 flex items-center justify-between"
             style={{ color: 'var(--fg-muted)' }}
           >
             <span>{KIND_GROUP_LABEL[kind]}</span>

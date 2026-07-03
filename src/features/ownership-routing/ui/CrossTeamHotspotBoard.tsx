@@ -55,7 +55,7 @@ function SeverityBadge({ severity }: { severity: Severity }) {
   const v = SEVERITY_VISUALS[severity];
   return (
     <span
-      className="text-[9px] font-bold uppercase tracking-[0.12em] px-1.5 py-0.5 rounded-md border"
+      className="text-2xs font-bold uppercase tracking-[0.12em] px-1.5 py-0.5 rounded-md border"
       style={{
         background: v.bgVar,
         color: v.fgVar,
@@ -70,7 +70,7 @@ function SeverityBadge({ severity }: { severity: Severity }) {
 function TeamChip({ team }: { team: string }) {
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-medium tracking-[0.04em]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-medium tracking-[0.04em]"
       style={{
         background: 'var(--bg-surface-muted)',
         color: 'var(--fg-muted)',
@@ -90,7 +90,7 @@ function TeamChain({ teams }: { teams: string[] }) {
           {i > 0 && (
             <span
               aria-hidden
-              className="text-[10px] font-medium select-none"
+              className="text-xs font-medium select-none"
               style={{ color: 'var(--fg-subtle)' }}
             >
               ↔
@@ -142,7 +142,7 @@ function HotspotRow({
         <div className="flex items-center gap-1.5 min-w-0">
           <SeverityDot severity={hotspot.severity} />
           <span
-            className={`text-[10px] font-semibold uppercase tracking-[0.10em] truncate ${
+            className={`text-xs font-semibold uppercase tracking-[0.10em] truncate ${
               isPath ? 'font-mono' : ''
             }`}
             style={{ color: 'var(--fg-default)' }}
@@ -152,7 +152,7 @@ function HotspotRow({
         </div>
         <TeamChain teams={hotspot.teams} />
         <span
-          className="text-[11px] leading-snug"
+          className="text-sm leading-snug"
           style={{ color: 'var(--fg-muted)' }}
         >
           {hotspot.reason}
@@ -161,7 +161,7 @@ function HotspotRow({
       <div className="flex flex-col items-end gap-1.5 shrink-0">
         <SeverityBadge severity={hotspot.severity} />
         <span
-          className="text-[10px] font-mono tabular-nums"
+          className="text-xs font-mono tabular-nums"
           style={{ color: 'var(--fg-muted)' }}
         >
           <span style={{ color: 'var(--fg-default)' }}>
@@ -202,7 +202,7 @@ export function CrossTeamHotspotBoard({
             ))}
           </div>
           <div
-            className="mt-2 pt-2 border-t text-[10px] italic"
+            className="mt-2 pt-2 border-t text-xs italic"
             style={{
               borderColor: 'var(--border-muted)',
               color: 'var(--fg-subtle)',

@@ -40,7 +40,7 @@ export function ChannelCard({
         </div>
         {badge && (
           <span
-            className="inline-flex items-center gap-1.5 px-2 h-6 rounded-full text-[10px] font-semibold"
+            className="inline-flex items-center gap-1.5 px-2 h-6 rounded-full text-xs font-semibold"
             style={{ color: 'var(--intent-success-fg)', background: 'var(--intent-success-bg)' }}
           >
             <StatusDot intent="success" size="xs" pulse />
@@ -48,10 +48,10 @@ export function ChannelCard({
           </span>
         )}
       </div>
-      <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>{title}</h3>
-      <p className="text-[12px] leading-snug" style={{ color: 'var(--fg-muted)' }}>{blurb}</p>
+      <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>{title}</h3>
+      <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>{blurb}</p>
       <span
-        className="text-[11px] font-semibold mt-1 inline-flex items-center gap-1"
+        className="text-sm font-semibold mt-1 inline-flex items-center gap-1"
         style={{ color: 'var(--fg-link)' }}
       >
         {cta} <ChevronRight className="w-3 h-3" />

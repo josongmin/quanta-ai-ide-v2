@@ -50,10 +50,10 @@ export function FilesScene({
     <V2Card className="p-5">
       <div className="flex items-center gap-2">
         <FileCode className="w-3.5 h-3.5 text-[var(--fg-muted)]" />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Files
         </span>
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {pr.files.length} files · {viewedCount} viewed · +{pr.added} / −{pr.removed}
         </span>
       </div>
@@ -61,7 +61,7 @@ export function FilesScene({
       <HunkNavigator file={activeFile} />
 
       {sorted.length === 0 ? (
-        <div className="mt-4 text-[12px] italic text-[var(--fg-subtle)]">{t('empty.noFiles')}</div>
+        <div className="mt-4 text-base italic text-[var(--fg-subtle)]">{t('empty.noFiles')}</div>
       ) : (
         <ul className="mt-3 space-y-1">
           {sorted.slice(0, 10).map((f) => (
@@ -78,7 +78,7 @@ export function FilesScene({
             />
           ))}
           {sorted.length > 10 && (
-            <li className="px-2 py-1 text-[11px] font-mono text-[var(--fg-subtle)]">
+            <li className="px-2 py-1 text-sm font-mono text-[var(--fg-subtle)]">
               +{String(sorted.length - 10)} more files…
             </li>
           )}
@@ -121,10 +121,10 @@ function FileScannerRow({
     >
       <button type="button" onClick={onClick} className="flex-1 min-w-0 flex items-center gap-2 text-left">
         <FileKindIcon kind={f.kind} />
-        <span className="text-[12px] font-mono truncate text-[var(--fg-strong)]">{f.path}</span>
+        <span className="text-base font-mono truncate text-[var(--fg-strong)]">{f.path}</span>
         {isHot && (
           <span
-            className="shrink-0 inline-flex items-center px-1 h-4 rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            className="shrink-0 inline-flex items-center px-1 h-4 rounded-sm text-2xs font-bold uppercase tracking-eyebrow"
             title={`Hot-spot: ${String(f.hunks.length)} hunks · ${String(total)} LOC. Likely to hide regressions.`}
             style={{ background: 'var(--intent-warn-bg)', color: 'var(--intent-warn-fg)', border: '1px solid color-mix(in srgb, var(--intent-warn-fg) 40%, transparent)' }}
           >
@@ -133,7 +133,7 @@ function FileScannerRow({
         )}
         {prodIncidents !== null && prodIncidents.length > 0 && (
           <span
-            className="shrink-0 inline-flex items-center px-1 h-4 rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+            className="shrink-0 inline-flex items-center px-1 h-4 rounded-sm text-2xs font-bold uppercase tracking-eyebrow"
             title={`Overlaps ${String(prodIncidents.length)} prior incident${prodIncidents.length === 1 ? '' : 's'}: ${prodIncidents.join(', ')}`}
             style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)', border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 45%, transparent)' }}
           >
@@ -142,7 +142,7 @@ function FileScannerRow({
         )}
         {isTest && (
           <span
-            className="shrink-0 inline-flex items-center px-1 h-4 rounded-sm text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)]"
+            className="shrink-0 inline-flex items-center px-1 h-4 rounded-sm text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)]"
             style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-default)' }}
           >
             test
@@ -150,7 +150,7 @@ function FileScannerRow({
         )}
         {cov !== null && cov.drop >= 3 && (
           <span
-            className="shrink-0 inline-flex items-center gap-0.5 text-[10px] font-mono tabular-nums"
+            className="shrink-0 inline-flex items-center gap-0.5 text-xs font-mono tabular-nums"
             title={`Coverage ${String(cov.before)}% → ${String(cov.after)}% (-${String(cov.drop)}pp)`}
             style={{ color: blockerColor }}
           >
@@ -158,7 +158,7 @@ function FileScannerRow({
           </span>
         )}
       </button>
-      <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-mono tabular-nums">
+      <span className="shrink-0 inline-flex items-center gap-1 text-xs font-mono tabular-nums">
         <span style={{ color: 'color-mix(in srgb, var(--intent-success-vivid) 85%, transparent)' }}>+{f.added}</span>
         <span style={{ color: 'color-mix(in srgb, var(--intent-danger-vivid) 85%, transparent)' }}>−{f.removed}</span>
       </span>

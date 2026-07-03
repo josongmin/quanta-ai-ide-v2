@@ -42,7 +42,7 @@ export function IncidentCard({ incident }: { incident: Incident }) {
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
       >
         <span
-          className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-[10px] uppercase tracking-[0.14em] font-semibold shrink-0"
+          className="inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs uppercase tracking-eyebrow font-semibold shrink-0"
           style={{
             background: bg,
             color: fg,
@@ -53,8 +53,8 @@ export function IncidentCard({ incident }: { incident: Incident }) {
           {incident.status}
         </span>
         <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-          <span className="text-[14px] font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>{incident.title}</span>
-          <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-lg font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>{incident.title}</span>
+          <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
             <span className="font-mono">{incident.startedAt}</span>
             {incident.resolvedAt && <> → <span className="font-mono">{incident.resolvedAt}</span></>}
             {' · '}Affected: {incident.affected.join(' · ')}
@@ -87,12 +87,12 @@ export function IncidentCard({ incident }: { incident: Incident }) {
                   }}
                 />
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: i === 0 ? fg : 'var(--fg-muted)' }}>
+                  <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: i === 0 ? fg : 'var(--fg-muted)' }}>
                     {u.status}
                   </span>
-                  <span className="font-mono text-[10px]" style={{ color: 'var(--fg-subtle)' }}>{u.at}</span>
+                  <span className="font-mono text-xs" style={{ color: 'var(--fg-subtle)' }}>{u.at}</span>
                 </div>
-                <p className="text-[12px] leading-relaxed" style={{ color: 'var(--fg-default)' }}>{u.body}</p>
+                <p className="text-base leading-relaxed" style={{ color: 'var(--fg-default)' }}>{u.body}</p>
               </div>
             ))}
           </div>

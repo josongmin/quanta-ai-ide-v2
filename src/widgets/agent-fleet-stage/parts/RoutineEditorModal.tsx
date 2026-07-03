@@ -65,7 +65,7 @@ export default function RoutineEditorModal({
         className={`relative w-full max-w-[640px] max-h-[80vh] flex flex-col rounded-xl border shadow-2xl ${surface}`}
       >
         <div className={`shrink-0 flex items-center justify-between px-5 py-3 border-b ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'}`}>
-          <h2 className={`text-[12px] font-bold ${heading}`}>{t('editor.title', { name: draft.name })}</h2>
+          <h2 className={`text-base font-bold ${heading}`}>{t('editor.title', { name: draft.name })}</h2>
           <IconButton icon={X} label="Close" onClick={onClose} size="sm" />
         </div>
 
@@ -77,7 +77,7 @@ export default function RoutineEditorModal({
                 type="button"
                 onClick={() => { setTab(tk); }}
                 aria-pressed={tab === tk}
-                className={`flex-1 px-2 py-1 rounded text-[10px] font-mono transition-colors ${
+                className={`flex-1 px-2 py-1 rounded text-xs font-mono transition-colors ${
                   tab === tk
                     ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black')
                     : (isDark ? 'text-white/45 hover:text-white/75' : 'text-black/45 hover:text-black/75')
@@ -97,7 +97,7 @@ export default function RoutineEditorModal({
           <button
             type="button"
             onClick={onClose}
-            className={`text-[11px] font-mono px-3 py-1.5 rounded-md transition-colors ${
+            className={`text-sm font-mono px-3 py-1.5 rounded-md transition-colors ${
               isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.04]'
             }`}
           >
@@ -106,7 +106,7 @@ export default function RoutineEditorModal({
           <button
             type="button"
             onClick={() => { onSave(draft); }}
-            className="text-[11px] font-mono px-3 py-1.5 rounded-md border border-[color:var(--intent-success-fg)] bg-[color:var(--intent-success-bg)] hover:bg-[color:var(--intent-success-bg)] text-[color:var(--intent-success-fg)] transition-colors"
+            className="text-sm font-mono px-3 py-1.5 rounded-md border border-[color:var(--intent-success-fg)] bg-[color:var(--intent-success-bg)] hover:bg-[color:var(--intent-success-bg)] text-[color:var(--intent-success-fg)] transition-colors"
           >
             {t('editor.save')}
           </button>

@@ -65,11 +65,11 @@ export default function ReviewerRotation({
     <V2Card className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <UserPlus className="w-3.5 h-3.5 text-[var(--fg-muted)]" strokeWidth={2} />
-        <span className="text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+        <span className="text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
           Reviewer rotation
         </span>
         <ProvenanceBadge kind="ai" />
-        <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
+        <span className="text-xs font-mono text-[var(--fg-subtle)]">
           {suggestions.length} {suggestions.length === 1 ? 'suggestion' : 'suggestions'}
         </span>
         {gap.hasGap && (
@@ -97,7 +97,7 @@ export default function ReviewerRotation({
               className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-[var(--bg-surface-muted)]"
             >
               <span
-                className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-[11px] font-mono font-bold tabular-nums"
+                className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-sm font-mono font-bold tabular-nums"
                 style={{ background: `color-mix(in srgb, ${tone} 13%, transparent)`, color: tone, border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)` }}
                 title={`Match score ${String(conf)}%`}
               >
@@ -105,7 +105,7 @@ export default function ReviewerRotation({
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[12px] font-bold text-[var(--fg-default)] truncate">
+                  <span className="text-base font-bold text-[var(--fg-default)] truncate">
                     @{s.login}
                   </span>
                   <span className="inline-block h-1 rounded-full bg-[var(--bg-hover)] overflow-hidden flex-1 min-w-12 max-w-32">
@@ -115,7 +115,7 @@ export default function ReviewerRotation({
                     />
                   </span>
                 </div>
-                <div className="mt-1 text-[11px] text-[var(--fg-muted)] leading-snug">
+                <div className="mt-1 text-sm text-[var(--fg-muted)] leading-snug">
                   {s.reasons.join(' · ')}
                 </div>
               </div>
@@ -131,7 +131,7 @@ export default function ReviewerRotation({
                   });
                   requestReviewer(pr.number, s.login);
                 }}
-                className="shrink-0 inline-flex items-center gap-1 h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-[var(--track-eyebrow)] transition-colors disabled:opacity-60"
+                className="shrink-0 inline-flex items-center gap-1 h-7 px-3 rounded-md text-xs font-bold uppercase tracking-eyebrow transition-colors disabled:opacity-60"
                 style={{
                   background: isQueued ? 'color-mix(in srgb, var(--intent-success-fg) 18%, transparent)' : 'var(--bg-hover)',
                   color: isQueued ? 'var(--intent-success-fg)' : 'var(--fg-default)',

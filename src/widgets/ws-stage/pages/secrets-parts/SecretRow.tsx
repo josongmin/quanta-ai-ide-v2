@@ -9,7 +9,7 @@ export function SecretRow({
   return (
     <div
       role="row"
-      className="grid items-center px-3 h-12 text-[12px] transition-colors"
+      className="grid items-center px-3 h-12 text-base transition-colors"
       style={{
         gridTemplateColumns: '1fr 220px 110px 100px 32px',
         gap: 12,
@@ -28,7 +28,7 @@ export function SecretRow({
         {secret.scopes.map((sc) => (
           <span
             key={sc}
-            className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+            className="text-xs font-mono px-1.5 py-0.5 rounded"
             style={{
               background: 'var(--bg-surface-muted)',
               color: 'var(--fg-default)',
@@ -39,10 +39,10 @@ export function SecretRow({
           </span>
         ))}
       </div>
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="tabular-nums text-sm" style={{ color: 'var(--fg-muted)' }}>
         {secret.lastRotated}
       </span>
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="tabular-nums text-sm" style={{ color: 'var(--fg-muted)' }}>
         {secret.lastAccessed}
       </span>
       <RowMenu

@@ -12,7 +12,7 @@ export function AddOns({
 }) {
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-[10px] uppercase tracking-[0.14em] font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
+      <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
         Add-ons
       </legend>
       <div className="flex flex-col gap-1.5">
@@ -43,15 +43,15 @@ export function AddOns({
                 {enabled && available && <Check className="w-2.5 h-2.5" style={{ color: 'var(--bg-canvas)' }} />}
               </span>
               <div className="flex flex-col flex-1 min-w-0">
-                <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+                <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
                   {a.label}
                 </span>
-                <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+                <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
                   {a.sub}
                   {!available && ` · Not available on ${labelFor(plan)}`}
                 </span>
               </div>
-              <span className="text-[11px] font-mono tabular-nums shrink-0" style={{ color: 'var(--fg-default)' }}>
+              <span className="text-sm font-mono tabular-nums shrink-0" style={{ color: 'var(--fg-default)' }}>
                 +${a.monthlyPerSeat}/seat/mo
               </span>
             </button>

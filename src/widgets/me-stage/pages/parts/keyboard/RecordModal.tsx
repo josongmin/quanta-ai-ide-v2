@@ -47,16 +47,16 @@ export function RecordModal({
           boxShadow: 'var(--shadow-lg)',
         }}
       >
-        <h3 className="text-[14px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+        <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           Record shortcut for &quot;{shortcut.label}&quot;
         </h3>
-        <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
           Press the keys you want to use. Modifier-only combos like ⇧ alone won&apos;t be captured.
           Press <span className="font-mono">Esc</span> twice to cancel without saving.
         </p>
 
         <div
-          className="flex items-center justify-center h-20 rounded-md font-mono text-[18px] tabular-nums onb-stagger"
+          className="flex items-center justify-center h-20 rounded-md font-mono text-2xl tabular-nums onb-stagger"
           style={{
             background: 'var(--bg-canvas)',
             border: `1.5px ${recorded ? 'solid' : 'dashed'} ${recorded ? 'var(--fg-accent)' : 'var(--border-default)'}`,
@@ -67,7 +67,7 @@ export function RecordModal({
         </div>
 
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[11px]" style={{ color: 'var(--fg-subtle)' }}>
+          <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
             Default: <span className="font-mono">{shortcut.defaultKey}</span>
           </span>
           <div className="flex items-center gap-1.5">

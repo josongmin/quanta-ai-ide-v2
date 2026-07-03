@@ -13,7 +13,7 @@ function ThinkingBlockViewImpl({ block }: { block: ThinkingBlock }) {
     <div>
       <button type="button"
         onClick={() => { setOpen((v) => !v); }}
-        className={`group flex items-center gap-1.5 text-[11px] font-medium transition-colors ${muted} hover:text-[color:var(--fg-default)]`}
+        className={`group flex items-center gap-1.5 text-sm font-medium transition-colors ${muted} hover:text-[color:var(--fg-default)]`}
       >
         <Brain className="w-3 h-3" />
         <span>{t('block.thoughtFor', { seconds })}</span>
@@ -21,13 +21,13 @@ function ThinkingBlockViewImpl({ block }: { block: ThinkingBlock }) {
       </button>
       {open && (
         <div
-          className="mt-1.5 ml-4 pl-3 border-l text-[12px] leading-[1.6] italic border-[color:var(--border-default)] text-[color:var(--fg-muted)]"
+          className="mt-1.5 ml-4 pl-3 border-l text-base leading-[1.6] italic border-[color:var(--border-default)] text-[color:var(--fg-muted)]"
         >
           {block.text}
         </div>
       )}
       {!open && (
-        <div className={`ml-4 mt-0.5 text-[11px] ${faint} italic line-clamp-1`}>
+        <div className={`ml-4 mt-0.5 text-sm ${faint} italic line-clamp-1`}>
           {block.text}
         </div>
       )}

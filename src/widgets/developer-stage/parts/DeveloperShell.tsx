@@ -20,7 +20,7 @@ export type DevPath =
 function hint(text: string) {
   return (
     <span
-      className="text-[10px] truncate opacity-60"
+      className="text-xs truncate opacity-60"
       style={{ color: 'var(--fg-subtle)' }}
     >
       {text}
@@ -105,10 +105,10 @@ function PlatformCard() {
         <Terminal className="w-4 h-4" />
       </div>
       <div className="flex flex-col min-w-0">
-        <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>
+        <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
           Developer platform
         </span>
-        <span className="text-[10px]" style={{ color: 'var(--fg-subtle)' }}>
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
           API · CLI · SDKs
         </span>
       </div>
@@ -120,7 +120,7 @@ function Breadcrumb({ pageTitle }: { pageTitle: string }) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex items-center gap-1 text-[11px]"
+      className="flex items-center gap-1 text-sm"
       style={{ color: 'var(--fg-subtle)' }}
     >
       <span>Developers</span>

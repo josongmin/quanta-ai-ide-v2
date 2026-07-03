@@ -38,10 +38,10 @@ export function DepRow({ path, n, dir }: { path: string; n: number; dir: 'in' | 
           dir === 'in' ? 'rotate-180' : ''
         }`}
       />
-      <span className="flex-1 text-[11px] font-mono truncate text-[var(--fg-muted)]">
+      <span className="flex-1 text-sm font-mono truncate text-[var(--fg-muted)]">
         {path ? path.split('.').join('/') : t('deps.rootLabel')}
       </span>
-      <span className="text-[10px] tabular-nums font-bold text-[var(--fg-strong)]">
+      <span className="text-xs tabular-nums font-bold text-[var(--fg-strong)]">
         {n}
       </span>
     </div>

@@ -93,7 +93,7 @@ export function VerdictHero({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-2 h-4">
-              <span className="text-xs font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)]">
+              <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-muted)]">
                 pull request
               </span>
               <span className="text-xs font-mono text-[var(--fg-subtle)] tabular-nums">
@@ -104,13 +104,13 @@ export function VerdictHero({
             </div>
             <div className="flex items-baseline gap-3 flex-wrap">
               <span
-                className="text-[28px] font-black uppercase tracking-[-0.01em] leading-[0.95]"
+                className="text-4xl font-black uppercase tracking-[-0.01em] leading-[0.95]"
                 style={{ color: accent }}
               >
                 {verdictLabel}
               </span>
               <span
-                className="text-[14px] font-semibold text-[var(--fg-strong)] truncate max-w-[480px] leading-tight"
+                className="text-lg font-semibold text-[var(--fg-strong)] truncate max-w-[480px] leading-tight"
                 title={pr.title}
               >
                 {pr.title}
@@ -131,7 +131,7 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'approve', 'Looks good!', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-10 rounded-lg text-base font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)] transition-all hover:brightness-115 active:brightness-95 disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-10 rounded-lg text-base font-bold uppercase tracking-eyebrow text-[var(--fg-strong)] transition-all hover:brightness-115 active:brightness-95 disabled:opacity-40"
               style={{
                 background: 'linear-gradient(180deg, color-mix(in srgb, var(--intent-success-fg) 22%, transparent) 0%, color-mix(in srgb, var(--intent-success-fg) 14%, transparent) 100%)',
                 border: '1px solid color-mix(in srgb, var(--intent-success-fg) 55%, transparent)',
@@ -145,7 +145,7 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'request-changes', 'Please address findings.', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-9 rounded-lg text-[11px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-strong)] hover:text-[var(--fg-strong)] transition-colors disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-9 rounded-lg text-sm font-bold uppercase tracking-eyebrow text-[var(--fg-strong)] hover:text-[var(--fg-strong)] transition-colors disabled:opacity-40"
               style={{
                 background: 'var(--intent-danger-bg)',
                 border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 40%, transparent)',
@@ -158,7 +158,7 @@ export function VerdictHero({
               type="button"
               disabled={!canDecide}
               onClick={() => { submitReview(pr.number, 'comment', 'Comment.', viewerLogin); }}
-              className="flex items-center justify-center gap-2 h-8 rounded-md text-sm font-semibold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)] transition-colors disabled:opacity-40"
+              className="flex items-center justify-center gap-2 h-8 rounded-md text-sm font-semibold uppercase tracking-eyebrow text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-hover)] transition-colors disabled:opacity-40"
             >
               <MessageSquare className="w-3 h-3" strokeWidth={2.25} />
               Comment
@@ -182,7 +182,7 @@ export function VerdictHero({
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-xs font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] shrink-0">
+          <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)] shrink-0">
             pace
           </span>
           <EffortMeter effort={effort} />
@@ -233,7 +233,7 @@ function HeroStatCell({
         background: isLive ? `color-mix(in srgb, ${color} 6%, transparent)` : 'var(--bg-surface-muted)',
       }}
     >
-      <span className="text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)] text-[var(--fg-subtle)] leading-none">
+      <span className="text-2xs font-bold uppercase tracking-eyebrow text-[var(--fg-subtle)] leading-none">
         {label}
       </span>
       <span
@@ -258,7 +258,7 @@ function PrStatusPill({ status }: { status: PrStatus }) {
   const m = map[status];
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+      className="inline-flex items-center px-1.5 py-0.5 rounded-full text-2xs font-bold uppercase tracking-eyebrow"
       style={{ background: `color-mix(in srgb, ${m.color} 13%, transparent)`, color: m.color }}
     >
       {m.label}

@@ -5,7 +5,7 @@ export function DotPill({
 }: { tone: string; label: string; title: string }) {
   return (
     <span
-      className="inline-flex items-center gap-1 px-1.5 h-5 rounded-full text-[10px] font-mono tabular-nums"
+      className="inline-flex items-center gap-1 px-1.5 h-5 rounded-full text-xs font-mono tabular-nums"
       style={{
         background: `color-mix(in srgb, ${tone} 10%, transparent)`,
         border: `1px solid color-mix(in srgb, ${tone} 33%, transparent)`,

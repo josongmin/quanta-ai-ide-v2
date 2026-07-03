@@ -32,7 +32,7 @@ function StepCard({ step }: { step: ChangeStep }) {
     >
       <div className="flex items-start gap-2.5">
         <span
-          className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-mono font-bold tabular-nums shrink-0"
+          className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-mono font-bold tabular-nums shrink-0"
           style={{
             background: 'var(--bg-elevated)',
             color: 'var(--fg-default)',
@@ -47,7 +47,7 @@ function StepCard({ step }: { step: ChangeStep }) {
               {KIND_LABEL[step.kind]}
             </Badge>
             <span
-              className="text-[11px] font-bold truncate"
+              className="text-sm font-bold truncate"
               style={{ color: 'var(--fg-default)' }}
             >
               {step.title}
@@ -55,7 +55,7 @@ function StepCard({ step }: { step: ChangeStep }) {
           </div>
 
           <p
-            className="mt-1.5 text-[10px] leading-snug"
+            className="mt-1.5 text-xs leading-snug"
             style={{ color: 'var(--fg-muted)' }}
           >
             {step.rationale}
@@ -64,7 +64,7 @@ function StepCard({ step }: { step: ChangeStep }) {
           {step.requiredChecks.length > 0 && (
             <div className="mt-2">
               <div
-                className="text-[8.5px] font-black uppercase tracking-[0.16em] mb-1"
+                className="text-2xs font-black uppercase tracking-[0.16em] mb-1"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 Required checks
@@ -73,7 +73,7 @@ function StepCard({ step }: { step: ChangeStep }) {
                 {step.requiredChecks.map((check) => (
                   <li
                     key={check}
-                    className="px-1.5 py-0.5 rounded text-[9px] font-mono"
+                    className="px-1.5 py-0.5 rounded text-2xs font-mono"
                     style={{
                       background: 'var(--bg-elevated)',
                       color: 'var(--fg-default)',
@@ -89,7 +89,7 @@ function StepCard({ step }: { step: ChangeStep }) {
           {step.obligations.length > 0 && (
             <div className="mt-2">
               <div
-                className="text-[8.5px] font-black uppercase tracking-[0.16em] mb-1"
+                className="text-2xs font-black uppercase tracking-[0.16em] mb-1"
                 style={{ color: 'var(--fg-subtle)' }}
               >
                 Obligations
@@ -98,7 +98,7 @@ function StepCard({ step }: { step: ChangeStep }) {
                 {step.obligations.map((ob) => (
                   <li
                     key={ob}
-                    className="px-1.5 py-0.5 rounded text-[9px] font-mono"
+                    className="px-1.5 py-0.5 rounded text-2xs font-mono"
                     style={{
                       background: 'transparent',
                       color: 'var(--fg-muted)',
@@ -122,7 +122,7 @@ export function PlanTab({ plan }: Props) {
     <div className="space-y-3">
       <section>
         <div
-          className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5"
+          className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
           style={{ color: 'var(--fg-subtle)' }}
         >
           Plan steps
@@ -137,7 +137,7 @@ export function PlanTab({ plan }: Props) {
       {plan.seams.length > 0 && (
         <section>
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5"
+            className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
             Safe seams
@@ -157,14 +157,14 @@ export function PlanTab({ plan }: Props) {
                     {seam.cutKind}
                   </Badge>
                   <span
-                    className="text-[11px] font-mono"
+                    className="text-sm font-mono"
                     style={{ color: 'var(--fg-default)' }}
                   >
                     {seam.nodeId}
                   </span>
                 </div>
                 <p
-                  className="mt-1 text-[10px] leading-snug"
+                  className="mt-1 text-xs leading-snug"
                   style={{ color: 'var(--fg-muted)' }}
                 >
                   {seam.reason}
@@ -178,7 +178,7 @@ export function PlanTab({ plan }: Props) {
       {plan.prSplits.length > 0 && (
         <section>
           <div
-            className="text-[9px] font-black uppercase tracking-[0.18em] mb-1.5"
+            className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
             Suggested PR splits
@@ -195,20 +195,20 @@ export function PlanTab({ plan }: Props) {
               >
                 <div className="flex items-center justify-between gap-2">
                   <span
-                    className="text-[11px] font-bold"
+                    className="text-sm font-bold"
                     style={{ color: 'var(--fg-default)' }}
                   >
                     {split.title}
                   </span>
                   <span
-                    className="text-[9px] font-mono tabular-nums"
+                    className="text-2xs font-mono tabular-nums"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
                     {split.stepIds.length} step{split.stepIds.length === 1 ? '' : 's'}
                   </span>
                 </div>
                 <p
-                  className="mt-1 text-[10px] leading-snug"
+                  className="mt-1 text-xs leading-snug"
                   style={{ color: 'var(--fg-muted)' }}
                 >
                   {split.rationale}

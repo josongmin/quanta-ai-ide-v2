@@ -28,14 +28,14 @@ export function ConfidenceDial({ value }: { value: number }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-[16px] font-black font-mono" style={{ color }}>{pct}</span>
-          <span className="text-[8px] font-bold uppercase tracking-[0.12em]" style={{ color: t.textFaint }}>
+          <span className="text-xl font-black font-mono" style={{ color }}>{pct}</span>
+          <span className="text-2xs font-bold uppercase tracking-[0.12em]" style={{ color: t.textFaint }}>
             {tr('trust.conf')}
           </span>
         </div>
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: t.textFaint }}>
+        <div className="text-xs font-bold uppercase tracking-eyebrow" style={{ color: t.textFaint }}>
           {tr('trust.patchConfidence')}
         </div>
         <div className="text-sm mt-0.5 leading-snug" style={{ color: t.textBody }}>

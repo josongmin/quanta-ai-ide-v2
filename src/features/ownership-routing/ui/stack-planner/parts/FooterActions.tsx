@@ -17,7 +17,7 @@ function FooterButton({
       onClick={onClick}
       disabled={disabled}
       title={tooltip}
-      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-[0.16em] transition-colors disabled:cursor-not-allowed"
+      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-[0.16em] transition-colors disabled:cursor-not-allowed"
       style={{
         background: 'transparent',
         color: disabled ? 'var(--fg-subtle)' : 'var(--fg-default)',
@@ -34,7 +34,7 @@ function FooterButton({
       <span>{label}</span>
       {hint && (
         <span
-          className="text-[8px] font-mono uppercase tracking-[0.18em]"
+          className="text-2xs font-mono uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-subtle)' }}
         >
           {hint}

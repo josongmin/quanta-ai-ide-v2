@@ -18,7 +18,7 @@ export function JoinOrg({ value, onChange }: OrgStepProps) {
 
       {codeCheck.state === 'available' && <RecognizedOrg code={value.inviteCode} />}
 
-      <p className="text-[11px] leading-snug" style={{ color: 'var(--fg-subtle)' }}>
+      <p className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
         Don&apos;t have a code? Ask an admin in your org. Codes look like{' '}
         <span className="font-mono">XXXXX-XXXX-XXXX</span> and are case-insensitive.{' '}
         <span style={{ color: 'var(--fg-default)' }}>
@@ -52,7 +52,7 @@ function InviteCodeField({
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium flex items-center justify-between"
+        className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
         <span>Invite code</span>

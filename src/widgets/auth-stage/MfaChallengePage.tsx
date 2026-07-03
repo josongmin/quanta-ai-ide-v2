@@ -109,7 +109,7 @@ export default function MfaChallengePage() {
         <FallbackHint method={method} onSwitch={setMethod} />
       </div>
 
-      <div className="text-center text-[11px] pt-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
+      <div className="text-center text-sm pt-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
         <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>
           ← Back to sign in
         </Link>

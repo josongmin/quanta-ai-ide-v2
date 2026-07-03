@@ -247,12 +247,12 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
             onChange={(e) => { setQuery(e.target.value); }}
             onKeyDown={onInputKey}
             placeholder="Jump to file, symbol, or finding…"
-            className="flex-1 bg-transparent border-0 outline-none text-[13px] font-mono text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)]"
+            className="flex-1 bg-transparent border-0 outline-none text-md font-mono text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)]"
             aria-label="Search files, symbols, and findings"
             autoComplete="off"
             spellCheck={false}
           />
-          <span className="shrink-0 text-[10px] font-mono text-[var(--fg-subtle)]">
+          <span className="shrink-0 text-xs font-mono text-[var(--fg-subtle)]">
             {visible.length} {visible.length === 1 ? 'result' : 'results'}
           </span>
           <button
@@ -280,7 +280,7 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
           aria-label="Search results"
         >
           {visible.length === 0 ? (
-            <div className="px-3 py-6 text-center text-[12px] text-[var(--fg-subtle)]">
+            <div className="px-3 py-6 text-center text-base text-[var(--fg-subtle)]">
               No matches.
             </div>
           ) : (
@@ -297,7 +297,7 @@ export default function CommandPalette({ pr, repo, onJumpToFile, onJumpToFinding
           )}
         </div>
 
-        <div className="px-4 py-2 border-t border-[var(--border-default)] flex items-center gap-3 text-[10px] font-mono text-[var(--fg-subtle)]">
+        <div className="px-4 py-2 border-t border-[var(--border-default)] flex items-center gap-3 text-xs font-mono text-[var(--fg-subtle)]">
           <span className="inline-flex items-center gap-1.5">
             <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">↑</kbd>
             <kbd className="px-1 rounded bg-[var(--bg-elevated)] border border-[var(--border-default)]">↓</kbd>
@@ -356,15 +356,15 @@ function PaletteRow({
         <RowIcon kind={item.kind} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[12px] font-mono text-[var(--fg-default)] truncate">
+        <span className="block text-base font-mono text-[var(--fg-default)] truncate">
           {labelFor(item)}
         </span>
-        <span className="block text-[10px] font-mono text-[var(--fg-muted)] truncate">
+        <span className="block text-xs font-mono text-[var(--fg-muted)] truncate">
           {sublabelFor(item)}
         </span>
       </span>
       <span
-        className="shrink-0 text-[9px] font-bold uppercase tracking-[var(--track-eyebrow)]"
+        className="shrink-0 text-2xs font-bold uppercase tracking-eyebrow"
         style={{ color: tone }}
       >
         {KIND_LABEL[item.kind]}

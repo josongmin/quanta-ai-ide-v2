@@ -10,7 +10,7 @@ export function SubprocessorsTable() {
       }}
     >
       <div
-        className="grid items-center px-4 h-9 text-[10px] uppercase tracking-[0.14em] font-semibold"
+        className="grid items-center px-4 h-9 text-xs uppercase tracking-eyebrow font-semibold"
         style={{
           gridTemplateColumns: '1.2fr 1.6fr 1fr',
           color: 'var(--fg-subtle)',
@@ -30,9 +30,9 @@ export function SubprocessorsTable() {
             borderBottom: i === SUBPROCESSORS.length - 1 ? 'none' : '1px solid var(--border-muted)',
           }}
         >
-          <span className="text-[12px] font-semibold" style={{ color: 'var(--fg-strong)' }}>{s.name}</span>
-          <span className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>{s.purpose}</span>
-          <span className="text-[11px] font-mono tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{s.region}</span>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{s.name}</span>
+          <span className="text-base" style={{ color: 'var(--fg-muted)' }}>{s.purpose}</span>
+          <span className="text-sm font-mono tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{s.region}</span>
         </div>
       ))}
     </div>

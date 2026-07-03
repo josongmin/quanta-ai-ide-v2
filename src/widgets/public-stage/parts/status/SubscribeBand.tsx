@@ -17,10 +17,10 @@ export function SubscribeBand() {
     >
       <div className="flex flex-col gap-3 min-w-0">
         <Eyebrow tone="info"><Activity className="w-2.5 h-2.5" /> Subscribe</Eyebrow>
-        <h3 className="text-[22px] sm:text-[26px] font-semibold tracking-[-0.018em]" style={{ color: 'var(--fg-strong)' }}>
+        <h3 className="text-3xl sm:text-4xl font-semibold tracking-[-0.018em]" style={{ color: 'var(--fg-strong)' }}>
           Get notified when something breaks.
         </h3>
-        <p className="text-[12px] leading-relaxed max-w-[480px]" style={{ color: 'var(--fg-muted)' }}>
+        <p className="text-base leading-relaxed max-w-[480px]" style={{ color: 'var(--fg-muted)' }}>
           One email per incident, when it opens and again when it resolves. No marketing.
           Webhook + RSS available for status-page-aggregators.
         </p>
@@ -40,14 +40,14 @@ export function SubscribeBand() {
             onChange={(e) => { setEmail(e.target.value); setDone(false); }}
             placeholder="oncall@team.com"
             required
-            className="flex-1 bg-transparent outline-none text-[12px] pr-3"
+            className="flex-1 bg-transparent outline-none text-base pr-3"
             style={{ color: 'var(--fg-strong)' }}
           />
         </div>
         <div className="flex items-center gap-2">
           <button
             type="submit"
-            className="flex-1 inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md text-[12px] font-semibold"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md text-base font-semibold"
             style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
           >
             {done ? 'Subscribed ✓' : 'Subscribe'}

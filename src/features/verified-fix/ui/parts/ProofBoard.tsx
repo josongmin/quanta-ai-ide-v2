@@ -29,20 +29,20 @@ export function ProofBoard({
       >
         <div className="flex items-center gap-2 mb-1.5">
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('proof.rootCause')}
           </span>
           <span
-            className="text-[9px] font-mono px-1.5 py-0.5 rounded"
+            className="text-2xs font-mono px-1.5 py-0.5 rounded"
             style={{ background: t.badgeBg, color: t.textMuted }}
           >
             {tr('proof.seed', { id: seed.id.replace('seed-', '') })}
           </span>
         </div>
         <p
-          className="text-[13px] leading-relaxed mb-3"
+          className="text-md leading-relaxed mb-3"
           style={{ color: t.textHi }}
         >
           {fixCase.rootCause}
@@ -51,14 +51,14 @@ export function ProofBoard({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <div
-              className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5"
+              className="text-2xs font-bold uppercase tracking-eyebrow mb-1.5"
               style={{ color: t.textFaint }}
             >
               {tr('proof.evidence')}
             </div>
             <ul className="space-y-1">
               {seed.evidenceRefs.map((e, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-[11px]">
+                <li key={i} className="flex items-start gap-1.5 text-sm">
                   <span
                     className="font-mono px-1 py-px rounded shrink-0 mt-px"
                     style={{
@@ -88,7 +88,7 @@ export function ProofBoard({
 
           <div>
             <div
-              className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5 flex items-center gap-1"
+              className="text-2xs font-bold uppercase tracking-eyebrow mb-1.5 flex items-center gap-1"
               style={{ color: t.textFaint }}
             >
               <GitFork className="w-2.5 h-2.5" /> {tr('proof.blastHint')}
@@ -97,7 +97,7 @@ export function ProofBoard({
               {seed.blastHint.map((b) => (
                 <span
                   key={b}
-                  className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+                  className="text-xs font-mono px-1.5 py-0.5 rounded"
                   style={{ background: t.infoSoft, color: t.info }}
                 >
                   {b}
@@ -107,7 +107,7 @@ export function ProofBoard({
             {seed.constraints.length > 0 && (
               <>
                 <div
-                  className="text-[9px] font-bold uppercase tracking-[0.14em] mb-1.5 flex items-center gap-1"
+                  className="text-2xs font-bold uppercase tracking-eyebrow mb-1.5 flex items-center gap-1"
                   style={{ color: t.textFaint }}
                 >
                   <FileWarning className="w-2.5 h-2.5" /> {tr('proof.constraints')}
@@ -130,7 +130,7 @@ export function ProofBoard({
             className="mt-3 pt-3 border-t flex items-center gap-3 flex-wrap"
             style={{ borderColor: t.borderSoft }}
           >
-            <span className="text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: t.textFaint }}>
+            <span className="text-2xs font-bold uppercase tracking-[0.16em]" style={{ color: t.textFaint }}>
               {tr('proof.postPatchDelta')}
             </span>
             <DeltaPill
@@ -165,7 +165,7 @@ export function ProofBoard({
       >
         <div className="flex items-center justify-between mb-2.5">
           <span
-            className="text-[10px] font-black uppercase tracking-[0.18em]"
+            className="text-xs font-black uppercase tracking-eyebrow"
             style={{ color: t.textMuted }}
           >
             {tr('proof.obligations')}
@@ -175,11 +175,11 @@ export function ProofBoard({
 
         {!candidate && (
           <div
-            className="text-[11px] py-6 text-center"
+            className="text-sm py-6 text-center"
             style={{ color: t.textFaint }}
           >
             {tr('proof.noCandidate')}
-            <div className="text-[10px] mt-1">{tr('proof.noCandidateHint')}</div>
+            <div className="text-xs mt-1">{tr('proof.noCandidateHint')}</div>
           </div>
         )}
 
@@ -203,7 +203,7 @@ function DeltaPill({ from, to, trend }: { from: string; to: string; trend: 'down
   const bg = good ? t.okSoft : t.warnSoft;
   return (
     <span
-      className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded"
+      className="inline-flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded"
       style={{ background: bg, color }}
     >
       <span style={{ opacity: 0.65 }}>{from}</span>
@@ -231,7 +231,7 @@ function ObligationGroup({ label, items }: { label: string; items: ProofObligati
           return (
             <li
               key={o.id}
-              className="flex items-start gap-2 text-[11px] leading-snug"
+              className="flex items-start gap-2 text-sm leading-snug"
               title={o.detail}
             >
               <span
@@ -248,7 +248,7 @@ function ObligationGroup({ label, items }: { label: string; items: ProofObligati
               </span>
               <span style={{ color: t.textBody }} className="flex-1">
                 {o.label}
-                <div style={{ color: t.textFaint }} className="text-[10px] mt-px">
+                <div style={{ color: t.textFaint }} className="text-xs mt-px">
                   {o.detail}
                 </div>
               </span>
@@ -272,7 +272,7 @@ function CoverageRing({ obligations }: { obligations: ProofObligation[] }) {
   const pct = Math.round(coverage * 100);
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[9px] font-mono" style={{ color: t.textFaint }}>
+      <span className="text-2xs font-mono" style={{ color: t.textFaint }}>
         {tr('proof.coverage')}
       </span>
       <div className="relative w-7 h-7">
@@ -288,7 +288,7 @@ function CoverageRing({ obligations }: { obligations: ProofObligation[] }) {
           />
         </svg>
         <span
-          className="absolute inset-0 flex items-center justify-center text-[9px] font-bold"
+          className="absolute inset-0 flex items-center justify-center text-2xs font-bold"
           style={{ color: ringColor }}
         >
           {pct}

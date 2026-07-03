@@ -20,9 +20,9 @@ export const BarRow = memo(function BarRow({
   const ratio = Math.min(1, value / max);
   const barAlpha = 0.25 + ratio * 0.55; // 0.25 → 0.80
   return (
-    <div className="flex items-center gap-2 text-[11px]" style={{ color: 'var(--fg-default)' }}>
+    <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--fg-default)' }}>
       <span
-        className={`w-[78px] shrink-0 truncate ${mono ? 'font-mono text-[10px]' : ''}`}
+        className={`w-[78px] shrink-0 truncate ${mono ? 'font-mono text-xs' : ''}`}
         style={{ color: 'var(--fg-default)' }}
       >
         {label}
@@ -40,7 +40,7 @@ export const BarRow = memo(function BarRow({
         />
       </div>
       <span
-        className="w-7 text-right tabular-nums font-bold text-[11px]"
+        className="w-7 text-right tabular-nums font-bold text-sm"
         style={{ color: 'var(--fg-default)' }}
       >
         {value}

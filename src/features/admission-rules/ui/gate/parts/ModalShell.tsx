@@ -43,7 +43,7 @@ export function ModalShell({
             style={{ borderBottom: '1px solid var(--border-default)' }}
           >
             <h3
-              className="text-[12px] font-semibold uppercase tracking-[0.14em] flex-1"
+              className="text-base font-semibold uppercase tracking-eyebrow flex-1"
               style={{ color: 'var(--fg-strong)' }}
             >
               {title}
@@ -85,7 +85,7 @@ export function Field({ label, children }: { label: string; children: React.Reac
   return (
     <label className="flex flex-col gap-1.5">
       <span
-        className="text-[10px] uppercase tracking-[0.14em] font-medium"
+        className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
         {label}

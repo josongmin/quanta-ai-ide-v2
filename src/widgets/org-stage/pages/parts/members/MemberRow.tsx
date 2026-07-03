@@ -32,7 +32,7 @@ export function Row({
   return (
     <div
       role="row"
-      className="grid items-center px-3 h-12 text-[12px] transition-colors"
+      className="grid items-center px-3 h-12 text-base transition-colors"
       style={{
         gridTemplateColumns: '24px 1fr 140px 130px 110px 32px',
         gap: 12,
@@ -46,7 +46,7 @@ export function Row({
 
       <div className="flex items-center gap-2.5 min-w-0">
         <div
-          className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+          className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
           style={{
             background: 'var(--bg-surface-muted)',
             border: '1px solid var(--border-muted)',
@@ -67,7 +67,7 @@ export function Row({
               </span>
             )}
           </div>
-          <span className="text-[11px] truncate" style={{ color: 'var(--fg-muted)' }}>
+          <span className="text-sm truncate" style={{ color: 'var(--fg-muted)' }}>
             {member.email}
           </span>
         </div>
@@ -77,7 +77,7 @@ export function Row({
 
       <span className="truncate" style={{ color: 'var(--fg-default)' }}>{member.team}</span>
 
-      <span className="tabular-nums text-[11px]" style={{ color: 'var(--fg-muted)' }}>
+      <span className="tabular-nums text-sm" style={{ color: 'var(--fg-muted)' }}>
         {member.lastActive}
       </span>
 
@@ -91,7 +91,7 @@ function StatusBadge({ status }: { status: Status }) {
   const tone = status === 'invited' ? 'warn' : 'neutral';
   return (
     <span
-      className="text-[9px] uppercase tracking-[0.14em] font-semibold px-1.5 py-0.5 rounded"
+      className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
       style={{
         background: tone === 'warn' ? 'var(--intent-warn-bg)' : 'var(--bg-surface-muted)',
         color: tone === 'warn' ? 'var(--intent-warn-fg)' : 'var(--fg-muted)',
@@ -111,7 +111,7 @@ function RoleSelect({
       value={value}
       onChange={(e) => { onChange(e.target.value as Role); }}
       disabled={disabled}
-      className="h-7 rounded-md px-2 text-[12px] outline-none cursor-pointer w-full"
+      className="h-7 rounded-md px-2 text-base outline-none cursor-pointer w-full"
       style={{
         background: 'var(--bg-surface-muted)',
         border: '1px solid var(--border-default)',
