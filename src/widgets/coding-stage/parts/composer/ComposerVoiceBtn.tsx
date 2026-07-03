@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Mic } from 'lucide-react';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Extracted verbatim from Composer.tsx — byte-for-byte. A separate
 // filename (not the pre-existing orphan composer/VoiceBtn.tsx, which uses
@@ -38,17 +39,15 @@ function getSpeechRecognitionCtor(): SpeechRecognitionCtor | null {
 // mic icon pulses with the breath animation; final transcripts are
 // pushed up via `onTranscript` so the parent can append to the draft.
 export function VoiceBtn({
-  isDark, t, onTranscript, onInterim,
+  onTranscript, onInterim,
 }: {
-  isDark: boolean;
-  t: (k: string) => string;
   onTranscript: (text: string) => void;
   // Called with in-flight (non-final) transcript so the composer can
   // ghost-render it. The empty string signals "clear ghost" — fired on
   // recognition end so the ghost doesn't linger after the mic stops.
   onInterim?: (text: string) => void;
 }) {
-  void isDark;
+  const { t } = useCodingStage();
   const [supported] = useState(() => getSpeechRecognitionCtor() != null);
   const [listening, setListening] = useState(false);
   const recRef = useRef<SpeechRecognitionLike | null>(null);

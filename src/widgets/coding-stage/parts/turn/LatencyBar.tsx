@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import type { AgentTurn } from '../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+import { useCodingStage } from '../../model/CodingStageContext';
 
 const LATENCY_PHASE_TONE: Record<string, string> = {
   thinking: 'var(--identity-out-of-scope)',
@@ -16,12 +15,11 @@ const LATENCY_PHASE_TONE: Record<string, string> = {
 export function LatencyBar({
   durations,
   baseline,
-  t,
 }: {
   durations: NonNullable<AgentTurn['phaseDurationsMs']>;
   baseline?: Record<string, number>;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const entries = Object.entries(durations).filter((e): e is [string, number] => e[1] != null && e[1] > 0);
   if (entries.length === 0) return null;
   const total = entries.reduce((s, [, ms]) => s + ms, 0);

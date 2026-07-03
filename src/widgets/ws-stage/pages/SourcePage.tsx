@@ -7,6 +7,7 @@ import { GithubIcon } from '@shared/ui/brand-icons';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Field, Toggle, Button } from '@shared/ui/forms';
 import { ModalBackdrop, ConfirmDialog, useDialogA11y } from '@shared/ui';
+import { useCopyToClipboard } from '@shared/lib';
 
 type Host = 'github' | 'gitlab' | 'bitbucket';
 
@@ -22,7 +23,7 @@ const PROBED_BRANCH = 'main';
 
 export default function SourcePage() {
   const [host, setHost] = useState<Host>('github');
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: copyRepoUrl } = useCopyToClipboard(1500);
   const [rules, setRules] = useState<ProtectionRule[]>([
     { id: 'pr-review',     label: 'Require pull-request review', sub: 'At least one approving review before merge.',          enabled: true  },
     { id: 'status-checks', label: 'Require status checks',       sub: 'CI must pass on the merge commit.',                    enabled: true  },
@@ -30,12 +31,6 @@ export default function SourcePage() {
   ]);
   const [revealOpen, setRevealOpen] = useState(false);
   const [confirmDisconnect, setConfirmDisconnect] = useState(false);
-
-  const copyRepo = async () => {
-    try { await navigator.clipboard.writeText(REPO_URL); } catch { /* noop */ }
-    setCopied(true);
-    setTimeout(() => { setCopied(false); }, 1500);
-  };
 
   const toggleRule = (id: ProtectionRule['id']) => {
     setRules((all) => all.map((r) => (r.id === id ? { ...r, enabled: !r.enabled } : r)));
@@ -96,7 +91,7 @@ export default function SourcePage() {
           trailing={
             <button
               type="button"
-              onClick={() => { void copyRepo(); }}
+              onClick={() => { copyRepoUrl(REPO_URL); }}
               className="inline-flex items-center gap-1 h-6 px-2 rounded text-sm font-medium"
               style={{
                 background: copied ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',
@@ -252,13 +247,7 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
     return `whsec_${tail}`;
   }, []);
   const [shown, setShown] = useState(true);
-  const [copied, setCopied] = useState(false);
-
-  const copy = async () => {
-    try { await navigator.clipboard.writeText(secret); } catch { /* noop */ }
-    setCopied(true);
-    setTimeout(() => { setCopied(false); }, 1500);
-  };
+  const { copied, copy } = useCopyToClipboard(1500);
 
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onClose);
@@ -314,7 +303,7 @@ function RevealSecretModal({ onClose }: { onClose: () => void }) {
             </button>
             <button
               type="button"
-              onClick={() => { void copy(); }}
+              onClick={() => { copy(secret); }}
               className="inline-flex items-center gap-1 h-7 px-2 rounded text-sm font-medium"
               style={{
                 background: copied ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',

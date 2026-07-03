@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, ArrowRight, Hash, Slash, Sparkles } from 'lucide-react';
 import type { Task } from '../types';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Cmd-K global command palette. Three sections:
 //   - Actions     (parent-supplied callbacks: new task, switch model, …)
@@ -28,8 +29,6 @@ type Props = {
   tasks: Task[];
   onJumpTask: (taskId: string) => void;
   onInsertSlash: (cmd: string) => void;
-  isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
 };
 
 const SLASH_OPTIONS = ['/plan', '/diff', '/test', '/fix', '/explain', '/review', '/clean'];
@@ -40,8 +39,9 @@ type Row =
   | { kind: 'slash';  section: 'slash';   cmd: string };
 
 export function CommandPalette({
-  open, onClose, actions, tasks, onJumpTask, onInsertSlash, isDark, t,
+  open, onClose, actions, tasks, onJumpTask, onInsertSlash,
 }: Props) {
+  const { t, isDark } = useCodingStage();
   const [query, setQuery] = useState('');
   const [index, setIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);

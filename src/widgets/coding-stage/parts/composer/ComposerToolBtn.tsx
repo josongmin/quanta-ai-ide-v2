@@ -3,15 +3,13 @@
 // a different visual treatment) so Composer's rendered output is
 // unchanged.
 export function ToolBtn({
-  icon: Icon, title, isDark, onClick, disabled,
+  icon: Icon, title, onClick, disabled,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   title: string;
-  isDark: boolean;
   onClick?: () => void;
   disabled?: boolean;
 }) {
-  void isDark;
   // Buttons without an onClick are demo-only. We mark them aria-disabled
   // and disable the cursor so users get truthful affordance instead of a
   // dead click.

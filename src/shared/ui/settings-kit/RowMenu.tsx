@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ComponentType } from 'react';
 import { MoreHorizontal } from 'lucide-react';
+import { useRovingMenuFocus } from '@shared/lib';
 
 // Row action menu used 5+ times across settings/admin tables: a MoreHorizontal
 // trigger that toggles a positioned dropdown, with a transparent fixed
@@ -39,9 +40,11 @@ export function RowMenu({
   const px = itemPadding === 'wide' ? 'px-3' : 'px-2.5';
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  // Roving Arrow/Home/End nav. focusOnMount is off because this component
+  // persists and only the menu div is conditionally rendered — so focus is
+  // moved on `open` change (below), not on mount.
+  const { onKeyDown: onRove } = useRovingMenuFocus(menuRef, { focusOnMount: false });
 
-  // Move focus into the menu when it opens so keyboard users land on the
-  // first actionable item (WAI-ARIA menu pattern).
   useEffect(() => {
     if (!open) return;
     menuRef.current
@@ -55,18 +58,9 @@ export function RowMenu({
   };
 
   const onMenuKeyDown = (e: React.KeyboardEvent) => {
+    if (onRove(e)) return;
     if (e.key === 'Escape') { e.preventDefault(); closeAndRestore(); return; }
-    if (e.key === 'Tab') { setOpen(false); return; }
-    const nodes = Array.from(
-      menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled])') ?? [],
-    );
-    if (nodes.length === 0) return;
-    const idx = nodes.indexOf(document.activeElement as HTMLElement);
-    const n = nodes.length;
-    if (e.key === 'ArrowDown') { e.preventDefault(); nodes[(idx + 1 + n) % n]?.focus(); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); nodes[(idx - 1 + n) % n]?.focus(); }
-    else if (e.key === 'Home') { e.preventDefault(); nodes[0]?.focus(); }
-    else if (e.key === 'End') { e.preventDefault(); nodes[n - 1]?.focus(); }
+    if (e.key === 'Tab') setOpen(false);
   };
 
   return (

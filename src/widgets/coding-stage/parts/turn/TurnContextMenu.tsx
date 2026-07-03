@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 import {
   Copy, ClipboardCopy, Share2, Download, FilePlus2, GitPullRequest,
 } from 'lucide-react';
-import { useClickOutside } from '@shared/lib';
+import { useClickOutside, useRovingMenuFocus } from '@shared/lib';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Right-click context menu over a thread turn. Pure presentational —
 // the parent decides where to anchor it (clientX/Y from the contextmenu
@@ -24,7 +25,6 @@ type Props = {
   x: number;
   y: number;
   items: TurnContextMenuItem[];
-  isDark: boolean;
   onClose: () => void;
 };
 
@@ -37,11 +37,16 @@ const ICON_FOR: Record<TurnContextMenuItem['id'], React.ComponentType<{ classNam
   openInNew: FilePlus2,
 };
 
-export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
+export function TurnContextMenu({ x, y, items, onClose }: Props) {
+  const { isDark } = useCodingStage();
   const ref = useRef<HTMLDivElement>(null);
+  // Roving nav + focus-on-mount. skipDisabled:false — these items are never
+  // disabled, so no filter is needed.
+  const { onKeyDown: onRove } = useRovingMenuFocus(ref, { skipDisabled: false });
 
   // Close on outside click (mousedown so we beat the next click that
-  // might land on a different button) and on Escape.
+  // might land on a different button) and on Escape. Escape is a window
+  // listener because a right-click menu has no trigger focus to key off.
   useClickOutside(ref, true, onClose);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -52,26 +57,6 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
       window.removeEventListener('keydown', onKey);
     };
   }, [onClose]);
-
-  // Move focus into the menu on open so it's reachable by keyboard (a
-  // right-click menu has no trigger to tab from).
-  useEffect(() => {
-    ref.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
-  }, []);
-
-  const onMenuKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' &&
-        e.key !== 'Home' && e.key !== 'End') return;
-    e.preventDefault();
-    const nodes = Array.from(ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
-    if (nodes.length === 0) return;
-    const idx = nodes.indexOf(document.activeElement as HTMLElement);
-    const n = nodes.length;
-    if (e.key === 'ArrowDown') nodes[(idx + 1 + n) % n]?.focus();
-    else if (e.key === 'ArrowUp') nodes[(idx - 1 + n) % n]?.focus();
-    else if (e.key === 'Home') nodes[0]?.focus();
-    else nodes[n - 1]?.focus();
-  };
 
   // Bias the menu to the click point but keep it inside the viewport.
   // Width/height are conservative estimates; the menu is small enough
@@ -85,7 +70,7 @@ export function TurnContextMenu({ x, y, items, isDark, onClose }: Props) {
     <div
       ref={ref}
       role="menu"
-      onKeyDown={onMenuKeyDown}
+      onKeyDown={onRove}
       className="fixed z-[60] min-w-[200px] py-1 rounded-md border shadow-2xl bg-[var(--bg-elevated)] border-[color:var(--border-default)]"
       style={isDark ? {
         left, top,

@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { FileCode } from 'lucide-react';
 import type { AgentTurn } from '../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+import { useCodingStage } from '../../model/CodingStageContext';
 
 export function CitationStrip({
   citations,
-  t,
 }: {
   citations: NonNullable<AgentTurn['citations']>;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const [expanded, setExpanded] = useState(false);
   const visible = expanded ? citations : citations.slice(0, 3);
   const overflow = citations.length - visible.length;

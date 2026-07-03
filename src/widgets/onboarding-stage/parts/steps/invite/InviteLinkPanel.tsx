@@ -1,20 +1,16 @@
-import { useState } from 'react';
 import { Link2, Check, Copy, RotateCcw } from 'lucide-react';
+import { useCopyToClipboard } from '@shared/lib';
 import type { WizardData } from '../../wizard';
 
 // Magic invite link — generate, copy, regenerate.
 export function InviteLinkPanel({
   value, onGenerate,
 }: { value: WizardData['invite']; onGenerate: () => void }) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard(1500);
 
-  const copy = async () => {
+  const handleCopy = () => {
     if (!value.inviteLink) return;
-    try {
-      await navigator.clipboard.writeText(value.inviteLink);
-      setCopied(true);
-      setTimeout(() => { setCopied(false); }, 1500);
-    } catch { /* ignore */ }
+    copy(value.inviteLink);
   };
 
   return (
@@ -45,7 +41,7 @@ export function InviteLinkPanel({
           </code>
           <button
             type="button"
-            onClick={() => { void copy(); }}
+            onClick={handleCopy}
             className="inline-flex items-center gap-1 h-7 px-2 rounded-md text-sm font-medium"
             style={{
               background: 'var(--bg-canvas)',

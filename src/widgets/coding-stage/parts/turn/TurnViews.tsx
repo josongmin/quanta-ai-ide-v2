@@ -8,13 +8,10 @@ import { CitationStrip } from './CitationStrip';
 import { ReactionBar } from './ReactionBar';
 import { StreamingDots } from './StreamingDots';
 import type { AgentTurn, ReactionKind, Turn, UserTurn } from '../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+import { useCodingStage } from '../../model/CodingStageContext';
 
 export function TurnView({
   turn,
-  isDark,
-  t,
   onApplyInverse,
   onFork,
   onReact,
@@ -22,8 +19,6 @@ export function TurnView({
   baselinePhaseDurationsMs,
 }: {
   turn: Turn;
-  isDark: boolean;
-  t: TranslateFn;
   onApplyInverse: () => void;
   onFork: () => void;
   onReact: (kind: ReactionKind) => void;
@@ -43,8 +38,6 @@ export function TurnView({
     <div role="presentation" onContextMenu={onCtx}>
       <AgentTurnView
         turn={turn}
-        isDark={isDark}
-        t={t}
         onApplyInverse={onApplyInverse}
         onFork={onFork}
         onReact={onReact}
@@ -86,21 +79,18 @@ function UserTurnView({ turn }: { turn: UserTurn }) {
 
 function AgentTurnView({
   turn,
-  isDark,
-  t,
   onApplyInverse,
   onFork,
   onReact,
   baselinePhaseDurationsMs,
 }: {
   turn: AgentTurn;
-  isDark: boolean;
-  t: TranslateFn;
   onApplyInverse: () => void;
   onFork: () => void;
   onReact: (kind: ReactionKind) => void;
   baselinePhaseDurationsMs?: Record<string, number>;
 }) {
+  const { t } = useCodingStage();
   const muted = 'text-[color:var(--fg-muted)]';
   const faint = 'text-[color:var(--fg-subtle)]';
   const modelLabel = turn.model
@@ -166,7 +156,7 @@ function AgentTurnView({
               {phaseLabel ?? 'streaming'}
             </span>
           )}
-          {turn.streaming && <TpsLiveMeter turn={turn} t={t} />}
+          {turn.streaming && <TpsLiveMeter turn={turn} />}
           {turn.inverseOf && (
             <span
               style={{
@@ -200,20 +190,19 @@ function AgentTurnView({
           <LatencyBar
             durations={turn.phaseDurationsMs}
             baseline={baselinePhaseDurationsMs}
-            t={t}
           />
         )}
         {turn.citations && turn.citations.length > 0 && (
-          <CitationStrip citations={turn.citations} t={t} />
+          <CitationStrip citations={turn.citations} />
         )}
         <div className="space-y-2">
           {turn.blocks.map((block, i) => (
-            <BlockView key={i} block={block} isDark={isDark} />
+            <BlockView key={i} block={block} />
           ))}
           {turn.streaming && turn.blocks.length === 0 && <StreamingDots />}
         </div>
         {!turn.streaming && turn.blocks.length > 0 && (
-          <ReactionBar reactions={turn.reactions} onReact={onReact} t={t} />
+          <ReactionBar reactions={turn.reactions} onReact={onReact} />
         )}
       </div>
       {!turn.streaming && (

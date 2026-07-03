@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Key, Copy, Check, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
+import { useCopyToClipboard } from '@shared/lib';
 import type { Token } from './types';
 
 export function RevealModal({ token, onClose }: { token: Token; onClose: () => void }) {
@@ -21,12 +22,7 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
     return `${token.prefix}${tail}`;
   }, [token.prefix]);
   const [shown, setShown] = useState(true);
-  const [copied, setCopied] = useState(false);
-
-  const copy = async () => {
-    try { await navigator.clipboard.writeText(fullToken); setCopied(true); setTimeout(() => { setCopied(false); }, 1500); }
-    catch { /* ignore */ }
-  };
+  const { copied, copy } = useCopyToClipboard(1500);
 
   return (
     <div
@@ -86,7 +82,7 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
           </button>
           <button
             type="button"
-            onClick={() => { void copy(); }}
+            onClick={() => { copy(fullToken); }}
             className="inline-flex items-center gap-1 h-7 px-2 rounded text-sm font-medium transition-colors"
             style={{
               background: copied ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',

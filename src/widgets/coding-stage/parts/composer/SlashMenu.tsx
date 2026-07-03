@@ -1,20 +1,21 @@
 import { Slash } from 'lucide-react';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Slash command menu. Pops above the textarea when the input starts with
 // `/`. Mutually exclusive with the mention picker (the parent renders
 // only one at a time). Extracted verbatim from Composer.tsx — the JSX,
 // classNames and inline styles are byte-for-byte identical.
 export function SlashMenu({
-  slashFiltered, slashIndex, setSlashIndex, onChange, isDark, textMuted, focusTextarea,
+  slashFiltered, slashIndex, setSlashIndex, onChange, textMuted, focusTextarea,
 }: {
   slashFiltered: { cmd: string; desc: string }[];
   slashIndex: number;
   setSlashIndex: (i: number) => void;
   onChange: (v: string) => void;
-  isDark: boolean;
   textMuted: string;
   focusTextarea: () => void;
 }) {
+  const { isDark } = useCodingStage();
   return (
     <div
       className="absolute bottom-[calc(100%+8px)] left-0 right-0 rounded-xl border shadow-2xl overflow-hidden border-[color:var(--border-default)] bg-[var(--bg-elevated)]"

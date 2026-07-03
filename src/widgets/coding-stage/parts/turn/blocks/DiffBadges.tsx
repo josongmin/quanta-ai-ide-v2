@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTabVisibility } from '@features/workspace-tabs';
 import type { CodingFileChange } from '../../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+import { useCodingStage } from '../../../model/CodingStageContext';
 
 // Working-tree drift badge. State-coloured chip that surfaces what kind
 // of drift was detected and how to resolve it. Colour mapping follows
 // the same lineage as VCS UIs: amber overlap (review), sky shifted
 // (auto-rebase OK), rose gone (file deleted).
 export function DriftBadge({
-  drift, isDark, t,
+  drift,
 }: {
   drift: NonNullable<CodingFileChange['drift']>;
-  isDark: boolean;
-  t: TranslateFn;
 }) {
-  void isDark;
+  const { t } = useCodingStage();
   const toneStyle: React.CSSProperties =
     drift.state === 'overlap' ? {
         background: 'var(--intent-warn-bg)',

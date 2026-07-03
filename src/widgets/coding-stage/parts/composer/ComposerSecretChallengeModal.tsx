@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { SecretMatch } from '@shared/lib';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Extracted verbatim from Composer.tsx — byte-for-byte. A separate
 // filename (not the pre-existing orphan composer/SecretChallengeModal.tsx,
@@ -11,16 +12,15 @@ import type { SecretMatch } from '@shared/lib';
 // the user may have pasted intentionally. Pattern: Slack DLP banner +
 // 1Password vault paste warning.
 export function SecretChallengeModal({
-  matches, mode, isDark, t, onMaskAndSend, onSendAsIs, onCancel,
+  matches, mode, onMaskAndSend, onSendAsIs, onCancel,
 }: {
   matches: SecretMatch[];
   mode: 'block' | 'warn';
-  isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
   onMaskAndSend: () => void;
   onSendAsIs: () => void;
   onCancel: () => void;
 }) {
+  const { t, isDark } = useCodingStage();
   // Esc cancels; Enter triggers mask-and-send (the safe default).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

@@ -4,6 +4,7 @@ import {
   Pin, FolderPlus, ListFilter, GripVertical, Cloud,
 } from 'lucide-react';
 import { ResizeHandle } from '@shared/ui';
+import { useCodingStage } from '../../model/CodingStageContext';
 import type { Project, Task, TaskStatus } from '../types';
 
 // Project-grouped task rail. Each project is a collapsible group; selected
@@ -22,7 +23,6 @@ type Props = {
   // let the parent splice. Cross-project drops are rejected (different
   // base branch + project context — needs a confirm dialog, out of v1).
   onReorder?: (srcId: string, dstId: string) => void;
-  t: (k: string, opts?: Record<string, unknown>) => string;
   width: number;
   onWidthChange: (next: number) => void;
 };
@@ -44,9 +44,10 @@ const ACCENT_HEX = {
 };
 
 export function TaskRail({
-  projects, tasks, activeId, onSelect, onNewTask, onNewProject, onReorder, t,
+  projects, tasks, activeId, onSelect, onNewTask, onNewProject, onReorder,
   width, onWidthChange,
 }: Props) {
+  const { t } = useCodingStage();
   const [query, setQuery] = useState('');
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState<'all' | 'mine' | 'archived'>('all');
@@ -227,7 +228,6 @@ export function TaskRail({
               onNewTask={() => { onNewTask(project.id); }}
               onToggle={() => { setCollapsed((c) => ({ ...c, [project.id]: !isCollapsed })); }}
               collapsed={isCollapsed}
-              t={t}
               dragSrcId={dragSrcId}
               dragOverId={dragOverId}
               onDragStart={(id) => { setDragSrcId(id); }}
@@ -257,7 +257,7 @@ export function TaskRail({
 }
 
 function ProjectGroup({
-  project, tasks, activeId, onSelect, onNewTask, onToggle, collapsed, t,
+  project, tasks, activeId, onSelect, onNewTask, onToggle, collapsed,
   dragSrcId, dragOverId, onDragStart, onDragOver, onDragEnd, onDrop,
 }: {
   project: Project;
@@ -267,7 +267,6 @@ function ProjectGroup({
   onNewTask: () => void;
   onToggle: () => void;
   collapsed: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
   dragSrcId: string | null;
   dragOverId: string | null;
   onDragStart: (id: string) => void;
@@ -275,6 +274,7 @@ function ProjectGroup({
   onDragEnd: () => void;
   onDrop: (srcId: string, dstId: string) => void;
 }) {
+  const { t } = useCodingStage();
   const accent = ACCENT_HEX[project.accent];
   const textPrimary = 'text-[color:var(--fg-strong)]';
   const textMuted = 'text-[color:var(--fg-muted)]';
@@ -351,7 +351,6 @@ function ProjectGroup({
                 task={task}
                 active={task.id === activeId}
                 onClick={() => { onSelect(task.id); }}
-                t={t}
                 isDragging={dragSrcId === task.id}
                 isDropTarget={dragOverId === task.id && dragSrcId !== null && dragSrcId !== task.id}
                 onDragStart={() => { onDragStart(task.id); }}
@@ -373,13 +372,12 @@ function ProjectGroup({
 }
 
 function TaskRow({
-  task, active, onClick, t,
+  task, active, onClick,
   isDragging, isDropTarget, onDragStart, onDragOver, onDragEnd, onDrop,
 }: {
   task: Task;
   active: boolean;
   onClick: () => void;
-  t: (k: string, opts?: Record<string, unknown>) => string;
   isDragging: boolean;
   isDropTarget: boolean;
   onDragStart: () => void;
@@ -387,6 +385,7 @@ function TaskRow({
   onDragEnd: () => void;
   onDrop: (srcId: string) => void;
 }) {
+  const { t } = useCodingStage();
   const titleColor = active
     ? 'text-[color:var(--fg-strong)]'
     : 'text-[color:var(--fg-default)]';

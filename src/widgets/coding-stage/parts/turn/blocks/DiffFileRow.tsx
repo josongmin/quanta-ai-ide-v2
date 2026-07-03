@@ -1,21 +1,20 @@
 import { memo, useState } from 'react';
 import { Check, ChevronRight, XCircle } from 'lucide-react';
-import { useTranslation } from '@shared/i18n';
 import type { CodingFileChange, HunkComment } from '../../types';
 import { DriftBadge, DiffBar } from './DiffBadges';
 import { HunkCommentThread } from './DiffComments';
 import { SplitHunkBody, UnifiedHunkBody } from './DiffHunk';
+import { useCodingStage } from '../../../model/CodingStageContext';
 
 export type DiffViewMode = 'unified' | 'split';
 
 function FileRowImpl({
-  file, isDark, viewMode = 'unified',
+  file, viewMode = 'unified',
 }: {
   file: CodingFileChange;
-  isDark: boolean;
   viewMode?: DiffViewMode;
 }) {
-  const { t } = useTranslation('coding');
+  const { t, isDark } = useCodingStage();
   const [open, setOpen] = useState(false);
   const [decisions, setDecisions] = useState<Record<string, 'accepted' | 'rejected' | undefined>>(() => {
     const seed: Record<string, 'accepted' | 'rejected' | undefined> = {};
@@ -134,7 +133,7 @@ function FileRowImpl({
               emerald = clean, sky = shifted (auto-rebase OK), amber =
               overlap (review required), rose = gone (file deleted). */}
           {file.drift && file.drift.state !== 'clean' && (
-            <DriftBadge drift={file.drift} isDark={isDark} t={t} />
+            <DriftBadge drift={file.drift} />
           )}
         </div>
         <div className="flex items-center gap-2 text-xs font-mono shrink-0">
@@ -245,7 +244,6 @@ function FileRowImpl({
                   onSubmit={(text, kind) => { addComment(key, text, kind); }}
                   onReply={(parentId, text) => { replyToComment(key, parentId, text); }}
                   onToggleResolve={(commentId) => { toggleResolve(key, commentId); }}
-                  t={t}
                 />
               </div>
             );

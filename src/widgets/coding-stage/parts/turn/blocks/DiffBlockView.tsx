@@ -7,7 +7,7 @@ import { useTranslation } from '@shared/i18n';
 import type { DiffBlock } from '../../types';
 import { FileRow, type DiffViewMode } from './DiffFileRow';
 
-function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolean }) {
+function DiffBlockViewImpl({ block }: { block: DiffBlock }) {
   const { t } = useTranslation('coding');
   const [applied, setApplied] = useState(block.applied === 'applied');
   // View mode lives at the block level so toggling once affects every
@@ -88,7 +88,7 @@ function DiffBlockViewImpl({ block, isDark }: { block: DiffBlock; isDark: boolea
 
       <div className="divide-y divide-[color:var(--border-muted)]">
         {block.files.map((file) => (
-          <FileRow key={file.path} file={file} isDark={isDark} viewMode={viewMode} />
+          <FileRow key={file.path} file={file} viewMode={viewMode} />
         ))}
       </div>
 

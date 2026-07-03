@@ -2,6 +2,7 @@ import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
 import { AtSign, Plus, Copy, Check, ShieldCheck, AlertTriangle, RefreshCw } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
+import { useCopyToClipboard } from '@shared/lib';
 
 type Domain = {
   domain: string;
@@ -168,7 +169,7 @@ function Toggle({ label, sub, on, disabled }: { label: string; sub: string; on: 
 }
 
 function UnverifiedHelper() {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard(1200);
   const txt = 'acme-domain-verify=ab12cd34ef56gh78';
   return (
     <div
@@ -198,13 +199,7 @@ function UnverifiedHelper() {
         <code className="font-mono text-base px-3 py-2 rounded truncate" style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}>{txt}</code>
         <button
           type="button"
-          onClick={() => {
-            if (typeof navigator !== 'undefined' && navigator.clipboard) {
-              void navigator.clipboard.writeText(txt);
-              setCopied(true);
-              window.setTimeout(() => { setCopied(false); }, 1200);
-            }
-          }}
+          onClick={() => { copy(txt); }}
           className="inline-flex items-center justify-center w-8 h-8 rounded-md transition-colors"
           style={{ color: 'var(--fg-muted)', background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
         >

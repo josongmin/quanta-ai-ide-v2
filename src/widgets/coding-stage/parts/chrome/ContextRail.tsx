@@ -3,11 +3,11 @@ import {
   Activity, AlertOctagon, Briefcase, CheckCircle2, Clock, Code,
   FileCode, Hash as HashIcon, MessageCircle, Palette, Sparkles,
 } from 'lucide-react';
+import { useCodingStage } from '../../model/CodingStageContext';
 import type {
   AgentTurn, BranchState, CiCheck, Integration, PrState, Project, Task,
 } from '../types';
 
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 type Density = 'compact' | 'comfortable' | 'spacious';
 type DriftState = { kind: 'stuck' | 'noisy' | 'ok' | 'idle'; multiple: number };
 type SuccessRateData = {
@@ -19,8 +19,6 @@ export function ContextRail({
   task,
   project,
   accent,
-  isDark,
-  t,
   density,
   onDensityChange,
   highContrast,
@@ -29,13 +27,12 @@ export function ContextRail({
   task: Task;
   project: Project;
   accent: string;
-  isDark: boolean;
-  t: TranslateFn;
   density: Density;
   onDensityChange: (d: Density) => void;
   highContrast: boolean;
   onHighContrastChange: (v: boolean) => void;
 }) {
+  const { t } = useCodingStage();
   const drift = useMemo<DriftState>(() => {
     const agentTurns = task.thread.filter((tn): tn is AgentTurn => tn.role === 'agent');
     if (agentTurns.length < 3) return { kind: 'idle', multiple: 0 };
@@ -141,13 +138,13 @@ export function ContextRail({
 
         {drift.kind !== 'idle' && (
           <ContextSection label={t('drift.label')}>
-            <DriftRow drift={drift} isDark={isDark} t={t} />
+            <DriftRow drift={drift} />
           </ContextSection>
         )}
 
         {hasSuccessData && (
           <ContextSection label={t('successRate.label')}>
-            <SuccessRatePanel data={successRate} t={t} />
+            <SuccessRatePanel data={successRate} />
           </ContextSection>
         )}
 
@@ -156,8 +153,6 @@ export function ContextRail({
             <PrCiPanel
               branchState={task.branchState}
               prState={task.prState}
-             
-              t={t}
             />
           </ContextSection>
         )}
@@ -165,7 +160,7 @@ export function ContextRail({
         {project.integrations && project.integrations.length > 0 && (
           <ContextSection label={t('integrations.title')}>
             {project.integrations.map((it, i) => (
-              <IntegrationRow key={`${it.kind}:${i}`} integration={it} t={t} />
+              <IntegrationRow key={`${it.kind}:${i}`} integration={it} />
             ))}
           </ContextSection>
         )}
@@ -226,11 +221,11 @@ export function ContextRail({
 }
 
 function SuccessRatePanel({
-  data, t,
+  data,
 }: {
   data: SuccessRateData;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const muted = 'text-[color:var(--fg-muted)]';
   const faint = 'text-[color:var(--fg-subtle)]';
   const trackBg = 'bg-[color:var(--bg-elevated)]';
@@ -285,14 +280,12 @@ function SuccessRatePanel({
 }
 
 function DriftRow({
-  drift, isDark, t,
+  drift,
 }: {
   drift: DriftState;
-  isDark: boolean;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   if (drift.kind === 'idle') return null;
-  void isDark;
   const isAnomaly = drift.kind === 'stuck' || drift.kind === 'noisy';
   const toneStyle: React.CSSProperties = isAnomaly
     ? {
@@ -328,12 +321,12 @@ const INTEGRATION_ICON: Record<Integration['kind'], ComponentType<{ className?: 
 };
 
 function PrCiPanel({
-  branchState, prState, t,
+  branchState, prState,
 }: {
   branchState?: BranchState;
   prState?: PrState;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const muted = 'text-[color:var(--fg-muted)]';
   const faint = 'text-[color:var(--fg-subtle)]';
   const heading = 'text-[color:var(--fg-strong)]';
@@ -458,11 +451,11 @@ function PrCiPanel({
 }
 
 function IntegrationRow({
-  integration, t,
+  integration,
 }: {
   integration: Integration;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const Icon = INTEGRATION_ICON[integration.kind];
   const labelColor = 'text-[color:var(--fg-strong)]';
   const subColor = 'text-[color:var(--fg-subtle)]';

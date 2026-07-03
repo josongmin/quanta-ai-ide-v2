@@ -18,6 +18,8 @@ export {
 } from './storageKeys';
 export { clamp, clamp01 } from './clamp';
 export { assertNever } from './assertNever';
+export { useCopyToClipboard } from './useCopyToClipboard';
+export { useRovingMenuFocus } from './useRovingMenuFocus';
 export { isEditableTarget } from './isEditableTarget';
 export { shallowEqual } from './shallowEqual';
 export { useScrollRestoration } from './useScrollRestoration';

@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { SettingsModal } from '@shared/ui';
+import { useCopyToClipboard } from '@shared/lib';
 import type { Role } from './types';
 
 export function InviteModal({ onClose }: { onClose: () => void }) {
@@ -11,7 +12,7 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
   const [role, setRole] = useState<Role>('member');
   const [team, setTeam] = useState('Frontend');
   const linkRef = useRef<HTMLInputElement>(null);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard(1500);
 
   const parsed = emails
     .split(/[\s,;\n]+/)
@@ -25,9 +26,7 @@ export function InviteModal({ onClose }: { onClose: () => void }) {
   const copyLink = () => {
     if (linkRef.current) {
       linkRef.current.select();
-      try { void navigator.clipboard.writeText(inviteLink); } catch { /* noop */ }
-      setCopied(true);
-      setTimeout(() => { setCopied(false); }, 1500);
+      copy(inviteLink);
     }
   };
 

@@ -7,9 +7,8 @@ import { Composer, type ComposerModelId } from '../Composer';
 import { LiveSnapshotCard } from '../timeline/LiveSnapshotCard';
 import { TimelineScrubber } from '../timeline/TimelineScrubber';
 import { TurnView } from '../turn/TurnViews';
+import { useCodingStage } from '../../model/CodingStageContext';
 import type { AgentTurn, Project, ReactionKind, Task, Turn } from '../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
 
 export const ACCENT_HEX = {
   emerald: '#a1a1aa',
@@ -23,7 +22,6 @@ export const ACCENT_HEX = {
 export function ThreadPane({
   task,
   project,
-  isDark,
   draft,
   onDraftChange,
   onSubmit,
@@ -31,7 +29,6 @@ export function ThreadPane({
   intent,
   onIntent,
   isStreaming,
-  t,
   model,
   onModelChange,
   onSaveProjectDefaultModel,
@@ -48,7 +45,6 @@ export function ThreadPane({
 }: {
   task: Task;
   project: Project;
-  isDark: boolean;
   draft: string;
   onDraftChange: (v: string) => void;
   onSubmit: () => void;
@@ -56,7 +52,6 @@ export function ThreadPane({
   intent: 'code' | 'ask';
   onIntent: (v: 'code' | 'ask') => void;
   isStreaming: boolean;
-  t: TranslateFn;
   model: ComposerModelId;
   onModelChange: (id: ComposerModelId) => void;
   onSaveProjectDefaultModel: () => void;
@@ -71,6 +66,7 @@ export function ThreadPane({
   onOpenTurnMenu: (x: number, y: number, turn: Turn) => void;
   cost: { inTok: number; outTok: number; usd: number; avgUsd: number };
 }) {
+  const { t, isDark } = useCodingStage();
   const border = 'border-[color:var(--border-muted)]';
   const textPrimary = 'text-[color:var(--fg-strong)]';
   const textMuted = 'text-[color:var(--fg-muted)]';
@@ -194,15 +190,13 @@ export function ThreadPane({
 
       <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto scrollbar-thin">
         {task.thread.length === 0 ? (
-          <EmptyState project={project} t={t} />
+          <EmptyState project={project} />
         ) : (
           <div className="max-w-[760px] mx-auto px-6 py-6 space-y-6">
             {visibleThread.map((turn) => (
               <TurnView
                 key={turn.id}
                 turn={turn}
-                isDark={isDark}
-                t={t}
                 onApplyInverse={() => { onApplyInverse(turn.id); }}
                 onFork={() => { onFork(turn.id); }}
                 onReact={(kind) => { onReact(turn.id, kind); }}
@@ -213,8 +207,6 @@ export function ThreadPane({
             {!isStreaming && !isScrubbed && task.thread[task.thread.length - 1]?.role === 'agent' && (
               <LiveSnapshotCard
                 task={task}
-                isDark={isDark}
-                t={t}
                 onContinue={() => { onDraftChange(t('snapshot.continue') + ': '); }}
               />
             )}
@@ -228,8 +220,6 @@ export function ThreadPane({
             turns={task.thread}
             headIdx={scrubHead}
             onScrub={onScrub}
-            isDark={isDark}
-            t={t}
             onApplyInverse={(targetIdx) => {
               const turn = task.thread[targetIdx];
               if (turn != null) onApplyInverse(turn.id);
@@ -253,8 +243,6 @@ export function ThreadPane({
             onStop={onStop}
             intent={intent}
             onIntent={onIntent}
-            isDark={isDark}
-            t={t}
             isStreaming={isStreaming}
             branch={task.branch}
             baseBranch={task.baseBranch}
@@ -303,11 +291,10 @@ function StatusBadge({ status }: { status: Task['status'] }) {
 
 function EmptyState({
   project,
-  t,
 }: {
   project: Project;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const accent = ACCENT_HEX[project.accent];
   const textPrimary = 'text-[color:var(--fg-strong)]';
   const textMuted = 'text-[color:var(--fg-muted)]';

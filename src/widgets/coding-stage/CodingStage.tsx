@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { safeLocalGet, safeLocalSet, STORAGE_KEYS, STORAGE_KEY_PREFIX } from '@shared/lib';
 import { TaskRail } from './parts/chrome/TaskRail';
@@ -14,6 +13,7 @@ import {
   isModelId,
   pickKeyword,
 } from './lib/codingStageHelpers';
+import { CodingStageProvider } from './model/CodingStageContext';
 import { useTaskThread } from './lib/useTaskThread';
 import { useComposerState } from './lib/useComposerState';
 import { useBudgetChallenge } from './lib/useBudgetChallenge';
@@ -37,7 +37,6 @@ const EMPTY_PROMPT_HISTORY: string[] = [];
 // Everything is local state; no agent backend round-trips.
 
 export default function CodingStage() {
-  const { isDark } = useTheme();
   const { t } = useTranslation('coding');
   const navigate = useNavigate();
   // Verified-fix store action — used at agent-turn-end to seed a fix
@@ -359,99 +358,93 @@ export default function CodingStage() {
   const surface = 'bg-[var(--bg-stage)]';
 
   return (
-    <div
-      className={`absolute inset-0 flex font-sans ${surface}`}
-      data-coding-stage
-      data-coding-density={density}
-      data-coding-contrast={highContrast ? 'high' : 'normal'}
-    >
-      <TaskRail
-        projects={projects}
-        tasks={tasks}
-        activeId={activeId}
-        onSelect={setActiveId}
-        onNewTask={startNewTask}
-        onNewProject={startNewProject}
-        t={t}
-        width={284}
-        onWidthChange={handleTaskRailWidthChange}
-      />
-
-      <ThreadPane
-        task={active}
-        project={activeProject}
-        isDark={isDark}
-        draft={draft}
-        onDraftChange={setDraft}
-        onSubmit={onSubmitComposer}
-        onStop={stopStream}
-        intent={intent}
-        onIntent={setIntent}
-        isStreaming={isStreaming}
-        t={t}
-        model={model}
-        onModelChange={setModel}
-        onSaveProjectDefaultModel={handleSaveProjectDefaultModel}
-        promptHistory={promptHistory[active.id] ?? EMPTY_PROMPT_HISTORY}
-        visibleThread={visibleThread}
-        scrubHead={scrubHead}
-        onScrub={setScrubHead}
-        isScrubbed={isScrubbed}
-        onApplyInverse={handleApplyInverse}
-        onFork={handleFork}
-        onReact={handleReact}
-        onOpenTurnMenu={handleOpenTurnMenu}
-        cost={cost}
-      />
-
-      <ContextRail
-        task={active}
-        project={activeProject}
-        accent={ACCENT_HEX[activeProject.accent]}
-        isDark={isDark}
-        t={t}
-        density={density}
-        onDensityChange={setDensity}
-        highContrast={highContrast}
-        onHighContrastChange={setHighContrast}
-      />
-
-      <CommandPalette
-        open={paletteOpen}
-        onClose={handlePaletteClose}
-        actions={paletteActionList}
-        tasks={tasks}
-        onJumpTask={handleJumpTask}
-        onInsertSlash={handleInsertSlash}
-        isDark={isDark}
-        t={t}
-      />
-
-      {budgetChallenge && (
-        <BudgetSoftCapModal
-          used={budgetChallenge.used}
-          cap={budgetChallenge.cap}
-          primary={budgetChallenge.primary}
-          downgrade={budgetChallenge.downgrade}
-          t={t}
-          onAutoDowngrade={handleBudgetAutoDowngrade}
-          onOverride={handleBudgetOverride}
-          onStop={handleBudgetStop}
+    <CodingStageProvider>
+      <div
+        className={`absolute inset-0 flex font-sans ${surface}`}
+        data-coding-stage
+        data-coding-density={density}
+        data-coding-contrast={highContrast ? 'high' : 'normal'}
+      >
+        <TaskRail
+          projects={projects}
+          tasks={tasks}
+          activeId={activeId}
+          onSelect={setActiveId}
+          onNewTask={startNewTask}
+          onNewProject={startNewProject}
+          width={284}
+          onWidthChange={handleTaskRailWidthChange}
         />
-      )}
-      {turnMenu && (
-        <TurnContextMenu
-          x={turnMenu.x}
-          y={turnMenu.y}
-          isDark={isDark}
-          onClose={handleTurnMenuClose}
-          items={buildTurnMenuItems(turnMenu.turn, t, {
-            onCopy: handleTurnMenuCopy,
-            onOpenInNew: handleTurnMenuOpenInNew,
-          })}
+
+        <ThreadPane
+          task={active}
+          project={activeProject}
+          draft={draft}
+          onDraftChange={setDraft}
+          onSubmit={onSubmitComposer}
+          onStop={stopStream}
+          intent={intent}
+          onIntent={setIntent}
+          isStreaming={isStreaming}
+          model={model}
+          onModelChange={setModel}
+          onSaveProjectDefaultModel={handleSaveProjectDefaultModel}
+          promptHistory={promptHistory[active.id] ?? EMPTY_PROMPT_HISTORY}
+          visibleThread={visibleThread}
+          scrubHead={scrubHead}
+          onScrub={setScrubHead}
+          isScrubbed={isScrubbed}
+          onApplyInverse={handleApplyInverse}
+          onFork={handleFork}
+          onReact={handleReact}
+          onOpenTurnMenu={handleOpenTurnMenu}
+          cost={cost}
         />
-      )}
-    </div>
+
+        <ContextRail
+          task={active}
+          project={activeProject}
+          accent={ACCENT_HEX[activeProject.accent]}
+          density={density}
+          onDensityChange={setDensity}
+          highContrast={highContrast}
+          onHighContrastChange={setHighContrast}
+        />
+
+        <CommandPalette
+          open={paletteOpen}
+          onClose={handlePaletteClose}
+          actions={paletteActionList}
+          tasks={tasks}
+          onJumpTask={handleJumpTask}
+          onInsertSlash={handleInsertSlash}
+        />
+
+        {budgetChallenge && (
+          <BudgetSoftCapModal
+            used={budgetChallenge.used}
+            cap={budgetChallenge.cap}
+            primary={budgetChallenge.primary}
+            downgrade={budgetChallenge.downgrade}
+            t={t}
+            onAutoDowngrade={handleBudgetAutoDowngrade}
+            onOverride={handleBudgetOverride}
+            onStop={handleBudgetStop}
+          />
+        )}
+        {turnMenu && (
+          <TurnContextMenu
+            x={turnMenu.x}
+            y={turnMenu.y}
+            onClose={handleTurnMenuClose}
+            items={buildTurnMenuItems(turnMenu.turn, t, {
+              onCopy: handleTurnMenuCopy,
+              onOpenInNew: handleTurnMenuOpenInNew,
+            })}
+          />
+        )}
+      </div>
+    </CodingStageProvider>
   );
 }
 

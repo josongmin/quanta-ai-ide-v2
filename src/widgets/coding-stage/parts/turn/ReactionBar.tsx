@@ -1,18 +1,16 @@
 import { type ComponentType } from 'react';
 import { Heart, Target, ThumbsDown, ThumbsUp } from 'lucide-react';
 import type { AgentTurn, ReactionKind } from '../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+import { useCodingStage } from '../../model/CodingStageContext';
 
 export function ReactionBar({
   reactions,
   onReact,
-  t,
 }: {
   reactions: AgentTurn['reactions'];
   onReact: (kind: ReactionKind) => void;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const items: { kind: ReactionKind; Icon: ComponentType<{ className?: string; fill?: string }>; toneStyle: React.CSSProperties }[] = [
     { kind: 'thumbsUp', Icon: ThumbsUp, toneStyle: { color: 'var(--intent-success-fg)', background: 'color-mix(in srgb, var(--intent-success-vivid) 15%, transparent)' } },
     { kind: 'thumbsDown', Icon: ThumbsDown, toneStyle: { color: 'var(--intent-danger-fg)', background: 'color-mix(in srgb, var(--intent-danger-vivid) 15%, transparent)' } },

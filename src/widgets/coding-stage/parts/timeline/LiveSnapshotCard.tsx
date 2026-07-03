@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { formatNumber } from '@shared/lib';
 import type { Task, PlanBlock, AgentTurn } from '../types';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Same prices used by the cost meter in CodingStage. Duplicated here to
 // avoid a circular import; if pricing changes, update both.
@@ -22,12 +23,11 @@ const SNAPSHOT_PRICING: Record<string, { in: number; out: number }> = {
 
 type Props = {
   task: Task;
-  isDark: boolean;
-  t: (key: string, opts?: Record<string, unknown>) => string;
   onContinue: () => void;
 };
 
-export function LiveSnapshotCard({ task, t, onContinue }: Props) {
+export function LiveSnapshotCard({ task, onContinue }: Props) {
+  const { t } = useCodingStage();
   const stats = task.diffStats;
   const { touched, plan } = useMemo(() => extractAgentState(task), [task]);
 

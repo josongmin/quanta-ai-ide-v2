@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { FileCode, AtSign } from 'lucide-react';
 import { SAMPLE_MENTION_FILES, SAMPLE_MENTION_SYMBOLS } from '../data';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Mention picker. Pops above the textarea when the cursor sits inside a
 // `#…` (file) or `@…` (symbol) token. Pure UI — the parent owns the
@@ -17,8 +18,6 @@ export type MentionItem =
 type Props = {
   trigger: MentionTrigger;
   query: string;
-  isDark: boolean;
-  t: (k: string) => string;
   onPick: (item: MentionItem) => void;
   onClose: () => void;
   // Parent-controlled selected index; lets the textarea handle ↑↓/Enter
@@ -50,8 +49,9 @@ function score(haystack: string, needle: string): number | null {
 }
 
 export function MentionPicker({
-  trigger, query, isDark, t, onPick, onClose, index, onIndexChange, onItemsChange,
+  trigger, query, onPick, onClose, index, onIndexChange, onItemsChange,
 }: Props) {
+  const { t, isDark } = useCodingStage();
   const items = useMemo<MentionItem[]>(() => {
     if (trigger === '#') {
       const ranked = SAMPLE_MENTION_FILES

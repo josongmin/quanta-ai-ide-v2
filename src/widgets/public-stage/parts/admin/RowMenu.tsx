@@ -1,33 +1,19 @@
 // Reusable row action menu for admin tables.
 
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useRovingMenuFocus } from '@shared/lib';
 
 export function RowMenu({
   onClose, children,
 }: { onClose: () => void; children: React.ReactNode }) {
   const menuRef = useRef<HTMLDivElement>(null);
-
-  // The menu mounts only while open, so focus the first item on mount and
-  // wire arrow-key / Escape navigation (WAI-ARIA menu pattern).
-  useEffect(() => {
-    menuRef.current
-      ?.querySelector<HTMLElement>('[role="menuitem"]:not([disabled])')
-      ?.focus();
-  }, []);
+  // Mounts only while open, so focus-on-mount lands the user on the first item.
+  const { onKeyDown: onRove } = useRovingMenuFocus(menuRef);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
+    if (onRove(e)) return;
     if (e.key === 'Escape') { e.preventDefault(); onClose(); return; }
-    if (e.key === 'Tab') { onClose(); return; }
-    const nodes = Array.from(
-      menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled])') ?? [],
-    );
-    if (nodes.length === 0) return;
-    const idx = nodes.indexOf(document.activeElement as HTMLElement);
-    const n = nodes.length;
-    if (e.key === 'ArrowDown') { e.preventDefault(); nodes[(idx + 1 + n) % n]?.focus(); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); nodes[(idx - 1 + n) % n]?.focus(); }
-    else if (e.key === 'Home') { e.preventDefault(); nodes[0]?.focus(); }
-    else if (e.key === 'End') { e.preventDefault(); nodes[n - 1]?.focus(); }
+    if (e.key === 'Tab') onClose();
   };
 
   return (

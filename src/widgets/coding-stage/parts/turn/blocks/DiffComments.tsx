@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { HelpCircle, MessageSquare, Plus, Sparkles } from 'lucide-react';
 import type { HunkComment } from '../../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+import { useCodingStage } from '../../../model/CodingStageContext';
 
 // Inline review thread under a hunk. Renders existing comments as small
 // stacked bubbles; the [+ Note] / [+ Ask] affordance opens a compact
 // composer that posts back to the parent FileRow's state.
 export function HunkCommentThread({
-  hunkKey, comments, composing, onOpenCompose, onCancelCompose, onSubmit, onReply, onToggleResolve, t,
+  hunkKey, comments, composing, onOpenCompose, onCancelCompose, onSubmit, onReply, onToggleResolve,
 }: {
   hunkKey: string;
   comments: HunkComment[];
@@ -18,8 +17,8 @@ export function HunkCommentThread({
   onSubmit: (text: string, kind: 'note' | 'ask') => void;
   onReply: (parentId: string, text: string) => void;
   onToggleResolve: (commentId: string) => void;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   void hunkKey;
   const [text, setText] = useState('');
   const [kind, setKind] = useState<'note' | 'ask'>('note');
@@ -59,7 +58,6 @@ export function HunkCommentThread({
                 comment={c}
                 onReply={(replyText) => { onReply(c.id, replyText); }}
                 onToggleResolve={() => { onToggleResolve(c.id); }}
-                t={t}
               />
             ))}
           </div>
@@ -162,14 +160,14 @@ export function HunkCommentThread({
 // Recursive: replies render as a nested CommentNode tree (one level deep
 // in practice, since real review threads rarely go deeper).
 function CommentNode({
-  comment, onReply, onToggleResolve, t, depth = 0,
+  comment, onReply, onToggleResolve, depth = 0,
 }: {
   comment: HunkComment;
   onReply: (text: string) => void;
   onToggleResolve: () => void;
-  t: TranslateFn;
   depth?: number;
 }) {
+  const { t } = useCodingStage();
   const [replying, setReplying] = useState(false);
   const [replyText, setReplyText] = useState('');
   const muted = 'text-[color:var(--fg-muted)]';
@@ -301,7 +299,6 @@ function CommentNode({
               comment={r}
               onReply={() => { /* nested replies collapse to flat for v1 */ }}
               onToggleResolve={() => { /* only top-level can be resolved */ }}
-              t={t}
               depth={depth + 1}
             />
           ))}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Search, Copy, Check } from 'lucide-react';
 import { DeveloperShell } from '../parts/DeveloperShell';
+import { useCopyToClipboard } from '@shared/lib';
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 type Endpoint = {
@@ -233,7 +234,7 @@ function EndpointDetail({ endpoint }: { endpoint: Endpoint }) {
 }
 
 function CodeBlock({ label, code, muted }: { label: string; code: string; muted?: boolean }) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard(1200);
   return (
     <div
       className="rounded-lg overflow-hidden mb-3"
@@ -251,13 +252,7 @@ function CodeBlock({ label, code, muted }: { label: string; code: string; muted?
         </span>
         <button
           type="button"
-          onClick={() => {
-            if (typeof navigator !== 'undefined' && navigator.clipboard) {
-              void navigator.clipboard.writeText(code);
-              setCopied(true);
-              window.setTimeout(() => { setCopied(false); }, 1200);
-            }
-          }}
+          onClick={() => { copy(code); }}
           className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-medium transition-colors"
           style={{ color: 'var(--fg-muted)' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}

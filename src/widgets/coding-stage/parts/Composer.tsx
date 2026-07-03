@@ -16,6 +16,7 @@ import { useVoiceInput } from './composer/useVoiceInput';
 import { useSecretScanning } from './composer/useSecretScanning';
 import { useSlashCommands } from './composer/useSlashCommands';
 import { useMentionPicker } from './composer/useMentionPicker';
+import { useCodingStage } from '../model/CodingStageContext';
 
 // Composer with intent toggle, model picker, slash commands, mention
 // pickers (`#` for files, `@` for symbols), and a small branch chip.
@@ -46,8 +47,6 @@ type Props = {
   onStop?: () => void;
   intent: Intent;
   onIntent: (v: Intent) => void;
-  isDark: boolean;
-  t: (k: string) => string;
   isStreaming: boolean;
   branch: string;
   baseBranch: string;
@@ -63,9 +62,10 @@ type Props = {
 };
 
 export function Composer({
-  draft, onChange, onSubmit, onStop, intent, onIntent, isDark, t, isStreaming, branch, baseBranch,
+  draft, onChange, onSubmit, onStop, intent, onIntent, isStreaming, branch, baseBranch,
   model: modelId, onModelChange, onSaveProjectDefaultModel, history,
 }: Props) {
+  const { t, isDark } = useCodingStage();
   const taRef = useRef<HTMLTextAreaElement>(null);
   const model = COMPOSER_MODELS.find((m) => m.id === modelId) ?? COMPOSER_MODELS[0];
   const [modelOpen, setModelOpen] = useState(false);
@@ -298,8 +298,6 @@ export function Composer({
         <SecretChallengeModal
           matches={secretChallenge.matches}
           mode={secretChallenge.mode}
-          isDark={isDark}
-          t={t}
           onMaskAndSend={maskAndSend}
           onSendAsIs={sendAsIs}
           onCancel={() => { setSecretChallenge(null); }}
@@ -310,8 +308,6 @@ export function Composer({
         <MentionPicker
           trigger={mention.trigger}
           query={mention.query}
-          isDark={isDark}
-          t={t}
           index={mentionIndex}
           onIndexChange={setMentionIndex}
           onItemsChange={setMentionItems}
@@ -327,7 +323,6 @@ export function Composer({
           slashIndex={slashIndex}
           setSlashIndex={setSlashIndex}
           onChange={onChange}
-          isDark={isDark}
           textMuted={textMuted}
           focusTextarea={() => { taRef.current?.focus(); }}
         />
@@ -407,28 +402,24 @@ export function Composer({
         {/* Bottom row */}
         <div className="flex items-center justify-between px-2 pb-2">
           <div className="flex items-center gap-0.5">
-            <ToolBtn icon={Paperclip} title={t('composer.attach')} isDark={isDark} disabled />
-            <ToolBtn icon={ImageIcon} title={t('composer.image')} isDark={isDark} disabled />
+            <ToolBtn icon={Paperclip} title={t('composer.attach')} disabled />
+            <ToolBtn icon={ImageIcon} title={t('composer.image')} disabled />
             <ToolBtn
               icon={Hash}
               title={t('composer.mentionFile')}
-              isDark={isDark}
               onClick={() => { insertTrigger('#'); }}
             />
             <ToolBtn
               icon={AtSign}
               title={t('composer.mentionSymbol')}
-              isDark={isDark}
               onClick={() => { insertTrigger('@'); }}
             />
             <VoiceBtn
-              isDark={isDark}
-              t={t}
               onInterim={setVoiceInterim}
               onTranscript={onTranscript}
             />
-            <ToolBtn icon={Globe} title={t('composer.web')} isDark={isDark} disabled />
-            <ToolBtn icon={Sparkles} title={t('composer.suggest')} isDark={isDark} disabled />
+            <ToolBtn icon={Globe} title={t('composer.web')} disabled />
+            <ToolBtn icon={Sparkles} title={t('composer.suggest')} disabled />
             <span className="mx-1 h-3.5 w-px bg-[color:var(--border-default)]" />
             <div ref={modelRef} className="relative">
               <button type="button"
@@ -489,8 +480,8 @@ export function Composer({
           </div>
           <div className="flex items-center gap-2">
             <span className={`flex items-center gap-1 text-xs font-mono ${textMuted}`}>
-              <Kbd isDark={isDark}><Command className="w-2.5 h-2.5" /></Kbd>
-              <Kbd isDark={isDark}>↵</Kbd>
+              <Kbd><Command className="w-2.5 h-2.5" /></Kbd>
+              <Kbd>↵</Kbd>
             </span>
             {isStreaming && (
               <PressHoldStop

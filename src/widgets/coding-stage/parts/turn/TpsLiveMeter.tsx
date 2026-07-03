@@ -2,16 +2,14 @@ import { useEffect, useState } from 'react';
 import { Zap } from 'lucide-react';
 import { useTabVisibility } from '@features/workspace-tabs';
 import type { AgentTurn } from '../types';
-
-type TranslateFn = (k: string, opts?: Record<string, unknown>) => string;
+import { useCodingStage } from '../../model/CodingStageContext';
 
 export function TpsLiveMeter({
   turn,
-  t,
 }: {
   turn: AgentTurn;
-  t: TranslateFn;
 }) {
+  const { t } = useCodingStage();
   const [startedAt, setStartedAt] = useState<number>(0);
   const [now, setNow] = useState<number>(0);
   const visible = useTabVisibility();

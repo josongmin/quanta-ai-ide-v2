@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
-import { shallowEqual } from '@shared/lib';
+import { shallowEqual, useCopyToClipboard } from '@shared/lib';
 import { RevealOnceModal } from '@shared/ui';
 
 type Status = 'connected' | 'not-configured';
@@ -289,12 +289,7 @@ function StatusBand({
 }
 
 function CopyRow({ label, value }: { label: string; value: string }) {
-  const [copied, setCopied] = useState(false);
-  const copy = () => {
-    try { void navigator.clipboard.writeText(value); } catch { /* noop */ }
-    setCopied(true);
-    setTimeout(() => { setCopied(false); }, 1200);
-  };
+  const { copied, copy } = useCopyToClipboard(1200);
   return (
     <div className="flex items-center justify-between gap-3 py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
       <div className="flex flex-col min-w-0 flex-1 gap-1">
@@ -303,7 +298,7 @@ function CopyRow({ label, value }: { label: string; value: string }) {
         </span>
         <code className="font-mono text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{value}</code>
       </div>
-      <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={copy}>
+      <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={() => { copy(value); }}>
         {copied ? 'Copied' : 'Copy'}
       </Button>
     </div>

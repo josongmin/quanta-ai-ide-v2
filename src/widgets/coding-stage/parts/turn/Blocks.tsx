@@ -10,13 +10,13 @@ import { DiffPreviewBlockView } from './blocks/DiffPreviewBlockView';
 // file under ./blocks/. This wrapper just routes by `kind`. Per-block
 // components are wrapped in React.memo so unrelated block updates in
 // the same turn don't re-render every sibling.
-export function BlockView({ block, isDark }: { block: AgentBlock; isDark: boolean }) {
+export function BlockView({ block }: { block: AgentBlock }) {
   if (block.kind === 'text') return <TextBlockView block={block} />;
   if (block.kind === 'thinking') return <ThinkingBlockView block={block} />;
   if (block.kind === 'plan') return <PlanBlockView block={block} />;
   if (block.kind === 'tool') return <ToolBlockView block={block} />;
   if (block.kind === 'diff-preview') return <DiffPreviewBlockView block={block} />;
-  return <DiffBlockView block={block} isDark={isDark} />;
+  return <DiffBlockView block={block} />;
 }
 
 // Re-export the per-block views so callers that want to skip the

@@ -9,6 +9,7 @@ import {
   approxCost, classifyInverse, turnMeta,
   type InverseRisk, type TurnMeta, type TurnStatus,
 } from './timelineMeta';
+import { useCodingStage } from '../../model/CodingStageContext';
 
 // Recovery-engine timeline scrubber.
 //
@@ -42,14 +43,13 @@ type Props = {
   turns: Turn[];
   headIdx: number | null;
   onScrub: (idx: number | null) => void;
-  isDark: boolean;
-  t: (k: string, opts?: Record<string, unknown>) => string;
   onApplyInverse?: (targetIdx: number, risk: InverseRisk) => void;
 };
 
 export function TimelineScrubber({
-  turns, headIdx, onScrub, isDark, t, onApplyInverse,
+  turns, headIdx, onScrub, onApplyInverse,
 }: Props) {
+  const { t, isDark } = useCodingStage();
   const total = turns.length;
   const headSafe = headIdx ?? Math.max(0, total - 1);
   const isLive = headIdx === null;
@@ -139,7 +139,6 @@ export function TimelineScrubber({
                     onClick={() => {
                       onScrub(meta.index === total - 1 ? null : meta.index);
                     }}
-                    t={t}
                   />
                 );
               })}
@@ -242,10 +241,10 @@ type NotchProps = {
   total: number;
   maxCost: number;
   onClick: () => void;
-  t: (k: string, opts?: Record<string, unknown>) => string;
 };
 
-function Notch({ meta, isHead, past, total, maxCost, onClick, t }: NotchProps) {
+function Notch({ meta, isHead, past, total, maxCost, onClick }: NotchProps) {
+  const { t } = useCodingStage();
   const [hover, setHover] = useState(false);
 
   const cost = approxCost(meta);
@@ -313,7 +312,7 @@ function Notch({ meta, isHead, past, total, maxCost, onClick, t }: NotchProps) {
         </span>
       )}
 
-      {hover && <HoverCard meta={meta} t={t} />}
+      {hover && <HoverCard meta={meta} />}
     </button>
   );
 }
@@ -451,8 +450,9 @@ function InverseArrows({
 }
 
 function HoverCard({
-  meta, t,
-}: { meta: TurnMeta; t: (k: string, opts?: Record<string, unknown>) => string }) {
+  meta,
+}: { meta: TurnMeta }) {
+  const { t } = useCodingStage();
   const cardBg = 'bg-[var(--bg-elevated)] border-[color:var(--border-default)]';
   const subText = 'text-[color:var(--fg-muted)]';
   const headText = 'text-[color:var(--fg-strong)]';
