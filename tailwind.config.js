@@ -67,6 +67,15 @@ export default {
         '4xl': '28px',
       },
 
+      // Mirror of `primitives.tracking.eyebrow`. Added so the uppercase micro-
+      // label ("eyebrow") has a first-class `tracking-eyebrow` class instead of
+      // ~740 inconsistent `tracking-[0.14em]/[0.18em]/[var(--track-eyebrow)]`
+      // arbitrary values. Additive only (Tailwind's tight/wide/wider/widest
+      // defaults are preserved) so existing named tracking classes are unchanged.
+      letterSpacing: {
+        eyebrow: '0.18em',
+      },
+
       // Mirror of `primitives.spacing`. Tailwind already ships an integer
       // scale; we override with our explicit pixel values so the visual
       // rhythm stays in sync with our tokens.
