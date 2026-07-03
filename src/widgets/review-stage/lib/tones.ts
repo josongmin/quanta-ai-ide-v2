@@ -6,10 +6,13 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import type { EngineSeverity } from '@entities/pr';
+import { primitives } from '@shared/tokens';
+
+const { red, amber, blue, green } = primitives.colors;
 
 export const SEV: Record<EngineSeverity, string> = {
-  blocker: '#c25a55', high: '#d98a85', medium: '#a8893a', low: '#5a8fce',
+  blocker: red[400], high: red[300], medium: amber[400], low: blue[400],
 };
 
 // Single OK tone — used by status/gates when something passes.
-export const OK = '#5fa86c';
+export const OK = green[400];

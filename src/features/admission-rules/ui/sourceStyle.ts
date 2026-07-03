@@ -1,4 +1,5 @@
 import type { RuleSource, RuleSeverity, CostClass, RuleSignal } from '@entities/admission';
+import { primitives } from '@shared/tokens';
 
 // Single colour axis: severity. Red=block, amber=warn, neutral=info/pass.
 // Everything else (source, cost, evidence) is differentiated by *text*,
@@ -7,8 +8,8 @@ import type { RuleSource, RuleSeverity, CostClass, RuleSignal } from '@entities/
 // readable when ten rules + a PR diff + a chart are on screen at once.
 
 export const SEVERITY_COLOR: Record<RuleSeverity, string> = {
-  block: '#c25a55',
-  warn:  '#a8893a',
+  block: primitives.colors.red[400],
+  warn:  primitives.colors.amber[400],
   info:  'currentColor', // inherits — no extra hue
 };
 
