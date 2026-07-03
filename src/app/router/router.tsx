@@ -12,10 +12,11 @@ import {
   createRootRoute, createRoute, createRouter, Outlet, redirect, useRouterState,
 } from '@tanstack/react-router';
 
-import { buildRepo } from '@entities/repo';
+import { buildRepo, buildRepoData, toRepoDataDTO } from '@entities/repo';
 import { FilterProvider } from '@entities/filter-state';
 import { AppShell } from '@widgets/app-shell';
 import { ErrorBoundary } from '@app/providers';
+import { RouteFallback } from '@shared/ui';
 import { isChromeless } from './routeChrome';
 
 // Tab-kind routes are now rendered by WorkspaceTabsHost — the host keeps
@@ -141,9 +142,13 @@ const rootRoute = createRootRoute({
 });
 
 function FilterProviderRoot({ children }: { children: React.ReactNode }) {
-  // Repo data lives at the root so all routes share the same in-memory
-  // graph. Building once on mount is enough — the demo data is static.
-  const repo = useMemo(() => buildRepo(), []);
+  // Repo data lives at the root so all routes share the same in-memory graph.
+  // Building once on mount is enough — the demo data is static.
+  //
+  // Routed through the DTO adapter (buildRepoData ∘ toRepoDataDTO) so the
+  // serialization boundary is exercised on every load. Backend swap (Phase 1):
+  // replace with the async `fetchRepoData()` seam behind a Suspense/loader.
+  const repo = useMemo(() => buildRepoData(toRepoDataDTO(buildRepo())), []);
   return <FilterProvider repo={repo}>{children}</FilterProvider>;
 }
 
@@ -239,7 +244,7 @@ function makeLazyRoute(
       // instead of the top-level "App" boundary replacing the whole shell.
       return (
         <ErrorBoundary label={path}>
-          <Suspense fallback={null}>
+          <Suspense fallback={<RouteFallback />}>
             <Component />
           </Suspense>
         </ErrorBoundary>

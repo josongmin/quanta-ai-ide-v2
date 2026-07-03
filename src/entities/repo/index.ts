@@ -17,6 +17,8 @@ export type {
 } from './model';
 export { STATUS_CSS } from './model';
 export { buildRepo, CELL_SIZE, GRID_COUNT } from './lib/build';
+export { buildRepoData, toRepoDataDTO, type RepoDataDTO } from './lib/repoDto';
+export { fetchRepoData } from './lib/loadRepo';
 export { computeSCCs, cycleSCCs, type SCC } from './lib/cycles';
 export {
   computeBlast,

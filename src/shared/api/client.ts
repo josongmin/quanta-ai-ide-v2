@@ -1,0 +1,84 @@
+// Single HTTP client — the one gateway every real network call goes through.
+//
+// Design for a clean mock→real swap:
+//   • Returns a tagged `ApiResult<T>` (never throws) so call sites branch on
+//     `ok` exactly like the existing `GenerateError` result shape.
+//   • In mock mode every call returns `{ ok:false, error:{ kind:'not-wired' }}`
+//     — features are expected to use their in-app generator instead. Once
+//     VITE_API_MODE=real, the same call sites hit the backend unchanged.
+//   • Auth-token attach and 401 handling are registered seams (setAuthToken-
+//     Getter / setUnauthorizedHandler) so the auth phase plugs in without
+//     touching this file.
+
+import { env } from '@shared/config/env';
+
+export type ApiError = {
+  kind: 'network' | 'http' | 'parse' | 'unauthorized' | 'not-wired';
+  status?: number;
+  message: string;
+};
+
+export type ApiResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: ApiError };
+
+type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
+
+// ── Registered seams (auth phase wires these) ────────────────────────────
+let authTokenGetter: () => string | null = () => null;
+let onUnauthorized: () => void = () => { /* no-op until auth is wired */ };
+
+/** Auth phase: return the current access token (attached as Bearer). */
+export function setAuthTokenGetter(fn: () => string | null): void {
+  authTokenGetter = fn;
+}
+/** Auth phase: called on any 401 (refresh token / redirect to login). */
+export function setUnauthorizedHandler(fn: () => void): void {
+  onUnauthorized = fn;
+}
+
+async function request<T>(method: Method, path: string, body?: unknown): Promise<ApiResult<T>> {
+  if (!env.useRealApi) {
+    return {
+      ok: false,
+      error: { kind: 'not-wired', message: `API in mock mode — ${method} ${path} should use its in-app generator` },
+    };
+  }
+
+  try {
+    const token = authTokenGetter();
+    const res = await fetch(`${env.apiBaseUrl}${path}`, {
+      method,
+      headers: {
+        'content-type': 'application/json',
+        ...(token ? { authorization: `Bearer ${token}` } : {}),
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+
+    if (res.status === 401) {
+      onUnauthorized();
+      return { ok: false, error: { kind: 'unauthorized', status: 401, message: 'Unauthorized' } };
+    }
+    if (!res.ok) {
+      return { ok: false, error: { kind: 'http', status: res.status, message: `HTTP ${res.status.toString()}` } };
+    }
+
+    try {
+      const data = (await res.json()) as unknown;
+      return { ok: true, data: data as T };
+    } catch {
+      return { ok: false, error: { kind: 'parse', message: 'Invalid JSON response' } };
+    }
+  } catch (e) {
+    return { ok: false, error: { kind: 'network', message: e instanceof Error ? e.message : String(e) } };
+  }
+}
+
+export const api = {
+  get: <T>(path: string): Promise<ApiResult<T>> => request<T>('GET', path),
+  post: <T>(path: string, body?: unknown): Promise<ApiResult<T>> => request<T>('POST', path, body),
+  patch: <T>(path: string, body?: unknown): Promise<ApiResult<T>> => request<T>('PATCH', path, body),
+  put: <T>(path: string, body?: unknown): Promise<ApiResult<T>> => request<T>('PUT', path, body),
+  del: <T>(path: string): Promise<ApiResult<T>> => request<T>('DELETE', path),
+};
