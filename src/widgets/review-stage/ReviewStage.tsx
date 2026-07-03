@@ -51,7 +51,6 @@ export default function ReviewStage() {
 
   return (
     <div
-      data-review-theme={isDark ? 'dark' : 'light'}
       className="absolute inset-0 overflow-hidden flex flex-col"
       style={{ backgroundColor: 'var(--bg-stage)' }}
     >

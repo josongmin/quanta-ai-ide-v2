@@ -80,7 +80,6 @@ export default function AdmissionV2() {
   return (
     <div
       className="absolute inset-0 overflow-hidden flex"
-      data-v2-theme={isDark ? 'dark' : 'light'}
       style={pageBackground(isDark)}
     >
       <AmbientLayer isDark={isDark} />

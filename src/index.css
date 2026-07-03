@@ -397,57 +397,6 @@ canvas {
   100% { transform: translateX(110%);  opacity: 0; }
 }
 
-/* ─────── Admission v2 light-theme inversion ───────
- * The v2 surface is authored in dark mode (text-white/X, bg-white/Y).
- * Rather than thread `isDark` through 3,000 lines, we mount the whole
- * surface inside `[data-v2-theme="light"]` and invert the white tokens
- * to black at CSS level. This is a pragmatic shortcut — Tailwind's
- * `text-white/N` compiles to `rgb(255 255 255 / N%)`, so we just rewrite
- * the colour channel. Severity colours and inline-styled accents are
- * unaffected (they ship via the V2 token table or `style={{color}}`).
- */
-[data-v2-theme="light"] .text-white       { color: rgb(0 0 0 / 1) !important; }
-[data-v2-theme="light"] .text-white\/95   { color: rgb(0 0 0 / 0.95) !important; }
-[data-v2-theme="light"] .text-white\/90   { color: rgb(0 0 0 / 0.90) !important; }
-[data-v2-theme="light"] .text-white\/85   { color: rgb(0 0 0 / 0.85) !important; }
-[data-v2-theme="light"] .text-white\/80   { color: rgb(0 0 0 / 0.80) !important; }
-[data-v2-theme="light"] .text-white\/75   { color: rgb(0 0 0 / 0.75) !important; }
-[data-v2-theme="light"] .text-white\/70   { color: rgb(0 0 0 / 0.72) !important; }
-[data-v2-theme="light"] .text-white\/65   { color: rgb(0 0 0 / 0.68) !important; }
-[data-v2-theme="light"] .text-white\/55   { color: rgb(0 0 0 / 0.60) !important; }
-[data-v2-theme="light"] .text-white\/50   { color: rgb(0 0 0 / 0.55) !important; }
-[data-v2-theme="light"] .text-white\/45   { color: rgb(0 0 0 / 0.50) !important; }
-[data-v2-theme="light"] .text-white\/40   { color: rgb(0 0 0 / 0.45) !important; }
-[data-v2-theme="light"] .text-white\/35   { color: rgb(0 0 0 / 0.40) !important; }
-[data-v2-theme="light"] .text-white\/30   { color: rgb(0 0 0 / 0.35) !important; }
-[data-v2-theme="light"] .text-white\/25   { color: rgb(0 0 0 / 0.30) !important; }
-
-/* Background opacities — invert the same way. We hit the most common
- * Tailwind tones used inside v2 (the [0.0X] arbitrary syntax). */
-[data-v2-theme="light"] .bg-white         { background-color: rgb(255 255 255 / 1) !important; }
-[data-v2-theme="light"] .bg-white\/15     { background-color: rgb(0 0 0 / 0.10) !important; }
-[data-v2-theme="light"] .bg-white\/10     { background-color: rgb(0 0 0 / 0.08) !important; }
-[data-v2-theme="light"] .bg-white\/5      { background-color: rgb(0 0 0 / 0.05) !important; }
-[data-v2-theme="light"] .bg-white\/\[0\.04\]  { background-color: rgb(0 0 0 / 0.04) !important; }
-[data-v2-theme="light"] .bg-white\/\[0\.025\] { background-color: rgb(0 0 0 / 0.025) !important; }
-[data-v2-theme="light"] .bg-white\/\[0\.03\]  { background-color: rgb(0 0 0 / 0.03) !important; }
-[data-v2-theme="light"] .bg-white\/\[0\.06\]  { background-color: rgb(0 0 0 / 0.05) !important; }
-
-/* Borders — `border-white/X` and divides. Same invert. */
-[data-v2-theme="light"] .border-white\/10 { border-color: rgb(0 0 0 / 0.10) !important; }
-[data-v2-theme="light"] .border-white\/5  { border-color: rgb(0 0 0 / 0.06) !important; }
-[data-v2-theme="light"] .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
-  border-color: rgb(0 0 0 / 0.06) !important;
-}
-
-/* `text-black` button on white pill — flip to black-on-white still works
- * in light, so we leave it alone. The reverse pair (`bg-white text-black`)
- * is the primary CTA — we want it to become `bg-black text-white` in
- * light mode so the CTA still pops. */
-[data-v2-theme="light"] .bg-white.text-black {
-  background-color: #0d1117 !important;
-  color: #fff !important;
-}
 
 /* ─────── Focus stack: active card swap ─────── */
 /* Opacity-only fade: any non-`none` transform on this wrapper would create
@@ -571,59 +520,6 @@ canvas {
   }
 }
 
-/* ─────── ReviewStage light-theme inversion ───────
- * Same trick as `[data-v2-theme="light"]`. ReviewStage is authored in dark
- * (text-white/X, bg-white/Y, border-white/X) — rather than rewrite the body
- * we mount the entire surface inside `[data-review-theme="light"]` and
- * invert the white tokens to black at the CSS level. */
-[data-review-theme="light"] .text-white       { color: rgb(0 0 0 / 1) !important; }
-[data-review-theme="light"] .text-white\/95   { color: rgb(0 0 0 / 0.95) !important; }
-[data-review-theme="light"] .text-white\/90   { color: rgb(0 0 0 / 0.90) !important; }
-[data-review-theme="light"] .text-white\/85   { color: rgb(0 0 0 / 0.85) !important; }
-[data-review-theme="light"] .text-white\/80   { color: rgb(0 0 0 / 0.80) !important; }
-[data-review-theme="light"] .text-white\/75   { color: rgb(0 0 0 / 0.75) !important; }
-[data-review-theme="light"] .text-white\/70   { color: rgb(0 0 0 / 0.72) !important; }
-[data-review-theme="light"] .text-white\/65   { color: rgb(0 0 0 / 0.68) !important; }
-[data-review-theme="light"] .text-white\/60   { color: rgb(0 0 0 / 0.65) !important; }
-[data-review-theme="light"] .text-white\/55   { color: rgb(0 0 0 / 0.60) !important; }
-[data-review-theme="light"] .text-white\/50   { color: rgb(0 0 0 / 0.55) !important; }
-[data-review-theme="light"] .text-white\/45   { color: rgb(0 0 0 / 0.50) !important; }
-[data-review-theme="light"] .text-white\/40   { color: rgb(0 0 0 / 0.45) !important; }
-[data-review-theme="light"] .text-white\/35   { color: rgb(0 0 0 / 0.40) !important; }
-[data-review-theme="light"] .text-white\/30   { color: rgb(0 0 0 / 0.35) !important; }
-[data-review-theme="light"] .text-white\/25   { color: rgb(0 0 0 / 0.30) !important; }
-[data-review-theme="light"] .text-white\/20   { color: rgb(0 0 0 / 0.25) !important; }
-
-[data-review-theme="light"] .bg-white         { background-color: rgb(255 255 255 / 1) !important; }
-[data-review-theme="light"] .bg-white\/90     { background-color: rgb(0 0 0 / 0.85) !important; }
-[data-review-theme="light"] .bg-white\/80     { background-color: rgb(0 0 0 / 0.75) !important; }
-[data-review-theme="light"] .bg-white\/30     { background-color: rgb(0 0 0 / 0.30) !important; }
-[data-review-theme="light"] .bg-white\/15     { background-color: rgb(0 0 0 / 0.10) !important; }
-[data-review-theme="light"] .bg-white\/10     { background-color: rgb(0 0 0 / 0.08) !important; }
-[data-review-theme="light"] .bg-white\/5      { background-color: rgb(0 0 0 / 0.05) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.10\] { background-color: rgb(0 0 0 / 0.08) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.1\]  { background-color: rgb(0 0 0 / 0.08) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.08\] { background-color: rgb(0 0 0 / 0.06) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.06\] { background-color: rgb(0 0 0 / 0.05) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.04\] { background-color: rgb(0 0 0 / 0.04) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.035\] { background-color: rgb(0 0 0 / 0.035) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.03\] { background-color: rgb(0 0 0 / 0.03) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.025\] { background-color: rgb(0 0 0 / 0.025) !important; }
-[data-review-theme="light"] .bg-white\/\[0\.02\] { background-color: rgb(0 0 0 / 0.02) !important; }
-
-[data-review-theme="light"] .border-white\/30 { border-color: rgb(0 0 0 / 0.25) !important; }
-[data-review-theme="light"] .border-white\/15 { border-color: rgb(0 0 0 / 0.12) !important; }
-[data-review-theme="light"] .border-white\/10 { border-color: rgb(0 0 0 / 0.10) !important; }
-[data-review-theme="light"] .border-white\/5  { border-color: rgb(0 0 0 / 0.06) !important; }
-[data-review-theme="light"] .border-white\/\[0\.04\] { border-color: rgb(0 0 0 / 0.05) !important; }
-[data-review-theme="light"] .border-white\/\[0\.06\] { border-color: rgb(0 0 0 / 0.06) !important; }
-[data-review-theme="light"] .border-white\/\[0\.08\] { border-color: rgb(0 0 0 / 0.08) !important; }
-[data-review-theme="light"] .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
-  border-color: rgb(0 0 0 / 0.06) !important;
-}
-[data-review-theme="light"] .divide-white\/\[0\.04\] > :not([hidden]) ~ :not([hidden]) {
-  border-color: rgb(0 0 0 / 0.05) !important;
-}
 
 /* Onboarding wizard — step in/out and small affordance animations. */
 @keyframes onb-step-in {
