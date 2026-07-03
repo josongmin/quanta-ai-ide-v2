@@ -47,10 +47,10 @@ export function RoutineRail({
     });
   }, [routines, filter, query]);
 
-  const panel = isDark ? 'bg-[#11161e]' : 'bg-white';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
-  const textMuted = isDark ? 'text-white/55' : 'text-black/55';
+  const panel = 'bg-[var(--bg-surface)]';
+  const border = 'border-[var(--border-default)]';
+  const textFaint = 'text-[var(--fg-subtle)]';
+  const textMuted = 'text-[var(--fg-muted)]';
 
   return (
     <aside
@@ -64,9 +64,7 @@ export function RoutineRail({
         <button
           type="button"
           onClick={onNew}
-          className={`p-1 rounded-md transition-colors ${
-            isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.04]'
-          }`}
+          className={`p-1 rounded-md transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]`}
           aria-label={t('header.newRoutine')}
           title={t('header.newRoutine')}
         >
@@ -75,22 +73,16 @@ export function RoutineRail({
       </div>
 
       <div className={`shrink-0 px-3 py-2 border-b ${border} space-y-2`}>
-        <div className={`flex items-center gap-2 px-2 py-1 rounded-md ${
-          isDark ? 'bg-white/[0.03] border border-white/[0.06]' : 'bg-black/[0.02] border border-black/[0.06]'
-        }`}>
+        <div className={`flex items-center gap-2 px-2 py-1 rounded-md bg-[var(--bg-surface-muted)] border border-[var(--border-default)]`}>
           <SearchIcon className={`w-3 h-3 shrink-0 ${textFaint}`} />
           <input
             value={query}
             onChange={(e) => { setQuery(e.target.value); }}
             placeholder={t('rail.search')}
-            className={`flex-1 bg-transparent outline-none text-base font-mono ${
-              isDark ? 'text-white/85 placeholder:text-white/30' : 'text-black/85 placeholder:text-black/35'
-            }`}
+            className={`flex-1 bg-transparent outline-none text-base font-mono text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)]`}
           />
         </div>
-        <div className={`flex items-center gap-px rounded-md p-px ${
-          isDark ? 'bg-white/[0.04]' : 'bg-black/[0.04]'
-        }`}>
+        <div className={`flex items-center gap-px rounded-md p-px bg-[var(--bg-hover)]`}>
           {(['all', 'active', 'paused', 'draft'] as const).map((f) => (
             <button
               key={f}
@@ -99,8 +91,8 @@ export function RoutineRail({
               aria-pressed={filter === f}
               className={`flex-1 px-2 py-1 rounded text-xs font-mono transition-colors ${
                 filter === f
-                  ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black')
-                  : (isDark ? 'text-white/45 hover:text-white/75' : 'text-black/45 hover:text-black/75')
+                  ? 'bg-[var(--bg-selected)] text-[var(--fg-strong)]'
+                  : 'text-[var(--fg-subtle)] hover:text-[var(--fg-default)]'
               }`}
             >
               {t(`rail.filter.${f}`)}
@@ -143,12 +135,10 @@ function RoutineRow({
   t: TranslateFn;
 }) {
   const Icon = KIND_ICON[routine.kind] ?? Bot;
-  const baseTone = isDark
-    ? (active ? 'bg-white/[0.06]' : 'hover:bg-white/[0.03]')
-    : (active ? 'bg-black/[0.04]' : 'hover:bg-black/[0.02]');
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/45' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
+  const baseTone = active ? 'bg-[var(--bg-elevated)]' : 'hover:bg-[var(--bg-surface-muted)]';
+  const heading = 'text-[var(--fg-default)]';
+  const muted = 'text-[var(--fg-muted)]';
+  const faint = 'text-[var(--fg-subtle)]';
 
   const statusDotColor =
     routine.status === 'active' ? 'var(--intent-success-vivid)'
@@ -169,9 +159,7 @@ function RoutineRow({
         className={`w-full text-left px-3 py-2 transition-colors ${baseTone}`}
       >
         <div className="flex items-start gap-2">
-          <span className={`shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md mt-0.5 ${
-            isDark ? 'bg-white/[0.04]' : 'bg-black/[0.03]'
-          }`}>
+          <span className={`shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md mt-0.5 bg-[var(--bg-hover)]`}>
             <Icon className={`w-3.5 h-3.5 ${muted}`} />
           </span>
           <div className="flex-1 min-w-0">

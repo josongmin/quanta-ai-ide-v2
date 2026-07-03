@@ -13,7 +13,7 @@ export default function Avatar({ login, size = 24 }: AvatarProps) {
   const fontSize = Math.max(8, Math.round(size * 0.42));
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full font-bold text-white shrink-0 select-none"
+      className="inline-flex items-center justify-center rounded-full font-bold text-[var(--fg-on-accent)] shrink-0 select-none"
       style={{
         width: size,
         height: size,

@@ -41,7 +41,7 @@ export default function AgentFleetStage() {
     return live?.id ?? runs[0]?.id ?? null;
   }, [activeRunId, runs]);
 
-  const surface = isDark ? 'bg-[#0d1117]' : 'bg-[#f7f8fa]';
+  const surface = 'bg-[var(--bg-canvas)]';
 
   function onApproveGate(_runId: string, _stepId: string) {
     // Demo no-op: a real impl would advance the run past the gate.
@@ -90,7 +90,7 @@ export default function AgentFleetStage() {
 
   return (
     <div className={`absolute inset-0 flex flex-col font-sans ${surface}`}>
-      <RoiRibbon isDark={isDark} t={t} />
+      <RoiRibbon t={t} />
       <div className="flex-1 min-h-0 flex">
         <RoutineRail
           routines={routines}
@@ -135,17 +135,16 @@ export default function AgentFleetStage() {
 }
 
 function RoiRibbon({
-  isDark, t,
+  t,
 }: {
-  isDark: boolean;
   t: (k: string, opts?: Record<string, unknown>) => string;
 }) {
   const roi = SAMPLE_FLEET_HEALTH.weekRoi;
-  const panel = isDark ? 'bg-[#11161e]' : 'bg-white';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const labelTone = isDark ? 'text-white/40' : 'text-black/40';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
+  const panel = 'bg-[var(--bg-surface)]';
+  const border = 'border-[var(--border-default)]';
+  const labelTone = 'text-[var(--fg-subtle)]';
+  const heading = 'text-[var(--fg-default)]';
+  const muted = 'text-[var(--fg-muted)]';
 
   return (
     <div className={`shrink-0 h-14 flex items-center justify-between px-5 border-b ${border} ${panel}`}>
@@ -157,20 +156,20 @@ function RoiRibbon({
         <span className={`text-xs font-bold uppercase tracking-eyebrow ${labelTone}`}>
           {t('header.weekRoi')}
         </span>
-        <RoiStat value={String(roi.prsMerged)}      label={t('header.roi.prsMerged', { n: roi.prsMerged })}      isDark={isDark} />
-        <RoiStat value={String(roi.locDeleted)}     label={t('header.roi.locDeleted', { n: roi.locDeleted })}    isDark={isDark} />
-        <RoiStat value={`${roi.reviewHoursSaved.toFixed(1)}h`} label={t('header.roi.hoursSaved', { h: roi.reviewHoursSaved.toFixed(1) })} isDark={isDark} />
-        <RoiStat value={`$${roi.totalSpentUsd.toFixed(2)}`}    label={t('header.roi.spent', { usd: roi.totalSpentUsd.toFixed(2) })}      isDark={isDark} />
+        <RoiStat value={String(roi.prsMerged)}      label={t('header.roi.prsMerged', { n: roi.prsMerged })}      />
+        <RoiStat value={String(roi.locDeleted)}     label={t('header.roi.locDeleted', { n: roi.locDeleted })}    />
+        <RoiStat value={`${roi.reviewHoursSaved.toFixed(1)}h`} label={t('header.roi.hoursSaved', { h: roi.reviewHoursSaved.toFixed(1) })} />
+        <RoiStat value={`$${roi.totalSpentUsd.toFixed(2)}`}    label={t('header.roi.spent', { usd: roi.totalSpentUsd.toFixed(2) })}      />
       </div>
     </div>
   );
 }
 
-function RoiStat({ value, label, isDark }: { value: string; label: string; isDark: boolean }) {
-  const muted = isDark ? 'text-white/45' : 'text-black/55';
+function RoiStat({ value, label }: { value: string; label: string }) {
+  const muted = 'text-[var(--fg-subtle)]';
   return (
     <div className="text-right" title={label}>
-      <div className={`text-base font-mono tabular-nums ${isDark ? 'text-white/85' : 'text-black/85'}`}>{value}</div>
+      <div className={`text-base font-mono tabular-nums text-[var(--fg-default)]`}>{value}</div>
       <div className={`text-2xs font-mono ${muted}`}>{label}</div>
     </div>
   );

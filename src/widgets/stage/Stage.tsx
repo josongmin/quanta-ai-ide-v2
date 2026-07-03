@@ -229,7 +229,7 @@ function FileTooltip({ x, y, file, isDark }: { x: number; y: number; file: FileR
       </div>
       <div className={`space-y-1 border-t pt-2 text-xs ${isDark ? 'border-white/10' : 'border-black/10'}`}>
         <Row label={t('tooltip.loc')} value={file.metrics.loc} />
-        <Row label={t('tooltip.complexity')} value={file.metrics.complexity} valueClass="text-[#4f9a5c]" />
+        <Row label={t('tooltip.complexity')} value={file.metrics.complexity} valueClass="text-[var(--intent-success-vivid)]" />
         <Row label={t('tooltip.fanInOut')} value={`${file.metrics.fanIn} / ${file.metrics.fanOut}`} />
         <Row label={t('tooltip.blastRadius')} value={file.metrics.blastRadius} />
         <Row
@@ -267,16 +267,16 @@ function Row({ label, value, valueClass, valueStyle }: { label: string; value: s
 
 function confidenceClass(c: 'exact' | 'overapprox' | 'unknown' | 'stale'): string {
   switch (c) {
-    case 'exact':      return 'text-[#5fa86c]';
-    case 'overapprox': return 'text-[#a8893a]';
-    case 'unknown':    return 'text-[#c25a55]';
-    case 'stale':      return 'text-slate-400';
+    case 'exact':      return 'text-[var(--intent-success-fg)]';
+    case 'overapprox': return 'text-[var(--intent-warn-fg)]';
+    case 'unknown':    return 'text-[var(--intent-danger-fg)]';
+    case 'stale':      return 'text-[var(--fg-subtle)]';
   }
 }
 function safetyClass(s: number, isDark: boolean): string {
   void isDark;
-  if (s >= 70) return 'text-[#5fa86c]';
-  if (s >= 40) return 'text-[#a8893a]';
+  if (s >= 70) return 'text-[var(--intent-success-fg)]';
+  if (s >= 40) return 'text-[var(--intent-warn-fg)]';
   if (s >= 20) return '';
-  return 'text-[#c25a55]';
+  return 'text-[var(--intent-danger-fg)]';
 }

@@ -62,7 +62,7 @@ export function RiskTab({ file }: { file: FileRecord }) {
           <div
             className="relative w-20 h-20 rounded-full flex flex-col items-center justify-center"
             style={{
-              border: `1.5px solid ${severe ? 'rgba(194,90,85,0.4)' : 'var(--border-strong)'}`,
+              border: `1.5px solid ${severe ? 'rgb(from var(--intent-danger-vivid) r g b / 0.4)' : 'var(--border-strong)'}`,
             }}
           >
             <div className="text-3xl font-black leading-none tabular-nums" style={{ color: ringColor }}>
@@ -295,6 +295,6 @@ function FileRow({ f }: { f: FileRecord }) {
 }
 
 function ConfDot({ c }: { c: Confidence }) {
-  const bg = c === 'exact' ? C.ok : c === 'overapprox' ? C.warning : c === 'unknown' ? C.critical : '#6e7681';
+  const bg = c === 'exact' ? C.ok : c === 'overapprox' ? C.warning : c === 'unknown' ? C.critical : 'var(--fg-muted)';
   return <span className="w-2 h-2 rounded-full shrink-0" style={{ background: bg, boxShadow: `0 0 6px ${bg}` }} title={c} />;
 }

@@ -1,13 +1,15 @@
+import { primitives } from '@shared/tokens';
+
 export type StatusKey = 'STABLE' | 'MODIFIED' | 'NEW' | 'SECURITY_ALERT';
 
 // Status labels are now resolved in the UI layer via i18n (`common:status.*`).
 // Only the css palette remains here — colors are presentation-agnostic.
 
 export const STATUS_CSS: Record<StatusKey, string> = {
-  STABLE: '#6e7681',
-  MODIFIED: '#4f9a5c',
-  NEW: '#4f9a5c',
-  SECURITY_ALERT: '#c25a55',
+  STABLE: primitives.colors.grey[500],
+  MODIFIED: primitives.colors.green[500],
+  NEW: primitives.colors.green[500],
+  SECURITY_ALERT: primitives.colors.red[400],
 };
 
 export type Layer = 'view' | 'controller' | 'service' | 'repository' | 'util' | 'test' | 'vendor';

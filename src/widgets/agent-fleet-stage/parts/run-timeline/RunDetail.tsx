@@ -4,18 +4,17 @@ import {
 import type { Run, RunCandidate, RunStep, TranslateFn } from '../types';
 
 export function RunDetail({
-  run, onApproveGate, onAdoptCandidate, isDark, t,
+  run, onApproveGate, onAdoptCandidate, t,
 }: {
   run: Run;
   onApproveGate: (stepId: string) => void;
   onAdoptCandidate: (cId: string) => void;
-  isDark: boolean;
   t: TranslateFn;
 }) {
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
-  const card = isDark ? 'bg-white/[0.025] border-white/[0.06]' : 'bg-black/[0.02] border-black/[0.06]';
+  const heading = 'text-[var(--fg-default)]';
+  const muted = 'text-[var(--fg-muted)]';
+  const faint = 'text-[var(--fg-subtle)]';
+  const card = 'bg-[var(--bg-surface-muted)] border-[var(--border-default)]';
 
   return (
     <div className={`rounded-lg border ${card} px-4 py-3`}>
@@ -39,7 +38,6 @@ export function RunDetail({
           <StepRow
             key={step.id}
             step={step}
-            isDark={isDark}
             t={t}
             onApprove={() => { onApproveGate(step.id); }}
           />
@@ -57,7 +55,6 @@ export function RunDetail({
                 key={c.id}
                 cand={c}
                 onAdopt={() => { onAdoptCandidate(c.id); }}
-                isDark={isDark}
                 t={t}
               />
             ))}
@@ -97,16 +94,15 @@ const STEP_ICON: Record<RunStep['state'], typeof CircleDot> = {
 };
 
 function StepRow({
-  step, isDark, t, onApprove,
+  step, t, onApprove,
 }: {
   step: RunStep;
-  isDark: boolean;
   t: TranslateFn;
   onApprove: () => void;
 }) {
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
+  const muted = 'text-[var(--fg-muted)]';
+  const heading = 'text-[var(--fg-default)]';
+  const faint = 'text-[var(--fg-subtle)]';
 
   const Icon = STEP_ICON[step.state] ?? ChevronRight;
 
@@ -115,15 +111,13 @@ function StepRow({
     step.state === 'ok' ? 'text-[color:var(--intent-success-fg)]'
     : step.state === 'fail' ? 'text-[color:var(--intent-danger-fg)]'
     : step.state === 'gated' ? 'text-[color:var(--intent-warn-fg)]'
-    : step.state === 'running' ? (isDark ? 'text-white/85' : 'text-black/85')
+    : step.state === 'running' ? 'text-[var(--fg-default)]'
     : faint;
 
   return (
     <li className="flex items-center gap-2 text-sm">
       <Icon className={`w-3 h-3 shrink-0 ${iconTone} ${step.state === 'running' ? 'animate-pulse' : ''}`} />
-      <span className={`shrink-0 inline-flex items-center px-1 py-px rounded-sm text-2xs font-bold uppercase tracking-eyebrow ${
-        isDark ? 'bg-white/[0.04] text-white/55' : 'bg-black/[0.04] text-black/55'
-      }`}>
+      <span className={`shrink-0 inline-flex items-center px-1 py-px rounded-sm text-2xs font-bold uppercase tracking-eyebrow bg-[var(--bg-hover)] text-[var(--fg-muted)]`}>
         {t(`stepPhase.${step.phase}`)}
       </span>
       <span className={`flex-1 truncate ${heading}`}>{step.label}</span>
@@ -151,19 +145,18 @@ function StepRow({
 }
 
 function CandidateRow({
-  cand, onAdopt, isDark, t,
+  cand, onAdopt, t,
 }: {
   cand: RunCandidate;
   onAdopt: () => void;
-  isDark: boolean;
   t: TranslateFn;
 }) {
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
+  const heading = 'text-[var(--fg-default)]';
+  const muted = 'text-[var(--fg-muted)]';
+  const faint = 'text-[var(--fg-subtle)]';
   const tone = cand.selected
     ? 'border-[color:var(--intent-success-fg)] bg-[color:var(--intent-success-bg)]'
-    : (isDark ? 'border-white/[0.06]' : 'border-black/[0.06]');
+    : 'border-[var(--border-default)]';
 
   return (
     <div className={`flex items-center gap-2 px-2 py-1.5 rounded-md border ${tone}`}>
@@ -182,9 +175,7 @@ function CandidateRow({
         <button
           type="button"
           onClick={onAdopt}
-          className={`shrink-0 px-2 py-0.5 rounded-md text-xs font-mono transition-colors ${
-            isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
-          }`}
+          className={`shrink-0 px-2 py-0.5 rounded-md text-xs font-mono transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]`}
         >
           {t('run.candidateAdopt')}
         </button>

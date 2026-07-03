@@ -29,12 +29,12 @@ function NodeButton({
     ? { boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)' }
     : { boxShadow: 'inset 0 0 0 1px var(--border-default)' };
   const tone = direct
-    ? 'text-zinc-800 dark:text-zinc-100'
-    : 'text-zinc-500 dark:text-zinc-400';
+    ? 'text-[var(--fg-strong)]'
+    : 'text-[var(--fg-muted)]';
   const handle = () => onClick?.(id);
-  const className = `text-left font-mono text-sm px-2 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] ${tone} ${
+  const className = `text-left font-mono text-sm px-2 py-1 rounded-md bg-[var(--bg-surface-muted)] ${tone} ${
     typeof onClick === 'function'
-      ? 'cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.05]'
+      ? 'cursor-pointer hover:bg-[var(--bg-active)]'
       : ''
   }`;
   if (typeof onClick === 'function') {
@@ -66,19 +66,19 @@ function Section({
         <span
           className={`text-xs font-bold uppercase tracking-eyebrow ${
             emphasis === 'direct'
-              ? 'text-zinc-800 dark:text-zinc-200'
-              : 'text-zinc-500 dark:text-zinc-400'
+              ? 'text-[var(--fg-default)]'
+              : 'text-[var(--fg-muted)]'
           }`}
         >
           {title}
         </span>
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">{caption}</span>
-        <span className="ml-auto font-mono text-xs text-zinc-400 dark:text-zinc-500">
+        <span className="text-xs text-[var(--fg-subtle)]">{caption}</span>
+        <span className="ml-auto font-mono text-xs text-[var(--fg-subtle)]">
           {String(ids.length)}
         </span>
       </div>
       {ids.length === 0 ? (
-        <p className="px-1 text-sm text-zinc-400 dark:text-zinc-500 italic">None.</p>
+        <p className="px-1 text-sm text-[var(--fg-subtle)] italic">None.</p>
       ) : (
         <div className="flex flex-wrap gap-1.5 px-1">
           {ids.map((id) => (
@@ -96,7 +96,7 @@ export default function IssueCodeOverlay({
   onNodeClick,
 }: Props) {
   return (
-    <div className="rounded-2xl px-3 py-3 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5 flex flex-col gap-3">
+    <div className="rounded-2xl px-3 py-3 bg-[var(--bg-hover)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)] flex flex-col gap-3">
       <Section
         title="Stack hits"
         caption="direct evidence"

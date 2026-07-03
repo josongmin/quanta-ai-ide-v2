@@ -1,5 +1,5 @@
-export function Field({ label, isDark, children }: { label: string; isDark: boolean; children: React.ReactNode }) {
-  const labelTone = isDark ? 'text-white/40' : 'text-black/45';
+export function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  const labelTone = 'text-[var(--fg-subtle)]';
   return (
     <div>
       <div className={`text-xs font-bold uppercase tracking-eyebrow mb-1 ${labelTone}`}>{label}</div>

@@ -50,7 +50,7 @@ export function GatePage({
   const passed = decision.ruleResults.filter((r) => r.status === 'pass');
 
   const accent = decision.outcome === 'block' ? SEVERITY_COLOR.block
-    : decision.outcome === 'warn' ? SEVERITY_COLOR.warn : '#5fa86c';
+    : decision.outcome === 'warn' ? SEVERITY_COLOR.warn : 'var(--intent-success-fg)';
   const Icon = decision.outcome === 'allow' ? ShieldCheck
     : decision.outcome === 'warn' ? ShieldAlert : ShieldX;
 

@@ -15,7 +15,6 @@ export function RunTimeline({
   onApproveGate,
   onAdoptCandidate,
   onEditRoutine,
-  isDark,
   t,
 }: {
   routine: Routine | null;
@@ -25,13 +24,13 @@ export function RunTimeline({
   onApproveGate: (runId: string, stepId: string) => void;
   onAdoptCandidate: (runId: string, candidateId: string) => void;
   onEditRoutine: () => void;
-  isDark: boolean;
+  isDark?: boolean;
   t: TranslateFn;
 }) {
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
+  const border = 'border-[var(--border-default)]';
+  const heading = 'text-[var(--fg-default)]';
+  const muted = 'text-[var(--fg-muted)]';
+  const faint = 'text-[var(--fg-subtle)]';
 
   const activeRun = useMemo(
     () => runs.find((r) => r.id === activeRunId) ?? runs[0],
@@ -55,25 +54,21 @@ export function RunTimeline({
         <div className="flex items-center gap-2 min-w-0">
           <span className={`text-base font-semibold truncate ${heading}`}>{routine.name}</span>
           <span className={faint}>·</span>
-          <StatusPill status={routine.status} isDark={isDark} t={t} />
+          <StatusPill status={routine.status} t={t} />
           <span className={faint}>·</span>
-          <TrustChip level={routine.trustLevel} isDark={isDark} t={t} />
+          <TrustChip level={routine.trustLevel} t={t} />
         </div>
         <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={onEditRoutine}
-            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors ${
-              isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
-            }`}
+            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]`}
           >
             {t('editor.open')}
           </button>
           <button
             type="button"
-            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors ${
-              isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.05]'
-            }`}
+            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]`}
           >
             {routine.status === 'active' ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
             {routine.status === 'active' ? t('actions.pause') : t('actions.resume')}
@@ -81,9 +76,7 @@ export function RunTimeline({
           <button
             type="button"
             aria-label="More"
-            className={`p-1 rounded-md transition-colors ${
-              isDark ? 'text-white/40 hover:text-white/85 hover:bg-white/[0.05]' : 'text-black/40 hover:text-black/85 hover:bg-black/[0.05]'
-            }`}
+            className={`p-1 rounded-md transition-colors text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-elevated)]`}
           >
             <MoreHorizontal className="w-3.5 h-3.5" />
           </button>
@@ -92,7 +85,7 @@ export function RunTimeline({
 
       <div className="flex-1 min-h-0 overflow-auto scrollbar-thin">
         <div className="max-w-[840px] mx-auto px-6 py-6 space-y-5">
-          <RoutineSummary routine={routine} isDark={isDark} t={t} />
+          <RoutineSummary routine={routine} t={t} />
 
           <div>
             <div className={`mb-2 text-xs font-bold uppercase tracking-eyebrow ${faint}`}>
@@ -110,7 +103,6 @@ export function RunTimeline({
                     run={run}
                     active={run.id === activeRun?.id}
                     onClick={() => { onSelectRun(run.id); }}
-                    isDark={isDark}
                     t={t}
                   />
                 ))}
@@ -123,7 +115,6 @@ export function RunTimeline({
               run={activeRun}
               onApproveGate={(stepId) => { onApproveGate(activeRun.id, stepId); }}
               onAdoptCandidate={(cId) => { onAdoptCandidate(activeRun.id, cId); }}
-              isDark={isDark}
               t={t}
             />
           )}

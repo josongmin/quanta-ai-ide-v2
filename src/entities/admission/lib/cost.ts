@@ -1,3 +1,4 @@
+import { primitives } from '@shared/tokens';
 import type { AdmissionRule, CostClass, RuleSignal } from '../model';
 
 // Cost classifier — runs in O(1), called on every keystroke in the rule
@@ -75,11 +76,11 @@ export const COST_HINT: Record<CostClass, string> = {
 };
 
 export const COST_COLOR: Record<CostClass, string> = {
-  instant: '#5fa86c',
-  fast: '#7aa7d4',
-  medium: '#a8893a',
-  slow: '#db6d28',
-  background: '#c25a55',
+  instant: primitives.colors.green[400],
+  fast: '#7aa7d4',      // not in the primitive blue scale (blue[400]=#5a8fce) — left as-is
+  medium: primitives.colors.amber[400],
+  slow: '#db6d28',      // not in the primitive scales (orange, no orange primitive) — left as-is
+  background: primitives.colors.red[400],
 };
 
 /** Soft cap for live-preview match counts. Beyond this we set `truncated`. */

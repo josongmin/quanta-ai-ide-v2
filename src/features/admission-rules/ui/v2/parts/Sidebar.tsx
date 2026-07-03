@@ -26,7 +26,7 @@ export function Sidebar({
   const enabled = rules.filter((r) => r.enabled).length;
   const verdict = decision.outcome;
   const verdictColor = verdict === 'block' ? SEVERITY_COLOR.block
-    : verdict === 'warn' ? SEVERITY_COLOR.warn : '#5fa86c';
+    : verdict === 'warn' ? SEVERITY_COLOR.warn : 'var(--intent-success-fg)';
 
   // Verdict short-form for the nav badge — full word is too long for the
   // 18px badge slot. We use a single glyph + tooltip via the page title.

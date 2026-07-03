@@ -19,7 +19,7 @@ export function IntegrationCard({ integration }: { integration: Integration }) {
     >
       <div className="flex items-start justify-between">
         <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center text-white"
+          className="w-10 h-10 rounded-lg flex items-center justify-center text-[var(--fg-on-accent)]"
           style={{
             backgroundImage: `linear-gradient(135deg, ${integration.tone.from}, ${integration.tone.to})`,
           }}

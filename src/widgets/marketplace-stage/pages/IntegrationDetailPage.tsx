@@ -28,7 +28,7 @@ export default function IntegrationDetailPage() {
       {/* Hero */}
       <div className="flex items-start gap-6 mb-8">
         <div
-          className="w-20 h-20 rounded-2xl flex items-center justify-center text-white shrink-0"
+          className="w-20 h-20 rounded-2xl flex items-center justify-center text-[var(--fg-on-accent)] shrink-0"
           style={{
             backgroundImage: `linear-gradient(135deg, ${integration.tone.from}, ${integration.tone.to})`,
             boxShadow: '0 12px 28px -10px color-mix(in srgb, var(--fg-strong) 22%, transparent)',

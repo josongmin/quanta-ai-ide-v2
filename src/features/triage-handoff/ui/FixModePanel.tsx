@@ -33,9 +33,9 @@ const BUTTONS: ButtonSpec[] = [
 
 export default function FixModePanel({ onAction, recommended }: Props) {
   return (
-    <div className="rounded-2xl px-3 py-3 bg-white dark:bg-white/[0.04] dark:backdrop-blur ring-1 ring-inset ring-black/5 dark:ring-white/5">
+    <div className="rounded-2xl px-3 py-3 bg-[var(--bg-hover)] dark:backdrop-blur ring-1 ring-inset ring-[var(--border-muted)]">
       <div className="flex items-center gap-2 px-1 mb-2">
-        <span className="text-xs font-bold uppercase tracking-eyebrow text-zinc-700 dark:text-zinc-300">
+        <span className="text-xs font-bold uppercase tracking-eyebrow text-[var(--fg-default)]">
           Fix mode
         </span>
         {recommended && (
@@ -56,15 +56,15 @@ export default function FixModePanel({ onAction, recommended }: Props) {
                 boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--intent-success-vivid) 50%, transparent)',
               }
             : {};
-          const text = isRecommended ? '' : 'text-zinc-700 dark:text-zinc-200';
-          const ring = isRecommended ? '' : 'ring-1 ring-inset ring-black/5 dark:ring-white/10';
+          const text = isRecommended ? '' : 'text-[var(--fg-default)]';
+          const ring = isRecommended ? '' : 'ring-1 ring-inset ring-[var(--border-strong)]';
           return (
             <button
               key={b.action}
               type="button"
               onClick={() => { onAction(b.action); }}
               style={style}
-              className={`text-sm font-medium px-2.5 py-1 rounded-md bg-white/30 dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer ${ring} ${text}`}
+              className={`text-sm font-medium px-2.5 py-1 rounded-md bg-[var(--bg-surface-muted)] hover:bg-[var(--bg-active)] transition-colors cursor-pointer ${ring} ${text}`}
             >
               {b.label}
             </button>

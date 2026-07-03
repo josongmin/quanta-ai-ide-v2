@@ -29,8 +29,10 @@ export type TtlMapStoreConfig<T> = {
 };
 
 export type TtlMapStore<T> = {
-  readMap(): Record<string, T>;
-  writeMap(map: Record<string, T>): void;
+  // Arrow-property signatures (not method shorthand) so these plain functions
+  // can be freely destructured without tripping @typescript-eslint/unbound-method.
+  readMap: () => Record<string, T>;
+  writeMap: (map: Record<string, T>) => void;
 };
 
 /**

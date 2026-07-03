@@ -28,18 +28,16 @@ export default function RoutineEditorModal({
   // conditionally mounted by its parent, so it is always effectively open.
   useDialogA11y(dialogRef, true, onClose);
 
-  const surface = isDark ? 'bg-[#11141a] border-white/[0.10]' : 'bg-white border-black/[0.10]';
-  const heading = isDark ? 'text-white/90' : 'text-black/85';
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
-  const labelTone = isDark ? 'text-white/40' : 'text-black/45';
-  const inputBg = isDark
-    ? 'bg-white/[0.04] text-white/85 placeholder:text-white/30 border-white/[0.08]'
-    : 'bg-black/[0.03] text-black/85 placeholder:text-black/35 border-black/[0.08]';
+  const surface = 'bg-[var(--bg-surface)] border-[var(--border-strong)]';
+  const heading = 'text-[var(--fg-strong)]';
+  const muted = 'text-[var(--fg-muted)]';
+  const faint = 'text-[var(--fg-subtle)]';
+  const labelTone = 'text-[var(--fg-subtle)]';
+  const inputBg = 'bg-[var(--bg-hover)] text-[var(--fg-default)] placeholder:text-[var(--fg-subtle)] border-[var(--border-default)]';
 
   const dryRun = useMemo(() => simulateDryRun(draft), [draft]);
 
-  const tones: EditorTones = { isDark, heading, muted, faint, labelTone, inputBg };
+  const tones: EditorTones = { heading, muted, faint, labelTone, inputBg };
 
   // Tab key → panel. Record map keeps the body open for new tabs (OCP).
   const PANELS: Record<Tab, ReactNode> = {
@@ -64,13 +62,13 @@ export default function RoutineEditorModal({
         tabIndex={-1}
         className={`relative w-full max-w-[640px] max-h-[80vh] flex flex-col rounded-xl border shadow-2xl ${surface}`}
       >
-        <div className={`shrink-0 flex items-center justify-between px-5 py-3 border-b ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'}`}>
+        <div className={`shrink-0 flex items-center justify-between px-5 py-3 border-b border-[var(--border-default)]`}>
           <h2 className={`text-base font-bold ${heading}`}>{t('editor.title', { name: draft.name })}</h2>
           <IconButton icon={X} label="Close" onClick={onClose} size="sm" />
         </div>
 
-        <div className={`shrink-0 px-5 py-2 border-b ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'}`}>
-          <div className={`flex items-center gap-px rounded-md p-px ${isDark ? 'bg-white/[0.04]' : 'bg-black/[0.04]'}`}>
+        <div className={`shrink-0 px-5 py-2 border-b border-[var(--border-default)]`}>
+          <div className={`flex items-center gap-px rounded-md p-px bg-[var(--bg-hover)]`}>
             {TABS.map((tk) => (
               <button
                 key={tk}
@@ -79,8 +77,8 @@ export default function RoutineEditorModal({
                 aria-pressed={tab === tk}
                 className={`flex-1 px-2 py-1 rounded text-xs font-mono transition-colors ${
                   tab === tk
-                    ? (isDark ? 'bg-white/[0.10] text-white' : 'bg-white text-black')
-                    : (isDark ? 'text-white/45 hover:text-white/75' : 'text-black/45 hover:text-black/75')
+                    ? 'bg-[var(--bg-selected)] text-[var(--fg-strong)]'
+                    : 'text-[var(--fg-subtle)] hover:text-[var(--fg-default)]'
                 }`}
               >
                 {t(`editor.tab${tk.charAt(0).toUpperCase() + tk.slice(1)}`)}
@@ -93,13 +91,11 @@ export default function RoutineEditorModal({
           {PANELS[tab]}
         </div>
 
-        <div className={`shrink-0 flex items-center justify-end gap-2 px-5 py-3 border-t ${isDark ? 'border-white/[0.06]' : 'border-black/[0.06]'}`}>
+        <div className={`shrink-0 flex items-center justify-end gap-2 px-5 py-3 border-t border-[var(--border-default)]`}>
           <button
             type="button"
             onClick={onClose}
-            className={`text-sm font-mono px-3 py-1.5 rounded-md transition-colors ${
-              isDark ? 'text-white/55 hover:text-white hover:bg-white/[0.05]' : 'text-black/55 hover:text-black hover:bg-black/[0.04]'
-            }`}
+            className={`text-sm font-mono px-3 py-1.5 rounded-md transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]`}
           >
             {t('editor.discard')}
           </button>

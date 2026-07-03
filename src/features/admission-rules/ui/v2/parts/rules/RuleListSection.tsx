@@ -307,8 +307,8 @@ export function RuleListSection({
         <V2Card className="p-4">
           <SectionTitle icon={Zap}>{tA('section.ifTodayRan')}</SectionTitle>
           <div className="mt-3 flex items-baseline gap-3">
-            <span className="text-4xl font-black tabular-nums text-[#c25a55] leading-none"
-              style={{ textShadow: '0 0 12px #c25a5555' }}
+            <span className="text-4xl font-black tabular-nums text-[var(--intent-danger-fg)] leading-none"
+              style={{ textShadow: '0 0 12px rgb(from var(--intent-danger-fg) r g b / 0.33)' }}
             >
               {retro.filter((r) => r.decision.outcome === 'block').length}
             </span>

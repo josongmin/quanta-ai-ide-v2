@@ -21,7 +21,7 @@ const THUMB_STYLE_BASE: CSSProperties = Object.freeze({
   width: 16,
   height: 16,
   borderRadius: '50%',
-  background: '#fff',
+  background: 'var(--fg-on-accent)',
   transition: 'transform 160ms ease',
   boxShadow: 'var(--shadow-sm)',
 });

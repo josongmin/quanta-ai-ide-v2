@@ -91,7 +91,7 @@ export function CheatSheet({ onClose }: { onClose: () => void }) {
           <button
             type="button"
             onClick={onClose}
-            className="text-sm font-mono text-[var(--fg-subtle)] hover:text-white"
+            className="text-sm font-mono text-[var(--fg-subtle)] hover:text-[var(--fg-strong)]"
           >
             esc
           </button>

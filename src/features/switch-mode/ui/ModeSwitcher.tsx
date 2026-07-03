@@ -1,7 +1,6 @@
 import { useRef, useState, useCallback } from 'react';
 import { Grid3x3, Sparkles } from 'lucide-react';
 import { useViewMode } from '../model/ViewModeContext';
-import { useTheme } from '@shared/theme';
 import { useTranslation } from '@shared/i18n';
 import { useClickOutside } from '@shared/lib';
 import { GlassCard } from '@shared/ui';
@@ -23,7 +22,6 @@ const MODES: {
 
 export default function ModeSwitcher() {
   const { mode, setMode } = useViewMode();
-  const { isDark } = useTheme();
   const { t } = useTranslation('mode');
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -38,9 +36,7 @@ export default function ModeSwitcher() {
       <GlassCard className="p-1">
         <button type="button"
           onClick={() => { setOpen((v) => !v); }}
-          className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${
-            isDark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'
-          }`}
+          className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors text-[var(--fg-default)] hover:bg-[var(--bg-active)]"
           title={t('switcher.buttonTitle', { label: currentLabel })}
           aria-label={t('switcher.tooltip')}
         >
@@ -51,9 +47,7 @@ export default function ModeSwitcher() {
       {open && (
         <div className="absolute left-0 mt-2 w-[260px]">
           <GlassCard className="p-2">
-            <div className={`text-2xs font-black uppercase tracking-eyebrow mb-1.5 px-1.5 ${
-              isDark ? 'text-white/40' : 'text-black/40'
-            }`}>
+            <div className="text-2xs font-black uppercase tracking-eyebrow mb-1.5 px-1.5 text-[var(--fg-subtle)]">
               {t('switcher.heading')}
             </div>
             <div className="space-y-0.5">
@@ -67,16 +61,14 @@ export default function ModeSwitcher() {
                     onClick={() => { setMode(id); setOpen(false); }}
                     className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-left transition-colors ${
                       active
-                        ? (isDark ? 'bg-white/15 text-white' : 'bg-black/10 text-black')
-                        : (isDark ? 'hover:bg-white/5 text-white/70' : 'hover:bg-black/5 text-black/70')
+                        ? 'bg-[var(--bg-selected)] text-[var(--fg-strong)]'
+                        : 'hover:bg-[var(--bg-active)] text-[var(--fg-default)]'
                     }`}
                   >
-                    <I className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[#4f9a5c]' : ''}`} />
+                    <I className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-[var(--intent-success-vivid)]' : ''}`} />
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-bold leading-tight">{label}</div>
-                      <div className={`text-2xs leading-tight truncate ${
-                        isDark ? 'text-white/40' : 'text-black/40'
-                      }`}>
+                      <div className="text-2xs leading-tight truncate text-[var(--fg-subtle)]">
                         {hint}
                       </div>
                     </div>

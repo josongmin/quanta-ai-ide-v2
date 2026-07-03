@@ -65,7 +65,7 @@ export function BulkActionBar() {
         onClick={() => {
           if (confirm(`Delete ${selection.size} rules?`)) bulkRemove();
         }}
-        className="flex items-center gap-1 text-xs font-mono uppercase tracking-eyebrow px-2 py-0.5 rounded-md hover:bg-[#c25a55]/15 text-[#c25a55]"
+        className="flex items-center gap-1 text-xs font-mono uppercase tracking-eyebrow px-2 py-0.5 rounded-md hover:bg-[rgb(from_var(--intent-danger-fg)_r_g_b_/_0.15)] text-[var(--intent-danger-fg)]"
       >
         <Trash2 className="w-3 h-3" />
         delete

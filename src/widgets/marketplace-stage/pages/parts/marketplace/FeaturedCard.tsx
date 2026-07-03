@@ -26,7 +26,7 @@ export function FeaturedCard({ integration }: { integration: Integration }) {
       }}
     >
       <div
-        className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 text-white"
+        className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 text-[var(--fg-on-accent)]"
         style={{
           backgroundImage: `linear-gradient(135deg, ${integration.tone.from}, ${integration.tone.to})`,
         }}

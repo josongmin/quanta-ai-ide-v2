@@ -48,9 +48,7 @@ function ActivityCard({
   const fill = isDark ? 'rgba(13,17,23,0.88)' : 'rgba(255,255,255,0.94)';
   return (
     <div
-      className={`px-2.5 py-2 rounded-lg border shadow-lg ${
-        isDark ? 'border-white/10 text-white/85 backdrop-blur-md' : 'border-black/10 text-black/85'
-      }`}
+      className="px-2.5 py-2 rounded-lg border shadow-lg border-[var(--border-strong)] text-[var(--fg-default)] dark:backdrop-blur-md"
       style={{ background: fill, borderLeftWidth: 3, borderLeftColor: hue }}
     >
       {/* Header: agent + chat id + state */}
@@ -60,20 +58,18 @@ function ActivityCard({
           style={{ background: hue, boxShadow: `0 0 6px ${hue}` }}
         />
         <span style={{ color: hue }}>{agent}</span>
-        <span className={isDark ? 'text-white/30' : 'text-black/30'}>·</span>
-        <span className={isDark ? 'text-white/40' : 'text-black/40'}>{chatId}</span>
-        <span className="ml-auto"><StateBadge state={state} isDark={isDark} /></span>
+        <span className="text-[var(--fg-subtle)]">·</span>
+        <span className="text-[var(--fg-subtle)]">{chatId}</span>
+        <span className="ml-auto"><StateBadge state={state} /></span>
       </div>
 
       {/* Task summary */}
-      <div className={`mt-1 text-sm leading-snug ${isDark ? 'text-white/70' : 'text-black/70'}`}>
+      <div className="mt-1 text-sm leading-snug text-[var(--fg-default)]">
         {task}
       </div>
 
       {/* Per-file actions */}
-      <div className={`mt-1.5 pt-1.5 border-t space-y-1 ${
-        isDark ? 'border-white/10' : 'border-black/10'
-      }`}>
+      <div className="mt-1.5 pt-1.5 border-t space-y-1 border-[var(--border-strong)]">
         {targets.slice(0, 4).map(({ target, fileName }) => (
           // Composite key — multiple targets can share a fileId when an
           // agent works on two symbols in the same file, so we fold action
@@ -82,12 +78,11 @@ function ActivityCard({
             key={`${target.fileId}:${target.action}:${target.symbol ?? ''}`}
             target={target}
             fileName={fileName}
-            isDark={isDark}
             hue={hue}
           />
         ))}
         {targets.length > 4 && (
-          <div className={`text-2xs italic ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+          <div className="text-2xs italic text-[var(--fg-subtle)]">
             +{(targets.length - 4).toString()} more
           </div>
         )}
@@ -97,8 +92,8 @@ function ActivityCard({
 }
 
 function TargetRow({
-  target, fileName, isDark, hue,
-}: { target: ActivityTarget; fileName: string; isDark: boolean; hue: string }) {
+  target, fileName, hue,
+}: { target: ActivityTarget; fileName: string; hue: string }) {
   const verbColor = ACTION_HUES[target.action] ?? hue;
   return (
     <div className="text-xs leading-snug">
@@ -106,11 +101,11 @@ function TargetRow({
         <span className="font-bold uppercase tracking-eyebrow text-2xs" style={{ color: verbColor }}>
           {target.action}
         </span>
-        <span className={`font-mono truncate ${isDark ? 'text-white/85' : 'text-black/85'}`}>
+        <span className="font-mono truncate text-[var(--fg-default)]">
           {target.symbol ?? fileName}
         </span>
       </div>
-      <div className={`pl-[42px] truncate ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+      <div className="pl-[42px] truncate text-[var(--fg-subtle)]">
         {target.intent}
         {target.symbol && <span className="ml-1 opacity-60">· {fileName}</span>}
       </div>
@@ -118,12 +113,12 @@ function TargetRow({
   );
 }
 
-function StateBadge({ state, isDark }: { state: ActivityState; isDark: boolean }) {
+function StateBadge({ state }: { state: ActivityState }) {
   const label = state === 'thinking' ? 'thinking' : state === 'editing' ? 'editing' : 'done';
   const opacity = state === 'done' ? 0.5 : 1;
   return (
     <span
-      className={`text-2xs font-mono ${isDark ? 'text-white/55' : 'text-black/55'}`}
+      className="text-2xs font-mono text-[var(--fg-muted)]"
       style={{ opacity }}
     >
       {label}

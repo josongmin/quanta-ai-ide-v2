@@ -1,4 +1,5 @@
 import { clamp01 } from '@shared/lib';
+import { primitives } from '@shared/tokens';
 import type { FileRecord, RepoData } from '@entities/repo';
 import { computeHotspots, HOTSPOT_VISIBLE_PERCENTILE } from '@entities/hotspot';
 import type { HeatMetricKey } from '../model';
@@ -26,9 +27,9 @@ export type HeatMetric = {
 // Single warm-sequential hue for "high = bad" metrics. Spec / Healey 1996:
 // keep hue stable, encode intensity via alpha + size. Cool blue is reserved
 // for "stale" since its meaning (low energy, long-untouched) reads opposite.
-const WARM_HUE = '#d98a85';
-const COOL_HUE = '#5a8fce';
-const NEUTRAL_HUE = '#6e7681';
+const WARM_HUE = primitives.colors.red[300];
+const COOL_HUE = primitives.colors.blue[400];
+const NEUTRAL_HUE = primitives.colors.grey[500];
 
 export const HEAT_METRICS: HeatMetric[] = [
   { key: 'none',          label: 'Off',                hint: 'No heat overlay',                                  hue: NEUTRAL_HUE, score: () => 0 },

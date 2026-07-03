@@ -33,7 +33,7 @@ export function ChannelCard({
     <>
       <div className="flex items-start justify-between">
         <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center text-white"
+          className="w-11 h-11 rounded-xl flex items-center justify-center text-[var(--fg-on-accent)]"
           style={{ backgroundImage: `linear-gradient(135deg, ${tone.from}, ${tone.to})` }}
         >
           <Icon className="w-5 h-5" />

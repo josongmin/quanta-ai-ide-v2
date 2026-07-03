@@ -13,7 +13,6 @@ export function FleetRail({
   routines,
   onApproveHitl,
   onJumpToRun,
-  isDark,
   t,
 }: {
   health: FleetHealth;
@@ -21,12 +20,12 @@ export function FleetRail({
   routines: Routine[];
   onApproveHitl: (id: string) => void;
   onJumpToRun: (runId: string, routineId: string) => void;
-  isDark: boolean;
+  isDark?: boolean;
   t: TranslateFn;
 }) {
-  const panel = isDark ? 'bg-[#11161e]' : 'bg-white';
-  const border = isDark ? 'border-white/[0.06]' : 'border-black/[0.06]';
-  const textFaint = isDark ? 'text-white/30' : 'text-black/40';
+  const panel = 'bg-[var(--bg-surface)]';
+  const border = 'border-[var(--border-default)]';
+  const textFaint = 'text-[var(--fg-subtle)]';
 
   return (
     <aside className={`shrink-0 w-[300px] flex flex-col ${panel} border-l ${border}`}>
@@ -37,37 +36,36 @@ export function FleetRail({
       </div>
 
       <div className="flex-1 min-h-0 overflow-auto scrollbar-thin p-4 space-y-5">
-        <Section label={t('fleet.title')} isDark={isDark}>
-          <ConcurrencyRow health={health} isDark={isDark} t={t} />
-          <SpendRow health={health} isDark={isDark} t={t} />
-          <AttentionRow health={health} isDark={isDark} t={t} />
+        <Section label={t('fleet.title')}>
+          <ConcurrencyRow health={health} t={t} />
+          <SpendRow health={health} t={t} />
+          <AttentionRow health={health} t={t} />
         </Section>
 
-        <Section label={t('hitl.title')} isDark={isDark}>
+        <Section label={t('hitl.title')}>
           <HitlList
             items={hitl}
             routines={routines}
             onApprove={onApproveHitl}
             onJump={onJumpToRun}
-            isDark={isDark}
             t={t}
           />
         </Section>
 
-        <Section label={t('fleet.alerts')} isDark={isDark}>
+        <Section label={t('fleet.alerts')}>
           {health.alerts.length === 0 ? (
-            <Empty text={t('fleet.noAlerts')} isDark={isDark} />
+            <Empty text={t('fleet.noAlerts')} />
           ) : (
             <div className="space-y-1">
               {health.alerts.map((a) => (
-                <AlertRow key={a.id} alert={a} isDark={isDark} t={t} />
+                <AlertRow key={a.id} alert={a} t={t} />
               ))}
             </div>
           )}
         </Section>
 
         {health.conflicts.length > 0 && (
-          <Section label={t('fleet.conflicts')} isDark={isDark}>
+          <Section label={t('fleet.conflicts')}>
             <div className="space-y-1">
               {health.conflicts.map((c, i) => (
                 <ConflictRow
@@ -75,7 +73,6 @@ export function FleetRail({
                   a={routines.find((r) => r.id === c.routineIdA)?.name ?? c.routineIdA}
                   b={routines.find((r) => r.id === c.routineIdB)?.name ?? c.routineIdB}
                   path={c.path}
-                  isDark={isDark}
                   t={t}
                 />
               ))}
@@ -91,8 +88,8 @@ export function FleetRail({
   );
 }
 
-function Section({ label, isDark, children }: { label: string; isDark: boolean; children: React.ReactNode }) {
-  const color = isDark ? 'text-white/40' : 'text-black/40';
+function Section({ label, children }: { label: string; children: React.ReactNode }) {
+  const color = 'text-[var(--fg-subtle)]';
   return (
     <div>
       <div className={`mb-2.5 text-xs font-bold uppercase tracking-eyebrow ${color}`}>{label}</div>
@@ -101,14 +98,14 @@ function Section({ label, isDark, children }: { label: string; isDark: boolean; 
   );
 }
 
-function Empty({ text, isDark }: { text: string; isDark: boolean }) {
-  return <div className={`px-2 py-2 text-sm ${isDark ? 'text-white/40' : 'text-black/45'}`}>{text}</div>;
+function Empty({ text }: { text: string }) {
+  return <div className={`px-2 py-2 text-sm text-[var(--fg-subtle)]`}>{text}</div>;
 }
 
-function ConcurrencyRow({ health, isDark, t }: { health: FleetHealth; isDark: boolean; t: TranslateFn }) {
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const trackBg = isDark ? 'bg-white/[0.06]' : 'bg-black/[0.05]';
+function ConcurrencyRow({ health, t }: { health: FleetHealth; t: TranslateFn }) {
+  const muted = 'text-[var(--fg-muted)]';
+  const heading = 'text-[var(--fg-default)]';
+  const trackBg = 'bg-[var(--bg-elevated)]';
   const fill = 'bg-[color:var(--intent-success-vivid)]';
   const pct = Math.min(100, (health.running / Math.max(1, health.maxConcurrency)) * 100);
   return (
@@ -124,8 +121,8 @@ function ConcurrencyRow({ health, isDark, t }: { health: FleetHealth; isDark: bo
   );
 }
 
-function SpendRow({ health, isDark, t }: { health: FleetHealth; isDark: boolean; t: TranslateFn }) {
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
+function SpendRow({ health, t }: { health: FleetHealth; t: TranslateFn }) {
+  const heading = 'text-[var(--fg-default)]';
   return (
     <div className={`flex items-center gap-1.5 text-sm font-mono tabular-nums ${heading}`}>
       <Coins className="w-3 h-3 opacity-70" />
@@ -134,10 +131,10 @@ function SpendRow({ health, isDark, t }: { health: FleetHealth; isDark: boolean;
   );
 }
 
-function AttentionRow({ health, isDark, t }: { health: FleetHealth; isDark: boolean; t: TranslateFn }) {
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
-  const trackBg = isDark ? 'bg-white/[0.06]' : 'bg-black/[0.05]';
+function AttentionRow({ health, t }: { health: FleetHealth; t: TranslateFn }) {
+  const muted = 'text-[var(--fg-muted)]';
+  const heading = 'text-[var(--fg-default)]';
+  const trackBg = 'bg-[var(--bg-elevated)]';
   const pct = Math.min(100, (health.attention.spentHours / Math.max(0.1, health.attention.budgetHours)) * 100);
   const fill = pct < 70 ? 'bg-[color:var(--intent-success-vivid)]'
     : pct < 95 ? 'bg-[color:var(--intent-warn-vivid)]'
@@ -158,26 +155,25 @@ function AttentionRow({ health, isDark, t }: { health: FleetHealth; isDark: bool
 }
 
 function HitlList({
-  items, routines, onApprove, onJump, isDark, t,
+  items, routines, onApprove, onJump, t,
 }: {
   items: HitlItem[];
   routines: Routine[];
   onApprove: (id: string) => void;
   onJump: (runId: string, routineId: string) => void;
-  isDark: boolean;
   t: TranslateFn;
 }) {
   if (items.length === 0) {
     return (
-      <div className={`flex items-center gap-2 px-2 py-2 text-sm ${isDark ? 'text-white/40' : 'text-black/45'}`}>
+      <div className={`flex items-center gap-2 px-2 py-2 text-sm text-[var(--fg-subtle)]`}>
         <Inbox className="w-3 h-3 opacity-60" />
         {t('hitl.empty')}
       </div>
     );
   }
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
+  const muted = 'text-[var(--fg-muted)]';
+  const faint = 'text-[var(--fg-subtle)]';
+  const heading = 'text-[var(--fg-default)]';
 
   return (
     <div className="space-y-1">
@@ -186,14 +182,14 @@ function HitlList({
         const stale = it.waitingMs > 60 * 60 * 1000;
         const tone = stale
           ? 'border-[color:var(--intent-warn-fg)] bg-[color:var(--intent-warn-bg)]'
-          : (isDark ? 'border-white/[0.08] bg-white/[0.025]' : 'border-black/[0.08] bg-black/[0.02]');
+          : 'border-[var(--border-default)] bg-[var(--bg-surface-muted)]';
         const wait = it.waitingMs >= 3600_000
           ? `${Math.round(it.waitingMs / 3600_000)}h`
           : `${Math.round(it.waitingMs / 60_000)}m`;
         return (
           <div key={it.id} className={`px-2 py-1.5 rounded-md border ${tone}`}>
             <div className="flex items-center gap-1.5 mb-0.5">
-              <Hand className={`w-3 h-3 shrink-0 ${stale ? 'text-[color:var(--intent-warn-fg)]' : (isDark ? 'text-white/55' : 'text-black/55')}`} />
+              <Hand className={`w-3 h-3 shrink-0 ${stale ? 'text-[color:var(--intent-warn-fg)]' : 'text-[var(--fg-muted)]'}`} />
               <span className={`text-sm font-semibold truncate ${heading}`}>{rname}</span>
               <span className={`ml-auto text-xs font-mono ${faint}`}>{wait}</span>
             </div>
@@ -202,18 +198,14 @@ function HitlList({
               <button
                 type="button"
                 onClick={() => { onApprove(it.id); }}
-                className={`flex-1 text-xs font-mono px-2 py-1 rounded-md transition-colors ${
-                  isDark ? 'bg-white/[0.06] hover:bg-white/[0.10] text-white/85' : 'bg-black/[0.05] hover:bg-black/[0.08] text-black/85'
-                }`}
+                className={`flex-1 text-xs font-mono px-2 py-1 rounded-md transition-colors bg-[var(--bg-elevated)] hover:bg-[var(--bg-selected)] text-[var(--fg-default)]`}
               >
                 {it.suggestedAction}
               </button>
               <button
                 type="button"
                 onClick={() => { onJump(it.runId, it.routineId); }}
-                className={`p-1 rounded-md transition-colors ${
-                  isDark ? 'text-white/40 hover:text-white/85 hover:bg-white/[0.05]' : 'text-black/40 hover:text-black/85 hover:bg-black/[0.05]'
-                }`}
+                className={`p-1 rounded-md transition-colors text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-elevated)]`}
                 aria-label="Open run"
                 title={t('run.details')}
               >
@@ -227,13 +219,13 @@ function HitlList({
   );
 }
 
-function AlertRow({ alert, isDark, t }: { alert: FleetAlert; isDark: boolean; t: TranslateFn }) {
+function AlertRow({ alert, t }: { alert: FleetAlert; t: TranslateFn }) {
   const tone =
     alert.severity === 'crit' ? 'border-[color:var(--intent-danger-fg)] bg-[color:var(--intent-danger-bg)] text-[color:var(--intent-danger-fg)]'
     : alert.severity === 'warn' ? 'border-[color:var(--intent-warn-fg)] bg-[color:var(--intent-warn-bg)] text-[color:var(--intent-warn-fg)]'
-    : (isDark ? 'border-white/[0.10] bg-white/[0.04] text-white/65' : 'border-black/[0.10] bg-black/[0.04] text-black/65');
+    : 'border-[var(--border-strong)] bg-[var(--bg-hover)] text-[var(--fg-muted)]';
   const Icon = alert.severity === 'crit' ? AlertOctagon : alert.severity === 'warn' ? AlertTriangle : AlertCircle;
-  const faint = isDark ? 'text-white/30' : 'text-black/40';
+  const faint = 'text-[var(--fg-subtle)]';
   return (
     <div className={`flex items-start gap-2 px-2 py-1.5 rounded-md border ${tone}`}>
       <Icon className="w-3 h-3 shrink-0 mt-0.5 opacity-80" />
@@ -246,13 +238,11 @@ function AlertRow({ alert, isDark, t }: { alert: FleetAlert; isDark: boolean; t:
   );
 }
 
-function ConflictRow({ a, b, path, isDark, t }: { a: string; b: string; path: string; isDark: boolean; t: TranslateFn }) {
-  const muted = isDark ? 'text-white/55' : 'text-black/55';
-  const heading = isDark ? 'text-white/85' : 'text-black/85';
+function ConflictRow({ a, b, path, t }: { a: string; b: string; path: string; t: TranslateFn }) {
+  const muted = 'text-[var(--fg-muted)]';
+  const heading = 'text-[var(--fg-default)]';
   return (
-    <div className={`flex items-start gap-2 px-2 py-1.5 rounded-md border ${
-      isDark ? 'border-white/[0.08] bg-white/[0.025]' : 'border-black/[0.08] bg-black/[0.02]'
-    }`}>
+    <div className={`flex items-start gap-2 px-2 py-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface-muted)]`}>
       <GitMerge className={`w-3 h-3 shrink-0 mt-0.5 ${muted}`} />
       <div className="flex-1 min-w-0">
         <div className={`text-sm truncate ${heading}`}>{t('fleet.conflictRow', { a, b })}</div>
@@ -260,9 +250,7 @@ function ConflictRow({ a, b, path, isDark, t }: { a: string; b: string; path: st
       </div>
       <button
         type="button"
-        className={`shrink-0 p-1 rounded-md transition-colors ${
-          isDark ? 'text-white/40 hover:text-white/85 hover:bg-white/[0.05]' : 'text-black/40 hover:text-black/85 hover:bg-black/[0.05]'
-        }`}
+        className={`shrink-0 p-1 rounded-md transition-colors text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-elevated)]`}
         aria-label={t('fleet.conflictResolve')}
         title={t('fleet.conflictResolve')}
       >
