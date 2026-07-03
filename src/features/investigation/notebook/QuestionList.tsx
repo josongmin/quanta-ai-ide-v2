@@ -35,7 +35,7 @@ function sortQuestions(qs: NotebookQuestion[]): NotebookQuestion[] {
 const STATUS_TONE: Record<NotebookQuestionStatus, { bg: string; fg: string; label: string }> = {
   pending: {
     bg: 'var(--bg-surface-muted)',
-    fg: 'var(--intent-warning-vivid)',
+    fg: 'var(--intent-warn-vivid)',
     label: 'pending',
   },
   answered: {

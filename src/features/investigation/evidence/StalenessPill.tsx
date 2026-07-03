@@ -32,7 +32,7 @@ export function StalenessPill({ staleness }: Props) {
       break;
     case 'stale':
       label = 'stale';
-      color = 'var(--intent-warning-vivid)';
+      color = 'var(--intent-warn-vivid)';
       glyph = <Clock size={9} aria-hidden="true" />;
       break;
     case 'unknown':

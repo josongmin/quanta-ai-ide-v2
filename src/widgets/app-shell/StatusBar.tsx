@@ -113,7 +113,7 @@ function IndexCell({ counts }: { counts: IndexCounts }) {
   const dotColor = isWorking
     ? 'var(--intent-info-vivid, #5b9dff)'
     : isStale
-      ? 'var(--intent-warning-vivid)'
+      ? 'var(--intent-warn-vivid)'
       : 'var(--intent-success-vivid)';
   const summary = isWorking
     ? `indexing ${counts.indexing}`
@@ -205,7 +205,7 @@ function PipelineCell() {
   const dotColor = state.terminated
     ? state.reason === 'success'
       ? 'var(--intent-success-vivid)'
-      : 'var(--intent-warning-vivid)'
+      : 'var(--intent-warn-vivid)'
     : state.busy
       ? 'var(--intent-info-vivid, #5b9dff)'
       : 'var(--fg-subtle)';
@@ -377,7 +377,7 @@ function DraftsCell() {
     counts.submitting > 0
       ? 'var(--intent-info-vivid, #5b9dff)'
       : counts.blocked > 0
-        ? 'var(--intent-warning-vivid)'
+        ? 'var(--intent-warn-vivid)'
         : 'var(--intent-success-vivid)';
 
   const parts: string[] = [];

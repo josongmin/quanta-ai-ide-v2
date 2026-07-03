@@ -12,7 +12,7 @@ function colorFor(c: Confidence): string {
     case 'high':
       return 'var(--intent-success-vivid)';
     case 'medium':
-      return 'var(--intent-warning-vivid)';
+      return 'var(--intent-warn-vivid)';
     case 'low':
       return 'var(--intent-danger-vivid)';
     case 'unknown':

@@ -234,7 +234,7 @@ function CatalogCell({ entry, isDark }: { entry: CatalogEntry; isDark: boolean }
 
 const STATUS_META: Record<CatalogStatus, { label: string; fg: string }> = {
   live:    { label: 'Live',    fg: 'var(--intent-success-fg)' },
-  stub:    { label: 'Stub',    fg: 'var(--intent-warning-fg)' },
+  stub:    { label: 'Stub',    fg: 'var(--intent-warn-fg)' },
   planned: { label: 'Planned', fg: 'var(--fg-subtle)' },
 };
 

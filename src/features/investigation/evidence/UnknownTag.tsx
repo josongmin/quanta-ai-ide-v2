@@ -14,7 +14,7 @@ export function UnknownTag({ tag, onClick }: Props) {
   const interactive = Boolean(onClick);
   const style: CSSProperties = {
     background: 'var(--bg-surface-muted)',
-    color: 'var(--intent-warning-vivid)',
+    color: 'var(--intent-warn-vivid)',
     border: '1px solid var(--border-default)',
     fontSize: '10px',
     lineHeight: 1.1,

@@ -61,7 +61,7 @@ function Column({
 
 function colorForConfidence(score: number): string {
   if (score >= 0.8) return 'var(--intent-success-vivid)';
-  if (score >= 0.5) return 'var(--intent-warning-vivid)';
+  if (score >= 0.5) return 'var(--intent-warn-vivid)';
   return 'var(--intent-danger-vivid)';
 }
 

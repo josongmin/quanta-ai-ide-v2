@@ -234,10 +234,15 @@ function makeLazyRoute(
     getParentRoute: () => parentRoute,
     path,
     component: function LazyRouteComponent() {
+      // Per-route boundary: a failed lazy chunk (or a crash inside the route)
+      // is contained to the outlet — the app chrome and other routes survive,
+      // instead of the top-level "App" boundary replacing the whole shell.
       return (
-        <Suspense fallback={null}>
-          <Component />
-        </Suspense>
+        <ErrorBoundary label={path}>
+          <Suspense fallback={null}>
+            <Component />
+          </Suspense>
+        </ErrorBoundary>
       );
     },
   });

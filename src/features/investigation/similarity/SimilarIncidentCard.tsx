@@ -38,10 +38,10 @@ export function SimilarIncidentCard({ evidence }: Props) {
   return (
     <div className="border rounded-md p-2.5 flex flex-col gap-1.5" style={cardStyle}>
       <div className="flex items-center gap-1.5">
-        <History size={12} aria-hidden="true" style={{ color: 'var(--intent-warning-vivid)' }} />
+        <History size={12} aria-hidden="true" style={{ color: 'var(--intent-warn-vivid)' }} />
         <span
           className="font-mono uppercase tracking-wider"
-          style={{ color: 'var(--intent-warning-vivid)', fontSize: '10px' }}
+          style={{ color: 'var(--intent-warn-vivid)', fontSize: '10px' }}
         >
           {incidentId}
         </span>

@@ -113,7 +113,7 @@ export function EvidenceCard({ evidence, expanded, onToggle }: Props) {
           <span
             style={{
               background: 'var(--bg-surface-muted)',
-              color: 'var(--intent-warning-vivid)',
+              color: 'var(--intent-warn-vivid)',
               border: '1px solid var(--border-default)',
               fontSize: '9px',
               lineHeight: 1.1,

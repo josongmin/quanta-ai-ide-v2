@@ -26,7 +26,7 @@ const STATUS_TONE: Record<JobStatus, { fg: string; label: string }> = {
   queued: { fg: 'var(--fg-muted)', label: 'queued' },
   running: { fg: 'var(--fg-default)', label: 'running' },
   partial: { fg: 'var(--fg-default)', label: 'partial' },
-  stale: { fg: 'var(--intent-warning-vivid)', label: 'stale' },
+  stale: { fg: 'var(--intent-warn-vivid)', label: 'stale' },
   completed: { fg: 'var(--intent-success-vivid)', label: 'done' },
   cancelled: { fg: 'var(--fg-subtle)', label: 'cancelled' },
   failed: { fg: 'var(--intent-danger-vivid)', label: 'failed' },
