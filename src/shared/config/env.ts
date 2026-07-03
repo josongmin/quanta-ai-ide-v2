@@ -19,6 +19,4 @@ export const env = {
   /** True only when a real backend is configured — the switch every data seam
    *  branches on (`env.useRealApi ? api.get(...) : simulate*()`). */
   useRealApi: apiMode === 'real' && apiBaseUrl !== '',
-  /** Vite's own DEV flag, surfaced here so nothing else reads import.meta.env. */
-  isDev: import.meta.env.DEV,
 } as const;

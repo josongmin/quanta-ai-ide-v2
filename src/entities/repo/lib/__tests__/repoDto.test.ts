@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildRepo } from '../build';
 import { buildRepoData, toRepoDataDTO, type RepoDataDTO } from '../repoDto';
-import { fetchRepoData } from '../loadRepo';
+import { fetchRepoData } from '@entities/repo';
 
 // Guards the serialization boundary: RepoData carries a derived
 // `foldersByPath: Map` that does NOT survive JSON. The DTO must omit it and the
@@ -30,6 +30,10 @@ describe('repo DTO boundary', () => {
     expect(repo.foldersByPath.size).toBe(repo.folders.length);
     const folder = repo.folders[0];
     expect(repo.foldersByPath.get(folder.path)).toBe(folder);
+
+    // FileRecord itself must be fully JSON-safe (no Set/Map/typed-array hiding
+    // in its metrics) — the files survive the round-trip byte-for-byte.
+    expect(repo.files).toEqual(buildRepo(7).files);
   });
 
   it('fetchRepoData() resolves a live RepoData in mock mode', async () => {
