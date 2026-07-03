@@ -205,6 +205,15 @@ export default tseslint.config(
           message:
             'Use design-system intent/fg/bg tokens (var(--intent-*), var(--fg-*), var(--bg-*)), not a raw Tailwind palette colour.',
         },
+        {
+          // Raw hex in a Tailwind arbitrary color class (bg-[#..]/text-[#..]/…).
+          // Use the semantic CSS-var tokens instead. Viz/token-editor/island
+          // files are exempted below.
+          selector:
+            "Literal[value=/(bg|text|border|ring|fill|stroke|from|to|via)-\\[#[0-9a-fA-F]{3,8}\\]/]",
+          message:
+            'Use a design-system token (var(--intent-*/--fg-*/--bg-*)) instead of a raw hex arbitrary colour class.',
+        },
       ],
     },
   },
