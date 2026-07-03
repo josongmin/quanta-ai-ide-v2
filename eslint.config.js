@@ -184,6 +184,45 @@ export default tseslint.config(
           selector: 'TSEnumDeclaration',
           message: 'Use string union types instead of TS enums.',
         },
+        // Design-system discipline guards (className string literals). These
+        // stop the arbitrary-value / raw-colour debt cleaned up in the DS audit
+        // from creeping back in.
+        {
+          // Only flag px values that HAVE an exact named class (the type
+          // scale: 9/10/11/12/13/14/16/18/22/28). Genuinely off-scale display
+          // sizes (15/20/32/34…) have no token and are allowed.
+          selector: "Literal[value=/text-\\[(9|10|11|12|13|14|16|18|22|28)px\\]/]",
+          message:
+            'Use the named font-size class (text-2xs/xs/sm/base/md/lg/xl/2xl/3xl/4xl) instead of the equivalent arbitrary text-[Npx].',
+        },
+        {
+          selector: "Literal[value=/tracking-\\[(0\\.1[48]em|var\\(--track-eyebrow\\))\\]/]",
+          message: 'Use the `tracking-eyebrow` class instead of tracking-[0.14em]/[0.18em]/[var(--track-eyebrow)].',
+        },
+        {
+          selector:
+            "Literal[value=/(bg|text|border|ring|from|to|via|fill|stroke|divide|outline)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-[0-9]{2,3}/]",
+          message:
+            'Use design-system intent/fg/bg tokens (var(--intent-*), var(--fg-*), var(--bg-*)), not a raw Tailwind palette colour.',
+        },
+      ],
+    },
+  },
+
+  // Token editors / palette DBs render and edit raw token values, so they
+  // legitimately use arbitrary sizes/colours — exempt them from the DS-discipline
+  // guards (keep the enum guard).
+  {
+    files: [
+      'src/features/chat-agent/ui/TokensPanel.tsx',
+      'src/features/chat-agent/ui/tokens-panel/**',
+      'src/widgets/me-stage/pages/parts/appearance/**',
+      'src/shared/tokens/**',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        { selector: 'TSEnumDeclaration', message: 'Use string union types instead of TS enums.' },
       ],
     },
   },
