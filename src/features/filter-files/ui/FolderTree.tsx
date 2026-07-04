@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, memo, useCallback, useDeferredValue, useImperativeHandle, useMemo, useState } from 'react';
 import { ChevronRight, Folder, FolderOpen, FileCode } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import type { FileRecord, FolderRecord } from '@entities/repo';
@@ -33,22 +33,22 @@ function build(folders: FolderRecord[]): Tree {
 }
 
 function Row({
-  node, depth, expanded, handlers, counts, files, activeKey,
+  node, depth, expanded, handlers, counts, files, matched, activeKey,
 }: {
   node: Tree; depth: number;
   expanded: Set<string>;
   handlers: RowHandlers;
   counts: { matched: Map<string, number>; total: Map<string, number> };
   files: FileRecord[];
+  // The (deferred) match mask, threaded from the root — one subscription for
+  // the whole tree instead of one per row.
+  matched: Uint8Array;
   activeKey?: string | null;
 }) {
   const { toggle, onOpenFolder, onOpenFile } = handlers;
   const { t: tr } = useTranslation('inspect');
-  // Narrow selectors. Each row in a deep tree subscribes only to the slices
-  // it actually reads, so a slider tweak elsewhere won't re-render every row.
   const selectedFolders = useFilterStore((s) => s.state.selectedFolders);
   const toggleFolder = useFilterStore((s) => s.toggleFolder);
-  const matched = useFilterStore((s) => s.matched);
   const path = node.folder.path;
   const isOpen = expanded.has(path) || depth === 0;
   const isSelected = selectedFolders.has(path);
@@ -122,6 +122,7 @@ function Row({
               handlers={handlers}
               counts={counts}
               files={files}
+              matched={matched}
               activeKey={activeKey}
             />
           ))}
@@ -208,6 +209,10 @@ const FolderTree = forwardRef<FolderTreeHandle, FolderTreeProps>(function Folder
 ) {
   const repo = useFilterStore((s) => s.repo);
   const matched = useFilterStore((s) => s.matched);
+  // The folder count badges use `matched` synchronously (instant feedback on a
+  // keystroke); the heavy per-file list uses a DEFERRED mask so typing stays
+  // responsive — React updates the ~435-row tree under concurrent priority.
+  const matchedDeferred = useDeferredValue(matched);
   const tree = useMemo(() => build(repo.folders), [repo.folders]);
   // Expanded-folder paths. Bounded by the repo's folder count (every entry
   // is an existing folder path, deduped by Set semantics), so this grows at
@@ -266,6 +271,7 @@ const FolderTree = forwardRef<FolderTreeHandle, FolderTreeProps>(function Folder
       handlers={handlers}
       counts={counts}
       files={repo.files}
+      matched={matchedDeferred}
       activeKey={activeKey}
     />
   );

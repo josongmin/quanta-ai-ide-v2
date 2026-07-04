@@ -262,6 +262,31 @@ function computeMatched(cache: MaskCache, state: FilterState): { mask: Uint8Arra
   return { mask: out, searchError };
 }
 
+// Sort comparators, hoisted to module scope so the 18-closure record isn't
+// reallocated on every computeDerived call. `repo` (formerly captured) is now a
+// param.
+type SortCmp = (repo: RepoData, a: number, b: number) => number;
+const SORT_CMP: Record<Exclude<SortKey, 'none'>, SortCmp> = {
+  'loc-desc':            (repo, a, b) => repo.files[b].metrics.loc - repo.files[a].metrics.loc,
+  'complexity-desc':     (repo, a, b) => repo.files[b].metrics.complexity - repo.files[a].metrics.complexity,
+  'cognitive-desc':      (repo, a, b) => repo.files[b].metrics.cognitive - repo.files[a].metrics.cognitive,
+  'maintainability-asc': (repo, a, b) => repo.files[a].metrics.maintainability - repo.files[b].metrics.maintainability,
+  'fanIn-desc':          (repo, a, b) => repo.files[b].metrics.fanIn - repo.files[a].metrics.fanIn,
+  'fanOut-desc':         (repo, a, b) => repo.files[b].metrics.fanOut - repo.files[a].metrics.fanOut,
+  'churn-desc':          (repo, a, b) => repo.files[b].metrics.churn - repo.files[a].metrics.churn,
+  'pagerank-desc':       (repo, a, b) => repo.files[b].metrics.pagerank - repo.files[a].metrics.pagerank,
+  'coverage-asc':        (repo, a, b) => repo.files[a].metrics.lineCoverage - repo.files[b].metrics.lineCoverage,
+  'eslint-desc':         (repo, a, b) => (repo.files[b].metrics.eslintErrors * 5 + repo.files[b].metrics.eslintWarnings) - (repo.files[a].metrics.eslintErrors * 5 + repo.files[a].metrics.eslintWarnings),
+  'anyCount-desc':       (repo, a, b) => repo.files[b].metrics.anyCount - repo.files[a].metrics.anyCount,
+  'todo-desc':           (repo, a, b) => repo.files[b].metrics.todoCount - repo.files[a].metrics.todoCount,
+  'authors-desc':        (repo, a, b) => repo.files[b].metrics.authors - repo.files[a].metrics.authors,
+  'staleness-desc':      (repo, a, b) => repo.files[b].metrics.daysSinceTouched - repo.files[a].metrics.daysSinceTouched,
+  'safety-asc':          (repo, a, b) => repo.files[a].metrics.editSafety - repo.files[b].metrics.editSafety,
+  'safety-desc':         (repo, a, b) => repo.files[b].metrics.editSafety - repo.files[a].metrics.editSafety,
+  'blast-desc':          (repo, a, b) => repo.files[b].metrics.blastRadius - repo.files[a].metrics.blastRadius,
+  'confidence-asc':      (repo, a, b) => CONF_RANK[repo.files[a].metrics.confidence] - CONF_RANK[repo.files[b].metrics.confidence],
+};
+
 export function computeDerived(cache: MaskCache, state: FilterState): Derived {
   const { repo, N } = cache;
   const { mask: m, searchError: parseError } = computeMatched(cache, state);
@@ -271,27 +296,8 @@ export function computeDerived(cache: MaskCache, state: FilterState): Derived {
 
   const rk = new Int32Array(N).fill(-1);
   if (state.sort !== 'none' && ids.length > 0) {
-    const cmp: Record<Exclude<SortKey, 'none'>, (a: number, b: number) => number> = {
-      'loc-desc':           (a, b) => repo.files[b].metrics.loc - repo.files[a].metrics.loc,
-      'complexity-desc':    (a, b) => repo.files[b].metrics.complexity - repo.files[a].metrics.complexity,
-      'cognitive-desc':     (a, b) => repo.files[b].metrics.cognitive - repo.files[a].metrics.cognitive,
-      'maintainability-asc':(a, b) => repo.files[a].metrics.maintainability - repo.files[b].metrics.maintainability,
-      'fanIn-desc':         (a, b) => repo.files[b].metrics.fanIn - repo.files[a].metrics.fanIn,
-      'fanOut-desc':        (a, b) => repo.files[b].metrics.fanOut - repo.files[a].metrics.fanOut,
-      'churn-desc':         (a, b) => repo.files[b].metrics.churn - repo.files[a].metrics.churn,
-      'pagerank-desc':      (a, b) => repo.files[b].metrics.pagerank - repo.files[a].metrics.pagerank,
-      'coverage-asc':       (a, b) => repo.files[a].metrics.lineCoverage - repo.files[b].metrics.lineCoverage,
-      'eslint-desc':        (a, b) => (repo.files[b].metrics.eslintErrors * 5 + repo.files[b].metrics.eslintWarnings) - (repo.files[a].metrics.eslintErrors * 5 + repo.files[a].metrics.eslintWarnings),
-      'anyCount-desc':      (a, b) => repo.files[b].metrics.anyCount - repo.files[a].metrics.anyCount,
-      'todo-desc':          (a, b) => repo.files[b].metrics.todoCount - repo.files[a].metrics.todoCount,
-      'authors-desc':       (a, b) => repo.files[b].metrics.authors - repo.files[a].metrics.authors,
-      'staleness-desc':     (a, b) => repo.files[b].metrics.daysSinceTouched - repo.files[a].metrics.daysSinceTouched,
-      'safety-asc':         (a, b) => repo.files[a].metrics.editSafety - repo.files[b].metrics.editSafety,
-      'safety-desc':        (a, b) => repo.files[b].metrics.editSafety - repo.files[a].metrics.editSafety,
-      'blast-desc':         (a, b) => repo.files[b].metrics.blastRadius - repo.files[a].metrics.blastRadius,
-      'confidence-asc':     (a, b) => CONF_RANK[repo.files[a].metrics.confidence] - CONF_RANK[repo.files[b].metrics.confidence],
-    };
-    ids.sort(cmp[state.sort]);
+    const cmp = SORT_CMP[state.sort];
+    ids.sort((a, b) => cmp(repo, a, b));
     ids.forEach((id, i) => { rk[id] = i; });
   }
 
