@@ -1,4 +1,7 @@
-import type { RuleSource, RuleSeverity, CostClass, RuleSignal } from '@entities/admission';
+import {
+  signalDescribe, signalUsesHint,
+  type RuleSource, type RuleSeverity, type CostClass, type RuleSignal,
+} from '@entities/admission';
 import { primitives } from '@shared/tokens';
 
 // Single colour axis: severity. Red=block, amber=warn, neutral=info/pass.
@@ -35,57 +38,15 @@ export const SOURCE_LABEL: Record<RuleSource, string> = {
 // Cost class: text only. We use the badge component itself to communicate
 // expense; no per-class colour because it competes with severity.
 
+// Thin re-exports over the SIGNAL_META registry (entities/admission) so the
+// per-kind describe/uses metadata lives in one place. Call sites keep these
+// names.
 export function describeSignal(signal: RuleSignal): string {
-  switch (signal.kind) {
-    case 'metric':
-      return `${signal.field} ${signal.op} ${signal.value}`;
-    case 'graph':
-      return `${signal.pattern}${signal.value !== undefined ? ` >${signal.value}` : ''}`;
-    case 'taint':
-      return `${signal.source} → ${signal.sink}${signal.requireSanitizer ? ' · sanitizer' : ''}`;
-    case 'dsl':
-      return signal.expr;
-    case 'external':
-      return `${signal.tool}:${signal.ruleId}`;
-  }
+  return signalDescribe(signal);
 }
 
 export function usesHint(signal: RuleSignal): string {
-  switch (signal.kind) {
-    case 'metric': {
-      const map: Record<string, string> = {
-        blastRadius:     'graph · transitive deps',
-        editSafety:      'composite · cov × complexity × blast',
-        sastFindings:    'sast index',
-        cognitive:       'cognitive complexity',
-        cyclomatic:      'cyclomatic complexity',
-        loc:             'file size',
-        fanIn:           'graph · incoming refs',
-        fanOut:          'graph · outgoing refs',
-        churn:           'git churn 90d',
-        lineCoverage:    'test coverage',
-        maintainability: 'maintainability index',
-        eslintErrors:    'lint count',
-        todoCount:       'TODO density',
-      };
-      return map[signal.field] ?? signal.field;
-    }
-    case 'graph': {
-      const map: Record<string, string> = {
-        'import-cycle':            'dependency graph · cycle',
-        'public-api-touched':      'PR diff ∩ public surface',
-        'public-api-without-test': 'public surface ∧ no test delta',
-        'orphan-edit':             'graph · zero in-refs',
-        'blast-radius-spike':      'PR-wide blast aggregation',
-        'unknown-region-creep':    'analyzer confidence delta',
-        'layer-violation':         'architecture layer rule',
-      };
-      return map[signal.pattern] ?? 'graph predicate';
-    }
-    case 'taint':    return `dataflow · ${signal.source} → ${signal.sink}`;
-    case 'dsl':      return 'facet DSL on metric index';
-    case 'external': return `imported · ${signal.tool}`;
-  }
+  return signalUsesHint(signal);
 }
 
 export const COST_TEXT: Record<CostClass, string> = {

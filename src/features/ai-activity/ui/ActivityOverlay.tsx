@@ -62,6 +62,10 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
   // mutating their fields in place and only growing the pool when the active
   // pin count exceeds what we've allocated so far. The pool never shrinks.
   const pinPoolRef = useRef<Pin[]>([]);
+  // Signature of the last committed pin field — lets the rAF loop skip the
+  // React re-render (and the byChat/zones/lines rebuild) on frames where
+  // nothing visibly moved.
+  const prevSigRef = useRef<string>('');
 
   // Memoise the bound projector so the rAF effect's dependency array stays
   // stable across renders. Without this, every parent re-render produced a
@@ -85,6 +89,8 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
     }
     const project = projectFn;
 
+    // Reset so the first frame of a freshly-(re)started loop always commits.
+    prevSigRef.current = '';
     let cancelled = false;
     const tick = () => {
       if (cancelled) return;
@@ -115,10 +121,20 @@ export function ActivityOverlay({ mode }: { mode: ViewMode }) {
           n++;
         }
       }
-      // React needs a changed array reference to re-render; slice the active
-      // prefix of the (possibly larger) pool into a cheap fresh wrapper. The
-      // expensive part — the Pin objects themselves — is reused.
-      setPins(pool.slice(0, n));
+      // Dirty-check: only re-render when the visible field actually changed.
+      // A static camera + idle activity yields byte-identical frames — skip
+      // setPins so React doesn't rebuild byChat/zones/lines 60×/sec for nothing.
+      let sig = String(n);
+      for (let i = 0; i < n; i++) {
+        const p = pool[i];
+        sig += `|${p.chatId}:${p.fileId}:${Math.round(p.x)}:${Math.round(p.y)}:${p.state}:${p.hue}`;
+      }
+      if (sig !== prevSigRef.current) {
+        // React needs a changed array reference to re-render; slice the active
+        // prefix into a cheap fresh wrapper. The Pin objects themselves are reused.
+        prevSigRef.current = sig;
+        setPins(pool.slice(0, n));
+      }
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);

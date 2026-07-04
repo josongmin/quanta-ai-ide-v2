@@ -32,6 +32,7 @@ export type {
 export { SAMPLE_RULES } from './lib/sample';
 export { SEED_ADMISSION_RULES, SEED_ADMISSION_RULE_BY_ID } from './lib/seed';
 export { estimateCost } from './lib/cost';
+export { signalDescribe, signalUsesHint } from './lib/signalMeta';
 export {
   previewRule,
   evaluateAdmission,

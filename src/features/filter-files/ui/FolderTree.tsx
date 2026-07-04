@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, memo, useCallback, useImperativeHandle, useMemo, useState } from 'react';
 import { ChevronRight, Folder, FolderOpen, FileCode } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import type { FileRecord, FolderRecord } from '@entities/repo';
@@ -141,7 +141,10 @@ function Row({
   );
 }
 
-function FileRow({
+// Memoized: with a boolean `matched` prop and stable handlers, a leaf re-renders
+// only when its own match/active state flips — not on every `matched` array
+// churn (e.g. a slider drag) that re-renders the parent Row.
+const FileRow = memo(function FileRow({
   file, depth, matched, onOpenFile, isActive,
 }: {
   file: FileRecord; depth: number; matched: boolean;
@@ -190,7 +193,7 @@ function FileRow({
       </span>
     </div>
   );
-}
+});
 
 // Imperative handle so parents (FilterBar's Files card header) can drive
 // expand-all / collapse-all from IDE-style toolbar buttons without lifting

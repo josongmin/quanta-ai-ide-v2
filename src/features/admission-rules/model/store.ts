@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { AdmissionRule, RuleSource, RuleSeverity, RuleSignal } from '@entities/admission';
 import { SAMPLE_RULES } from '@entities/admission';
+import { serializeRules, parseRulesImport, mergeRules, diffRuleSummary } from '../lib/rulesIo';
 
 // Single source of truth for the rule set during the session. We don't
 // persist; SAMPLE_RULES is the seed and edits live in memory. The board,
@@ -318,7 +319,7 @@ export const useAdmissionStore = create<AdmissionStore>((set, get) => ({
     const prevVersions = s.versions[rule.id] ?? [];
     const last = prevVersions[prevVersions.length - 1];
     const summary = last
-      ? diffSummary(last.snapshot, rule)
+      ? diffRuleSummary(last.snapshot, rule)
       : 'initial revision';
     const nextVersions = [
       ...prevVersions,
@@ -447,50 +448,14 @@ export const useAdmissionStore = create<AdmissionStore>((set, get) => ({
     ],
   })); },
 
-  // ── Import / export ────────────────────────────────────────────────
-  exportRules: () => {
-    const s = get();
-    return JSON.stringify({ version: 1, rules: s.rules }, null, 2);
-  },
+  // ── Import / export ──────────────────────────────────────────────────
+  // Thin wrappers over the pure helpers in lib/rulesIo.ts.
+  exportRules: () => serializeRules(get().rules),
   importRules: (json) => {
-    try {
-      const parsed = JSON.parse(json) as unknown;
-      if (
-        !parsed ||
-        typeof parsed !== 'object' ||
-        !('rules' in parsed) ||
-        !Array.isArray(parsed.rules)
-      ) {
-        return { ok: false, error: 'Expected {"rules": [...]}' };
-      }
-      // JSON import boundary: each element is untrusted until shape-checked.
-      const raw: unknown[] = parsed.rules;
-      const incoming: AdmissionRule[] = [];
-      for (const r of raw) {
-        if (
-          !r || typeof r !== 'object' ||
-          !('id' in r) || !r.id ||
-          !('name' in r) || !r.name ||
-          !('signal' in r) || !r.signal
-        ) {
-          return { ok: false, error: `Invalid rule: ${JSON.stringify(r).slice(0, 80)}` };
-        }
-        // Shape validated above; the parsed object carries the AdmissionRule fields.
-        incoming.push(r as AdmissionRule);
-      }
-      set((s) => {
-        const merged = [...s.rules];
-        for (const r of incoming) {
-          const idx = merged.findIndex((x) => x.id === r.id);
-          if (idx >= 0) merged[idx] = r;
-          else merged.push(r);
-        }
-        return { rules: merged };
-      });
-      return { ok: true, count: incoming.length };
-    } catch (e) {
-      return { ok: false, error: e instanceof Error ? e.message : String(e) };
-    }
+    const res = parseRulesImport(json);
+    if (!res.ok) return { ok: false, error: res.error };
+    set((s) => ({ rules: mergeRules(s.rules, res.rules) }));
+    return { ok: true, count: res.rules.length };
   },
 }));
 
@@ -501,27 +466,4 @@ function filterOut(set: Set<string>, id: string): Set<string> {
   const n = new Set(set);
   n.delete(id);
   return n;
-}
-
-function diffSummary(prev: AdmissionRule, next: AdmissionRule): string {
-  const parts: string[] = [];
-  if (prev.severity !== next.severity) parts.push(`severity ${prev.severity}→${next.severity}`);
-  if (prev.enabled !== next.enabled) parts.push(next.enabled ? 'enabled' : 'disabled');
-  if (prev.name !== next.name) parts.push(`renamed`);
-  // Signal changes
-  const ps = JSON.stringify(prev.signal);
-  const ns = JSON.stringify(next.signal);
-  if (ps !== ns) {
-    if (prev.signal.kind === 'metric' && next.signal.kind === 'metric'
-        && prev.signal.field === next.signal.field
-        && prev.signal.op === next.signal.op) {
-      parts.push(`threshold ${prev.signal.value}→${next.signal.value}`);
-    } else {
-      parts.push('signal updated');
-    }
-  }
-  if (JSON.stringify(prev.scope) !== JSON.stringify(next.scope)) {
-    parts.push('scope updated');
-  }
-  return parts.length === 0 ? 'no-op' : parts.join(' · ');
 }

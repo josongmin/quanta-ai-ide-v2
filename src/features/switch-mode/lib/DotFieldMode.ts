@@ -322,6 +322,10 @@ export function createDotFieldMode(): ViewMode {
   };
 
   let selectedId: number | null = null;
+  // Precomputed dep set of the selected file — rebuilt only on selection change
+  // so the per-frame highlight loop does a Set.has() instead of Array.includes()
+  // over every file's deps.
+  let selectedDeps: Set<number> | null = null;
   let rafId = 0;
   let ctx: ViewModeContext | null = null;
   let lastTheme: 'dark' | 'light' | null = null;
@@ -451,6 +455,7 @@ export function createDotFieldMode(): ViewMode {
 
   function resetView() {
     selectedId = null;
+    selectedDeps = null;
     rotTarget.x = FLAT.x; rotTarget.y = FLAT.y;
     zoomTarget = FLAT.dist;
     panTarget.set(0, 0, 0);
@@ -545,6 +550,7 @@ export function createDotFieldMode(): ViewMode {
         resetView();
       } else {
         selectedId = id;
+        selectedDeps = new Set(ctx.repo.files[id].deps);
         rotTarget.x = SIDE.x; rotTarget.y = SIDE.y;
         panTarget.set(inter[0].object.position.x, 0, inter[0].object.position.z);
         zoomTarget = SIDE.dist;
@@ -1289,7 +1295,7 @@ export function createDotFieldMode(): ViewMode {
       if (!m) continue;
       const f = repo.files[id];
       const isSel = selectedId === id;
-      const isDep = selectedId !== null && repo.files[selectedId].deps.includes(id);
+      const isDep = selectedDeps?.has(id) ?? false;
       const isMatched = !filterActive || snap.matched[id] === 1;
       const rank = snap.rankByFileId[id];
       const isGlow = topN > 0 && rank >= 0 && rank < topN;

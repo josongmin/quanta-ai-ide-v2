@@ -1,5 +1,6 @@
 import { primitives } from '@shared/tokens';
 import type { AdmissionRule, CostClass, RuleSignal } from '../model';
+import { signalCost } from './signalMeta';
 
 // Cost classifier — runs in O(1), called on every keystroke in the rule
 // editor. Driven entirely by the signal kind because that's what determines
@@ -16,46 +17,9 @@ export function estimateCost(rule: AdmissionRule): CostClass {
   return estimateSignalCost(rule.signal);
 }
 
+// Cost is per-signal-kind metadata — see SIGNAL_META (signalMeta.ts).
 export function estimateSignalCost(signal: RuleSignal): CostClass {
-  switch (signal.kind) {
-    case 'metric':
-      return 'instant';
-    case 'external':
-      return 'fast';
-    case 'graph':
-      return graphCost(signal.pattern);
-    case 'dsl':
-      return classifyDslCost(signal.expr);
-    case 'taint':
-      // Source-to-sink with sanitizer search = inter-procedural dataflow.
-      return signal.requireSanitizer ? 'background' : 'slow';
-  }
-}
-
-const GRAPH_COST: Record<string, CostClass> = {
-  'import-cycle': 'fast',
-  'public-api-touched': 'fast',
-  'orphan-edit': 'fast',
-  'layer-violation': 'fast',
-  'public-api-without-test': 'fast',
-  'unknown-region-creep': 'fast',
-  // Already precomputed on each file; aggregation is O(PR).
-  'blast-radius-spike': 'instant',
-};
-
-function graphCost(pattern: string): CostClass {
-  return GRAPH_COST[pattern] ?? 'medium';
-}
-
-// DSL cost is heuristic. If the expression touches only metric/flag fields
-// (which we already have on every file) it's instant; if it implies graph
-// traversal (substring "blast", "fan", "cycle") it's fast.
-function classifyDslCost(expr: string): CostClass {
-  const lo = expr.toLowerCase();
-  if (lo.includes('blast') || lo.includes('fan') || lo.includes('cyclic')) {
-    return 'fast';
-  }
-  return 'instant';
+  return signalCost(signal);
 }
 
 // Display metadata — used by the editor badge and the preview panel.
