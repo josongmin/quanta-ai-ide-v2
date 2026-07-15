@@ -32,8 +32,19 @@ function depsEqual(a: readonly unknown[], b: readonly unknown[]): boolean {
   return true;
 }
 
-function safeRegex(p: string): RegExp | null {
-  try { return new RegExp(p, 'i'); } catch { return null; }
+// A user-supplied regex is compiled and run against every file on every
+// keystroke, so an evil pattern is a self-DoS (ReDoS / catastrophic
+// backtracking). `safeRegex` used to catch only *syntax*. Now we also reject
+// over-long patterns and the classic exponential shape — a group containing an
+// unbounded quantifier that is itself quantified: (a+)+, (a*)*, (\d+){2,}.
+const MAX_REGEX_LEN = 200;
+const REDOS_SHAPE = /\([^()]*[+*][^()]*\)\s*[+*{]/;
+
+/** Returns an error string if the pattern is unusable/unsafe, else null. */
+function regexError(p: string): string | null {
+  if (p.length > MAX_REGEX_LEN) return 'Pattern too long';
+  if (REDOS_SHAPE.test(p)) return 'Pattern too complex';
+  try { new RegExp(p, 'i'); return null; } catch { return 'Invalid regex'; }
 }
 
 function getMask(
@@ -72,8 +83,9 @@ function computeMatched(cache: MaskCache, state: FilterState): { mask: Uint8Arra
     : getMask(cache, 'search', [searchTrim, state.searchMode], () => {
       const m = new Uint8Array(N);
       if (state.searchMode === 'regex') {
-        const rx = safeRegex(searchTrim);
-        if (!rx) { searchError = 'Invalid regex'; return m; }
+        const err = regexError(searchTrim);
+        if (err) { searchError = err; return m; }
+        const rx = new RegExp(searchTrim, 'i');
         for (const f of files) if (rx.test(`${f.name} ${f.folderPath}`)) m[f.id] = 1;
       } else if (state.searchMode === 'dsl') {
         const r = parseDsl(searchTrim);
@@ -89,7 +101,7 @@ function computeMatched(cache: MaskCache, state: FilterState): { mask: Uint8Arra
       return m;
     });
   if (searchTrim.length > 0 && searchError === null) {
-    if (state.searchMode === 'regex' && !safeRegex(searchTrim)) searchError = 'Invalid regex';
+    if (state.searchMode === 'regex') searchError = regexError(searchTrim);
     else if (state.searchMode === 'dsl') {
       const r = parseDsl(searchTrim);
       if (!r.ok) searchError = r.error;
@@ -297,7 +309,10 @@ export function computeDerived(cache: MaskCache, state: FilterState): Derived {
   const rk = new Int32Array(N).fill(-1);
   if (state.sort !== 'none' && ids.length > 0) {
     const cmp = SORT_CMP[state.sort];
-    ids.sort((a, b) => cmp(repo, a, b));
+    // NaN-tolerant: a NaN/undefined metric (possible from a raw backend DTO, or
+    // an unknown confidence in CONF_RANK) would otherwise return NaN and corrupt
+    // the order of neighboring well-defined files. Treat as equal.
+    ids.sort((a, b) => { const r = cmp(repo, a, b); return Number.isNaN(r) ? 0 : r; });
     ids.forEach((id, i) => { rk[id] = i; });
   }
 

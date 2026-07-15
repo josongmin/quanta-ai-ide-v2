@@ -3,6 +3,7 @@ import {
   Activity, AlertOctagon, Briefcase, CheckCircle2, Clock, Code,
   FileCode, Hash as HashIcon, MessageCircle, Palette, Sparkles,
 } from 'lucide-react';
+import { safeHref } from '@shared/lib';
 import { useCodingStage } from '../../model/CodingStageContext';
 import type {
   AgentTurn, BranchState, CiCheck, Integration, PrState, Project, Task,
@@ -374,7 +375,7 @@ function PrCiPanel({
                 : `PR #${prState.number}`}
             </span>
             <a
-              href={prState.url}
+              href={safeHref(prState.url)}
               target="_blank"
               rel="noopener noreferrer"
               className={`text-xs underline opacity-70 hover:opacity-100 ${muted}`}

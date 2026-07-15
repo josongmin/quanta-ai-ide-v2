@@ -10,7 +10,9 @@
 
 type ApiMode = 'mock' | 'real';
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? '';
+// Strip trailing slashes so `${apiBaseUrl}${path}` never produces a `//`
+// (many servers 404/redirect on a double slash, dropping the auth header).
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
 const apiMode: ApiMode = import.meta.env.VITE_API_MODE === 'real' ? 'real' : 'mock';
 
 export const env = {

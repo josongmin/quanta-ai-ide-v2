@@ -73,4 +73,15 @@ describe('api client — real mode', () => {
     expect(res.ok).toBe(false);
     if (!res.ok) expect(res.error.kind).toBe('network');
   });
+
+  it('treats a 204 / empty body as success, not a parse error', async () => {
+    const { api } = await loadClient('real');
+    vi.stubGlobal('fetch', () => Promise.resolve(new Response(null, { status: 204 })));
+    const res = await api.del('/thing');
+    expect(res.ok).toBe(true);
+
+    vi.stubGlobal('fetch', () => Promise.resolve(new Response('', { status: 200 })));
+    const res2 = await api.get('/empty');
+    expect(res2.ok).toBe(true);
+  });
 });

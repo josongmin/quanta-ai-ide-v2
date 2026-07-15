@@ -401,8 +401,12 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
   },
 
   dismissCandidate(candidateId, reason, note) {
-    // Dismiss can move the selection; invalidate any in-flight validation.
+    // Dismiss can move the selection; invalidate any in-flight validation, and
+    // bump the generation token so its own async regeneration below is dropped
+    // if the seed changes / the store resets before it resolves.
     valRun += 1;
+    genRun += 1;
+    const myGen = genRun;
     const at = new Date().toISOString();
     const seedId = get().selectedSeedId;
     set((cur) => {
@@ -428,6 +432,9 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
         });
         void simulateGenerate(seed, seedDismissals, 0)
           .then((next) => {
+            // Superseded (reset / new seed) while regenerating — drop the stale
+            // list so it can't resurrect into a cleared or switched store.
+            if (myGen !== genRun) return;
             if ('kind' in next) return;
             set((cur) => ({
               candidatesBySeed: { ...cur.candidatesBySeed, [seedId]: next },

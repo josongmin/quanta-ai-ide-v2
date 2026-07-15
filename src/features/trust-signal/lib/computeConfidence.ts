@@ -34,6 +34,9 @@ function decideLevel(
   candidate: FixCandidate,
   validation: ValidationResult,
 ): ConfidenceLevel {
+  // No proof obligations = nothing was verified — the LEAST certain, not the
+  // most. (Empty `.every()` would otherwise vacuously return 'exact'.)
+  if (validation.obligations.length === 0) return 'unknown';
   if (validation.failed > 0) return 'unknown';
   if (validation.dynamicUnreachable) return 'unknown';
 

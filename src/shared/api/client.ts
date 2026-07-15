@@ -64,9 +64,13 @@ async function request<T>(method: Method, path: string, body?: unknown): Promise
       return { ok: false, error: { kind: 'http', status: res.status, message: `HTTP ${res.status.toString()}` } };
     }
 
+    // A 204 / empty body (the REST convention for a successful DELETE/PUT with
+    // no content) is a SUCCESS, not a parse error — read text and only parse
+    // when non-empty.
+    const text = await res.text();
+    if (text === '') return { ok: true, data: undefined as T };
     try {
-      const data = (await res.json()) as unknown;
-      return { ok: true, data: data as T };
+      return { ok: true, data: JSON.parse(text) as T };
     } catch {
       return { ok: false, error: { kind: 'parse', message: 'Invalid JSON response' } };
     }

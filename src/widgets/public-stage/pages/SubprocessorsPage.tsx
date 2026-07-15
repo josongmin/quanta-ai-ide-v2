@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { safeHref } from '@shared/lib';
 import {
   Server,
   Cloud,
@@ -187,7 +188,7 @@ export default function SubprocessorsPage() {
                   </td>
                   <td className="px-3 py-2.5 text-right">
                     <a
-                      href={s.dpaUrl}
+                      href={safeHref(s.dpaUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-base underline underline-offset-2"

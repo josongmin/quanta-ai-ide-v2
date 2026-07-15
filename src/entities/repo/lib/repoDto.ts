@@ -21,6 +21,14 @@ export function buildRepoData(dto: RepoDataDTO): RepoData {
   const foldersByPath = new Map<string, FolderRecord>(
     dto.folders.map((f) => [f.path, f]),
   );
+  // Duplicate/colliding paths would make the derived index disagree with the
+  // `folders` array (last-wins). Surface it — a malformed backend payload, not
+  // something to swallow silently.
+  if (foldersByPath.size !== dto.folders.length) {
+    console.warn(
+      `buildRepoData: ${(dto.folders.length - foldersByPath.size).toString()} duplicate folder path(s) — the folders array and foldersByPath index disagree.`,
+    );
+  }
   return { ...dto, foldersByPath };
 }
 

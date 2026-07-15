@@ -186,4 +186,20 @@ describe('fix-pipeline store — dismissal & reset', () => {
     expect(s().generationStatus).toBe('idle');
     expect(s().dismissals).toEqual([]);
   });
+
+  it('drops the dismiss regeneration if the store resets before it resolves (race guard)', async () => {
+    const seedId = s().seeds[0].id;
+    const p = s().selectSeed(seedId);
+    await flush();
+    await p;
+    const cid = s().selectedCandidateId!;
+
+    s().dismissCandidate(cid, 'wrong-root-cause'); // schedules async regen
+    s().reset(); // supersede before it resolves
+    await flush();
+
+    // The stale regenerated list must NOT resurrect into the reset store.
+    expect(s().candidatesBySeed).toEqual({});
+    expect(s().selectedSeedId).toBeNull();
+  });
 });

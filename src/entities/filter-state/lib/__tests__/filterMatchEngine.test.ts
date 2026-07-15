@@ -56,4 +56,15 @@ describe('computeDerived', () => {
     expect(ranks).toContain(0);
     expect(Math.max(...ranks)).toBe(sorted.matchedCount - 1);
   });
+
+  it('rejects a catastrophic-backtracking regex instead of hanging (ReDoS guard)', () => {
+    const d = computeDerived(makeMaskCache(repo), { ...base(), searchMode: 'regex', search: '(a+)+$' });
+    expect(d.searchError).toBe('Pattern too complex');
+    expect(d.matchedCount).toBe(0);
+  });
+
+  it('rejects an over-long regex pattern', () => {
+    const d = computeDerived(makeMaskCache(repo), { ...base(), searchMode: 'regex', search: 'a'.repeat(300) });
+    expect(d.searchError).toBe('Pattern too long');
+  });
 });

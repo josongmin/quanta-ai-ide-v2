@@ -3,6 +3,7 @@ import {
   Globe, ExternalLink,
 } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
+import { safeHref } from '@shared/lib';
 import type { DeployStatus, Environment, Region, Tier } from './types';
 import { REGION_LABELS } from './types';
 
@@ -30,7 +31,7 @@ export function EnvCard({
             <RegionChip region={env.region} />
           </div>
           <a
-            href={env.url}
+            href={safeHref(env.url)}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-1 text-sm font-mono truncate"

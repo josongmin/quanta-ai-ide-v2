@@ -17,6 +17,7 @@ export {
   STORAGE_KEYS, STORAGE_KEY_PREFIX, type StorageKey,
 } from './storageKeys';
 export { clamp, clamp01 } from './clamp';
+export { safeHref } from './safeHref';
 export { assertNever } from './assertNever';
 export { useCopyToClipboard } from './useCopyToClipboard';
 export { useRovingMenuFocus } from './useRovingMenuFocus';

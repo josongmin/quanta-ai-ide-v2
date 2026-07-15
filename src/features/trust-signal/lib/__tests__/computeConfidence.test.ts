@@ -73,4 +73,10 @@ describe('computeConfidence', () => {
     ).weakestObligation;
     expect(weakest).toBe('boom');
   });
+
+  it('is unknown (not vacuously exact) when there are no obligations', () => {
+    const c = computeConfidence(buildCandidate(), buildValidation({ obligations: [] }));
+    expect(c.level).toBe('unknown');
+    expect(c.numeric).toBe(0);
+  });
 });

@@ -63,3 +63,42 @@ describe('verified-fix store', () => {
     expect(st().activeCaseId).toBeNull();
   });
 });
+
+// The stock FIX_CASES patchKinds all fall back to 'pass-first', so these seed
+// candidates whose patchKind maps to the fail paths — otherwise the critique
+// and block branches (the hardest half of the machine) are never executed.
+describe('verified-fix store — critique & block branches', () => {
+  const seedWith = (patchKind: string): string => {
+    st().reset();
+    const cand = { ...FIX_CASES[0].candidates[0], id: 'c-test', patchKind };
+    return st().seed(SEEDS[0], [cand]);
+  };
+
+  it('fails attempt 1, runs a critique, then passes attempt 2 → done', () => {
+    const id = seedWith('edit-safety'); // pass-after-critique
+    st().startValidation(id);
+
+    vi.advanceTimersByTime(VALIDATE_MS + 10); // attempt 1 fails → critique
+    expect(st().cases[id].loop.currentStage).toBe('critique');
+    expect(st().cases[id].validations).toHaveLength(1);
+
+    vi.advanceTimersByTime(VALIDATE_MS + 10); // attempt 2 passes
+    const c = st().cases[id];
+    expect(c.loop.currentStage).toBe('done');
+    expect(c.validations).toHaveLength(2);
+    expect(c.draft).not.toBeNull();
+  });
+
+  it('routes to a human checkpoint when attempt 2 also fails (aborted)', () => {
+    const id = seedWith('public-surface'); // human-required
+    st().startValidation(id);
+    vi.advanceTimersByTime(VALIDATE_MS + 10); // attempt 1 fail → critique
+    vi.advanceTimersByTime(VALIDATE_MS + 10); // attempt 2 fail → aborted
+
+    const c = st().cases[id];
+    expect(c.loop.currentStage).toBe('aborted');
+    expect(c.loop.aborted).toBe(true);
+    expect(c.loop.abortReason).toBeTruthy();
+    expect(c.validations).toHaveLength(2);
+  });
+});
