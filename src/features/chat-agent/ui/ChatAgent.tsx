@@ -4,6 +4,7 @@ import { useTranslation } from '@shared/i18n';
 import { safeLocalGet, safeLocalSet, safeLocalRemove, STORAGE_KEYS } from '@shared/lib';
 import { GlassCard } from '@shared/ui';
 import { useRunSuggestion, type SuggestionKey } from '../model/suggestions';
+import { useQuantaChat } from '../model/useQuantaChat';
 import { ChatHeader } from './parts/ChatHeader';
 import { Composer } from './parts/Composer';
 import { ExternalSuggestions } from './parts/ExternalSuggestions';
@@ -37,6 +38,9 @@ export default function ChatAgent({
   const pendingTimersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
   const pendingRafsRef = useRef<Set<number>>(new Set());
   const runSuggestion = useRunSuggestion();
+  // Real agent bridge (quanta-codeagent web-daemon). Falls back to synthReply
+  // when no daemon is reachable — see useQuantaChat.
+  const quanta = useQuantaChat();
 
   // User-resizable height. The widget defaults to 60vh-ish via CSS but
   // when the user drags the top handle we switch to an explicit pixel
@@ -278,17 +282,36 @@ export default function ChatAgent({
           title: isFirst ? deriveTitle(trimmed) : s.title,
         }
       : s));
-    const timer = setTimeout(() => {
-      pendingTimersRef.current.delete(timer);
-      setSessions((cur) => cur.map((s) => s.id === sid
-        ? {
-            ...s,
-            msgs: [...s.msgs, { id: id + 1, role: 'agent', text: synthReply(trimmed, t) }],
-            pending: false,
-          }
-        : s));
-    }, 700);
-    pendingTimersRef.current.add(timer);
+
+    const agentId = id + 1;
+    // Upsert the (streaming) agent reply into the originating tab — one message
+    // grows as deltas arrive rather than appending a bubble per chunk.
+    const putAgent = (agentText: string, pending: boolean): void => {
+      setSessions((cur) => cur.map((s) => {
+        if (s.id !== sid) return s;
+        const has = s.msgs.some((m) => m.id === agentId);
+        const msgs = has
+          ? s.msgs.map((m) => (m.id === agentId ? { ...m, text: agentText } : m))
+          : [...s.msgs, { id: agentId, role: 'agent' as const, text: agentText }];
+        return { ...s, msgs, pending };
+      }));
+    };
+
+    // Offline fallback — the original 700ms synthetic reply.
+    const fallback = (): void => {
+      const timer = setTimeout(() => {
+        pendingTimersRef.current.delete(timer);
+        putAgent(synthReply(trimmed, t), false);
+      }, 700);
+      pendingTimersRef.current.add(timer);
+    };
+
+    const started = quanta.runTurn(trimmed, {
+      onDelta: (acc) => { putAgent(acc, true); },
+      onDone: (final) => { putAgent(final.length > 0 ? final : synthReply(trimmed, t), false); },
+      onError: fallback,
+    });
+    if (!started) fallback();
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
