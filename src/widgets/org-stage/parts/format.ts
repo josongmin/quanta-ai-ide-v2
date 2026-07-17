@@ -19,7 +19,7 @@ export function initials(name: string, email: string): string {
 }
 
 /** ISO → short local date, or an em dash when absent/invalid. */
-export function shortDate(iso: string): string {
+export function shortDate(iso: string | null | undefined): string {
   if (!iso) return '—';
   const d = new Date(iso);
   return Number.isNaN(d.getTime())

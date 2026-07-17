@@ -29,3 +29,10 @@ export {
   revokeOtherSessions,
   type ActiveSession,
 } from './model/account';
+export {
+  listPersonalTokens,
+  createPersonalToken,
+  revokePersonalToken,
+  type ApiKeyRecord,
+  type ApiKeyCreated,
+} from './model/apiKeys';

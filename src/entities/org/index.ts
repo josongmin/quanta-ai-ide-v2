@@ -26,3 +26,10 @@ export {
   type OrgTeam,
   type OrgDetail,
 } from './model/types';
+export {
+  listServiceAccounts,
+  createServiceAccount,
+  revokeServiceAccount,
+  type ServiceAccountRecord,
+  type ServiceAccountCreated,
+} from './model/serviceAccounts';

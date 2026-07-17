@@ -6,6 +6,7 @@
 // Audit are already backend-wired and self-switch in their own files.)
 import { env } from '@shared/config/env';
 import { OrgComingSoon } from './parts/OrgComingSoon';
+import { ServiceAccountsReal } from './pages/parts/service-accounts/ServiceAccountsReal';
 
 import RolesMock from './pages/RolesPage';
 import UsageMock from './pages/UsagePage';
@@ -29,7 +30,7 @@ export function UsagePage() {
   return env.useRealAuth ? <OrgComingSoon title="Usage" subtitle="Organization usage metrics." /> : <UsageMock />;
 }
 export function ServiceAccountsPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Service accounts" /> : <ServiceAccountsMock />;
+  return env.useRealAuth ? <ServiceAccountsReal /> : <ServiceAccountsMock />;
 }
 export function DomainsPage() {
   return env.useRealAuth ? <OrgComingSoon title="Domains" /> : <DomainsMock />;

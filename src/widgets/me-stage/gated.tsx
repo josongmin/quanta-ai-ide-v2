@@ -8,6 +8,7 @@ import { MeComingSoon } from './real/MeComingSoon';
 import { ProfileReal } from './real/ProfileReal';
 import { AccountReal } from './real/AccountReal';
 import { SecurityReal } from './real/SecurityReal';
+import { ApiTokensReal } from './real/ApiTokensReal';
 
 import ProfileMock from './pages/ProfilePage';
 import AccountMock from './pages/AccountPage';
@@ -31,7 +32,7 @@ export function ConnectedAppsPage() {
   return env.useRealAuth ? <MeComingSoon title="Connected apps" /> : <ConnectedAppsMock />;
 }
 export function ApiTokensPage() {
-  return env.useRealAuth ? <MeComingSoon title="API tokens" subtitle="Personal access tokens." /> : <ApiTokensMock />;
+  return env.useRealAuth ? <ApiTokensReal /> : <ApiTokensMock />;
 }
 export function NotificationsPage() {
   return env.useRealAuth ? <MeComingSoon title="Notifications" /> : <NotificationsMock />;

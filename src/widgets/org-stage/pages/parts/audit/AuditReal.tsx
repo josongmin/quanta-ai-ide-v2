@@ -53,7 +53,10 @@ function fmtWhen(iso: string): string {
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleString();
 }
 function csvCell(v: string): string {
-  return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+  // Formula-injection guard: a cell starting with = + - @ tab CR executes in
+  // Excel/Sheets. Prefix with a quote to neutralize, then apply CSV quoting.
+  const guarded = /^[=+\-@\t\r]/.test(v) ? `'${v}` : v;
+  return /[",\n]/.test(guarded) ? `"${guarded.replace(/"/g, '""')}"` : guarded;
 }
 function dayToIso(day: string, end: boolean): string | null {
   if (!day) return null;
@@ -109,8 +112,13 @@ export function AuditReal() {
 
   async function loadMore() {
     if (!cursor || loadingMore) return;
+    // Snapshot the filter identity — if a filter changes mid-load, the first-page
+    // effect resets the list; bail so we don't append this page's (now-stale)
+    // rows onto the new filter's list or clobber the cursor.
+    const q0 = query;
     setLoadingMore(true);
-    const res = await accountsApi.get<AuditResponse>(query(cursor));
+    const res = await accountsApi.get<AuditResponse>(q0(cursor));
+    if (q0 !== query) { setLoadingMore(false); return; }
     setLoadingMore(false);
     if (res.ok) {
       setEntries((prev) => [...prev, ...(Array.isArray(res.data.entries) ? res.data.entries : [])]);
