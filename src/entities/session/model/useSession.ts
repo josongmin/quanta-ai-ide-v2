@@ -9,6 +9,8 @@ type CurrentUser = {
   email: string;
   name: string;
   image?: string | null;
+  /** Whether the user has a confirmed second factor (better-auth twoFactor). */
+  twoFactorEnabled: boolean;
 };
 
 type SessionState = {
@@ -27,7 +29,10 @@ export function useSession(): SessionState {
   const id = (data?.session as { id?: unknown } | undefined)?.id;
   return {
     user: raw
-      ? { id: raw.id, email: raw.email, name: raw.name, image: raw.image }
+      ? {
+          id: raw.id, email: raw.email, name: raw.name, image: raw.image,
+          twoFactorEnabled: Boolean((raw as { twoFactorEnabled?: unknown }).twoFactorEnabled),
+        }
       : null,
     isAuthenticated: Boolean(data),
     isPending,

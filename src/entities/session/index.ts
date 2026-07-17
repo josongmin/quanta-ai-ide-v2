@@ -2,12 +2,23 @@
 export { useSession } from './model/useSession';
 export {
   signInWithPassword,
+  signInWithProvider,
   signUpWithPassword,
   signOut,
   requestPasswordReset,
   resetPassword,
   verifyEmail,
+  type SignInResult,
+  type OAuthProvider,
 } from './model/actions';
+export {
+  enableTwoFactor,
+  verifyTotp,
+  verifyBackupCode,
+  disableTwoFactor,
+  regenerateBackupCodes,
+  type TotpEnrollment,
+} from './model/twoFactor';
 export {
   updateProfile,
   changeEmail,

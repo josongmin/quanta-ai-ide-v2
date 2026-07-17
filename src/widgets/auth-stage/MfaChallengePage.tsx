@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Check, Loader2 } from 'lucide-react';
+import { env } from '@shared/config/env';
 import { AuthShell } from './parts/AuthShell';
 import { Button } from './parts/AuthForm';
 import {
@@ -9,8 +10,15 @@ import {
   DEMO_TOTP,
 } from './parts/mfa';
 import type { Method, Phase } from './parts/mfa';
+import MfaChallengeReal from './MfaChallengeReal';
 
+// Real auth → live TOTP/backup verify against accounts; otherwise the demo mock
+// (which also offers a fake passkey path).
 export default function MfaChallengePage() {
+  return env.useRealAuth ? <MfaChallengeReal /> : <MfaChallengeMock />;
+}
+
+function MfaChallengeMock() {
   const [method, setMethod] = useState<Method>('totp');
   const [code, setCode] = useState<string[]>(['', '', '', '', '', '']);
   const [backupCode, setBackupCode] = useState('');

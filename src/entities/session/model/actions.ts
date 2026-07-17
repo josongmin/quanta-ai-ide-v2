@@ -8,6 +8,13 @@ import { messageForError } from '../lib/errorMessages';
 
 export type { ActionResult };
 
+/** Sign-in can succeed OR require a second factor before the session is live. */
+export type SignInResult =
+  | { ok: true; twoFactorRedirect: boolean }
+  | { ok: false; error: string };
+
+export type OAuthProvider = 'github' | 'google';
+
 // Auth-specific messaging (invalid credentials / verify email) over the shared
 // normalizer — the ActionResult shape itself lives in shared/auth (one source).
 function normalize(res: { error: unknown }): ActionResult {
@@ -17,8 +24,25 @@ function normalize(res: { error: unknown }): ActionResult {
 export async function signInWithPassword(input: {
   email: string;
   password: string;
-}): Promise<ActionResult> {
-  return normalize(await authClient.signIn.email(input));
+}): Promise<SignInResult> {
+  const res = await authClient.signIn.email(input);
+  if (res.error) return { ok: false, error: messageForError(res.error) };
+  // The twoFactor plugin injects `twoFactorRedirect` when the account has a
+  // confirmed second factor — the session is NOT live until it's verified.
+  const twoFactorRedirect = Boolean(
+    (res.data as { twoFactorRedirect?: unknown } | null | undefined)?.twoFactorRedirect,
+  );
+  return { ok: true, twoFactorRedirect };
+}
+
+/** OAuth sign-in. On success better-auth redirects the browser to the provider,
+ *  so this only returns here on an immediate error. GitLab/SSO are not backed.
+ *  newUserCallbackURL routes first-time OAuth users (e.g. to onboarding). */
+export async function signInWithProvider(
+  provider: OAuthProvider,
+  opts?: { callbackURL?: string; errorCallbackURL?: string; newUserCallbackURL?: string },
+): Promise<ActionResult> {
+  return normalize(await authClient.signIn.social({ provider, ...opts }));
 }
 
 export async function signUpWithPassword(input: {

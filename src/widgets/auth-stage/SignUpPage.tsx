@@ -4,7 +4,7 @@ import {
   Eye, EyeOff, Mail, KeyRound, ArrowRight, Building2, AlertCircle,
 } from 'lucide-react';
 import { env } from '@shared/config/env';
-import { signUpWithPassword } from '@entities/session';
+import { signUpWithPassword, signInWithProvider, type OAuthProvider } from '@entities/session';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { AuthShell } from './parts/AuthShell';
 import { Field, Button, HRule } from './parts/AuthForm';
@@ -73,6 +73,20 @@ export default function SignUpPage() {
     }
 
     setStep('submitting');
+  };
+
+  // Real OAuth — social sign-in is also sign-up. Brand-new OAuth users are routed
+  // to onboarding (newUserCallbackURL); an existing account lands on the dest.
+  const startOauth = (provider: OAuthProvider) => {
+    setError(null);
+    void (async () => {
+      const r = await signInWithProvider(provider, {
+        callbackURL: `${window.location.origin}${destAfterSignup}`,
+        newUserCallbackURL: `${window.location.origin}/onboarding`,
+        errorCallbackURL: `${window.location.origin}/auth/signup`,
+      });
+      if (!r.ok) { setStep('form'); setError(r.error); }
+    })();
   };
 
   // SSO-enforced org? Steer them to /auth/sso instead of letting them create
@@ -257,7 +271,23 @@ export default function SignUpPage() {
           </Button>
         </form>
 
-        {/* OAuth is mock-only (fakes success); hidden in real mode. */}
+        {/* Real OAuth (GitHub/Google) — social sign-in doubles as sign-up for a
+            new user. GitLab is not backed, so only these two show in real mode. */}
+        {env.useRealAuth && (
+          <>
+            <HRule />
+            <div className="flex flex-col gap-2">
+              <Button variant="secondary" leading={<GithubIcon className="w-3.5 h-3.5" />} onClick={() => { startOauth('github'); }}>
+                Continue with GitHub
+              </Button>
+              <Button variant="secondary" leading={<Mail className="w-3.5 h-3.5" />} onClick={() => { startOauth('google'); }}>
+                Continue with Google
+              </Button>
+            </div>
+          </>
+        )}
+
+        {/* OAuth is mock-only (fakes success) in the standalone demo. */}
         {!env.useRealAuth && (
           <>
             <HRule />

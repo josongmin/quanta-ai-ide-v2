@@ -37,11 +37,17 @@ const m = authClient as unknown as {
 beforeEach(() => { vi.clearAllMocks(); });
 
 describe('session actions — happy path normalization', () => {
-  it('signInWithPassword calls signIn.email and returns ok', async () => {
+  it('signInWithPassword calls signIn.email and returns ok (no 2FA)', async () => {
     m.signIn.email.mockResolvedValue({ data: {}, error: null });
     const r = await signInWithPassword({ email: 'a@b.com', password: 'pw' });
     expect(m.signIn.email).toHaveBeenCalledWith({ email: 'a@b.com', password: 'pw' });
-    expect(r).toEqual({ ok: true });
+    expect(r).toEqual({ ok: true, twoFactorRedirect: false });
+  });
+
+  it('signInWithPassword surfaces twoFactorRedirect when 2FA is required', async () => {
+    m.signIn.email.mockResolvedValue({ data: { twoFactorRedirect: true }, error: null });
+    const r = await signInWithPassword({ email: 'a@b.com', password: 'pw' });
+    expect(r).toEqual({ ok: true, twoFactorRedirect: true });
   });
 
   it('signUpWithPassword forwards name (required by 1.6)', async () => {

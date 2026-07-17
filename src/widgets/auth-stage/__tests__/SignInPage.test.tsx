@@ -17,7 +17,7 @@ vi.mock('@tanstack/react-router', () => ({
   Link: ({ to, children }: { to: string; children: ReactNode }) => <a href={to}>{children}</a>,
   useNavigate: () => navigateMock,
 }));
-vi.mock('@entities/session', () => ({ signInWithPassword: vi.fn() }));
+vi.mock('@entities/session', () => ({ signInWithPassword: vi.fn(), signInWithProvider: vi.fn() }));
 
 import SignInPage from '../SignInPage';
 import { signInWithPassword } from '@entities/session';
@@ -38,12 +38,23 @@ beforeEach(() => { vi.clearAllMocks(); });
 
 describe('SignInPage — real mode', () => {
   it('calls signInWithPassword and navigates to /intelligence on success', async () => {
-    signIn.mockResolvedValue({ ok: true });
+    signIn.mockResolvedValue({ ok: true, twoFactorRedirect: false });
     render(<ThemeProvider><SignInPage /></ThemeProvider>);
     fillAndSubmit();
     await waitFor(() => {
       expect(signIn).toHaveBeenCalledWith({ email: 'me@nowhere.io', password: 'super-secret-pw' });
       expect(navigateMock).toHaveBeenCalledWith({ to: '/intelligence' });
+    });
+  });
+
+  it('routes to the 2FA challenge when a second factor is required', async () => {
+    signIn.mockResolvedValue({ ok: true, twoFactorRedirect: true });
+    render(<ThemeProvider><SignInPage /></ThemeProvider>);
+    fillAndSubmit();
+    await waitFor(() => {
+      expect(navigateMock).toHaveBeenCalledWith(
+        expect.objectContaining({ to: '/auth/mfa' }),
+      );
     });
   });
 
@@ -57,10 +68,10 @@ describe('SignInPage — real mode', () => {
     expect(navigateMock).not.toHaveBeenCalled();
   });
 
-  it('hides the OAuth / demo-cred affordances in real mode', () => {
-    signIn.mockResolvedValue({ ok: true });
+  it('shows real OAuth (GitHub/Google) but not the demo creds in real mode', () => {
+    signIn.mockResolvedValue({ ok: true, twoFactorRedirect: false });
     render(<ThemeProvider><SignInPage /></ThemeProvider>);
-    expect(screen.queryByText(/Continue with GitHub/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Continue with GitHub/i)).toBeInTheDocument();
     expect(screen.queryByText(/sefield-demo/i)).not.toBeInTheDocument();
   });
 });

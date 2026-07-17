@@ -32,7 +32,9 @@
       "@widgets/*":  ["src/widgets/*"],
       "@features/*": ["src/features/*"],
       "@entities/*": ["src/entities/*"],
-      "@shared/*":   ["src/shared/*"]
+      "@shared/*":   ["src/shared/*"],
+      "zod":         ["node_modules/zod"],
+      "zod/*":       ["node_modules/zod/*"]
     }
   },
   "include": ["src"],

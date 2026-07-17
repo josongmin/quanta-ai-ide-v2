@@ -10,9 +10,12 @@
 // app-layer guard/init should import this instance directly.
 
 import { createAuthClient } from 'better-auth/react';
-import { organizationClient } from 'better-auth/client/plugins';
+import { organizationClient, twoFactorClient } from 'better-auth/client/plugins';
 import { env } from '@shared/config/env';
 
+// NOTE: twoFactorClient's inferred type references zod's `v4/core`; under pnpm
+// that path is only nameable because tsconfig maps `zod/*` to the hoisted copy
+// (declaration emit / composite build would otherwise fail TS2742).
 export const authClient = createAuthClient({
   // origin only — better-auth appends basePath ('/api/auth').
   baseURL: env.accountsUrl,
@@ -20,9 +23,12 @@ export const authClient = createAuthClient({
   fetchOptions: { credentials: 'include' },
   // Mirrors the accounts server plugins (better-auth.ts). organizationClient
   // gives `authClient.organization.*` (members/invitations/teams/roles) plus
-  // the reactive `useActiveOrganization`/`useListOrganizations` hooks — so the
-  // org-admin UI needs no hand-rolled CRUD layer. twoFactor/apiKey/admin
-  // clients are added in their own phases (MFA / PAT / backoffice) to keep the
-  // async auth chunk minimal and every capability justified by a consumer.
-  plugins: [organizationClient({ teams: { enabled: true } })],
+  // the reactive `useActiveOrganization`/`useListOrganizations` hooks.
+  // twoFactorClient gives `authClient.twoFactor.*` (enable/verifyTotp/disable/
+  // backup codes) and injects `twoFactorRedirect` into sign-in when a second
+  // factor is required. apiKey/admin clients are added in their own phases.
+  plugins: [
+    organizationClient({ teams: { enabled: true } }),
+    twoFactorClient(),
+  ],
 });

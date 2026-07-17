@@ -4,7 +4,7 @@ import {
   Eye, EyeOff, Mail, KeyRound, Lock, AlertCircle, Sparkles, Check,
 } from 'lucide-react';
 import { env } from '@shared/config/env';
-import { signInWithPassword } from '@entities/session';
+import { signInWithPassword, signInWithProvider, type OAuthProvider } from '@entities/session';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { AuthShell } from './parts/AuthShell';
 import { Field, Button, HRule } from './parts/AuthForm';
@@ -57,16 +57,20 @@ export default function SignInPage() {
 
     // Real auth: hit the accounts backend (better-auth). On success the session
     // cookie is set; navigate into the app (the route guard re-checks the warm
-    // session). OAuth/magic-link are hidden in real mode, so this is password-only.
+    // session). If the account has a second factor, the session isn't live yet —
+    // route to the MFA challenge (carrying ?redirect= so it lands correctly).
     if (env.useRealAuth) {
       setError(null);
       void (async () => {
         const r = await signInWithPassword({ email, password: pw });
-        if (r.ok) {
-          setLastUsedMethod('password');
-          await navigate({ to: destAfterLogin as never });
+        if (!r.ok) { setError(r.error); return; }
+        setLastUsedMethod('password');
+        if (r.twoFactorRedirect) {
+          await navigate(rawRedirect
+            ? { to: '/auth/mfa' as never, search: { redirect: rawRedirect } as never }
+            : { to: '/auth/mfa' as never });
         } else {
-          setError(r.error);
+          await navigate({ to: destAfterLogin as never });
         }
       })();
       return;
@@ -96,6 +100,20 @@ export default function SignInPage() {
     setLastUsedMethod(m);
     setOauth(null);
     setSuccessMessage('Signed in. Redirecting…');
+  };
+
+  // Real OAuth — better-auth redirects the browser to the provider; control only
+  // returns here on an immediate error. callbackURL carries the post-login dest.
+  const startOauth = (provider: OAuthProvider) => {
+    setError(null);
+    setLastUsedMethod(provider === 'github' ? 'oauth-github' : 'oauth-google');
+    void (async () => {
+      const r = await signInWithProvider(provider, {
+        callbackURL: `${window.location.origin}${destAfterLogin}`,
+        errorCallbackURL: `${window.location.origin}/auth/login`,
+      });
+      if (!r.ok) setError(r.error);
+    })();
   };
 
   return (
@@ -196,9 +214,31 @@ export default function SignInPage() {
           {successMessage && <SuccessNote message={successMessage} />}
         </form>
 
-        {/* OAuth / SSO / magic-link and the demo-cred hint are mock-only: they
-            fake success in the demo and aren't wired to real auth yet. Hiding
-            them in real mode avoids a misleading "signed in" from a fake flow. */}
+        {/* Real OAuth (GitHub/Google) — the accounts backend has these providers
+            when the client-ids are configured. GitLab/SSO/magic-link are not
+            backed, so only these two show in real mode. */}
+        {env.useRealAuth && (
+          <>
+            <HRule />
+            <div className="flex flex-col gap-2">
+              <OauthButton
+                label="Continue with GitHub"
+                leading={<GithubIcon className="w-3.5 h-3.5" />}
+                highlight={lastUsed === 'oauth-github'}
+                onClick={() => { startOauth('github'); }}
+              />
+              <OauthButton
+                label="Continue with Google"
+                leading={<Mail className="w-3.5 h-3.5" />}
+                highlight={lastUsed === 'oauth-google'}
+                onClick={() => { startOauth('google'); }}
+              />
+            </div>
+          </>
+        )}
+
+        {/* Mock-only affordances (SSO / magic-link / GitLab / demo creds): they
+            fake success in the standalone demo and aren't backed by real auth. */}
         {!env.useRealAuth && (
           <>
             <HRule />

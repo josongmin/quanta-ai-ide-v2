@@ -7,11 +7,10 @@ import {
   useSession, listSessions, revokeSession, revokeOtherSessions,
   type ActiveSession,
 } from '@entities/session';
+import { TwoFactorSection } from './TwoFactorSection';
 
-// Real security surface: active sessions (list + revoke + sign-out-everywhere)
-// over better-auth. Two-factor enrolment and recovery codes need the twoFactor
-// client plugin and land in Phase 2 (MFA); shown here as a "coming soon" note
-// rather than the mock's fabricated methods.
+// Real security surface: two-factor enrollment (TwoFactorSection) + active
+// sessions (list + revoke + sign-out-everywhere) over better-auth.
 
 function deviceLabel(ua: string | null): string {
   if (!ua) return 'Unknown device';
@@ -82,11 +81,7 @@ export function SecurityReal() {
 
   return (
     <MeShell title="Security" subtitle="Two-factor, active sessions, and sign-in.">
-      <Section title="Two-factor authentication" hint="Add a second factor to protect your account.">
-        <Row label="Authenticator app (TOTP)" sub="Set up an authenticator or passkey for step-up sign-in.">
-          <Badge variant="info" size="sm">Coming soon</Badge>
-        </Row>
-      </Section>
+      <TwoFactorSection />
 
       <Section title="Active sessions" hint="Devices currently signed in to your account.">
         {actionError && (
