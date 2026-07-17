@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { Globe, Trash2 } from 'lucide-react';
+import { env } from '@shared/config/env';
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Field, Button, SaveBar } from '@shared/ui/forms';
 import { ConfirmDialog } from '@shared/ui';
 import { shallowEqual } from '@shared/lib';
+import { GeneralReal } from './parts/general/GeneralReal';
+
+// Real auth → live org identity (name/slug/delete) over the org plugin;
+// otherwise the standalone demo's richer mock form below.
+export default function GeneralPage() {
+  return env.useRealAuth ? <GeneralReal /> : <GeneralMock />;
+}
 
 type Form = {
   name: string;
@@ -23,7 +31,7 @@ const INITIAL: Form = {
 
 const WORKSPACES = ['monorepo', 'mobile', 'infra', 'docs-site'];
 
-export default function GeneralPage() {
+function GeneralMock() {
   const [form, setForm] = useState<Form>(INITIAL);
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [confirmDelete, setConfirmDelete] = useState(false);

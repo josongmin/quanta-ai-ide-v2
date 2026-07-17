@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { env } from '@shared/config/env';
 import { useTheme } from '@shared/theme';
 import { ScrollPane } from '@shared/ui';
 import { useTabVisibility } from '@features/workspace-tabs';
+import { BillingReal } from './BillingReal';
 import {
   PLANS, USAGE, INVOICES, PAYMENT_METHODS, BILLING_PROFILE,
   type PlanId,
@@ -17,10 +19,16 @@ import { TaxSection } from './parts/TaxSection';
 import { ContractsSection } from './parts/ContractsSection';
 import { Section, Divider } from './parts/Section';
 
+// Real auth → live plan/status/checkout/portal over accounts; otherwise the
+// standalone demo's rich seeded billing surface below.
+export default function BillingStage() {
+  return env.useRealAuth ? <BillingReal /> : <BillingMock />;
+}
+
 // Single-page scroll layout. No sidebar, no boxed cards stacked vertically —
 // sections are separated by hairlines and large whitespace, à la Linear /
 // Vercel settings. Anchor links in the header jump down the page.
-export default function BillingStage() {
+function BillingMock() {
   const { isDark } = useTheme();
   const [cycle, setCycle] = useState<'monthly' | 'annual'>('annual');
   const [planId, setPlanId] = useState<PlanId>('team');

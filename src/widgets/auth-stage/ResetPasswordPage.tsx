@@ -3,6 +3,8 @@ import { Link } from '@tanstack/react-router';
 import {
   Eye, EyeOff, Check, Clock, ShieldCheck, AlertCircle, KeyRound,
 } from 'lucide-react';
+import { env } from '@shared/config/env';
+import { resetPassword } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
 import { Field, Button } from './parts/AuthForm';
 import { PasswordStrengthPanel } from './parts/PasswordStrengthPanel';
@@ -20,6 +22,12 @@ export default function ResetPasswordPage() {
   const [confirm, setConfirm] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [phase, setPhase] = useState<Phase>('form');
+  const [error, setError] = useState<string | null>(null);
+  // Reset token from the email link (?token=). Read once from the URL.
+  const token = useMemo(
+    () => new URLSearchParams(window.location.search).get('token') ?? '',
+    [],
+  );
 
   // Token countdown — purely visual; expiry would be enforced server-side.
   const [expiresAt] = useState(() => Date.now() + TOKEN_TTL_SEC * 1000);
@@ -77,6 +85,18 @@ export default function ResetPasswordPage() {
     e.preventDefault();
     if (!ready) return;
     setPhase('submitting');
+
+    // Real auth: submit the new password with the URL token.
+    if (env.useRealAuth) {
+      setError(null);
+      void (async () => {
+        const r = await resetPassword({ newPassword: pw, token });
+        if (r.ok) setPhase('success');
+        else { setPhase('form'); setError(r.error); }
+      })();
+      return;
+    }
+
     setTimeout(() => { setPhase('success'); }, 900);
   };
 
@@ -132,6 +152,13 @@ export default function ResetPasswordPage() {
         />
 
         <SignOutNotice />
+
+        {error && (
+          <div className="flex items-start gap-2 text-sm" style={{ color: 'var(--intent-danger-fg)' }} role="alert">
+            <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
 
         <Button type="submit" disabled={!ready || phase === 'submitting'}>
           {phase === 'submitting' ? 'Updating…' : 'Update password and sign in'}

@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { Search, Download, ChevronDown, ChevronRight } from 'lucide-react';
+import { env } from '@shared/config/env';
 import { OrgShell } from '../parts/OrgShell';
 import { Button } from '@shared/ui/forms';
+import { AuditReal } from './parts/audit/AuditReal';
+
+// Real auth → live audit trail over accounts /v1/audit; otherwise the demo mock.
+export default function AuditLogPage() {
+  return env.useRealAuth ? <AuditReal /> : <AuditLogMock />;
+}
 
 type Result = 'success' | 'failure';
 
@@ -50,7 +57,7 @@ const SEED: LogEntry[] = [
   { id: 'e15', ts: '2026-05-10 16:30:44', actor: 'Sora Kim',       initials: 'SK', action: 'auth.login',             target: 'sora.kim@acme.com',         ip: '203.0.113.42',  result: 'success' },
 ];
 
-export default function AuditLogPage() {
+function AuditLogMock() {
   const [q, setQ] = useState('');
   const [actor, setActor] = useState(ACTORS[0]);
   const [action, setAction] = useState(ACTIONS[0]);

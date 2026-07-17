@@ -3,6 +3,8 @@ import { Link } from '@tanstack/react-router';
 import {
   Mail, ShieldCheck, Clock, Building2, KeyRound, Info,
 } from 'lucide-react';
+import { env } from '@shared/config/env';
+import { requestPasswordReset } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
 import { Field, Button } from './parts/AuthForm';
 import { useRateLimit } from './lib/rateLimit';
@@ -38,6 +40,22 @@ export default function ForgotPasswordPage() {
     if (rate.lockedUntil) return;
 
     setPhase('sending');
+
+    // Real auth: fire the reset request; always show 'sent' regardless of the
+    // result (privacy — never reveal whether the email exists). The email link
+    // points back at this FE's /auth/reset.
+    if (env.useRealAuth) {
+      void requestPasswordReset({
+        email,
+        redirectTo: `${window.location.origin}/auth/reset`,
+      }).finally(() => {
+        rate.recordFail();
+        setLastSent(Date.now());
+        setPhase('sent');
+      });
+      return;
+    }
+
     setTimeout(() => {
       // We always claim success — never reveal whether the email exists.
       // recordFail counts as "an attempt was made"; we use it for rate-limit.

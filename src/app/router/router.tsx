@@ -17,7 +17,9 @@ import { FilterProvider } from '@entities/filter-state';
 import { AppShell } from '@widgets/app-shell';
 import { ErrorBoundary } from '@app/providers';
 import { RouteFallback } from '@shared/ui';
+import { env } from '@shared/config/env';
 import { isChromeless } from './routeChrome';
+import { decideAuthRedirect } from './authGuard';
 
 // Tab-kind routes are now rendered by WorkspaceTabsHost — the host keeps
 // every open tab mounted in parallel and only paints the active one. The
@@ -25,6 +27,12 @@ import { isChromeless } from './routeChrome';
 // preserved purely as a deep-linking surface.
 const BillingStage = lazy(() =>
   import('@widgets/billing-stage').then((m) => ({ default: m.BillingStage })),
+);
+const BillingSuccessPage = lazy(() =>
+  import('@widgets/billing-stage').then((m) => ({ default: m.BillingSuccessPage })),
+);
+const BillingCancelPage = lazy(() =>
+  import('@widgets/billing-stage').then((m) => ({ default: m.BillingCancelPage })),
 );
 const OnboardingStage     = lazy(() => import('@widgets/onboarding-stage').then((m) => ({ default: m.OnboardingStage })));
 const ProfilePage         = lazy(() => import('@widgets/me-stage').then((m) => ({ default: m.ProfilePage })));
@@ -72,6 +80,7 @@ const ResetPasswordPage   = lazy(() => import('@widgets/auth-stage').then((m) =>
 const VerifyEmailPage     = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.VerifyEmailPage })));
 const MfaChallengePage    = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.MfaChallengePage })));
 const SessionExpiredPage  = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.SessionExpiredPage })));
+const AcceptInvitationPage = lazy(() => import('@widgets/auth-stage').then((m) => ({ default: m.AcceptInvitationPage })));
 const PricingPage         = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.PricingPage })));
 const ChangelogPage       = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.ChangelogPage })));
 const HelpPage            = lazy(() => import('@widgets/public-stage').then((m) => ({ default: m.HelpPage })));
@@ -117,6 +126,24 @@ const OrgUsagePage            = lazy(() => import('@widgets/org-stage').then((m)
 // ─────────────────────────────────────────────────────────────────────────
 
 const rootRoute = createRootRoute({
+  // Auth guard — real mode only. Awaits the (boot-primed, warm) better-auth
+  // session so protected content never flashes before the redirect resolves.
+  // Mock mode returns immediately → free browsing, exactly as before.
+  beforeLoad: async ({ location }) => {
+    if (!env.useRealAuth) return;
+    // Dynamic import so better-auth stays out of the initial chunk — in mock
+    // mode (the standalone demo) it's never loaded at all.
+    const { authClient } = await import('@shared/auth');
+    const { data } = await authClient.getSession();
+    const decision = decideAuthRedirect({
+      authed: Boolean(data),
+      pathname: location.pathname,
+      useRealAuth: env.useRealAuth,
+    });
+    if (decision) {
+      redirect({ to: decision.to as never, search: decision.search as never, throw: true });
+    }
+  },
   component: function RootLayout() {
     // Auth, onboarding, public/marketing/legal, and the super-admin console
     // render full-bleed, without the AppShell chrome (header, GNB, modals).
@@ -328,6 +355,11 @@ const authResetRoute    = makeAuth('/auth/reset',           ResetPasswordPage);
 const authVerifyRoute   = makeAuth('/auth/verify-email',    VerifyEmailPage);
 const authMfaRoute      = makeAuth('/auth/mfa',             MfaChallengePage);
 const authExpiredRoute  = makeAuth('/auth/session-expired', SessionExpiredPage);
+// Emailed invite-accept link (needs a session; the auth guard bounces + returns).
+const acceptInviteRoute = makeAuth('/accept-invitation/$id', AcceptInvitationPage);
+// Stripe checkout return (success_url / cancel_url point here, set by accounts).
+const billingSuccessRoute = makeAuth('/billing/success', BillingSuccessPage);
+const billingCancelRoute  = makeAuth('/billing/cancel',  BillingCancelPage);
 
 // Public marketing / legal / status pages — chromeless, same lazy-suspense
 // wrapper as auth.
@@ -447,6 +479,9 @@ const routeTree = rootRoute.addChildren([
   authForgotRoute,
   authResetRoute,
   authVerifyRoute,
+  acceptInviteRoute,
+  billingSuccessRoute,
+  billingCancelRoute,
   authMfaRoute,
   authExpiredRoute,
   pricingRoute,

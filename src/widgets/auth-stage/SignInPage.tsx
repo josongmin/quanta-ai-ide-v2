@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import {
   Eye, EyeOff, Mail, KeyRound, Lock, AlertCircle, Sparkles, Check,
 } from 'lucide-react';
+import { env } from '@shared/config/env';
+import { signInWithPassword } from '@entities/session';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { AuthShell } from './parts/AuthShell';
 import { Field, Button, HRule } from './parts/AuthForm';
@@ -29,12 +31,22 @@ export default function SignInPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [oauth, setOauth] = useState<null | 'github' | 'gitlab' | 'google' | 'sso'>(null);
 
+  const navigate = useNavigate();
+  // Guard stashes the intended destination as ?redirect=. Only honor same-app
+  // paths (leading '/') to avoid an open redirect.
+  const rawRedirect = useMemo(() => {
+    const r = new URLSearchParams(window.location.search).get('redirect');
+    return r?.startsWith('/') ? r : null;
+  }, []);
+  const destAfterLogin = rawRedirect ?? '/intelligence';
   const rate = useRateLimit({ maxFails: 3, cooldownMs: 60_000 });
   const lastUsed = useMemo(() => getLastUsedMethod(), []);
   const idp = useMemo(() => (email.includes('@') ? lookupIdP(email) : null), [email]);
 
   // Auto-suggest SSO when the typed email maps to a known org with enforced SSO.
-  const ssoEnforced = idp?.enforced;
+  // Mock-only: the idp directory is demo data, so it must not drive the real
+  // password login path (which would block sign-in for demo domains).
+  const ssoEnforced = !env.useRealAuth && idp?.enforced;
 
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => { inputRef.current?.focus(); }, []);
@@ -42,6 +54,23 @@ export default function SignInPage() {
   const submitPassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (rate.lockedUntil) return;
+
+    // Real auth: hit the accounts backend (better-auth). On success the session
+    // cookie is set; navigate into the app (the route guard re-checks the warm
+    // session). OAuth/magic-link are hidden in real mode, so this is password-only.
+    if (env.useRealAuth) {
+      setError(null);
+      void (async () => {
+        const r = await signInWithPassword({ email, password: pw });
+        if (r.ok) {
+          setLastUsedMethod('password');
+          await navigate({ to: destAfterLogin as never });
+        } else {
+          setError(r.error);
+        }
+      })();
+      return;
+    }
 
     if (mode === 'magic-link' || email.toLowerCase().includes(MAGIC_LINK_EMAIL_HINT)) {
       setSuccessMessage(`Magic sign-in link sent to ${email}. Check your inbox to continue.`);
@@ -78,7 +107,11 @@ export default function SignInPage() {
         footer={
           <>
             <span>New to se · field?</span>
-            <Link to={'/auth/signup' as never} style={{ color: 'var(--fg-link)' }}>
+            <Link
+              to={'/auth/signup' as never}
+              search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined}
+              style={{ color: 'var(--fg-link)' }}
+            >
               Create an account
             </Link>
           </>
@@ -147,7 +180,7 @@ export default function SignInPage() {
             </Button>
           )}
 
-          {!ssoEnforced && (
+          {!ssoEnforced && !env.useRealAuth && (
             <button
               type="button"
               onClick={() => { setMode((m) => (m === 'password' ? 'magic-link' : 'password')); setError(null); }}
@@ -163,45 +196,52 @@ export default function SignInPage() {
           {successMessage && <SuccessNote message={successMessage} />}
         </form>
 
-        <HRule />
+        {/* OAuth / SSO / magic-link and the demo-cred hint are mock-only: they
+            fake success in the demo and aren't wired to real auth yet. Hiding
+            them in real mode avoids a misleading "signed in" from a fake flow. */}
+        {!env.useRealAuth && (
+          <>
+            <HRule />
 
-        <div className="flex flex-col gap-2">
-          <OauthButton
-            label="Continue with GitHub"
-            leading={<GithubIcon className="w-3.5 h-3.5" />}
-            highlight={lastUsed === 'oauth-github'}
-            onClick={() => { setOauth('github'); }}
-          />
-          <OauthButton
-            label="Continue with GitLab"
-            leading={<GitLabMark />}
-            highlight={lastUsed === 'oauth-gitlab'}
-            onClick={() => { setOauth('gitlab'); }}
-          />
-          <OauthButton
-            label="Continue with Google"
-            leading={<Mail className="w-3.5 h-3.5" />}
-            highlight={lastUsed === 'oauth-google'}
-            onClick={() => { setOauth('google'); }}
-          />
-          <Link
-            to={'/auth/sso' as never}
-            className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-colors w-full"
-            style={{
-              background: 'var(--bg-surface-muted)',
-              color: 'var(--fg-strong)',
-              border: '1px solid var(--border-default)',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface-muted)'; }}
-          >
-            <KeyRound className="w-3.5 h-3.5" />
-            Continue with SSO
-            {lastUsed === 'sso' && <LastBadge />}
-          </Link>
-        </div>
+            <div className="flex flex-col gap-2">
+              <OauthButton
+                label="Continue with GitHub"
+                leading={<GithubIcon className="w-3.5 h-3.5" />}
+                highlight={lastUsed === 'oauth-github'}
+                onClick={() => { setOauth('github'); }}
+              />
+              <OauthButton
+                label="Continue with GitLab"
+                leading={<GitLabMark />}
+                highlight={lastUsed === 'oauth-gitlab'}
+                onClick={() => { setOauth('gitlab'); }}
+              />
+              <OauthButton
+                label="Continue with Google"
+                leading={<Mail className="w-3.5 h-3.5" />}
+                highlight={lastUsed === 'oauth-google'}
+                onClick={() => { setOauth('google'); }}
+              />
+              <Link
+                to={'/auth/sso' as never}
+                className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-colors w-full"
+                style={{
+                  background: 'var(--bg-surface-muted)',
+                  color: 'var(--fg-strong)',
+                  border: '1px solid var(--border-default)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface-muted)'; }}
+              >
+                <KeyRound className="w-3.5 h-3.5" />
+                Continue with SSO
+                {lastUsed === 'sso' && <LastBadge />}
+              </Link>
+            </div>
 
-        <DemoCredHint />
+            <DemoCredHint />
+          </>
+        )}
       </AuthShell>
 
       {oauth && (

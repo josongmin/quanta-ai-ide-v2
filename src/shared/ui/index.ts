@@ -23,7 +23,7 @@ export { IconButton } from './IconButton';
 export { Switch } from './Switch';
 export { SegmentedControl } from './SegmentedControl';
 export { Pill } from './Pill';
-export { Badge } from './Badge';
+export { Badge, type BadgeVariant } from './Badge';
 export { StatusDot } from './StatusDot';
 export { ResizeHandle } from './ResizeHandle';
 export { SideNavShell, type SideNavItem, type SideNavGroup } from './SideNavShell';

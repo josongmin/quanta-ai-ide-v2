@@ -14,6 +14,7 @@ export { default as ResetPasswordPage }  from './ResetPasswordPage';
 export { default as VerifyEmailPage }    from './VerifyEmailPage';
 export { default as MfaChallengePage }   from './MfaChallengePage';
 export { default as SessionExpiredPage } from './SessionExpiredPage';
+export { default as AcceptInvitationPage } from './AcceptInvitationPage';
 
 export { Field, Button, HRule, OAuthGrid } from './parts/AuthForm';
 export { PasswordStrengthPanel } from './parts/PasswordStrengthPanel';

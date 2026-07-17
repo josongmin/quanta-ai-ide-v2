@@ -101,6 +101,20 @@ export default defineConfig({
             ) {
               return 'vendor-i18n';
             }
+            // better-auth (+ its deps) BEFORE the vendor-react rule: its client
+            // entry lives at `.../client/react/...`, whose `/react/` substring
+            // would otherwise false-match into vendor-react and drag the whole
+            // auth SDK into the initial chunk. It's only ever dynamically
+            // imported (real-auth mode), so its own chunk stays async — the
+            // standalone demo (mock) ships none of it.
+            if (
+              id.includes('better-auth') ||
+              id.includes('@better-fetch') ||
+              id.includes('nanostores') ||
+              id.includes('@noble')
+            ) {
+              return 'vendor-auth';
+            }
             if (id.includes('react-dom') || id.includes('/react/') || id.endsWith('/react') || id.includes('scheduler')) {
               return 'vendor-react';
             }

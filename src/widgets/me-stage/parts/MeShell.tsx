@@ -5,6 +5,8 @@ import {
   Keyboard, Sparkles, Inbox, ChevronRight,
 } from 'lucide-react';
 import { SideNavShell, type SideNavGroup } from '@shared/ui';
+import { env } from '@shared/config/env';
+import { useSession } from '@entities/session';
 
 export type MePath =
   | '/me/profile' | '/me/account' | '/me/security' | '/me/connected-apps'
@@ -80,7 +82,23 @@ export function MeShell({ title, subtitle, topRight, children }: Props) {
   );
 }
 
+// Real auth → the signed-in user; standalone demo → the seeded "Sora Kim".
 function UserCard() {
+  return env.useRealAuth ? <SessionUserCard /> : <StaticUserCard initials="SK" name="Sora Kim" email="sora@acme.com" />;
+}
+
+function SessionUserCard() {
+  const { user } = useSession();
+  // Empty name → fall back to email, then a generic label (name may be '').
+  const name = user?.name && user.name.trim().length > 0 ? user.name : (user?.email ?? 'You');
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const initials = (parts.length >= 2 && parts[0] && parts[1])
+    ? (parts[0][0] + parts[1][0]).toUpperCase()
+    : name.slice(0, 2).toUpperCase();
+  return <StaticUserCard initials={initials} name={name} email={user?.email ?? ''} />;
+}
+
+function StaticUserCard({ initials, name, email }: { initials: string; name: string; email: string }) {
   return (
     <div className="flex items-center gap-2">
       <div
@@ -90,14 +108,14 @@ function UserCard() {
           color: 'var(--bg-canvas)',
         }}
       >
-        SK
+        {initials}
       </div>
       <div className="flex flex-col min-w-0">
         <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
-          Sora Kim
+          {name}
         </span>
         <span className="text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>
-          sora@acme.com
+          {email}
         </span>
       </div>
     </div>

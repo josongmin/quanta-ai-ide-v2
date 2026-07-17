@@ -1,8 +1,12 @@
-import { useCallback, useState } from 'react';
-import { Link, useSearch } from '@tanstack/react-router';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { useCallback, useRef, useState } from 'react';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { ArrowRight, Sparkles, Loader2 } from 'lucide-react';
+import { env } from '@shared/config/env';
+import { useSession, updateProfile } from '@entities/session';
+import { createOrganization, setActiveOrg, inviteMember } from '@entities/org';
+import { startCheckout } from '@entities/billing';
 import { OnboardingShell } from './parts/OnboardingShell';
-import { STEPS, INITIAL_DATA, type WizardData } from './parts/wizard';
+import { STEPS, INITIAL_DATA, type WizardData, type InviteRole } from './parts/wizard';
 import { StepProfile } from './parts/steps/StepProfile';
 import { StepOrg } from './parts/steps/StepOrg';
 import { StepWorkspace } from './parts/steps/StepWorkspace';
@@ -24,8 +28,21 @@ export default function OnboardingStage() {
   const stepFromUrl = clampStep(parseInt(search.step ?? '0', 10) || 0);
   const isDone = search.done === '1';
 
+  const { user } = useSession();
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(stepFromUrl);
   const [data, setData] = useState<WizardData>(INITIAL_DATA);
+  const [finishing, setFinishing] = useState(false);
+  const [finishError, setFinishError] = useState<string | null>(null);
+  // Idempotency guards so a retry / reload never spawns a duplicate org,
+  // re-sends succeeded invites, or opens a second checkout. The created org id
+  // is persisted to sessionStorage (keyed by slug) so it survives a component
+  // remount (page reload / navigation back into onboarding) too — refs alone
+  // reset on unmount. invitedRef/invitesReportedRef are per-mount (a re-created
+  // invite on reload just 400s harmlessly).
+  const createdOrgRef = useRef<string | null>(null);
+  const invitedRef = useRef<Set<string>>(new Set());
+  const invitesReportedRef = useRef(false);
 
   const setProfile   = useCallback((v: WizardData['profile'])   => { setData((d) => ({ ...d, profile: v })); }, []);
   const setOrg       = useCallback((v: WizardData['org'])       => { setData((d) => ({ ...d, org: v })); }, []);
@@ -35,6 +52,77 @@ export default function OnboardingStage() {
 
   if (isDone) return <DonePage data={data} />;
 
+  const flipToDone = () => {
+    const u = new URL(window.location.href);
+    u.searchParams.set('done', '1');
+    u.searchParams.delete('step');
+    window.history.replaceState(null, '', u.toString());
+    // Force re-read of URL
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
+  // Real-mode finish: persist the wizard to the accounts backend. Create mode
+  // provisions the org, applies invites, and (for a paid plan) redirects to
+  // Stripe checkout. Join mode is handled via the emailed invite link, so here
+  // we only save the profile. Mock mode keeps the in-memory demo (flipToDone).
+  const finishReal = async () => {
+    setFinishing(true);
+    setFinishError(null);
+    if (data.profile.name.trim().length > 0) {
+      await updateProfile({ name: data.profile.name.trim() });
+    }
+    if (data.org.mode === 'create') {
+      // Create the org exactly once; reuse it on a retry / reload (no duplicate
+      // org). sessionStorage bridges a remount.
+      const storeKey = `onboarding:org:${data.org.slug}`;
+      let orgId = createdOrgRef.current ?? sessionStorage.getItem(storeKey);
+      if (!orgId) {
+        const created = await createOrganization({ name: data.org.name.trim(), slug: data.org.slug });
+        if (!created.ok) { setFinishing(false); setFinishError(created.error); return; }
+        orgId = created.org.id;
+        sessionStorage.setItem(storeKey, orgId);
+      }
+      createdOrgRef.current = orgId;
+      // Active org drives the JWT/entitlement claim — a swallowed failure here
+      // would leave the user org-less (and unentitled) even after paying.
+      const activated = await setActiveOrg({ organizationId: orgId });
+      if (!activated.ok) { setFinishing(false); setFinishError(activated.error); return; }
+
+      // Invites are best-effort but never silently dropped; already-sent ones
+      // are skipped so a retry can't double-invite.
+      const failed: string[] = [];
+      for (const entry of data.invite.entries) {
+        if (invitedRef.current.has(entry.email)) continue;
+        const res = await inviteMember({ organizationId: orgId, email: entry.email, role: backendRole(entry.role) });
+        if (res.ok) invitedRef.current.add(entry.email);
+        else failed.push(entry.email);
+      }
+      // Surface invite failures once (usual cause: free-tier seat limit before
+      // the plan upgrade). The org is provisioned — let the user press Finish
+      // again to continue; they can resend from Members after upgrading.
+      if (failed.length > 0 && !invitesReportedRef.current) {
+        invitesReportedRef.current = true;
+        setFinishError(
+          `${failed.length.toString()} invite${failed.length === 1 ? '' : 's'} couldn't be sent — resend from Members after upgrading. Press Finish to continue.`,
+        );
+        setFinishing(false);
+        return;
+      }
+
+      if (data.plan.id === 'team' || data.plan.id === 'business') {
+        const checkout = await startCheckout(orgId, { plan: data.plan.id, cycle: data.plan.cycle });
+        if (checkout.ok) { window.location.href = checkout.url; return; }
+        // Checkout couldn't start — land in the app; they can upgrade in Billing.
+      }
+      // Clear the persisted bootstrap marker now that onboarding succeeded.
+      sessionStorage.removeItem(`onboarding:org:${data.org.slug}`);
+    }
+    setFinishing(false);
+    // Real onboarding is complete — go to the workspace, NOT the demo's scripted
+    // "indexing" DonePage (which is fabricated). Mock mode keeps that screen.
+    void navigate({ to: '/intelligence' });
+  };
+
   const next = () => {
     if (current < STEPS.length - 1) {
       setCurrent((c) => c + 1);
@@ -43,14 +131,10 @@ export default function OnboardingStage() {
       const u = new URL(window.location.href);
       u.searchParams.set('step', String(current + 1));
       window.history.replaceState(null, '', u.toString());
+    } else if (env.useRealAuth) {
+      void finishReal();
     } else {
-      // Finish — flip to done view.
-      const u = new URL(window.location.href);
-      u.searchParams.set('done', '1');
-      u.searchParams.delete('step');
-      window.history.replaceState(null, '', u.toString());
-      // Force re-read of URL
-      window.dispatchEvent(new PopStateEvent('popstate'));
+      flipToDone();
     }
   };
 
@@ -71,17 +155,21 @@ export default function OnboardingStage() {
       onPrev={current > 0 ? prev : undefined}
       topRight={
         <span>
-          Signed in as <span style={{ color: 'var(--fg-default)' }}>sora@acme.com</span>
+          Signed in as <span style={{ color: 'var(--fg-default)' }}>{env.useRealAuth ? (user?.email ?? 'you') : 'sora@acme.com'}</span>
           <span className="mx-2" style={{ color: 'var(--border-muted)' }}>·</span>
           <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Sign out</Link>
         </span>
       }
       actions={
         <>
+          {finishError && (
+            <span className="text-sm mr-1" style={{ color: 'var(--intent-danger-fg)' }}>{finishError}</span>
+          )}
           {!isLast && current >= 3 && (
             <button
               type="button"
               onClick={next}
+              disabled={finishing}
               className="text-base font-medium px-2.5 py-1.5 rounded-md transition-colors"
               style={{ color: 'var(--fg-muted)' }}
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
@@ -93,20 +181,27 @@ export default function OnboardingStage() {
           <button
             type="button"
             onClick={next}
-            disabled={!stepValid}
+            disabled={!stepValid || finishing}
             className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-opacity hover:opacity-90"
             style={{
               background: 'var(--fg-strong)',
               color: 'var(--bg-canvas)',
-              opacity: stepValid ? 1 : 0.5,
-              cursor: stepValid ? 'pointer' : 'not-allowed',
+              opacity: stepValid && !finishing ? 1 : 0.5,
+              cursor: stepValid && !finishing ? 'pointer' : 'not-allowed',
             }}
           >
             {isLast ? (
-              <>
-                Finish setup
-                <Sparkles className="w-3.5 h-3.5" />
-              </>
+              finishing ? (
+                <>
+                  Finishing…
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                </>
+              ) : (
+                <>
+                  Finish setup
+                  <Sparkles className="w-3.5 h-3.5" />
+                </>
+              )
             ) : (
               <>
                 Continue
@@ -128,6 +223,14 @@ export default function OnboardingStage() {
 
 function clampStep(n: number) {
   return Math.max(0, Math.min(STEPS.length - 1, Number.isFinite(n) ? n : 0));
+}
+
+// Wizard invite roles → backend org roles (accounts has no reviewer/viewer;
+// reviewer collapses to member, viewer to the least-privileged guest).
+function backendRole(r: InviteRole): 'admin' | 'member' | 'guest' {
+  if (r === 'admin') return 'admin';
+  if (r === 'viewer') return 'guest';
+  return 'member';
 }
 
 // Per-step "can advance?" gate. Mirrors what the back end would enforce.

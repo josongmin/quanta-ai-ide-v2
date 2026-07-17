@@ -22,6 +22,16 @@ export type ApiResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: ApiError };
 
+/** Map an ApiError to a user-facing string. `resource` names what was being
+ *  read for the 403 case ("the audit log", "billing"). One home so every
+ *  accountsApi/api caller renders consistent copy. */
+export function apiErrorMessage(e: ApiError, resource = 'this'): string {
+  if (e.kind === 'unauthorized') return 'Your session expired. Please sign in again.';
+  if (e.kind === 'http' && e.status === 403) return `You don't have permission to view ${resource}.`;
+  if (e.kind === 'not-wired') return 'Not available in demo mode.';
+  return e.message || 'Something went wrong.';
+}
+
 type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
 // ── Registered seams (auth phase wires these) ────────────────────────────

@@ -2,11 +2,19 @@ import { useMemo, useState } from 'react';
 import {
   UsersRound, Search, Plus,
 } from 'lucide-react';
+import { env } from '@shared/config/env';
 import { OrgShell } from '../parts/OrgShell';
 import { Button } from '@shared/ui/forms';
 import { TeamDetail } from './parts/teams/TeamDetail';
 import { CreateTeamModal } from './parts/teams/CreateTeamModal';
+import { TeamsReal } from './parts/teams/TeamsReal';
 import type { Team } from './parts/teams/types';
+
+// Real auth → live teams over the org plugin; otherwise the demo mock with its
+// richer (product-level) ownership-routing detail.
+export default function TeamsPage() {
+  return env.useRealAuth ? <TeamsReal /> : <TeamsMock />;
+}
 
 const SEED: Team[] = [
   {
@@ -89,7 +97,7 @@ const SEED: Team[] = [
   },
 ];
 
-export default function TeamsPage() {
+function TeamsMock() {
   const [teams, setTeams] = useState<Team[]>(SEED);
   const [selectedId, setSelectedId] = useState<string>('t1');
   const [q, setQ] = useState('');

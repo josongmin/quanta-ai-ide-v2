@@ -1,19 +1,14 @@
+// Backend-wired pages (self-switch mock↔real inside their own file).
 export { default as MembersPage }     from './pages/MembersPage';
 export { default as GeneralPage }     from './pages/GeneralPage';
 export { default as TeamsPage }       from './pages/TeamsPage';
-export { default as RolesPage }       from './pages/RolesPage';
-export { default as SecurityPage }    from './pages/SecurityPage';
-export { default as IntegrationsPage }from './pages/IntegrationsPage';
-export { default as WebhooksPage }    from './pages/WebhooksPage';
-export { default as ApiOAuthPage }    from './pages/ApiOAuthPage';
-export { default as PoliciesPage }    from './pages/PoliciesPage';
-export { default as AiPoliciesPage }  from './pages/AiPoliciesPage';
-export { default as SamlSsoPage }     from './pages/SamlSsoPage';
-export { default as ScimPage }        from './pages/ScimPage';
 export { default as AuditLogPage }    from './pages/AuditLogPage';
-export { default as DataResidencyPage }from './pages/DataResidencyPage';
-export { default as RetentionPolicyPage }from './pages/RetentionPolicyPage';
-export { default as InvitationsPage }    from './pages/InvitationsPage';
-export { default as DomainsPage }        from './pages/DomainsPage';
-export { default as ServiceAccountsPage }from './pages/ServiceAccountsPage';
-export { default as UsagePage }          from './pages/UsagePage';
+export { default as InvitationsPage } from './pages/InvitationsPage';
+
+// Not-yet-wired pages: real mode shows OrgComingSoon, mock mode the demo seed.
+// (Gated in ./gated so the 14 mock files need no per-file changes.)
+export {
+  RolesPage, UsagePage, ServiceAccountsPage, DomainsPage, SecurityPage,
+  IntegrationsPage, WebhooksPage, ApiOAuthPage, PoliciesPage, AiPoliciesPage,
+  SamlSsoPage, ScimPage, DataResidencyPage, RetentionPolicyPage,
+} from './gated';

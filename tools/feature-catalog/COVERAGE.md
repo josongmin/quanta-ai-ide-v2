@@ -62,7 +62,7 @@
 | `prefers-reduced-motion` `prefers-reduced-motion` aware | 🟢 parity | · | ◐ | · | · | · | · | · | · | ✅ |
 | `skip-to-composer` Skip-to-composer link | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `blueprint-surface` Blueprint surface utility (mode-aware bg) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
-| `button-tone-system` Button tone system (primary / secondary / ghost / danger) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
+| `button-tone-system` IconButton tone system (muted / accent / danger) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `click-outside-hook` useClickOutside (popover / menu dismiss) | ⚪ table-stakes | · | · | · | · | · | · | · | · | ✅ |
 | `confidence-meter` ConfidenceMeter (calibrated 0..1 bar) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `deterministic-rng` Seeded RNG (deterministic demo data) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
@@ -96,25 +96,25 @@
 | `admission-workspace` Admission workspace (top-level) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `anomaly-sentinel` AnomalySentinel (z-score outlier surfacing) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `confidence-band` ConfidenceBand (CI ribbon overlay) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `confidence-mix` ConfidenceMix (rule confidence breakdown) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
+| `confidence-mix` VerdictDonut (decision-class breakdown) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `cost-badge` CostBadge (per-rule cost overlay) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `counterfactual-impact` Counterfactual impact card | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `cusum-drift-card` CUSUM drift card (rule performance drift) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `effect-size-bar` Effect-size bar (Cohen's d / log-odds) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `reliability-diagram` Reliability diagram (rule calibration plot) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `rule-editor` RuleEditor (declarative predicate editor) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `rules-board` RulesBoard (kanban-style rule lifecycle) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
+| `rules-board` RulesPage (rule list + lifecycle states) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `survival-curve` Survival curve (rule TTL) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `facet-renderer` FacetRenderer (declarative facet host) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `filter-bar` FilterBar (faceted filter host) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `folder-tree-nav` FolderTree (workspace navigator) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `preset-facet` PresetFacet (saved filter presets) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
+| `preset-facet` Saved filter presets (project-selector dropdown) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `project-selector` Project selector (filter scope) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `range-facet` RangeFacet (numeric range filter) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `search-dsl-bar` Search DSL bar (typed search syntax) | 🔵 leading | · | · | · | · | ◐ | · | · | · | ✅ |
 | `avatar-component` Avatar (login → display) | ⚪ table-stakes | · | · | · | · | · | · | · | · | ✅ |
 | `conversation-log` ConversationLog (timeline of review events) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
-| `diff-view` DiffView (unified / split toggle) | 🟢 parity | ✅ | · | · | · | ✅ | · | · | · | ✅ |
+| `diff-view` Diff block view (unified / split toggle) | 🟢 parity | ✅ | · | · | · | ✅ | · | · | · | ✅ |
 | `inline-comment-composer` Inline comment composer | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `inline-thread` Inline review thread (per-line conversation) | 🔵 leading | · | · | · | · | ◐ | · | · | · | ✅ |
 | `pr-preview-trigger` PR preview trigger (open the bar) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
@@ -127,18 +127,17 @@
 | `universe-mode` Universe mode (3D dependency space) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `view-mode-context` ViewModeContext (mode-aware components) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `app-shell` AppShell (chrome host) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `engine-findings-rail` EngineFindingsRail (CI / scanner findings) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
-| `git-actions-menu` GitActionsMenu (branch-scoped quick actions) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `heat-overlay-picker` HeatOverlayPicker (heat-metric chooser) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
+| `engine-findings-rail` EngineFindingsPanel (CI / scanner findings) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
+| `heat-overlay-picker` HeatDetail (heat-metric chooser) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `overlay-context` OverlayContext (heat / risk / time overlay state) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
-| `pr-context-rail` PrContextRail (PR-level context) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `pr-ticket-rail` PrTicketRail (PR list scoped to me / team) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
+| `pr-context-rail` ReviewContextRail (PR-level context) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
+| `pr-ticket-rail` LeftQueue (PR list scoped to me / archived) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `prefs-context` PrefsContext (cross-feature preferences) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `risk-lens-switcher` RiskLensSwitcher (risk-axis cycler) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
+| `risk-lens-switcher` RiskDetail (risk-axis selector) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `settings-panel` SettingsPanel (top-level prefs UI) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `shortcuts-modal` ShortcutsModal (?-triggered cheat sheet) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `stage-host` Stage (top-level page host) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
-| `time-window-picker` TimeWindowPicker (rolling window) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
+| `time-window-picker` Time-window control (rolling window) | 🟢 parity | · | · | · | · | · | · | · | · | ✅ |
 | `chat-agent-resize` ChatAgent vertical resize (top-grip handle) | 🔵 leading | ✅ | · | · | · | · | · | · | · | ✅ |
 | `chat-agent-widget` ChatAgent (bottom-pinned conversational widget) | 🔵 leading | · | · | · | · | · | · | · | · | ✅ |
 | `proactive-suggestions` Proactive suggestions (low-safety / unknown-flag / refactor / blast-radius) | 🔵 leading | ◐ | · | · | · | · | · | · | · | ✅ |

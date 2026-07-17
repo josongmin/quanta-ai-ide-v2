@@ -2,7 +2,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Search, ArrowUpRight, Lock } from 'lucide-react';
 import { useTheme } from '@shared/theme';
+import { env } from '@shared/config/env';
 import { ScrollPane } from '@shared/ui';
+import { useActiveOrgSlug } from '@entities/org';
 import { useTabVisibility } from '@features/workspace-tabs';
 import {
   CATALOG, GROUP_META, GROUP_ORDER, catalogStats,
@@ -18,17 +20,28 @@ export default function CatalogStage() {
   const [q, setQ] = useState('');
   const visible = useTabVisibility();
 
+  // In real auth mode, point org/billing links at the signed-in org instead of
+  // the demo's hard-coded "acme" slug. Mock mode keeps the demo paths.
+  const orgSlug = useActiveOrgSlug();
+  const entries = useMemo(() => {
+    if (!env.useRealAuth || !orgSlug) return CATALOG;
+    return CATALOG.map((e) =>
+      e.path.startsWith('/org/acme/')
+        ? { ...e, path: e.path.replace('/org/acme/', `/org/${orgSlug}/`) }
+        : e);
+  }, [orgSlug]);
+
   const stats = useMemo(() => catalogStats(), []);
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    if (!needle) return CATALOG;
-    return CATALOG.filter((c) =>
+    if (!needle) return entries;
+    return entries.filter((c) =>
       c.title.toLowerCase().includes(needle)
       || c.blurb.toLowerCase().includes(needle)
       || c.id.toLowerCase().includes(needle)
       || c.group.toLowerCase().includes(needle),
     );
-  }, [q]);
+  }, [q, entries]);
 
   const grouped = useMemo(() => {
     const m = new Map<string, CatalogEntry[]>();

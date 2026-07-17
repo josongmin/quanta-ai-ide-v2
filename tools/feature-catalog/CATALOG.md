@@ -1,13 +1,13 @@
 # Feature Catalog
 
-_141 features across 19 families._
+_140 features across 19 families._
 
 ## Tier distribution
 
 | Tier | Count |
 |---|---|
 | 🔵 leading | 78 |
-| 🟢 parity | 59 |
+| 🟢 parity | 58 |
 | 🟡 progressive | 2 |
 | ⚪ table-stakes | 2 |
 
@@ -147,7 +147,7 @@ _Cross-cutting affordances — command palette, context menu, reactions, snapsho
 | ID | Tier | Feature | Pattern |
 |---|---|---|---|
 | `blueprint-surface` | 🔵 leading | **Blueprint surface utility (mode-aware bg)** — `blueprintSurface(mode, depth)` returns the right glass / solid / outlined background for the active universe mode. Single source of truth for surface treatments — no `bg-zinc-900/50` literals scattered across components. | Material Design surface elevation / Apple HIG materials |
-| `button-tone-system` | 🟢 parity | **Button tone system (primary / secondary / ghost / danger)** — `<Button tone>` covers four tones with consistent hover / focus / active states. Disabled state respects contrast minimums; danger tone is reserved for irreversible actions. | Material 3 button hierarchy / shadcn/ui |
+| `button-tone-system` | 🟢 parity | **IconButton tone system (muted / accent / danger)** — `<IconButton tone>` covers three semantic tones with consistent hover / focus / active states. Tones resolve through intent tokens (`--intent-danger-vivid` etc); danger tone is reserved for irreversible actions. | Material 3 button hierarchy / shadcn/ui |
 | `click-outside-hook` | ⚪ table-stakes | **useClickOutside (popover / menu dismiss)** — Hook that calls a handler when a pointerdown lands outside the referenced element. Powers menu dismissal, popover close, and mention-picker collapse. | react-onclickoutside / DOM pointerdown convention |
 | `confidence-meter` | 🔵 leading | **ConfidenceMeter (calibrated 0..1 bar)** — Reusable 0..1 bar with three colour zones — ≥0.85 emerald, 0.6–0.85 neutral, <0.6 amber. Used by per-turn confidence chip, rule reliability cards, and admission overview. | Anthropic extended-thinking calibration thresholds |
 | `deterministic-rng` | 🟢 parity | **Seeded RNG (deterministic demo data)** — `makeRng(seed)` wraps a deterministic LCG so demo fixtures are reproducible across reloads. Used by SAMPLE_PROJECTS, sample tasks, and timeline jitter. | numpy.random.default_rng / mulberry32 |
@@ -199,17 +199,17 @@ _Statistical guard for letting agent-authored changes through — calibration cu
 
 | ID | Tier | Feature | Pattern |
 |---|---|---|---|
-| `admission-workspace` | 🟢 parity | **Admission workspace (top-level)** — `AdmissionWorkspace` is the host for the rule lifecycle UI — Overview / Decision / History / RulesBoard / RuleEditor tabs. | Feature-flag platforms (LaunchDarkly / GrowthBook) |
+| `admission-workspace` | 🟢 parity | **Admission workspace (top-level)** — `AdmissionV2` is the host for the rule lifecycle UI — Health / Rules / Gate pages routed through a sidebar. `AdmissionRoot` mounts it. | Feature-flag platforms (LaunchDarkly / GrowthBook) |
 | `anomaly-sentinel` | 🔵 leading | **AnomalySentinel (z-score outlier surfacing)** — Tracks the per-rule accept-rate's z-score against its 14-day rolling baseline. |z| > 2 flips the sentinel amber, |z| > 3 red. | SRE 3-sigma alerts / Z-score outlier detection |
 | `confidence-band` | 🟢 parity | **ConfidenceBand (CI ribbon overlay)** — Shaded ±95% confidence ribbon around any time-series chart in the admission v2 surface (CUSUM, survival, reliability). | ggplot2 geom_ribbon / Pyplot fill_between |
-| `confidence-mix` | 🔵 leading | **ConfidenceMix (rule confidence breakdown)** — Stacked bar of rule confidence by decision class — accept / revise / reject — so a reviewer can see whether the model is confident-correct or confident-wrong. | Calibration histogram (Brier score viz) |
-| `cost-badge` | 🟢 parity | **CostBadge (per-rule cost overlay)** — Tiny chip on each rule card showing rolling cost ($/day) so expensive rules surface for review without opening the row. | AWS cost-by-tag chips |
+| `confidence-mix` | 🔵 leading | **VerdictDonut (decision-class breakdown)** — Donut of rule verdicts by decision class — accept / revise / reject — so a reviewer can see whether the model is confident-correct or confident-wrong. | Calibration histogram (Brier score viz) |
+| `cost-badge` | 🟢 parity | **CostBadge (per-rule cost overlay)** — Tiny cost chip inline in each `RuleListSection` row showing rolling cost ($/day) so expensive rules surface for review without opening the row. | AWS cost-by-tag chips |
 | `counterfactual-impact` | 🔵 leading | **Counterfactual impact card** — "What would have happened if this rule weren't live?" shows the agent decisions that flipped because of the rule, sized by potential blast radius. | Counterfactual reasoning in causal inference |
 | `cusum-drift-card` | 🔵 leading | **CUSUM drift card (rule performance drift)** — Per-rule CUSUM (cumulative-sum control chart) of accept-rate. A sustained run above/below the centerline signals real drift, not noise. | Page 1954 CUSUM / SPC charts |
 | `effect-size-bar` | 🔵 leading | **Effect-size bar (Cohen's d / log-odds)** — Reports the rule's effect on the underlying decision distribution as a Cohen's d (continuous) or log-odds (binary), with 95% CI error bars. | Cohen 1988 effect-size / Cumming "the new statistics" |
 | `reliability-diagram` | 🔵 leading | **Reliability diagram (rule calibration plot)** — Predicted-confidence × empirical-accept-rate scatter, with the diagonal as perfect calibration. Bands shade ±15% drift. | DeGroot/Fienberg 1983 reliability diagram |
-| `rule-editor` | 🟢 parity | **RuleEditor (declarative predicate editor)** — Condition-builder surface for the per-rule predicate. Group / AND / OR / NOT scaffolding with one input per leaf clause. | Notion filter builder / Sentry alert rules |
-| `rules-board` | 🔵 leading | **RulesBoard (kanban-style rule lifecycle)** — Three columns — proposed / shadow / live — with rule cards moving between them as approvers act. Drop targets enforce valid transitions. | Kanban / Jira workflow |
+| `rule-editor` | 🟢 parity | **RuleEditor (declarative predicate editor)** — Condition-builder surface for the per-rule predicate — the `RuleEditorForm` inside the `RuleEditorOverlay`, with one input per signal clause. | Notion filter builder / Sentry alert rules |
+| `rules-board` | 🔵 leading | **RulesPage (rule list + lifecycle states)** — `RulesPage` hosts the rule list (`RuleListSection`) with search, source-filter chips, and bulk actions. Lifecycle (proposed / shadow / live) is a per-row state, not a kanban column. | Linear list views / GitHub Issues |
 | `survival-curve` | 🔵 leading | **Survival curve (rule TTL)** — Kaplan-Meier-style survival curve for rule accept-rate over time. Shows the TTL of a rule's effectiveness — when does it decay? | Kaplan-Meier survival analysis |
 
 ## Filter & Search
@@ -221,7 +221,7 @@ _Faceted filtering (preset / range / metric), folder tree navigator, search-DSL 
 | `facet-renderer` | 🟢 parity | **FacetRenderer (declarative facet host)** — Single component that picks the right facet type (preset / range / metric / category) from the facet's declared shape. New facet types register here; consumers stay generic. | react-jsonschema-form / Material-UI generics |
 | `filter-bar` | 🟢 parity | **FilterBar (faceted filter host)** — `FilterBar` is the top of the filter feature — composes preset, range, and metric facets, plus a folder-tree opener. Keyboard navigable; Esc collapses any open facet. | Linear filter chips / Notion property filters |
 | `folder-tree-nav` | 🟢 parity | **FolderTree (workspace navigator)** — Imperative-handle-exposing folder tree. `FolderTreeHandle` lets consumers expand to a path, scroll-to-file, or trigger filter changes. | VS Code explorer / IntelliJ project view |
-| `preset-facet` | 🟢 parity | **PresetFacet (saved filter presets)** — Dropdown of saved filter presets — "my open PRs", "high-risk files", "untested code paths". Selecting a preset replaces the active facet stack atomically. | Linear views / GitHub Issues filters |
+| `preset-facet` | 🟢 parity | **Saved filter presets (project-selector dropdown)** — Saved filter presets — "my open PRs", "high-risk files", "untested code paths" — surfaced in the project selector's dropdown (`PRESETS` + `applyPreset`). Selecting a preset replaces the active facet stack atomically. | Linear views / GitHub Issues filters |
 | `project-selector` | 🟢 parity | **Project selector (filter scope)** — Multi-select dropdown that scopes every other filter to a chosen project set. Persists via FilterContext so the choice survives navigation. | GitHub repo scope selector / Linear team picker |
 | `range-facet` | 🟢 parity | **RangeFacet (numeric range filter)** — Two-handle slider for numeric facets — LOC, churn, age-in-days. Live-updates the result count as the user drags. | Airbnb price slider / Steam refine sliders |
 | `search-dsl-bar` | 🔵 leading | **Search DSL bar (typed search syntax)** — Top search bar parses a small DSL — `is:open path:src/ author:me age:<7d` — into structured query terms. Tokens render as removable chips; raw text stays as fallback fuzzy search. | GitHub search syntax / JIRA JQL |
@@ -233,12 +233,12 @@ _DiffView with unified/split toggle, inline comment threads, reply/resolve, acti
 | ID | Tier | Feature | Pattern |
 |---|---|---|---|
 | `avatar-component` | ⚪ table-stakes | **Avatar (login → display)** — Tiny `Avatar` component that takes a login + size and renders the GitHub avatar with a fallback to initials. Used everywhere a person is referenced. | GitHub user avatars / Gravatar |
-| `conversation-log` | 🔵 leading | **ConversationLog (timeline of review events)** — Chronological mix of comments, reviews, status checks, force-pushes. Each event is one row; clicking expands the row to the full body inline. | GitHub PR conversation tab / Linear activity log |
-| `diff-view` | 🟢 parity | **DiffView (unified / split toggle)** — `DiffView` is the host for diff rendering. Mode toggle switches between unified and split via `ModeToggle`. Renders one `DiffHunk` per hunk. | GitHub PR diff viewer / Gerrit |
-| `inline-comment-composer` | 🟢 parity | **Inline comment composer** — Click `+` on a diff line to open `InlineCommentComposer` directly in the gutter. Cmd+Enter submits; Esc cancels and restores focus. | GitHub PR review composer |
-| `inline-thread` | 🔵 leading | **Inline review thread (per-line conversation)** — `InlineThread` renders a comment thread inline in the diff at the line it was anchored to. Replies stack under the original; resolve collapses the thread to a single chip. | GitHub line-comment threads / Gerrit replies |
+| `conversation-log` | 🔵 leading | **ConversationLog (timeline of review events)** — `ReviewTimeline` is the chronological mix of commits, reviews, threads, and status checks for a PR, rendered as event lanes in the review stage. | GitHub PR conversation tab / Linear activity log |
+| `diff-view` | 🟢 parity | **Diff block view (unified / split toggle)** — `DiffBlockView` is the host for diff rendering inside a coding-stage turn. Per-file rows (`DiffFileRow`) switch between unified and split via a `viewMode` toggle. Renders one `DiffHunk` per hunk. | GitHub PR diff viewer / Gerrit |
+| `inline-comment-composer` | 🟢 parity | **Inline comment composer** — Click `+` on a diff line to open the inline composer directly in the gutter (part of `HunkCommentThread`). Cmd+Enter submits; Esc cancels and restores focus. | GitHub PR review composer |
+| `inline-thread` | 🔵 leading | **Inline review thread (per-line conversation)** — `HunkCommentThread` renders a comment thread inline in the diff at the line it was anchored to. Replies stack under the original; resolve collapses the thread to a single chip. | GitHub line-comment threads / Gerrit replies |
 | `pr-preview-trigger` | 🟢 parity | **PR preview trigger (open the bar)** — Header button that opens the `PrPreviewBar` — the sticky bottom bar showing the active branch's PR diff summary, checks, and conflicts. | VS Code GitHub Pull Requests extension |
-| `review-action-bar` | 🟢 parity | **Review action bar (approve / request-changes / comment)** — Sticky bottom bar with the three GitHub-canonical review actions. Approve / Request changes both require a non-empty top-level comment for traceability. | GitHub PR review summary |
+| `review-action-bar` | 🟢 parity | **Review action bar (approve / request-changes / comment)** — `DecisionHeadsUp` is the review-stage decision bar carrying the GitHub-canonical review actions (approve / request-changes / comment) with the blocking-comment traceability guard. | GitHub PR review summary |
 
 ## Mode switching & Activity
 
@@ -261,18 +261,17 @@ _Top-level Stage host, AppShell, GitActionsMenu, OverlayContext and PrefsContext
 | ID | Tier | Feature | Pattern |
 |---|---|---|---|
 | `app-shell` | 🟢 parity | **AppShell (chrome host)** — Top-level layout — title bar, navigation, mode-switcher slot, chat-agent slot. Wraps every page and owns the keyboard shortcut registry. | VS Code shell / Linear app shell |
-| `engine-findings-rail` | 🔵 leading | **EngineFindingsRail (CI / scanner findings)** — Right-side rail in review stage showing findings from CI, semgrep, lint, type, test runs — grouped by severity, click to jump to the offending hunk. | GitHub PR checks / Sourcegraph code intel |
-| `git-actions-menu` | 🟢 parity | **GitActionsMenu (branch-scoped quick actions)** — Branch-anchored menu surfacing Pull / Push / Sync / Rebase / Discard with confirmation gates on the destructive entries. | GitHub Desktop branch menu |
-| `heat-overlay-picker` | 🔵 leading | **HeatOverlayPicker (heat-metric chooser)** — Picker exposing the heat-metric axes — churn, complexity, blast radius, coverage gap, recent edits, cost, latency. Active metric drives the colour ramp on every viz. | Chrome DevTools "Rendering" pane / Datadog metric picker |
+| `engine-findings-rail` | 🔵 leading | **EngineFindingsPanel (CI / scanner findings)** — Panel in review stage showing findings from CI, semgrep, lint, type, test runs — grouped by severity, click to jump to the offending hunk. | GitHub PR checks / Sourcegraph code intel |
+| `heat-overlay-picker` | 🔵 leading | **HeatDetail (heat-metric chooser)** — Master-detail pane in the overlay popover exposing the heat-metric axes — churn, complexity, blast radius, coverage gap, recent edits, cost, latency. Active metric drives the colour ramp on every viz. | Chrome DevTools "Rendering" pane / Datadog metric picker |
 | `overlay-context` | 🔵 leading | **OverlayContext (heat / risk / time overlay state)** — Provider for the overlay popover's three axes — heat metric, risk lens, time window. One context, three pickers, every visualization reads from here. | VS Code workbench layout state |
-| `pr-context-rail` | 🟢 parity | **PrContextRail (PR-level context)** — Left rail in review stage showing PR-level metadata — author, branch, base, linked issues, reviewers, status checks summary. | GitHub PR sidebar |
-| `pr-ticket-rail` | 🔵 leading | **PrTicketRail (PR list scoped to me / team)** — Resizable rail listing PRs in scope (`mine-to-review` / `my-prs` / `team`) sortable by risk / updated / size. Persists width, scope, and sort key. | GitHub Pulls inbox / Linear inbox |
+| `pr-context-rail` | 🟢 parity | **ReviewContextRail (PR-level context)** — Rail in review stage showing PR-level metadata — author, branch, base, linked issues, reviewers, status checks summary. | GitHub PR sidebar |
+| `pr-ticket-rail` | 🔵 leading | **LeftQueue (PR list scoped to me / archived)** — `LeftQueue` is the review-stage left rail listing PRs by `QueueScope` (all / mine / archived), grouped by repo and ordered by risk within each group. | GitHub Pulls inbox / Linear inbox |
 | `prefs-context` | 🟢 parity | **PrefsContext (cross-feature preferences)** — React context for user preferences (density, locale, theme, motion). One provider serves the whole app and persists to localStorage on each change. | React Context + localStorage |
-| `risk-lens-switcher` | 🔵 leading | **RiskLensSwitcher (risk-axis cycler)** — One-tap cycler through risk lenses (no-coverage, high-blast, recent-failures, churn-spike). The "what would hurt most if it breaks" lens. | Photography lens cycle (50mm / 35mm / 85mm) |
+| `risk-lens-switcher` | 🔵 leading | **RiskDetail (risk-axis selector)** — Master-detail pane in the overlay popover selecting the risk lens (no-coverage, high-blast, recent-failures, churn-spike). The "what would hurt most if it breaks" lens. | Photography lens cycle (50mm / 35mm / 85mm) |
 | `settings-panel` | 🟢 parity | **SettingsPanel (top-level prefs UI)** — Density, theme, motion, locale, model-defaults — all live in `SettingsPanel`. Compact mode for embedding inside other surfaces. | macOS System Settings sections |
 | `shortcuts-modal` | 🟢 parity | **ShortcutsModal (?-triggered cheat sheet)** — Modal listing every keyboard shortcut grouped by feature. Triggered by `?` outside an input. | GitHub `?` shortcut help |
 | `stage-host` | 🟢 parity | **Stage (top-level page host)** — `Stage` is the central content host beneath `AppShell`. Routes feature pages and provides the safe-area insets used by the chat-agent overlay. | SwiftUI NavigationStack |
-| `time-window-picker` | 🟢 parity | **TimeWindowPicker (rolling window)** — Picker for the time window applied to every metric — 24h, 7d, 30d, 90d, all-time. Affects churn, recent-failures, cost aggregation. | Datadog/Grafana time-range picker |
+| `time-window-picker` | 🟢 parity | **Time-window control (rolling window)** — Time-window control inside the overlay popover — 24h, 7d, 30d, 90d, all-time — applied to every metric. Affects churn, recent-failures, cost aggregation. | Datadog/Grafana time-range picker |
 
 ## Chat agent (bottom-anchored)
 

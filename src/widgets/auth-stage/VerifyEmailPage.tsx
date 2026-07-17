@@ -3,6 +3,8 @@ import { Link } from '@tanstack/react-router';
 import {
   Mail, Check, AlertCircle, Loader2, ShieldAlert, Clock, RotateCw,
 } from 'lucide-react';
+import { env } from '@shared/config/env';
+import { verifyEmail } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
 import { Button } from './parts/AuthForm';
 import { formatTime, formatDate } from '@shared/i18n';
@@ -11,6 +13,11 @@ type Phase = 'verifying' | 'success' | 'expired' | 'reused' | 'wasnt-me';
 
 export default function VerifyEmailPage() {
   const [phase, setPhase] = useState<Phase>('verifying');
+  // Verification token from the email link (?token=). Read once from the URL.
+  const token = useMemo(
+    () => new URLSearchParams(window.location.search).get('token') ?? '',
+    [],
+  );
   // 24-hour token, started when this page mounts. In real life, the issuance
   // timestamp comes from the token itself (JWT exp claim).
   const [issuedAt] = useState(() => Date.now());
@@ -26,12 +33,17 @@ export default function VerifyEmailPage() {
     return () => { clearInterval(id); };
   }, []);
 
-  // Auto-verify on mount (1.4s).
+  // Auto-verify on mount. Real auth hits the backend with the URL token;
+  // mock fakes success after 1.4s.
   useEffect(() => {
     if (phase !== 'verifying') return;
+    if (env.useRealAuth) {
+      void verifyEmail({ token }).then((r) => { setPhase(r.ok ? 'success' : 'expired'); });
+      return;
+    }
     const id = setTimeout(() => { setPhase('success'); }, 1400);
     return () => { clearTimeout(id); };
-  }, [phase]);
+  }, [phase, token]);
 
   const remainingSec = Math.max(0, Math.floor((expiresAt - now) / 1000));
 
@@ -40,7 +52,7 @@ export default function VerifyEmailPage() {
       title={titleFor(phase)}
       subtitle={subtitleFor(phase)}
       topRight={
-        <DemoStateToggle phase={phase} onChange={setPhase} />
+        env.useRealAuth ? undefined : <DemoStateToggle phase={phase} onChange={setPhase} />
       }
       footer={
         phase === 'wasnt-me'

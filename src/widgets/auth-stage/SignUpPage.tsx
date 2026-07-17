@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import {
-  Eye, EyeOff, Mail, KeyRound, ArrowRight, Building2,
+  Eye, EyeOff, Mail, KeyRound, ArrowRight, Building2, AlertCircle,
 } from 'lucide-react';
+import { env } from '@shared/config/env';
+import { signUpWithPassword } from '@entities/session';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { AuthShell } from './parts/AuthShell';
 import { Field, Button, HRule } from './parts/AuthForm';
@@ -23,6 +25,15 @@ export default function SignUpPage() {
   const [step, setStep] = useState<Step>('form');
   const [oauth, setOauth] = useState<null | 'github' | 'gitlab' | 'google'>(null);
   const [touchedEmail, setTouchedEmail] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  // Honor the guard's ?redirect= (same-app paths only) so a new invitee who
+  // signs up from an /accept-invitation link returns there — mirrors SignInPage.
+  const rawRedirect = useMemo(() => {
+    const r = new URLSearchParams(window.location.search).get('redirect');
+    return r?.startsWith('/') ? r : null;
+  }, []);
+  const destAfterSignup = rawRedirect ?? '/intelligence';
 
   const report = useMemo(() => evaluatePassword(pw, name), [pw, name]);
   const idp = useMemo(() => (email.includes('@') ? lookupIdP(email) : null), [email]);
@@ -47,6 +58,20 @@ export default function SignUpPage() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
+
+    // Real auth: create the account (dev auto-signs-in; prod requires email
+    // verification, in which case the guard bounces to login until verified).
+    if (env.useRealAuth) {
+      setError(null);
+      setStep('submitting');
+      void (async () => {
+        const r = await signUpWithPassword({ email, password: pw, name });
+        if (r.ok) await navigate({ to: destAfterSignup as never });
+        else { setStep('form'); setError(r.error); }
+      })();
+      return;
+    }
+
     setStep('submitting');
   };
 
@@ -57,7 +82,7 @@ export default function SignUpPage() {
       <AuthShell
         title={`${idp.org} uses SSO`}
         subtitle="Your organization manages accounts through their identity provider, so there's no separate signup."
-        topRight={<Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Sign in</Link>}
+        topRight={<Link to={'/auth/login' as never} search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined} style={{ color: 'var(--fg-link)' }}>Sign in</Link>}
         footer={
           <>
             <span>Different organization?</span>
@@ -145,7 +170,7 @@ export default function SignUpPage() {
         subtitle="Start with a free workspace. You can invite teammates next."
         topRight={
           <span>Already have an account?{' '}
-            <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Sign in</Link>
+            <Link to={'/auth/login' as never} search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined} style={{ color: 'var(--fg-link)' }}>Sign in</Link>
           </span>
         }
         footer={
@@ -220,24 +245,36 @@ export default function SignUpPage() {
 
           <TermsCheck checked={agreed} onChange={setAgreed} />
 
+          {error && (
+            <div className="flex items-start gap-2 text-sm" style={{ color: 'var(--intent-danger-fg)' }} role="alert">
+              <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
           <Button type="submit" disabled={!canSubmit || step === 'submitting'}>
             {step === 'submitting' ? 'Creating account…' : 'Create account'}
           </Button>
         </form>
 
-        <HRule />
+        {/* OAuth is mock-only (fakes success); hidden in real mode. */}
+        {!env.useRealAuth && (
+          <>
+            <HRule />
 
-        <div className="flex flex-col gap-2">
-          <Button variant="secondary" leading={<GithubIcon className="w-3.5 h-3.5" />} onClick={() => { setOauth('github'); }}>
-            Continue with GitHub
-          </Button>
-          <Button variant="secondary" leading={<GitLabMark />} onClick={() => { setOauth('gitlab'); }}>
-            Continue with GitLab
-          </Button>
-          <Button variant="secondary" leading={<Mail className="w-3.5 h-3.5" />} onClick={() => { setOauth('google'); }}>
-            Continue with Google
-          </Button>
-        </div>
+            <div className="flex flex-col gap-2">
+              <Button variant="secondary" leading={<GithubIcon className="w-3.5 h-3.5" />} onClick={() => { setOauth('github'); }}>
+                Continue with GitHub
+              </Button>
+              <Button variant="secondary" leading={<GitLabMark />} onClick={() => { setOauth('gitlab'); }}>
+                Continue with GitLab
+              </Button>
+              <Button variant="secondary" leading={<Mail className="w-3.5 h-3.5" />} onClick={() => { setOauth('google'); }}>
+                Continue with Google
+              </Button>
+            </div>
+          </>
+        )}
       </AuthShell>
 
       {oauth && (

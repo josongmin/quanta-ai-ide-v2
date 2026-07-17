@@ -15,10 +15,22 @@ type ApiMode = 'mock' | 'real';
 const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
 const apiMode: ApiMode = import.meta.env.VITE_API_MODE === 'real' ? 'real' : 'mock';
 
+// Auth mirrors the api mock→real switch, but is independent: the demo runs
+// standalone with `authMode='mock'` (stub sign-in, no route guards) and only
+// talks to the accounts backend (better-auth) when `authMode='real'` AND an
+// accounts origin is configured.
+const accountsUrl = (import.meta.env.VITE_ACCOUNTS_URL ?? '').replace(/\/+$/, '');
+const authMode: ApiMode = import.meta.env.VITE_AUTH_MODE === 'real' ? 'real' : 'mock';
+
 export const env = {
   apiBaseUrl,
   apiMode,
   /** True only when a real backend is configured — the switch every data seam
    *  branches on (`env.useRealApi ? api.get(...) : simulate*()`). */
   useRealApi: apiMode === 'real' && apiBaseUrl !== '',
+  accountsUrl,
+  authMode,
+  /** True only when real auth is wired — gates the better-auth client, real
+   *  sign-in branches, and route guards (`env.useRealAuth ? guard : free`). */
+  useRealAuth: authMode === 'real' && accountsUrl !== '',
 } as const;

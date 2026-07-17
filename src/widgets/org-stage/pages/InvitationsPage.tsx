@@ -1,9 +1,16 @@
 import { useParams } from '@tanstack/react-router';
 import { useRef, useState } from 'react';
 import { Mail, Plus, RotateCcw, X, Clock } from 'lucide-react';
+import { env } from '@shared/config/env';
 import { useHoverStyle } from '@shared/lib';
 import { CopyableField } from '@shared/ui';
 import { OrgShell } from '../parts/OrgShell';
+import { InvitationsReal } from './parts/invitations/InvitationsReal';
+
+// Real auth → live pending invites over the org plugin; otherwise the demo mock.
+export default function InvitationsPage() {
+  return env.useRealAuth ? <InvitationsReal /> : <InvitationsMock />;
+}
 
 type InviteStatus = 'pending' | 'accepted' | 'expired';
 type Invite = {
@@ -31,7 +38,7 @@ const STATUS_META: Record<InviteStatus, { label: string; fg: string; bg: string 
   expired:  { label: 'Expired',  fg: 'var(--intent-danger-fg)',  bg: 'var(--intent-danger-bg)' },
 };
 
-export default function InvitationsPage() {
+function InvitationsMock() {
   // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
   const { org = '' } = useParams({ strict: false });
   const [filter, setFilter] = useState<'all' | InviteStatus>('all');

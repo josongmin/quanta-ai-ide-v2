@@ -11,6 +11,7 @@ import { isMacOS, isTauri, useMenuEvent, useShortcut } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
 import { IconButton } from '@shared/ui';
 import { useFilterStore } from '@entities/filter-state';
+import { env } from '@shared/config/env';
 import { SettingsPanel } from '@features/tweak-prefs';
 // NOTE: the dedicated activity-panel open/close store was removed after
 // this chrome was authored (f301417). The panel now lives inside the
@@ -23,6 +24,29 @@ import {
   useGlobalShortcuts,
   useTrackRecents,
 } from '@features/control-palette';
+
+// Lazy so the better-auth client (pulled in transitively via entities/session)
+// stays out of the initial chunk — the mock demo, which never mounts it, ships
+// zero auth code. Loaded only in real-auth mode when the GNB renders it.
+// AvatarBadge lives HERE (not in UserMenu.tsx) so the eager mock branch +
+// Suspense fallback don't statically drag UserMenu's auth deps back into initial.
+const UserMenu = lazy(() =>
+  import('./UserMenu').then((m) => ({ default: m.UserMenu })),
+);
+
+function AvatarBadge() {
+  return (
+    <div
+      className="w-7 h-7 rounded-full bg-gradient-to-br flex items-center justify-center text-xs font-black ml-1"
+      style={{
+        backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
+        color: 'var(--bg-canvas)',
+      }}
+    >
+      SK
+    </div>
+  );
+}
 
 // Heavy modal — only paid for once the user actually opens it. Keeps the
 // chat-agent slice (and its TokensContext deps) out of the initial chunk.
@@ -217,15 +241,16 @@ export default function AppShell({ children }: { children: ReactNode }) {
             label={t('action.notifications')}
             tone="muted"
           />
-          <div
-            className="w-7 h-7 rounded-full bg-gradient-to-br flex items-center justify-center text-xs font-black ml-1"
-            style={{
-              backgroundImage: 'linear-gradient(to bottom right, var(--fg-accent), var(--fg-link))',
-              color: 'var(--bg-canvas)',
-            }}
-          >
-            SK
-          </div>
+          {/* Real auth → session-driven user menu (working sign-out); mock demo
+              keeps the static avatar so it runs standalone without a backend.
+              Fallback = the same avatar shape → no layout shift while the chunk loads. */}
+          {env.useRealAuth ? (
+            <Suspense fallback={<AvatarBadge />}>
+              <UserMenu />
+            </Suspense>
+          ) : (
+            <AvatarBadge />
+          )}
         </div>
       </header>
 

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import {
   UserPlus, Filter, X, UserMinus,
 } from 'lucide-react';
+import { env } from '@shared/config/env';
 import { OrgShell } from '../parts/OrgShell';
 import { Button } from '@shared/ui/forms';
 import {
@@ -9,7 +10,14 @@ import {
 } from '@shared/ui';
 import { Row, BulkCheckbox } from './parts/members/MemberRow';
 import { InviteModal } from './parts/members/InviteModal';
+import { MembersReal } from './parts/members/MembersReal';
 import type { Member, Role } from './parts/members/types';
+
+// Real auth → live roster over the accounts org plugin; otherwise the standalone
+// demo's seeded mock below.
+export default function MembersPage() {
+  return env.useRealAuth ? <MembersReal /> : <MembersMock />;
+}
 
 const SEED: Member[] = [
   { id: 'u1',  name: 'Sora Kim',     email: 'sora@acme.com',     role: 'owner',   status: 'active',     team: 'Platform',    lastActive: '2m ago',   avatar: 'SK', twoFA: true  },
@@ -29,7 +37,7 @@ const SEED: Member[] = [
 type StatusFilter = 'all' | 'active' | 'invited' | 'deactivated';
 type RoleFilter   = 'all' | Role;
 
-export default function MembersPage() {
+function MembersMock() {
   const [members, setMembers] = useState<Member[]>(SEED);
   const [q, setQ] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
