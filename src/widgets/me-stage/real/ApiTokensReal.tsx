@@ -122,6 +122,7 @@ export function ApiTokensReal() {
       {confirmRevoke && (
         <ConfirmDialog
           open
+          busy={busyId === confirmRevoke.id}
           onCancel={() => { setConfirmRevoke(null); }}
           onConfirm={() => { void doRevoke(confirmRevoke); }}
           title={`Revoke "${confirmRevoke.name ?? 'token'}"?`}

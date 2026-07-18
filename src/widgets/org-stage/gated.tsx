@@ -7,6 +7,7 @@
 import { env } from '@shared/config/env';
 import { OrgComingSoon } from './parts/OrgComingSoon';
 import { ServiceAccountsReal } from './pages/parts/service-accounts/ServiceAccountsReal';
+import { WebhooksReal } from './pages/parts/webhooks/WebhooksReal';
 
 import RolesMock from './pages/RolesPage';
 import UsageMock from './pages/UsagePage';
@@ -42,7 +43,7 @@ export function IntegrationsPage() {
   return env.useRealAuth ? <OrgComingSoon title="Integrations" /> : <IntegrationsMock />;
 }
 export function WebhooksPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Webhooks" /> : <WebhooksMock />;
+  return env.useRealAuth ? <WebhooksReal /> : <WebhooksMock />;
 }
 export function ApiOAuthPage() {
   return env.useRealAuth ? <OrgComingSoon title="API & OAuth" /> : <ApiOAuthMock />;

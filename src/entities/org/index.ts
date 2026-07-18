@@ -33,3 +33,14 @@ export {
   type ServiceAccountRecord,
   type ServiceAccountCreated,
 } from './model/serviceAccounts';
+export {
+  listWebhooks,
+  createWebhook,
+  updateWebhook,
+  deleteWebhook,
+  listDeliveries,
+  replayDelivery,
+  type WebhookEndpointRecord,
+  type WebhookEndpointCreated,
+  type WebhookDeliveryRecord,
+} from './model/webhooks';

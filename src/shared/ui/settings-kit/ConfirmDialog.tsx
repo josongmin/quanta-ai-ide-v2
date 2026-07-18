@@ -45,6 +45,8 @@ type Props = {
    * typed value exactly equals this string (GeneralPage org-name pattern).
    */
   requireTypedConfirmation?: string;
+  /** Disables Confirm while the action is in flight (prevents double-submit). */
+  busy?: boolean;
 };
 
 export function ConfirmDialog({
@@ -61,6 +63,7 @@ export function ConfirmDialog({
   monoTitle = false,
   width = 420,
   requireTypedConfirmation,
+  busy = false,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [typed, setTyped] = useState('');
@@ -127,7 +130,7 @@ export function ConfirmDialog({
           <Button
             variant={danger ? 'danger' : 'primary'}
             size="md"
-            disabled={!matches}
+            disabled={!matches || busy}
             onClick={onConfirm}
           >
             {confirmLabel}
