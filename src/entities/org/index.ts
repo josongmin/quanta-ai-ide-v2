@@ -44,3 +44,11 @@ export {
   type WebhookEndpointCreated,
   type WebhookDeliveryRecord,
 } from './model/webhooks';
+export {
+  getScimConfig,
+  enableScim,
+  rotateScimToken,
+  disableScim,
+  type ScimConfig,
+  type ScimTokenResponse,
+} from './model/scim';

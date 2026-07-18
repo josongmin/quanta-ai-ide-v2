@@ -5,8 +5,8 @@ import { DEMO_TOTP } from './types';
 // TOTP — 6 single-digit boxes with paste, autofocus, error shake.
 
 export function TotpInput({
-  value, onChange, phase,
-}: { value: string[]; onChange: (v: string[]) => void; phase: Phase }) {
+  value, onChange, phase, demo = false,
+}: { value: string[]; onChange: (v: string[]) => void; phase: Phase; demo?: boolean }) {
   const refs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => { refs.current[0]?.focus(); }, []);
@@ -80,10 +80,12 @@ export function TotpInput({
           />
         ))}
       </div>
-      <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-        Demo: code is <span className="font-mono" style={{ color: 'var(--fg-default)' }}>{DEMO_TOTP}</span>.
-        Try anything else to see the wrong-code state.
-      </span>
+      {demo && (
+        <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
+          Demo: code is <span className="font-mono" style={{ color: 'var(--fg-default)' }}>{DEMO_TOTP}</span>.
+          Try anything else to see the wrong-code state.
+        </span>
+      )}
     </div>
   );
 }

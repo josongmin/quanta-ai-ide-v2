@@ -6,4 +6,4 @@ export { default as TermsPage }         from './pages/TermsPage';
 export { default as PrivacyPage }       from './pages/PrivacyPage';
 export { default as DpaPage }           from './pages/DpaPage';
 export { default as SubprocessorsPage } from './pages/SubprocessorsPage';
-export { default as AdminPage }         from './pages/AdminPage';
+export { AdminPage }                    from './gated';

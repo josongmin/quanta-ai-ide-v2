@@ -9,6 +9,7 @@ import { ProfileReal } from './real/ProfileReal';
 import { AccountReal } from './real/AccountReal';
 import { SecurityReal } from './real/SecurityReal';
 import { ApiTokensReal } from './real/ApiTokensReal';
+import { InboxReal } from './real/InboxReal';
 
 import ProfileMock from './pages/ProfilePage';
 import AccountMock from './pages/AccountPage';
@@ -41,5 +42,5 @@ export function AiPage() {
   return env.useRealAuth ? <MeComingSoon title="AI" /> : <AiMock />;
 }
 export function InboxPage() {
-  return env.useRealAuth ? <MeComingSoon title="Inbox" /> : <InboxMock />;
+  return env.useRealAuth ? <InboxReal /> : <InboxMock />;
 }

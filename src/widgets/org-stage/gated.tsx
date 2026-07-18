@@ -8,6 +8,7 @@ import { env } from '@shared/config/env';
 import { OrgComingSoon } from './parts/OrgComingSoon';
 import { ServiceAccountsReal } from './pages/parts/service-accounts/ServiceAccountsReal';
 import { WebhooksReal } from './pages/parts/webhooks/WebhooksReal';
+import { ScimReal } from './pages/parts/scim/ScimReal';
 
 import RolesMock from './pages/RolesPage';
 import UsageMock from './pages/UsagePage';
@@ -58,7 +59,7 @@ export function SamlSsoPage() {
   return env.useRealAuth ? <OrgComingSoon title="SAML SSO" /> : <SamlSsoMock />;
 }
 export function ScimPage() {
-  return env.useRealAuth ? <OrgComingSoon title="SCIM" /> : <ScimMock />;
+  return env.useRealAuth ? <ScimReal /> : <ScimMock />;
 }
 export function DataResidencyPage() {
   return env.useRealAuth ? <OrgComingSoon title="Data residency" /> : <DataResidencyMock />;

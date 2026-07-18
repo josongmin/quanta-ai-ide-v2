@@ -36,3 +36,10 @@ export {
   type ApiKeyRecord,
   type ApiKeyCreated,
 } from './model/apiKeys';
+export {
+  listNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+  type NotificationRecord,
+  type NotificationPage,
+} from './model/notifications';

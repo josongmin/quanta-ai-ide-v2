@@ -81,6 +81,7 @@ function MfaChallengeMock() {
             value={code}
             onChange={(c) => { setCode(c); setPhase('challenge'); }}
             phase={phase}
+            demo
           />
         )}
 

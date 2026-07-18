@@ -1,0 +1,175 @@
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from '@tanstack/react-router';
+import { KeyRound, RefreshCw, Power, Copy, Check } from 'lucide-react';
+import { OrgShell } from '../../../parts/OrgShell';
+import { Button } from '@shared/ui/forms';
+import { Badge, InlineError, SkeletonText, RevealOnceModal, ConfirmDialog } from '@shared/ui';
+import {
+  useOrg, getScimConfig, enableScim, rotateScimToken, disableScim,
+  type ScimConfig, type ScimTokenResponse,
+} from '@entities/org';
+
+// Real org SCIM 2.0 provisioning over accounts /v1/scim/:orgId. Honest to the
+// backend: enable/disable + base URL + bearer token (shown once). The mock's
+// group-mapping/sync-rules/auto-toggles aren't backed, so they're not wired.
+// House rules: no edge stripes, no grey selected-fills, intent tokens, named fs.
+export function ScimReal() {
+  const { org = '' } = useParams({ strict: false });
+  const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
+  const orgId = detail?.org.id ?? '';
+
+  const [config, setConfig] = useState<ScimConfig | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [nonce, setNonce] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [revealed, setRevealed] = useState<ScimTokenResponse | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [confirmDisable, setConfirmDisable] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const mountedRef = useRef(true);
+  useEffect(() => () => { mountedRef.current = false; }, []);
+
+  useEffect(() => {
+    if (!orgId) return;
+    let active = true;
+    void getScimConfig(orgId).then((res) => {
+      if (!active) return;
+      if (res.ok) { setConfig(res.data); setError(null); } else setError(res.error);
+    }).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [orgId, nonce]);
+
+  const refetch = () => { setNonce((n) => n + 1); };
+
+  async function doEnable() {
+    if (busy) return;
+    setBusy(true); setError(null);
+    const res = await enableScim(orgId);
+    if (!mountedRef.current) return;
+    setBusy(false);
+    if (!res.ok) { setError(res.error); return; }
+    setSaved(false); setRevealed(res.data); refetch();
+  }
+  async function doRotate() {
+    if (busy) return;
+    setBusy(true); setError(null);
+    const res = await rotateScimToken(orgId);
+    if (!mountedRef.current) return;
+    setBusy(false);
+    if (!res.ok) { setError(res.error); return; }
+    setSaved(false); setRevealed(res.data);
+  }
+  async function doDisable() {
+    setBusy(true); setError(null);
+    const res = await disableScim(orgId);
+    if (!mountedRef.current) return;
+    setBusy(false); setConfirmDisable(false);
+    if (!res.ok) { setError(res.error); return; }
+    refetch();
+  }
+  function copyUrl() {
+    if (!config) return;
+    void navigator.clipboard.writeText(config.baseUrl).then(() => {
+      if (!mountedRef.current) return;
+      setCopied(true);
+      setTimeout(() => { if (mountedRef.current) setCopied(false); }, 1500);
+    });
+  }
+
+  const enabled = config?.enabled ?? false;
+
+  return (
+    <OrgShell
+      orgName={detail?.org.name ?? org}
+      orgSlug={detail?.org.slug ?? org}
+      title="SCIM provisioning"
+      subtitle="Push users from your identity provider (Okta, Azure AD) with SCIM 2.0. Enterprise plan."
+      topRight={
+        !loading && !orgError ? (
+          enabled ? (
+            <Button variant="ghost" size="md" leading={<Power className="w-3.5 h-3.5" />} disabled={busy} onClick={() => { setConfirmDisable(true); }}>
+              Disable SCIM
+            </Button>
+          ) : (
+            <Button variant="primary" size="md" leading={<KeyRound className="w-3.5 h-3.5" />} disabled={busy || !orgId} onClick={() => { void doEnable(); }}>
+              Enable SCIM
+            </Button>
+          )
+        ) : undefined
+      }
+    >
+      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>}
+
+      {orgError ? (
+        <InlineError message={orgError} onRetry={refetchOrg} />
+      ) : loading ? (
+        <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}><SkeletonText lines={4} /></div>
+      ) : (
+        <div className="flex flex-col gap-4 max-w-[720px]">
+          <div className="flex items-center gap-2.5">
+            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>Status</span>
+            <Badge variant={enabled ? 'success' : 'neutral'} size="sm">{enabled ? 'Enabled' : 'Not configured'}</Badge>
+          </div>
+
+          {enabled ? (
+            <>
+              <label className="flex flex-col gap-1.5">
+                <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>SCIM base URL</span>
+                <div className="flex items-center gap-2">
+                  <code title={config?.baseUrl} className="flex-1 h-9 px-3 inline-flex items-center rounded-md font-mono text-sm truncate" style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)', color: 'var(--fg-strong)' }}>
+                    {config?.baseUrl}
+                  </code>
+                  <Button variant="ghost" size="md" leading={copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />} onClick={copyUrl}>
+                    {copied ? 'Copied' : 'Copy'}
+                  </Button>
+                </div>
+              </label>
+
+              <div className="rounded-md p-3.5 flex items-start justify-between gap-3" style={{ border: '1px solid var(--border-muted)' }}>
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <span className="text-sm font-medium" style={{ color: 'var(--fg-strong)' }}>Bearer token</span>
+                  <span className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>Shown once when created. Rotate if it may be compromised — the old token stops working immediately.</span>
+                </div>
+                <Button variant="ghost" size="md" leading={<RefreshCw className="w-3.5 h-3.5" />} disabled={busy} onClick={() => { void doRotate(); }}>
+                  Rotate token
+                </Button>
+              </div>
+
+              <p className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>
+                In your IdP, set the SCIM base URL above and paste the bearer token. Users assigned in the IdP are provisioned into this org; unassigning deprovisions them.
+              </p>
+            </>
+          ) : (
+            <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
+              Enable SCIM to get a base URL and bearer token for your identity provider. Assigned users are automatically added to this organization.
+            </p>
+          )}
+        </div>
+      )}
+
+      {revealed && (
+        <RevealOnceModal
+          title="SCIM token created"
+          value={revealed.token}
+          description="Paste this into your IdP's SCIM connector. It can't be shown again — rotate to get a new one."
+          onDismiss={() => { setRevealed(null); }}
+          onSaved={() => { setSaved(true); }}
+          saved={saved}
+          titleMono
+        />
+      )}
+      {confirmDisable && (
+        <ConfirmDialog
+          open
+          busy={busy}
+          onCancel={() => { setConfirmDisable(false); }}
+          onConfirm={() => { void doDisable(); }}
+          title="Disable SCIM?"
+          confirmLabel="Disable"
+          description="The bearer token stops working immediately and your IdP can no longer provision users. Existing members are kept."
+        />
+      )}
+    </OrgShell>
+  );
+}
