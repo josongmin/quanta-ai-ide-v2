@@ -54,6 +54,7 @@ export {
 } from './model/scim';
 export {
   getSsoConnection,
+  resolveSso,
   registerSso,
   updateSso,
   verifySso,

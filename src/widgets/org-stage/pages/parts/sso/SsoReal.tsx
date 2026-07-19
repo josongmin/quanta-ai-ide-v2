@@ -35,6 +35,8 @@ export function SsoReal() {
   const [domain, setDomain] = useState('');
   const [issuer, setIssuer] = useState('');
   const [authEndpoint, setAuthEndpoint] = useState('');
+  const [tokenEndpoint, setTokenEndpoint] = useState('');
+  const [jwksEndpoint, setJwksEndpoint] = useState('');
   const [clientId, setClientId] = useState('');
   const [clientSecret, setClientSecret] = useState('');
 
@@ -48,6 +50,7 @@ export function SsoReal() {
       if (res.data) {
         setDomain(res.data.domain); setIssuer(res.data.issuer);
         setAuthEndpoint(res.data.authorizationEndpoint); setClientId(res.data.clientId);
+        setTokenEndpoint(res.data.tokenEndpoint); setJwksEndpoint(res.data.jwksEndpoint);
       }
     }).finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
@@ -55,8 +58,9 @@ export function SsoReal() {
 
   const refetch = () => { setNonce((n) => n + 1); };
   const configured = conn !== null;
+  const httpsOk = (v: string) => /^https:\/\/.+/.test(v.trim());
   const valid = /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain.trim())
-    && /^https:\/\/.+/.test(issuer.trim()) && /^https:\/\/.+/.test(authEndpoint.trim())
+    && httpsOk(issuer) && httpsOk(authEndpoint) && httpsOk(tokenEndpoint) && httpsOk(jwksEndpoint)
     && clientId.trim().length > 0 && (configured || clientSecret.trim().length > 0);
 
   async function save() {
@@ -64,7 +68,9 @@ export function SsoReal() {
     setBusy(true); setError(null);
     const input = {
       domain: domain.trim(), issuer: issuer.trim(),
-      authorizationEndpoint: authEndpoint.trim(), clientId: clientId.trim(),
+      authorizationEndpoint: authEndpoint.trim(),
+      tokenEndpoint: tokenEndpoint.trim(), jwksEndpoint: jwksEndpoint.trim(),
+      clientId: clientId.trim(),
     };
     const res = configured
       ? await updateSso(orgId, { ...input, ...(clientSecret.trim() ? { clientSecret: clientSecret.trim() } : {}) })
@@ -98,7 +104,7 @@ export function SsoReal() {
     if (!mountedRef.current) return;
     setBusy(false); setConfirmDelete(false);
     if (!res.ok) { setError(res.error); return; }
-    setConn(null); setDomain(''); setIssuer(''); setAuthEndpoint(''); setClientId(''); setClientSecret('');
+    setConn(null); setDomain(''); setIssuer(''); setAuthEndpoint(''); setTokenEndpoint(''); setJwksEndpoint(''); setClientId(''); setClientSecret('');
     refetch();
   }
 
@@ -176,6 +182,8 @@ export function SsoReal() {
           <Field label="Email domain" value={domain} onChange={(e) => { setDomain(e.target.value); }} placeholder="acme.com" />
           <Field label="OIDC issuer" value={issuer} onChange={(e) => { setIssuer(e.target.value); }} placeholder="https://acme.okta.com" />
           <Field label="Authorization endpoint" value={authEndpoint} onChange={(e) => { setAuthEndpoint(e.target.value); }} placeholder="https://acme.okta.com/oauth2/v1/authorize" />
+          <Field label="Token endpoint" value={tokenEndpoint} onChange={(e) => { setTokenEndpoint(e.target.value); }} placeholder="https://acme.okta.com/oauth2/v1/token" />
+          <Field label="JWKS endpoint" value={jwksEndpoint} onChange={(e) => { setJwksEndpoint(e.target.value); }} placeholder="https://acme.okta.com/oauth2/v1/keys" />
           <Field label="Client ID" value={clientId} onChange={(e) => { setClientId(e.target.value); }} placeholder="0oa1b2c3…" />
           <Field
             label={configured ? 'Client secret (leave blank to keep)' : 'Client secret'}

@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { signInWithPassword, signInWithProvider, type OAuthProvider } from '@entities/session';
+import { resolveSso } from '@entities/org';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { AuthShell } from './parts/AuthShell';
 import { Field, Button, HRule } from './parts/AuthForm';
@@ -113,6 +114,20 @@ export default function SignInPage() {
         errorCallbackURL: `${window.location.origin}/auth/login`,
       });
       if (!r.ok) setError(r.error);
+    })();
+  };
+
+  // Real SSO — resolve the email's org connection, then send the browser to the
+  // server's authorize entry point (it mints state/PKCE/nonce and 302s to the IdP).
+  // No SSO for the domain → hint to use the password path instead.
+  const startSso = () => {
+    const em = email.trim();
+    if (!em.includes('@')) { setError('Enter your work email to continue with SSO.'); return; }
+    setError(null);
+    void (async () => {
+      const r = await resolveSso(em);
+      if (r.sso && r.authorizationUrl) { window.location.href = r.authorizationUrl; }
+      else { setError('No SSO is configured for this domain — use your password instead.'); }
     })();
   };
 
@@ -232,6 +247,12 @@ export default function SignInPage() {
                 leading={<Mail className="w-3.5 h-3.5" />}
                 highlight={lastUsed === 'oauth-google'}
                 onClick={() => { startOauth('google'); }}
+              />
+              <OauthButton
+                label="Continue with SSO"
+                leading={<KeyRound className="w-3.5 h-3.5" />}
+                highlight={false}
+                onClick={startSso}
               />
             </div>
           </>

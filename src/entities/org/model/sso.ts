@@ -12,6 +12,8 @@ export type SsoConnection = {
   domain: string;
   issuer: string;
   authorizationEndpoint: string;
+  tokenEndpoint: string;
+  jwksEndpoint: string;
   clientId: string;
   hasSecret: boolean;
   enabled: boolean;
@@ -26,6 +28,8 @@ export type SsoRegisterInput = {
   domain: string;
   issuer: string;
   authorizationEndpoint: string;
+  tokenEndpoint: string;
+  jwksEndpoint: string;
   clientId: string;
   clientSecret: string;
 };
@@ -59,6 +63,16 @@ export async function registerSso(orgId: string, input: SsoRegisterInput): Promi
 export async function updateSso(orgId: string, patch: SsoUpdateInput): Promise<Result<SsoConnection>> {
   const res = await accountsApi.patch<SsoConnection>(`/v1/sso/${orgId}`, patch);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: connError(res, 'SSO') };
+}
+
+// Login-time (pre-auth, public): does this email's domain use SSO? Returns the
+// authorize entry point to redirect the browser to (the server generates
+// state/PKCE/nonce there, then 302s to the IdP). { sso:false } → fall back to password.
+export async function resolveSso(email: string): Promise<{ sso: boolean; authorizationUrl: string | null }> {
+  const res = await accountsApi.get<{ sso: boolean; authorizationUrl: string | null }>(
+    `/v1/sso/resolve?email=${encodeURIComponent(email)}`,
+  );
+  return res.ok && res.data ? res.data : { sso: false, authorizationUrl: null };
 }
 
 // Trigger a DNS TXT ownership check. Idempotent: returns the latest record with

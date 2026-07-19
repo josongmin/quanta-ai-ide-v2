@@ -12,7 +12,7 @@ import { getSsoConnection, registerSso, updateSso, verifySso, deleteSso } from '
 const api = vi.mocked(accountsApi);
 beforeEach(() => { vi.clearAllMocks(); });
 
-const REC = { orgId: 'o1', domain: 'acme.com', issuer: 'https://i', authorizationEndpoint: 'https://a', clientId: 'c', hasSecret: true, enabled: true, verified: false, verificationToken: 'tok123', createdAt: 't' };
+const REC = { orgId: 'o1', domain: 'acme.com', issuer: 'https://i', authorizationEndpoint: 'https://a', tokenEndpoint: 'https://t', jwksEndpoint: 'https://j', clientId: 'c', hasSecret: true, enabled: true, verified: false, verificationToken: 'tok123', createdAt: 't' };
 
 describe('getSsoConnection', () => {
   it('returns null when not configured', async () => {
@@ -37,13 +37,13 @@ describe('verifySso', () => {
 describe('registerSso', () => {
   it('403 → Enterprise-plan message', async () => {
     api.post.mockResolvedValue({ ok: false, error: { kind: 'http', status: 403, message: 'x' } });
-    const res = await registerSso('o1', { domain: 'acme.com', issuer: 'https://i', authorizationEndpoint: 'https://a', clientId: 'c', clientSecret: 's' });
+    const res = await registerSso('o1', { domain: 'acme.com', issuer: 'https://i', authorizationEndpoint: 'https://a', tokenEndpoint: 'https://t', jwksEndpoint: 'https://j', clientId: 'c', clientSecret: 's' });
     expect(res.ok).toBe(false);
     if (!res.ok) expect(res.error).toMatch(/Enterprise plan/i);
   });
   it('409 → domain-taken message', async () => {
     api.post.mockResolvedValue({ ok: false, error: { kind: 'http', status: 409, message: 'x' } });
-    const res = await registerSso('o1', { domain: 'acme.com', issuer: 'https://i', authorizationEndpoint: 'https://a', clientId: 'c', clientSecret: 's' });
+    const res = await registerSso('o1', { domain: 'acme.com', issuer: 'https://i', authorizationEndpoint: 'https://a', tokenEndpoint: 'https://t', jwksEndpoint: 'https://j', clientId: 'c', clientSecret: 's' });
     expect(!res.ok && /already claimed/i.test(res.error)).toBe(true);
   });
 });
