@@ -9,6 +9,7 @@ import { OrgComingSoon } from './parts/OrgComingSoon';
 import { ServiceAccountsReal } from './pages/parts/service-accounts/ServiceAccountsReal';
 import { WebhooksReal } from './pages/parts/webhooks/WebhooksReal';
 import { ScimReal } from './pages/parts/scim/ScimReal';
+import { SsoReal } from './pages/parts/sso/SsoReal';
 
 import RolesMock from './pages/RolesPage';
 import UsageMock from './pages/UsagePage';
@@ -56,7 +57,7 @@ export function AiPoliciesPage() {
   return env.useRealAuth ? <OrgComingSoon title="AI policies" /> : <AiPoliciesMock />;
 }
 export function SamlSsoPage() {
-  return env.useRealAuth ? <OrgComingSoon title="SAML SSO" /> : <SamlSsoMock />;
+  return env.useRealAuth ? <SsoReal /> : <SamlSsoMock />;
 }
 export function ScimPage() {
   return env.useRealAuth ? <ScimReal /> : <ScimMock />;

@@ -52,3 +52,14 @@ export {
   type ScimConfig,
   type ScimTokenResponse,
 } from './model/scim';
+export {
+  getSsoConnection,
+  registerSso,
+  updateSso,
+  verifySso,
+  deleteSso,
+  type SsoConnection,
+  type SsoRegisterInput,
+  type SsoUpdateInput,
+  type SsoVerifyResult,
+} from './model/sso';

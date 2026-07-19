@@ -28,7 +28,7 @@ describe('listNotifications', () => {
   it('passes cursor + unread query params', async () => {
     api.get.mockResolvedValue({ ok: true, data: { notifications: [], nextCursor: null, unreadCount: 0 } });
     await listNotifications({ cursor: 'abc|1', unreadOnly: true });
-    const path = api.get.mock.calls[0]![0];
+    const path = api.get.mock.calls[0][0];
     expect(path).toContain('cursor=abc');
     expect(path).toContain('unread=true');
   });
