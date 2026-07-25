@@ -1,6 +1,8 @@
 import type { ComponentType, ReactNode } from 'react';
 import { ThemeProvider } from '@shared/theme';
 import { HtmlLangSync } from '@shared/i18n';
+import { WorkbenchRoot } from '@shared/workbench/react';
+import { UIRuntimeProvider } from '@shared/ui/runtime/UIRuntimeProvider';
 // Deep-import the providers rather than going through each slice's barrel.
 // The barrels re-export heavy UI components (FocusScanStack, ChatAgent, the
 // investigation panels …) and Rollup can't always shake those out — going
@@ -8,24 +10,20 @@ import { HtmlLangSync } from '@shared/i18n';
 // the provider itself.
 import { TokensProvider } from '@features/chat-agent/model/TokensContext';
 import { PrefsProvider } from '@features/tweak-prefs/model/PrefsContext';
-import { ViewModeProvider } from '@features/switch-mode/model/ViewModeContext';
-import { OverlayProvider } from '@features/apply-overlay/model/OverlayContext';
-import { BoundaryProvider } from '@features/inspect-boundaries/model/BoundaryContext';
-import { StackProvider } from '@features/inspect-target/model/StackContext';
-import { InvestigationProvider } from '@features/investigation/model/InvestigationContext';
+import { InvestigationNotebookProvider } from '@features/investigation/model/InvestigationContext';
 import { JobsProvider } from '@features/investigation/jobs/JobsContext';
 
 // Outer order = outermost first. FilterProvider stays at the call site since
 // it needs a built `repo` prop.
 const PROVIDERS: ComponentType<{ children: ReactNode }>[] = [
   ThemeProvider,
+  // Composition root: owns the canonical workbench kernel session (WBT-04).
+  // Mounted once, outermost of the runtime providers.
+  WorkbenchRoot,
+  UIRuntimeProvider,
   TokensProvider,
   PrefsProvider,
-  ViewModeProvider,
-  OverlayProvider,
-  BoundaryProvider,
-  StackProvider,
-  InvestigationProvider,
+  InvestigationNotebookProvider,
   JobsProvider,
 ];
 
