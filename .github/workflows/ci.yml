@@ -40,6 +40,11 @@ jobs:
           pnpm test:ui-infra-audit
           pnpm ui-infra:audit
 
+      # Fast owner-local workbench-contract suite (WB-105): runs after the
+      # architecture rail and before the full build. Fails on zero test discovery.
+      - name: Workbench contract suite
+        run: pnpm test:workbench-contract
+
       - name: Typecheck
         run: pnpm typecheck
 

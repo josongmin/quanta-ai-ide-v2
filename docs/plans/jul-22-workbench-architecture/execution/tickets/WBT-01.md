@@ -1,6 +1,6 @@
 # WBT-01 — React-free contract, compatibility, configuration
 
-- status: `BLOCKED_BY_WBT-00`
+- status: `DONE` (branch feat/wbt-00-architecture-guardrail; see WBT-01-RECEIPT.md)
 - covers: `WB-101`, `WB-102`, `WB-103`, `WB-104`, `WB-106`, `WB-107`, `WB-105`
 - goal: runtime/framework와 분리된 JSON-safe workbench contract와 admission policy를 고정한다.
 - hard dependency: WBT-00 receipt
