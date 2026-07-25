@@ -6,7 +6,7 @@ snapshot: `2026-07-25 @ dc551ce8450374d8007dfb379835d23817ca4467`
 
 | package | status | blocker | 지금 허용된 작업 | DONE receipt |
 |---|---|---|---|---|
-| `WBT-00` | `DONE` | — | 완료 | [WBT-00-RECEIPT.md](WBT-00-RECEIPT.md) — `test:ui-infra-audit` 14/14, `ui-infra:audit`/`typecheck`/`lint:strict` exit 0 @ `6340cd7` (branch feat/wbt-00-architecture-guardrail) |
+| `WBT-00` | `DONE` | — | 완료 | [WBT-00-RECEIPT.md](WBT-00-RECEIPT.md) — `test:ui-infra-audit` 14/14, `ui-infra:audit`/`typecheck`/`lint:strict` exit 0 @ the `feat/wbt-00-architecture-guardrail` branch tip (branch feat/wbt-00-architecture-guardrail) |
 | `WBT-01` | `READY` | 없음 | WB-101 RED부터: contract 공개 계약 + schema/manifest 테스트 착수 가능 | — |
 | `WBT-02` | `BLOCKED_BY_WBT-01` | canonical contract 없음 | 구현 금지 | — |
 | `WBT-03` | `BLOCKED_BY_WBT-02` | ScopeNode/command authority 없음 | fixture 설계만 허용 | — |

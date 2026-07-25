@@ -1,6 +1,6 @@
 # WBT-00 — Architecture guardrail
 
-- status: `DONE` @ `6340cd7` (branch feat/wbt-00-architecture-guardrail; see WBT-00-RECEIPT.md)
+- status: `DONE` @ the `feat/wbt-00-architecture-guardrail` branch tip (branch feat/wbt-00-architecture-guardrail; see WBT-00-RECEIPT.md)
 - covers: `WB-001`, `WB-002`, `WB-003`, `WB-004`
 - goal: canonical workbench 구현 전에 신규 shell/router/tab/provider 결합을 fail-new로 차단한다.
 - hard dependency: 없음
