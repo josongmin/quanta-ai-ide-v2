@@ -27,7 +27,21 @@ export type WorkbenchErrorReason =
   | 'untrusted-contribution'
   | 'secret-plaintext'
   | 'unknown-setting'
-  | 'scope-not-allowed';
+  | 'scope-not-allowed'
+  // kernel runtime (WBT-02) — one taxonomy for the whole workbench
+  | 'scope-disposed'
+  | 'scope-inactive'
+  | 'duplicate-registration'
+  | 'unknown-command'
+  | 'capability-denied'
+  | 'command-aborted'
+  | 'command-timeout'
+  | 'handler-error'
+  | 'unknown-context-key'
+  | 'context-type-mismatch'
+  | 'wrong-scope'
+  | 'queue-overflow'
+  | 'ttl-expired';
 
 // One rejection. `path` locates the offending node (e.g. a manifest id or a
 // JSON pointer); `detail` carries structured, JSON-safe context for diagnostics.

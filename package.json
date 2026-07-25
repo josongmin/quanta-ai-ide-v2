@@ -30,7 +30,7 @@
     "ui-infra:audit": "node scripts/ui-infra-audit.mjs",
     "ui-infra:update": "node scripts/ui-infra-audit.mjs --update",
     "test:ui-infra-audit": "node --test scripts/ui-infra-audit.test.mjs",
-    "test:workbench-contract": "vitest run src/shared/workbench/contract",
+    "test:workbench": "vitest run src/shared/workbench",
     "audit:cross-slice": "node scripts/audit-cross-slice.mjs",
     "catalog:validate": "PYTHONPATH=tools/feature-catalog/src python -m feature_catalog validate --root tools/feature-catalog/catalog",
     "catalog:audit": "PYTHONPATH=tools/feature-catalog/src python -m feature_catalog audit --root tools/feature-catalog/catalog",
