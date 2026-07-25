@@ -6,7 +6,7 @@ snapshot: `2026-07-25 @ dc551ce8450374d8007dfb379835d23817ca4467`
 
 | package | status | blocker | 지금 허용된 작업 | DONE receipt |
 |---|---|---|---|---|
-| `WBT-00` | `DONE` | — | 완료 | [WBT-00-RECEIPT.md](WBT-00-RECEIPT.md) — `test:ui-infra-audit` 14/14, `ui-infra:audit`/`typecheck`/`lint:strict` exit 0 @ the `feat/wbt-00-architecture-guardrail` branch tip (branch feat/wbt-00-architecture-guardrail) |
+| `WBT-00` | `DONE` | — | 완료 | [WBT-00-RECEIPT.md](WBT-00-RECEIPT.md) — `test:ui-infra-audit` 14/14, `ui-infra:audit`/`typecheck`/`lint:strict` exit 0 on `main` |
 | `WBT-01` | `DONE` | — | 완료 | [WBT-01-RECEIPT.md](WBT-01-RECEIPT.md) — `test:workbench-contract` 40/40, typecheck/lint:strict/ui-infra:audit exit 0; 헬어딧 0 real defect |
 | `WBT-02` | `DONE` | — | 완료 | [WBT-02-RECEIPT.md](WBT-02-RECEIPT.md) — core 28/28 (workbench 68/68), typecheck/lint:strict/ui-infra:audit/audit:cross-slice exit 0; 헬어딧 2 defect fixed→clean |
 | `WBT-03` | `DONE` | — | 완료 | [WBT-03-RECEIPT.md](WBT-03-RECEIPT.md) — workbench 89/89, typecheck/lint:strict/ui-infra:audit/audit:cross-slice exit 0; 헬어딧 MAJOR byte-leak fixed→clean |

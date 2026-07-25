@@ -1,6 +1,6 @@
 # WBT-03 — Workspace, context, layout kernel
 
-- status: `DONE` (branch feat/wbt-00-architecture-guardrail; see WBT-03-RECEIPT.md)
+- status: `DONE` (main; see WBT-03-RECEIPT.md)
 - covers: `WB-211..215`
 - goal: workspace snapshot identity, bounded context handoff, surface-open admission, layout persistence를 canonical kernel로 고정한다.
 - hard dependency: WBT-02 receipt

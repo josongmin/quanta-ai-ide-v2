@@ -1,6 +1,6 @@
 # WBT-02 — Scope, registry, command kernel
 
-- status: `DONE` (branch feat/wbt-00-architecture-guardrail; see WBT-02-RECEIPT.md)
+- status: `DONE` (main; see WBT-02-RECEIPT.md)
 - covers: `WB-201..205`
 - goal: 하나의 immutable scope tree와 atomic contribution/command authority를 구현한다.
 - hard dependency: WBT-01 receipt

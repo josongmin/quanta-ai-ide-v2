@@ -2,7 +2,7 @@
 
 - ticket: `WBT-03` (WB-211..215)
 - package: WBT-03
-- branch: `feat/wbt-00-architecture-guardrail`
+- branch: `main`
 - HEAD: branch tip (see `git log`)
 - implementation owner: Jo (assisted)
 
@@ -40,6 +40,6 @@
 
 ## Verdict
 
-- status: `DONE` on branch `feat/wbt-00-architecture-guardrail`.
+- status: `DONE` on `main`.
 - next unlocked: `WBT-04` (React host / UI runtime convergence — modifies the live app; owner should verify the running app).
 - reviewer: pending (owner).

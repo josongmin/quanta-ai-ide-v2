@@ -2,8 +2,8 @@
 
 - ticket: `WBT-00` (WB-001, WB-002, WB-003, WB-004)
 - package: WBT-00
-- branch/PR: `feat/wbt-00-architecture-guardrail`
-- HEAD: `feat/wbt-00-architecture-guardrail` branch tip (see `git log`)
+- branch/PR: `main`
+- HEAD: `main` (see `git log`)
 - worktree status: committed on branch (owner approved including the pre-existing eslint/package/ci edits)
 - implementation owner: Jo (assisted)
 
@@ -54,11 +54,11 @@
 
 - legacy adapters remaining: none (guardrail-only package).
 - remaining consumers: n/a.
-- blocker/deferred: resolved — committed at the `feat/wbt-00-architecture-guardrail` branch tip. Owner approved including the pre-existing `eslint.config.js` / `package.json` / `.github/workflows/ci.yml` edits in the WBT-00 commit.
+- blocker/deferred: resolved — committed at the `main` (see git log). Owner approved including the pre-existing `eslint.config.js` / `package.json` / `.github/workflows/ci.yml` edits in the WBT-00 commit.
 - next ticket unlocked: `WBT-01` (`READY`).
 
 ## Verdict
 
-- status: `DONE` @ the `feat/wbt-00-architecture-guardrail` branch tip (branch feat/wbt-00-architecture-guardrail).
+- status: `DONE` on `main`.
 - evidence location: this file; re-verify with `pnpm test:ui-infra-audit && pnpm ui-infra:audit && pnpm typecheck && pnpm lint:strict`.
 - reviewer: pending (owner) — branch not yet pushed / PR not opened.

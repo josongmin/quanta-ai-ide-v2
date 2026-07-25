@@ -2,7 +2,7 @@
 
 - ticket: `WBT-02` (WB-201..205)
 - package: WBT-02
-- branch: `feat/wbt-00-architecture-guardrail`
+- branch: `main`
 - HEAD: branch tip (see `git log`)
 - implementation owner: Jo (assisted)
 
@@ -49,6 +49,6 @@
 
 ## Verdict
 
-- status: `DONE` on branch `feat/wbt-00-architecture-guardrail`.
+- status: `DONE` on `main`.
 - next unlocked: `WBT-03` (workspace/context/layout kernel).
 - reviewer: pending (owner) — branch not pushed / PR not opened.
