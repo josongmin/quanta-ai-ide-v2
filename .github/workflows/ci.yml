@@ -33,6 +33,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Architecture guardrail runs first so a structural regression fails fast,
+      # before the slower typecheck/build/renderer stages. Never uses --update.
+      - name: Architecture guardrail (fast-fail)
+        run: |
+          pnpm test:ui-infra-audit
+          pnpm ui-infra:audit
+
       - name: Typecheck
         run: pnpm typecheck
 
@@ -63,6 +70,15 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Build Storybook
+        run: pnpm storybook:build
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Renderer interaction and accessibility tests
+        run: pnpm test:renderer
 
       - name: Bundle-size budget
         run: pnpm bundle-budget

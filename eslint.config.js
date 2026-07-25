@@ -25,13 +25,23 @@ export default tseslint.config(
   {
     ignores: [
       'dist',
+      'storybook-static',
+      'playwright-report',
+      'test-results',
       'node_modules',
       'pnpm-lock.yaml',
       'src-tauri',
       'scripts',
+      // Architecture audit fixtures intentionally violate the rules and are not
+      // real modules; they are scanned only by scripts/ui-infra-audit.test.mjs.
+      'tools/ui-infra-fixtures',
       '*.config.js',
       'vite.config.ts',
       'vitest.config.ts',
+      'playwright.config.ts',
+      'wdio.conf.ts',
+      '.storybook',
+      'e2e',
       'tailwind.config.js',
       'postcss.config.js',
       'eslint.config.js',
@@ -256,6 +266,51 @@ export default tseslint.config(
     rules: {
       'unused-imports/no-unused-vars': 'off',
       'boundaries/dependencies': 'off',
+    },
+  },
+
+  // React-free UI runtime core. React adapters live in UIRuntimeProvider.tsx;
+  // the state machines remain portable and independently testable.
+  {
+    files: [
+      'src/shared/ui/runtime/CommandService.ts',
+      'src/shared/ui/runtime/DialogService.ts',
+      'src/shared/ui/runtime/LayerManager.ts',
+      'src/shared/ui/runtime/types.ts',
+    ],
+    rules: {
+      'no-restricted-imports': ['error', {
+        paths: [
+          { name: 'react', message: 'UI runtime core must remain React-free.' },
+          { name: 'react-dom', message: 'UI runtime core must remain DOM-adapter-free.' },
+        ],
+      }],
+    },
+  },
+
+  // Canonical workbench kernel (contract + core) must stay host-neutral: no
+  // React/DOM/router/state/Tauri. Enforced live here and fail-new in
+  // scripts/ui-infra-audit.mjs (workbenchReactImport rule). These paths do not
+  // exist yet — the guard is ready ahead of WBT-01/WBT-02.
+  {
+    files: [
+      'src/shared/workbench/contract/**/*.{ts,tsx}',
+      'src/shared/workbench/core/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'no-restricted-imports': ['error', {
+        paths: [
+          { name: 'react', message: 'Workbench contract/core must remain React-free.' },
+          { name: 'react-dom', message: 'Workbench contract/core must remain DOM-free.' },
+          { name: 'zustand', message: 'Workbench contract/core must not depend on the Zustand store.' },
+        ],
+        patterns: [
+          {
+            group: ['@tanstack/react-router', '@tauri-apps/*'],
+            message: 'Workbench contract/core must not depend on router or Tauri host APIs.',
+          },
+        ],
+      }],
     },
   },
 );
