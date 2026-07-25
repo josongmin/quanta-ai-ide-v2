@@ -41,7 +41,19 @@ export type WorkbenchErrorReason =
   | 'context-type-mismatch'
   | 'wrong-scope'
   | 'queue-overflow'
-  | 'ttl-expired';
+  | 'ttl-expired'
+  // workspace / context store / surface / layout (WBT-03)
+  | 'stale-handle'
+  | 'wrong-workspace'
+  | 'lease-expired'
+  | 'byte-budget'
+  | 'schema-skew'
+  | 'surface-not-found'
+  | 'surface-disabled'
+  | 'reuse-conflict'
+  | 'layout-corrupt'
+  | 'invalid-operation'
+  | 'migration-failed';
 
 // One rejection. `path` locates the offending node (e.g. a manifest id or a
 // JSON pointer); `detail` carries structured, JSON-safe context for diagnostics.

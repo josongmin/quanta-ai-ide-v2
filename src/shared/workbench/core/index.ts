@@ -22,3 +22,27 @@ export {
   type IntentHandler,
   type FlushResult,
 } from './IntentBus';
+export {
+  WorkspaceSession,
+  type WorkspaceIdentity,
+  type WorkspaceHandle,
+  type Generation,
+} from './WorkspaceSession';
+export { ContextStore, type ContextHandle, type Lease, type PutOptions } from './ContextStore';
+export {
+  SurfaceService,
+  type ResolvedSurface,
+  type SurfaceResolverPort,
+  type NavigationPort,
+  type ReuseMode,
+  type OpenRequest,
+  type OpenResult,
+} from './SurfaceService';
+export {
+  LayoutStore,
+  layoutV3Schema,
+  type LayoutV3,
+  type LayoutOp,
+  type PersistencePort,
+  type MigrationReceipt,
+} from './LayoutStore';
