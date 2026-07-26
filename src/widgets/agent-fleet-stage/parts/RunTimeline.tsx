@@ -14,7 +14,10 @@ export function RunTimeline({
   onSelectRun,
   onApproveGate,
   onAdoptCandidate,
+  onToggleRoutinePaused,
   onEditRoutine,
+  commandsEnabled,
+  commandDisabledReason,
   t,
 }: {
   routine: Routine | null;
@@ -23,7 +26,11 @@ export function RunTimeline({
   onSelectRun: (id: string) => void;
   onApproveGate: (runId: string, stepId: string) => void;
   onAdoptCandidate: (runId: string, candidateId: string) => void;
+  onToggleRoutinePaused: (routineId: string, paused: boolean) => void;
   onEditRoutine: () => void;
+  // When false, controls that need a real backend transition are disabled.
+  commandsEnabled: boolean;
+  commandDisabledReason: string;
   isDark?: boolean;
   t: TranslateFn;
 }) {
@@ -68,7 +75,17 @@ export function RunTimeline({
           </button>
           <button
             type="button"
-            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]`}
+            disabled={!commandsEnabled}
+            aria-disabled={!commandsEnabled}
+            onClick={commandsEnabled
+              ? () => { onToggleRoutinePaused(routine.id, routine.status === 'active'); }
+              : undefined}
+            title={commandsEnabled ? undefined : commandDisabledReason}
+            className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors ${
+              commandsEnabled
+                ? 'text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]'
+                : 'text-[var(--fg-subtle)] opacity-50 cursor-not-allowed'
+            }`}
           >
             {routine.status === 'active' ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
             {routine.status === 'active' ? t('actions.pause') : t('actions.resume')}
@@ -76,7 +93,14 @@ export function RunTimeline({
           <button
             type="button"
             aria-label="More"
-            className={`p-1 rounded-md transition-colors text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-elevated)]`}
+            disabled={!commandsEnabled}
+            aria-disabled={!commandsEnabled}
+            title={commandsEnabled ? undefined : commandDisabledReason}
+            className={`p-1 rounded-md transition-colors ${
+              commandsEnabled
+                ? 'text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-elevated)]'
+                : 'text-[var(--fg-subtle)] opacity-50 cursor-not-allowed'
+            }`}
           >
             <MoreHorizontal className="w-3.5 h-3.5" />
           </button>
@@ -115,6 +139,8 @@ export function RunTimeline({
               run={activeRun}
               onApproveGate={(stepId) => { onApproveGate(activeRun.id, stepId); }}
               onAdoptCandidate={(cId) => { onAdoptCandidate(activeRun.id, cId); }}
+              commandsEnabled={commandsEnabled}
+              commandDisabledReason={commandDisabledReason}
               t={t}
             />
           )}

@@ -184,6 +184,9 @@
     "thirtyDay": "Last 30 days"
   },
   "footer": "quanta-ai-ide-v2 · agents",
+  "commands": {
+    "unavailable": "Not available in this build — no fleet backend connected"
+  },
   "actions": {
     "pause": "Pause",
     "resume": "Resume",

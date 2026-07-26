@@ -12,14 +12,22 @@ export function FleetRail({
   hitl,
   routines,
   onApproveHitl,
+  onResolveConflict,
   onJumpToRun,
+  commandsEnabled,
+  commandDisabledReason,
   t,
 }: {
   health: FleetHealth;
   hitl: HitlItem[];
   routines: Routine[];
   onApproveHitl: (id: string) => void;
+  onResolveConflict: (routineIdA: string, routineIdB: string, path: string) => void;
   onJumpToRun: (runId: string, routineId: string) => void;
+  // HITL-approval and conflict-resolution mutate real fleet state; disabled
+  // when no command port is present. Jump-to-run is pure local nav and stays live.
+  commandsEnabled: boolean;
+  commandDisabledReason: string;
   isDark?: boolean;
   t: TranslateFn;
 }) {
@@ -48,6 +56,8 @@ export function FleetRail({
             routines={routines}
             onApprove={onApproveHitl}
             onJump={onJumpToRun}
+            commandsEnabled={commandsEnabled}
+            commandDisabledReason={commandDisabledReason}
             t={t}
           />
         </Section>
@@ -73,6 +83,9 @@ export function FleetRail({
                   a={routines.find((r) => r.id === c.routineIdA)?.name ?? c.routineIdA}
                   b={routines.find((r) => r.id === c.routineIdB)?.name ?? c.routineIdB}
                   path={c.path}
+                  onResolve={() => { onResolveConflict(c.routineIdA, c.routineIdB, c.path); }}
+                  commandsEnabled={commandsEnabled}
+                  commandDisabledReason={commandDisabledReason}
                   t={t}
                 />
               ))}
@@ -155,12 +168,14 @@ function AttentionRow({ health, t }: { health: FleetHealth; t: TranslateFn }) {
 }
 
 function HitlList({
-  items, routines, onApprove, onJump, t,
+  items, routines, onApprove, onJump, commandsEnabled, commandDisabledReason, t,
 }: {
   items: HitlItem[];
   routines: Routine[];
   onApprove: (id: string) => void;
   onJump: (runId: string, routineId: string) => void;
+  commandsEnabled: boolean;
+  commandDisabledReason: string;
   t: TranslateFn;
 }) {
   if (items.length === 0) {
@@ -197,8 +212,15 @@ function HitlList({
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                onClick={() => { onApprove(it.id); }}
-                className={`flex-1 text-xs font-mono px-2 py-1 rounded-md transition-colors bg-[var(--bg-elevated)] hover:bg-[var(--bg-selected)] text-[var(--fg-default)]`}
+                disabled={!commandsEnabled}
+                aria-disabled={!commandsEnabled}
+                onClick={commandsEnabled ? () => { onApprove(it.id); } : undefined}
+                title={commandsEnabled ? undefined : commandDisabledReason}
+                className={`flex-1 text-xs font-mono px-2 py-1 rounded-md transition-colors ${
+                  commandsEnabled
+                    ? 'bg-[var(--bg-elevated)] hover:bg-[var(--bg-selected)] text-[var(--fg-default)]'
+                    : 'bg-[var(--bg-elevated)] text-[var(--fg-subtle)] opacity-50 cursor-not-allowed'
+                }`}
               >
                 {it.suggestedAction}
               </button>
@@ -238,7 +260,17 @@ function AlertRow({ alert, t }: { alert: FleetAlert; t: TranslateFn }) {
   );
 }
 
-function ConflictRow({ a, b, path, t }: { a: string; b: string; path: string; t: TranslateFn }) {
+function ConflictRow({
+  a, b, path, onResolve, commandsEnabled, commandDisabledReason, t,
+}: {
+  a: string;
+  b: string;
+  path: string;
+  onResolve: () => void;
+  commandsEnabled: boolean;
+  commandDisabledReason: string;
+  t: TranslateFn;
+}) {
   const muted = 'text-[var(--fg-muted)]';
   const heading = 'text-[var(--fg-default)]';
   return (
@@ -250,9 +282,16 @@ function ConflictRow({ a, b, path, t }: { a: string; b: string; path: string; t:
       </div>
       <button
         type="button"
-        className={`shrink-0 p-1 rounded-md transition-colors text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-elevated)]`}
+        disabled={!commandsEnabled}
+        aria-disabled={!commandsEnabled}
+        onClick={commandsEnabled ? onResolve : undefined}
+        className={`shrink-0 p-1 rounded-md transition-colors ${
+          commandsEnabled
+            ? 'text-[var(--fg-subtle)] hover:text-[var(--fg-default)] hover:bg-[var(--bg-elevated)]'
+            : 'text-[var(--fg-subtle)] opacity-50 cursor-not-allowed'
+        }`}
         aria-label={t('fleet.conflictResolve')}
-        title={t('fleet.conflictResolve')}
+        title={commandsEnabled ? t('fleet.conflictResolve') : commandDisabledReason}
       >
         <RefreshCcw className="w-3 h-3" />
       </button>

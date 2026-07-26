@@ -184,6 +184,9 @@
     "thirtyDay": "최근 30일"
   },
   "footer": "quanta-ai-ide-v2 · agents",
+  "commands": {
+    "unavailable": "이 빌드에서는 사용할 수 없음 — 플릿 백엔드 미연결"
+  },
   "actions": {
     "pause": "일시정지",
     "resume": "재개",

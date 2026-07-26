@@ -9,14 +9,27 @@ import {
   SAMPLE_FLEET_HEALTH, SAMPLE_HITL_QUEUE, SAMPLE_ROUTINES,
 } from './parts/data';
 import type { Routine } from './parts/types';
+import { hasCommandPort, type FleetCommandPort } from './model/commandPort';
 
 // /agents — fleet console for background coding agents.
 // Three-pane layout mirrors /coding so the operator's mental model is
 // shared: Routines (definitions) | Runs (instances) | Fleet (health).
 
-export default function AgentFleetStage() {
+export default function AgentFleetStage({
+  // Injected only in a build with a real fleet backend. Absent in this demo,
+  // which is why the backend-only controls render honestly disabled instead
+  // of faking a successful action.
+  commandPort,
+}: {
+  commandPort?: FleetCommandPort;
+} = {}) {
   const { isDark } = useTheme();
   const { t } = useTranslation('agents');
+
+  // Controls that require a real state transition are only live when a
+  // command port is present. Otherwise they are disabled with a reason.
+  const commandsEnabled = hasCommandPort(commandPort);
+  const commandDisabledReason = t('commands.unavailable');
 
   const [routines, setRoutines] = useState<Routine[]>(() => SAMPLE_ROUTINES);
   const [activeRoutineId, setActiveRoutineId] = useState<string | null>(SAMPLE_ROUTINES[0]?.id ?? null);
@@ -43,15 +56,24 @@ export default function AgentFleetStage() {
 
   const surface = 'bg-[var(--bg-canvas)]';
 
-  function onApproveGate(_runId: string, _stepId: string) {
-    // Demo no-op: a real impl would advance the run past the gate.
-    // Using void return on purpose so the action looks responsive.
+  // The five handlers below delegate to the command port. When no port is
+  // injected (demo build) the controls that call them are rendered disabled,
+  // so these bodies are unreachable rather than silent no-ops — no fake
+  // success is ever presented to the operator.
+  function onApproveGate(runId: string, stepId: string) {
+    commandPort?.approveGate(runId, stepId);
   }
-  function onAdoptCandidate(_runId: string, _candidateId: string) {
-    /* demo no-op */
+  function onAdoptCandidate(runId: string, candidateId: string) {
+    commandPort?.adoptCandidate(runId, candidateId);
   }
-  function onApproveHitl(_id: string) {
-    /* demo no-op */
+  function onApproveHitl(id: string) {
+    commandPort?.approveHitl(id);
+  }
+  function onToggleRoutinePaused(routineId: string, paused: boolean) {
+    commandPort?.setRoutinePaused(routineId, paused);
+  }
+  function onResolveConflict(routineIdA: string, routineIdB: string, path: string) {
+    commandPort?.resolveConflict(routineIdA, routineIdB, path);
   }
   function onJumpFromHitl(runId: string, routineId: string) {
     setActiveRoutineId(routineId);
@@ -107,7 +129,10 @@ export default function AgentFleetStage() {
           onSelectRun={setActiveRunId}
           onApproveGate={onApproveGate}
           onAdoptCandidate={onAdoptCandidate}
+          onToggleRoutinePaused={onToggleRoutinePaused}
           onEditRoutine={() => { setEditorOpen(true); }}
+          commandsEnabled={commandsEnabled}
+          commandDisabledReason={commandDisabledReason}
           isDark={isDark}
           t={t}
         />
@@ -116,7 +141,10 @@ export default function AgentFleetStage() {
           hitl={SAMPLE_HITL_QUEUE}
           routines={routines}
           onApproveHitl={onApproveHitl}
+          onResolveConflict={onResolveConflict}
           onJumpToRun={onJumpFromHitl}
+          commandsEnabled={commandsEnabled}
+          commandDisabledReason={commandDisabledReason}
           isDark={isDark}
           t={t}
         />

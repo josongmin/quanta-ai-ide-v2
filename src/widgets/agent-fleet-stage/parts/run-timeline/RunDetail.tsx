@@ -4,11 +4,15 @@ import {
 import type { Run, RunCandidate, RunStep, TranslateFn } from '../types';
 
 export function RunDetail({
-  run, onApproveGate, onAdoptCandidate, t,
+  run, onApproveGate, onAdoptCandidate, commandsEnabled, commandDisabledReason, t,
 }: {
   run: Run;
   onApproveGate: (stepId: string) => void;
   onAdoptCandidate: (cId: string) => void;
+  // Gate-approval and candidate-adoption need a real run transition; when
+  // no command port is present these controls render disabled, not fake.
+  commandsEnabled: boolean;
+  commandDisabledReason: string;
   t: TranslateFn;
 }) {
   const heading = 'text-[var(--fg-default)]';
@@ -39,6 +43,8 @@ export function RunDetail({
             key={step.id}
             step={step}
             t={t}
+            commandsEnabled={commandsEnabled}
+            commandDisabledReason={commandDisabledReason}
             onApprove={() => { onApproveGate(step.id); }}
           />
         ))}
@@ -55,6 +61,8 @@ export function RunDetail({
                 key={c.id}
                 cand={c}
                 onAdopt={() => { onAdoptCandidate(c.id); }}
+                commandsEnabled={commandsEnabled}
+                commandDisabledReason={commandDisabledReason}
                 t={t}
               />
             ))}
@@ -94,11 +102,13 @@ const STEP_ICON: Record<RunStep['state'], typeof CircleDot> = {
 };
 
 function StepRow({
-  step, t, onApprove,
+  step, t, onApprove, commandsEnabled, commandDisabledReason,
 }: {
   step: RunStep;
   t: TranslateFn;
   onApprove: () => void;
+  commandsEnabled: boolean;
+  commandDisabledReason: string;
 }) {
   const muted = 'text-[var(--fg-muted)]';
   const heading = 'text-[var(--fg-default)]';
@@ -134,8 +144,13 @@ function StepRow({
       {step.state === 'gated' && (
         <button
           type="button"
-          onClick={onApprove}
-          className="shrink-0 ml-1 px-2 py-0.5 rounded-md text-xs font-mono border transition-colors border-[color:var(--intent-warn-fg)] bg-[color:var(--intent-warn-bg)] text-[color:var(--intent-warn-fg)] hover:bg-[color:var(--intent-warn-bg)]"
+          disabled={!commandsEnabled}
+          aria-disabled={!commandsEnabled}
+          onClick={commandsEnabled ? onApprove : undefined}
+          title={commandsEnabled ? undefined : commandDisabledReason}
+          className={`shrink-0 ml-1 px-2 py-0.5 rounded-md text-xs font-mono border transition-colors border-[color:var(--intent-warn-fg)] bg-[color:var(--intent-warn-bg)] text-[color:var(--intent-warn-fg)] ${
+            commandsEnabled ? 'hover:bg-[color:var(--intent-warn-bg)]' : 'opacity-50 cursor-not-allowed'
+          }`}
         >
           {t('run.approveGate')}
         </button>
@@ -145,10 +160,12 @@ function StepRow({
 }
 
 function CandidateRow({
-  cand, onAdopt, t,
+  cand, onAdopt, commandsEnabled, commandDisabledReason, t,
 }: {
   cand: RunCandidate;
   onAdopt: () => void;
+  commandsEnabled: boolean;
+  commandDisabledReason: string;
   t: TranslateFn;
 }) {
   const heading = 'text-[var(--fg-default)]';
@@ -174,8 +191,15 @@ function CandidateRow({
       {!cand.selected && (
         <button
           type="button"
-          onClick={onAdopt}
-          className={`shrink-0 px-2 py-0.5 rounded-md text-xs font-mono transition-colors text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]`}
+          disabled={!commandsEnabled}
+          aria-disabled={!commandsEnabled}
+          onClick={commandsEnabled ? onAdopt : undefined}
+          title={commandsEnabled ? undefined : commandDisabledReason}
+          className={`shrink-0 px-2 py-0.5 rounded-md text-xs font-mono transition-colors ${
+            commandsEnabled
+              ? 'text-[var(--fg-muted)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-elevated)]'
+              : 'text-[var(--fg-subtle)] opacity-50 cursor-not-allowed'
+          }`}
         >
           {t('run.candidateAdopt')}
         </button>

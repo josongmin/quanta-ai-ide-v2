@@ -184,6 +184,9 @@
     "thirtyDay": "直近30日"
   },
   "footer": "quanta-ai-ide-v2 · agents",
+  "commands": {
+    "unavailable": "このビルドでは利用不可 — フリートバックエンド未接続"
+  },
   "actions": {
     "pause": "一時停止",
     "resume": "再開",

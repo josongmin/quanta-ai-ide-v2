@@ -86,7 +86,10 @@ export default function AppShell({ children }: { children: ReactNode }) {
   // Tauri shell with `titleBarStyle: Overlay`. In the browser this collapses
   // to zero so the layout stays identical.
   const showTrafficLightSpacer = useMemo(() => isTauri() && isMacOS(), []);
-  const headerDragHandle = useWindowDragHandle();
+  // dragOverControls: pressing ANY GNB element — avatar, bell, palette chip,
+  // search slot, project switcher — and moving drags the window; a clean
+  // click still triggers the control. Text inputs keep caret drags.
+  const headerDragHandle = useWindowDragHandle({ dragOverControls: true });
 
   const openSettings = useCallback(() => { settingsDialog.show(); }, [settingsDialog]);
   useMenuEvent('settings', openSettings);
@@ -150,6 +153,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
         //    opts back into reorder), so the window drag is never hijacked.
         data-tauri-drag-region="deep"
         onPointerDown={headerDragHandle}
+        // Native HTML5 drags (avatar <img> ghosts, incidental text/link drags)
+        // must never hijack the window-drag gesture inside the Tauri shell.
+        // Alt+drag stays as the opt-in for real in-app DnD (tab reorder).
+        onDragStartCapture={(e) => {
+          if (isTauri() && !e.altKey) e.preventDefault();
+        }}
         data-app-chrome="gnb"
         className="shrink-0 h-12 flex items-stretch border-b select-none relative z-50"
         style={{

@@ -184,6 +184,9 @@
     "thirtyDay": "近 30 日"
   },
   "footer": "quanta-ai-ide-v2 · agents",
+  "commands": {
+    "unavailable": "此版本不可用 — 未连接舰队后端"
+  },
   "actions": {
     "pause": "暂停",
     "resume": "恢复",
