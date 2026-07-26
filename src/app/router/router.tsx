@@ -20,6 +20,7 @@ import { RouteFallback } from '@shared/ui';
 import { env } from '@shared/config/env';
 import { isChromeless } from './routeChrome';
 import { decideAuthRedirect } from './authGuard';
+import { WorkspaceSurface } from './workspaceSurfaceRoute';
 
 // Tab-kind routes are now rendered by WorkspaceTabsHost — the host keeps
 // every open tab mounted in parallel and only paints the active one. The
@@ -126,6 +127,7 @@ const OrgUsagePage            = lazy(() => import('@widgets/org-stage').then((m)
 // ─────────────────────────────────────────────────────────────────────────
 
 const rootRoute = createRootRoute({
+  validateSearch: (search: Record<string, unknown>) => search as Record<string, unknown> & { tab?: string },
   // Auth guard — real mode only. Awaits the (boot-primed, warm) better-auth
   // session so protected content never flashes before the redirect resolves.
   // Mock mode returns immediately → free browsing, exactly as before.
@@ -318,6 +320,22 @@ const catalogRoute = createRoute({
   component: TabHostRoute,
 });
 
+// Generic canonical surface route (WB-402): one route resolves ANY surface from
+// the catalog by identity — adding a surface needs no router edit. Legacy tab
+// paths (/intelligence, …) remain read-only aliases handled by WorkspaceTabsHost.
+const workspaceSurfaceRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/w/$workspaceId/$surfaceId',
+  component: function WorkspaceSurfaceRouteComponent() {
+    const { workspaceId, surfaceId } = workspaceSurfaceRoute.useParams();
+    return (
+      <ErrorBoundary label={`surface:${surfaceId}`}>
+        <WorkspaceSurface workspaceId={workspaceId} surfaceId={surfaceId} />
+      </ErrorBoundary>
+    );
+  },
+});
+
 // Personal account pages (/me/*). These render INSIDE the AppShell chrome
 // (the GNB tabs stay visible). Each page mounts its own MeShell which adds
 // the left-side settings sidebar.
@@ -461,6 +479,7 @@ const routeTree = rootRoute.addChildren([
   wsLabelsRoute,
   wsDangerRoute,
   catalogRoute,
+  workspaceSurfaceRoute,
   meProfileRoute,
   meAccountRoute,
   meSecurityRoute,
