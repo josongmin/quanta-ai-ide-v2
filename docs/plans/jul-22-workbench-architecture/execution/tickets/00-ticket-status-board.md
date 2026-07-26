@@ -11,7 +11,7 @@ snapshot: `2026-07-25 @ dc551ce8450374d8007dfb379835d23817ca4467`
 | `WBT-02` | `DONE` | — | 완료 | [WBT-02-RECEIPT.md](WBT-02-RECEIPT.md) — core 28/28 (workbench 68/68), typecheck/lint:strict/ui-infra:audit/audit:cross-slice exit 0; 헬어딧 2 defect fixed→clean |
 | `WBT-03` | `DONE` | — | 완료 | [WBT-03-RECEIPT.md](WBT-03-RECEIPT.md) — workbench 89/89, typecheck/lint:strict/ui-infra:audit/audit:cross-slice exit 0; 헬어딧 MAJOR byte-leak fixed→clean |
 | `WBT-04` | `IN_PROGRESS` | WB-302/303/305는 running-app 검증 필요 | WB-301+WB-304 landed(react host+composition root); WB-302/303/305 staged | [WBT-04-RECEIPT.md](WBT-04-RECEIPT.md) — react 8/8, full 578/578(회귀0), build 0. WB-301/304 verified; 나머지 ledger |
-| `WBT-05` | `BLOCKED_BY_WBT-04` | SurfaceHost와 UI authority 수렴 미완료 | migration corpus inventory만 허용 | — |
+| `WBT-05` | `IN_PROGRESS` | WB-402/403/405 + full TabKind 제거 남음 | WB-401 catalog + WB-404/406 부분(중앙 컴포넌트 switch 제거, baseline 8→6) landed @ `be1e6d5` | full 584/584, build 0, 헬어딧 clean; app/workbench/* + catalog-derived registry |
 | `WBT-06` | `BLOCKED_BY_WBT-05` | generic surface runtime 없음 | receiver/legacy-provider inventory만 허용 | — |
 | `WBT-07` | `BLOCKED_BY_WBT-05` | built-in catalog transaction 없음 | route/page inventory와 fixture 설계만 허용 | — |
 | `WBT-08` | `DEFERRED_BY_WBT-06_WBT-07` | P1..P6 proof 미완료 | threat-model 질문 목록만 작성 가능 | — |
