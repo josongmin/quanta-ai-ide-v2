@@ -5,11 +5,12 @@
 // an invalid deep link renders a typed error surface (unknown/disabled/
 // untrusted), never a silent redirect to a default. Activation is lazy, so a
 // cancelled navigation (unmount before the chunk loads) leaves no orphan.
-import { lazy, type ComponentType, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { SurfaceHost } from '@shared/workbench/react';
 import type { ScopeIdentity } from '@shared/workbench';
 import { builtinCatalog } from '@app/workbench/builtinSurfaces';
 import type { CatalogEntry, SurfaceCatalog, SurfaceManifest } from '@app/workbench/surfaceCatalog';
+import { surfaceView } from '@app/workbench/surfaceView';
 
 export type SurfaceAdmission = 'ok' | 'disabled' | 'untrusted';
 export type AdmissionPolicy = (manifest: SurfaceManifest) => SurfaceAdmission;
@@ -38,28 +39,6 @@ export function resolveSurfaceRoute(
   return { status: 'ok', workspaceId, surfaceId, entry };
 }
 
-// Lazy views are built ONCE at module load (never during render — that would
-// mint a new component identity each render and remount the surface).
-function makeLazyView(entry: CatalogEntry): ComponentType {
-  return lazy(() =>
-    entry.activate().then((mod) => {
-      const Component = mod.Component as ComponentType;
-      const Provider = mod.Provider as ComponentType<{ children: ReactNode }> | undefined;
-      if (Provider === undefined) return { default: Component };
-      const Wrapped = (): ReactNode => (
-        <Provider>
-          <Component />
-        </Provider>
-      );
-      return { default: Wrapped };
-    }),
-  );
-}
-
-const BUILTIN_VIEWS: Readonly<Record<string, ComponentType>> = Object.fromEntries(
-  builtinCatalog.entries.map((entry) => [entry.manifest.id, makeLazyView(entry)]),
-);
-
 export function SurfaceErrorView({ state }: { state: Exclude<SurfaceRouteState, { status: 'ok' }> }): ReactNode {
   return (
     <div role="alert" data-surface-error={state.status}>
@@ -85,17 +64,25 @@ export function WorkspaceSurface({
 }): ReactNode {
   const state = resolveSurfaceRoute(catalog, admit, workspaceId, surfaceId);
   if (state.status !== 'ok') return <SurfaceErrorView state={state} />;
+  return <MountedSurface entry={state.entry} workspaceId={workspaceId} surfaceId={surfaceId} />;
+}
 
+// Mounts the resolved surface. Split out so the view is resolved for ANY catalog
+// entry (not a builtins-only map) with hooks living in one place.
+function MountedSurface({ entry, workspaceId, surfaceId }: { entry: CatalogEntry; workspaceId: string; surfaceId: string }): ReactNode {
   // owner/trust come from the descriptor — never parsed from the id string.
   const identity: ScopeIdentity = {
-    id: `${state.surfaceId}@${state.workspaceId}`,
+    id: `${surfaceId}@${workspaceId}`,
     kind: 'surface',
-    owner: { owner: state.entry.manifest.owner, trust: state.entry.manifest.trust },
+    owner: { owner: entry.manifest.owner, trust: entry.manifest.trust },
   };
-  const View = BUILTIN_VIEWS[state.surfaceId];
-  if (View === undefined) return <SurfaceErrorView state={{ status: 'unknown', workspaceId, surfaceId }} />;
+  // surfaceView caches per catalog entry (WeakMap) — the returned component has a
+  // STABLE identity across renders, so the "reset state each render" concern does
+  // not apply here.
+  const View = surfaceView(entry);
   return (
     <SurfaceHost identity={identity} state="mounted">
+      {/* eslint-disable-next-line react-hooks/static-components -- View is cached per entry (stable identity) */}
       <View />
     </SurfaceHost>
   );

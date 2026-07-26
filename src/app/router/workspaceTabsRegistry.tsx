@@ -1,4 +1,4 @@
-import { lazy, type ComponentType, type ReactNode } from 'react';
+import type { ComponentType } from 'react';
 import type { LucideProps } from 'lucide-react';
 import {
   DEFAULT_TAB_KINDS,
@@ -14,6 +14,7 @@ import {
 import type { TabKindDef } from '@features/workspace-tabs';
 import { builtinCatalog, surfaceIdForKind } from '@app/workbench/builtinSurfaces';
 import { SURFACE_ICONS } from '@app/workbench/icons';
+import { surfaceView } from '@app/workbench/surfaceView';
 
 // App-layer composition: the built-in surface catalog is the authority for a
 // tab's view and icon. This module derives the legacy `TabKindDef` projection
@@ -31,24 +32,12 @@ export {
   WORKSPACE_TAB_META,
 };
 
-// Lazy view for a kind, resolved from the catalog. An optional per-surface
-// Provider is folded into the component so the host renders one element.
+// Lazy view for a kind, resolved from the catalog via the single shared view
+// assembly (surfaceView) — the Provider fold lives in exactly one place.
 function deriveComponent(kind: TabKind): ComponentType {
   const entry = builtinCatalog.resolve(surfaceIdForKind(kind));
   if (entry === undefined) throw new Error(`no built-in surface for tab kind ${kind}`);
-  return lazy(() =>
-    entry.activate().then((mod) => {
-      const Component = mod.Component as ComponentType;
-      const Provider = mod.Provider as ComponentType<{ children: ReactNode }> | undefined;
-      if (Provider === undefined) return { default: Component };
-      const Wrapped = (): ReactNode => (
-        <Provider>
-          <Component />
-        </Provider>
-      );
-      return { default: Wrapped };
-    }),
-  );
+  return surfaceView(entry);
 }
 
 function deriveIcon(kind: TabKind): ComponentType<LucideProps> {

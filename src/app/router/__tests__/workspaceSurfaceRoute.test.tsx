@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { WorkbenchRoot } from '@shared/workbench/react';
 import { resolveSurfaceRoute, WorkspaceSurface, builtinAdmission, type AdmissionPolicy } from '../workspaceSurfaceRoute';
 import { builtinCatalog } from '@app/workbench/builtinSurfaces';
+import { buildSurfaceCatalog, type SurfaceManifest } from '@app/workbench/surfaceCatalog';
 
 describe('resolveSurfaceRoute', () => {
   it('resolves a known built-in surface and preserves workspace/surface identity', () => {
@@ -50,5 +51,27 @@ describe('WorkspaceSurface', () => {
       </WorkbenchRoot>,
     );
     expect(container.querySelector('[data-surface="core.coding@ws"]')).not.toBeNull();
+  });
+
+  it('mounts a NON-BUILTIN surface from an injected catalog (truly generic)', () => {
+    const descriptor: SurfaceManifest = {
+      id: 'acme.custom',
+      owner: 'acme',
+      trust: 'untrusted',
+      title: 'Custom',
+      group: 'acme.group',
+      icon: 'Box',
+      instancing: 'singleton',
+      contextKinds: [],
+    };
+    const built = buildSurfaceCatalog([descriptor], { 'acme.custom': () => Promise.resolve({ Component: () => null }) });
+    if (!built.ok) throw new Error('catalog build failed');
+    const { container } = render(
+      <WorkbenchRoot>
+        <WorkspaceSurface workspaceId="ws" surfaceId="acme.custom" catalog={built.value} />
+      </WorkbenchRoot>,
+    );
+    // Resolves AND mounts via the same route — not a builtins-only map.
+    expect(container.querySelector('[data-surface="acme.custom@ws"]')).not.toBeNull();
   });
 });
