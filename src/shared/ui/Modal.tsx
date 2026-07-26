@@ -30,7 +30,7 @@ export function Modal({
   ariaLabelledBy, ariaDescribedBy, align = 'center',
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
-  useDialogA11y(dialogRef, open, onClose);
+  useDialogA11y(dialogRef, open, onClose, { kind: 'modal', modal: true });
   useScrollLock(open);
 
   if (!open) return null;

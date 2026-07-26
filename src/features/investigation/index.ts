@@ -1,4 +1,9 @@
-export { InvestigationProvider, useInvestigation } from './model/InvestigationContext';
+export {
+  InvestigationProvider,
+  InvestigationNotebookProvider,
+  InvestigationRunnerProvider,
+  useInvestigation,
+} from './model/InvestigationContext';
 export type {
   ActionKind,
   ActionRecommendation,

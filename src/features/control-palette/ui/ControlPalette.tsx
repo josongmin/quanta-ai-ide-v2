@@ -25,6 +25,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { Search, ArrowUp, CornerDownLeft } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
 import { useTheme } from '@shared/theme';
+import { useScrollLock } from '@shared/lib';
+import { useDialogA11y } from '@shared/ui';
 import { useFilterStore } from '@entities/filter-state';
 import { useControlPaletteStore } from '../model/store';
 import type { Command } from '../model/types';
@@ -71,6 +73,9 @@ export default function ControlPalette({ onOpenHelp, onOpenTokens, onOpenActivit
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(dialogRef, open, () => { setOpen(false); }, { kind: 'modal', modal: true });
+  useScrollLock(open);
 
   // Sectioned, ranked result list. We separate the cursor index from
   // the section structure: the list is flat for keyboard, sectioned
@@ -128,6 +133,7 @@ export default function ControlPalette({ onOpenHelp, onOpenTokens, onOpenActivit
       onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={t('palette.title')}

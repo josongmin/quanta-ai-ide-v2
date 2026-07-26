@@ -1,8 +1,8 @@
 [package]
-name = "se-dot-field-demo"
+name = "quanta-ai-ide-v2"
 version = "0.1.0"
 description = "2.5D Code City — Tauri shell"
-authors = ["se-dot-field-demo"]
+authors = ["quanta-ai-ide-v2"]
 edition = "2021"
 rust-version = "1.77"
 
@@ -15,9 +15,6 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 tauri = { version = "2", features = [] }
-tauri-plugin-shell = "2"
-tauri-plugin-dialog = "2"
-tauri-plugin-os = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"

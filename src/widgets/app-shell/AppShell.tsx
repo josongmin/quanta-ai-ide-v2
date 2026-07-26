@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useMemo, type ReactNode } from 'react';
 import StatusBar, { STATUS_BAR_HEIGHT } from './StatusBar';
 import {
   Bell, ChevronDown, Palette,
@@ -9,7 +9,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { WorkspaceTabsStrip, WorkspaceTabsHost } from '@features/workspace-tabs';
 import { isMacOS, isTauri, useMenuEvent, useShortcut } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
-import { IconButton } from '@shared/ui';
+import { IconButton, useDialogController } from '@shared/ui';
 import { useFilterStore } from '@entities/filter-state';
 import { env } from '@shared/config/env';
 import { SettingsPanel } from '@features/tweak-prefs';
@@ -70,8 +70,9 @@ const ShortcutsModal = lazy(() =>
 // it via `children` (the root route's <Outlet/> output).
 
 export default function AppShell({ children }: { children: ReactNode }) {
-  const [tokensOpen, setTokensOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false);
+  const settingsDialog = useDialogController('app.settings');
+  const tokensDialog = useDialogController('app.tokens');
+  const helpDialog = useDialogController('app.help');
   const navigate = useNavigate();
   const setActivityOpen = useCallback((_open: boolean) => { /* see note above import block */ }, []);
   // Surface/text styling all flows through the semantic-token CSS
@@ -86,13 +87,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   // to zero so the layout stays identical.
   const showTrafficLightSpacer = useMemo(() => isTauri() && isMacOS(), []);
 
-  // Bridge the native `Settings…` menu item (Cmd+,) to SettingsPanel's own
-  // trigger button. Cheaper than threading a controlled-open prop through
-  // the feature slice, and the button is always rendered.
-  const settingsSlotRef = useRef<HTMLSpanElement>(null);
-  const openSettings = useCallback(() => {
-    settingsSlotRef.current?.querySelector('button')?.click();
-  }, []);
+  const openSettings = useCallback(() => { settingsDialog.show(); }, [settingsDialog]);
   useMenuEvent('settings', openSettings);
 
   // Browser-path keyboard shortcuts. The Tauri menu already covers Cmd+,;
@@ -102,13 +97,16 @@ export default function AppShell({ children }: { children: ReactNode }) {
   useShortcut({ key: ',', ctrl: true, ignoreInputs: false }, openSettings);
   useShortcut(
     { key: '/', ctrl: true, ignoreInputs: false },
-    useCallback(() => { setHelpOpen((v) => !v); }, []),
+    useCallback(() => {
+      if (helpDialog.open) helpDialog.close();
+      else helpDialog.show();
+    }, [helpDialog]),
   );
 
   // Global control palette: Cmd/Ctrl-K opens, Cmd/Ctrl-1..7 jumps to a
   // top-level tab, bare "?" opens the help modal. The palette content
   // itself reaches into the same setHelp/Tokens/Activity bag below.
-  useGlobalShortcuts({ onOpenHelp: useCallback(() => { setHelpOpen(true); }, []) });
+  useGlobalShortcuts({ onOpenHelp: useCallback(() => { helpDialog.show(); }, [helpDialog]) });
   useTrackRecents();
   const paletteOpen = useControlPaletteStore((s) => s.open);
   const setPaletteOpen = useControlPaletteStore((s) => s.setOpen);
@@ -193,8 +191,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
             onClick={resetAll}
             tone="muted"
           />
-          <span ref={settingsSlotRef} className="contents">
-            <SettingsPanel compact />
+          <span className="contents">
+            <SettingsPanel
+              compact
+              open={settingsDialog.open}
+              onOpenChange={(open) => { if (open) settingsDialog.show(); else settingsDialog.close(); }}
+            />
           </span>
           {/* Light/dark toggle removed — theme is driven entirely from
               the palette (TokensPanel) so the chrome follows the active
@@ -233,7 +235,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
           <IconButton
             icon={Palette}
             label={t('action.designTokens')}
-            onClick={() => { setTokensOpen(true); }}
+            onClick={() => { tokensDialog.show(); }}
             tone="muted"
           />
           <IconButton
@@ -271,9 +273,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
       <StatusBar />
 
-      {tokensOpen && (
+      {tokensDialog.open && (
         <Suspense fallback={null}>
-          <TokensPanel onClose={() => { setTokensOpen(false); }} />
+          <TokensPanel onClose={() => { tokensDialog.close(); }} />
         </Suspense>
       )}
 
@@ -286,8 +288,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
           ai-activity panel store. */}
       {paletteOpen && (
         <ControlPalette
-          onOpenHelp={() => { setHelpOpen(true); }}
-          onOpenTokens={() => { setTokensOpen(true); }}
+          onOpenHelp={() => { helpDialog.show(); }}
+          onOpenTokens={() => { tokensDialog.show(); }}
           onOpenActivity={() => {
             void navigate({ to: '/intelligence' });
             setActivityOpen(true);
@@ -295,15 +297,14 @@ export default function AppShell({ children }: { children: ReactNode }) {
         />
       )}
 
-      {helpOpen && (
+      {helpDialog.open && (
         <Suspense fallback={null}>
           <ShortcutsModal
-            open={helpOpen}
-            onClose={() => { setHelpOpen(false); }}
+            open={helpDialog.open}
+            onClose={() => { helpDialog.close(); }}
           />
         </Suspense>
       )}
     </div>
   );
 }
-

@@ -1,5 +1,6 @@
 import { useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { useScrollLock } from '@shared/lib';
 
 import { useDialogA11y } from './useDialogA11y';
 
@@ -26,7 +27,8 @@ export function Drawer({
   ariaLabelledBy, ariaDescribedBy,
 }: Props) {
   const dialogRef = useRef<HTMLElement>(null);
-  useDialogA11y(dialogRef, open, onClose);
+  useDialogA11y(dialogRef, open, onClose, { kind: 'drawer', modal: true });
+  useScrollLock(open);
 
   if (!open) return null;
 
@@ -36,7 +38,7 @@ export function Drawer({
     // the dialog subtree it wraps from the a11y tree.
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- backdrop click-to-dismiss; Escape handled by useDialogA11y
     <div
-      className="fixed inset-0 z-[200] flex"
+      className="fixed inset-0 z-[var(--z-modal)] flex"
       onClick={onClose}
     >
       <div className="flex-1 bg-[var(--bg-scrim)]" />

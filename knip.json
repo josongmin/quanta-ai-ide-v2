@@ -65,15 +65,10 @@
     "@shared/*":   ["src/shared/*"]
   },
 
-  // Tauri shell plugin is wired through tauri.conf.json, not TS source.
-  "ignoreDependencies": [
-    "@tauri-apps/plugin-shell"
-  ],
-
-  // python3 / semgrep are invoked from package.json scripts but live
+  // python / semgrep are invoked from package.json scripts but live
   // outside the JS toolchain.
   "ignoreBinaries": [
-    "python3",
+    "python",
     "semgrep"
   ]
 }

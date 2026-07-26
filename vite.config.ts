@@ -49,9 +49,6 @@ export default defineConfig({
     ],
     exclude: [
       '@tauri-apps/api',
-      '@tauri-apps/plugin-dialog',
-      '@tauri-apps/plugin-os',
-      '@tauri-apps/plugin-shell',
     ],
   },
   build: {

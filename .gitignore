@@ -18,6 +18,10 @@ src-tauri/gen/
 *.log
 coverage/
 .vitest-cache/
+storybook-static/
+test-results/
+playwright-report/
+__pycache__/
 
 # OS / editor noise
 .DS_Store

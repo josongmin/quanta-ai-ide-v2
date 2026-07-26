@@ -67,7 +67,7 @@ export function ConfirmDialog({
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [typed, setTyped] = useState('');
-  useDialogA11y(dialogRef, open, onCancel);
+  useDialogA11y(dialogRef, open, onCancel, { kind: 'modal', modal: true });
   useScrollLock(open);
 
   if (!open) return null;

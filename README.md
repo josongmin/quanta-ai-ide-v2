@@ -1,4 +1,4 @@
-# se-dot-field-demo
+# quanta-ai-ide-v2
 
 A Software-Engineering / codebase visualizer demo. Renders a repository as a 3D
 dot field (and other modes) so you can filter files, inspect targets, swap

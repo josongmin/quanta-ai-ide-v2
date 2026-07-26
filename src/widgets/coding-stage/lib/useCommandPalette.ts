@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useShortcut } from '@shared/lib';
 import type { Turn } from '../parts/types';
 
 // Command palette + per-turn context menu open state, plus the small
@@ -13,19 +14,10 @@ export function useCommandPalette() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [turnMenu, setTurnMenu] = useState<{ x: number; y: number; turn: Turn } | null>(null);
 
-  // ⌘K toggles palette — capture phase so it wins over chat-agent's ⌘K.
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      const meta = e.metaKey || e.ctrlKey;
-      if (meta && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        e.stopPropagation();
-        setPaletteOpen((v) => !v);
-      }
-    }
-    window.addEventListener('keydown', onKey, true);
-    return () => { window.removeEventListener('keydown', onKey, true); };
-  }, []);
+  useShortcut(
+    { id: 'coding.commandPalette.toggle', key: 'k', ctrl: true, ignoreInputs: false, priority: 10 },
+    useCallback(() => { setPaletteOpen((value) => !value); }, []),
+  );
 
   const handleOpenTurnMenu = useCallback((x: number, y: number, turn: Turn) => {
     setTurnMenu({ x, y, turn });

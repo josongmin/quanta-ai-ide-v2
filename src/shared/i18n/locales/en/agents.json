@@ -183,7 +183,7 @@
     "memory": "Memory",
     "thirtyDay": "Last 30 days"
   },
-  "footer": "se-dot-field-demo · agents",
+  "footer": "quanta-ai-ide-v2 · agents",
   "actions": {
     "pause": "Pause",
     "resume": "Resume",

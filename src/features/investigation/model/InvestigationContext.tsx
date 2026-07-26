@@ -80,7 +80,7 @@ function mapQuestionById(
   });
 }
 
-function NotebookProvider({ children }: { children: ReactNode }) {
+export function InvestigationNotebookProvider({ children }: { children: ReactNode }) {
   const [notebook, setNotebook] = useState<NotebookEntry[]>(FIXTURE_NOTEBOOKS);
   const [activeNotebookId, setActiveNotebookIdState] = useState<string | null>(null);
 
@@ -208,7 +208,7 @@ export function useNotebook(): Omit<NotebookCtx, 'ensureNotebookForTarget'> {
   }), [c]);
 }
 
-function InvestigationRunnerProvider({ children }: { children: ReactNode }) {
+export function InvestigationRunnerProvider({ children }: { children: ReactNode }) {
   const {
     ensureNotebookForTarget,
     setActiveNotebook,
@@ -389,9 +389,9 @@ export function useInvestigationRunner(): InvestigationRunnerCtx {
 
 export function InvestigationProvider({ children }: { children: ReactNode }) {
   return (
-    <NotebookProvider>
+    <InvestigationNotebookProvider>
       <InvestigationRunnerProvider>{children}</InvestigationRunnerProvider>
-    </NotebookProvider>
+    </InvestigationNotebookProvider>
   );
 }
 

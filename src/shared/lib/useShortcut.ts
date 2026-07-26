@@ -1,45 +1,47 @@
-import { useEffect } from 'react';
+import { useEffect, useId, useRef } from 'react';
+import { useUIRuntime, useUiScope } from '../ui/runtime/UIRuntimeProvider';
+import type { Keybinding } from '../ui/runtime/types';
 
-// Cross-platform keyboard shortcut hook. The `ctrl` flag means
-// "Cmd on macOS OR Ctrl elsewhere" so consumers don't have to special-case.
-// We listen on `window` so the binding fires regardless of which element
-// currently has focus, but skip while the user is typing in a text field.
-
-export type Shortcut = {
-  key: string;          // e.g. 'k', '/', 'a' — matched case-insensitively
-  ctrl?: boolean;       // when true requires Cmd (Mac) or Ctrl (others)
-  shift?: boolean;
-  alt?: boolean;
-  // Don't fire when typing in inputs (default true). Pass false to allow
-  // shortcuts that should also work while focused on an input.
-  ignoreInputs?: boolean;
+export type Shortcut = Keybinding & {
+  id?: string;
+  priority?: number;
 };
 
-export function useShortcut(s: Shortcut, handler: () => void): void {
+export function useShortcut(shortcut: Shortcut, handler: () => void): void {
+  const runtime = useUIRuntime();
+  const scope = useUiScope();
+  const generatedId = useId();
+  const handlerRef = useRef(handler);
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (s.ignoreInputs !== false) {
-        if (
-          target &&
-          (target.tagName === 'INPUT' ||
-            target.tagName === 'TEXTAREA' ||
-            target.isContentEditable)
-        ) {
-          return;
-        }
-      }
-      const meta = s.ctrl ? (e.metaKey || e.ctrlKey) : true;
-      const shift = s.shift !== undefined ? e.shiftKey === s.shift : true;
-      const alt = s.alt !== undefined ? e.altKey === s.alt : true;
-      if (e.key.toLowerCase() === s.key.toLowerCase() && meta && shift && alt) {
-        e.preventDefault();
-        handler();
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-    };
-  }, [s.key, s.ctrl, s.shift, s.alt, s.ignoreInputs, handler]);
+    handlerRef.current = handler;
+  }, [handler]);
+
+  useEffect(() => {
+    const registration = runtime.commands.register({
+      id: shortcut.id ?? `shortcut:${generatedId}`,
+      handler: () => { handlerRef.current(); },
+      keybinding: {
+        key: shortcut.key,
+        ctrl: shortcut.ctrl,
+        shift: shortcut.shift,
+        alt: shortcut.alt,
+        ignoreInputs: shortcut.ignoreInputs,
+      },
+      priority: scope.commandPriority + (shortcut.priority ?? 0),
+      isActive: () => scope.activeRef.current,
+    });
+    return registration.dispose;
+  }, [
+    generatedId,
+    runtime,
+    scope,
+    shortcut.id,
+    shortcut.key,
+    shortcut.ctrl,
+    shortcut.shift,
+    shortcut.alt,
+    shortcut.ignoreInputs,
+    shortcut.priority,
+  ]);
 }

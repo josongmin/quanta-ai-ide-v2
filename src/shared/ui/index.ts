@@ -53,3 +53,15 @@ export { EmptyState } from './settings-kit/EmptyState';
 export { Skeleton, SkeletonText } from './Skeleton';
 export { InlineError } from './InlineError';
 export { RouteFallback } from './RouteFallback';
+
+// ── UI runtime ──
+export {
+  UIRuntimeProvider,
+  UiScopeProvider,
+  createUIRuntime,
+  useDialogController,
+  useUIRuntime,
+  useUiScope,
+  type UIRuntime,
+} from './runtime';
+export type { DialogCloseReason, Keybinding, LayerKind, UiOwnerRef } from './runtime';

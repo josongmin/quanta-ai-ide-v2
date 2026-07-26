@@ -51,7 +51,7 @@ export function SettingsModal({
   maxHeightVh = 85, bodyClassName = 'p-4 flex flex-col gap-4', ariaLabel,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
-  useDialogA11y(dialogRef, open, onClose);
+  useDialogA11y(dialogRef, open, onClose, { kind: 'modal', modal: true });
   useScrollLock(open);
 
   if (!open) return null;

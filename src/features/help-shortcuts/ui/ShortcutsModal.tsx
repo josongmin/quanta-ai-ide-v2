@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from '@shared/i18n';
 import { Modal } from '@shared/ui';
 import { isMacOS } from '@shared/lib';
@@ -29,18 +29,6 @@ export default function ShortcutsModal({ open, onClose }: Props) {
     { actionKey: 'closeOrBlur',  keys: ['Esc'] },
     { actionKey: 'focusSearchSlash', keys: ['/'] },
   ], [mod]);
-
-  // Belt-and-braces Esc handler. <Modal> already binds Esc, but this also
-  // satisfies the "Esc closes" expectation for any consumer that swaps out
-  // the underlying primitive.
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); };
-  }, [open, onClose]);
 
   return (
     <Modal open={open} onClose={onClose} ariaLabel={t('title')} width={520}>

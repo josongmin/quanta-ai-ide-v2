@@ -183,7 +183,7 @@
     "memory": "메모리",
     "thirtyDay": "최근 30일"
   },
-  "footer": "se-dot-field-demo · agents",
+  "footer": "quanta-ai-ide-v2 · agents",
   "actions": {
     "pause": "일시정지",
     "resume": "재개",

@@ -8,8 +8,21 @@ import { Modal } from '@shared/ui';
 // eagerly so the GNB chrome paints in one frame.
 const SettingsBody = lazy(() => import('./SettingsBody'));
 
-export default function SettingsPanel({ compact = false }: { compact?: boolean }) {
-  const [open, setOpen] = useState(false);
+export default function SettingsPanel({
+  compact = false,
+  open: controlledOpen,
+  onOpenChange,
+}: {
+  compact?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = (next: boolean) => {
+    if (controlledOpen === undefined) setInternalOpen(next);
+    onOpenChange?.(next);
+  };
 
   return (
     <>

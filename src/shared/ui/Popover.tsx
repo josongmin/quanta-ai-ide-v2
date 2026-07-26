@@ -72,7 +72,7 @@ export function Popover({
   // The centered path renders role="dialog" + aria-modal, so it must actually
   // behave modally: move focus in, trap Tab, and restore focus on close. The
   // anchored path is a transient menu and stays untrapped (no-op when false).
-  useDialogA11y(panelRef, open && placement === 'center', close);
+  useDialogA11y(panelRef, open && placement === 'center', close, { kind: 'modal', modal: true });
 
   // Viewport-aware positioning. Recomputes on open, on every scroll
   // anywhere (capture phase catches inner scroll containers too), and on

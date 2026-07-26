@@ -17,9 +17,6 @@ pub use error::{AppError, AppResult};
 
 pub fn run() {
     let result = tauri::Builder::default()
-        .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_os::init())
         .invoke_handler(tauri::generate_handler![
             commands::system::app_version,
             commands::system::ping,

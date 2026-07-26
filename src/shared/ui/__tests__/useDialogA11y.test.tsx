@@ -1,7 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { useRef } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 import { useDialogA11y } from '../useDialogA11y';
+import { UIRuntimeProvider } from '../runtime/UIRuntimeProvider';
 
 // jsdom has no layout engine, so `offsetParent` is always null and
 // getFocusable() would filter out every element. Stub it so the focus-trap
@@ -31,23 +32,25 @@ function Dialog({ open, onClose }: { open: boolean; onClose: () => void }) {
 }
 
 const withTrigger = (open: boolean, onClose: () => void) => (
-  <>
+  <UIRuntimeProvider>
     <button type="button" data-testid="trigger">trigger</button>
     <Dialog open={open} onClose={onClose} />
-  </>
+  </UIRuntimeProvider>
 );
+
+const withRuntime = (node: ReactNode) => <UIRuntimeProvider>{node}</UIRuntimeProvider>;
 
 describe('useDialogA11y', () => {
   it('calls onClose on Escape', () => {
     const onClose = vi.fn();
-    render(<Dialog open onClose={onClose} />);
+    render(withRuntime(<Dialog open onClose={onClose} />));
     fireEvent.keyDown(window, { key: 'Escape' });
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it('is a no-op when closed', () => {
     const onClose = vi.fn();
-    render(<Dialog open={false} onClose={onClose} />);
+    render(withRuntime(<Dialog open={false} onClose={onClose} />));
     fireEvent.keyDown(window, { key: 'Escape' });
     expect(onClose).not.toHaveBeenCalled();
   });
@@ -65,10 +68,24 @@ describe('useDialogA11y', () => {
   });
 
   it('traps Tab at the last focusable, wrapping to the first', () => {
-    render(<Dialog open onClose={vi.fn()} />);
+    render(withRuntime(<Dialog open onClose={vi.fn()} />));
     const first = screen.getByRole('button', { name: 'first' });
     screen.getByRole('button', { name: 'last' }).focus();
     fireEvent.keyDown(window, { key: 'Tab' });
     expect(first).toHaveFocus();
+  });
+
+  it('closes only the topmost nested dialog on Escape', () => {
+    const firstClose = vi.fn();
+    const secondClose = vi.fn();
+    render(withRuntime(
+      <>
+        <Dialog open onClose={firstClose} />
+        <Dialog open onClose={secondClose} />
+      </>,
+    ));
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(secondClose).toHaveBeenCalledOnce();
+    expect(firstClose).not.toHaveBeenCalled();
   });
 });
