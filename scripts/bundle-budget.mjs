@@ -1,120 +1,149 @@
-// Bundle-size guard run after `vite build`. Fails with non-zero exit if any
-// budget is exceeded so CI can gate on it. We measure gzipped size of the
-// emitted JS in `dist/assets`; CSS and HTML are out of scope (covered by Vite's
-// own warnings). Budgets are tight-but-not-fragile: ~15% headroom over current
-// usage so a stray import is loud, but a benign React patch upgrade isn't.
+// Bundle-size guard run after `vite build`. Fails non-zero if a budget is
+// exceeded so CI (`pnpm verify`) can gate on it.
+//
+// Unlike a filename-glob guess, this reads Vite's build manifest
+// (dist/.vite/manifest.json) and computes the entry's REAL transitive STATIC
+// import closure — the exact set of JS the browser must download and execute
+// before the app is interactive. Dynamic imports are followed only to MEASURE
+// each on-open surface separately, never folded into the initial number. That
+// distinction is the whole point: a heavy area (three.js, the coding turn view,
+// admission) is only "off the critical path" if it is reachable from the entry
+// ONLY through a dynamic import — which this script proves, rather than trusting
+// the modulepreload filter (a hint, not evidence).
 import fs from 'node:fs';
 import path from 'node:path';
 import { gzipSync } from 'node:zlib';
 
-const DIST = 'dist/assets';
-const HTML = 'dist/index.html';
+const DIST = 'dist';
+const ASSETS = path.join(DIST, 'assets');
+const MANIFEST = path.join(DIST, '.vite', 'manifest.json');
 
-// The entry chunk's hashed filename comes from dist/index.html so we don't
-// confuse it with feature `index.ts` barrels that Rollup also names `index-*`.
-function readEntryFromHtml() {
-  if (!fs.existsSync(HTML)) {
-    console.error(`bundle-budget: ${HTML} does not exist; run \`vite build\` first.`);
-    process.exit(1);
-  }
-  const html = fs.readFileSync(HTML, 'utf8');
-  const m = html.match(/<script[^>]+src="\/assets\/(index-[^"]+\.js)"/);
-  if (!m) {
-    console.error('bundle-budget: could not find entry <script> in dist/index.html.');
-    process.exit(1);
-  }
-  return m[1];
-}
-
-const ENTRY = readEntryFromHtml();
-
-const BUDGETS = {
-  // Initial path: chunks that load before the user does anything. Entry,
-  // React, i18n vendor (we await loadNamespaces at boot), icons. Lazy
-  // feature barrels (also named `index-*`) are excluded by pinning the entry
-  // to whatever index.html actually loads.
-  initial: {
-    files: [ENTRY, 'vendor-react-*.js', 'vendor-icons-*.js', 'vendor-i18n-*.js'],
-    maxGz: 130 * 1024,
-  },
-  // three.js is lazy (loaded by viz-modes on demand) but big enough to deserve
-  // its own ceiling separate from the initial budget.
-  vendorThree: {
-    files: ['vendor-three-*.js'],
-    maxGz: 130 * 1024,
-  },
-  // No single non-vendor chunk should balloon past 50 KB gz; if one does, it
-  // probably needs to be split further or moved behind a dynamic import. We
-  // exclude `vendor-*` (covered by their own budgets) and the entry itself
-  // (covered by the initial budget). Lazy feature `index-*` chunks DO count.
-  largestNonVendor: {
-    excludePrefixes: ['vendor-'],
-    excludeNames: [ENTRY],
-    maxGz: 50 * 1024,
-  },
-};
-
-function matchAny(name, patterns) {
-  return patterns.some((p) => {
-    const r = new RegExp('^' + p.replace(/\./g, '\\.').replace(/\*/g, '.*') + '$');
-    return r.test(name);
-  });
-}
-
-function gzSize(filePath) {
-  const buf = fs.readFileSync(filePath);
-  return gzipSync(buf).length;
-}
-
-if (!fs.existsSync(DIST)) {
-  console.error(`bundle-budget: ${DIST} does not exist; run \`vite build\` first.`);
+function die(msg) {
+  console.error(`bundle-budget: ${msg}`);
   process.exit(1);
 }
 
-const allFiles = fs.readdirSync(DIST).filter((f) => f.endsWith('.js'));
-const sizes = new Map();
-for (const f of allFiles) sizes.set(f, gzSize(path.join(DIST, f)));
+if (!fs.existsSync(MANIFEST)) {
+  die(`${MANIFEST} not found. Enable build.manifest in vite.config and run \`vite build\` first.`);
+}
+const manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
+
+// Chunks that must NEVER appear in the initial static closure — each is either a
+// heavy vendor lib or a per-surface stage that must stay behind a dynamic import.
+// A match here means a static import leaked it onto the critical path.
+const FORBIDDEN_IN_INITIAL = [
+  /vendor-three/,
+  /vendor-auth/,
+  /coding-turn/,
+  /coding-stage/,
+  /admission-/,
+  /review-stage/,
+  /chat-agent/,
+  /viz-modes/,
+];
+
+const BUDGETS = {
+  initialGz: 130 * 1024, // critical-path JS before interactivity
+  vendorThreeGz: 130 * 1024,
+  largestNonVendorGz: 50 * 1024,
+};
+
+const gzCache = new Map();
+function gzOf(file) {
+  if (gzCache.has(file)) return gzCache.get(file);
+  const p = path.join(DIST, file); // manifest .file is dist-relative ("assets/..")
+  const size = fs.existsSync(p) ? gzipSync(fs.readFileSync(p)).length : 0;
+  gzCache.set(file, size);
+  return size;
+}
+const kb = (n) => (n / 1024).toFixed(1);
+
+// The manifest is keyed by source/chunk id; each record has { file, imports?,
+// dynamicImports?, isEntry? }. `imports` are STATIC; `dynamicImports` are lazy.
+const entryKey = Object.keys(manifest).find((k) => manifest[k].isEntry);
+if (!entryKey) die('no isEntry chunk in manifest.');
+
+// Transitive STATIC closure (follows `imports`, never `dynamicImports`).
+function staticClosure(startKeys) {
+  const seen = new Set();
+  const stack = [...startKeys];
+  while (stack.length) {
+    const k = stack.pop();
+    if (seen.has(k) || !manifest[k]) continue;
+    seen.add(k);
+    for (const imp of manifest[k].imports ?? []) stack.push(imp);
+  }
+  return seen;
+}
+const filesOf = (keys) => [...new Set([...keys].map((k) => manifest[k]?.file).filter(Boolean))];
 
 let failed = false;
+const report = [];
 
-// Initial bundle: sum of matched files.
+// ── Initial critical-path closure ──────────────────────────────────────────
+const initialKeys = staticClosure([entryKey]);
+const initialFiles = filesOf(initialKeys);
+const initialGz = initialFiles.reduce((a, f) => a + gzOf(f), 0);
 {
-  const matched = allFiles.filter((f) => matchAny(f, BUDGETS.initial.files));
-  const total = matched.reduce((acc, f) => acc + sizes.get(f), 0);
-  const ok = total <= BUDGETS.initial.maxGz;
-  const line = `${ok ? 'OK ' : 'FAIL'} initial: ${(total / 1024).toFixed(1)} KB gz (budget ${(BUDGETS.initial.maxGz / 1024).toFixed(0)} KB) -> ${matched.join(', ')}`;
-  (ok ? console.log : console.error)(line);
+  const ok = initialGz <= BUDGETS.initialGz;
+  report.push(`${ok ? 'OK  ' : 'FAIL'} initial static closure: ${kb(initialGz)} KB gz over ${initialFiles.length} chunks (budget ${kb(BUDGETS.initialGz)} KB)`);
   if (!ok) failed = true;
 }
 
-// vendor-three on its own.
+// ── Leak guard: no heavy/lazy chunk may be in the initial static closure ────
 {
-  const matched = allFiles.filter((f) => matchAny(f, BUDGETS.vendorThree.files));
-  const total = matched.reduce((acc, f) => acc + sizes.get(f), 0);
-  const ok = total <= BUDGETS.vendorThree.maxGz;
-  const line = `${ok ? 'OK ' : 'FAIL'} vendor-three: ${(total / 1024).toFixed(1)} KB gz (budget ${(BUDGETS.vendorThree.maxGz / 1024).toFixed(0)} KB)`;
-  (ok ? console.log : console.error)(line);
-  if (!ok) failed = true;
-}
-
-// Largest non-vendor chunk.
-{
-  const candidates = allFiles.filter(
-    (f) =>
-      !BUDGETS.largestNonVendor.excludePrefixes.some((p) => f.startsWith(p)) &&
-      !BUDGETS.largestNonVendor.excludeNames.includes(f),
-  );
-  let worst = { name: '(none)', size: 0 };
-  for (const f of candidates) {
-    const s = sizes.get(f);
-    if (s > worst.size) worst = { name: f, size: s };
+  const leaks = initialFiles.filter((f) => FORBIDDEN_IN_INITIAL.some((re) => re.test(f)));
+  if (leaks.length) {
+    report.push(`FAIL initial closure leaks lazy/heavy chunks (must be dynamic-only): ${leaks.join(', ')}`);
+    failed = true;
+  } else {
+    report.push('OK   initial closure contains no forbidden heavy/lazy chunk');
   }
-  const ok = worst.size <= BUDGETS.largestNonVendor.maxGz;
-  const line = `${ok ? 'OK ' : 'FAIL'} largest-non-vendor: ${worst.name} ${(worst.size / 1024).toFixed(1)} KB gz (budget ${(BUDGETS.largestNonVendor.maxGz / 1024).toFixed(0)} KB)`;
-  (ok ? console.log : console.error)(line);
+}
+
+// ── Per-surface on-open closures (measured separately, report + three budget) ─
+// Every dynamic-import target anywhere in the graph, with the MARGINAL static
+// closure it drags in beyond what the initial path already loaded.
+const dynamicTargets = new Set();
+for (const k of Object.keys(manifest)) for (const d of manifest[k].dynamicImports ?? []) dynamicTargets.add(d);
+const onOpen = [];
+for (const t of dynamicTargets) {
+  const closure = staticClosure([t]);
+  const marginalFiles = filesOf(closure).filter((f) => !initialFiles.includes(f));
+  const gz = marginalFiles.reduce((a, f) => a + gzOf(f), 0);
+  onOpen.push({ file: manifest[t]?.file ?? t, gz, chunks: marginalFiles.length });
+}
+onOpen.sort((a, b) => b.gz - a.gz);
+report.push('');
+report.push('on-open closures (marginal gz beyond the initial path), largest first:');
+for (const o of onOpen.slice(0, 8)) report.push(`     ${kb(o.gz).padStart(8)} KB gz  ${o.file}  (+${o.chunks} chunks)`);
+
+// vendor-three ceiling (its own file, wherever it loads from).
+{
+  const three = Object.values(manifest).map((m) => m.file).find((f) => f && /vendor-three/.test(f));
+  const gz = three ? gzOf(three) : 0;
+  const ok = gz <= BUDGETS.vendorThreeGz;
+  report.push('');
+  report.push(`${ok ? 'OK  ' : 'FAIL'} vendor-three: ${kb(gz)} KB gz (budget ${kb(BUDGETS.vendorThreeGz)} KB)`);
   if (!ok) failed = true;
 }
 
+// ── Largest single non-vendor emitted chunk ─────────────────────────────────
+{
+  const allFiles = fs.readdirSync(ASSETS).filter((f) => f.endsWith('.js')).map((f) => `assets/${f}`);
+  let worst = { file: '(none)', gz: 0 };
+  for (const f of allFiles) {
+    if (/\/vendor-/.test(f) || initialFiles.includes(f)) continue;
+    const gz = gzOf(f);
+    if (gz > worst.gz) worst = { file: f, gz };
+  }
+  const ok = worst.gz <= BUDGETS.largestNonVendorGz;
+  report.push('');
+  report.push(`${ok ? 'OK  ' : 'FAIL'} largest non-vendor chunk: ${worst.file} ${kb(worst.gz)} KB gz (budget ${kb(BUDGETS.largestNonVendorGz)} KB)`);
+  if (!ok) failed = true;
+}
+
+console.log(report.join('\n'));
 if (failed) {
   console.error('\nbundle-budget: at least one budget exceeded.');
   process.exit(1);

@@ -61,6 +61,11 @@ export default defineConfig({
       : 'esnext',
     minify: !process.env.TAURI_ENV_DEBUG ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_ENV_DEBUG,
+    // Emit dist/.vite/manifest.json so bundle-budget can compute the entry's
+    // real transitive STATIC-import closure (the bytes the browser must load
+    // before interactivity) instead of guessing from filename globs. Dynamic
+    // imports are recorded separately, which is exactly the split we budget on.
+    manifest: true,
     // Vite's default is to emit `<link rel="modulepreload">` for every chunk
     // reachable from the entry — including dynamic-import targets. That
     // would defeat the whole point of code-splitting three.js / chat-agent
