@@ -23,7 +23,7 @@ export function PasswordStrengthPanel({ report }: { report: PasswordReport }) {
         </span>
       </div>
 
-      {report.breached && <BreachWarning />}
+      {report.commonlyUsed && <CommonPasswordWarning />}
 
       <RuleList rules={report.rules} />
     </div>
@@ -47,7 +47,7 @@ function Meter({ score }: { score: PasswordReport['score'] }) {
   );
 }
 
-function BreachWarning() {
+function CommonPasswordWarning() {
   return (
     <div
       className="flex items-start gap-2 px-2.5 py-2 rounded-md text-sm leading-snug onb-stagger"
@@ -60,10 +60,10 @@ function BreachWarning() {
       <ShieldAlert className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: 'var(--intent-danger-fg)' }} />
       <div className="flex flex-col gap-0.5">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          This password has appeared in known breaches.
+          This is one of the most commonly-used passwords.
         </span>
         <span style={{ color: 'var(--fg-muted)' }}>
-          Choose a different password — even if you use it elsewhere, attackers already have it.
+          It&apos;s trivial to guess — please pick something less predictable.
         </span>
       </div>
     </div>

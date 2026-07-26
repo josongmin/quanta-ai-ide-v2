@@ -9,7 +9,7 @@ import { GitLabMark, BitbucketMark } from './ProviderMarks';
 
 // Pre-connect: pick provider + redirect.
 export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
-  const [oauth, setOauth] = useState<null | 'github' | 'gitlab' | 'google'>(null);
+  const [oauth, setOauth] = useState<null | 'github' | 'gitlab' | 'bitbucket' | 'google'>(null);
 
   const providers: { id: 'github' | 'gitlab' | 'bitbucket'; label: string; icon: React.ReactNode; perm: string }[] = [
     { id: 'github',    label: 'GitHub',     icon: <GithubIcon className="w-4 h-4" />, perm: 'Read access · repos & members' },
@@ -62,7 +62,7 @@ export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
 
       <button
         type="button"
-        onClick={() => { setOauth(value.provider === 'bitbucket' ? 'gitlab' : value.provider); }}
+        onClick={() => { setOauth(value.provider); }}
         className="inline-flex items-center justify-center gap-1.5 h-10 rounded-md text-base font-semibold transition-colors"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
       >

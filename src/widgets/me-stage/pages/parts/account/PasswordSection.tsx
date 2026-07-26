@@ -14,7 +14,7 @@ export function PasswordSection() {
 
   const report = useMemo(() => evaluatePassword(next), [next]);
   const mismatch = confirm.length > 0 && next !== confirm;
-  const ready = report.score >= 3 && !report.breached && next === confirm && current.length > 0;
+  const ready = report.meetsPolicy && next === confirm && current.length > 0;
 
   const submit = () => {
     if (!ready) return;

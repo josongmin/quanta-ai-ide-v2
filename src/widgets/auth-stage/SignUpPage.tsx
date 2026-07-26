@@ -42,11 +42,12 @@ export default function SignUpPage() {
     ? 'Use a complete email like name@company.com'
     : undefined;
 
+  // Client-side gate is the advisory minimum bar (meetsPolicy). The backend is
+  // the final authority and may still reject on a real breach/policy check.
   const canSubmit =
     name.trim().length > 0
     && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-    && report.score >= 3
-    && !report.breached
+    && report.meetsPolicy
     && agreed;
 
   useEffect(() => {

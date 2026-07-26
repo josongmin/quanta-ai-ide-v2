@@ -45,7 +45,8 @@ export default function ResetPasswordPage() {
 
   const report = useMemo(() => evaluatePassword(pw), [pw]);
   const mismatch = confirm.length > 0 && pw !== confirm;
-  const ready = report.score >= 3 && !report.breached && pw === confirm && pw.length >= 12;
+  // Client-side minimum bar only — the backend has the final say on the reset.
+  const ready = report.meetsPolicy && pw === confirm;
 
   if (phase === 'token-invalid') {
     return (

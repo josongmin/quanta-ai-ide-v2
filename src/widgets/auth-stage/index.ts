@@ -1,7 +1,7 @@
 // Public surface of the auth-stage widget.
 //
-// Pages render the full auth flow. The form atoms (Field/Button/HRule/
-// OAuthGrid), the password-strength panel, the OAuth-return overlay, and
+// Pages render the full auth flow. The form atoms (Field/Button/HRule),
+// the password-strength panel, the OAuth-return overlay, and
 // the `evaluatePassword` helper are exported so sibling widgets that
 // share the auth visual language (onboarding wizards, account settings
 // pages with password changes) can compose them without reaching into
@@ -16,11 +16,13 @@ export { default as MfaChallengePage }   from './MfaChallengePage';
 export { default as SessionExpiredPage } from './SessionExpiredPage';
 export { default as AcceptInvitationPage } from './AcceptInvitationPage';
 
-export { Field, Button, HRule, OAuthGrid } from './parts/AuthForm';
+export { Field, Button, HRule } from './parts/AuthForm';
 export { PasswordStrengthPanel } from './parts/PasswordStrengthPanel';
 export { OAuthRedirectOverlay } from './parts/OAuthRedirectOverlay';
 export {
   evaluatePassword,
+  meetsClientPolicy,
+  isCommonPassword,
   type PasswordRule,
   type PasswordReport,
 } from './lib/passwordRules';

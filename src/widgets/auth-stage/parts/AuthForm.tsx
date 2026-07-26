@@ -1,6 +1,4 @@
 import { forwardRef, type ReactNode, type InputHTMLAttributes } from 'react';
-import { Mail, KeyRound } from 'lucide-react';
-import { GithubIcon } from '@shared/ui/brand-icons';
 import { Link } from '@tanstack/react-router';
 
 // Tight form primitives used across the auth pages. They all collapse to
@@ -122,33 +120,3 @@ export function HRule({ label = 'or' }: { label?: string }) {
   );
 }
 
-// OAuth provider row. Static visual demo — all clicks are no-ops.
-export function OAuthGrid() {
-  return (
-    <div className="flex flex-col gap-2">
-      <Button variant="secondary" leading={<GithubIcon className="w-3.5 h-3.5" />}>
-        Continue with GitHub
-      </Button>
-      <Button variant="secondary" leading={<GitLabMark />}>
-        Continue with GitLab
-      </Button>
-      <Button variant="secondary" leading={<Mail className="w-3.5 h-3.5" />}>
-        Continue with Google
-      </Button>
-      <Button variant="secondary" leading={<KeyRound className="w-3.5 h-3.5" />}>
-        Continue with SSO
-      </Button>
-    </div>
-  );
-}
-
-function GitLabMark() {
-  return (
-    <span
-      className="w-3.5 h-3.5 rounded-sm inline-flex items-center justify-center text-2xs font-black"
-      style={{ background: 'var(--fg-default)', color: 'var(--bg-canvas)' }}
-    >
-      GL
-    </span>
-  );
-}
