@@ -3,49 +3,23 @@ import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { useShallow } from 'zustand/react/shallow';
 import { ErrorBoundary, UiScopeProvider } from '@shared/ui';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
-import { resolveTabKindFromPath, type TabKind } from '@shared/config/workspaceTabs';
-import { useWorkspaceTabsRegistry, type TabKindDef } from '../model/RegistryContext';
+import { surfaceIdFromPath, getSurfaceMeta, legacyPathForSurface } from '@shared/config/surfaces';
+import { useSurfaceRuntime, type SurfaceRuntimeEntry } from '../model/RegistryContext';
 import { TabVisibilityProvider } from './TabVisibilityContext';
 import { reconcileMountedTabs } from '../model/lifecycle';
 
-// Cap on simultaneously-mounted tab panels. Each WebGL-bearing tab
-// (intelligence/explore) holds a renderer + scene graph + window
-// listeners + DOM label tree — without a cap, opening 15 tabs means 15
-// live WebGL contexts even with only one visible. We bound it via LRU:
-// the active tab is always mounted, and the least-recently-active
-// inactive tab is evicted (unmounted) when a new activation would push
-// us over the cap. An evicted tab re-mounts fresh next time it is
-// activated (zoom/pan/selection within the mode resets — acceptable
-// tradeoff for the memory ceiling). 6 chosen to comfortably cover a
-// typical 3-5 tab session with headroom.
+// Cap on simultaneously-mounted tab panels. Each WebGL-bearing surface holds a
+// renderer + scene graph + listeners; without a cap, many open tabs mean many
+// live contexts. Bounded via LRU: the active tab is always mounted, the
+// least-recently-active inactive tab is evicted when a new activation exceeds
+// the cap. An evicted tab re-mounts fresh next activation.
 const MAX_MOUNTED_TABS = 6;
 
-// Renders every *activated* tab as a sibling in the DOM, with only the
-// active tab visible. Inactive tabs stay mounted so per-tab state (scroll
-// position, uncommitted form input, locally-derived UI flags) survives a
-// switch — the same trick browser tab strips use.
-//
-// Mounted once in AppShell, above the route boundary. Self-hides on
-// non-tab paths (e.g. /me/profile) so the page underneath can paint
-// over it. Putting the host inside a route component would force a full
-// unmount/remount on every tab switch, which would tear down every
-// mounted tab panel and defeat the keep-mounted contract.
-//
-// Two further refinements:
-//
-//   1. Tabs are only rendered after their first activation. A fresh app
-//      boot with seven default tabs no longer downloads seven lazy
-//      chunks; only the active tab's chunk loads.
-//
-//   2. Every panel publishes its visibility via TabVisibilityContext so
-//      heavy descendants (WebGL rAF loops, polling intervals) can pause
-//      when hidden behind `display: none`.
+// Renders every activated tab as a sibling, painting only the active one.
+// Inactive tabs stay mounted so per-tab state survives a switch. Mounted once in
+// AppShell, above the route boundary; self-hides on non-surface paths.
 export default function WorkspaceTabsHost() {
-  const tabRegistry = useWorkspaceTabsRegistry();
-  // One shallow-equal subscription rather than two separate ones — the
-  // host always needs both fields together, so reading them in a single
-  // selector cuts per-update comparator work in half. The shallow
-  // wrapper bails out cleanly when nothing relevant has changed.
+  const surfaceRuntime = useSurfaceRuntime();
   const { tabs, activeId } = useWorkspaceTabsStore(
     useShallow((s) => ({ tabs: s.tabs, activeId: s.activeId })),
   );
@@ -63,19 +37,10 @@ export default function WorkspaceTabsHost() {
   }, [location.href]);
   useTabUrlSync(pathname, search);
 
-  // Whether the current URL is owned by a tab kind. On non-tab routes
-  // (e.g. /me/profile) we render nothing so the route's own page can
-  // paint into <main> instead. The tab list stays alive in the store
-  // and resumes painting the moment the user navigates back to a tab
-  // path.
-  const onTabPath = resolveTabKindFromPath(pathname) !== null;
+  // Whether the current URL is owned by a surface. On non-surface routes we
+  // render nothing so the route's own page paints into <main>.
+  const onSurfacePath = surfaceIdFromPath(pathname) !== null;
 
-  // LRU of currently-mounted tab ids (oldest → newest). The active tab
-  // is always at the back; eviction removes from the front when length
-  // exceeds MAX_MOUNTED_TABS. This replaces the unbounded "everActive"
-  // set: keep-mounted survives a tab switch, but doesn't survive being
-  // pushed out of the LRU. Bootstrapped with `activeId` so the first
-  // paint shows the initial active tab without an extra render pass.
   const [mountedOrder, setMountedOrder] = useState<string[]>(() => [activeId]);
   useEffect(() => useWorkspaceTabsStore.subscribe((state) => {
     const aliveIds = new Set(state.tabs.map((tab) => tab.id));
@@ -87,7 +52,7 @@ export default function WorkspaceTabsHost() {
 
   const mounted = useMemo(() => new Set(mountedOrder), [mountedOrder]);
 
-  if (!onTabPath) return null;
+  if (!onSurfacePath) return null;
 
   return (
     <div className="absolute inset-0">
@@ -98,7 +63,7 @@ export default function WorkspaceTabsHost() {
             key={tab.id}
             tab={tab}
             visible={tab.id === activeId}
-            tabRegistry={tabRegistry}
+            surfaceRuntime={surfaceRuntime}
           />
         );
       })}
@@ -106,53 +71,36 @@ export default function WorkspaceTabsHost() {
   );
 }
 
-// Memoised so a non-active tab doesn't re-render when sibling tabs come
-// or go. The component re-renders only when its own `tab` or `visible`
-// changes, which is exactly what we want for the keep-mounted pattern.
 const TabPanel = memo(function TabPanel({
   tab,
   visible,
-  tabRegistry,
+  surfaceRuntime,
 }: {
   tab: WorkspaceTab;
   visible: boolean;
-  tabRegistry: Record<TabKind, TabKindDef>;
+  surfaceRuntime: Readonly<Record<string, SurfaceRuntimeEntry>>;
 }) {
-  const def = tabRegistry[tab.kind];
-  const Component = def.Component;
+  const entry = surfaceRuntime[tab.surfaceId];
   const owner = useMemo(() => ({
-    ownerId: `workspace-tab:${tab.kind}`,
+    ownerId: `workspace-surface:${tab.surfaceId}`,
     scopeInstanceId: `tab:${tab.id}`,
     tabId: tab.id,
-  }), [tab.id, tab.kind]);
-  // A surface's optional Provider is folded into its lazy Component by the
-  // catalog derivation, so the host renders a single element.
-  const content = <Component />;
+  }), [tab.id, tab.surfaceId]);
+  const title = getSurfaceMeta(tab.surfaceId)?.title ?? tab.surfaceId;
 
-  // `display: none` keeps subtree state alive (state, layout effects,
-  // scroll containers) but stops paint and hit-testing. We also disable
-  // pointer events explicitly because some descendants set their own
-  // `pointer-events: auto` and would otherwise leak clicks.
   const style: CSSProperties = visible
     ? { position: 'absolute', inset: 0 }
-    : {
-        position: 'absolute',
-        inset: 0,
-        display: 'none',
-        pointerEvents: 'none',
-      };
+    : { position: 'absolute', inset: 0, display: 'none', pointerEvents: 'none' };
+
+  const Component = entry?.Component;
 
   return (
-    <div
-      role="tabpanel"
-      aria-hidden={!visible}
-      style={style}
-    >
-      <ErrorBoundary label={`Tab:${def.label}`}>
+    <div role="tabpanel" aria-hidden={!visible} style={style}>
+      <ErrorBoundary label={`Surface:${title}`}>
         <Suspense fallback={null}>
           <UiScopeProvider owner={owner} active={visible}>
             <TabVisibilityProvider visible={visible}>
-              {content}
+              {Component ? <Component /> : <div role="alert">Unknown surface: {tab.surfaceId}</div>}
             </TabVisibilityProvider>
           </UiScopeProvider>
         </Suspense>
@@ -161,59 +109,43 @@ const TabPanel = memo(function TabPanel({
   );
 });
 
-// URL → active-tab one-way sync. The store→URL leg is handled by the
-// strip's click handler so we don't ping-pong when the user navigates to
-// a non-tab path like `/me/profile`.
-//
-// We deliberately do NOT subscribe to `tabs` / `activeId` here. The
-// host's render already subscribes (it needs them to paint). Using
-// `getState()` from inside the effect lets the sync read the current
-// snapshot without adding another subscription that re-fires on store
-// churn.
+// URL → active-surface one-way sync.
 function useTabUrlSync(pathname: string, search: string) {
   useEffect(() => {
-    const kind = resolveTabKindFromPath(pathname);
-    if (!kind) return;
-    const { tabs, activeId, setActive, open } = useWorkspaceTabsStore.getState();
+    const surfaceId = surfaceIdFromPath(pathname);
+    if (!surfaceId) return;
+    const { tabs, activeId, setActive, openSurface } = useWorkspaceTabsStore.getState();
     const explicitTabId = new URLSearchParams(search).get('tab');
     if (explicitTabId) {
-      const exact = tabs.find((t) => t.id === explicitTabId && t.kind === kind);
+      const exact = tabs.find((t) => t.id === explicitTabId && t.surfaceId === surfaceId);
       if (exact) {
         if (activeId !== exact.id) setActive(exact.id);
         return;
       }
     }
     const active = tabs.find((t) => t.id === activeId);
-    if (active?.kind === kind) return;
-    // Prefer focusing an existing tab of that kind over opening a new
-    // one — direct URL navigation should feel like "jump to that view",
-    // not "spawn another instance".
-    const existing = tabs.find((t) => t.kind === kind);
+    if (active?.surfaceId === surfaceId) return;
+    const existing = tabs.find((t) => t.surfaceId === surfaceId);
     if (existing) setActive(existing.id);
-    else open(kind);
+    else openSurface(surfaceId);
   }, [pathname, search]);
 }
 
-// Navigation hook used by the strip when the user clicks a tab. Pushes
-// the canonical path for the activated kind so deep links and back/
-// forward stay coherent. Wrapped in useCallback so consumers that pass
-// it into useMemo/useCallback dependency arrays get a stable identity.
+// Navigation hook used by the strip when the user clicks a tab. Pushes the
+// legacy ingress path for the surface (deep links stay coherent); canonical
+// `/w/...` is the forward-looking form.
 export function useNavigateToTab() {
   const navigate = useNavigate();
-  const tabRegistry = useWorkspaceTabsRegistry();
   return useCallback(
-    (kind: TabKind, tabId?: string) => {
-      const path = tabRegistry[kind].path;
-      // `replace: true` keeps tab switches off the browser history
-      // stack. Linear behaves the same way: back/forward moves between
-      // sessions, not between tabs.
+    (surfaceId: string, tabId?: string) => {
+      const path = legacyPathForSurface(surfaceId) ?? `/w/default/${surfaceId}`;
       void navigate({
         to: path,
         replace: true,
         search: (previous) => ({ ...previous, tab: tabId }),
       });
     },
-    [navigate, tabRegistry],
+    [navigate],
   );
 }
 

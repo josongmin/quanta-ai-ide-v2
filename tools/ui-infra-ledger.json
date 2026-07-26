@@ -119,13 +119,7 @@
     "workbenchReactImport": {},
     "crossFamilyImport": {},
     "deepImport": {},
-    "centralSurfaceSwitch": {
-      "src/app/router/workspaceTabsRegistry.tsx": 2,
-      "src/features/workspace-tabs/model/RegistryContext.tsx": 3,
-      "src/features/workspace-tabs/ui/WorkspaceTabsHost.tsx": 1
-    },
-    "arbitraryProvider": {
-      "src/features/workspace-tabs/model/RegistryContext.tsx": 1
-    }
+    "centralSurfaceSwitch": {},
+    "arbitraryProvider": {}
   }
 }

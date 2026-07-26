@@ -1,36 +1,34 @@
 import { createContext, useContext, type ComponentType, type ReactNode } from 'react';
 import type { LucideProps } from 'lucide-react';
-import type { TabKind, TabMeta } from '@shared/config/workspaceTabs';
 
-export type TabKindDef = TabMeta & {
-  icon: ComponentType<LucideProps>;
+// Surface runtime injection (P0-3/P1). The app layer composes the surface
+// catalog (view + icon) and injects it here keyed on `surfaceId`. Features read
+// it without importing widget code and without a closed `TabKind` switch.
+export type SurfaceRuntimeEntry = {
   Component: ComponentType;
+  icon: ComponentType<LucideProps>;
 };
 
-const RegistryContext = createContext<Record<TabKind, TabKindDef> | null>(null);
+const SurfaceRuntimeContext = createContext<Readonly<Record<string, SurfaceRuntimeEntry>> | null>(null);
 
-export function WorkspaceTabsRegistryProvider({
+export function SurfaceRuntimeProvider({
   registry,
   children,
 }: {
-  registry: Record<TabKind, TabKindDef>;
+  registry: Readonly<Record<string, SurfaceRuntimeEntry>>;
   children: ReactNode;
 }) {
-  return (
-    <RegistryContext.Provider value={registry}>
-      {children}
-    </RegistryContext.Provider>
-  );
+  return <SurfaceRuntimeContext.Provider value={registry}>{children}</SurfaceRuntimeContext.Provider>;
 }
 
-export function useWorkspaceTabsRegistry(): Record<TabKind, TabKindDef> {
-  const registry = useContext(RegistryContext);
+export function useSurfaceRuntime(): Readonly<Record<string, SurfaceRuntimeEntry>> {
+  const registry = useContext(SurfaceRuntimeContext);
   if (!registry) {
-    throw new Error('WorkspaceTabsRegistryProvider is missing above this subtree');
+    throw new Error('SurfaceRuntimeProvider is missing above this subtree');
   }
   return registry;
 }
 
-export function useTabKindDef(kind: TabKind): TabKindDef {
-  return useWorkspaceTabsRegistry()[kind];
+export function useSurfaceEntry(surfaceId: string): SurfaceRuntimeEntry | undefined {
+  return useSurfaceRuntime()[surfaceId];
 }

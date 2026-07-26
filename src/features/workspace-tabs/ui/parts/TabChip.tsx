@@ -1,8 +1,8 @@
 import { forwardRef, useState, type CSSProperties, type DragEvent } from 'react';
-import { Pin, X } from 'lucide-react';
+import { Box, Pin, X } from 'lucide-react';
 import { useTheme } from '@shared/theme';
 import type { WorkspaceTab } from '../../model/store';
-import { useWorkspaceTabsRegistry } from '../../model/RegistryContext';
+import { useSurfaceEntry } from '../../model/RegistryContext';
 import { CLOSE_WIDTH_THRESHOLD, type TabDensity } from './types';
 
 type TabChipProps = {
@@ -50,8 +50,7 @@ export const TabChip = forwardRef<HTMLDivElement, TabChipProps>(function TabChip
   onMoveFocus,
   onMoveEdge,
 }, ref) {
-  const tabRegistry = useWorkspaceTabsRegistry();
-  const Icon = tabRegistry[tab.kind].icon;
+  const Icon = useSurfaceEntry(tab.surfaceId)?.icon ?? Box;
   const { isDark } = useTheme();
   const [dropSide, setDropSide] = useState<'left' | 'right' | null>(null);
   const resolvedWidth = width;

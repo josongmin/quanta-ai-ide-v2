@@ -1,11 +1,11 @@
 import { beforeEach, describe, it, expect } from 'vitest';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../store';
-import { DEFAULT_TAB_KINDS } from '@shared/config/workspaceTabs';
+import { DEFAULT_SURFACE_IDS } from '@shared/config/surfaces';
 
 // The workspace-tabs store is the browser-style tab strip: open/close/focus/
 // pin/reorder with a last-tab guard and a persist layer whose `merge` fn
-// sanitises out-of-date persisted shapes. Ids/timestamps come from Date.now()
-// + Math.random(), so we assert on structure/relationships and tab.kind,
+// sanitises out-of-date persisted shapes. Runtime-generated ids/timestamps are
+// intentionally opaque, so we assert on structure/relationships and tab.kind,
 // never on exact id or lastFocusedAt values.
 
 const s = () => useWorkspaceTabsStore.getState();
@@ -13,10 +13,11 @@ const s = () => useWorkspaceTabsStore.getState();
 // Build a deterministic, known-good tab list to seed state for the
 // close/focus/pin cases (avoids depending on Date.now() collisions between
 // two defaultTab() calls in the same tick).
-function seedTabs(kinds: WorkspaceTab['kind'][]): void {
+// Accepts legacy kind shorthands and seeds canonical surfaceIds (`core.<kind>`).
+function seedTabs(kinds: string[]): void {
   const tabs: WorkspaceTab[] = kinds.map((kind, i) => ({
     id: `seed-${i}`,
-    kind,
+    surfaceId: `core.${kind}`,
     dirty: false,
     pinned: false,
     lastFocusedAt: undefined,
@@ -26,8 +27,8 @@ function seedTabs(kinds: WorkspaceTab['kind'][]): void {
 
 beforeEach(() => {
   // Restore a clean default-tab slice. setAll enforces the same invariants
-  // the store guarantees at runtime (non-empty, valid kinds).
-  seedTabs([...DEFAULT_TAB_KINDS]);
+  // the store guarantees at runtime (non-empty, valid surface ids).
+  seedTabs(DEFAULT_SURFACE_IDS.map((id) => id.replace('core.', '')));
 });
 
 describe('workspace-tabs store — close', () => {
@@ -40,7 +41,7 @@ describe('workspace-tabs store — close', () => {
     expect(s().tabs).toHaveLength(1);
     // A brand-new tab, not the one we closed.
     expect(s().tabs[0].id).not.toBe(onlyId);
-    expect(s().tabs[0].kind).toBe('intelligence');
+    expect(s().tabs[0].surfaceId).toBe('core.intelligence');
     expect(s().activeId).toBe(s().tabs[0].id);
   });
 

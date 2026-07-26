@@ -1,7 +1,5 @@
-import type { TabKind } from '@shared/config/workspaceTabs';
-
-// Hero tiles — the three entry points the start page leads with.
-export const HERO_KINDS: TabKind[] = ['agents', 'coding', 'reviews'];
+// Hero tiles — the three entry points the start page leads with (surfaceIds).
+export const HERO_SURFACE_IDS: string[] = ['core.agents', 'core.coding', 'core.reviews'];
 
 export type RecentRepo = {
   slug: string;
@@ -63,16 +61,16 @@ export const RECENT_REPOS: RecentRepo[] = [
   },
 ];
 
-export const HERO_COPY: Partial<Record<TabKind, { title: string; sub: string }>> = {
-  agents: {
+export const HERO_COPY: Readonly<Record<string, { title: string; sub: string }>> = {
+  'core.agents': {
     title: 'AI Coding Agent',
     sub: 'Start a coding session with full engine context.',
   },
-  coding: {
+  'core.coding': {
     title: 'Code Editor',
     sub: 'Workspace editor with engine signals and overlays.',
   },
-  reviews: {
+  'core.reviews': {
     title: 'PR Review',
     sub: 'Review pull requests with auto-fix and blast radius.',
   },

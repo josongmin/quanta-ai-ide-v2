@@ -4,17 +4,12 @@ import {
   createJSONStorage,
   type StateStorage,
 } from 'zustand/middleware';
-import { DEFAULT_TAB_KINDS, isTabKind, TAB_KINDS_ORDERED, type TabKind } from '@shared/config/workspaceTabs';
 import { STORAGE_KEYS, systemRuntimeEnv } from '@shared/lib';
+import { DEFAULT_SURFACE_IDS, SURFACE_IDS_ORDERED, isKnownSurface } from '@shared/config/surfaces';
 import { migrateTabs, TAB_STATE_VERSION } from './migrateTabs';
 
-// Canonical surface id ↔ legacy tab kind. The store carries both during the
-// migration window: `surfaceId` is the canonical identity, `kind` is retained as
-// a migration-only alias for legacy consumers.
-function surfaceIdForKind(kind: TabKind): string {
-  return `core.${kind}`;
-}
-const KNOWN_SURFACE_IDS = new Set(TAB_KINDS_ORDERED.map((k) => `core.${k}`));
+const KNOWN_SURFACE_IDS = new Set(SURFACE_IDS_ORDERED);
+const DEFAULT_SURFACE_ID = 'core.intelligence';
 
 // Throttle window for localStorage writes. Tab activations cluster (e.g.
 // the user cycles through tabs with Cmd+Alt+Arrow) — without throttling,
@@ -113,17 +108,13 @@ function throttledLocalStorage(throttleMs: number): StateStorage {
   };
 }
 
-// One open tab. `id` is per-instance (a single workspace can hold two
-// "coding" tabs, each with its own id). `kind` keys into the registry
-// for label/icon/component.
+// One open tab. `id` is per-instance (a single workspace can hold two coding
+// tabs, each with its own id). `surfaceId` is the sole identity — it keys the
+// catalog for title/icon/view. There is no `kind`.
 export type WorkspaceTab = {
   id: string;
-  kind: TabKind;
-  // Canonical surface identity (`core.<kind>`); optional during the migration
-  // window so legacy-seeded records still typecheck.
-  surfaceId?: string;
-  // Optional user label ("Investigate auth", "Inbox triage"). Falls back to
-  // the registry label when absent so duplicate kinds can still be opened.
+  surfaceId: string;
+  // Optional user label. Falls back to the surface title when absent.
   label?: string;
   dirty?: boolean;
   pinned?: boolean;
@@ -137,7 +128,7 @@ type State = {
 
 type Actions = {
   setActive: (id: string) => void;
-  open: (kind: TabKind, opts?: { activate?: boolean }) => string;
+  openSurface: (surfaceId: string, opts?: { activate?: boolean }) => string;
   close: (id: string) => void;
   reorder: (id: string, toIndex: number) => void;
   focusRelative: (delta: number) => void;
@@ -160,11 +151,10 @@ function touchTab(tab: WorkspaceTab, now: number): WorkspaceTab {
   return { ...tab, lastFocusedAt: now };
 }
 
-function defaultTab(kind: TabKind, active = false): WorkspaceTab {
+function defaultTab(surfaceId: string, active = false): WorkspaceTab {
   return {
     id: makeId(),
-    kind,
-    surfaceId: surfaceIdForKind(kind),
+    surfaceId,
     dirty: false,
     pinned: false,
     lastFocusedAt: active ? systemRuntimeEnv.now() : undefined,
@@ -172,14 +162,13 @@ function defaultTab(kind: TabKind, active = false): WorkspaceTab {
 }
 
 function defaultTabs(): WorkspaceTab[] {
-  return DEFAULT_TAB_KINDS.map((kind, index) => defaultTab(kind, index === 0));
+  return DEFAULT_SURFACE_IDS.map((surfaceId, index) => defaultTab(surfaceId, index === 0));
 }
 
 function sanitizeTab(raw: WorkspaceTab): WorkspaceTab {
   return {
     id: raw.id,
-    kind: raw.kind,
-    surfaceId: typeof raw.surfaceId === 'string' ? raw.surfaceId : surfaceIdForKind(raw.kind),
+    surfaceId: raw.surfaceId,
     label: typeof raw.label === 'string' && raw.label.trim() ? raw.label : undefined,
     dirty: Boolean(raw.dirty),
     pinned: Boolean(raw.pinned),
@@ -228,12 +217,12 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
           });
         },
 
-        open: (kind, opts) => {
-          // Linear-style: every "open" creates a fresh instance even if the
-          // same kind is already open. The picker exposes both "open new"
-          // and "focus existing" as distinct actions when needed.
+        openSurface: (surfaceId, opts) => {
+          // Linear-style: every open creates a fresh instance even if the same
+          // surface is already open. The picker exposes both "open new" and
+          // "focus existing" as distinct actions when needed.
           const activate = opts?.activate !== false;
-          const tab = defaultTab(kind, activate);
+          const tab = defaultTab(surfaceId, activate);
           set((s) => ({
             tabs: [...s.tabs, tab],
             activeId: activate ? tab.id : s.activeId,
@@ -246,7 +235,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
             // Last-tab guard — closing the only tab would strand the user.
             // Linear/Notion both replace the closed tab with a new default.
             if (s.tabs.length === 1) {
-              const fresh = defaultTab('intelligence', true);
+              const fresh = defaultTab(DEFAULT_SURFACE_ID, true);
               return { tabs: [fresh], activeId: fresh.id };
             }
             const idx = s.tabs.findIndex((t) => t.id === id);
@@ -324,7 +313,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
         setAll: (tabs, activeId) => {
           if (tabs.length === 0) return;
           const sanitized = tabs
-            .filter((t) => isTabKind(t.kind))
+            .filter((t) => isKnownSurface(t.surfaceId))
             .map((t) => sanitizeTab(t));
           if (sanitized.length === 0) return;
           const ensuredActive =
@@ -352,7 +341,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
         // after a kind rename) so the UI doesn't render nothing for them.
         const tabs = p.tabs
           .filter((t): t is WorkspaceTab =>
-            t != null && typeof t.id === 'string' && typeof t.kind === 'string' && isTabKind(t.kind),
+            t != null && typeof t.id === 'string' && typeof t.surfaceId === 'string' && isKnownSurface(t.surfaceId),
           )
           .map((t) => sanitizeTab(t));
         if (tabs.length === 0) return current;
@@ -370,7 +359,6 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
         const result = migrateTabs(persisted, KNOWN_SURFACE_IDS);
         const tabs: WorkspaceTab[] = result.tabs.map((t) => ({
           id: t.id,
-          kind: t.surfaceId.replace(/^core\./, '') as TabKind,
           surfaceId: t.surfaceId,
           label: t.label,
           pinned: t.pinned,

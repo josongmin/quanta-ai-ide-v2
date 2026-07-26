@@ -3,9 +3,8 @@ import { ArrowRight, Search } from 'lucide-react';
 import { Modal } from '@shared/ui';
 import { useWorkspaceTabsStore } from '../model/store';
 import { useNavigateToTab } from './WorkspaceTabsHost';
-import { TAB_KINDS_ORDERED, type TabKind } from '@shared/config/workspaceTabs';
-import { useWorkspaceTabsRegistry } from '../model/RegistryContext';
-import { HERO_KINDS, RECENT_REPOS } from './parts/addTabData';
+import { SURFACE_IDS_ORDERED, getSurfaceMeta } from '@shared/config/surfaces';
+import { HERO_SURFACE_IDS, RECENT_REPOS } from './parts/addTabData';
 import { HeroTile } from './parts/HeroTile';
 import { RepoRow } from './parts/RepoRow';
 
@@ -18,13 +17,12 @@ type Props = {
 // then a "more capabilities" row, then a recent repos list. Compact: all
 // three sections live inside one ~720px dialog.
 export default function AddTabModal({ open, onClose }: Props) {
-  const tabRegistry = useWorkspaceTabsRegistry();
-  const openTab = useWorkspaceTabsStore((s) => s.open);
+  const openSurface = useWorkspaceTabsStore((s) => s.openSurface);
   const navigateToTab = useNavigateToTab();
   const [query, setQuery] = useState('');
 
-  const moreKinds = useMemo(
-    () => TAB_KINDS_ORDERED.filter((k) => !HERO_KINDS.includes(k)),
+  const moreSurfaceIds = useMemo(
+    () => SURFACE_IDS_ORDERED.filter((id) => !HERO_SURFACE_IDS.includes(id)),
     [],
   );
 
@@ -41,9 +39,9 @@ export default function AddTabModal({ open, onClose }: Props) {
     onClose();
   }
 
-  function handlePick(kind: TabKind) {
-    const id = openTab(kind);
-    navigateToTab(kind, id);
+  function handlePick(surfaceId: string) {
+    const id = openSurface(surfaceId);
+    navigateToTab(surfaceId, id);
     handleClose();
   }
 
@@ -86,8 +84,8 @@ export default function AddTabModal({ open, onClose }: Props) {
 
         {/* Hero tiles */}
         <div className="grid grid-cols-3 gap-2.5 px-6 pb-5">
-          {HERO_KINDS.map((kind) => (
-            <HeroTile key={kind} kind={kind} onPick={handlePick} tabRegistry={tabRegistry} />
+          {HERO_SURFACE_IDS.map((surfaceId) => (
+            <HeroTile key={surfaceId} surfaceId={surfaceId} onPick={handlePick} />
           ))}
         </div>
 
@@ -103,24 +101,21 @@ export default function AddTabModal({ open, onClose }: Props) {
             More
           </div>
           <div className="flex-1 flex flex-wrap gap-x-4 gap-y-1.5">
-            {moreKinds.map((kind) => {
-              const def = tabRegistry[kind];
-              return (
-                <button
-                  key={kind}
-                  type="button"
-                  onClick={() => { handlePick(kind); }}
-                  className="text-sm font-medium transition-colors hover:[color:var(--fg-default)]"
-                  style={{ color: 'var(--fg-muted)' }}
-                >
-                  {def.label}
-                </button>
-              );
-            })}
+            {moreSurfaceIds.map((surfaceId) => (
+              <button
+                key={surfaceId}
+                type="button"
+                onClick={() => { handlePick(surfaceId); }}
+                className="text-sm font-medium transition-colors hover:[color:var(--fg-default)]"
+                style={{ color: 'var(--fg-muted)' }}
+              >
+                {getSurfaceMeta(surfaceId)?.title ?? surfaceId}
+              </button>
+            ))}
           </div>
           <button
             type="button"
-            onClick={() => { handlePick('catalog'); }}
+            onClick={() => { handlePick('core.catalog'); }}
             className="inline-flex items-center gap-1.5 text-2xs font-semibold uppercase px-2 py-1 rounded transition-colors hover:[background:var(--bg-hover)] shrink-0"
             style={{
               color: 'var(--fg-default)',

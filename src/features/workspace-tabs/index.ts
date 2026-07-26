@@ -1,24 +1,24 @@
-// Public surface of the workspace-tabs feature. App composes the tab
-// registry at the app layer and mounts WorkspaceTabsRegistryProvider.
+// Public surface of the workspace-tabs feature. The app layer composes the
+// surface catalog (view + icon) and injects it via SurfaceRuntimeProvider,
+// keyed on surfaceId — no closed TabKind registry.
 
 export { useWorkspaceTabsStore, useActiveTab, type WorkspaceTab } from './model/store';
 export {
-  WorkspaceTabsRegistryProvider,
-  useWorkspaceTabsRegistry,
-  useTabKindDef,
-  type TabKindDef,
+  SurfaceRuntimeProvider,
+  useSurfaceRuntime,
+  useSurfaceEntry,
+  type SurfaceRuntimeEntry,
 } from './model/RegistryContext';
 export {
-  DEFAULT_TAB_KINDS,
-  TAB_KINDS_ORDERED,
-  resolveTabKindFromPath,
-  getKindsByGroup,
-  getTabMeta,
-  isTabKind,
-  type TabKind,
-  type TabKindGroup,
-  type TabMeta,
-} from '@shared/config/workspaceTabs';
+  DEFAULT_SURFACE_IDS,
+  SURFACE_IDS_ORDERED,
+  surfaceIdFromPath,
+  surfaceIdsByGroup,
+  getSurfaceMeta,
+  isKnownSurface,
+  type SurfaceMeta,
+  type SurfaceGroup,
+} from '@shared/config/surfaces';
 
 export { default as WorkspaceTabsStrip } from './ui/WorkspaceTabsStrip';
 export { default as WorkspaceTabsHost } from './ui/WorkspaceTabsHost';

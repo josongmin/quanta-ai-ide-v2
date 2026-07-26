@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { getTabMeta } from '@shared/config/workspaceTabs';
+import { getSurfaceMeta } from '@shared/config/surfaces';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
 import { useNavigateToTab } from './WorkspaceTabsHost';
 import AddTabModal from './AddTabModal';
@@ -81,7 +81,7 @@ export default function WorkspaceTabsStrip() {
   const activate = useCallback((tab: WorkspaceTab, behavior: ScrollBehavior = 'smooth') => {
     setActive(tab.id);
     setFocusId(tab.id);
-    navigateToTab(tab.kind, tab.id);
+    navigateToTab(tab.surfaceId, tab.id);
     requestAnimationFrame(() => {
       itemRefs.current[tab.id]?.focus();
       scrollTabIntoView(tab.id, behavior);
@@ -280,7 +280,7 @@ export default function WorkspaceTabsStrip() {
                 key={tab.id}
                 ref={(el) => { itemRefs.current[tab.id] = el; }}
                 tab={tab}
-                label={labelMap.get(tab.id) ?? getTabMeta(tab.kind).label}
+                label={labelMap.get(tab.id) ?? getSurfaceMeta(tab.surfaceId)?.title ?? tab.surfaceId}
                 index={i}
                 active={tab.id === activeId}
                 focused={tab.id === focusId}

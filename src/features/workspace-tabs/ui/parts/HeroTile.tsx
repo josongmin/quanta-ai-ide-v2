@@ -1,23 +1,20 @@
 import { FolderClosed } from 'lucide-react';
-import type { TabKind } from '@shared/config/workspaceTabs';
-import type { useWorkspaceTabsRegistry } from '../../model/RegistryContext';
+import { getSurfaceMeta } from '@shared/config/surfaces';
 import { HERO_COPY } from './addTabData';
 
 export function HeroTile({
-  kind,
+  surfaceId,
   onPick,
-  tabRegistry,
 }: {
-  kind: TabKind;
-  onPick: (k: TabKind) => void;
-  tabRegistry: ReturnType<typeof useWorkspaceTabsRegistry>;
+  surfaceId: string;
+  onPick: (surfaceId: string) => void;
 }) {
-  const def = tabRegistry[kind];
-  const copy = HERO_COPY[kind] ?? { title: def.label, sub: def.description };
+  const meta = getSurfaceMeta(surfaceId);
+  const copy = HERO_COPY[surfaceId] ?? { title: meta?.title ?? surfaceId, sub: '' };
   return (
     <button
       type="button"
-      onClick={() => { onPick(kind); }}
+      onClick={() => { onPick(surfaceId); }}
       className="text-left rounded-lg p-3 transition-colors hover:[background:var(--bg-hover)]"
       style={{
         background: 'var(--bg-surface)',

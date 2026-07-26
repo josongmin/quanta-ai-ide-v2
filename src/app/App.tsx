@@ -1,9 +1,9 @@
 import { RouterProvider } from '@tanstack/react-router';
-import { WorkspaceTabsRegistryProvider } from '@features/workspace-tabs';
+import { SurfaceRuntimeProvider } from '@features/workspace-tabs';
 import { AppProviders } from './providers';
 import { AuthInit } from './providers/AuthInit';
 import { router } from './router/router';
-import { TAB_REGISTRY } from './router/workspaceTabsRegistry';
+import { SURFACE_RUNTIME } from './router/surfaceRuntime';
 
 // Top-level entry. The router is the *content* — it owns the AppShell
 // chrome via its root route — while AppProviders wraps everything that
@@ -14,9 +14,9 @@ export default function App() {
   return (
     <AppProviders>
       <AuthInit />
-      <WorkspaceTabsRegistryProvider registry={TAB_REGISTRY}>
+      <SurfaceRuntimeProvider registry={SURFACE_RUNTIME}>
         <RouterProvider router={router} />
-      </WorkspaceTabsRegistryProvider>
+      </SurfaceRuntimeProvider>
     </AppProviders>
   );
 }
