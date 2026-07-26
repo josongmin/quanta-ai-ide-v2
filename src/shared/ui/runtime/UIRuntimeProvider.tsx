@@ -12,6 +12,7 @@ import {
 import { DialogService, type DialogSnapshot } from './DialogService';
 import { LayerManager } from './LayerManager';
 import { useOptionalWorkbench } from '@shared/workbench/react';
+import type { ScopeIdentity } from '@shared/workbench';
 import type { DialogCloseReason, UiOwnerRef } from './types';
 
 // The command/keybinding authority is the workbench (P1-6) — the UI runtime owns
@@ -85,7 +86,12 @@ export function UIRuntimeProvider({ children, runtime: suppliedRuntime }: { chil
   );
 }
 
-export function UiScopeProvider({
+// A per-surface UI scope whose DISPOSE truth is the workbench ScopeNode (P1-7).
+// The dialog/layer owner cleanup is registered as a disposable on a child
+// ScopeNode, so surface teardown flows through the single kernel scope tree — no
+// parallel active/dispose tree. Without a WorkbenchRoot (isolated shared-UI
+// tests) it falls back to direct owner cleanup.
+export function SurfaceScope({
   owner,
   active,
   commandPriority = 100,
@@ -97,6 +103,7 @@ export function UiScopeProvider({
   children: ReactNode;
 }) {
   const runtime = useUIRuntime();
+  const workbench = useOptionalWorkbench();
   const activeRef = useRef(active);
   const scope = useMemo<UiScope>(() => ({ owner, activeRef, commandPriority }), [owner, commandPriority]);
 
@@ -104,10 +111,25 @@ export function UiScopeProvider({
     activeRef.current = active;
   }, [active]);
 
-  useEffect(() => () => {
-    runtime.layers.disposeOwner(owner);
-    runtime.dialogs.disposeOwner(owner);
-  }, [owner, runtime]);
+  useEffect(() => {
+    const cleanup = (): void => {
+      runtime.layers.disposeOwner(owner);
+      runtime.dialogs.disposeOwner(owner);
+    };
+    if (!workbench) return cleanup; // no workbench (standalone tests) → direct cleanup
+    const identity: ScopeIdentity = {
+      id: owner.scopeInstanceId,
+      kind: 'surface',
+      owner: { owner: owner.ownerId, trust: 'core' },
+    };
+    const created = workbench.appScope.createChild(identity);
+    if (!created.ok) return cleanup;
+    const node = created.value;
+    node.registerDisposable(cleanup);
+    return () => {
+      node.dispose();
+    };
+  }, [owner, runtime, workbench]);
 
   return <ScopeContext.Provider value={scope}>{children}</ScopeContext.Provider>;
 }

@@ -1,7 +1,7 @@
 import { Suspense, memo, useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { useShallow } from 'zustand/react/shallow';
-import { ErrorBoundary, UiScopeProvider } from '@shared/ui';
+import { ErrorBoundary, SurfaceScope } from '@shared/ui';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
 import { surfaceIdFromPath, getSurfaceMeta, legacyPathForSurface } from '@shared/config/surfaces';
 import { useSurfaceRuntime, type SurfaceRuntimeEntry } from '../model/RegistryContext';
@@ -98,11 +98,11 @@ const TabPanel = memo(function TabPanel({
     <div role="tabpanel" aria-hidden={!visible} style={style}>
       <ErrorBoundary label={`Surface:${title}`}>
         <Suspense fallback={null}>
-          <UiScopeProvider owner={owner} active={visible}>
+          <SurfaceScope owner={owner} active={visible}>
             <TabVisibilityProvider visible={visible}>
               {Component ? <Component /> : <div role="alert">Unknown surface: {tab.surfaceId}</div>}
             </TabVisibilityProvider>
-          </UiScopeProvider>
+          </SurfaceScope>
         </Suspense>
       </ErrorBoundary>
     </div>

@@ -2,7 +2,7 @@ export { DialogService, type DialogSnapshot } from './DialogService';
 export { LayerManager, type LayerHandle, type LayerRegistration } from './LayerManager';
 export {
   UIRuntimeProvider,
-  UiScopeProvider,
+  SurfaceScope,
   createUIRuntime,
   useDialogController,
   useUIRuntime,

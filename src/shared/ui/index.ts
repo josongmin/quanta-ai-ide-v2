@@ -57,7 +57,7 @@ export { RouteFallback } from './RouteFallback';
 // ── UI runtime ──
 export {
   UIRuntimeProvider,
-  UiScopeProvider,
+  SurfaceScope,
   createUIRuntime,
   useDialogController,
   useUIRuntime,
