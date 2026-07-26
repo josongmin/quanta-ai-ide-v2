@@ -3,6 +3,8 @@ import { buildSurfaceCatalog, type SurfaceManifest, type SurfaceActivator } from
 
 const manifest = (id: string, over: Partial<SurfaceManifest> = {}): SurfaceManifest => ({
   id,
+  owner: 'core',
+  trust: 'core',
   title: id,
   group: 'core.main',
   icon: 'Box',

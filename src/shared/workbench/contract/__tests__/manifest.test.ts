@@ -10,7 +10,7 @@ function baseManifest(overrides: Record<string, unknown> = {}): Record<string, u
     trust: 'trusted',
     contributions: {
       groups: [{ id: 'acme.group', title: 'Group' }],
-      surfaces: [{ id: 'acme.surface', title: 'Surface', group: 'acme.group', contextKinds: [] }],
+      surfaces: [{ id: 'acme.surface', title: 'Surface', group: 'acme.group', owner: 'acme', trust: 'trusted', icon: 'Box', contextKinds: [] }],
     },
     ...overrides,
   };
@@ -65,7 +65,7 @@ describe('validateManifestSet', () => {
   });
 
   it('rejects a dangling group reference (missing-reference)', () => {
-    const m = parse(baseManifest({ contributions: { surfaces: [{ id: 'acme.s', title: 'S', group: 'acme.ghost', contextKinds: [] }] } }));
+    const m = parse(baseManifest({ contributions: { surfaces: [{ id: 'acme.s', title: 'S', group: 'acme.ghost', owner: 'acme', trust: 'trusted', icon: 'Box', contextKinds: [] }] } }));
     const r = validateManifestSet([m]);
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors.some((e) => e.reason === 'missing-reference')).toBe(true);
@@ -92,7 +92,7 @@ describe('validateManifestSet', () => {
   });
 
   it('is order-independent (same verdict regardless of manifest order)', () => {
-    const a = parse(baseManifest({ id: 'acme.a', contributions: { surfaces: [{ id: 'acme.sa', title: 'A', group: 'zzz.g', contextKinds: [] }] } }));
+    const a = parse(baseManifest({ id: 'acme.a', contributions: { surfaces: [{ id: 'acme.sa', title: 'A', group: 'zzz.g', owner: 'acme', trust: 'trusted', icon: 'Box', contextKinds: [] }] } }));
     const b = parse(baseManifest({ id: 'zzz.b', contributions: { groups: [{ id: 'zzz.g', title: 'G' }] } }));
     const forward = validateManifestSet([a, b]);
     const backward = validateManifestSet([b, a]);

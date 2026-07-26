@@ -86,10 +86,11 @@ export function WorkspaceSurface({
   const state = resolveSurfaceRoute(catalog, admit, workspaceId, surfaceId);
   if (state.status !== 'ok') return <SurfaceErrorView state={state} />;
 
+  // owner/trust come from the descriptor — never parsed from the id string.
   const identity: ScopeIdentity = {
     id: `${state.surfaceId}@${state.workspaceId}`,
     kind: 'surface',
-    owner: { owner: state.surfaceId.split('.')[0], trust: 'core' },
+    owner: { owner: state.entry.manifest.owner, trust: state.entry.manifest.trust },
   };
   const View = BUILTIN_VIEWS[state.surfaceId];
   if (View === undefined) return <SurfaceErrorView state={{ status: 'unknown', workspaceId, surfaceId }} />;

@@ -5,18 +5,11 @@
 // metadata/activator set (validate-all) and materializes it into an immutable,
 // deterministically-ordered snapshot — a single invalid owner never yields a
 // partial catalog.
-import { type Result, type WorkbenchError, ownerOf, ok, err, fail } from '@shared/workbench';
+import { type Result, type WorkbenchError, type SurfaceDescriptor, ownerOf, ok, err, fail } from '@shared/workbench';
 
-// Eager, serialisable surface metadata. `icon` is a name (string), not a
-// component — no React import at discovery time.
-export type SurfaceManifest = {
-  readonly id: string;
-  readonly title: string;
-  readonly group: string;
-  readonly icon: string;
-  readonly instancing: 'singleton' | 'multi';
-  readonly contextKinds: readonly string[];
-};
+// The single surface descriptor authority lives in the contract. The catalog does
+// not define a second shape — a manifest IS a `SurfaceDescriptor`.
+export type SurfaceManifest = SurfaceDescriptor;
 
 // The runtime view a surface activates into. `Component` is the view; `Provider`
 // is an optional per-surface wrapper. Both are opaque here (typed as `unknown`)

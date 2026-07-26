@@ -85,11 +85,19 @@ export const whenExprSchema: z.ZodType<WhenExpr> = z.lazy(() =>
 // ── Contributions ───────────────────────────────────────────────────────────
 export const groupSchema = z.object({ id: idSchema, title: z.string().min(1) }).strict();
 
+// The single Surface Descriptor authority. Owner and trust are EXPLICIT fields —
+// never parsed from the id string. `icon` is a serialisable name (host maps it to
+// a component). Manifests and the built-in catalog both materialise this one
+// shape; there is no second surface type.
 export const surfaceSchema = z
   .object({
     id: idSchema,
+    owner: namespaceSchema,
+    trust: trustSchema,
     title: z.string().min(1),
     group: idSchema,
+    icon: z.string().min(1),
+    instancing: z.enum(['singleton', 'multi']).default('singleton'),
     contextKinds: z.array(z.string().min(1)).default([]),
     when: whenExprSchema.optional(),
   })

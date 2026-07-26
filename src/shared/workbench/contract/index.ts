@@ -21,7 +21,7 @@ export type { FeatureManifest, ManifestSet, HostCapability, InstalledOwner } fro
 export { parseFeatureManifest, validateManifestSet, checkHostCompatibility } from './featureManifest';
 
 // surface
-export type { Group, Surface, LayoutPreset } from './surface';
+export type { Group, Surface, SurfaceDescriptor, LayoutPreset } from './surface';
 
 // command
 export type { CommandContribution, CommandResult } from './command';

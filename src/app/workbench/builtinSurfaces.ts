@@ -16,16 +16,27 @@ export function kindForSurfaceId(surfaceId: string): string {
   return surfaceId.replace(/^core\./, '');
 }
 
+const core = (id: string, title: string, group: string, icon: string): SurfaceManifest => ({
+  id,
+  owner: 'core',
+  trust: 'core',
+  title,
+  group,
+  icon,
+  instancing: 'singleton',
+  contextKinds: [],
+});
+
 const SURFACES: readonly SurfaceManifest[] = [
-  { id: 'core.intelligence', title: 'Intelligence', group: 'core.core', icon: 'Brain', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.coding', title: 'Coding', group: 'core.core', icon: 'Code2', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.agents', title: 'Agents', group: 'core.core', icon: 'Bot', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.reviews', title: 'Reviews', group: 'core.core', icon: 'GitPullRequest', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.admission', title: 'Admission', group: 'core.core', icon: 'ShieldCheck', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.fixes', title: 'Fixes', group: 'core.core', icon: 'Wand2', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.fix-pipeline', title: 'Fix Pipeline', group: 'core.more', icon: 'Wrench', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.catalog', title: 'Catalog', group: 'core.more', icon: 'Layers', instancing: 'singleton', contextKinds: [] },
-  { id: 'core.inbox', title: 'Inbox', group: 'core.more', icon: 'Inbox', instancing: 'singleton', contextKinds: [] },
+  core('core.intelligence', 'Intelligence', 'core.core', 'Brain'),
+  core('core.coding', 'Coding', 'core.core', 'Code2'),
+  core('core.agents', 'Agents', 'core.core', 'Bot'),
+  core('core.reviews', 'Reviews', 'core.core', 'GitPullRequest'),
+  core('core.admission', 'Admission', 'core.core', 'ShieldCheck'),
+  core('core.fixes', 'Fixes', 'core.core', 'Wand2'),
+  core('core.fix-pipeline', 'Fix Pipeline', 'core.more', 'Wrench'),
+  core('core.catalog', 'Catalog', 'core.more', 'Layers'),
+  core('core.inbox', 'Inbox', 'core.more', 'Inbox'),
 ];
 
 const ACTIVATORS: Readonly<Record<string, SurfaceActivator>> = {

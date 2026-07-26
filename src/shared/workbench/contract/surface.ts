@@ -1,9 +1,13 @@
 // Surface / group / layout-preset contract types (derived from schemas).
 import type { z } from 'zod';
-import type { groupSchema, surfaceSchema } from './schemas';
+import type { groupSchema, surfaceSchema, DeepReadonly } from './schemas';
 
 export type Group = z.infer<typeof groupSchema>;
-export type Surface = z.infer<typeof surfaceSchema>;
+
+// The single Surface Descriptor authority (owner/trust/icon/instancing explicit).
+export type SurfaceDescriptor = DeepReadonly<z.infer<typeof surfaceSchema>>;
+// Back-compat alias — same type, no second shape.
+export type Surface = SurfaceDescriptor;
 
 // A host-composed arrangement of surfaces into named slots. JSON-safe: slot ->
 // ordered surface ids. Layout *runtime* state (v3 LayoutStore) lives in the
