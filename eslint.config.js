@@ -29,6 +29,10 @@ export default tseslint.config(
       'playwright-report',
       'test-results',
       'node_modules',
+      // Agent worktrees are nested checkouts under .claude/; never lint another
+      // checkout's files from the parent repo (their config.js files aren't in
+      // this project's tsconfig, which breaks type-aware rules).
+      '.claude',
       'pnpm-lock.yaml',
       'src-tauri',
       'scripts',
