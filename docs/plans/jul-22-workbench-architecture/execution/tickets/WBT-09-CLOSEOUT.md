@@ -21,9 +21,19 @@ STAGED means designed/partly-built with a ledger, not falsely marked done.
 | WBT-08 plugin admission (schema/trust/budget/crash rail + RFC) | **DONE** | admission 8 + rail 4 tests, RFC (no runtime) |
 | WBT-09 closeout | **this file** | receipts per package; ledger below |
 
+## Live wiring completed this autopilot
+
+- **WB-403 live**: the tab store now carries canonical `surfaceId` + runs the
+  idempotent persist migration (version 2→3) on load (`store.ts`).
+- **WB-402 live**: the generic `/w/$workspaceId/$surfaceId` route is mounted in
+  `router.tsx` (catalog-driven `WorkspaceSurface`); adding a surface needs no
+  router edit; legacy tab paths stay read-only aliases.
+- **WBT-08 hardened**: adversarial audit found 2 fail-open BLOCKERs (NaN/negative
+  resource bypass, throwing-setup leak) — both fixed fail-closed with regressions.
+
 ## Verified state on `main`
 
-- full repo test suite **611/611** (was 570 pre-campaign; +41 workbench tests, 0 regression)
+- full repo test suite **614/614** (was 570 pre-campaign; +44 workbench tests, 0 regression); `pnpm build` 0
 - `pnpm build` succeeds with the workbench mounted; `pnpm typecheck`, `pnpm lint:strict`, `pnpm ui-infra:audit`, `pnpm audit:cross-slice` all exit 0
 - everything additive or behaviour-preserving: the existing app renders identically (the tab component-switch removal was proven identical across all 9 surfaces by parallel adversarial+objective audit)
 
