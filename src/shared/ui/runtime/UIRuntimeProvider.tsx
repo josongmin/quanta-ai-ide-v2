@@ -9,13 +9,14 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from 'react';
-import { CommandService } from './CommandService';
 import { DialogService, type DialogSnapshot } from './DialogService';
 import { LayerManager } from './LayerManager';
+import { useOptionalWorkbench } from '@shared/workbench/react';
 import type { DialogCloseReason, UiOwnerRef } from './types';
 
+// The command/keybinding authority is the workbench (P1-6) — the UI runtime owns
+// only dialogs + layers now.
 export type UIRuntime = {
-  commands: CommandService;
   dialogs: DialogService;
   layers: LayerManager;
 };
@@ -32,7 +33,6 @@ const APP_OWNER: UiOwnerRef = { ownerId: 'app', scopeInstanceId: 'app' };
 
 export function createUIRuntime(): UIRuntime {
   return {
-    commands: new CommandService(),
     dialogs: new DialogService(),
     layers: new LayerManager(),
   };
@@ -40,11 +40,14 @@ export function createUIRuntime(): UIRuntime {
 
 export function UIRuntimeProvider({ children, runtime: suppliedRuntime }: { children: ReactNode; runtime?: UIRuntime }) {
   const [runtime] = useState(() => suppliedRuntime ?? createUIRuntime());
+  const workbench = useOptionalWorkbench();
   const activeRef = useRef(true);
   const appScope = useMemo<UiScope>(() => ({ owner: APP_OWNER, activeRef, commandPriority: 0 }), []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      // Layers (modal dismiss) intercept first; then command dispatch delegates
+      // to the canonical workbench keybinding authority.
       if (runtime.layers.handleKeydown(event)) {
         event.preventDefault();
         event.stopPropagation();
@@ -52,7 +55,7 @@ export function UIRuntimeProvider({ children, runtime: suppliedRuntime }: { chil
         return;
       }
       if (runtime.layers.hasModalLayer()) return;
-      if (runtime.commands.dispatchKeydown(event)) {
+      if (workbench?.keybindings.dispatchKeydown(event) === true) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -60,7 +63,7 @@ export function UIRuntimeProvider({ children, runtime: suppliedRuntime }: { chil
     };
     window.addEventListener('keydown', onKeyDown, true);
     return () => { window.removeEventListener('keydown', onKeyDown, true); };
-  }, [runtime]);
+  }, [runtime, workbench]);
 
   useEffect(() => {
     const root = document.getElementById('root');

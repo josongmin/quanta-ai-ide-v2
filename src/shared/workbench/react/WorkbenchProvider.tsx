@@ -15,6 +15,7 @@ import {
   type BusLimits,
 } from '../core';
 import type { ScopeIdentity } from '../contract';
+import { KeybindingService } from './KeybindingService';
 
 export type WorkbenchSession = {
   readonly appScope: ScopeNode;
@@ -22,6 +23,7 @@ export type WorkbenchSession = {
   readonly commands: CommandService;
   readonly contextKeys: ContextKeyService;
   readonly intents: IntentBus;
+  readonly keybindings: KeybindingService;
 };
 
 const APP_SCOPE: ScopeIdentity = { id: 'core.app', kind: 'root', owner: { owner: 'core', trust: 'core' } };
@@ -34,6 +36,7 @@ export function createWorkbenchSession(): WorkbenchSession {
     commands: new CommandService(),
     contextKeys: new ContextKeyService(),
     intents: new IntentBus(DEFAULT_BUS_LIMITS),
+    keybindings: new KeybindingService(),
   };
 }
 
@@ -65,6 +68,12 @@ export function useWorkbench(): WorkbenchSession {
   const session = useContext(WorkbenchContext);
   if (session === null) throw new Error('WorkbenchRoot is missing above this subtree');
   return session;
+}
+
+// Null when no WorkbenchRoot is above (e.g. isolated shared-UI tests). Lets the
+// UI runtime delegate command dispatch to the workbench only when present.
+export function useOptionalWorkbench(): WorkbenchSession | null {
+  return useContext(WorkbenchContext);
 }
 
 export { WorkbenchContext };

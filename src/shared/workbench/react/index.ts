@@ -3,9 +3,11 @@
 export {
   WorkbenchRoot,
   useWorkbench,
+  useOptionalWorkbench,
   createWorkbenchSession,
   type WorkbenchSession,
 } from './WorkbenchProvider';
+export { KeybindingService, type Keybinding, type KeybindingRegistration } from './KeybindingService';
 export { ScopeProvider, useWorkbenchScope } from './ScopeProvider';
 export { useCommand, useContextKey } from './hooks';
 export { CrashBoundary, type CrashState } from './CrashBoundary';

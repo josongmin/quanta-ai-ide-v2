@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef } from 'react';
-import { useUIRuntime, useUiScope } from '../ui/runtime/UIRuntimeProvider';
-import type { Keybinding } from '../ui/runtime/types';
+import { useUiScope } from '../ui/runtime/UIRuntimeProvider';
+import { useWorkbench, type Keybinding } from '../workbench/react';
 
 export type Shortcut = Keybinding & {
   id?: string;
@@ -8,7 +8,7 @@ export type Shortcut = Keybinding & {
 };
 
 export function useShortcut(shortcut: Shortcut, handler: () => void): void {
-  const runtime = useUIRuntime();
+  const { keybindings } = useWorkbench();
   const scope = useUiScope();
   const generatedId = useId();
   const handlerRef = useRef(handler);
@@ -18,7 +18,7 @@ export function useShortcut(shortcut: Shortcut, handler: () => void): void {
   }, [handler]);
 
   useEffect(() => {
-    const registration = runtime.commands.register({
+    const registration = keybindings.register({
       id: shortcut.id ?? `shortcut:${generatedId}`,
       handler: () => { handlerRef.current(); },
       keybinding: {
@@ -34,7 +34,7 @@ export function useShortcut(shortcut: Shortcut, handler: () => void): void {
     return registration.dispose;
   }, [
     generatedId,
-    runtime,
+    keybindings,
     scope,
     shortcut.id,
     shortcut.key,

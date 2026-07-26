@@ -1,40 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { CommandService } from '../CommandService';
 import { DialogService } from '../DialogService';
 import { LayerManager } from '../LayerManager';
-
-function keydown(key: string, overrides: Partial<KeyboardEventInit> = {}): KeyboardEvent {
-  return new KeyboardEvent('keydown', { key, cancelable: true, ...overrides });
-}
-
-describe('CommandService', () => {
-  it('dispatches only the highest-priority active matching command', () => {
-    const service = new CommandService();
-    const global = vi.fn();
-    const activeTab = vi.fn();
-    const hiddenTab = vi.fn();
-    service.register({ id: 'global.palette', keybinding: { key: 'k', ctrl: true }, handler: global });
-    service.register({
-      id: 'tab.palette',
-      keybinding: { key: 'k', ctrl: true },
-      priority: 100,
-      isActive: () => true,
-      handler: activeTab,
-    });
-    service.register({
-      id: 'hidden.palette',
-      keybinding: { key: 'k', ctrl: true },
-      priority: 200,
-      isActive: () => false,
-      handler: hiddenTab,
-    });
-
-    expect(service.dispatchKeydown(keydown('k', { metaKey: true }))).toBe(true);
-    expect(activeTab).toHaveBeenCalledOnce();
-    expect(global).not.toHaveBeenCalled();
-    expect(hiddenTab).not.toHaveBeenCalled();
-  });
-});
 
 describe('LayerManager', () => {
   it('closes only the topmost layer and disposes every layer owned by a scope', () => {
