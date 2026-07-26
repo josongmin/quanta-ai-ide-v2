@@ -46,3 +46,8 @@ export {
   type PersistencePort,
   type MigrationReceipt,
 } from './LayoutStore';
+export {
+  ActivationRail,
+  type QuarantineReceipt,
+  type ActivationOutcome,
+} from './ActivationRail';

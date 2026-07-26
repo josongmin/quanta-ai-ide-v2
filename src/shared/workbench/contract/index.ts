@@ -46,3 +46,15 @@ export type {
   ConfigurationService,
 } from './configuration';
 export { SETTING_PRECEDENCE, admitSettingContribution, resolveConfiguration, migrateSetting } from './configuration';
+
+// extension admission (WBT-08)
+export type {
+  Capability,
+  ResourceBudget,
+  ResourceRequest,
+  AdmissionRequest,
+  AdmissionVerdict,
+} from './admission';
+export { admitExtension, admitExtensionResult, DEFAULT_BUDGETS } from './admission';
+export type { SchemaArtifact, GoldenCase } from './schemaArtifact';
+export { schemaArtifact, SCHEMA_ARTIFACT_VERSION, GOLDEN_CORPUS } from './schemaArtifact';

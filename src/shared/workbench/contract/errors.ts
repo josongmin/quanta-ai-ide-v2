@@ -55,7 +55,10 @@ export type WorkbenchErrorReason =
   | 'invalid-operation'
   | 'migration-failed'
   // React host lifecycle (WBT-04)
-  | 'invalid-transition';
+  | 'invalid-transition'
+  // extension admission (WBT-08)
+  | 'resource-overflow'
+  | 'crash-quarantine';
 
 // One rejection. `path` locates the offending node (e.g. a manifest id or a
 // JSON pointer); `detail` carries structured, JSON-safe context for diagnostics.
