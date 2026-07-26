@@ -4,8 +4,17 @@ import {
   createJSONStorage,
   type StateStorage,
 } from 'zustand/middleware';
-import { DEFAULT_TAB_KINDS, isTabKind, type TabKind } from '@shared/config/workspaceTabs';
-import { STORAGE_KEYS } from '@shared/lib';
+import { DEFAULT_TAB_KINDS, isTabKind, TAB_KINDS_ORDERED, type TabKind } from '@shared/config/workspaceTabs';
+import { STORAGE_KEYS, systemRuntimeEnv } from '@shared/lib';
+import { migrateTabs, TAB_STATE_VERSION } from './migrateTabs';
+
+// Canonical surface id ↔ legacy tab kind. The store carries both during the
+// migration window: `surfaceId` is the canonical identity, `kind` is retained as
+// a migration-only alias for legacy consumers.
+function surfaceIdForKind(kind: TabKind): string {
+  return `core.${kind}`;
+}
+const KNOWN_SURFACE_IDS = new Set(TAB_KINDS_ORDERED.map((k) => `core.${k}`));
 
 // Throttle window for localStorage writes. Tab activations cluster (e.g.
 // the user cycles through tabs with Cmd+Alt+Arrow) — without throttling,
@@ -110,6 +119,9 @@ function throttledLocalStorage(throttleMs: number): StateStorage {
 export type WorkspaceTab = {
   id: string;
   kind: TabKind;
+  // Canonical surface identity (`core.<kind>`); optional during the migration
+  // window so legacy-seeded records still typecheck.
+  surfaceId?: string;
   // Optional user label ("Investigate auth", "Inbox triage"). Falls back to
   // the registry label when absent so duplicate kinds can still be opened.
   label?: string;
@@ -141,7 +153,7 @@ type Actions = {
 export type WorkspaceTabsStore = State & Actions;
 
 function makeId(): string {
-  return `t-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6).toString(36)}`;
+  return systemRuntimeEnv.createId('t');
 }
 
 function touchTab(tab: WorkspaceTab, now: number): WorkspaceTab {
@@ -152,9 +164,10 @@ function defaultTab(kind: TabKind, active = false): WorkspaceTab {
   return {
     id: makeId(),
     kind,
+    surfaceId: surfaceIdForKind(kind),
     dirty: false,
     pinned: false,
-    lastFocusedAt: active ? Date.now() : undefined,
+    lastFocusedAt: active ? systemRuntimeEnv.now() : undefined,
   };
 }
 
@@ -166,6 +179,7 @@ function sanitizeTab(raw: WorkspaceTab): WorkspaceTab {
   return {
     id: raw.id,
     kind: raw.kind,
+    surfaceId: typeof raw.surfaceId === 'string' ? raw.surfaceId : surfaceIdForKind(raw.kind),
     label: typeof raw.label === 'string' && raw.label.trim() ? raw.label : undefined,
     dirty: Boolean(raw.dirty),
     pinned: Boolean(raw.pinned),
@@ -206,7 +220,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
         setActive: (id) => {
           set((s) => {
             if (!s.tabs.some((t) => t.id === id)) return s;
-            const now = Date.now();
+            const now = systemRuntimeEnv.now();
             return {
               activeId: id,
               tabs: s.tabs.map((t) => (t.id === id ? touchTab(t, now) : t)),
@@ -245,7 +259,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
               const fallback = next[idx] ?? next[next.length - 1];
               activeId = fallback.id;
             }
-            const now = Date.now();
+            const now = systemRuntimeEnv.now();
             return {
               tabs: next.map((t) => (t.id === activeId ? touchTab(t, now) : t)),
               activeId,
@@ -272,7 +286,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
             if (currentIndex === -1) return s;
             const nextIndex = (currentIndex + delta + s.tabs.length) % s.tabs.length;
             const nextId = s.tabs[nextIndex].id;
-            const now = Date.now();
+            const now = systemRuntimeEnv.now();
             return {
               activeId: nextId,
               tabs: s.tabs.map((t) => (t.id === nextId ? touchTab(t, now) : t)),
@@ -348,7 +362,24 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
             : tabs[0].id;
         return { ...current, tabs, activeId };
       },
-      version: 2,
+      // Legacy `{ kind }` corpus (version < 3) is migrated to canonical
+      // surface-identity records via the shared, idempotent migration. Unknown/
+      // corrupt tabs are quarantined; the canonical store is the only writer.
+      migrate: (persisted, version) => {
+        if (version >= TAB_STATE_VERSION) return persisted;
+        const result = migrateTabs(persisted, KNOWN_SURFACE_IDS);
+        const tabs: WorkspaceTab[] = result.tabs.map((t) => ({
+          id: t.id,
+          kind: t.surfaceId.replace(/^core\./, '') as TabKind,
+          surfaceId: t.surfaceId,
+          label: t.label,
+          pinned: t.pinned,
+          lastFocusedAt: t.lastFocusedAt,
+        }));
+        if (tabs.length === 0) return persisted;
+        return { tabs, activeId: result.activeId ?? tabs[0].id };
+      },
+      version: TAB_STATE_VERSION,
     },
   ),
 );
