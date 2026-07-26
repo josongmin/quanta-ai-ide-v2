@@ -38,6 +38,14 @@ describe('parseFeatureManifest', () => {
     if (!r.ok) expect(r.errors.some((e) => e.reason === 'schema-invalid')).toBe(true);
   });
 
+  it('rejects a surface whose owner does not match its id namespace (privilege escalation)', () => {
+    const r = parseFeatureManifest(baseManifest({
+      contributions: { surfaces: [{ id: 'acme.evil', owner: 'core', trust: 'trusted', title: 'X', group: 'acme.g', icon: 'Box', contextKinds: [] }] },
+    }));
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.some((e) => e.reason === 'schema-invalid')).toBe(true);
+  });
+
   it('rejects a future schemaVersion instead of permissive-parsing it', () => {
     const r = parseFeatureManifest(baseManifest({ schemaVersion: 99 }));
     expect(r.ok).toBe(false);
@@ -89,6 +97,19 @@ describe('validateManifestSet', () => {
   it('allows the core namespace for a core owner', () => {
     const m = parse(baseManifest({ id: 'core.explorer', trust: 'core', contributions: {} }));
     expect(validateManifestSet([m]).ok).toBe(true);
+  });
+
+  it('rejects a contributed surface claiming more trust than its manifest', () => {
+    const m = parse(baseManifest({
+      trust: 'untrusted',
+      contributions: {
+        groups: [{ id: 'acme.g', title: 'G' }],
+        surfaces: [{ id: 'acme.priv', owner: 'acme', trust: 'core', title: 'P', group: 'acme.g', icon: 'Box', contextKinds: [] }],
+      },
+    }));
+    const r = validateManifestSet([m]);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.some((e) => e.reason === 'capability-escalation')).toBe(true);
   });
 
   it('is order-independent (same verdict regardless of manifest order)', () => {

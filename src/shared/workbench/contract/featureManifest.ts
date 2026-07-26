@@ -87,9 +87,15 @@ export function validateManifestSet(manifests: readonly FeatureManifest[]): Resu
     for (const context of manifest.contributions.contexts) contextKinds.add(context.kind);
   }
 
+  const TRUST_RANK: Readonly<Record<string, number>> = { untrusted: 0, trusted: 1, core: 2 };
+
   // Pass 2: resolve references now that every id is known (order-independent).
   for (const manifest of manifests) {
     for (const surface of manifest.contributions.surfaces) {
+      // A contributed surface cannot claim more trust than its manifest.
+      if (TRUST_RANK[surface.trust] > TRUST_RANK[manifest.trust]) {
+        errors.push(fail('capability-escalation', `surface ${surface.id} trust '${surface.trust}' exceeds manifest trust '${manifest.trust}'`, { path: surface.id }));
+      }
       if (!groupIds.has(surface.group)) {
         errors.push(fail('missing-reference', `surface ${surface.id} references unknown group ${surface.group}`, { path: surface.id }));
       }

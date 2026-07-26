@@ -101,7 +101,10 @@ export const surfaceSchema = z
     contextKinds: z.array(z.string().min(1)).default([]),
     when: whenExprSchema.optional(),
   })
-  .strict();
+  .strict()
+  // Owner must match the id namespace — a surface cannot claim a foreign owner
+  // (e.g. id 'acme.x' declaring owner 'core' to escalate to core authority).
+  .refine((s) => ownerOf(s.id) === s.owner, { message: 'owner must equal the id namespace', path: ['owner'] });
 
 export const commandSchema = z
   .object({

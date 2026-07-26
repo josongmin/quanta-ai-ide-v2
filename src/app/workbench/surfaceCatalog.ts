@@ -59,8 +59,10 @@ export function buildSurfaceCatalog(
     } else {
       byId.set(manifest.id, manifest);
     }
-    if (ownerOf(manifest.id) === 'core' && !manifest.id.startsWith('core.')) {
-      errors.push(fail('reserved-namespace', `invalid core id ${manifest.id}`, { path: manifest.id }));
+    // Owner must equal the id namespace — a descriptor cannot claim a foreign
+    // owner to escalate authority (id 'acme.x' with owner 'core').
+    if (ownerOf(manifest.id) !== manifest.owner) {
+      errors.push(fail('reserved-namespace', `surface ${manifest.id} owner '${manifest.owner}' must match its id namespace`, { path: manifest.id }));
     }
     groupIds.add(manifest.group);
   }
