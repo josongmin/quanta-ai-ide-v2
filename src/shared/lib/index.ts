@@ -32,6 +32,7 @@ export {
 } from './redact';
 export {
   isTauri,
+  startWindowDrag,
   isMacOS,
   useMenuEvent,
   type MenuEventId,

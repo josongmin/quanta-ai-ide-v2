@@ -139,9 +139,13 @@ export default function AppShell({ children }: { children: ReactNode }) {
         }
       `}</style>
       <header
-        // The whole header is a drag handle; interactive children opt out via
-        // `data-tauri-drag-region="false"` (Tauri honours the closest ancestor).
-        data-tauri-drag-region
+        // OS window drag is the DEFAULT for the whole GNB: `"deep"` makes every
+        // pixel of the subtree a drag handle, while genuinely clickable elements
+        // (buttons, role=tab, tabindex) automatically win over dragging — so tab
+        // clicks/reorder/close and all header buttons keep working. A bare attr
+        // would only catch direct hits on <header> itself, which its children
+        // fully cover; `"false"` anywhere below would carve a dead zone back out.
+        data-tauri-drag-region="deep"
         data-app-chrome="gnb"
         className="shrink-0 h-12 flex items-stretch border-b select-none relative z-50"
         style={{
@@ -151,14 +155,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
       >
         {showTrafficLightSpacer && (
           <div
-            data-tauri-drag-region
             aria-hidden
             className="shrink-0"
             style={{ width: 78 }}
           />
         )}
         <button type="button"
-          data-tauri-drag-region="false"
           className="flex items-center gap-2 px-4 border-r transition-colors hover-surface focus-ring-inset"
           style={{
             borderColor: 'var(--border-muted)',
@@ -178,13 +180,13 @@ export default function AppShell({ children }: { children: ReactNode }) {
           <ChevronDown className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
         </button>
 
-        <div data-tauri-drag-region="false" className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1">
           <div className="flex min-w-0 h-full items-center">
             <WorkspaceTabsStrip />
           </div>
         </div>
 
-        <div data-tauri-drag-region="false" className="flex items-center gap-1 px-3">
+        <div className="flex items-center gap-1 px-3">
           <IconButton
             icon={RotateCcw}
             label={t('action.resetFilters')}
