@@ -10,7 +10,7 @@ const manifest = (id: string, over: Partial<SurfaceManifest> = {}): SurfaceManif
   contextKinds: [],
   ...over,
 });
-const activator = (): SurfaceActivator => () => Promise.resolve({ default: () => null });
+const activator = (): SurfaceActivator => () => Promise.resolve({ Component: () => null });
 
 describe('buildSurfaceCatalog', () => {
   it('materialises a valid catalog and does not call activators at discovery', () => {

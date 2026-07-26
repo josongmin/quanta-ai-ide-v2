@@ -1,16 +1,5 @@
-import { lazy, type ComponentType } from 'react';
-import {
-  Bot,
-  Brain,
-  Code2,
-  GitPullRequest,
-  Inbox,
-  Layers,
-  ShieldCheck,
-  Wand2,
-  Wrench,
-  type LucideProps,
-} from 'lucide-react';
+import { lazy, type ComponentType, type ReactNode } from 'react';
+import type { LucideProps } from 'lucide-react';
 import {
   DEFAULT_TAB_KINDS,
   getKindsByGroup,
@@ -23,9 +12,14 @@ import {
   type TabMeta,
 } from '@shared/config/workspaceTabs';
 import type { TabKindDef } from '@features/workspace-tabs';
+import { builtinCatalog, surfaceIdForKind } from '@app/workbench/builtinSurfaces';
+import { SURFACE_ICONS } from '@app/workbench/icons';
 
-// App-layer composition: lazy stage components stitched onto shared tab
-// metadata. Features consume the result via WorkspaceTabsRegistryProvider.
+// App-layer composition: the built-in surface catalog is the authority for a
+// tab's view and icon. This module derives the legacy `TabKindDef` projection
+// from that catalog — there is no hand-maintained `Record<TabKind, Component>`
+// central switch anymore. Features consume the result via
+// WorkspaceTabsRegistryProvider.
 
 export type { TabKind, TabKindGroup, TabMeta };
 export {
@@ -37,57 +31,33 @@ export {
   WORKSPACE_TAB_META,
 };
 
-const IntelligenceLayout = lazy(() =>
-  import('@app/router/intelligence').then((m) => ({ default: m.IntelligenceLayout })),
-);
-const CodingStage = lazy(() =>
-  import('@widgets/coding-stage').then((m) => ({ default: m.CodingStage })),
-);
-const AgentFleetStage = lazy(() =>
-  import('@widgets/agent-fleet-stage').then((m) => ({ default: m.AgentFleetStage })),
-);
-const ReviewStage = lazy(() =>
-  import('@widgets/review-stage').then((m) => ({ default: m.ReviewStage })),
-);
-const AdmissionRoot = lazy(() =>
-  import('@features/admission-rules').then((m) => ({ default: m.AdmissionRoot })),
-);
-const VerifiedFixRoot = lazy(() =>
-  import('@features/verified-fix').then((m) => ({ default: m.VerifiedFixRoot })),
-);
-const FixPipelineStage = lazy(() =>
-  import('@widgets/fix-pipeline-stage').then((m) => ({ default: m.FixPipelineStage })),
-);
-const CatalogStage = lazy(() =>
-  import('@widgets/catalog').then((m) => ({ default: m.CatalogStage })),
-);
-const InboxPage = lazy(() =>
-  import('@widgets/me-stage').then((m) => ({ default: m.InboxPage })),
-);
+// Lazy view for a kind, resolved from the catalog. An optional per-surface
+// Provider is folded into the component so the host renders one element.
+function deriveComponent(kind: TabKind): ComponentType {
+  const entry = builtinCatalog.resolve(surfaceIdForKind(kind));
+  if (entry === undefined) throw new Error(`no built-in surface for tab kind ${kind}`);
+  return lazy(() =>
+    entry.activate().then((mod) => {
+      const Component = mod.Component as ComponentType;
+      const Provider = mod.Provider as ComponentType<{ children: ReactNode }> | undefined;
+      if (Provider === undefined) return { default: Component };
+      const Wrapped = (): ReactNode => (
+        <Provider>
+          <Component />
+        </Provider>
+      );
+      return { default: Wrapped };
+    }),
+  );
+}
 
-const TAB_ICONS: Record<TabKind, ComponentType<LucideProps>> = {
-  intelligence: Brain,
-  coding: Code2,
-  agents: Bot,
-  reviews: GitPullRequest,
-  admission: ShieldCheck,
-  fixes: Wand2,
-  'fix-pipeline': Wrench,
-  catalog: Layers,
-  inbox: Inbox,
-};
-
-const TAB_COMPONENTS: Record<TabKind, ComponentType> = {
-  intelligence: IntelligenceLayout,
-  coding: CodingStage,
-  agents: AgentFleetStage,
-  reviews: ReviewStage,
-  admission: AdmissionRoot,
-  fixes: VerifiedFixRoot,
-  'fix-pipeline': FixPipelineStage,
-  catalog: CatalogStage,
-  inbox: InboxPage,
-};
+function deriveIcon(kind: TabKind): ComponentType<LucideProps> {
+  const entry = builtinCatalog.resolve(surfaceIdForKind(kind));
+  const name = entry?.manifest.icon ?? '';
+  const icon = SURFACE_ICONS[name];
+  if (icon === undefined) throw new Error(`no icon '${name}' for tab kind ${kind}`);
+  return icon;
+}
 
 export const TAB_REGISTRY: Record<TabKind, TabKindDef> = (() => {
   const out = {} as Record<TabKind, TabKindDef>;
@@ -95,8 +65,8 @@ export const TAB_REGISTRY: Record<TabKind, TabKindDef> = (() => {
     const meta = WORKSPACE_TAB_META[kind];
     out[kind] = {
       ...meta,
-      icon: TAB_ICONS[kind],
-      Component: TAB_COMPONENTS[kind],
+      icon: deriveIcon(kind),
+      Component: deriveComponent(kind),
     };
   }
   return out;

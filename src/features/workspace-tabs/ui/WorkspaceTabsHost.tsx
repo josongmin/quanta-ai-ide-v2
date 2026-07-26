@@ -1,11 +1,12 @@
 import { Suspense, memo, useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { useShallow } from 'zustand/react/shallow';
-import { ErrorBoundary } from '@shared/ui';
+import { ErrorBoundary, UiScopeProvider } from '@shared/ui';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
 import { resolveTabKindFromPath, type TabKind } from '@shared/config/workspaceTabs';
 import { useWorkspaceTabsRegistry, type TabKindDef } from '../model/RegistryContext';
 import { TabVisibilityProvider } from './TabVisibilityContext';
+import { reconcileMountedTabs } from '../model/lifecycle';
 
 // Cap on simultaneously-mounted tab panels. Each WebGL-bearing tab
 // (intelligence/explore) holds a renderer + scene graph + window
@@ -76,31 +77,13 @@ export default function WorkspaceTabsHost() {
   // pushed out of the LRU. Bootstrapped with `activeId` so the first
   // paint shows the initial active tab without an extra render pass.
   const [mountedOrder, setMountedOrder] = useState<string[]>(() => [activeId]);
-
-  // On activeId change, promote it to the back (most-recently-active)
-  // and evict from the front if we're now over cap.
-  if (mountedOrder.length === 0 || mountedOrder[mountedOrder.length - 1] !== activeId) {
-    setMountedOrder((prev) => {
-      const without = prev.filter((id) => id !== activeId);
-      const next = [...without, activeId];
-      while (next.length > MAX_MOUNTED_TABS) next.shift();
-      return next;
+  useEffect(() => useWorkspaceTabsStore.subscribe((state) => {
+    const aliveIds = new Set(state.tabs.map((tab) => tab.id));
+    setMountedOrder((current) => {
+      const next = reconcileMountedTabs(current, state.activeId, aliveIds, MAX_MOUNTED_TABS);
+      return sameOrder(current, next) ? current : next;
     });
-  }
-
-  // Prune ids for tabs the user has closed. Without this, a long session
-  // that opens/closes the same tab kind repeatedly would accumulate dead
-  // ids — small with the cap, but still pointless retention.
-  const [prevTabsLen, setPrevTabsLen] = useState(tabs.length);
-  if (prevTabsLen !== tabs.length) {
-    setPrevTabsLen(tabs.length);
-    setMountedOrder((prev) => {
-      const alive = new Set(tabs.map((t) => t.id));
-      const next = prev.filter((id) => alive.has(id));
-      if (next.length === prev.length) return prev;
-      return next;
-    });
-  }
+  }), []);
 
   const mounted = useMemo(() => new Set(mountedOrder), [mountedOrder]);
 
@@ -137,6 +120,14 @@ const TabPanel = memo(function TabPanel({
 }) {
   const def = tabRegistry[tab.kind];
   const Component = def.Component;
+  const owner = useMemo(() => ({
+    ownerId: `workspace-tab:${tab.kind}`,
+    scopeInstanceId: `tab:${tab.id}`,
+    tabId: tab.id,
+  }), [tab.id, tab.kind]);
+  // A surface's optional Provider is folded into its lazy Component by the
+  // catalog derivation, so the host renders a single element.
+  const content = <Component />;
 
   // `display: none` keeps subtree state alive (state, layout effects,
   // scroll containers) but stops paint and hit-testing. We also disable
@@ -159,9 +150,11 @@ const TabPanel = memo(function TabPanel({
     >
       <ErrorBoundary label={`Tab:${def.label}`}>
         <Suspense fallback={null}>
-          <TabVisibilityProvider visible={visible}>
-            <Component />
-          </TabVisibilityProvider>
+          <UiScopeProvider owner={owner} active={visible}>
+            <TabVisibilityProvider visible={visible}>
+              {content}
+            </TabVisibilityProvider>
+          </UiScopeProvider>
         </Suspense>
       </ErrorBoundary>
     </div>
@@ -214,17 +207,16 @@ export function useNavigateToTab() {
       // `replace: true` keeps tab switches off the browser history
       // stack. Linear behaves the same way: back/forward moves between
       // sessions, not between tabs.
-      void navigate({ to: path, replace: true });
-      if (typeof window !== 'undefined') {
-        queueMicrotask(() => {
-          const params = new URLSearchParams(window.location.search);
-          if (tabId) params.set('tab', tabId);
-          else params.delete('tab');
-          const query = params.toString();
-          window.history.replaceState(window.history.state, '', query ? `${path}?${query}` : path);
-        });
-      }
+      void navigate({
+        to: path,
+        replace: true,
+        search: (previous) => ({ ...previous, tab: tabId }),
+      });
     },
     [navigate, tabRegistry],
   );
+}
+
+function sameOrder(a: readonly string[], b: readonly string[]): boolean {
+  return a.length === b.length && a.every((value, index) => value === b[index]);
 }

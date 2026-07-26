@@ -120,7 +120,7 @@
     "crossFamilyImport": {},
     "deepImport": {},
     "centralSurfaceSwitch": {
-      "src/app/router/workspaceTabsRegistry.tsx": 4,
+      "src/app/router/workspaceTabsRegistry.tsx": 2,
       "src/features/workspace-tabs/model/RegistryContext.tsx": 3,
       "src/features/workspace-tabs/ui/WorkspaceTabsHost.tsx": 1
     },

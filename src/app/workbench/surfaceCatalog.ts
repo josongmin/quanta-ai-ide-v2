@@ -18,8 +18,14 @@ export type SurfaceManifest = {
   readonly contextKinds: readonly string[];
 };
 
+// The runtime view a surface activates into. `Component` is the view; `Provider`
+// is an optional per-surface wrapper. Both are opaque here (typed as `unknown`)
+// so the catalog stays free of a hard React dependency — the React host casts
+// them at the mount boundary.
+export type SurfaceModule = { readonly Component: unknown; readonly Provider?: unknown };
+
 // Lazy activator: resolves the React view only when the surface is activated.
-export type SurfaceActivator = () => Promise<{ default: unknown } | Record<string, unknown>>;
+export type SurfaceActivator = () => Promise<SurfaceModule>;
 
 export type CatalogEntry = {
   readonly manifest: SurfaceManifest;
