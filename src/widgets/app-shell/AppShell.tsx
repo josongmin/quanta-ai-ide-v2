@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import { WorkspaceTabsStrip, WorkspaceTabsHost } from '@features/workspace-tabs';
-import { isMacOS, isTauri, useMenuEvent, useShortcut } from '@shared/lib';
+import { isMacOS, isTauri, useMenuEvent, useShortcut, useWindowDragHandle } from '@shared/lib';
 import { useTranslation } from '@shared/i18n';
 import { IconButton, useDialogController } from '@shared/ui';
 import { useFilterStore } from '@entities/filter-state';
@@ -86,6 +86,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   // Tauri shell with `titleBarStyle: Overlay`. In the browser this collapses
   // to zero so the layout stays identical.
   const showTrafficLightSpacer = useMemo(() => isTauri() && isMacOS(), []);
+  const headerDragHandle = useWindowDragHandle();
 
   const openSettings = useCallback(() => { settingsDialog.show(); }, [settingsDialog]);
   useMenuEvent('settings', openSettings);
@@ -139,13 +140,16 @@ export default function AppShell({ children }: { children: ReactNode }) {
         }
       `}</style>
       <header
-        // OS window drag is the DEFAULT for the whole GNB: `"deep"` makes every
-        // pixel of the subtree a drag handle, while genuinely clickable elements
-        // (buttons, role=tab, tabindex) automatically win over dragging — so tab
-        // clicks/reorder/close and all header buttons keep working. A bare attr
-        // would only catch direct hits on <header> itself, which its children
-        // fully cover; `"false"` anywhere below would carve a dead zone back out.
+        // OS window drag is the DEFAULT for the whole GNB, via two layers:
+        // 1. `"deep"` — tauri's drag.js starts an OS drag on mousedown over any
+        //    non-clickable pixel (buttons/role=tab auto-win, so clicks survive).
+        // 2. useWindowDragHandle — pointer arbitration that ALSO covers the tab
+        //    chips (which drag.js exempts as clickable): press + move past a
+        //    4px slop → window drag; plain click → tab activation as usual.
+        //    The strip cancels the HTML5 reorder ghost in Tauri (Alt+drag
+        //    opts back into reorder), so the window drag is never hijacked.
         data-tauri-drag-region="deep"
+        onPointerDown={headerDragHandle}
         data-app-chrome="gnb"
         className="shrink-0 h-12 flex items-stretch border-b select-none relative z-50"
         style={{

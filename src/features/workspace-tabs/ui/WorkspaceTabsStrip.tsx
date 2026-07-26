@@ -7,7 +7,7 @@ import {
   type DragEvent,
 } from 'react';
 import { getSurfaceMeta } from '@shared/config/surfaces';
-import { isTauri, startWindowDrag } from '@shared/lib';
+import { isTauri } from '@shared/lib';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
 import { useNavigateToTab } from './WorkspaceTabsHost';
 import AddTabModal from './AddTabModal';
@@ -46,25 +46,17 @@ export default function WorkspaceTabsStrip() {
     clientX: 0,
     clientY: 0,
   });
-  const dragOriginRef = useRef<{ x: number; y: number } | null>(null);
-
-  // OS window drag vs tab reorder, arbitrated by direction at the HTML5
-  // dragstart threshold (Chrome's tab-strip model): mostly-horizontal pull
-  // keeps the native reorder DnD; mostly-vertical pull cancels it and hands
-  // the gesture to the OS as a window drag. Plain clicks never reach here.
-  // Deciding inside dragstart (not on raw pointermove) makes the two gestures
-  // race-free — exactly one of them ever runs.
+  // In the Tauri shell, pulling a tab moves the WINDOW (the GNB is a titlebar
+  // first — pointer arbitration lives on the <header> in AppShell), so the
+  // HTML5 reorder ghost must never hijack the gesture: cancel dragstart
+  // outright. Alt+drag opts back into the in-app reorder DnD. Direction
+  // sniffing at dragstart doesn't work here — WKWebView fires dragstart with
+  // coordinates equal to the press origin, so dx/dy are both 0.
+  // On the web build this is a no-op and plain-drag reorder stays as-is.
   const onStripDragStartCapture = useCallback((e: DragEvent<HTMLDivElement>) => {
-    if (!isTauri()) return;
-    const origin = dragOriginRef.current;
-    if (!origin) return;
-    const dx = Math.abs(e.clientX - origin.x);
-    const dy = Math.abs(e.clientY - origin.y);
-    if (dy > dx) {
-      e.preventDefault();
-      e.stopPropagation();
-      void startWindowDrag();
-    }
+    if (!isTauri() || e.altKey) return;
+    e.preventDefault();
+    e.stopPropagation();
   }, []);
 
   const visibleTabs = tabs;
@@ -280,7 +272,6 @@ export default function WorkspaceTabsStrip() {
         className="flex min-w-0 flex-1 items-center gap-1"
         role="tablist"
         aria-label="Workspace tabs"
-        onPointerDownCapture={(e) => { dragOriginRef.current = { x: e.clientX, y: e.clientY }; }}
         onDragStartCapture={onStripDragStartCapture}
       >
         <div className="relative flex min-w-0 max-w-full shrink">

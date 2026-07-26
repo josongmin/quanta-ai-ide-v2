@@ -33,6 +33,8 @@ export {
 export {
   isTauri,
   startWindowDrag,
+  prewarmWindowDrag,
+  useWindowDragHandle,
   isMacOS,
   useMenuEvent,
   type MenuEventId,
