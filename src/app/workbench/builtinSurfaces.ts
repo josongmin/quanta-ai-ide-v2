@@ -6,38 +6,31 @@
 // here, not a shell/router edit.
 // Metadata is eager and serialisable; activators import their React chunk only on
 // activation.
+import { SURFACE_IDS_ORDERED, getSurfaceMeta } from '@shared/config/surfaces';
 import { buildSurfaceCatalog, type SurfaceActivator, type SurfaceCatalog, type SurfaceManifest } from './surfaceCatalog';
 
-// Legacy tab kinds map to canonical surface ids `core.<kind>`.
+// Legacy tab kind → canonical surface id (migration only).
 export function surfaceIdForKind(kind: string): string {
   return `core.${kind}`;
 }
-export function kindForSurfaceId(surfaceId: string): string {
-  return surfaceId.replace(/^core\./, '');
-}
 
-const core = (id: string, title: string, group: string, icon: string): SurfaceManifest => ({
-  id,
-  owner: 'core',
-  trust: 'core',
-  title,
-  group,
-  icon,
-  instancing: 'singleton',
-  contextKinds: [],
+// Descriptors derive title/group/icon from the shared metadata SoT
+// (`@shared/config/surfaces`); the catalog adds only owner/trust/instancing +
+// the lazy activator. There is no second copy of the tab metadata.
+const SURFACES: readonly SurfaceManifest[] = SURFACE_IDS_ORDERED.map((surfaceId) => {
+  const meta = getSurfaceMeta(surfaceId);
+  if (meta === undefined) throw new Error(`no surface metadata for ${surfaceId}`);
+  return {
+    id: surfaceId,
+    owner: 'core',
+    trust: 'core',
+    title: meta.title,
+    group: `core.${meta.group}`,
+    icon: meta.icon,
+    instancing: 'singleton',
+    contextKinds: [],
+  };
 });
-
-const SURFACES: readonly SurfaceManifest[] = [
-  core('core.intelligence', 'Intelligence', 'core.core', 'Brain'),
-  core('core.coding', 'Coding', 'core.core', 'Code2'),
-  core('core.agents', 'Agents', 'core.core', 'Bot'),
-  core('core.reviews', 'Reviews', 'core.core', 'GitPullRequest'),
-  core('core.admission', 'Admission', 'core.core', 'ShieldCheck'),
-  core('core.fixes', 'Fixes', 'core.core', 'Wand2'),
-  core('core.fix-pipeline', 'Fix Pipeline', 'core.more', 'Wrench'),
-  core('core.catalog', 'Catalog', 'core.more', 'Layers'),
-  core('core.inbox', 'Inbox', 'core.more', 'Inbox'),
-];
 
 const ACTIVATORS: Readonly<Record<string, SurfaceActivator>> = {
   'core.intelligence': () =>
