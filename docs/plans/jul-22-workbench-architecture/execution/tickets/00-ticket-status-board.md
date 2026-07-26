@@ -14,8 +14,8 @@ snapshot: `2026-07-25 @ dc551ce8450374d8007dfb379835d23817ca4467`
 | `WBT-05` | `IN_PROGRESS` | full TabKind union 제거 + router 배선 남음 | WB-401/402/403/405 done; WB-404/406 컴포넌트 switch 제거(baseline 8→6) | [WBT-05-RECEIPT.md](WBT-05-RECEIPT.md) — full 595/595, build 0, 헬어딧 clean; catalog+route+migration+alias |
 | `WBT-06` | `BLOCKED_BY_WBT-05` | generic surface runtime 없음 | receiver/legacy-provider inventory만 허용 | — |
 | `WBT-07` | `BLOCKED_BY_WBT-05` | built-in catalog transaction 없음 | route/page inventory와 fixture 설계만 허용 | — |
-| `WBT-08` | `DEFERRED_BY_WBT-06_WBT-07` | P1..P6 proof 미완료 | threat-model 질문 목록만 작성 가능 | — |
-| `WBT-09` | `ACTIVE_CROSS_CUTTING` | 각 owner ticket의 proof 필요 | 모든 PR receipt 검증; final closeout은 WBT-08 뒤 | — |
+| `WBT-08` | `DONE` | — | admission policy/schema/crash-rail + RFC landed @ `070a5f5` | admission 8 + rail 4 tests, RFC(no runtime), full 611/611 |
+| `WBT-09` | `ACTIVE_CROSS_CUTTING` | WBT-06/07 + convergence STAGED | 캠페인 closeout ledger | [WBT-09-CLOSEOUT.md](WBT-09-CLOSEOUT.md) — 전 패키지 receipt + legacy removal ledger |
 
 ## 상태 전이
 

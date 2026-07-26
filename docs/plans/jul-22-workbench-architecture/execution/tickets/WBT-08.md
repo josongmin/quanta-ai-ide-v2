@@ -1,6 +1,6 @@
 # WBT-08 — Host-neutral plugin admission boundary
 
-- status: `DEFERRED_BY_WBT-06_WBT-07`
+- status: `DONE` (main; schema/admission/rail landed + RFC; L2 impl deferred)
 - covers: `WB-701..704`
 - goal: extension runtime을 만들기 전에 portable schema, trust/capability/budget, owner cleanup, threat-model admission을 고정한다.
 - hard dependency: WBT-06 + WBT-07 receipts
