@@ -48,6 +48,26 @@ describe('admitExtension', () => {
   it('exposes a Result wrapper for composition', () => {
     expect(admitExtensionResult(base(), budget).ok).toBe(true);
   });
+
+  it('fails closed on non-finite / negative resource amounts (no NaN>max bypass)', () => {
+    for (const bad of [Number.NaN, -1, Number.POSITIVE_INFINITY]) {
+      const v = admitExtension(base({ resources: { contributions: bad, contextBytes: 1, commandRatePerSec: 1, activationMs: 1 } }), budget);
+      expect(v.admitted, `contributions=${String(bad)}`).toBe(false);
+      if (!v.admitted) expect(v.denials.some((d) => d.reason === 'resource-overflow')).toBe(true);
+    }
+  });
+
+  it('treats max as an inclusive ceiling (a request equal to max is admitted)', () => {
+    const atMax = base({
+      resources: {
+        contributions: budget.maxContributions,
+        contextBytes: budget.maxContextBytes,
+        commandRatePerSec: budget.maxCommandRatePerSec,
+        activationMs: budget.maxActivationMs,
+      },
+    });
+    expect(admitExtension(atMax, budget).admitted).toBe(true);
+  });
 });
 
 describe('schema artifact (WB-701)', () => {
@@ -68,7 +88,7 @@ describe('schema artifact (WB-701)', () => {
         expect(result.ok, gold.name).toBe(false);
         if (!result.ok) {
           const reasons = new Set(result.errors.map((e) => e.reason));
-          for (const expected of gold.expect) expect(reasons.has(expected), `${gold.name}:${expected}`).toBe(true);
+          expect(reasons, gold.name).toEqual(new Set(gold.expect)); // exact match — catches divergence
         }
       }
     }

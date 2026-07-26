@@ -41,7 +41,15 @@ export class ActivationRail {
     if (!child.ok) return child;
     const scope = child.value;
 
-    const result = setup(scope);
+    let result: Result<void>;
+    try {
+      result = setup(scope);
+    } catch {
+      // A throwing setup must roll back exactly like a returned failure — no leak,
+      // no partial activation exposed.
+      scope.dispose();
+      return err(fail('handler-error', `activation setup threw for owner ${ownerId}`, { path: ownerId }));
+    }
     if (!result.ok) {
       scope.dispose(); // rollback — zero leak, nothing exposed
       return result;

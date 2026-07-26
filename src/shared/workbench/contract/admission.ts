@@ -53,19 +53,23 @@ export function admitExtension(request: AdmissionRequest, budget: ResourceBudget
     }
   }
 
-  // Resource budget: every dimension is checked before activation.
+  // Resource budget: every dimension is checked before activation. `max` is an
+  // inclusive ceiling (a request equal to max is allowed). A non-finite or
+  // negative amount is itself a denial — it must never slip past via `NaN > max`
+  // being false (fail-closed).
   const r = request.resources;
-  if (r.contributions > budget.maxContributions) {
-    denials.push(fail('resource-overflow', `contributions ${r.contributions} exceed budget ${budget.maxContributions}`, { path: request.ownerId, detail: { kind: 'contributions' } }));
+  const over = (amount: number, max: number): boolean => !Number.isFinite(amount) || amount < 0 || amount > max;
+  if (over(r.contributions, budget.maxContributions)) {
+    denials.push(fail('resource-overflow', `contributions ${r.contributions} outside budget ${budget.maxContributions}`, { path: request.ownerId, detail: { kind: 'contributions' } }));
   }
-  if (r.contextBytes > budget.maxContextBytes) {
-    denials.push(fail('byte-budget', `context bytes ${r.contextBytes} exceed budget ${budget.maxContextBytes}`, { path: request.ownerId, detail: { kind: 'contextBytes' } }));
+  if (over(r.contextBytes, budget.maxContextBytes)) {
+    denials.push(fail('byte-budget', `context bytes ${r.contextBytes} outside budget ${budget.maxContextBytes}`, { path: request.ownerId, detail: { kind: 'contextBytes' } }));
   }
-  if (r.commandRatePerSec > budget.maxCommandRatePerSec) {
-    denials.push(fail('resource-overflow', `command rate ${r.commandRatePerSec}/s exceeds budget ${budget.maxCommandRatePerSec}/s`, { path: request.ownerId, detail: { kind: 'commandRate' } }));
+  if (over(r.commandRatePerSec, budget.maxCommandRatePerSec)) {
+    denials.push(fail('resource-overflow', `command rate ${r.commandRatePerSec}/s outside budget ${budget.maxCommandRatePerSec}/s`, { path: request.ownerId, detail: { kind: 'commandRate' } }));
   }
-  if (r.activationMs > budget.maxActivationMs) {
-    denials.push(fail('resource-overflow', `activation ${r.activationMs}ms exceeds budget ${budget.maxActivationMs}ms`, { path: request.ownerId, detail: { kind: 'activationMs' } }));
+  if (over(r.activationMs, budget.maxActivationMs)) {
+    denials.push(fail('resource-overflow', `activation ${r.activationMs}ms outside budget ${budget.maxActivationMs}ms`, { path: request.ownerId, detail: { kind: 'activationMs' } }));
   }
 
   if (denials.length > 0) return { admitted: false, ownerId: request.ownerId, denials };

@@ -19,6 +19,19 @@ describe('ActivationRail', () => {
     expect(rail.activeOwnerCount()).toBe(0); // no partial activation visible
   });
 
+  it('rolls back (zero leak) when setup THROWS, not just returns err', () => {
+    const rail = new ActivationRail(root());
+    let disposed = false;
+    const r = rail.activate('acme', identity('acme'), (scope) => {
+      scope.registerDisposable(() => { disposed = true; });
+      throw new Error('setup exploded');
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors[0]?.reason).toBe('handler-error');
+    expect(disposed).toBe(true); // scope disposed despite the throw
+    expect(rail.activeOwnerCount()).toBe(0);
+  });
+
   it('activates and reclaims all resources on deactivate', () => {
     const rail = new ActivationRail(root());
     let disposed = false;
