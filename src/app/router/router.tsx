@@ -20,7 +20,7 @@ import { RouteFallback } from '@shared/ui';
 import { env } from '@shared/config/env';
 import { isChromeless } from './routeChrome';
 import { decideAuthRedirect } from './authGuard';
-import { WorkspaceSurface } from './workspaceSurfaceRoute';
+import { WorkspaceSurfaceGuard } from './workspaceSurfaceRoute';
 
 // Tab-kind routes are now rendered by WorkspaceTabsHost — the host keeps
 // every open tab mounted in parallel and only paints the active one. The
@@ -321,8 +321,11 @@ const catalogRoute = createRoute({
 });
 
 // Generic canonical surface route (WB-402): one route resolves ANY surface from
-// the catalog by identity — adding a surface needs no router edit. Legacy tab
-// paths (/intelligence, …) remain read-only aliases handled by WorkspaceTabsHost.
+// the catalog by identity — adding a surface needs no router edit. The route is a
+// deep-link GUARD only: the keep-mounted WorkspaceTabsHost is the single mount
+// authority, so the guard renders a typed error for a bad surfaceId and nothing
+// for a valid one (the host paints it — exactly one mount). Legacy tab paths
+// (/intelligence, …) remain read-only aliases handled by the same host.
 const workspaceSurfaceRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/w/$workspaceId/$surfaceId',
@@ -330,7 +333,7 @@ const workspaceSurfaceRoute = createRoute({
     const { workspaceId, surfaceId } = workspaceSurfaceRoute.useParams();
     return (
       <ErrorBoundary label={`surface:${surfaceId}`}>
-        <WorkspaceSurface workspaceId={workspaceId} surfaceId={surfaceId} />
+        <WorkspaceSurfaceGuard workspaceId={workspaceId} surfaceId={surfaceId} />
       </ErrorBoundary>
     );
   },

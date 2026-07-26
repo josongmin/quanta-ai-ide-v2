@@ -162,3 +162,40 @@ describe('workspace-tabs store — setPinned / moveIntoSection', () => {
     expect(s().tabs.map((t) => t.id)).toEqual(before);
   });
 });
+
+describe('workspace-tabs store — openSurface honours descriptor instancing', () => {
+  it('a singleton surface focuses its existing tab instead of duplicating', () => {
+    // All built-ins are singleton. Seed a single coding tab, then open it again.
+    seedTabs(['intelligence', 'coding']);
+    const codingId = s().tabs.find((t) => t.surfaceId === 'core.coding')!.id;
+    const countBefore = s().tabs.length;
+
+    const returned = s().openSurface('core.coding');
+
+    // No duplicate instance was created and the returned id is the existing one.
+    expect(s().tabs.length).toBe(countBefore);
+    expect(returned).toBe(codingId);
+    expect(s().tabs.filter((t) => t.surfaceId === 'core.coding')).toHaveLength(1);
+    // It was focused.
+    expect(s().activeId).toBe(codingId);
+  });
+
+  it('opening a singleton surface that is not open yet creates exactly one tab', () => {
+    seedTabs(['intelligence']);
+    const returned = s().openSurface('core.reviews');
+    const reviews = s().tabs.filter((t) => t.surfaceId === 'core.reviews');
+    expect(reviews).toHaveLength(1);
+    expect(returned).toBe(reviews[0].id);
+    expect(s().activeId).toBe(returned);
+  });
+
+  it('activate:false focuses an existing singleton without stealing focus', () => {
+    seedTabs(['intelligence', 'coding']);
+    const intelligenceId = s().activeId;
+    const returned = s().openSurface('core.coding', { activate: false });
+    // Returns the existing coding tab id, but focus stays on intelligence.
+    expect(s().tabs.filter((t) => t.surfaceId === 'core.coding')).toHaveLength(1);
+    expect(returned).toBe(s().tabs.find((t) => t.surfaceId === 'core.coding')!.id);
+    expect(s().activeId).toBe(intelligenceId);
+  });
+});

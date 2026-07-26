@@ -49,8 +49,37 @@ export function SurfaceErrorView({ state }: { state: Exclude<SurfaceRouteState, 
   );
 }
 
+// Route-wired deep-link guard — the FORM actually mounted by the `/w/...` route.
+//
+// The keep-mounted WorkspaceTabsHost is the single surface MOUNT authority (so a
+// tab's WebGL context + per-tab state survive tab switches). This route must NOT
+// also mount, or the surface's provider/effect/scope tree is created twice. So
+// the guard only validates the deep link: an invalid surfaceId renders a typed
+// error surface; a valid one renders nothing and lets the host paint it —
+// exactly one mount per (workspaceId, surfaceId). `WorkspaceSurface` below stays
+// the generic router-owned mounter (exercised by tests) — the drop-in for a
+// future router-owned lifecycle, deliberately not wired as the active path.
+export function WorkspaceSurfaceGuard({
+  workspaceId,
+  surfaceId,
+  admit = builtinAdmission,
+  catalog = builtinCatalog,
+}: {
+  workspaceId: string;
+  surfaceId: string;
+  admit?: AdmissionPolicy;
+  catalog?: SurfaceCatalog;
+}): ReactNode {
+  const state = resolveSurfaceRoute(catalog, admit, workspaceId, surfaceId);
+  if (state.status !== 'ok') return <SurfaceErrorView state={state} />;
+  return null;
+}
+
 // Presentational surface route — router-agnostic so it is fully testable. The
-// TanStack route is a thin wrapper that supplies workspaceId/surfaceId params.
+// generic MOUNTER for any catalog entry (built-in or injected/plugin). It is the
+// building block for a future router-owned mount mode; today the keep-mounted
+// host owns mounting, so this is not the active route path (see
+// WorkspaceSurfaceGuard) but remains covered by tests.
 export function WorkspaceSurface({
   workspaceId,
   surfaceId,

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { WorkbenchRoot } from '@shared/workbench/react';
-import { resolveSurfaceRoute, WorkspaceSurface, builtinAdmission, type AdmissionPolicy } from '../workspaceSurfaceRoute';
+import { resolveSurfaceRoute, WorkspaceSurface, WorkspaceSurfaceGuard, builtinAdmission, type AdmissionPolicy } from '../workspaceSurfaceRoute';
 import { builtinCatalog } from '@app/workbench/builtinSurfaces';
 import { buildSurfaceCatalog, type SurfaceManifest } from '@app/workbench/surfaceCatalog';
 
@@ -53,7 +53,7 @@ describe('WorkspaceSurface', () => {
     expect(container.querySelector('[data-surface="core.coding@ws"]')).not.toBeNull();
   });
 
-  it('mounts a NON-BUILTIN surface from an injected catalog (truly generic)', () => {
+  it('mounts a NON-BUILTIN surface from an injected catalog (truly generic, router-owned building block)', () => {
     const descriptor: SurfaceManifest = {
       id: 'acme.custom',
       owner: 'acme',
@@ -73,5 +73,48 @@ describe('WorkspaceSurface', () => {
     );
     // Resolves AND mounts via the same route — not a builtins-only map.
     expect(container.querySelector('[data-surface="acme.custom@ws"]')).not.toBeNull();
+  });
+});
+
+// The route wired at `/w/$ws/$surfaceId` is the GUARD, not the mounter. The
+// keep-mounted WorkspaceTabsHost is the single mount authority; the guard must
+// add ZERO mounts for a valid surface (else the surface mounts twice — once here,
+// once in the host). This is the P0 double-mount regression lock.
+describe('WorkspaceSurfaceGuard (the wired route form)', () => {
+  it('renders a typed error surface for an unknown deep link', () => {
+    const { getByRole } = render(
+      <WorkbenchRoot>
+        <WorkspaceSurfaceGuard workspaceId="ws" surfaceId="core.ghost" />
+      </WorkbenchRoot>,
+    );
+    expect(getByRole('alert').getAttribute('data-surface-error')).toBe('unknown');
+  });
+
+  it('mounts NOTHING for a valid surface — the host owns the single mount', () => {
+    let mounts = 0;
+    const descriptor: SurfaceManifest = {
+      id: 'acme.counted',
+      owner: 'acme',
+      trust: 'untrusted',
+      title: 'Counted',
+      group: 'acme.group',
+      icon: 'Box',
+      instancing: 'singleton',
+      contextKinds: [],
+    };
+    const Counting = () => { mounts += 1; return null; };
+    const built = buildSurfaceCatalog([descriptor], { 'acme.counted': () => Promise.resolve({ Component: Counting }) });
+    if (!built.ok) throw new Error('catalog build failed');
+
+    const admitAll: AdmissionPolicy = () => 'ok';
+    const { container } = render(
+      <WorkbenchRoot>
+        <WorkspaceSurfaceGuard workspaceId="ws" surfaceId="acme.counted" admit={admitAll} catalog={built.value} />
+      </WorkbenchRoot>,
+    );
+
+    // Guard resolved OK but mounted no surface host and never invoked the view.
+    expect(container.querySelector('[data-surface="acme.counted@ws"]')).toBeNull();
+    expect(mounts).toBe(0);
   });
 });

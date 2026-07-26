@@ -27,7 +27,9 @@ const SURFACES: readonly SurfaceManifest[] = SURFACE_IDS_ORDERED.map((surfaceId)
     title: meta.title,
     group: `core.${meta.group}`,
     icon: meta.icon,
-    instancing: 'singleton',
+    // Instancing is the descriptor's authority, sourced from the single
+    // metadata SoT — not hard-coded here and not decided by the tab store.
+    instancing: meta.instancing,
     contextKinds: [],
   };
 });

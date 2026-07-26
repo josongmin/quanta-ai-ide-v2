@@ -5,7 +5,7 @@ import {
   type StateStorage,
 } from 'zustand/middleware';
 import { STORAGE_KEYS, systemRuntimeEnv } from '@shared/lib';
-import { DEFAULT_SURFACE_IDS, SURFACE_IDS_ORDERED, isKnownSurface } from '@shared/config/surfaces';
+import { DEFAULT_SURFACE_IDS, SURFACE_IDS_ORDERED, isKnownSurface, instancingFor } from '@shared/config/surfaces';
 import { migrateTabs, TAB_STATE_VERSION } from './migrateTabs';
 
 const KNOWN_SURFACE_IDS = new Set(SURFACE_IDS_ORDERED);
@@ -200,7 +200,7 @@ function moveIntoSection(
 
 export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
   persist(
-    (set) => {
+    (set, get) => {
       const initial = defaultTabs();
       return {
         tabs: initial,
@@ -218,10 +218,18 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
         },
 
         openSurface: (surfaceId, opts) => {
-          // Linear-style: every open creates a fresh instance even if the same
-          // surface is already open. The picker exposes both "open new" and
-          // "focus existing" as distinct actions when needed.
           const activate = opts?.activate !== false;
+          // The descriptor's instancing policy is the sole authority: a
+          // `singleton` surface focuses its existing tab instead of spawning a
+          // duplicate; only `multi` surfaces get a fresh instance per open. The
+          // store never overrides the descriptor (that split was the P0 defect).
+          if (instancingFor(surfaceId) === 'singleton') {
+            const existing = get().tabs.find((t) => t.surfaceId === surfaceId);
+            if (existing) {
+              if (activate) get().setActive(existing.id);
+              return existing.id;
+            }
+          }
           const tab = defaultTab(surfaceId, activate);
           set((s) => ({
             tabs: [...s.tabs, tab],
