@@ -1,6 +1,7 @@
 import { beforeEach, describe, it, expect } from 'vitest';
 import { useAdmissionStore } from '../store';
 import { SAMPLE_RULES } from '@entities/admission';
+import { serializeRules } from '../../lib/rulesIo';
 
 // The admission store owns security-policy semantics: rule versioning, pack
 // all-on/all-off toggling, rollout dedup+severity, and the untrusted-JSON
@@ -77,12 +78,18 @@ describe('admission store — importRules (untrusted JSON boundary)', () => {
   });
 
   it('merges a valid rule by id (append new, replace existing)', () => {
+    // A COMPLETE rule (full shape incl. discriminated signal) — the import
+    // boundary now validates every field, so a spot-check fixture would be
+    // rejected. See rulesIo.ts ruleSchema.
+    const imported = { ...SAMPLE_RULES[0], id: 'imp.1', name: 'Imported' };
     const before = s().rules.length;
-    const res = s().importRules('{"rules":[{"id":"imp.1","name":"Imported","signal":{"kind":"metric"}}]}');
+    const res = s().importRules(serializeRules([imported]));
     expect(res).toEqual({ ok: true, count: 1 });
     expect(s().rules).toHaveLength(before + 1);
     // re-import same id → replaced, not duplicated
-    s().importRules('{"rules":[{"id":"imp.1","name":"Imported v2","signal":{"kind":"metric"}}]}');
-    expect(s().rules.filter((r) => r.id === 'imp.1')).toHaveLength(1);
+    s().importRules(serializeRules([{ ...imported, name: 'Imported v2' }]));
+    const hit = s().rules.filter((r) => r.id === 'imp.1');
+    expect(hit).toHaveLength(1);
+    expect(hit[0].name).toBe('Imported v2');
   });
 });

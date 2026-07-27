@@ -52,7 +52,11 @@ function Row({
   const path = node.folder.path;
   const isOpen = expanded.has(path) || depth === 0;
   const isSelected = selectedFolders.has(path);
-  const folderFiles = node.folder.fileIds.map((id) => files[id]);
+  // A fileId can dangle if repo.files and folder.fileIds drift out of sync;
+  // drop the holes so FileRow never receives `undefined` (it reads f.id).
+  const folderFiles = node.folder.fileIds
+    .map((id) => files[id])
+    .filter((f): f is FileRecord => f !== undefined);
   const hasChildren = node.children.length > 0 || folderFiles.length > 0;
   const m = counts.matched.get(path) ?? 0;
   const t = counts.total.get(path) ?? 0;

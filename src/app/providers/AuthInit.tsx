@@ -19,7 +19,14 @@ export function AuthInit(): null {
     });
     // Dynamic import keeps better-auth out of the initial chunk (mock demo pays
     // nothing). Primes the session store so the route guard reads it warm.
-    void import('@shared/auth').then(({ authClient }) => authClient.getSession());
+    void import('@shared/auth')
+      .then(({ authClient }) => authClient.getSession())
+      .catch((e: unknown) => {
+        // Non-blocking: a failed chunk load / session prime just means the
+        // route guard pays the cold-read cost. Surface it so the failure is
+        // observable instead of silently leaving auth uninitialised.
+        console.warn('[AuthInit] session prime failed', e);
+      });
   }, []);
   return null;
 }

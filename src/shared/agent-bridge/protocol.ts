@@ -143,6 +143,20 @@ export function decodeFrame(raw: unknown): DecodedFrame | null {
     if (typeof seq !== 'number' || !Number.isFinite(seq)) return null;
     const eventId = p['eventId'];
     if (typeof eventId !== 'string' || eventId.length === 0) return null;
+    // The typed hot fields the demo reads off events must have the right shape
+    // when present, or a hostile/buggy daemon crashes consumers that treat them
+    // as `string` / structured. Absent is fine (all optional); wrong-typed is
+    // not — drop the frame (null) rather than admit a lying SessionEvent.
+    if ('turnId' in p && typeof p['turnId'] !== 'string') return null;
+    if ('delta' in p && typeof p['delta'] !== 'string') return null;
+    if ('toolCallId' in p && typeof p['toolCallId'] !== 'string') return null;
+    if ('toolName' in p && typeof p['toolName'] !== 'string') return null;
+    if ('status' in p && typeof p['status'] !== 'string') return null;
+    if ('approval' in p) {
+      const ap = p['approval'];
+      if (!isRecord(ap) || typeof ap['approvalId'] !== 'string') return null;
+      if ('reason' in ap && typeof ap['reason'] !== 'string') return null;
+    }
     return { kind: 'event', event: p as unknown as SessionEvent };
   }
 

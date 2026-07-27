@@ -33,6 +33,30 @@ describe('decodeFrame', () => {
     expect(decodeFrame(event({ seq: 'NaN' }))).toBeNull();
   });
 
+  it('rejects an event whose typed hot fields have the wrong type', () => {
+    // A hostile/buggy daemon could ship a whitelisted type + valid seq/eventId
+    // but lie about the payload the consumer reads as `string` / structured.
+    expect(decodeFrame(event({ delta: 42 }))).toBeNull();
+    expect(decodeFrame(event({ turnId: 7 }))).toBeNull();
+    expect(decodeFrame(event({ toolCallId: {} }))).toBeNull();
+    expect(decodeFrame(event({ toolName: false }))).toBeNull();
+    expect(decodeFrame(event({ status: 1 }))).toBeNull();
+    // approval must be an object carrying a string approvalId.
+    expect(decodeFrame(event({ approval: 'nope' }))).toBeNull();
+    expect(decodeFrame(event({ approval: {} }))).toBeNull();
+    expect(decodeFrame(event({ approval: { approvalId: 1 } }))).toBeNull();
+    expect(decodeFrame(event({ approval: { approvalId: 'a', reason: 2 } }))).toBeNull();
+  });
+
+  it('still admits an event with a well-typed approval / no optional fields', () => {
+    const ok = decodeFrame(JSON.stringify({
+      kind: 'event',
+      payload: { type: 'approval.requested', seq: 3, eventId: 'e9', approval: { approvalId: 'ap1', reason: 'why' } },
+    }));
+    expect(ok?.kind).toBe('event');
+    if (ok?.kind === 'event') expect(ok.event.approval?.approvalId).toBe('ap1');
+  });
+
   it('decodes snapshot and rejected(connect) control frames', () => {
     const snap = decodeFrame(JSON.stringify({ kind: 'snapshot', payload: { sessionId: 's1', seq: 0 } }));
     expect(snap).toEqual({ kind: 'snapshot', sessionId: 's1', seq: 0 });

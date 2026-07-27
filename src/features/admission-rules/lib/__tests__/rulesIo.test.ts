@@ -28,6 +28,41 @@ describe('rulesIo — serialize/parse round-trip', () => {
   it('rejects a rule missing id/name/signal', () => {
     expect(parseRulesImport('{"rules":[{"id":"x"}]}').ok).toBe(false);
   });
+
+  it('rejects a rule missing a required field (description/scope/override/…)', () => {
+    // Start from a valid rule, then drop a field the old spot-check ignored.
+    const { description: _drop, ...noDescription } = base;
+    void _drop;
+    const res = parseRulesImport(JSON.stringify({ version: 1, rules: [noDescription] }));
+    expect(res.ok).toBe(false);
+    if (!res.ok) expect(res.error).toContain('description');
+  });
+
+  it('rejects a signal with an invalid discriminated kind', () => {
+    const bad = { ...base, signal: { kind: 'nope', field: 'blastRadius', op: '>', value: 1 } };
+    expect(parseRulesImport(JSON.stringify({ version: 1, rules: [bad] })).ok).toBe(false);
+  });
+
+  it('rejects a metric signal with an out-of-set field / non-numeric value', () => {
+    const badField = { ...base, signal: { kind: 'metric', field: 'notAField', op: '>', value: 1 } };
+    expect(parseRulesImport(JSON.stringify({ version: 1, rules: [badField] })).ok).toBe(false);
+    const badValue = { ...base, signal: { kind: 'metric', field: 'blastRadius', op: '>', value: 'high' } };
+    expect(parseRulesImport(JSON.stringify({ version: 1, rules: [badValue] })).ok).toBe(false);
+  });
+
+  it('accepts every valid signal variant round-tripped', () => {
+    const variants: RuleSignal[] = [
+      { kind: 'metric', field: 'loc', op: '<=', value: 200 },
+      { kind: 'graph', pattern: 'import-cycle' },
+      { kind: 'taint', source: 'env', sink: 'exec', requireSanitizer: true },
+      { kind: 'dsl', expr: 'safety:<40' },
+      { kind: 'external', tool: 'semgrep', ruleId: 'r1' },
+    ];
+    const rules = variants.map((signal, i) => ({ ...base, id: `v${i}`, signal }));
+    const res = parseRulesImport(serializeRules(rules));
+    expect(res.ok).toBe(true);
+    if (res.ok) expect(res.rules).toHaveLength(variants.length);
+  });
 });
 
 describe('rulesIo — mergeRules', () => {
