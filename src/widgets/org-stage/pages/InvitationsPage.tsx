@@ -1,5 +1,6 @@
 import { useParams } from '@tanstack/react-router';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Mail, Plus, RotateCcw, X, Clock } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { useHoverStyle } from '@shared/lib';
@@ -32,13 +33,14 @@ const INVITES: Invite[] = [
   { id: 'inv_5', email: 'new@candidates.io',   role: 'Member', team: 'Platform',  sentBy: 's.kim',   sentAt: '2026-05-09 16:45', expiresIn: '—',        status: 'accepted' },
 ];
 
-const STATUS_META: Record<InviteStatus, { label: string; fg: string; bg: string }> = {
-  pending:  { label: 'Pending',  fg: 'var(--intent-warn-fg)',    bg: 'var(--intent-warn-bg)' },
-  accepted: { label: 'Accepted', fg: 'var(--intent-success-fg)', bg: 'var(--intent-success-bg)' },
-  expired:  { label: 'Expired',  fg: 'var(--intent-danger-fg)',  bg: 'var(--intent-danger-bg)' },
+const STATUS_META: Record<InviteStatus, { fg: string; bg: string }> = {
+  pending:  { fg: 'var(--intent-warn-fg)',    bg: 'var(--intent-warn-bg)' },
+  accepted: { fg: 'var(--intent-success-fg)', bg: 'var(--intent-success-bg)' },
+  expired:  { fg: 'var(--intent-danger-fg)',  bg: 'var(--intent-danger-bg)' },
 };
 
 function InvitationsMock() {
+  const { t } = useTranslation('org');
   // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
   const { org = '' } = useParams({ strict: false });
   const [filter, setFilter] = useState<'all' | InviteStatus>('all');
@@ -48,8 +50,8 @@ function InvitationsMock() {
     <OrgShell
       orgName={org}
       orgSlug={org}
-      title="Invitations"
-      subtitle="Pending and accepted invites for this organization. Resend, revoke, or copy share-able invite links."
+      title={t('invitations.title')}
+      subtitle={t('invitations.subtitle')}
       topRight={
         <button
           type="button"
@@ -57,16 +59,16 @@ function InvitationsMock() {
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <Plus className="w-3.5 h-3.5" />
-          Invite people
+          {t('invitations.invitePeople')}
         </button>
       }
     >
       {/* Stats */}
       <div className="grid grid-cols-4 gap-3 mb-5">
-        <Tile label="Pending"   value={INVITES.filter((i) => i.status === 'pending').length}  tone="warn" />
-        <Tile label="Accepted"  value={INVITES.filter((i) => i.status === 'accepted').length} tone="success" />
-        <Tile label="Expired"   value={INVITES.filter((i) => i.status === 'expired').length}  tone="danger" />
-        <Tile label="This month" value={4} tone="default" />
+        <Tile label={t('invitations.stat.pending')}   value={INVITES.filter((i) => i.status === 'pending').length}  tone="warn" />
+        <Tile label={t('invitations.stat.accepted')}  value={INVITES.filter((i) => i.status === 'accepted').length} tone="success" />
+        <Tile label={t('invitations.stat.expired')}   value={INVITES.filter((i) => i.status === 'expired').length}  tone="danger" />
+        <Tile label={t('invitations.stat.thisMonth')} value={4} tone="default" />
       </div>
 
       {/* Filter chips */}
@@ -78,14 +80,14 @@ function InvitationsMock() {
               key={f}
               type="button"
               onClick={() => { setFilter(f); }}
-              className="h-7 px-3 rounded-full text-sm font-medium capitalize transition-colors"
+              className="h-7 px-3 rounded-full text-sm font-medium transition-colors"
               style={{
                 background: active ? 'color-mix(in srgb, var(--fg-accent) 12%, transparent)' : 'transparent',
                 color: active ? 'var(--fg-accent)' : 'var(--fg-muted)',
                 border: `1px solid ${active ? 'color-mix(in srgb, var(--fg-accent) 40%, transparent)' : 'var(--border-default)'}`,
               }}
             >
-              {f}
+              {t(`invitations.filter.${f}`)}
             </button>
           );
         })}
@@ -104,12 +106,12 @@ function InvitationsMock() {
             borderBottom: '1px solid var(--border-muted)',
           }}
         >
-          <span>Email</span>
-          <span>Role</span>
-          <span>Team</span>
-          <span>Sent by</span>
-          <span>Status</span>
-          <span>Expires</span>
+          <span>{t('invitations.table.email')}</span>
+          <span>{t('invitations.table.role')}</span>
+          <span>{t('invitations.table.team')}</span>
+          <span>{t('invitations.table.sentBy')}</span>
+          <span>{t('invitations.table.status')}</span>
+          <span>{t('invitations.table.expires')}</span>
           <span></span>
         </div>
         {filtered.map((inv, i) => (
@@ -123,10 +125,10 @@ function InvitationsMock() {
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
         <h2 className="text-base font-semibold tracking-tight mb-1.5" style={{ color: 'var(--fg-strong)' }}>
-          Shareable invite link
+          {t('invitations.shareLink.title')}
         </h2>
         <p className="text-sm mb-3" style={{ color: 'var(--fg-muted)' }}>
-          Anyone with this link from a verified domain can join as a Member. Disable any time.
+          {t('invitations.shareLink.sub')}
         </p>
         <CopyableField value={`https://acme.dev/join/${org}#aB12Cd34`} layout="row" button="text" />
       </div>
@@ -156,6 +158,7 @@ function Tile({ label, value, tone }: { label: string; value: number; tone: 'def
 }
 
 function Row({ inv, last }: { inv: Invite; last: boolean }) {
+  const { t } = useTranslation('org');
   const m = STATUS_META[inv.status];
   const ref = useRef<HTMLDivElement>(null);
   useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
@@ -179,7 +182,7 @@ function Row({ inv, last }: { inv: Invite; last: boolean }) {
         className="inline-flex items-center gap-1 px-2 h-5 rounded text-xs font-bold w-fit"
         style={{ color: m.fg, background: m.bg }}
       >
-        {m.label}
+        {t(`invitations.status.${inv.status}`)}
       </span>
       <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>
         {inv.status === 'pending' && <Clock className="w-3 h-3 inline mr-1" />}
@@ -188,12 +191,12 @@ function Row({ inv, last }: { inv: Invite; last: boolean }) {
       <div className="flex justify-end gap-1">
         {inv.status === 'pending' && (
           <>
-            <RowBtn icon={RotateCcw} label="Resend" />
-            <RowBtn icon={X} label="Revoke" danger />
+            <RowBtn icon={RotateCcw} label={t('invitations.action.resend')} />
+            <RowBtn icon={X} label={t('invitations.action.revoke')} danger />
           </>
         )}
         {inv.status === 'expired' && (
-          <RowBtn icon={RotateCcw} label="Re-invite" />
+          <RowBtn icon={RotateCcw} label={t('invitations.action.reinvite')} />
         )}
       </div>
     </div>

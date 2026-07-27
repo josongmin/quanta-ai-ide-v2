@@ -1,1 +1,1218 @@
-{}
+{
+  "shell": {
+    "breadcrumbAria": "Breadcrumb",
+    "settings": "Settings",
+    "nav": {
+      "groupOrg": "Organization",
+      "groupAccess": "Access & policy",
+      "groupCompliance": "Compliance",
+      "general": "General",
+      "members": "Members",
+      "invitations": "Invitations",
+      "teams": "Teams",
+      "roles": "Roles",
+      "serviceAccounts": "Service accounts",
+      "domains": "Domains",
+      "usage": "Usage",
+      "security": "Security",
+      "integrations": "Integrations",
+      "webhooks": "Webhooks",
+      "api": "API & OAuth",
+      "policies": "Policies",
+      "aiPolicies": "AI policies",
+      "sso": "SAML SSO",
+      "scim": "SCIM",
+      "audit": "Audit log",
+      "dataResidency": "Data residency",
+      "retention": "Retention"
+    }
+  },
+  "comingSoon": {
+    "title": "Available soon",
+    "subtitle": "{{title}} isn't connected to your organization yet — it's coming in a later release.",
+    "titles": {
+      "roles": "Roles",
+      "usage": "Usage",
+      "domains": "Domains",
+      "security": "Security",
+      "integrations": "Integrations",
+      "api": "API & OAuth",
+      "policies": "Policies",
+      "aiPolicies": "AI policies",
+      "dataResidency": "Data residency",
+      "retention": "Retention"
+    },
+    "subtitles": {
+      "roles": "Role permissions are managed by the platform.",
+      "usage": "Organization usage metrics."
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "copy": "Copy",
+    "copied": "Copied",
+    "close": "Close",
+    "closeDialog": "Close dialog",
+    "closeDrawer": "Close drawer",
+    "remove": "Remove",
+    "delete": "Delete",
+    "done": "Done",
+    "save": "Save",
+    "member_one": "member",
+    "member_other": "members",
+    "person_one": "person",
+    "person_other": "people",
+    "role": {
+      "owner": "Owner",
+      "admin": "Admin",
+      "member": "Member",
+      "billing": "Billing",
+      "guest": "Guest",
+      "viewer": "Viewer"
+    }
+  },
+  "general": {
+    "title": "General",
+    "subtitle": "Identity and defaults for this organization.",
+    "subtitleReal": "Identity for this organization.",
+    "identity": {
+      "title": "Identity",
+      "hint": "How this org appears across the product and to invitees.",
+      "logo": "Logo",
+      "logoSub": "Square PNG or SVG, at least 64×64.",
+      "upload": "Upload",
+      "removeLogo": "Remove",
+      "displayName": "Display name",
+      "displayNameHint": "up to 40 chars",
+      "slug": "URL slug",
+      "slugHint": "acme.app/{slug}",
+      "slugHintReal": "se-field.app/{slug}",
+      "website": "Website",
+      "description": "Description",
+      "descriptionHint": "shown on the org dashboard"
+    },
+    "defaults": {
+      "title": "Defaults",
+      "hint": "Per-user fallbacks when nothing else is selected.",
+      "defaultWorkspace": "Default workspace",
+      "defaultWorkspaceSub": "Where new members land after signing in."
+    },
+    "danger": {
+      "title": "Danger zone",
+      "hint": "Irreversible actions affecting this entire organization.",
+      "deleteLabel": "Delete organization",
+      "deleteSub": "Permanently remove this org, its workspaces, and all attached data. People keep their accounts.",
+      "deleteButton": "Delete org"
+    },
+    "deleteDialog": {
+      "title": "Delete {{name}}?",
+      "titleFallback": "Delete organization?",
+      "confirm": "I understand, delete",
+      "descriptionPre": "This permanently deletes the organization, every workspace inside it, billing records, and all agent history. People keep their accounts but lose access. Type ",
+      "descriptionPost": " below to confirm."
+    }
+  },
+  "members": {
+    "title": "Members",
+    "subtitle": "People who can access this organization. Invite by email, change roles, or deactivate access.",
+    "subtitleReal": "People who can access this organization. Invite by email or change roles.",
+    "invitePeople": "Invite people",
+    "selected": "{{count}} selected",
+    "deactivate": "Deactivate",
+    "clearSelection": "Clear selection",
+    "searchPlaceholder": "Search name, email, team…",
+    "searchPlaceholderReal": "Search name or email…",
+    "filter": {
+      "all": "All",
+      "active": "Active",
+      "invited": "Invited",
+      "deactivated": "Deactivated",
+      "allRoles": "All roles"
+    },
+    "table": {
+      "member": "Member",
+      "role": "Role",
+      "team": "Team",
+      "lastActive": "Last active",
+      "joined": "Joined"
+    },
+    "empty": {
+      "noMatchesTitle": "No matches for \"{{query}}\"",
+      "noMatchesSubtitle": "Try a different keyword or clear the filter.",
+      "noFilterTitle": "No people match this filter",
+      "noMembersTitle": "No members yet",
+      "noMembersSubtitle": "Invite people to get started.",
+      "noMatchesKeyword": "Try a different keyword."
+    },
+    "footer_one": "{{filtered}} of {{total}} person · Owner cannot be removed without first transferring ownership.",
+    "footer_other": "{{filtered}} of {{total}} people · Owner cannot be removed without first transferring ownership.",
+    "footerReal_one": "{{filtered}} of {{total}} person · Owner is changed via ownership transfer.",
+    "footerReal_other": "{{filtered}} of {{total}} people · Owner is changed via ownership transfer.",
+    "you": "You",
+    "removeDialog": {
+      "title": "Remove {{name}}?",
+      "confirm": "Remove",
+      "description": "Their access to this organization will end immediately. Their authored work stays attributed to them. This action can't be undone."
+    },
+    "rowMenu": {
+      "resendInvite": "Resend invite",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "transferOwnership": "Transfer ownership",
+      "removeFromOrg": "Remove from org",
+      "removeFromOrganization": "Remove from organization"
+    },
+    "twoFaTitle": "2FA enabled"
+  },
+  "invite": {
+    "title": "Invite people",
+    "emails": "Emails",
+    "valid": "{{count}} valid",
+    "invalid": "{{count}} invalid",
+    "emailsPlaceholder": "alice@acme.com, bob@acme.com…",
+    "emailsPlaceholderReal": "teammate@company.com, another@company.com…",
+    "skipping": "Skipping {{count}}: {{list}}",
+    "role": "Role",
+    "team": "Team",
+    "orShareLink": "Or share an invite link",
+    "send_one": "Send {{count}} invite",
+    "send_other": "Send {{count}} invites",
+    "sendEmpty": "Send invites",
+    "sending": "Sending…"
+  },
+  "invitations": {
+    "title": "Invitations",
+    "subtitle": "Pending and accepted invites for this organization. Resend, revoke, or copy share-able invite links.",
+    "subtitleReal": "Outstanding invites for this organization. Resend or revoke a pending invite.",
+    "invitePeople": "Invite people",
+    "stat": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "expired": "Expired",
+      "thisMonth": "This month"
+    },
+    "filter": {
+      "all": "All",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "expired": "Expired"
+    },
+    "table": {
+      "email": "Email",
+      "role": "Role",
+      "team": "Team",
+      "sentBy": "Sent by",
+      "status": "Status",
+      "expires": "Expires"
+    },
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "expired": "Expired"
+    },
+    "action": {
+      "resend": "Resend",
+      "revoke": "Revoke",
+      "reinvite": "Re-invite",
+      "resendInvite": "Resend invite",
+      "revokeInvite": "Revoke invite"
+    },
+    "shareLink": {
+      "title": "Shareable invite link",
+      "sub": "Anyone with this link from a verified domain can join as a Member. Disable any time."
+    },
+    "empty": {
+      "title": "No pending invitations",
+      "subtitle": "Invite people by email to see them here."
+    },
+    "pendingCount_one": "{{count}} pending invite.",
+    "pendingCount_other": "{{count}} pending invites."
+  },
+  "teams": {
+    "title": "Teams",
+    "subtitle": "Group people for ownership routing, notifications, and review assignment.",
+    "subtitleReal": "Group people within the organization. Assign ownership and review routing in workspace settings.",
+    "newTeam": "New team",
+    "searchPlaceholder": "Search teams…",
+    "noMatch": "No teams match.",
+    "membersCount_one": "{{count}} member",
+    "membersCount_other": "{{count}} members",
+    "pathsCount": "{{count}} paths",
+    "noneSelected": "No team selected",
+    "table": {
+      "team": "Team",
+      "created": "Created"
+    },
+    "empty": {
+      "title": "No teams yet",
+      "subtitle": "Create a team to group members."
+    },
+    "removeDialog": {
+      "title": "Delete {{name}}?",
+      "confirm": "Delete team",
+      "description": "Members keep their org access. Code paths owned by this team revert to org default routing.",
+      "descriptionReal": "Members stay in the organization; only the team grouping is removed."
+    },
+    "create": {
+      "title": "New team",
+      "name": "Name",
+      "namePlaceholder": "Mobile",
+      "teamName": "Team name",
+      "handle": "Handle",
+      "handleTaken": "already taken",
+      "handlePlaceholder": "mobile",
+      "createTeam": "Create team",
+      "creating": "Creating…"
+    },
+    "detail": {
+      "noDescription": "No description yet.",
+      "deleteTeam": "Delete team",
+      "membersHeader": "Members · {{count}}",
+      "addMember": "Add member",
+      "noMembers": "No members yet. Add someone to start routing work here.",
+      "lead": "Lead",
+      "makeLead": "Make lead",
+      "removeFromTeam": "Remove from team",
+      "codeOwnershipHeader": "Code ownership · {{count}}",
+      "codeOwnershipPre": "Globs that route reviews and incidents to this team. Paths flagged Auto are added to ",
+      "codeOwnershipPost": " on push.",
+      "auto": "Auto",
+      "manual": "Manual",
+      "removePath": "Remove path",
+      "addPathPlaceholder": "src/features/admission/**",
+      "addPath": "Add path",
+      "routing": "Routing",
+      "notificationChannel": "Notification channel",
+      "created": "Created {{date}}."
+    }
+  },
+  "roles": {
+    "title": "Roles",
+    "subtitle": "Built-in roles are locked. Duplicate one to define a custom role tuned to your team.",
+    "newRole": "New role",
+    "newRoleName": "New role",
+    "copySuffix": "{{name}} copy",
+    "builtIn": "Built-in",
+    "permsSummary": "{{perms}} perms · {{count}} {{unit}}",
+    "describePlaceholder": "Describe what this role is for…",
+    "assigned": "{{count}} assigned",
+    "permissionsOf": "{{count}} of {{total}} permissions",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "lockNotice": "This is a built-in role and cannot be edited. Duplicate it to make a customized version.",
+    "footer": "Custom roles take effect immediately for assigned members. Audit log records every permission change.",
+    "group": {
+      "org": "Organization",
+      "members": "Members",
+      "workspaces": "Workspaces",
+      "admission": "Admission",
+      "agents": "Agents",
+      "billing": "Billing",
+      "observability": "Audit & secrets"
+    },
+    "perm": {
+      "orgRead": "View org settings",
+      "orgManage": "Manage org settings",
+      "orgManageHint": "name, logo, defaults",
+      "membersInvite": "Invite members",
+      "membersRemove": "Remove members",
+      "membersRole": "Change member roles",
+      "workspacesCreate": "Create workspaces",
+      "workspacesDelete": "Delete workspaces",
+      "workspacesSettings": "Edit workspace settings",
+      "admissionRead": "Read admission rules",
+      "admissionWrite": "Author admission rules",
+      "admissionBypass": "Bypass admission gates",
+      "admissionBypassHint": "high risk",
+      "agentsRun": "Trigger agent runs",
+      "agentsConfigure": "Configure agents",
+      "agentsKill": "Kill running agents",
+      "billingRead": "View billing & usage",
+      "billingManage": "Change plan & payment",
+      "auditRead": "Read audit log",
+      "auditExport": "Export audit log",
+      "secretsRead": "Read secret names",
+      "secretsWrite": "Manage secrets"
+    },
+    "seed": {
+      "owner": "Full access. Can transfer ownership and delete the org.",
+      "admin": "Manage members, workspaces, and policies. No billing.",
+      "member": "Default role. Use the product, ship code, run agents.",
+      "billing": "Read-only access except for billing surfaces.",
+      "guest": "Limited read on shared workspaces.",
+      "secops": "Custom — security review and audit access."
+    }
+  },
+  "security": {
+    "title": "Security",
+    "subtitle": "Org-wide controls. Stricter settings here override per-user choices.",
+    "auth": {
+      "title": "Authentication",
+      "hint": "How people prove who they are when signing in.",
+      "mfaRequired": "Require multi-factor auth",
+      "mfaRequiredSub": "All members must enroll a second factor before they can access the org.",
+      "mfaMethod": "MFA method",
+      "mfaMethodSub": "Restrict to a specific factor type, or accept any enrolled factor.",
+      "mfaAny": "Any (TOTP, WebAuthn, backup)",
+      "mfaTotp": "TOTP only",
+      "mfaWebauthn": "WebAuthn / passkey only",
+      "passkeyAdmins": "Passkey-only for admins",
+      "passkeyAdminsSub": "Owners and Admins must use a phishing-resistant factor (WebAuthn).",
+      "ssoOnly": "Single sign-on only",
+      "ssoOnlySub": "Block password & social login. Members must use the org IdP."
+    },
+    "sessions": {
+      "title": "Sessions",
+      "hint": "How long an authenticated browser stays signed in.",
+      "maxDuration": "Maximum session duration",
+      "maxDurationSub": "Hard cap. After this, the user is logged out and must re-authenticate.",
+      "inactivity": "Inactivity timeout",
+      "inactivitySub": "Sign out after this many minutes of no activity.",
+      "min15": "15 min",
+      "min30": "30 min",
+      "hour1": "1 hour",
+      "hours2": "2 hours",
+      "never": "Never",
+      "rememberMe": "Allow “Remember me”",
+      "rememberMeSub": "Lets users skip MFA on trusted browsers for up to 30 days.",
+      "trustDevices": "Trust devices",
+      "trustDevicesSub": "Treat enrolled devices as a second factor on subsequent sign-ins.",
+      "hours8": "8 hours",
+      "day1": "1 day",
+      "week1": "1 week",
+      "days30": "30 days",
+      "days90": "90 days"
+    },
+    "ipAllowlist": {
+      "title": "IP allowlist",
+      "hint": "Restrict org access to a specific set of CIDR blocks. Empty list = allow all.",
+      "empty": "No CIDRs yet. Add one to start enforcing.",
+      "placeholder": "10.0.0.0/8",
+      "add": "Add CIDR",
+      "lockoutWarn": "Make sure your current IP is included before saving — otherwise you'll lock yourself out.",
+      "off": "IP allowlisting is off. Members can sign in from any network.",
+      "errorCidr": "Use CIDR notation, e.g. 10.0.0.0/8 or 203.0.113.42/32",
+      "errorDup": "Already in the list"
+    },
+    "appAccess": {
+      "title": "App access",
+      "hint": "Who can connect third-party OAuth apps to the org.",
+      "install": "Install third-party apps",
+      "installSub": "Members can browse the directory but only allowed roles can install.",
+      "adminOnly": "Admins only",
+      "all": "All members"
+    },
+    "notes": {
+      "effect": "Changes take effect immediately for new sign-ins. Existing sessions live until next refresh.",
+      "notify": "Members are notified by email when MFA, SSO-only, or passkey requirements change.",
+      "recovery": "Recovery codes are reissued whenever the MFA method changes."
+    }
+  },
+  "integrations": {
+    "title": "Integrations",
+    "subtitle": "{{installed}} of {{total}} apps installed.",
+    "category": {
+      "all": "All",
+      "chat": "Chat",
+      "tracker": "Issue tracker",
+      "pager": "Paging",
+      "observability": "Observability",
+      "sourcecontrol": "Source control",
+      "docs": "Docs"
+    },
+    "installedOnly": "Installed only",
+    "searchPlaceholder": "Search apps…",
+    "noMatchTitle": "No apps match.",
+    "noMatchSub": "Try a different category or clear the search.",
+    "notInstalled": "Not installed",
+    "configure": "Configure",
+    "install": "Install",
+    "statusDot": {
+      "healthy": "healthy",
+      "degraded": "degraded",
+      "error": "error"
+    },
+    "blurb": {
+      "slack": "Post review requests, agent updates, and incident signal to channels.",
+      "jira": "Two-way sync between admission gates and Jira tickets.",
+      "linear": "Open Linear issues from review threads. Link PRs back to issues.",
+      "pagerduty": "Page on-call when admission rules block a deploy or an agent crashes.",
+      "datadog": "Send agent + admission metrics to Datadog. Scrape errors back into incidents.",
+      "github": "Pull repos, post check runs, and apply CODEOWNERS routing.",
+      "gitlab": "Same as GitHub, for GitLab-hosted projects.",
+      "bitbucket": "Atlassian-hosted Git source.",
+      "notion": "Surface investigation summaries and runbooks inside Notion docs.",
+      "sentry": "Cross-link errors with admission failures and post-mortems.",
+      "opsgenie": "Alternative to PagerDuty for paging.",
+      "discord": "Drop notifications into a Discord server channel."
+    },
+    "drawer": {
+      "ariaLabel": "{{name}} configuration",
+      "account": "Account",
+      "installedBy": "Installed by",
+      "subscribedEvents": "Subscribed events",
+      "noEvents": "No events configured.",
+      "errorNotice": "API key returned 401 on last poll. Reconnect to refresh credentials.",
+      "documentation": "Documentation",
+      "openDocs": "Open {{name}} docs",
+      "uninstall": "Uninstall",
+      "done": "Done"
+    }
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "subtitle": "HTTP callbacks fired from org-level events. Each endpoint can subscribe to a subset of event types.",
+    "subtitleReal": "HTTP callbacks fired from org events, signed with HMAC-SHA256. Each endpoint subscribes to a subset of events.",
+    "newEndpoint": "New endpoint",
+    "urlPlaceholder": "https://hooks.example.com/se-events",
+    "descPlaceholder": "e.g. Internal warehouse mirror",
+    "seed": {
+      "warehouse": "Mirror to internal warehouse",
+      "partner": "Partner gate-result mirror",
+      "staging": "Staging only"
+    },
+    "event": {
+      "admissionPassed": "Admission gate passed",
+      "admissionFailed": "Admission gate failed",
+      "reviewRequested": "Review requested",
+      "reviewApproved": "Review approved",
+      "agentStarted": "Agent started",
+      "agentCompleted": "Agent completed",
+      "agentKilled": "Agent killed",
+      "incidentOpened": "Incident opened",
+      "incidentResolved": "Incident resolved",
+      "workspaceCreated": "Workspace created",
+      "memberInvited": "Member invited"
+    },
+    "real": {
+      "allEvents": "All events",
+      "memberInvited": "Member invited",
+      "memberRemoved": "Member removed",
+      "roleChanged": "Role changed",
+      "invitationCanceled": "Invitation canceled",
+      "orgUpdated": "Org updated",
+      "orgDeleted": "Org deleted",
+      "apikeyCreated": "API key created",
+      "apikeyRevoked": "API key revoked",
+      "subscriptionUpdated": "Subscription updated",
+      "paymentFailed": "Payment failed"
+    },
+    "table": {
+      "endpoint": "Endpoint",
+      "events": "Events",
+      "status": "Status",
+      "event": "Event",
+      "attempts": "Attempts",
+      "when": "When",
+      "all": "All"
+    },
+    "status": {
+      "enabled": "Enabled",
+      "paused": "Paused"
+    },
+    "deliveryStatus": {
+      "delivered": "delivered",
+      "failed": "failed",
+      "exhausted": "exhausted",
+      "pending": "pending",
+      "sending": "sending"
+    },
+    "action": {
+      "pause": "Pause",
+      "enable": "Enable",
+      "deleteEndpoint": "Delete endpoint",
+      "replay": "Replay"
+    },
+    "empty": {
+      "endpointsTitle": "No endpoints",
+      "endpointsSub": "Add an endpoint to receive signed event callbacks.",
+      "deliveriesTitle": "No deliveries yet",
+      "deliveriesSub": "Events will show here once endpoints receive them."
+    },
+    "recentDeliveries": "Recent deliveries",
+    "create": {
+      "title": "New webhook endpoint",
+      "payloadUrl": "Payload URL",
+      "urlPlaceholder": "https://hooks.example.com/p0",
+      "description": "Description (optional)",
+      "descPlaceholder": "Internal warehouse mirror",
+      "events": "Events",
+      "create": "Create endpoint",
+      "creating": "Creating…"
+    },
+    "signingSecret": {
+      "title": "Signing secret",
+      "description": "Verify each delivery's x-p0-signature header (HMAC-SHA256 of the body) with this secret. Shown once."
+    },
+    "deleteDialog": {
+      "title": "Delete this endpoint?",
+      "confirm": "Delete",
+      "description": "It will immediately stop receiving events. Delivery history is retained."
+    }
+  },
+  "api": {
+    "title": "API & OAuth",
+    "subtitle": "Org-scoped credentials and OAuth applications. Personal tokens live under /me/api-tokens.",
+    "newToken": "New token",
+    "registerApp": "Register app",
+    "tab": {
+      "pat": "Personal access tokens",
+      "oauth": "OAuth applications"
+    },
+    "footer": "Tokens authenticate as the org. Anything they do is auditable but not always reversible.",
+    "tokenCreated": "Token \"{{name}}\" created",
+    "deleteDialog": {
+      "revokeTitle": "Revoke \"{{name}}\"?",
+      "deleteTitle": "Delete \"{{name}}\"?",
+      "revoke": "Revoke",
+      "delete": "Delete",
+      "patDescription": "Any client using this token will start getting 401 immediately. This action cannot be undone.",
+      "appDescription": "Existing OAuth installs will be invalidated. Users will be prompted to reauthorize on next sign-in."
+    },
+    "pat": {
+      "empty": "No tokens yet. Create one to authenticate machine clients to the org API.",
+      "token": "Token",
+      "scopes": "Scopes",
+      "expires": "Expires",
+      "lastUsed": "Last used",
+      "expired": "expired",
+      "createdBy": "{{prefix}}…  · created by {{by}} · {{date}}",
+      "never": "Never",
+      "revoke": "Revoke token"
+    },
+    "app": {
+      "app": "App",
+      "redirect": "Redirect",
+      "status": "Status",
+      "installs": "Installs",
+      "scopeCount_one": "{{count}} scope",
+      "scopeCount_other": "{{count}} scopes",
+      "since": "since {{date}}",
+      "delete": "Delete app",
+      "appStatus": {
+        "published": "published",
+        "draft": "draft"
+      }
+    },
+    "scope": {
+      "orgRead": "Read org settings",
+      "orgWrite": "Manage org settings",
+      "membersRead": "Read members",
+      "membersWrite": "Invite/remove members",
+      "admissionRead": "Read admission rules",
+      "admissionWrite": "Author admission rules",
+      "agentsRead": "Read agents",
+      "agentsWrite": "Trigger agents",
+      "webhooksWrite": "Manage webhooks",
+      "auditRead": "Read audit log"
+    },
+    "createPat": {
+      "title": "New personal access token",
+      "generate": "Generate token",
+      "tokenName": "Token name",
+      "tokenNamePlaceholder": "e.g. CI deploy gate",
+      "expires": "Expires",
+      "days30": "30 days",
+      "days60": "60 days",
+      "days90": "90 days",
+      "year1": "1 year",
+      "noExpiration": "No expiration",
+      "scopes": "Scopes",
+      "selected": "{{count}} selected"
+    }
+  },
+  "policies": {
+    "title": "Policies",
+    "subtitle": "Org-default admission rules. Workspaces inherit these; per-workspace settings can override unless locked.",
+    "stat": {
+      "activeRules": "Active rules",
+      "hardBlocks": "Hard blocks",
+      "workspaces": "Workspaces",
+      "inheriting": "inheriting org defaults"
+    },
+    "inheritance": {
+      "title": "Inheritance",
+      "hint": "How org defaults reach existing and new workspaces.",
+      "applyNew": "Apply to new workspaces",
+      "applyNewSub": "Whenever a workspace is created, copy the active org rules and enforce them by default.",
+      "pushExisting": "Push changes to existing workspaces",
+      "pushExistingSub": "When a rule changes here, propagate the new severity to every workspace that hasn't customized it locally."
+    },
+    "rules": {
+      "title": "Rules",
+      "hint": "Each rule has a single severity. Block fails the gate; warn surfaces a soft signal.",
+      "activeOf": "{{active}} of {{total}} active"
+    },
+    "category": {
+      "secrets": "Secrets",
+      "review": "Review",
+      "tests": "Tests & coverage",
+      "deps": "Dependencies",
+      "config": "Configuration"
+    },
+    "override": {
+      "title2Approvers": "Require ≥2 approvers",
+      "desc2Approvers": "Production branches need at least two human approvals. Owners count once.",
+      "titleStaleDeps": "Warn on dependencies >365 days behind"
+    },
+    "row": {
+      "workspaces": "{{applied}} / {{total}} workspaces",
+      "localOverrides": " · some have local overrides",
+      "lastChanged": "last changed {{date}}"
+    },
+    "severity": {
+      "block": "Block",
+      "warn": "Warn",
+      "off": "Off"
+    },
+    "footer": "Saved changes appear in the workspace admission view within seconds. Active fix-pipeline runs are not retroactively re-checked."
+  },
+  "aiPolicies": {
+    "title": "AI policies",
+    "subtitle": "Which models the org can use, where data lives, and how prompts are sanitized before they leave the org.",
+    "allowedModels": {
+      "title": "Allowed models",
+      "hint": "Members can only pick from this list. Disabling a model immediately stops in-flight runs from queuing follow-ups.",
+      "model": "Model",
+      "vendor": "Vendor",
+      "context": "Context",
+      "tier": "Tier",
+      "residency": "Residency",
+      "notAvailable": "Not available in {{region}}",
+      "conflict_one": "{{count}} selected model is not available in the chosen residency. Members will get an error on use.",
+      "conflict_other": "{{count}} selected models are not available in the chosen residency. Members will get an error on use."
+    },
+    "tier": {
+      "frontier": "frontier",
+      "fast": "fast",
+      "cheap": "cheap"
+    },
+    "defaults": {
+      "title": "Defaults",
+      "hint": "What members get if they don't pick a model. Must be in the allowed list above.",
+      "defaultModel": "Default model",
+      "defaultModelSub": "For interactive use (chat, inspect).",
+      "fastModel": "Fast model",
+      "fastModelSub": "For bulk / background work (admission, agents). Pick a fast tier for cost.",
+      "reviewerOverride": "Allow reviewers to override",
+      "reviewerOverrideSub": "If on, individual reviewers can pick a non-default model for one-off review runs."
+    },
+    "dataHandling": {
+      "title": "Data handling",
+      "hint": "What providers can do with org prompts, and where they live.",
+      "optOut": "Opt out of model training",
+      "optOutSub": "Tell the provider not to use any prompt / completion for fine-tuning.",
+      "residency": "Data residency",
+      "residencySub": "Models will only be routed to inference endpoints in the chosen region.",
+      "retention": "Provider retention",
+      "retentionSub": "How many days the provider keeps prompts in their logs.",
+      "retention0": "0 days (zero retention)",
+      "retention7": "7 days",
+      "retention30": "30 days",
+      "retention90": "90 days"
+    },
+    "promptSafety": {
+      "title": "Prompt safety",
+      "hint": "Pre-send filters applied to every prompt that leaves the org.",
+      "redactPre": "Redact secrets",
+      "redactSubPre": "Run the secret scanner against every prompt and replace matches with ",
+      "redactSubPost": ".",
+      "blockPii": "Block PII",
+      "blockPiiSub": "Refuse to send a prompt that contains PII (emails, SSNs, credit cards, phone numbers)."
+    },
+    "agentCaps": {
+      "title": "Agent capabilities",
+      "hint": "What autonomous agents are allowed to do on behalf of the org.",
+      "browsing": "Web browsing",
+      "browsingSub": "Allow agents to fetch external URLs as part of investigations.",
+      "toolUse": "Tool use",
+      "toolUseSub": "Allow function-calling against internal tools (admission, fix-pipeline, audit)."
+    },
+    "spendCap": {
+      "title": "Spend cap",
+      "hint": "Hard limit on monthly token spend. Org gets paused on cap; admins are paged.",
+      "monthlyCap": "Monthly token cap",
+      "monthlyCapSub": "Counted across every allowed model. 0 disables the cap.",
+      "unit": "M tokens / month"
+    },
+    "notes": {
+      "changes": "Changes apply on the next agent / chat invocation.",
+      "retention": "Existing prompts already at the provider follow whatever retention was in force when they were sent.",
+      "audit": "Audit log records who changed what, every time. Reviewers can re-read decisions back to a configuration snapshot."
+    }
+  },
+  "samlSso": {
+    "title": "SAML SSO",
+    "subtitle": "Configure SAML 2.0 single sign-on with your identity provider.",
+    "status": {
+      "connected": "Connected",
+      "connectedSub": "SAML SSO is active and healthy.",
+      "error": "Error",
+      "errorSub": "Last test failed: invalid signature.",
+      "notConfigured": "Not configured",
+      "notConfiguredSub": "Fill in IdP metadata below to get started.",
+      "lastTested": "Last tested",
+      "testConnection": "Test connection"
+    },
+    "idp": {
+      "title": "Identity provider metadata",
+      "hint": "Paste values from your IdP, or upload the metadata XML to autofill.",
+      "upload": "Upload metadata XML",
+      "entityId": "Entity ID (Issuer)",
+      "ssoUrl": "SSO URL",
+      "cert": "X.509 Certificate"
+    },
+    "sp": {
+      "title": "Service provider metadata",
+      "hint": "Paste these into your IdP when creating the SAML application.",
+      "acsUrl": "ACS URL (Reply URL)",
+      "spEntityId": "SP Entity ID",
+      "nameIdFormat": "NameID Format"
+    },
+    "mapping": {
+      "title": "Attribute mapping",
+      "hint": "Map SAML assertion claims onto the user profile fields.",
+      "profileField": "Profile field",
+      "idpClaim": "IdP claim name"
+    },
+    "enforcement": {
+      "title": "Enforcement",
+      "hint": "Tighten how the org uses SSO.",
+      "requireSso": "Require SSO for all members",
+      "requireSsoSub": "Block password and social login. Members must sign in via your IdP.",
+      "jit": "Allow JIT provisioning",
+      "jitSub": "Auto-create accounts on first SSO sign-in. Otherwise users must be pre-invited.",
+      "defaultRole": "Default role for SSO users",
+      "defaultRoleSub": "Role assigned to JIT-provisioned members."
+    },
+    "notes": {
+      "test": "Always test the connection in an incognito window before requiring SSO — misconfigured IdPs can lock everyone out.",
+      "recovery": "Owners can always sign in with a recovery code if SSO breaks."
+    }
+  },
+  "sso": {
+    "title": "SAML / SSO",
+    "subtitle": "Connect your OIDC identity provider. Users whose email domain matches are routed to your IdP at login. Enterprise plan.",
+    "removeConnection": "Remove connection",
+    "status": "Status",
+    "connected": "Connected",
+    "disabled": "Disabled",
+    "notConfigured": "Not configured",
+    "secretStored": "secret stored",
+    "domainOwnership": "Domain ownership",
+    "verified": "Verified",
+    "notVerified": "Not verified",
+    "verifiedProven": "Ownership of {{domain}} is proven — matching logins route to your IdP.",
+    "verifyPrompt1": "Add this TXT record at the root of ",
+    "verifyPrompt2": ", then verify. Logins are ",
+    "verifyPromptNot": "not",
+    "verifyPrompt3": " routed to your IdP until the domain is verified.",
+    "verifyDomain": "Verify domain",
+    "checkingDns": "Checking DNS…",
+    "dnsNotFound": "TXT record not found yet — DNS can take a few minutes to propagate.",
+    "field": {
+      "emailDomain": "Email domain",
+      "issuer": "OIDC issuer",
+      "authEndpoint": "Authorization endpoint",
+      "tokenEndpoint": "Token endpoint",
+      "jwksEndpoint": "JWKS endpoint",
+      "clientId": "Client ID",
+      "clientSecret": "Client secret",
+      "clientSecretKeep": "Client secret (leave blank to keep)",
+      "clientSecretPlaceholderStored": "•••••••• (stored)",
+      "clientSecretPlaceholder": "from your IdP"
+    },
+    "saveChanges": "Save changes",
+    "connectSso": "Connect SSO",
+    "saving": "Saving…",
+    "auditNote": "Only owners/admins can change this. Every change is audited.",
+    "deleteDialog": {
+      "title": "Remove SSO connection?",
+      "confirm": "Remove",
+      "description": "Users on this domain will fall back to password login. The stored client secret is deleted."
+    }
+  },
+  "scim": {
+    "title": "SCIM provisioning",
+    "subtitle": "Push users and groups from your identity provider with SCIM 2.0.",
+    "subtitleReal": "Push users from your identity provider (Okta, Azure AD) with SCIM 2.0. Enterprise plan.",
+    "status": {
+      "connected": "Connected",
+      "connectedSub": "SCIM connector is receiving events from Okta.",
+      "notConfigured": "Not configured",
+      "notConfiguredSub": "Generate a token and paste it into your IdP.",
+      "lastSync": "Last sync",
+      "syncNow": "Sync now"
+    },
+    "endpoint": {
+      "title": "Endpoint",
+      "hint": "Paste these into your IdP's SCIM provisioning configuration.",
+      "baseUrl": "SCIM Base URL",
+      "bearerToken": "Bearer token",
+      "bearerTokenSub": "Generate a token to authenticate SCIM requests. Tokens are shown once.",
+      "generate": "Generate new token"
+    },
+    "syncRules": {
+      "title": "Sync rules",
+      "hint": "What the SCIM connector is allowed to do.",
+      "autoCreate": "Auto-create users",
+      "autoCreateSub": "Create accounts when the IdP sends a SCIM POST.",
+      "autoDeactivate": "Auto-deactivate on remove",
+      "autoDeactivateSub": "When a user is unassigned in the IdP, deactivate their session and revoke tokens.",
+      "syncGroups": "Sync groups → teams",
+      "syncGroupsSub": "Mirror IdP group membership onto ACME teams using the mapping below."
+    },
+    "mapping": {
+      "title": "Group → team mapping",
+      "hint": "Map IdP group names to ACME teams. Unmapped groups are ignored.",
+      "add": "Add mapping",
+      "groupName": "IdP group name",
+      "team": "ACME team",
+      "groupPlaceholder": "okta-group-name",
+      "remove": "Remove mapping"
+    },
+    "activity": {
+      "title": "Recent sync activity",
+      "hint": "Last 6 SCIM events. Older events are in the audit log.",
+      "timestamp": "Timestamp",
+      "action": "Action",
+      "target": "Target",
+      "count": "Count",
+      "created": "created",
+      "updated": "updated",
+      "deactivated": "deactivated"
+    },
+    "tokenCreated": "SCIM token created",
+    "real": {
+      "status": "Status",
+      "enabled": "Enabled",
+      "notConfigured": "Not configured",
+      "disableScim": "Disable SCIM",
+      "enableScim": "Enable SCIM",
+      "baseUrl": "SCIM base URL",
+      "bearerToken": "Bearer token",
+      "bearerTokenSub": "Shown once when created. Rotate if it may be compromised — the old token stops working immediately.",
+      "rotateToken": "Rotate token",
+      "idpNote": "In your IdP, set the SCIM base URL above and paste the bearer token. Users assigned in the IdP are provisioned into this org; unassigning deprovisions them.",
+      "enablePrompt": "Enable SCIM to get a base URL and bearer token for your identity provider. Assigned users are automatically added to this organization.",
+      "tokenDescription": "Paste this into your IdP's SCIM connector. It can't be shown again — rotate to get a new one.",
+      "disableTitle": "Disable SCIM?",
+      "disableConfirm": "Disable",
+      "disableDescription": "The bearer token stops working immediately and your IdP can no longer provision users. Existing members are kept."
+    }
+  },
+  "audit": {
+    "title": "Audit log",
+    "subtitle": "Every privileged action across the org. Retained per the Retention policy.",
+    "subtitleReal": "Privileged actions across the org. Retained per your plan's retention policy.",
+    "exportCsv": "Export CSV",
+    "searchPlaceholder": "Search actor, target, IP…",
+    "searchPlaceholderReal": "Search actor, action, target, IP…",
+    "allActors": "All actors",
+    "actions": {
+      "all": "All actions",
+      "authLogin": "auth.login",
+      "authLoginFailed": "auth.login.failed",
+      "membersInvite": "members.invite",
+      "membersRemove": "members.remove",
+      "admissionRuleChanged": "admission.rule.changed",
+      "secretsRotate": "secrets.rotate",
+      "ssoTest": "sso.test",
+      "webhookCreated": "webhook.created",
+      "agentRun": "agent.run",
+      "orgMemberInvited": "Member invited",
+      "orgMemberRemoved": "Member removed",
+      "orgMemberRoleChanged": "Role changed",
+      "orgInvitationCanceled": "Invitation canceled",
+      "orgUpdated": "Org updated",
+      "orgDeleted": "Org deleted",
+      "orgTeamCreated": "Team created",
+      "orgTeamDeleted": "Team deleted",
+      "security2faEnabled": "2FA enabled",
+      "security2faDisabled": "2FA disabled",
+      "securityPasswordChanged": "Password changed",
+      "securitySessionRevoked": "Session revoked",
+      "apikeyCreated": "API key created",
+      "apikeyRevoked": "API key revoked",
+      "billingSubscriptionUpdated": "Subscription updated",
+      "billingPaymentFailed": "Payment failed"
+    },
+    "table": {
+      "when": "When",
+      "actor": "Actor",
+      "action": "Action",
+      "target": "Target",
+      "ip": "IP",
+      "result": "Result",
+      "actionTarget": "Action / target"
+    },
+    "result": {
+      "success": "success",
+      "failure": "failure"
+    },
+    "diff": {
+      "before": "before",
+      "after": "after",
+      "noPayload": "— no payload —"
+    },
+    "showing": "Showing 1–15 of 8,421 events",
+    "previous": "Previous",
+    "next": "Next",
+    "empty": {
+      "matchingTitle": "No matching events",
+      "matchingSub": "Try a different filter.",
+      "noEventsTitle": "No audit events yet",
+      "noEventsSub": "Privileged actions will appear here."
+    },
+    "eventsCount_one": "{{count}} event",
+    "eventsCount_other": "{{count}} events",
+    "moreAvailable": " (more available)",
+    "loading": "Loading…",
+    "loadMore": "Load more",
+    "errorContext": "the audit log"
+  },
+  "dataResidency": {
+    "title": "Data residency",
+    "subtitle": "Choose where ACME data is processed and stored.",
+    "controls": {
+      "title": "What residency controls",
+      "body": "Source code, agent runs, secrets, and audit logs are stored in the selected region. Authentication metadata (email, tenant ID) lives in our global control plane. Switching regions triggers a one-time migration with a coordinated cutover."
+    },
+    "region": {
+      "title": "Active region",
+      "hint": "Click another region to request migration.",
+      "us": "United States",
+      "eu": "Europe",
+      "apac": "Asia-Pacific",
+      "selected": "Selected",
+      "dataCenters": "Data centers",
+      "latency": "Latency from you",
+      "stored": "Currently stored",
+      "notActive": "— not active —"
+    },
+    "settings": {
+      "title": "Residency settings",
+      "hint": "Stricter controls for regulated workloads.",
+      "noCrossReplica": "Disable cross-region replication",
+      "noCrossReplicaSub": "Backups stay in the selected region only. Increases the risk of total data loss in a region-wide outage.",
+      "blockExport": "Block data export to other regions",
+      "blockExportSub": "CSV exports, agent calls, and webhook deliveries can only target endpoints in the same region."
+    },
+    "certs": {
+      "title": "Compliance certifications",
+      "hint": "Audited by independent third parties. Reports available on request."
+    },
+    "footer": "Region changes are recorded in the audit log and notified to all owners and admins.",
+    "migration": {
+      "ariaLabel": "Request migration to {{region}}",
+      "title": "Request migration to {{region}}?",
+      "bodyPre": "We'll snapshot all org data in ",
+      "bodyMid": ", replicate it to ",
+      "bodyPost": ", then perform a coordinated cutover.",
+      "downtime": "· Estimated downtime: ~12 minutes during cutover (scheduled off-hours)",
+      "cost": "· One-time data transfer cost: $420 billed to current invoice",
+      "sessions": "· Active sessions are signed out at cutover",
+      "rollback": "· Rollback window: 7 days post-migration",
+      "cancel": "Cancel",
+      "confirm": "Request migration"
+    }
+  },
+  "retention": {
+    "title": "Retention policy",
+    "subtitle": "How long ACME keeps each class of data before automatic deletion.",
+    "default": {
+      "title": "Default retention",
+      "hint": "Applied to any data class set to “inherit default”.",
+      "global": "Global default",
+      "globalSub": "Number of days to retain by default. Class-level overrides take priority.",
+      "days": "days"
+    },
+    "opt": {
+      "days30": "30 days",
+      "days60": "60 days",
+      "days90": "90 days",
+      "days180": "180 days",
+      "year1": "1 year",
+      "years2": "2 years",
+      "forever": "Forever"
+    },
+    "perClass": {
+      "title": "Per-class overrides",
+      "hint": "Tighten retention for sensitive classes; loosen for compliance-required ones.",
+      "dataClass": "Data class",
+      "retention": "Retention",
+      "inherits": "Inherits?",
+      "inheritOption": "Inherit ({{days}}d)",
+      "inherit": "inherit",
+      "override": "override"
+    },
+    "class": {
+      "auditLog": "Audit log",
+      "auditLogHint": "Privileged actions across the org",
+      "agentRuns": "Agent runs",
+      "agentRunsHint": "Inputs, outputs, and step traces",
+      "webhookDeliveries": "Webhook deliveries",
+      "webhookDeliveriesHint": "Outgoing payloads and HTTP responses",
+      "investigationChats": "Investigation chats",
+      "investigationChatsHint": "Chat threads in the Intelligence stage",
+      "codeReviewThreads": "Code review threads",
+      "codeReviewThreadsHint": "Reviewer comments on diffs",
+      "inactiveSessions": "Inactive sessions",
+      "inactiveSessionsHint": "Browser sessions with no activity",
+      "deletedUserPii": "Deleted-user PII",
+      "deletedUserPiiHint": "Email, name after account deletion",
+      "telemetry": "Telemetry events",
+      "telemetryHint": "Anonymized usage analytics"
+    },
+    "legalHolds": {
+      "title": "Legal holds",
+      "hint": "Suspend deletion for specific scopes while litigation or investigations are open.",
+      "none": "No active holds.",
+      "active": "active",
+      "createdBy": "Created by {{creator}} · {{date}}",
+      "release": "Release hold"
+    },
+    "archive": {
+      "title": "Archive destination",
+      "hint": "Optionally archive data to your own S3 bucket before the retention deadline triggers deletion.",
+      "toggle": "Archive to S3 before deletion",
+      "toggleSub": "Writes a one-time JSONL dump per data class to your bucket.",
+      "bucket": "Bucket name",
+      "bucketPlaceholder": "s3://my-archive-bucket",
+      "roleArn": "AWS Role ARN",
+      "roleArnPlaceholder": "arn:aws:iam::123:role/archiver"
+    },
+    "notes": {
+      "archive": "Deletions are soft for 7 days, then cryptographically shredded. Archive writes happen the night before deletion.",
+      "apply": "Retention changes apply to new data. Existing records inherit their original policy until next compaction."
+    },
+    "releaseDialog": {
+      "ariaLabel": "Release hold {{ref}}",
+      "title": "Release hold {{ref}}?",
+      "body": "Records covered by this hold will become eligible for retention-driven deletion at the next compaction window. This action is logged and notifies legal-ops.",
+      "cancel": "Cancel",
+      "confirm": "Release hold"
+    }
+  },
+  "serviceAccounts": {
+    "title": "Service accounts",
+    "subtitle": "Machine identities for CI, scripts, and worker pools. Scope tightly; rotate tokens every 90 days.",
+    "subtitleReal": "Machine identities for CI and workers. Each holds an API key scoped to this org.",
+    "new": "New service account",
+    "stat": {
+      "total": "Total",
+      "active": "Active",
+      "tokens": "Tokens"
+    },
+    "table": {
+      "name": "Name",
+      "purpose": "Purpose",
+      "scopes": "Scopes",
+      "tokens": "Tokens",
+      "lastSeen": "Last seen",
+      "status": "Status",
+      "prefix": "Prefix",
+      "created": "Created",
+      "expires": "Expires"
+    },
+    "createdByLine": "{{id}} · by {{by}}",
+    "statusActive": "Active",
+    "statusDisabled": "Disabled",
+    "action": {
+      "tokens": "Tokens",
+      "rotate": "Rotate",
+      "disable": "Disable",
+      "enable": "Enable",
+      "more": "More"
+    },
+    "empty": {
+      "title": "No service accounts",
+      "subtitle": "Create one to give CI or a worker API access."
+    },
+    "fallbackName": "service account",
+    "revoke": {
+      "menu": "Revoke key",
+      "title": "Revoke \"{{name}}\"?",
+      "confirm": "Revoke",
+      "description": "Any CI job or worker using this key will immediately lose access. This can't be undone."
+    },
+    "create": {
+      "title": "New service account",
+      "name": "Name",
+      "namePlaceholder": "ci-deploy-bot",
+      "keyExpiration": "Key expiration",
+      "days90": "90 days",
+      "year1": "1 year",
+      "noExpiry": "No expiry",
+      "create": "Create",
+      "creating": "Creating…"
+    },
+    "keyCreated": "Service account \"{{name}}\" created",
+    "keyFallback": "key"
+  },
+  "usage": {
+    "title": "Usage",
+    "subtitle": "What your org has consumed in the past 30 days. Costs map to your current plan; switch in billing.",
+    "range": {
+      "days30": "Last 30 days",
+      "days7": "Last 7 days",
+      "days90": "Last 90 days",
+      "billingPeriod": "This billing period"
+    },
+    "exportCsv": "Export CSV",
+    "metric": {
+      "seats": "Active seats",
+      "agents": "Agent runs",
+      "tokens": "AI tokens",
+      "storage": "Storage",
+      "webhooks": "Webhook deliveries",
+      "requests": "API requests"
+    },
+    "unit": {
+      "seats": "/ 200",
+      "perMonth": "/ mo",
+      "tokens": "tokens / mo",
+      "storage": "GB"
+    },
+    "alert": {
+      "title": "You're projected to hit 92% of plan limits this month",
+      "sub": "Set a budget alert at 80%, or upgrade plans for cleaner headroom.",
+      "action": "Set budget alert"
+    },
+    "breakdown": {
+      "title": "Cost by workspace",
+      "thisMonth": "This month",
+      "workspace": "Workspace",
+      "runs": "Runs",
+      "tokens": "Tokens",
+      "cost": "Cost",
+      "share": "Share"
+    }
+  },
+  "domains": {
+    "title": "Domains",
+    "subtitle": "Claim email domains for auto-join, SSO enforcement, and identity-verified invites.",
+    "add": "Add domain",
+    "primary": "Primary",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "ssoRequired": "SSO required",
+    "ssoRequiredSub": "Force SAML/OIDC for accounts on this domain",
+    "autoJoin": "Auto-join",
+    "autoJoinSub": "New verified users on this domain join automatically",
+    "verify": {
+      "title": "Verify {{domain}}",
+      "body": "Add the TXT record below to your DNS, then click verify. Propagation usually takes under 5 minutes.",
+      "type": "Type",
+      "host": "Host",
+      "value": "Value",
+      "check": "Check DNS now"
+    }
+  },
+  "format": {
+    "expired": "expired",
+    "day_one": "{{count}} day",
+    "day_other": "{{count}} days",
+    "emDash": "—"
+  }
+}

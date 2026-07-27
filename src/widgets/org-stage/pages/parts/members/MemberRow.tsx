@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   Mail, Shield, Trash2, UserMinus, ArrowRightLeft, Check,
 } from 'lucide-react';
@@ -16,17 +17,18 @@ export function Row({
   onRemove: () => void;
   onResend: () => void;
 }) {
+  const { t } = useTranslation('org');
   const isOwner = member.role === 'owner';
   const isInvited = member.status === 'invited';
   const isDeactivated = member.status === 'deactivated';
 
   const items: RowMenuItem[] = [
-    ...(isInvited ? [{ icon: Mail, label: 'Resend invite', onClick: onResend }] : []),
-    ...(!isOwner && !isDeactivated ? [{ icon: UserMinus, label: 'Deactivate', onClick: onDeactivate }] : []),
-    ...(isDeactivated ? [{ icon: Check, label: 'Reactivate', onClick: onReactivate }] : []),
+    ...(isInvited ? [{ icon: Mail, label: t('members.rowMenu.resendInvite'), onClick: onResend }] : []),
+    ...(!isOwner && !isDeactivated ? [{ icon: UserMinus, label: t('members.rowMenu.deactivate'), onClick: onDeactivate }] : []),
+    ...(isDeactivated ? [{ icon: Check, label: t('members.rowMenu.reactivate'), onClick: onReactivate }] : []),
     isOwner
-      ? { icon: ArrowRightLeft, label: 'Transfer ownership', disabled: true }
-      : { icon: Trash2, label: 'Remove from org', onClick: onRemove, danger: true },
+      ? { icon: ArrowRightLeft, label: t('members.rowMenu.transferOwnership'), disabled: true }
+      : { icon: Trash2, label: t('members.rowMenu.removeFromOrg'), onClick: onRemove, danger: true },
   ];
 
   return (
@@ -62,7 +64,7 @@ export function Row({
             </span>
             <StatusBadge status={member.status} />
             {member.twoFA && (
-              <span title="2FA enabled">
+              <span title={t('members.twoFaTitle')}>
                 <Shield className="w-3 h-3" style={{ color: 'var(--intent-success-fg)' }} />
               </span>
             )}
@@ -87,6 +89,7 @@ export function Row({
 }
 
 function StatusBadge({ status }: { status: Status }) {
+  const { t } = useTranslation('org');
   if (status === 'active') return null;
   const tone = status === 'invited' ? 'warn' : 'neutral';
   return (
@@ -98,7 +101,7 @@ function StatusBadge({ status }: { status: Status }) {
         border: `1px solid ${tone === 'warn' ? 'var(--intent-warn-fg)' : 'var(--border-muted)'}`,
       }}
     >
-      {status}
+      {t(`members.filter.${status}`)}
     </span>
   );
 }
@@ -106,6 +109,7 @@ function StatusBadge({ status }: { status: Status }) {
 function RoleSelect({
   value, onChange, disabled,
 }: { value: Role; onChange: (v: Role) => void; disabled: boolean }) {
+  const { t } = useTranslation('org');
   return (
     <select
       value={value}
@@ -120,11 +124,11 @@ function RoleSelect({
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
     >
-      <option value="owner">Owner</option>
-      <option value="admin">Admin</option>
-      <option value="member">Member</option>
-      <option value="billing">Billing</option>
-      <option value="guest">Guest</option>
+      <option value="owner">{t('common.role.owner')}</option>
+      <option value="admin">{t('common.role.admin')}</option>
+      <option value="member">{t('common.role.member')}</option>
+      <option value="billing">{t('common.role.billing')}</option>
+      <option value="guest">{t('common.role.guest')}</option>
     </select>
   );
 }

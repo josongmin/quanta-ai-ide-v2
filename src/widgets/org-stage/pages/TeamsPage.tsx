@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   UsersRound, Search, Plus,
 } from 'lucide-react';
@@ -98,6 +99,7 @@ const SEED: Team[] = [
 ];
 
 function TeamsMock() {
+  const { t } = useTranslation('org');
   const [teams, setTeams] = useState<Team[]>(SEED);
   const [selectedId, setSelectedId] = useState<string>('t1');
   const [q, setQ] = useState('');
@@ -133,11 +135,11 @@ function TeamsMock() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="Teams"
-      subtitle="Group people for ownership routing, notifications, and review assignment."
+      title={t('teams.title')}
+      subtitle={t('teams.subtitle')}
       topRight={
         <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={() => { setCreateOpen(true); }}>
-          New team
+          {t('teams.newTeam')}
         </Button>
       }
     >
@@ -156,7 +158,7 @@ function TeamsMock() {
             <input
               value={q}
               onChange={(e) => { setQ(e.target.value); }}
-              placeholder="Search teams…"
+              placeholder={t('teams.searchPlaceholder')}
               className="flex-1 bg-transparent outline-none text-base"
               style={{ color: 'var(--fg-strong)' }}
             />
@@ -164,15 +166,15 @@ function TeamsMock() {
           <div className="flex-1 overflow-y-auto">
             {filtered.length === 0 ? (
               <div className="px-4 py-8 text-center text-sm" style={{ color: 'var(--fg-subtle)' }}>
-                No teams match.
+                {t('teams.noMatch')}
               </div>
-            ) : filtered.map((t) => {
-              const active = selectedId === t.id;
+            ) : filtered.map((team) => {
+              const active = selectedId === team.id;
               return (
                 <button
-                  key={t.id}
+                  key={team.id}
                   type="button"
-                  onClick={() => { setSelectedId(t.id); }}
+                  onClick={() => { setSelectedId(team.id); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors [&:not(:first-child)]:border-t"
                   style={{
                     background: active ? 'var(--bg-active)' : 'transparent',
@@ -185,16 +187,16 @@ function TeamsMock() {
                   <div className="flex flex-col min-w-0 flex-1 gap-0.5">
                     <div className="flex items-center gap-1.5 min-w-0">
                       <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
-                        {t.name}
+                        {team.name}
                       </span>
                       <span className="text-xs font-mono truncate" style={{ color: 'var(--fg-subtle)' }}>
-                        {t.handle}
+                        {team.handle}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-xs tabular-nums" style={{ color: 'var(--fg-muted)' }}>
-                      <span>{t.members.length} {t.members.length === 1 ? 'member' : 'members'}</span>
+                      <span>{t('teams.membersCount', { count: team.members.length })}</span>
                       <span>·</span>
-                      <span>{t.paths.length} paths</span>
+                      <span>{t('teams.pathsCount', { count: team.paths.length })}</span>
                     </div>
                   </div>
                 </button>
@@ -215,7 +217,7 @@ function TeamsMock() {
             <div className="flex-1 flex flex-col items-center justify-center gap-2 px-6 text-center">
               <UsersRound className="w-7 h-7" style={{ color: 'var(--fg-subtle)' }} />
               <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-                No team selected
+                {t('teams.noneSelected')}
               </span>
             </div>
           )}

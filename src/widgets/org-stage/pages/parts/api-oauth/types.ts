@@ -3,17 +3,18 @@ export type Scope =
   | 'admission:read' | 'admission:write' | 'agents:read' | 'agents:write'
   | 'webhooks:write' | 'audit:read';
 
-export const SCOPE_OPTIONS: { id: Scope; label: string; danger?: boolean }[] = [
-  { id: 'org:read',         label: 'Read org settings' },
-  { id: 'org:write',        label: 'Manage org settings', danger: true },
-  { id: 'members:read',     label: 'Read members' },
-  { id: 'members:write',    label: 'Invite/remove members', danger: true },
-  { id: 'admission:read',   label: 'Read admission rules' },
-  { id: 'admission:write',  label: 'Author admission rules', danger: true },
-  { id: 'agents:read',      label: 'Read agents' },
-  { id: 'agents:write',     label: 'Trigger agents' },
-  { id: 'webhooks:write',   label: 'Manage webhooks' },
-  { id: 'audit:read',       label: 'Read audit log' },
+// `labelKey` is an `org` namespace i18n key; resolved by the consumer.
+export const SCOPE_OPTIONS: { id: Scope; labelKey: string; danger?: boolean }[] = [
+  { id: 'org:read',         labelKey: 'api.scope.orgRead' },
+  { id: 'org:write',        labelKey: 'api.scope.orgWrite', danger: true },
+  { id: 'members:read',     labelKey: 'api.scope.membersRead' },
+  { id: 'members:write',    labelKey: 'api.scope.membersWrite', danger: true },
+  { id: 'admission:read',   labelKey: 'api.scope.admissionRead' },
+  { id: 'admission:write',  labelKey: 'api.scope.admissionWrite', danger: true },
+  { id: 'agents:read',      labelKey: 'api.scope.agentsRead' },
+  { id: 'agents:write',     labelKey: 'api.scope.agentsWrite' },
+  { id: 'webhooks:write',   labelKey: 'api.scope.webhooksWrite' },
+  { id: 'audit:read',       labelKey: 'api.scope.auditRead' },
 ];
 
 export type Pat = {

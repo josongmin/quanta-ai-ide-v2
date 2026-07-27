@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@shared/ui/forms';
 import { SettingsModal } from '@shared/ui';
 import { SCOPE_OPTIONS, type Scope } from './types';
@@ -6,6 +7,7 @@ import { SCOPE_OPTIONS, type Scope } from './types';
 export function CreatePatModal({
   onCancel, onCreate,
 }: { onCancel: () => void; onCreate: (name: string, scopes: Scope[], expiresInDays: number | null) => void }) {
+  const { t } = useTranslation('org');
   const [name, setName] = useState('');
   const [scopes, setScopes] = useState<Set<Scope>>(new Set(['org:read']));
   const [exp, setExp] = useState<number | null>(90);
@@ -23,47 +25,47 @@ export function CreatePatModal({
     <SettingsModal
       open
       onClose={onCancel}
-      title="New personal access token"
+      title={t('api.createPat.title')}
       size="lg"
       maxHeightVh={80}
       footer={(
         <>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+          <Button variant="ghost" onClick={onCancel}>{t('common.cancel')}</Button>
           <Button variant="primary" size="md" disabled={!valid} onClick={() => { onCreate(name.trim(), Array.from(scopes), exp); }}>
-            Generate token
+            {t('api.createPat.generate')}
           </Button>
         </>
       )}
     >
       <label className="flex flex-col gap-1.5">
-        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Token name</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>{t('api.createPat.tokenName')}</span>
         <input
           value={name}
           onChange={(e) => { setName(e.target.value); }}
-          placeholder="e.g. CI deploy gate"
+          placeholder={t('api.createPat.tokenNamePlaceholder')}
           className="h-9 rounded-md px-3 text-base outline-none"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         />
       </label>
       <label className="flex flex-col gap-1.5">
-        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Expires</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>{t('api.createPat.expires')}</span>
         <select
           value={exp == null ? 'never' : String(exp)}
           onChange={(e) => { setExp(e.target.value === 'never' ? null : Number(e.target.value)); }}
           className="h-9 rounded-md px-3 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         >
-          <option value="30">30 days</option>
-          <option value="60">60 days</option>
-          <option value="90">90 days</option>
-          <option value="365">1 year</option>
-          <option value="never">No expiration</option>
+          <option value="30">{t('api.createPat.days30')}</option>
+          <option value="60">{t('api.createPat.days60')}</option>
+          <option value="90">{t('api.createPat.days90')}</option>
+          <option value="365">{t('api.createPat.year1')}</option>
+          <option value="never">{t('api.createPat.noExpiration')}</option>
         </select>
       </label>
       <div className="flex flex-col gap-2">
         <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
-          <span>Scopes</span>
-          <span className="lowercase tracking-normal tabular-nums">{scopes.size} selected</span>
+          <span>{t('api.createPat.scopes')}</span>
+          <span className="lowercase tracking-normal tabular-nums">{t('api.createPat.selected', { count: scopes.size })}</span>
         </span>
         <div className="rounded-md overflow-hidden flex flex-col" style={{ border: '1px solid var(--border-muted)' }}>
           {SCOPE_OPTIONS.map((s) => {
@@ -89,7 +91,7 @@ export function CreatePatModal({
                 >
                   {s.id}
                 </span>
-                <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{s.label}</span>
+                <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{t(s.labelKey)}</span>
               </label>
             );
           })}

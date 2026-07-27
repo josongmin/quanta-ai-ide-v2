@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   CheckCircle2, Circle, RefreshCcw, Copy, Check, Plus, Trash2,
   KeyRound, UserPlus, UserMinus, UserCog, ShieldAlert,
@@ -42,6 +43,7 @@ const SEED_LOG: SyncEntry[] = [
 const SCIM_BASE_URL = 'https://app.se-field.com/scim/v2/acme';
 
 export default function ScimPage() {
+  const { t } = useTranslation('org');
   const [status] = useState<Status>('connected');
   const [lastSync, setLastSync] = useState('2026-05-11 10:14 UTC');
   const [autoCreate, setAutoCreate] = useState(true);
@@ -83,8 +85,8 @@ export default function ScimPage() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="SCIM provisioning"
-      subtitle="Push users and groups from your identity provider with SCIM 2.0."
+      title={t('scim.title')}
+      subtitle={t('scim.subtitle')}
     >
       <StatusBand
         status={status}
@@ -92,29 +94,29 @@ export default function ScimPage() {
         onSync={() => { setLastSync(new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'); }}
       />
 
-      <Section title="Endpoint" hint="Paste these into your IdP's SCIM provisioning configuration.">
-        <CopyRow label="SCIM Base URL" value={SCIM_BASE_URL} />
-        <Row label="Bearer token" sub="Generate a token to authenticate SCIM requests. Tokens are shown once.">
-          <Button leading={<KeyRound className="w-3 h-3" />} onClick={generate}>Generate new token</Button>
+      <Section title={t('scim.endpoint.title')} hint={t('scim.endpoint.hint')}>
+        <CopyRow label={t('scim.endpoint.baseUrl')} value={SCIM_BASE_URL} />
+        <Row label={t('scim.endpoint.bearerToken')} sub={t('scim.endpoint.bearerTokenSub')}>
+          <Button leading={<KeyRound className="w-3 h-3" />} onClick={generate}>{t('scim.endpoint.generate')}</Button>
         </Row>
       </Section>
 
-      <Section title="Sync rules" hint="What the SCIM connector is allowed to do.">
-        <Row label="Auto-create users" sub="Create accounts when the IdP sends a SCIM POST.">
+      <Section title={t('scim.syncRules.title')} hint={t('scim.syncRules.hint')}>
+        <Row label={t('scim.syncRules.autoCreate')} sub={t('scim.syncRules.autoCreateSub')}>
           <Toggle checked={autoCreate} onChange={setAutoCreate} />
         </Row>
-        <Row label="Auto-deactivate on remove" sub="When a user is unassigned in the IdP, deactivate their session and revoke tokens.">
+        <Row label={t('scim.syncRules.autoDeactivate')} sub={t('scim.syncRules.autoDeactivateSub')}>
           <Toggle checked={autoDeactivate} onChange={setAutoDeactivate} />
         </Row>
-        <Row label="Sync groups → teams" sub="Mirror IdP group membership onto ACME teams using the mapping below.">
+        <Row label={t('scim.syncRules.syncGroups')} sub={t('scim.syncRules.syncGroupsSub')}>
           <Toggle checked={syncGroups} onChange={setSyncGroups} />
         </Row>
       </Section>
 
       <Section
-        title="Group → team mapping"
-        hint="Map IdP group names to ACME teams. Unmapped groups are ignored."
-        right={<Button leading={<Plus className="w-3 h-3" />} onClick={addGroup}>Add mapping</Button>}
+        title={t('scim.mapping.title')}
+        hint={t('scim.mapping.hint')}
+        right={<Button leading={<Plus className="w-3 h-3" />} onClick={addGroup}>{t('scim.mapping.add')}</Button>}
       >
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)', opacity: syncGroups ? 1 : 0.5 }}>
           <div
@@ -127,8 +129,8 @@ export default function ScimPage() {
               borderBottom: '1px solid var(--border-muted)',
             }}
           >
-            <span>IdP group name</span>
-            <span>ACME team</span>
+            <span>{t('scim.mapping.groupName')}</span>
+            <span>{t('scim.mapping.team')}</span>
             <span />
           </div>
           {groups.map((g) => (
@@ -144,7 +146,7 @@ export default function ScimPage() {
               <input
                 value={g.idpGroup}
                 onChange={(e) => { setGroup(g.id, { idpGroup: e.target.value }); }}
-                placeholder="okta-group-name"
+                placeholder={t('scim.mapping.groupPlaceholder')}
                 className="h-8 px-2.5 rounded-md text-sm font-mono outline-none"
                 style={{
                   background: 'var(--bg-surface-muted)',
@@ -169,7 +171,7 @@ export default function ScimPage() {
                 onClick={() => { removeGroup(g.id); }}
                 className="w-7 h-7 rounded-md inline-flex items-center justify-center"
                 style={{ color: 'var(--fg-subtle)' }}
-                aria-label="Remove mapping"
+                aria-label={t('scim.mapping.remove')}
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
@@ -178,7 +180,7 @@ export default function ScimPage() {
         </div>
       </Section>
 
-      <Section title="Recent sync activity" hint="Last 6 SCIM events. Older events are in the audit log.">
+      <Section title={t('scim.activity.title')} hint={t('scim.activity.hint')}>
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
             className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
@@ -190,10 +192,10 @@ export default function ScimPage() {
               borderBottom: '1px solid var(--border-muted)',
             }}
           >
-            <span>Timestamp</span>
-            <span>Action</span>
-            <span>Target</span>
-            <span className="text-right">Count</span>
+            <span>{t('scim.activity.timestamp')}</span>
+            <span>{t('scim.activity.action')}</span>
+            <span>{t('scim.activity.target')}</span>
+            <span className="text-right">{t('scim.activity.count')}</span>
             <span />
           </div>
           {SEED_LOG.map((e) => {
@@ -211,7 +213,7 @@ export default function ScimPage() {
                 <span className="font-mono text-sm" style={{ color: 'var(--fg-muted)' }}>{e.ts}</span>
                 <span className="inline-flex items-center gap-1.5 text-sm" style={{ color: 'var(--fg-default)' }}>
                   <ActionIcon className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
-                  {e.action}
+                  {t(`scim.activity.${e.action}`)}
                 </span>
                 <span className="truncate font-mono text-sm" style={{ color: 'var(--fg-strong)' }}>{e.target}</span>
                 <span className="font-mono tabular-nums text-right" style={{ color: 'var(--fg-default)' }}>{e.count}</span>
@@ -238,7 +240,7 @@ export default function ScimPage() {
 
       {tokenModal !== null && (
         <RevealOnceModal
-          title="SCIM token created"
+          title={t('scim.tokenCreated')}
           value={tokenModal}
           saved={savedToken}
           showClose
@@ -253,10 +255,11 @@ export default function ScimPage() {
 function StatusBand({
   status, lastSync, onSync,
 }: { status: Status; lastSync: string; onSync: () => void }) {
+  const { t } = useTranslation('org');
   const meta: { Icon: React.ComponentType<{ className?: string; style?: CSSProperties }>; label: string; sub: string; fg: string } =
     status === 'connected'
-      ? { Icon: CheckCircle2, label: 'Connected', sub: 'SCIM connector is receiving events from Okta.', fg: 'var(--intent-success-fg)' }
-      : { Icon: Circle,        label: 'Not configured', sub: 'Generate a token and paste it into your IdP.', fg: 'var(--fg-muted)' };
+      ? { Icon: CheckCircle2, label: t('scim.status.connected'), sub: t('scim.status.connectedSub'), fg: 'var(--intent-success-fg)' }
+      : { Icon: Circle,        label: t('scim.status.notConfigured'), sub: t('scim.status.notConfiguredSub'), fg: 'var(--fg-muted)' };
   const { Icon } = meta;
 
   return (
@@ -279,16 +282,17 @@ function StatusBand({
       </div>
       <div className="flex flex-col items-end gap-1.5 shrink-0">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Last sync
+          {t('scim.status.lastSync')}
         </span>
         <span className="font-mono text-sm" style={{ color: 'var(--fg-default)' }}>{lastSync}</span>
       </div>
-      <Button leading={<RefreshCcw className="w-3 h-3" />} onClick={onSync}>Sync now</Button>
+      <Button leading={<RefreshCcw className="w-3 h-3" />} onClick={onSync}>{t('scim.status.syncNow')}</Button>
     </div>
   );
 }
 
 function CopyRow({ label, value }: { label: string; value: string }) {
+  const { t } = useTranslation('org');
   const { copied, copy } = useCopyToClipboard(1200);
   return (
     <div className="flex items-center justify-between gap-3 py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
@@ -299,7 +303,7 @@ function CopyRow({ label, value }: { label: string; value: string }) {
         <code className="font-mono text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{value}</code>
       </div>
       <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={() => { copy(value); }}>
-        {copied ? 'Copied' : 'Copy'}
+        {copied ? t('common.copied') : t('common.copy')}
       </Button>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   KeySquare, Plus, ShieldAlert, Boxes,
 } from 'lucide-react';
@@ -26,6 +27,7 @@ const SEED_APPS: OAuthApp[] = [
 type Tab = 'pat' | 'oauth';
 
 export default function ApiOAuthPage() {
+  const { t } = useTranslation('org');
   const [tab, setTab] = useState<Tab>('pat');
   const [pats, setPats] = useState<Pat[]>(SEED_PATS);
   const [apps, setApps] = useState<OAuthApp[]>(SEED_APPS);
@@ -51,16 +53,16 @@ export default function ApiOAuthPage() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="API & OAuth"
-      subtitle="Org-scoped credentials and OAuth applications. Personal tokens live under /me/api-tokens."
+      title={t('api.title')}
+      subtitle={t('api.subtitle')}
       topRight={
         tab === 'pat' ? (
           <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={() => { setCreatePat(true); }}>
-            New token
+            {t('api.newToken')}
           </Button>
         ) : (
           <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />}>
-            Register app
+            {t('api.registerApp')}
           </Button>
         )
       }
@@ -68,8 +70,8 @@ export default function ApiOAuthPage() {
       {/* Tabs */}
       <div className="flex items-center gap-1 mb-4" style={{ borderBottom: '1px solid var(--border-muted)' }}>
         {([
-          { id: 'pat' as const,   label: 'Personal access tokens', icon: KeySquare, count: pats.length },
-          { id: 'oauth' as const, label: 'OAuth applications',     icon: Boxes,     count: apps.length },
+          { id: 'pat' as const,   label: t('api.tab.pat'),   icon: KeySquare, count: pats.length },
+          { id: 'oauth' as const, label: t('api.tab.oauth'), icon: Boxes,     count: apps.length },
         ]).map(({ id, label, icon: Icon, count }) => {
           const active = tab === id;
           return (
@@ -110,7 +112,7 @@ export default function ApiOAuthPage() {
 
       <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ShieldAlert className="w-3 h-3 mt-0.5 shrink-0" />
-        Tokens authenticate as the org. Anything they do is auditable but not always reversible.
+        {t('api.footer')}
       </p>
 
       {createPat && (
@@ -121,7 +123,7 @@ export default function ApiOAuthPage() {
       )}
       {revealedToken && (
         <RevealOnceModal
-          title={<>Token &quot;{revealedToken.name}&quot; created</>}
+          title={t('api.tokenCreated', { name: revealedToken.name })}
           value={revealedToken.value}
           onDismiss={() => { setRevealedToken(null); }}
         />
@@ -135,12 +137,12 @@ export default function ApiOAuthPage() {
             else removeApp(confirmDelete.id);
             setConfirmDelete(null);
           }}
-          title={confirmDelete.kind === 'pat' ? `Revoke "${confirmDelete.name}"?` : `Delete "${confirmDelete.name}"?`}
-          confirmLabel={confirmDelete.kind === 'pat' ? 'Revoke' : 'Delete'}
+          title={confirmDelete.kind === 'pat' ? t('api.deleteDialog.revokeTitle', { name: confirmDelete.name }) : t('api.deleteDialog.deleteTitle', { name: confirmDelete.name })}
+          confirmLabel={confirmDelete.kind === 'pat' ? t('api.deleteDialog.revoke') : t('api.deleteDialog.delete')}
           description={
             confirmDelete.kind === 'pat'
-              ? 'Any client using this token will start getting 401 immediately. This action cannot be undone.'
-              : 'Existing OAuth installs will be invalidated. Users will be prompted to reauthorize on next sign-in.'
+              ? t('api.deleteDialog.patDescription')
+              : t('api.deleteDialog.appDescription')
           }
         />
       )}

@@ -1,1 +1,1218 @@
-{}
+{
+  "shell": {
+    "breadcrumbAria": "탐색 경로",
+    "settings": "설정",
+    "nav": {
+      "groupOrg": "조직",
+      "groupAccess": "액세스 및 정책",
+      "groupCompliance": "컴플라이언스",
+      "general": "일반",
+      "members": "멤버",
+      "invitations": "초대",
+      "teams": "팀",
+      "roles": "역할",
+      "serviceAccounts": "서비스 계정",
+      "domains": "도메인",
+      "usage": "사용량",
+      "security": "보안",
+      "integrations": "연동",
+      "webhooks": "웹훅",
+      "api": "API 및 OAuth",
+      "policies": "정책",
+      "aiPolicies": "AI 정책",
+      "sso": "SAML SSO",
+      "scim": "SCIM",
+      "audit": "감사 로그",
+      "dataResidency": "데이터 저장 위치",
+      "retention": "보존"
+    }
+  },
+  "comingSoon": {
+    "title": "곧 제공",
+    "subtitle": "{{title}}은(는) 아직 조직에 연결되지 않았습니다 — 다음 릴리스에서 제공될 예정입니다.",
+    "titles": {
+      "roles": "역할",
+      "usage": "사용량",
+      "domains": "도메인",
+      "security": "보안",
+      "integrations": "연동",
+      "api": "API 및 OAuth",
+      "policies": "정책",
+      "aiPolicies": "AI 정책",
+      "dataResidency": "데이터 저장 위치",
+      "retention": "보존"
+    },
+    "subtitles": {
+      "roles": "역할 권한은 플랫폼에서 관리됩니다.",
+      "usage": "조직 사용량 지표."
+    }
+  },
+  "common": {
+    "cancel": "취소",
+    "copy": "복사",
+    "copied": "복사됨",
+    "close": "닫기",
+    "closeDialog": "대화상자 닫기",
+    "closeDrawer": "패널 닫기",
+    "remove": "제거",
+    "delete": "삭제",
+    "done": "완료",
+    "save": "저장",
+    "member_one": "명",
+    "member_other": "명",
+    "person_one": "명",
+    "person_other": "명",
+    "role": {
+      "owner": "소유자",
+      "admin": "관리자",
+      "member": "멤버",
+      "billing": "결제",
+      "guest": "게스트",
+      "viewer": "뷰어"
+    }
+  },
+  "general": {
+    "title": "일반",
+    "subtitle": "이 조직의 기본 정보와 기본값입니다.",
+    "subtitleReal": "이 조직의 기본 정보입니다.",
+    "identity": {
+      "title": "기본 정보",
+      "hint": "이 조직이 제품 전반과 초대 대상자에게 어떻게 표시되는지 설정합니다.",
+      "logo": "로고",
+      "logoSub": "정사각형 PNG 또는 SVG, 최소 64×64.",
+      "upload": "업로드",
+      "removeLogo": "제거",
+      "displayName": "표시 이름",
+      "displayNameHint": "최대 40자",
+      "slug": "URL 슬러그",
+      "slugHint": "acme.app/{slug}",
+      "slugHintReal": "se-field.app/{slug}",
+      "website": "웹사이트",
+      "description": "설명",
+      "descriptionHint": "조직 대시보드에 표시됨"
+    },
+    "defaults": {
+      "title": "기본값",
+      "hint": "다른 값이 선택되지 않았을 때 사용되는 사용자별 기본값입니다.",
+      "defaultWorkspace": "기본 워크스페이스",
+      "defaultWorkspaceSub": "새 멤버가 로그인 후 처음 진입하는 위치입니다."
+    },
+    "danger": {
+      "title": "위험 구역",
+      "hint": "이 조직 전체에 영향을 주는 되돌릴 수 없는 작업입니다.",
+      "deleteLabel": "조직 삭제",
+      "deleteSub": "이 조직과 워크스페이스, 연결된 모든 데이터를 영구히 제거합니다. 구성원의 계정은 유지됩니다.",
+      "deleteButton": "조직 삭제"
+    },
+    "deleteDialog": {
+      "title": "{{name}}을(를) 삭제하시겠습니까?",
+      "titleFallback": "조직을 삭제하시겠습니까?",
+      "confirm": "이해했으며 삭제합니다",
+      "descriptionPre": "조직과 그 안의 모든 워크스페이스, 결제 기록, 모든 에이전트 이력이 영구히 삭제됩니다. 구성원의 계정은 유지되지만 액세스 권한을 잃습니다. 확인하려면 아래에 ",
+      "descriptionPost": "을(를) 입력하세요."
+    }
+  },
+  "members": {
+    "title": "멤버",
+    "subtitle": "이 조직에 액세스할 수 있는 사람들입니다. 이메일로 초대하고, 역할을 변경하거나, 액세스를 비활성화하세요.",
+    "subtitleReal": "이 조직에 액세스할 수 있는 사람들입니다. 이메일로 초대하거나 역할을 변경하세요.",
+    "invitePeople": "사용자 초대",
+    "selected": "{{count}}명 선택됨",
+    "deactivate": "비활성화",
+    "clearSelection": "선택 해제",
+    "searchPlaceholder": "이름, 이메일, 팀 검색…",
+    "searchPlaceholderReal": "이름 또는 이메일 검색…",
+    "filter": {
+      "all": "전체",
+      "active": "활성",
+      "invited": "초대됨",
+      "deactivated": "비활성화됨",
+      "allRoles": "모든 역할"
+    },
+    "table": {
+      "member": "멤버",
+      "role": "역할",
+      "team": "팀",
+      "lastActive": "마지막 활동",
+      "joined": "가입일"
+    },
+    "empty": {
+      "noMatchesTitle": "\"{{query}}\"에 대한 결과 없음",
+      "noMatchesSubtitle": "다른 키워드를 사용하거나 필터를 해제하세요.",
+      "noFilterTitle": "이 필터에 해당하는 사람이 없습니다",
+      "noMembersTitle": "아직 멤버가 없습니다",
+      "noMembersSubtitle": "사용자를 초대하여 시작하세요.",
+      "noMatchesKeyword": "다른 키워드를 사용하세요."
+    },
+    "footer_one": "{{total}}명 중 {{filtered}}명 · 소유자는 먼저 소유권을 이전하지 않으면 제거할 수 없습니다.",
+    "footer_other": "{{total}}명 중 {{filtered}}명 · 소유자는 먼저 소유권을 이전하지 않으면 제거할 수 없습니다.",
+    "footerReal_one": "{{total}}명 중 {{filtered}}명 · 소유자는 소유권 이전으로만 변경됩니다.",
+    "footerReal_other": "{{total}}명 중 {{filtered}}명 · 소유자는 소유권 이전으로만 변경됩니다.",
+    "you": "나",
+    "removeDialog": {
+      "title": "{{name}}을(를) 제거하시겠습니까?",
+      "confirm": "제거",
+      "description": "이 조직에 대한 액세스가 즉시 종료됩니다. 작성한 작업물은 계속 해당 사용자에게 귀속됩니다. 이 작업은 되돌릴 수 없습니다."
+    },
+    "rowMenu": {
+      "resendInvite": "초대 다시 보내기",
+      "deactivate": "비활성화",
+      "reactivate": "재활성화",
+      "transferOwnership": "소유권 이전",
+      "removeFromOrg": "조직에서 제거",
+      "removeFromOrganization": "조직에서 제거"
+    },
+    "twoFaTitle": "2단계 인증 사용 중"
+  },
+  "invite": {
+    "title": "사용자 초대",
+    "emails": "이메일",
+    "valid": "유효 {{count}}",
+    "invalid": "무효 {{count}}",
+    "emailsPlaceholder": "alice@acme.com, bob@acme.com…",
+    "emailsPlaceholderReal": "teammate@company.com, another@company.com…",
+    "skipping": "{{count}}개 건너뜀: {{list}}",
+    "role": "역할",
+    "team": "팀",
+    "orShareLink": "또는 초대 링크 공유",
+    "send_one": "초대 {{count}}건 보내기",
+    "send_other": "초대 {{count}}건 보내기",
+    "sendEmpty": "초대 보내기",
+    "sending": "보내는 중…"
+  },
+  "invitations": {
+    "title": "초대",
+    "subtitle": "이 조직의 대기 중 및 수락된 초대입니다. 다시 보내거나, 취소하거나, 공유 가능한 초대 링크를 복사하세요.",
+    "subtitleReal": "이 조직의 미처리 초대입니다. 대기 중인 초대를 다시 보내거나 취소하세요.",
+    "invitePeople": "사용자 초대",
+    "stat": {
+      "pending": "대기 중",
+      "accepted": "수락됨",
+      "expired": "만료됨",
+      "thisMonth": "이번 달"
+    },
+    "filter": {
+      "all": "전체",
+      "pending": "대기 중",
+      "accepted": "수락됨",
+      "expired": "만료됨"
+    },
+    "table": {
+      "email": "이메일",
+      "role": "역할",
+      "team": "팀",
+      "sentBy": "보낸 사람",
+      "status": "상태",
+      "expires": "만료"
+    },
+    "status": {
+      "pending": "대기 중",
+      "accepted": "수락됨",
+      "expired": "만료됨"
+    },
+    "action": {
+      "resend": "다시 보내기",
+      "revoke": "취소",
+      "reinvite": "다시 초대",
+      "resendInvite": "초대 다시 보내기",
+      "revokeInvite": "초대 취소"
+    },
+    "shareLink": {
+      "title": "공유 가능한 초대 링크",
+      "sub": "확인된 도메인에서 이 링크를 가진 누구나 멤버로 참여할 수 있습니다. 언제든 비활성화할 수 있습니다."
+    },
+    "empty": {
+      "title": "대기 중인 초대 없음",
+      "subtitle": "이메일로 사용자를 초대하면 여기에 표시됩니다."
+    },
+    "pendingCount_one": "대기 중인 초대 {{count}}건.",
+    "pendingCount_other": "대기 중인 초대 {{count}}건."
+  },
+  "teams": {
+    "title": "팀",
+    "subtitle": "소유권 라우팅, 알림, 리뷰 할당을 위해 사람들을 그룹으로 묶습니다.",
+    "subtitleReal": "조직 내 사람들을 그룹으로 묶습니다. 소유권과 리뷰 라우팅은 워크스페이스 설정에서 지정합니다.",
+    "newTeam": "새 팀",
+    "searchPlaceholder": "팀 검색…",
+    "noMatch": "일치하는 팀이 없습니다.",
+    "membersCount_one": "멤버 {{count}}명",
+    "membersCount_other": "멤버 {{count}}명",
+    "pathsCount": "경로 {{count}}개",
+    "noneSelected": "선택된 팀 없음",
+    "table": {
+      "team": "팀",
+      "created": "생성일"
+    },
+    "empty": {
+      "title": "아직 팀이 없습니다",
+      "subtitle": "팀을 만들어 멤버를 그룹으로 묶으세요."
+    },
+    "removeDialog": {
+      "title": "{{name}}을(를) 삭제하시겠습니까?",
+      "confirm": "팀 삭제",
+      "description": "멤버는 조직 액세스를 유지합니다. 이 팀이 소유한 코드 경로는 조직 기본 라우팅으로 되돌아갑니다.",
+      "descriptionReal": "멤버는 조직에 남습니다. 팀 그룹만 제거됩니다."
+    },
+    "create": {
+      "title": "새 팀",
+      "name": "이름",
+      "namePlaceholder": "Mobile",
+      "teamName": "팀 이름",
+      "handle": "핸들",
+      "handleTaken": "이미 사용 중",
+      "handlePlaceholder": "mobile",
+      "createTeam": "팀 만들기",
+      "creating": "만드는 중…"
+    },
+    "detail": {
+      "noDescription": "아직 설명이 없습니다.",
+      "deleteTeam": "팀 삭제",
+      "membersHeader": "멤버 · {{count}}",
+      "addMember": "멤버 추가",
+      "noMembers": "아직 멤버가 없습니다. 작업 라우팅을 시작하려면 누군가를 추가하세요.",
+      "lead": "리드",
+      "makeLead": "리드로 지정",
+      "removeFromTeam": "팀에서 제거",
+      "codeOwnershipHeader": "코드 소유권 · {{count}}",
+      "codeOwnershipPre": "리뷰와 인시던트를 이 팀으로 라우팅하는 글로브입니다. Auto로 표시된 경로는 푸시 시 ",
+      "codeOwnershipPost": "에 추가됩니다.",
+      "auto": "자동",
+      "manual": "수동",
+      "removePath": "경로 제거",
+      "addPathPlaceholder": "src/features/admission/**",
+      "addPath": "경로 추가",
+      "routing": "라우팅",
+      "notificationChannel": "알림 채널",
+      "created": "{{date}} 생성됨."
+    }
+  },
+  "roles": {
+    "title": "역할",
+    "subtitle": "기본 제공 역할은 잠겨 있습니다. 하나를 복제하여 팀에 맞춘 사용자 지정 역할을 정의하세요.",
+    "newRole": "새 역할",
+    "newRoleName": "새 역할",
+    "copySuffix": "{{name}} 복사본",
+    "builtIn": "기본 제공",
+    "permsSummary": "권한 {{perms}}개 · {{count}}{{unit}}",
+    "describePlaceholder": "이 역할의 용도를 설명하세요…",
+    "assigned": "{{count}}명 할당됨",
+    "permissionsOf": "권한 {{total}}개 중 {{count}}개",
+    "duplicate": "복제",
+    "delete": "삭제",
+    "lockNotice": "기본 제공 역할이라 편집할 수 없습니다. 복제하여 사용자 지정 버전을 만드세요.",
+    "footer": "사용자 지정 역할은 할당된 멤버에게 즉시 적용됩니다. 감사 로그에 모든 권한 변경이 기록됩니다.",
+    "group": {
+      "org": "조직",
+      "members": "멤버",
+      "workspaces": "워크스페이스",
+      "admission": "어드미션",
+      "agents": "에이전트",
+      "billing": "결제",
+      "observability": "감사 및 시크릿"
+    },
+    "perm": {
+      "orgRead": "조직 설정 보기",
+      "orgManage": "조직 설정 관리",
+      "orgManageHint": "이름, 로고, 기본값",
+      "membersInvite": "멤버 초대",
+      "membersRemove": "멤버 제거",
+      "membersRole": "멤버 역할 변경",
+      "workspacesCreate": "워크스페이스 생성",
+      "workspacesDelete": "워크스페이스 삭제",
+      "workspacesSettings": "워크스페이스 설정 편집",
+      "admissionRead": "어드미션 규칙 읽기",
+      "admissionWrite": "어드미션 규칙 작성",
+      "admissionBypass": "어드미션 게이트 우회",
+      "admissionBypassHint": "고위험",
+      "agentsRun": "에이전트 실행 트리거",
+      "agentsConfigure": "에이전트 구성",
+      "agentsKill": "실행 중인 에이전트 중지",
+      "billingRead": "결제 및 사용량 보기",
+      "billingManage": "요금제 및 결제 변경",
+      "auditRead": "감사 로그 읽기",
+      "auditExport": "감사 로그 내보내기",
+      "secretsRead": "시크릿 이름 읽기",
+      "secretsWrite": "시크릿 관리"
+    },
+    "seed": {
+      "owner": "전체 액세스. 소유권 이전 및 조직 삭제 가능.",
+      "admin": "멤버, 워크스페이스, 정책 관리. 결제는 제외.",
+      "member": "기본 역할. 제품 사용, 코드 배포, 에이전트 실행.",
+      "billing": "결제 화면을 제외하고 읽기 전용 액세스.",
+      "guest": "공유 워크스페이스에 대한 제한된 읽기.",
+      "secops": "사용자 지정 — 보안 리뷰 및 감사 액세스."
+    }
+  },
+  "security": {
+    "title": "보안",
+    "subtitle": "조직 전체 제어. 여기서 더 엄격한 설정은 사용자별 선택을 재정의합니다.",
+    "auth": {
+      "title": "인증",
+      "hint": "로그인 시 사용자가 신원을 증명하는 방식입니다.",
+      "mfaRequired": "다중 인증 필수",
+      "mfaRequiredSub": "모든 멤버는 조직에 액세스하기 전에 2차 인증 수단을 등록해야 합니다.",
+      "mfaMethod": "MFA 방식",
+      "mfaMethodSub": "특정 인증 유형으로 제한하거나 등록된 모든 인증을 허용합니다.",
+      "mfaAny": "모두 (TOTP, WebAuthn, 백업)",
+      "mfaTotp": "TOTP만",
+      "mfaWebauthn": "WebAuthn / 패스키만",
+      "passkeyAdmins": "관리자는 패스키 전용",
+      "passkeyAdminsSub": "소유자와 관리자는 피싱 방지 인증(WebAuthn)을 사용해야 합니다.",
+      "ssoOnly": "SSO 전용",
+      "ssoOnlySub": "비밀번호 및 소셜 로그인을 차단합니다. 멤버는 조직 IdP를 사용해야 합니다."
+    },
+    "sessions": {
+      "title": "세션",
+      "hint": "인증된 브라우저가 로그인 상태로 유지되는 기간입니다.",
+      "maxDuration": "최대 세션 기간",
+      "maxDurationSub": "절대 상한. 이후 사용자는 로그아웃되어 재인증해야 합니다.",
+      "inactivity": "비활성 시간 초과",
+      "inactivitySub": "지정한 분 동안 활동이 없으면 로그아웃합니다.",
+      "min15": "15분",
+      "min30": "30분",
+      "hour1": "1시간",
+      "hours2": "2시간",
+      "never": "안 함",
+      "rememberMe": "\"로그인 상태 유지\" 허용",
+      "rememberMeSub": "신뢰할 수 있는 브라우저에서 최대 30일간 MFA를 건너뛸 수 있습니다.",
+      "trustDevices": "기기 신뢰",
+      "trustDevicesSub": "등록된 기기를 이후 로그인 시 2차 인증 수단으로 취급합니다.",
+      "hours8": "8시간",
+      "day1": "1일",
+      "week1": "1주",
+      "days30": "30일",
+      "days90": "90일"
+    },
+    "ipAllowlist": {
+      "title": "IP 허용 목록",
+      "hint": "조직 액세스를 특정 CIDR 블록 집합으로 제한합니다. 목록이 비어 있으면 모두 허용됩니다.",
+      "empty": "아직 CIDR이 없습니다. 하나를 추가하여 적용을 시작하세요.",
+      "placeholder": "10.0.0.0/8",
+      "add": "CIDR 추가",
+      "lockoutWarn": "저장하기 전에 현재 IP가 포함되어 있는지 확인하세요 — 그렇지 않으면 본인이 잠겨 접속할 수 없게 됩니다.",
+      "off": "IP 허용 목록이 꺼져 있습니다. 멤버는 모든 네트워크에서 로그인할 수 있습니다.",
+      "errorCidr": "CIDR 표기를 사용하세요. 예: 10.0.0.0/8 또는 203.0.113.42/32",
+      "errorDup": "이미 목록에 있습니다"
+    },
+    "appAccess": {
+      "title": "앱 액세스",
+      "hint": "누가 서드파티 OAuth 앱을 조직에 연결할 수 있는지 설정합니다.",
+      "install": "서드파티 앱 설치",
+      "installSub": "멤버는 디렉터리를 둘러볼 수 있지만 허용된 역할만 설치할 수 있습니다.",
+      "adminOnly": "관리자만",
+      "all": "모든 멤버"
+    },
+    "notes": {
+      "effect": "변경 사항은 새 로그인에 즉시 적용됩니다. 기존 세션은 다음 갱신까지 유지됩니다.",
+      "notify": "MFA, SSO 전용, 패스키 요구 사항이 변경되면 멤버에게 이메일로 알립니다.",
+      "recovery": "MFA 방식이 변경될 때마다 복구 코드가 재발급됩니다."
+    }
+  },
+  "integrations": {
+    "title": "연동",
+    "subtitle": "앱 {{total}}개 중 {{installed}}개 설치됨.",
+    "category": {
+      "all": "전체",
+      "chat": "채팅",
+      "tracker": "이슈 트래커",
+      "pager": "온콜 호출",
+      "observability": "옵저버빌리티",
+      "sourcecontrol": "소스 관리",
+      "docs": "문서"
+    },
+    "installedOnly": "설치된 항목만",
+    "searchPlaceholder": "앱 검색…",
+    "noMatchTitle": "일치하는 앱이 없습니다.",
+    "noMatchSub": "다른 카테고리를 시도하거나 검색어를 지우세요.",
+    "notInstalled": "설치되지 않음",
+    "configure": "구성",
+    "install": "설치",
+    "statusDot": {
+      "healthy": "정상",
+      "degraded": "저하됨",
+      "error": "오류"
+    },
+    "blurb": {
+      "slack": "리뷰 요청, 에이전트 업데이트, 인시던트 신호를 채널에 게시합니다.",
+      "jira": "어드미션 게이트와 Jira 티켓 간 양방향 동기화.",
+      "linear": "리뷰 스레드에서 Linear 이슈를 엽니다. PR을 이슈에 연결합니다.",
+      "pagerduty": "어드미션 규칙이 배포를 차단하거나 에이전트가 중단되면 온콜을 호출합니다.",
+      "datadog": "에이전트 및 어드미션 지표를 Datadog으로 전송합니다. 오류를 인시던트로 다시 가져옵니다.",
+      "github": "리포지토리를 가져오고, 체크 런을 게시하고, CODEOWNERS 라우팅을 적용합니다.",
+      "gitlab": "GitHub와 동일하며 GitLab 호스팅 프로젝트용입니다.",
+      "bitbucket": "Atlassian 호스팅 Git 소스.",
+      "notion": "조사 요약과 런북을 Notion 문서에 표시합니다.",
+      "sentry": "오류를 어드미션 실패 및 사후 분석과 상호 연결합니다.",
+      "opsgenie": "PagerDuty의 대안 호출 도구.",
+      "discord": "Discord 서버 채널로 알림을 보냅니다."
+    },
+    "drawer": {
+      "ariaLabel": "{{name}} 구성",
+      "account": "계정",
+      "installedBy": "설치한 사람",
+      "subscribedEvents": "구독한 이벤트",
+      "noEvents": "구성된 이벤트가 없습니다.",
+      "errorNotice": "마지막 폴링에서 API 키가 401을 반환했습니다. 자격 증명을 새로 고치려면 다시 연결하세요.",
+      "documentation": "문서",
+      "openDocs": "{{name}} 문서 열기",
+      "uninstall": "제거",
+      "done": "완료"
+    }
+  },
+  "webhooks": {
+    "title": "웹훅",
+    "subtitle": "조직 수준 이벤트에서 발생하는 HTTP 콜백입니다. 각 엔드포인트는 이벤트 유형의 하위 집합을 구독할 수 있습니다.",
+    "subtitleReal": "조직 이벤트에서 발생하는 HTTP 콜백으로 HMAC-SHA256으로 서명됩니다. 각 엔드포인트는 이벤트의 하위 집합을 구독합니다.",
+    "newEndpoint": "새 엔드포인트",
+    "urlPlaceholder": "https://hooks.example.com/se-events",
+    "descPlaceholder": "예: 내부 웨어하우스 미러",
+    "seed": {
+      "warehouse": "내부 웨어하우스로 미러링",
+      "partner": "파트너 게이트 결과 미러",
+      "staging": "스테이징 전용"
+    },
+    "event": {
+      "admissionPassed": "어드미션 게이트 통과",
+      "admissionFailed": "어드미션 게이트 실패",
+      "reviewRequested": "리뷰 요청됨",
+      "reviewApproved": "리뷰 승인됨",
+      "agentStarted": "에이전트 시작됨",
+      "agentCompleted": "에이전트 완료됨",
+      "agentKilled": "에이전트 중지됨",
+      "incidentOpened": "인시던트 열림",
+      "incidentResolved": "인시던트 해결됨",
+      "workspaceCreated": "워크스페이스 생성됨",
+      "memberInvited": "멤버 초대됨"
+    },
+    "real": {
+      "allEvents": "모든 이벤트",
+      "memberInvited": "멤버 초대됨",
+      "memberRemoved": "멤버 제거됨",
+      "roleChanged": "역할 변경됨",
+      "invitationCanceled": "초대 취소됨",
+      "orgUpdated": "조직 업데이트됨",
+      "orgDeleted": "조직 삭제됨",
+      "apikeyCreated": "API 키 생성됨",
+      "apikeyRevoked": "API 키 취소됨",
+      "subscriptionUpdated": "구독 업데이트됨",
+      "paymentFailed": "결제 실패"
+    },
+    "table": {
+      "endpoint": "엔드포인트",
+      "events": "이벤트",
+      "status": "상태",
+      "event": "이벤트",
+      "attempts": "시도 횟수",
+      "when": "시점",
+      "all": "전체"
+    },
+    "status": {
+      "enabled": "사용",
+      "paused": "일시 중지"
+    },
+    "deliveryStatus": {
+      "delivered": "전달됨",
+      "failed": "실패",
+      "exhausted": "소진됨",
+      "pending": "대기 중",
+      "sending": "전송 중"
+    },
+    "action": {
+      "pause": "일시 중지",
+      "enable": "사용",
+      "deleteEndpoint": "엔드포인트 삭제",
+      "replay": "재전송"
+    },
+    "empty": {
+      "endpointsTitle": "엔드포인트 없음",
+      "endpointsSub": "서명된 이벤트 콜백을 받으려면 엔드포인트를 추가하세요.",
+      "deliveriesTitle": "아직 전달 내역 없음",
+      "deliveriesSub": "엔드포인트가 이벤트를 받으면 여기에 표시됩니다."
+    },
+    "recentDeliveries": "최근 전달 내역",
+    "create": {
+      "title": "새 웹훅 엔드포인트",
+      "payloadUrl": "페이로드 URL",
+      "urlPlaceholder": "https://hooks.example.com/p0",
+      "description": "설명 (선택)",
+      "descPlaceholder": "내부 웨어하우스 미러",
+      "events": "이벤트",
+      "create": "엔드포인트 생성",
+      "creating": "생성 중…"
+    },
+    "signingSecret": {
+      "title": "서명 시크릿",
+      "description": "각 전달의 x-p0-signature 헤더(본문의 HMAC-SHA256)를 이 시크릿으로 검증하세요. 한 번만 표시됩니다."
+    },
+    "deleteDialog": {
+      "title": "이 엔드포인트를 삭제하시겠습니까?",
+      "confirm": "삭제",
+      "description": "즉시 이벤트 수신이 중단됩니다. 전달 내역은 유지됩니다."
+    }
+  },
+  "api": {
+    "title": "API 및 OAuth",
+    "subtitle": "조직 범위 자격 증명과 OAuth 애플리케이션. 개인 토큰은 /me/api-tokens에 있습니다.",
+    "newToken": "새 토큰",
+    "registerApp": "앱 등록",
+    "tab": {
+      "pat": "개인 액세스 토큰",
+      "oauth": "OAuth 애플리케이션"
+    },
+    "footer": "토큰은 조직으로 인증됩니다. 토큰이 수행하는 작업은 감사할 수 있지만 항상 되돌릴 수 있는 것은 아닙니다.",
+    "tokenCreated": "토큰 \"{{name}}\"이(가) 생성됨",
+    "deleteDialog": {
+      "revokeTitle": "\"{{name}}\"을(를) 취소하시겠습니까?",
+      "deleteTitle": "\"{{name}}\"을(를) 삭제하시겠습니까?",
+      "revoke": "취소",
+      "delete": "삭제",
+      "patDescription": "이 토큰을 사용하는 모든 클라이언트가 즉시 401을 받기 시작합니다. 이 작업은 되돌릴 수 없습니다.",
+      "appDescription": "기존 OAuth 설치가 무효화됩니다. 사용자는 다음 로그인 시 재승인을 요청받습니다."
+    },
+    "pat": {
+      "empty": "아직 토큰이 없습니다. 하나를 생성하여 머신 클라이언트를 조직 API에 인증하세요.",
+      "token": "토큰",
+      "scopes": "스코프",
+      "expires": "만료",
+      "lastUsed": "마지막 사용",
+      "expired": "만료됨",
+      "createdBy": "{{prefix}}…  · {{by}} 생성 · {{date}}",
+      "never": "안 함",
+      "revoke": "토큰 취소"
+    },
+    "app": {
+      "app": "앱",
+      "redirect": "리디렉션",
+      "status": "상태",
+      "installs": "설치 수",
+      "scopeCount_one": "스코프 {{count}}개",
+      "scopeCount_other": "스코프 {{count}}개",
+      "since": "{{date}}부터",
+      "delete": "앱 삭제",
+      "appStatus": {
+        "published": "게시됨",
+        "draft": "초안"
+      }
+    },
+    "scope": {
+      "orgRead": "조직 설정 읽기",
+      "orgWrite": "조직 설정 관리",
+      "membersRead": "멤버 읽기",
+      "membersWrite": "멤버 초대/제거",
+      "admissionRead": "어드미션 규칙 읽기",
+      "admissionWrite": "어드미션 규칙 작성",
+      "agentsRead": "에이전트 읽기",
+      "agentsWrite": "에이전트 트리거",
+      "webhooksWrite": "웹훅 관리",
+      "auditRead": "감사 로그 읽기"
+    },
+    "createPat": {
+      "title": "새 개인 액세스 토큰",
+      "generate": "토큰 생성",
+      "tokenName": "토큰 이름",
+      "tokenNamePlaceholder": "예: CI 배포 게이트",
+      "expires": "만료",
+      "days30": "30일",
+      "days60": "60일",
+      "days90": "90일",
+      "year1": "1년",
+      "noExpiration": "만료 없음",
+      "scopes": "스코프",
+      "selected": "{{count}}개 선택됨"
+    }
+  },
+  "policies": {
+    "title": "정책",
+    "subtitle": "조직 기본 어드미션 규칙입니다. 워크스페이스가 이를 상속하며, 잠기지 않은 한 워크스페이스별 설정으로 재정의할 수 있습니다.",
+    "stat": {
+      "activeRules": "활성 규칙",
+      "hardBlocks": "하드 차단",
+      "workspaces": "워크스페이스",
+      "inheriting": "조직 기본값 상속 중"
+    },
+    "inheritance": {
+      "title": "상속",
+      "hint": "조직 기본값이 기존 및 신규 워크스페이스에 도달하는 방식입니다.",
+      "applyNew": "새 워크스페이스에 적용",
+      "applyNewSub": "워크스페이스가 생성될 때마다 활성 조직 규칙을 복사하여 기본적으로 적용합니다.",
+      "pushExisting": "기존 워크스페이스에 변경 사항 전파",
+      "pushExistingSub": "여기서 규칙이 변경되면 로컬에서 사용자 지정하지 않은 모든 워크스페이스에 새 심각도를 전파합니다."
+    },
+    "rules": {
+      "title": "규칙",
+      "hint": "각 규칙은 단일 심각도를 가집니다. Block은 게이트를 실패시키고, Warn은 소프트 신호를 표시합니다.",
+      "activeOf": "{{total}}개 중 {{active}}개 활성"
+    },
+    "category": {
+      "secrets": "시크릿",
+      "review": "리뷰",
+      "tests": "테스트 및 커버리지",
+      "deps": "의존성",
+      "config": "구성"
+    },
+    "override": {
+      "title2Approvers": "승인자 ≥2명 필수",
+      "desc2Approvers": "프로덕션 브랜치에는 최소 2명의 사람 승인이 필요합니다. 소유자는 1회로 계산됩니다.",
+      "titleStaleDeps": "365일 이상 뒤처진 의존성에 경고"
+    },
+    "row": {
+      "workspaces": "워크스페이스 {{total}}개 중 {{applied}}개",
+      "localOverrides": " · 일부는 로컬 재정의가 있음",
+      "lastChanged": "마지막 변경 {{date}}"
+    },
+    "severity": {
+      "block": "차단",
+      "warn": "경고",
+      "off": "끔"
+    },
+    "footer": "저장된 변경 사항은 몇 초 이내에 워크스페이스 어드미션 뷰에 나타납니다. 실행 중인 픽스 파이프라인은 소급 재검사되지 않습니다."
+  },
+  "aiPolicies": {
+    "title": "AI 정책",
+    "subtitle": "조직이 사용할 수 있는 모델, 데이터가 저장되는 위치, 프롬프트가 조직을 떠나기 전에 정제되는 방식을 설정합니다.",
+    "allowedModels": {
+      "title": "허용 모델",
+      "hint": "멤버는 이 목록에서만 선택할 수 있습니다. 모델을 비활성화하면 실행 중인 작업이 후속 작업을 큐에 넣는 것이 즉시 중단됩니다.",
+      "model": "모델",
+      "vendor": "공급업체",
+      "context": "컨텍스트",
+      "tier": "등급",
+      "residency": "저장 위치",
+      "notAvailable": "{{region}}에서 사용할 수 없음",
+      "conflict_one": "선택한 모델 {{count}}개가 선택한 저장 위치에서 사용할 수 없습니다. 멤버가 사용 시 오류를 받게 됩니다.",
+      "conflict_other": "선택한 모델 {{count}}개가 선택한 저장 위치에서 사용할 수 없습니다. 멤버가 사용 시 오류를 받게 됩니다."
+    },
+    "tier": {
+      "frontier": "프론티어",
+      "fast": "빠름",
+      "cheap": "저렴"
+    },
+    "defaults": {
+      "title": "기본값",
+      "hint": "멤버가 모델을 선택하지 않았을 때 적용되는 값입니다. 위 허용 목록에 있어야 합니다.",
+      "defaultModel": "기본 모델",
+      "defaultModelSub": "대화형 사용(채팅, 인스펙트)용.",
+      "fastModel": "빠른 모델",
+      "fastModelSub": "대량/백그라운드 작업(어드미션, 에이전트)용. 비용을 위해 빠른 등급을 선택하세요.",
+      "reviewerOverride": "리뷰어의 재정의 허용",
+      "reviewerOverrideSub": "켜면 개별 리뷰어가 일회성 리뷰 실행에 기본이 아닌 모델을 선택할 수 있습니다."
+    },
+    "dataHandling": {
+      "title": "데이터 처리",
+      "hint": "공급업체가 조직 프롬프트로 할 수 있는 작업과 데이터가 저장되는 위치입니다.",
+      "optOut": "모델 학습 거부",
+      "optOutSub": "공급업체에 어떤 프롬프트/완성도 미세 조정에 사용하지 않도록 지시합니다.",
+      "residency": "데이터 저장 위치",
+      "residencySub": "모델은 선택한 지역의 추론 엔드포인트로만 라우팅됩니다.",
+      "retention": "공급업체 보존",
+      "retentionSub": "공급업체가 로그에 프롬프트를 보관하는 일수입니다.",
+      "retention0": "0일 (보존 없음)",
+      "retention7": "7일",
+      "retention30": "30일",
+      "retention90": "90일"
+    },
+    "promptSafety": {
+      "title": "프롬프트 보안",
+      "hint": "조직을 떠나는 모든 프롬프트에 적용되는 전송 전 필터입니다.",
+      "redactPre": "시크릿 마스킹",
+      "redactSubPre": "모든 프롬프트에 대해 시크릿 스캐너를 실행하고 일치 항목을 ",
+      "redactSubPost": "(으)로 대체합니다.",
+      "blockPii": "PII 차단",
+      "blockPiiSub": "PII(이메일, 주민번호, 신용카드, 전화번호)가 포함된 프롬프트 전송을 거부합니다."
+    },
+    "agentCaps": {
+      "title": "에이전트 기능",
+      "hint": "자율 에이전트가 조직을 대신하여 수행할 수 있는 작업입니다.",
+      "browsing": "웹 브라우징",
+      "browsingSub": "에이전트가 조사의 일부로 외부 URL을 가져오도록 허용합니다.",
+      "toolUse": "도구 사용",
+      "toolUseSub": "내부 도구(어드미션, 픽스 파이프라인, 감사)에 대한 함수 호출을 허용합니다."
+    },
+    "spendCap": {
+      "title": "지출 한도",
+      "hint": "월간 토큰 지출에 대한 하드 한도입니다. 한도에 도달하면 조직이 일시 중지되고 관리자에게 호출됩니다.",
+      "monthlyCap": "월간 토큰 한도",
+      "monthlyCapSub": "모든 허용 모델에 걸쳐 계산됩니다. 0이면 한도를 해제합니다.",
+      "unit": "백만 토큰 / 월"
+    },
+    "notes": {
+      "changes": "변경 사항은 다음 에이전트/채팅 호출에 적용됩니다.",
+      "retention": "이미 공급업체에 있는 기존 프롬프트는 전송 시점에 적용된 보존 정책을 따릅니다.",
+      "audit": "감사 로그에 누가 무엇을 변경했는지 매번 기록됩니다. 리뷰어는 구성 스냅샷까지 거슬러 결정을 다시 확인할 수 있습니다."
+    }
+  },
+  "samlSso": {
+    "title": "SAML SSO",
+    "subtitle": "ID 공급자와 SAML 2.0 싱글 사인온을 구성합니다.",
+    "status": {
+      "connected": "연결됨",
+      "connectedSub": "SAML SSO가 활성화되어 정상 작동 중입니다.",
+      "error": "오류",
+      "errorSub": "마지막 테스트 실패: 잘못된 서명.",
+      "notConfigured": "구성되지 않음",
+      "notConfiguredSub": "시작하려면 아래에 IdP 메타데이터를 입력하세요.",
+      "lastTested": "마지막 테스트",
+      "testConnection": "연결 테스트"
+    },
+    "idp": {
+      "title": "ID 공급자 메타데이터",
+      "hint": "IdP의 값을 붙여넣거나 메타데이터 XML을 업로드하여 자동 입력하세요.",
+      "upload": "메타데이터 XML 업로드",
+      "entityId": "엔터티 ID (발급자)",
+      "ssoUrl": "SSO URL",
+      "cert": "X.509 인증서"
+    },
+    "sp": {
+      "title": "서비스 공급자 메타데이터",
+      "hint": "SAML 애플리케이션을 만들 때 이 값을 IdP에 붙여넣으세요.",
+      "acsUrl": "ACS URL (응답 URL)",
+      "spEntityId": "SP 엔터티 ID",
+      "nameIdFormat": "NameID 형식"
+    },
+    "mapping": {
+      "title": "속성 매핑",
+      "hint": "SAML 어설션 클레임을 사용자 프로필 필드에 매핑합니다.",
+      "profileField": "프로필 필드",
+      "idpClaim": "IdP 클레임 이름"
+    },
+    "enforcement": {
+      "title": "적용",
+      "hint": "조직의 SSO 사용 방식을 더 엄격하게 설정합니다.",
+      "requireSso": "모든 멤버에게 SSO 필수",
+      "requireSsoSub": "비밀번호 및 소셜 로그인을 차단합니다. 멤버는 IdP를 통해 로그인해야 합니다.",
+      "jit": "JIT 프로비저닝 허용",
+      "jitSub": "첫 SSO 로그인 시 계정을 자동 생성합니다. 그렇지 않으면 사용자를 미리 초대해야 합니다.",
+      "defaultRole": "SSO 사용자 기본 역할",
+      "defaultRoleSub": "JIT 프로비저닝된 멤버에게 할당되는 역할입니다."
+    },
+    "notes": {
+      "test": "SSO를 필수로 설정하기 전에 항상 시크릿 창에서 연결을 테스트하세요 — 잘못 구성된 IdP는 모두를 잠글 수 있습니다.",
+      "recovery": "SSO가 중단되면 소유자는 언제나 복구 코드로 로그인할 수 있습니다."
+    }
+  },
+  "sso": {
+    "title": "SAML / SSO",
+    "subtitle": "OIDC ID 공급자를 연결합니다. 이메일 도메인이 일치하는 사용자는 로그인 시 IdP로 라우팅됩니다. 엔터프라이즈 요금제.",
+    "removeConnection": "연결 제거",
+    "status": "상태",
+    "connected": "연결됨",
+    "disabled": "비활성화됨",
+    "notConfigured": "구성되지 않음",
+    "secretStored": "시크릿 저장됨",
+    "domainOwnership": "도메인 소유권",
+    "verified": "확인됨",
+    "notVerified": "미확인",
+    "verifiedProven": "{{domain}}의 소유권이 확인되었습니다 — 일치하는 로그인은 IdP로 라우팅됩니다.",
+    "verifyPrompt1": "이 TXT 레코드를 ",
+    "verifyPrompt2": " 루트에 추가한 뒤 확인하세요. 도메인이 확인될 때까지 로그인은 IdP로 ",
+    "verifyPromptNot": "라우팅되지 않습니다",
+    "verifyPrompt3": ".",
+    "verifyDomain": "도메인 확인",
+    "checkingDns": "DNS 확인 중…",
+    "dnsNotFound": "아직 TXT 레코드를 찾을 수 없습니다 — DNS 전파에 몇 분이 걸릴 수 있습니다.",
+    "field": {
+      "emailDomain": "이메일 도메인",
+      "issuer": "OIDC 발급자",
+      "authEndpoint": "인증 엔드포인트",
+      "tokenEndpoint": "토큰 엔드포인트",
+      "jwksEndpoint": "JWKS 엔드포인트",
+      "clientId": "클라이언트 ID",
+      "clientSecret": "클라이언트 시크릿",
+      "clientSecretKeep": "클라이언트 시크릿 (유지하려면 비워 두세요)",
+      "clientSecretPlaceholderStored": "•••••••• (저장됨)",
+      "clientSecretPlaceholder": "IdP에서 발급"
+    },
+    "saveChanges": "변경 사항 저장",
+    "connectSso": "SSO 연결",
+    "saving": "저장 중…",
+    "auditNote": "소유자/관리자만 변경할 수 있습니다. 모든 변경은 감사됩니다.",
+    "deleteDialog": {
+      "title": "SSO 연결을 제거하시겠습니까?",
+      "confirm": "제거",
+      "description": "이 도메인의 사용자는 비밀번호 로그인으로 되돌아갑니다. 저장된 클라이언트 시크릿이 삭제됩니다."
+    }
+  },
+  "scim": {
+    "title": "SCIM 프로비저닝",
+    "subtitle": "SCIM 2.0으로 ID 공급자에서 사용자와 그룹을 푸시합니다.",
+    "subtitleReal": "SCIM 2.0으로 ID 공급자(Okta, Azure AD)에서 사용자를 푸시합니다. 엔터프라이즈 요금제.",
+    "status": {
+      "connected": "연결됨",
+      "connectedSub": "SCIM 커넥터가 Okta로부터 이벤트를 수신하고 있습니다.",
+      "notConfigured": "구성되지 않음",
+      "notConfiguredSub": "토큰을 생성하여 IdP에 붙여넣으세요.",
+      "lastSync": "마지막 동기화",
+      "syncNow": "지금 동기화"
+    },
+    "endpoint": {
+      "title": "엔드포인트",
+      "hint": "IdP의 SCIM 프로비저닝 구성에 이 값을 붙여넣으세요.",
+      "baseUrl": "SCIM 기본 URL",
+      "bearerToken": "베어러 토큰",
+      "bearerTokenSub": "SCIM 요청을 인증할 토큰을 생성하세요. 토큰은 한 번만 표시됩니다.",
+      "generate": "새 토큰 생성"
+    },
+    "syncRules": {
+      "title": "동기화 규칙",
+      "hint": "SCIM 커넥터가 수행할 수 있는 작업입니다.",
+      "autoCreate": "사용자 자동 생성",
+      "autoCreateSub": "IdP가 SCIM POST를 보낼 때 계정을 생성합니다.",
+      "autoDeactivate": "제거 시 자동 비활성화",
+      "autoDeactivateSub": "IdP에서 사용자 할당이 해제되면 세션을 비활성화하고 토큰을 취소합니다.",
+      "syncGroups": "그룹 → 팀 동기화",
+      "syncGroupsSub": "아래 매핑을 사용하여 IdP 그룹 멤버십을 ACME 팀에 미러링합니다."
+    },
+    "mapping": {
+      "title": "그룹 → 팀 매핑",
+      "hint": "IdP 그룹 이름을 ACME 팀에 매핑합니다. 매핑되지 않은 그룹은 무시됩니다.",
+      "add": "매핑 추가",
+      "groupName": "IdP 그룹 이름",
+      "team": "ACME 팀",
+      "groupPlaceholder": "okta-group-name",
+      "remove": "매핑 제거"
+    },
+    "activity": {
+      "title": "최근 동기화 활동",
+      "hint": "최근 SCIM 이벤트 6건. 이전 이벤트는 감사 로그에 있습니다.",
+      "timestamp": "타임스탬프",
+      "action": "작업",
+      "target": "대상",
+      "count": "수",
+      "created": "생성됨",
+      "updated": "업데이트됨",
+      "deactivated": "비활성화됨"
+    },
+    "tokenCreated": "SCIM 토큰 생성됨",
+    "real": {
+      "status": "상태",
+      "enabled": "사용",
+      "notConfigured": "구성되지 않음",
+      "disableScim": "SCIM 비활성화",
+      "enableScim": "SCIM 활성화",
+      "baseUrl": "SCIM 기본 URL",
+      "bearerToken": "베어러 토큰",
+      "bearerTokenSub": "생성 시 한 번만 표시됩니다. 유출이 우려되면 교체하세요 — 이전 토큰은 즉시 작동을 멈춥니다.",
+      "rotateToken": "토큰 교체",
+      "idpNote": "IdP에서 위 SCIM 기본 URL을 설정하고 베어러 토큰을 붙여넣으세요. IdP에서 할당된 사용자가 이 조직에 프로비저닝되며, 할당 해제 시 프로비저닝이 해제됩니다.",
+      "enablePrompt": "SCIM을 활성화하여 ID 공급자용 기본 URL과 베어러 토큰을 받으세요. 할당된 사용자가 이 조직에 자동으로 추가됩니다.",
+      "tokenDescription": "IdP의 SCIM 커넥터에 이 값을 붙여넣으세요. 다시 표시할 수 없습니다 — 새로 받으려면 교체하세요.",
+      "disableTitle": "SCIM을 비활성화하시겠습니까?",
+      "disableConfirm": "비활성화",
+      "disableDescription": "베어러 토큰이 즉시 작동을 멈추고 IdP가 더 이상 사용자를 프로비저닝할 수 없습니다. 기존 멤버는 유지됩니다."
+    }
+  },
+  "audit": {
+    "title": "감사 로그",
+    "subtitle": "조직 전반의 모든 권한 작업입니다. 보존 정책에 따라 유지됩니다.",
+    "subtitleReal": "조직 전반의 권한 작업입니다. 요금제 보존 정책에 따라 유지됩니다.",
+    "exportCsv": "CSV 내보내기",
+    "searchPlaceholder": "행위자, 대상, IP 검색…",
+    "searchPlaceholderReal": "행위자, 작업, 대상, IP 검색…",
+    "allActors": "모든 행위자",
+    "actions": {
+      "all": "모든 작업",
+      "authLogin": "auth.login",
+      "authLoginFailed": "auth.login.failed",
+      "membersInvite": "members.invite",
+      "membersRemove": "members.remove",
+      "admissionRuleChanged": "admission.rule.changed",
+      "secretsRotate": "secrets.rotate",
+      "ssoTest": "sso.test",
+      "webhookCreated": "webhook.created",
+      "agentRun": "agent.run",
+      "orgMemberInvited": "멤버 초대됨",
+      "orgMemberRemoved": "멤버 제거됨",
+      "orgMemberRoleChanged": "역할 변경됨",
+      "orgInvitationCanceled": "초대 취소됨",
+      "orgUpdated": "조직 업데이트됨",
+      "orgDeleted": "조직 삭제됨",
+      "orgTeamCreated": "팀 생성됨",
+      "orgTeamDeleted": "팀 삭제됨",
+      "security2faEnabled": "2FA 활성화됨",
+      "security2faDisabled": "2FA 비활성화됨",
+      "securityPasswordChanged": "비밀번호 변경됨",
+      "securitySessionRevoked": "세션 취소됨",
+      "apikeyCreated": "API 키 생성됨",
+      "apikeyRevoked": "API 키 취소됨",
+      "billingSubscriptionUpdated": "구독 업데이트됨",
+      "billingPaymentFailed": "결제 실패"
+    },
+    "table": {
+      "when": "시점",
+      "actor": "행위자",
+      "action": "작업",
+      "target": "대상",
+      "ip": "IP",
+      "result": "결과",
+      "actionTarget": "작업 / 대상"
+    },
+    "result": {
+      "success": "성공",
+      "failure": "실패"
+    },
+    "diff": {
+      "before": "변경 전",
+      "after": "변경 후",
+      "noPayload": "— 페이로드 없음 —"
+    },
+    "showing": "8,421개 이벤트 중 1–15 표시",
+    "previous": "이전",
+    "next": "다음",
+    "empty": {
+      "matchingTitle": "일치하는 이벤트 없음",
+      "matchingSub": "다른 필터를 시도하세요.",
+      "noEventsTitle": "아직 감사 이벤트 없음",
+      "noEventsSub": "권한 작업이 여기에 표시됩니다."
+    },
+    "eventsCount_one": "이벤트 {{count}}개",
+    "eventsCount_other": "이벤트 {{count}}개",
+    "moreAvailable": " (더 있음)",
+    "loading": "불러오는 중…",
+    "loadMore": "더 보기",
+    "errorContext": "감사 로그"
+  },
+  "dataResidency": {
+    "title": "데이터 저장 위치",
+    "subtitle": "ACME 데이터가 처리 및 저장되는 위치를 선택합니다.",
+    "controls": {
+      "title": "저장 위치가 제어하는 항목",
+      "body": "소스 코드, 에이전트 실행, 시크릿, 감사 로그가 선택한 지역에 저장됩니다. 인증 메타데이터(이메일, 테넌트 ID)는 글로벌 제어 플레인에 있습니다. 지역을 전환하면 조율된 전환과 함께 일회성 마이그레이션이 발생합니다."
+    },
+    "region": {
+      "title": "활성 지역",
+      "hint": "마이그레이션을 요청하려면 다른 지역을 클릭하세요.",
+      "us": "미국",
+      "eu": "유럽",
+      "apac": "아시아 태평양",
+      "selected": "선택됨",
+      "dataCenters": "데이터 센터",
+      "latency": "사용자로부터의 지연",
+      "stored": "현재 저장량",
+      "notActive": "— 비활성 —"
+    },
+    "settings": {
+      "title": "저장 위치 설정",
+      "hint": "규제 대상 워크로드를 위한 더 엄격한 제어입니다.",
+      "noCrossReplica": "지역 간 복제 비활성화",
+      "noCrossReplicaSub": "백업이 선택한 지역에만 유지됩니다. 지역 전체 장애 시 전체 데이터 손실 위험이 커집니다.",
+      "blockExport": "다른 지역으로의 데이터 내보내기 차단",
+      "blockExportSub": "CSV 내보내기, 에이전트 호출, 웹훅 전달은 동일 지역의 엔드포인트만 대상으로 할 수 있습니다."
+    },
+    "certs": {
+      "title": "컴플라이언스 인증",
+      "hint": "독립적인 제3자에 의해 감사됩니다. 보고서는 요청 시 제공됩니다."
+    },
+    "footer": "지역 변경은 감사 로그에 기록되며 모든 소유자와 관리자에게 알림이 전송됩니다.",
+    "migration": {
+      "ariaLabel": "{{region}}(으)로 마이그레이션 요청",
+      "title": "{{region}}(으)로 마이그레이션을 요청하시겠습니까?",
+      "bodyPre": "모든 조직 데이터를 ",
+      "bodyMid": "에서 스냅샷하고 ",
+      "bodyPost": "(으)로 복제한 뒤 조율된 전환을 수행합니다.",
+      "downtime": "· 예상 다운타임: 전환 중 약 12분 (업무 외 시간 예약)",
+      "cost": "· 일회성 데이터 전송 비용: 현재 청구서에 $420 부과",
+      "sessions": "· 전환 시 활성 세션이 로그아웃됩니다",
+      "rollback": "· 롤백 기간: 마이그레이션 후 7일",
+      "cancel": "취소",
+      "confirm": "마이그레이션 요청"
+    }
+  },
+  "retention": {
+    "title": "보존 정책",
+    "subtitle": "ACME가 자동 삭제 전에 각 데이터 클래스를 얼마나 오래 보관하는지 설정합니다.",
+    "default": {
+      "title": "기본 보존",
+      "hint": "\"기본값 상속\"으로 설정된 모든 데이터 클래스에 적용됩니다.",
+      "global": "전역 기본값",
+      "globalSub": "기본적으로 보관할 일수입니다. 클래스 수준 재정의가 우선합니다.",
+      "days": "일"
+    },
+    "opt": {
+      "days30": "30일",
+      "days60": "60일",
+      "days90": "90일",
+      "days180": "180일",
+      "year1": "1년",
+      "years2": "2년",
+      "forever": "영구"
+    },
+    "perClass": {
+      "title": "클래스별 재정의",
+      "hint": "민감한 클래스는 보존을 강화하고, 컴플라이언스가 요구되는 클래스는 완화하세요.",
+      "dataClass": "데이터 클래스",
+      "retention": "보존",
+      "inherits": "상속?",
+      "inheritOption": "상속 ({{days}}일)",
+      "inherit": "상속",
+      "override": "재정의"
+    },
+    "class": {
+      "auditLog": "감사 로그",
+      "auditLogHint": "조직 전반의 권한 작업",
+      "agentRuns": "에이전트 실행",
+      "agentRunsHint": "입력, 출력, 단계 추적",
+      "webhookDeliveries": "웹훅 전달",
+      "webhookDeliveriesHint": "발신 페이로드 및 HTTP 응답",
+      "investigationChats": "조사 채팅",
+      "investigationChatsHint": "인텔리전스 스테이지의 채팅 스레드",
+      "codeReviewThreads": "코드 리뷰 스레드",
+      "codeReviewThreadsHint": "차이에 대한 리뷰어 코멘트",
+      "inactiveSessions": "비활성 세션",
+      "inactiveSessionsHint": "활동이 없는 브라우저 세션",
+      "deletedUserPii": "삭제된 사용자 PII",
+      "deletedUserPiiHint": "계정 삭제 후 이메일, 이름",
+      "telemetry": "텔레메트리 이벤트",
+      "telemetryHint": "익명화된 사용 분석"
+    },
+    "legalHolds": {
+      "title": "법적 보존",
+      "hint": "소송이나 조사가 진행되는 동안 특정 범위의 삭제를 중단합니다.",
+      "none": "활성 보존이 없습니다.",
+      "active": "활성",
+      "createdBy": "{{creator}} 생성 · {{date}}",
+      "release": "보존 해제"
+    },
+    "archive": {
+      "title": "아카이브 대상",
+      "hint": "보존 기한이 삭제를 트리거하기 전에 선택적으로 데이터를 자체 S3 버킷에 아카이브합니다.",
+      "toggle": "삭제 전 S3에 아카이브",
+      "toggleSub": "데이터 클래스별로 일회성 JSONL 덤프를 버킷에 씁니다.",
+      "bucket": "버킷 이름",
+      "bucketPlaceholder": "s3://my-archive-bucket",
+      "roleArn": "AWS Role ARN",
+      "roleArnPlaceholder": "arn:aws:iam::123:role/archiver"
+    },
+    "notes": {
+      "archive": "삭제는 7일간 소프트 삭제된 뒤 암호학적으로 파쇄됩니다. 아카이브 쓰기는 삭제 전날 밤에 이루어집니다.",
+      "apply": "보존 변경은 새 데이터에 적용됩니다. 기존 레코드는 다음 컴팩션까지 원래 정책을 유지합니다."
+    },
+    "releaseDialog": {
+      "ariaLabel": "보존 {{ref}} 해제",
+      "title": "보존 {{ref}}을(를) 해제하시겠습니까?",
+      "body": "이 보존이 적용된 레코드는 다음 컴팩션 시점에 보존 기반 삭제 대상이 됩니다. 이 작업은 기록되며 법무 운영팀에 알립니다.",
+      "cancel": "취소",
+      "confirm": "보존 해제"
+    }
+  },
+  "serviceAccounts": {
+    "title": "서비스 계정",
+    "subtitle": "CI, 스크립트, 워커 풀을 위한 머신 아이덴티티입니다. 범위를 좁게 지정하고 토큰을 90일마다 교체하세요.",
+    "subtitleReal": "CI와 워커를 위한 머신 아이덴티티입니다. 각각 이 조직 범위의 API 키를 보유합니다.",
+    "new": "새 서비스 계정",
+    "stat": {
+      "total": "전체",
+      "active": "활성",
+      "tokens": "토큰"
+    },
+    "table": {
+      "name": "이름",
+      "purpose": "용도",
+      "scopes": "스코프",
+      "tokens": "토큰",
+      "lastSeen": "마지막 확인",
+      "status": "상태",
+      "prefix": "접두사",
+      "created": "생성일",
+      "expires": "만료"
+    },
+    "createdByLine": "{{id}} · {{by}} 생성",
+    "statusActive": "활성",
+    "statusDisabled": "비활성화됨",
+    "action": {
+      "tokens": "토큰",
+      "rotate": "교체",
+      "disable": "비활성화",
+      "enable": "활성화",
+      "more": "더 보기"
+    },
+    "empty": {
+      "title": "서비스 계정 없음",
+      "subtitle": "하나를 만들어 CI나 워커에 API 액세스를 부여하세요."
+    },
+    "fallbackName": "서비스 계정",
+    "revoke": {
+      "menu": "키 취소",
+      "title": "\"{{name}}\"을(를) 취소하시겠습니까?",
+      "confirm": "취소",
+      "description": "이 키를 사용하는 모든 CI 작업이나 워커가 즉시 액세스를 잃습니다. 되돌릴 수 없습니다."
+    },
+    "create": {
+      "title": "새 서비스 계정",
+      "name": "이름",
+      "namePlaceholder": "ci-deploy-bot",
+      "keyExpiration": "키 만료",
+      "days90": "90일",
+      "year1": "1년",
+      "noExpiry": "만료 없음",
+      "create": "생성",
+      "creating": "생성 중…"
+    },
+    "keyCreated": "서비스 계정 \"{{name}}\"이(가) 생성됨",
+    "keyFallback": "키"
+  },
+  "usage": {
+    "title": "사용량",
+    "subtitle": "지난 30일간 조직이 소비한 내역입니다. 비용은 현재 요금제에 매핑됩니다. 결제에서 전환하세요.",
+    "range": {
+      "days30": "최근 30일",
+      "days7": "최근 7일",
+      "days90": "최근 90일",
+      "billingPeriod": "이번 청구 기간"
+    },
+    "exportCsv": "CSV 내보내기",
+    "metric": {
+      "seats": "활성 좌석",
+      "agents": "에이전트 실행",
+      "tokens": "AI 토큰",
+      "storage": "스토리지",
+      "webhooks": "웹훅 전달",
+      "requests": "API 요청"
+    },
+    "unit": {
+      "seats": "/ 200",
+      "perMonth": "/ 월",
+      "tokens": "토큰 / 월",
+      "storage": "GB"
+    },
+    "alert": {
+      "title": "이번 달 요금제 한도의 92%에 도달할 것으로 예상됩니다",
+      "sub": "80%에서 예산 알림을 설정하거나 여유를 위해 요금제를 업그레이드하세요.",
+      "action": "예산 알림 설정"
+    },
+    "breakdown": {
+      "title": "워크스페이스별 비용",
+      "thisMonth": "이번 달",
+      "workspace": "워크스페이스",
+      "runs": "실행",
+      "tokens": "토큰",
+      "cost": "비용",
+      "share": "비중"
+    }
+  },
+  "domains": {
+    "title": "도메인",
+    "subtitle": "자동 가입, SSO 적용, 신원 확인 초대를 위해 이메일 도메인을 소유합니다.",
+    "add": "도메인 추가",
+    "primary": "기본",
+    "verified": "확인됨",
+    "unverified": "미확인",
+    "ssoRequired": "SSO 필수",
+    "ssoRequiredSub": "이 도메인 계정에 SAML/OIDC를 강제합니다",
+    "autoJoin": "자동 가입",
+    "autoJoinSub": "이 도메인의 새 확인된 사용자가 자동으로 가입합니다",
+    "verify": {
+      "title": "{{domain}} 확인",
+      "body": "아래 TXT 레코드를 DNS에 추가한 뒤 확인을 클릭하세요. 전파는 보통 5분 이내에 완료됩니다.",
+      "type": "유형",
+      "host": "호스트",
+      "value": "값",
+      "check": "지금 DNS 확인"
+    }
+  },
+  "format": {
+    "expired": "만료됨",
+    "day_one": "{{count}}일",
+    "day_other": "{{count}}일",
+    "emDash": "—"
+  }
+}

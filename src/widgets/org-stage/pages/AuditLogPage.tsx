@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, Download, ChevronDown, ChevronRight } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { OrgShell } from '../parts/OrgShell';
@@ -58,6 +59,7 @@ const SEED: LogEntry[] = [
 ];
 
 function AuditLogMock() {
+  const { t } = useTranslation('org');
   const [q, setQ] = useState('');
   const [actor, setActor] = useState(ACTORS[0]);
   const [action, setAction] = useState(ACTIONS[0]);
@@ -76,11 +78,11 @@ function AuditLogMock() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="Audit log"
-      subtitle="Every privileged action across the org. Retained per the Retention policy."
+      title={t('audit.title')}
+      subtitle={t('audit.subtitle')}
       topRight={
         <Button variant="primary" size="md" leading={<Download className="w-3.5 h-3.5" />}>
-          Export CSV
+          {t('audit.exportCsv')}
         </Button>
       }
     >
@@ -93,7 +95,7 @@ function AuditLogMock() {
           <input
             value={q}
             onChange={(e) => { setQ(e.target.value); }}
-            placeholder="Search actor, target, IP…"
+            placeholder={t('audit.searchPlaceholder')}
             className="flex-1 bg-transparent outline-none text-base"
             style={{ color: 'var(--fg-strong)' }}
           />
@@ -104,7 +106,7 @@ function AuditLogMock() {
           className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 140 }}
         >
-          {ACTORS.map((a) => <option key={a} value={a}>{a}</option>)}
+          {ACTORS.map((a, i) => <option key={a} value={a}>{i === 0 ? t('audit.allActors') : a}</option>)}
         </select>
         <select
           value={action}
@@ -112,7 +114,7 @@ function AuditLogMock() {
           className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 180 }}
         >
-          {ACTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
+          {ACTIONS.map((a, i) => <option key={a} value={a}>{i === 0 ? t('audit.actions.all') : a}</option>)}
         </select>
         <input
           type="date"
@@ -143,12 +145,12 @@ function AuditLogMock() {
           }}
         >
           <span />
-          <span>When</span>
-          <span>Actor</span>
-          <span>Action</span>
-          <span>Target</span>
-          <span>IP</span>
-          <span>Result</span>
+          <span>{t('audit.table.when')}</span>
+          <span>{t('audit.table.actor')}</span>
+          <span>{t('audit.table.action')}</span>
+          <span>{t('audit.table.target')}</span>
+          <span>{t('audit.table.ip')}</span>
+          <span>{t('audit.table.result')}</span>
         </div>
         {filtered.map((e) => {
           const open = expanded === e.id;
@@ -193,14 +195,14 @@ function AuditLogMock() {
                     border: `1px solid ${e.result === 'success' ? 'var(--intent-success-fg)' : 'var(--intent-danger-fg)'}`,
                   }}
                 >
-                  {e.result}
+                  {t(`audit.result.${e.result}`)}
                 </span>
               </button>
               {open && (
                 <div className="px-10 pb-3 pt-1" style={{ background: 'var(--bg-surface-muted)' }}>
                   <div className="grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
-                    <DiffBlock label="before" data={e.before} />
-                    <DiffBlock label="after"  data={e.after}  />
+                    <DiffBlock label={t('audit.diff.before')} data={e.before} />
+                    <DiffBlock label={t('audit.diff.after')}  data={e.after}  />
                   </div>
                 </div>
               )}
@@ -211,11 +213,11 @@ function AuditLogMock() {
 
       <div className="flex items-center justify-between mt-3 px-1">
         <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-          Showing 1–15 of 8,421 events
+          {t('audit.showing')}
         </span>
         <div className="flex items-center gap-2">
-          <Button disabled>Previous</Button>
-          <Button>Next</Button>
+          <Button disabled>{t('audit.previous')}</Button>
+          <Button>{t('audit.next')}</Button>
         </div>
       </div>
     </OrgShell>
@@ -223,6 +225,7 @@ function AuditLogMock() {
 }
 
 function DiffBlock({ label, data }: { label: string; data?: Record<string, unknown> }) {
+  const { t } = useTranslation('org');
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
@@ -237,7 +240,7 @@ function DiffBlock({ label, data }: { label: string; data?: Record<string, unkno
           minHeight: 56,
         }}
       >
-{data ? JSON.stringify(data, null, 2) : '— no payload —'}
+{data ? JSON.stringify(data, null, 2) : t('audit.diff.noPayload')}
       </pre>
     </div>
   );

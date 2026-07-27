@@ -1,5 +1,6 @@
 import { useParams } from '@tanstack/react-router';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Bot, Plus, Key, RotateCcw, MoreHorizontal, Power } from 'lucide-react';
 import { useHoverStyle } from '@shared/lib';
 import { OrgShell } from '../parts/OrgShell';
@@ -23,14 +24,15 @@ const SAS: SA[] = [
 ];
 
 export default function ServiceAccountsPage() {
+  const { t } = useTranslation('org');
   // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
   const { org = '' } = useParams({ strict: false });
   return (
     <OrgShell
       orgName={org}
       orgSlug={org}
-      title="Service accounts"
-      subtitle="Machine identities for CI, scripts, and worker pools. Scope tightly; rotate tokens every 90 days."
+      title={t('serviceAccounts.title')}
+      subtitle={t('serviceAccounts.subtitle')}
       topRight={
         <button
           type="button"
@@ -38,14 +40,14 @@ export default function ServiceAccountsPage() {
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <Plus className="w-3.5 h-3.5" />
-          New service account
+          {t('serviceAccounts.new')}
         </button>
       }
     >
       <div className="grid grid-cols-3 gap-3 mb-5">
-        <Tile label="Total"  value={SAS.length}                 tone="default" />
-        <Tile label="Active" value={SAS.filter((s) => s.active).length} tone="success" />
-        <Tile label="Tokens" value={SAS.reduce((acc, s) => acc + s.tokens, 0)} tone="default" />
+        <Tile label={t('serviceAccounts.stat.total')}  value={SAS.length}                 tone="default" />
+        <Tile label={t('serviceAccounts.stat.active')} value={SAS.filter((s) => s.active).length} tone="success" />
+        <Tile label={t('serviceAccounts.stat.tokens')} value={SAS.reduce((acc, s) => acc + s.tokens, 0)} tone="default" />
       </div>
 
       <div
@@ -60,12 +62,12 @@ export default function ServiceAccountsPage() {
             borderBottom: '1px solid var(--border-muted)',
           }}
         >
-          <span>Name</span>
-          <span>Purpose</span>
-          <span className="text-right">Scopes</span>
-          <span className="text-right">Tokens</span>
-          <span>Last seen</span>
-          <span>Status</span>
+          <span>{t('serviceAccounts.table.name')}</span>
+          <span>{t('serviceAccounts.table.purpose')}</span>
+          <span className="text-right">{t('serviceAccounts.table.scopes')}</span>
+          <span className="text-right">{t('serviceAccounts.table.tokens')}</span>
+          <span>{t('serviceAccounts.table.lastSeen')}</span>
+          <span>{t('serviceAccounts.table.status')}</span>
           <span></span>
         </div>
         {SAS.map((s, i) => (
@@ -90,6 +92,7 @@ function Tile({ label, value, tone }: { label: string; value: number; tone: 'def
 }
 
 function Row({ sa, last }: { sa: SA; last: boolean }) {
+  const { t } = useTranslation('org');
   const ref = useRef<HTMLDivElement>(null);
   useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
@@ -116,7 +119,7 @@ function Row({ sa, last }: { sa: SA; last: boolean }) {
           <code className="text-base font-mono font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
             {sa.name}
           </code>
-          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{sa.id} · by {sa.createdBy}</span>
+          <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{t('serviceAccounts.createdByLine', { id: sa.id, by: sa.createdBy })}</span>
         </div>
       </div>
       <span className="text-base" style={{ color: 'var(--fg-muted)' }}>{sa.purpose}</span>
@@ -130,13 +133,13 @@ function Row({ sa, last }: { sa: SA; last: boolean }) {
           background: sa.active ? 'var(--intent-success-bg)' : 'var(--bg-surface-muted)',
         }}
       >
-        {sa.active ? 'Active' : 'Disabled'}
+        {sa.active ? t('serviceAccounts.statusActive') : t('serviceAccounts.statusDisabled')}
       </span>
       <div className="flex justify-end gap-0.5">
-        <IconBtn icon={Key} title="Tokens" />
-        <IconBtn icon={RotateCcw} title="Rotate" />
-        <IconBtn icon={Power} title={sa.active ? 'Disable' : 'Enable'} />
-        <IconBtn icon={MoreHorizontal} title="More" />
+        <IconBtn icon={Key} title={t('serviceAccounts.action.tokens')} />
+        <IconBtn icon={RotateCcw} title={t('serviceAccounts.action.rotate')} />
+        <IconBtn icon={Power} title={sa.active ? t('serviceAccounts.action.disable') : t('serviceAccounts.action.enable')} />
+        <IconBtn icon={MoreHorizontal} title={t('serviceAccounts.action.more')} />
       </div>
     </div>
   );

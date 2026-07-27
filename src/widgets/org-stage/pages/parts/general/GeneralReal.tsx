@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { Trash2 } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
@@ -11,6 +12,7 @@ import { useOrg, updateOrg, deleteOrg } from '@entities/org';
 // aren't backend-backed (logo needs object storage; workspace is a product/intel
 // concept), so they're dropped rather than faked.
 export function GeneralReal() {
+  const { t } = useTranslation('org');
   const { org = '' } = useParams({ strict: false });
   const navigate = useNavigate();
   const { detail, isPending, error, refetch } = useOrg(org);
@@ -57,7 +59,7 @@ export function GeneralReal() {
 
   if (error) {
     return (
-      <OrgShell orgName={org} orgSlug={org} title="General" subtitle="Identity for this organization.">
+      <OrgShell orgName={org} orgSlug={org} title={t('general.title')} subtitle={t('general.subtitleReal')}>
         <InlineError message={error} onRetry={refetch} />
       </OrgShell>
     );
@@ -67,8 +69,8 @@ export function GeneralReal() {
     <OrgShell
       orgName={detail?.org.name ?? org}
       orgSlug={detail?.org.slug ?? org}
-      title="General"
-      subtitle="Identity for this organization."
+      title={t('general.title')}
+      subtitle={t('general.subtitleReal')}
     >
       {actionError && (
         <div className="mb-3">
@@ -82,30 +84,30 @@ export function GeneralReal() {
         </div>
       ) : (
         <>
-          <Section title="Identity" hint="How this org appears across the product and to invitees.">
+          <Section title={t('general.identity.title')} hint={t('general.identity.hint')}>
             <Field
-              label="Display name"
-              hint="up to 40 chars"
+              label={t('general.identity.displayName')}
+              hint={t('general.identity.displayNameHint')}
               value={name}
               onChange={(e) => { setName(e.target.value.slice(0, 40)); }}
               maxLength={40}
             />
             <Field
-              label="URL slug"
-              hint="se-field.app/{slug}"
+              label={t('general.identity.slug')}
+              hint={t('general.identity.slugHintReal')}
               value={slug}
               onChange={(e) => { setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); }}
             />
           </Section>
 
-          <Section title="Danger zone" hint="Irreversible actions affecting this entire organization.">
+          <Section title={t('general.danger.title')} hint={t('general.danger.hint')}>
             <Row
-              label="Delete organization"
-              sub="Permanently remove this org, its workspaces, and all attached data. People keep their accounts."
+              label={t('general.danger.deleteLabel')}
+              sub={t('general.danger.deleteSub')}
               danger
             >
               <Button variant="danger" leading={<Trash2 className="w-3 h-3" />} onClick={() => { setConfirmDelete(true); }}>
-                Delete org
+                {t('general.danger.deleteButton')}
               </Button>
             </Row>
           </Section>
@@ -122,15 +124,14 @@ export function GeneralReal() {
             open={confirmDelete}
             onCancel={() => { setConfirmDelete(false); }}
             onConfirm={() => { void doDelete(); }}
-            title={`Delete ${detail?.org.name ?? 'organization'}?`}
-            confirmLabel="I understand, delete"
+            title={detail?.org.name ? t('general.deleteDialog.title', { name: detail.org.name }) : t('general.deleteDialog.titleFallback')}
+            confirmLabel={t('general.deleteDialog.confirm')}
             width={460}
             requireTypedConfirmation={detail?.org.name ?? ''}
             description={
               <>
-                This permanently deletes the organization, every workspace inside it, billing records, and all
-                agent history. People keep their accounts but lose access. Type{' '}
-                <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{detail?.org.name}</span> below to confirm.
+                {t('general.deleteDialog.descriptionPre')}
+                <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{detail?.org.name}</span>{t('general.deleteDialog.descriptionPost')}
               </>
             }
           />

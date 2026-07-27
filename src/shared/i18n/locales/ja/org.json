@@ -1,1 +1,1218 @@
-{}
+{
+  "shell": {
+    "breadcrumbAria": "パンくずリスト",
+    "settings": "設定",
+    "nav": {
+      "groupOrg": "組織",
+      "groupAccess": "アクセスとポリシー",
+      "groupCompliance": "コンプライアンス",
+      "general": "一般",
+      "members": "メンバー",
+      "invitations": "招待",
+      "teams": "チーム",
+      "roles": "ロール",
+      "serviceAccounts": "サービスアカウント",
+      "domains": "ドメイン",
+      "usage": "使用状況",
+      "security": "セキュリティ",
+      "integrations": "連携",
+      "webhooks": "Webhook",
+      "api": "API と OAuth",
+      "policies": "ポリシー",
+      "aiPolicies": "AI ポリシー",
+      "sso": "SAML SSO",
+      "scim": "SCIM",
+      "audit": "監査ログ",
+      "dataResidency": "データ保存地域",
+      "retention": "保持"
+    }
+  },
+  "comingSoon": {
+    "title": "近日提供",
+    "subtitle": "{{title}} はまだ組織に接続されていません — 今後のリリースで提供予定です。",
+    "titles": {
+      "roles": "ロール",
+      "usage": "使用状況",
+      "domains": "ドメイン",
+      "security": "セキュリティ",
+      "integrations": "連携",
+      "api": "API と OAuth",
+      "policies": "ポリシー",
+      "aiPolicies": "AI ポリシー",
+      "dataResidency": "データ保存地域",
+      "retention": "保持"
+    },
+    "subtitles": {
+      "roles": "ロール権限はプラットフォームで管理されます。",
+      "usage": "組織の使用状況メトリクス。"
+    }
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "close": "閉じる",
+    "closeDialog": "ダイアログを閉じる",
+    "closeDrawer": "パネルを閉じる",
+    "remove": "削除",
+    "delete": "削除",
+    "done": "完了",
+    "save": "保存",
+    "member_one": "人",
+    "member_other": "人",
+    "person_one": "人",
+    "person_other": "人",
+    "role": {
+      "owner": "オーナー",
+      "admin": "管理者",
+      "member": "メンバー",
+      "billing": "請求",
+      "guest": "ゲスト",
+      "viewer": "閲覧者"
+    }
+  },
+  "general": {
+    "title": "一般",
+    "subtitle": "この組織の基本情報とデフォルト設定です。",
+    "subtitleReal": "この組織の基本情報です。",
+    "identity": {
+      "title": "基本情報",
+      "hint": "この組織が製品全体および招待相手にどう表示されるかを設定します。",
+      "logo": "ロゴ",
+      "logoSub": "正方形の PNG または SVG、最小 64×64。",
+      "upload": "アップロード",
+      "removeLogo": "削除",
+      "displayName": "表示名",
+      "displayNameHint": "最大 40 文字",
+      "slug": "URL スラッグ",
+      "slugHint": "acme.app/{slug}",
+      "slugHintReal": "se-field.app/{slug}",
+      "website": "ウェブサイト",
+      "description": "説明",
+      "descriptionHint": "組織ダッシュボードに表示されます"
+    },
+    "defaults": {
+      "title": "デフォルト",
+      "hint": "他に選択されていない場合に使用されるユーザーごとのデフォルト値です。",
+      "defaultWorkspace": "デフォルトワークスペース",
+      "defaultWorkspaceSub": "新しいメンバーがサインイン後に最初に到達する場所です。"
+    },
+    "danger": {
+      "title": "危険ゾーン",
+      "hint": "この組織全体に影響する取り消せない操作です。",
+      "deleteLabel": "組織を削除",
+      "deleteSub": "この組織とそのワークスペース、関連するすべてのデータを完全に削除します。メンバーのアカウントは保持されます。",
+      "deleteButton": "組織を削除"
+    },
+    "deleteDialog": {
+      "title": "{{name}} を削除しますか？",
+      "titleFallback": "組織を削除しますか？",
+      "confirm": "理解した上で削除する",
+      "descriptionPre": "組織、その中のすべてのワークスペース、請求記録、すべてのエージェント履歴が完全に削除されます。メンバーのアカウントは保持されますがアクセスできなくなります。確認するには以下に ",
+      "descriptionPost": " と入力してください。"
+    }
+  },
+  "members": {
+    "title": "メンバー",
+    "subtitle": "この組織にアクセスできる人々です。メールで招待し、ロールを変更したり、アクセスを無効化したりできます。",
+    "subtitleReal": "この組織にアクセスできる人々です。メールで招待するかロールを変更してください。",
+    "invitePeople": "ユーザーを招待",
+    "selected": "{{count}} 件選択中",
+    "deactivate": "無効化",
+    "clearSelection": "選択を解除",
+    "searchPlaceholder": "名前、メール、チームを検索…",
+    "searchPlaceholderReal": "名前またはメールを検索…",
+    "filter": {
+      "all": "すべて",
+      "active": "アクティブ",
+      "invited": "招待済み",
+      "deactivated": "無効化済み",
+      "allRoles": "すべてのロール"
+    },
+    "table": {
+      "member": "メンバー",
+      "role": "ロール",
+      "team": "チーム",
+      "lastActive": "最終アクティブ",
+      "joined": "参加日"
+    },
+    "empty": {
+      "noMatchesTitle": "「{{query}}」に一致する結果がありません",
+      "noMatchesSubtitle": "別のキーワードを試すか、フィルターを解除してください。",
+      "noFilterTitle": "このフィルターに一致する人がいません",
+      "noMembersTitle": "まだメンバーがいません",
+      "noMembersSubtitle": "ユーザーを招待して始めましょう。",
+      "noMatchesKeyword": "別のキーワードを試してください。"
+    },
+    "footer_one": "{{total}} 人中 {{filtered}} 人 · オーナーは先に所有権を移譲しないと削除できません。",
+    "footer_other": "{{total}} 人中 {{filtered}} 人 · オーナーは先に所有権を移譲しないと削除できません。",
+    "footerReal_one": "{{total}} 人中 {{filtered}} 人 · オーナーは所有権の移譲でのみ変更されます。",
+    "footerReal_other": "{{total}} 人中 {{filtered}} 人 · オーナーは所有権の移譲でのみ変更されます。",
+    "you": "自分",
+    "removeDialog": {
+      "title": "{{name}} を削除しますか？",
+      "confirm": "削除",
+      "description": "この組織へのアクセスが直ちに終了します。作成した成果物は引き続きその人に帰属します。この操作は取り消せません。"
+    },
+    "rowMenu": {
+      "resendInvite": "招待を再送信",
+      "deactivate": "無効化",
+      "reactivate": "再有効化",
+      "transferOwnership": "所有権を移譲",
+      "removeFromOrg": "組織から削除",
+      "removeFromOrganization": "組織から削除"
+    },
+    "twoFaTitle": "2 要素認証が有効"
+  },
+  "invite": {
+    "title": "ユーザーを招待",
+    "emails": "メール",
+    "valid": "有効 {{count}}",
+    "invalid": "無効 {{count}}",
+    "emailsPlaceholder": "alice@acme.com, bob@acme.com…",
+    "emailsPlaceholderReal": "teammate@company.com, another@company.com…",
+    "skipping": "{{count}} 件スキップ: {{list}}",
+    "role": "ロール",
+    "team": "チーム",
+    "orShareLink": "または招待リンクを共有",
+    "send_one": "招待 {{count}} 件を送信",
+    "send_other": "招待 {{count}} 件を送信",
+    "sendEmpty": "招待を送信",
+    "sending": "送信中…"
+  },
+  "invitations": {
+    "title": "招待",
+    "subtitle": "この組織の保留中および承諾済みの招待です。再送信、取り消し、共有可能な招待リンクのコピーができます。",
+    "subtitleReal": "この組織の未処理の招待です。保留中の招待を再送信または取り消してください。",
+    "invitePeople": "ユーザーを招待",
+    "stat": {
+      "pending": "保留中",
+      "accepted": "承諾済み",
+      "expired": "期限切れ",
+      "thisMonth": "今月"
+    },
+    "filter": {
+      "all": "すべて",
+      "pending": "保留中",
+      "accepted": "承諾済み",
+      "expired": "期限切れ"
+    },
+    "table": {
+      "email": "メール",
+      "role": "ロール",
+      "team": "チーム",
+      "sentBy": "送信者",
+      "status": "ステータス",
+      "expires": "期限"
+    },
+    "status": {
+      "pending": "保留中",
+      "accepted": "承諾済み",
+      "expired": "期限切れ"
+    },
+    "action": {
+      "resend": "再送信",
+      "revoke": "取り消し",
+      "reinvite": "再招待",
+      "resendInvite": "招待を再送信",
+      "revokeInvite": "招待を取り消し"
+    },
+    "shareLink": {
+      "title": "共有可能な招待リンク",
+      "sub": "確認済みドメインからこのリンクを持つ人は誰でもメンバーとして参加できます。いつでも無効化できます。"
+    },
+    "empty": {
+      "title": "保留中の招待はありません",
+      "subtitle": "メールでユーザーを招待するとここに表示されます。"
+    },
+    "pendingCount_one": "保留中の招待 {{count}} 件。",
+    "pendingCount_other": "保留中の招待 {{count}} 件。"
+  },
+  "teams": {
+    "title": "チーム",
+    "subtitle": "所有権ルーティング、通知、レビュー割り当てのために人々をグループ化します。",
+    "subtitleReal": "組織内の人々をグループ化します。所有権とレビューのルーティングはワークスペース設定で割り当てます。",
+    "newTeam": "新しいチーム",
+    "searchPlaceholder": "チームを検索…",
+    "noMatch": "一致するチームがありません。",
+    "membersCount_one": "メンバー {{count}} 人",
+    "membersCount_other": "メンバー {{count}} 人",
+    "pathsCount": "パス {{count}} 件",
+    "noneSelected": "選択されたチームがありません",
+    "table": {
+      "team": "チーム",
+      "created": "作成日"
+    },
+    "empty": {
+      "title": "まだチームがありません",
+      "subtitle": "チームを作成してメンバーをグループ化しましょう。"
+    },
+    "removeDialog": {
+      "title": "{{name}} を削除しますか？",
+      "confirm": "チームを削除",
+      "description": "メンバーの組織アクセスは保持されます。このチームが所有するコードパスは組織のデフォルトルーティングに戻ります。",
+      "descriptionReal": "メンバーは組織に残ります。チームのグループ化のみが削除されます。"
+    },
+    "create": {
+      "title": "新しいチーム",
+      "name": "名前",
+      "namePlaceholder": "Mobile",
+      "teamName": "チーム名",
+      "handle": "ハンドル",
+      "handleTaken": "すでに使用されています",
+      "handlePlaceholder": "mobile",
+      "createTeam": "チームを作成",
+      "creating": "作成中…"
+    },
+    "detail": {
+      "noDescription": "まだ説明がありません。",
+      "deleteTeam": "チームを削除",
+      "membersHeader": "メンバー · {{count}}",
+      "addMember": "メンバーを追加",
+      "noMembers": "まだメンバーがいません。作業のルーティングを始めるには誰かを追加してください。",
+      "lead": "リード",
+      "makeLead": "リードに設定",
+      "removeFromTeam": "チームから削除",
+      "codeOwnershipHeader": "コード所有権 · {{count}}",
+      "codeOwnershipPre": "レビューとインシデントをこのチームにルーティングするグロブです。Auto と表示されたパスはプッシュ時に ",
+      "codeOwnershipPost": " に追加されます。",
+      "auto": "自動",
+      "manual": "手動",
+      "removePath": "パスを削除",
+      "addPathPlaceholder": "src/features/admission/**",
+      "addPath": "パスを追加",
+      "routing": "ルーティング",
+      "notificationChannel": "通知チャンネル",
+      "created": "{{date}} 作成。"
+    }
+  },
+  "roles": {
+    "title": "ロール",
+    "subtitle": "組み込みロールはロックされています。1 つを複製してチームに合わせたカスタムロールを定義してください。",
+    "newRole": "新しいロール",
+    "newRoleName": "新しいロール",
+    "copySuffix": "{{name}} のコピー",
+    "builtIn": "組み込み",
+    "permsSummary": "権限 {{perms}} 件 · {{count}}{{unit}}",
+    "describePlaceholder": "このロールの用途を説明してください…",
+    "assigned": "{{count}} 人に割り当て",
+    "permissionsOf": "権限 {{total}} 件中 {{count}} 件",
+    "duplicate": "複製",
+    "delete": "削除",
+    "lockNotice": "これは組み込みロールのため編集できません。複製してカスタマイズ版を作成してください。",
+    "footer": "カスタムロールは割り当てられたメンバーに直ちに適用されます。監査ログにすべての権限変更が記録されます。",
+    "group": {
+      "org": "組織",
+      "members": "メンバー",
+      "workspaces": "ワークスペース",
+      "admission": "アドミッション",
+      "agents": "エージェント",
+      "billing": "請求",
+      "observability": "監査とシークレット"
+    },
+    "perm": {
+      "orgRead": "組織設定を表示",
+      "orgManage": "組織設定を管理",
+      "orgManageHint": "名前、ロゴ、デフォルト",
+      "membersInvite": "メンバーを招待",
+      "membersRemove": "メンバーを削除",
+      "membersRole": "メンバーのロールを変更",
+      "workspacesCreate": "ワークスペースを作成",
+      "workspacesDelete": "ワークスペースを削除",
+      "workspacesSettings": "ワークスペース設定を編集",
+      "admissionRead": "アドミッションルールを読み取り",
+      "admissionWrite": "アドミッションルールを作成",
+      "admissionBypass": "アドミッションゲートをバイパス",
+      "admissionBypassHint": "高リスク",
+      "agentsRun": "エージェント実行をトリガー",
+      "agentsConfigure": "エージェントを構成",
+      "agentsKill": "実行中のエージェントを停止",
+      "billingRead": "請求と使用状況を表示",
+      "billingManage": "プランと支払いを変更",
+      "auditRead": "監査ログを読み取り",
+      "auditExport": "監査ログをエクスポート",
+      "secretsRead": "シークレット名を読み取り",
+      "secretsWrite": "シークレットを管理"
+    },
+    "seed": {
+      "owner": "フルアクセス。所有権の移譲と組織の削除が可能。",
+      "admin": "メンバー、ワークスペース、ポリシーを管理。請求を除く。",
+      "member": "デフォルトロール。製品を使用し、コードを出荷し、エージェントを実行。",
+      "billing": "請求画面を除いて読み取り専用アクセス。",
+      "guest": "共有ワークスペースへの制限付き読み取り。",
+      "secops": "カスタム — セキュリティレビューと監査アクセス。"
+    }
+  },
+  "security": {
+    "title": "セキュリティ",
+    "subtitle": "組織全体の制御。ここでのより厳格な設定はユーザーごとの選択を上書きします。",
+    "auth": {
+      "title": "認証",
+      "hint": "サインイン時にユーザーが本人であることを証明する方法です。",
+      "mfaRequired": "多要素認証を必須にする",
+      "mfaRequiredSub": "すべてのメンバーは組織にアクセスする前に第 2 要素を登録する必要があります。",
+      "mfaMethod": "MFA 方式",
+      "mfaMethodSub": "特定の要素タイプに制限するか、登録済みの任意の要素を受け入れます。",
+      "mfaAny": "すべて (TOTP、WebAuthn、バックアップ)",
+      "mfaTotp": "TOTP のみ",
+      "mfaWebauthn": "WebAuthn / パスキーのみ",
+      "passkeyAdmins": "管理者はパスキーのみ",
+      "passkeyAdminsSub": "オーナーと管理者はフィッシング耐性のある要素 (WebAuthn) を使用する必要があります。",
+      "ssoOnly": "SSO のみ",
+      "ssoOnlySub": "パスワードとソーシャルログインをブロックします。メンバーは組織の IdP を使用する必要があります。"
+    },
+    "sessions": {
+      "title": "セッション",
+      "hint": "認証されたブラウザがサインイン状態を維持する期間です。",
+      "maxDuration": "最大セッション期間",
+      "maxDurationSub": "上限。これを過ぎるとユーザーはログアウトされ再認証が必要になります。",
+      "inactivity": "非アクティブタイムアウト",
+      "inactivitySub": "指定した分数の間活動がないとサインアウトします。",
+      "min15": "15 分",
+      "min30": "30 分",
+      "hour1": "1 時間",
+      "hours2": "2 時間",
+      "never": "なし",
+      "rememberMe": "「ログイン状態を保持」を許可",
+      "rememberMeSub": "信頼できるブラウザで最大 30 日間 MFA をスキップできます。",
+      "trustDevices": "デバイスを信頼",
+      "trustDevicesSub": "登録済みデバイスを以降のサインイン時に第 2 要素として扱います。",
+      "hours8": "8 時間",
+      "day1": "1 日",
+      "week1": "1 週間",
+      "days30": "30 日",
+      "days90": "90 日"
+    },
+    "ipAllowlist": {
+      "title": "IP 許可リスト",
+      "hint": "組織アクセスを特定の CIDR ブロックのセットに制限します。リストが空の場合はすべて許可されます。",
+      "empty": "まだ CIDR がありません。1 つ追加して適用を開始してください。",
+      "placeholder": "10.0.0.0/8",
+      "add": "CIDR を追加",
+      "lockoutWarn": "保存する前に現在の IP が含まれていることを確認してください — そうしないと自分自身がロックアウトされます。",
+      "off": "IP 許可リストはオフです。メンバーは任意のネットワークからサインインできます。",
+      "errorCidr": "CIDR 表記を使用してください。例: 10.0.0.0/8 または 203.0.113.42/32",
+      "errorDup": "すでにリストにあります"
+    },
+    "appAccess": {
+      "title": "アプリアクセス",
+      "hint": "誰がサードパーティの OAuth アプリを組織に接続できるかを設定します。",
+      "install": "サードパーティアプリをインストール",
+      "installSub": "メンバーはディレクトリを閲覧できますが、許可されたロールのみがインストールできます。",
+      "adminOnly": "管理者のみ",
+      "all": "すべてのメンバー"
+    },
+    "notes": {
+      "effect": "変更は新しいサインインに直ちに適用されます。既存のセッションは次回の更新まで維持されます。",
+      "notify": "MFA、SSO のみ、パスキーの要件が変更されるとメンバーにメールで通知されます。",
+      "recovery": "MFA 方式が変更されるたびにリカバリーコードが再発行されます。"
+    }
+  },
+  "integrations": {
+    "title": "連携",
+    "subtitle": "アプリ {{total}} 個中 {{installed}} 個インストール済み。",
+    "category": {
+      "all": "すべて",
+      "chat": "チャット",
+      "tracker": "課題トラッカー",
+      "pager": "ページング",
+      "observability": "オブザーバビリティ",
+      "sourcecontrol": "ソース管理",
+      "docs": "ドキュメント"
+    },
+    "installedOnly": "インストール済みのみ",
+    "searchPlaceholder": "アプリを検索…",
+    "noMatchTitle": "一致するアプリがありません。",
+    "noMatchSub": "別のカテゴリを試すか、検索をクリアしてください。",
+    "notInstalled": "未インストール",
+    "configure": "構成",
+    "install": "インストール",
+    "statusDot": {
+      "healthy": "正常",
+      "degraded": "低下",
+      "error": "エラー"
+    },
+    "blurb": {
+      "slack": "レビュー依頼、エージェント更新、インシデント信号をチャンネルに投稿します。",
+      "jira": "アドミッションゲートと Jira チケット間の双方向同期。",
+      "linear": "レビュースレッドから Linear の課題を開きます。PR を課題にリンクします。",
+      "pagerduty": "アドミッションルールがデプロイをブロックしたりエージェントがクラッシュしたときにオンコールを呼び出します。",
+      "datadog": "エージェントとアドミッションのメトリクスを Datadog に送信します。エラーをインシデントに取り込みます。",
+      "github": "リポジトリを取得し、チェックランを投稿し、CODEOWNERS ルーティングを適用します。",
+      "gitlab": "GitHub と同じで GitLab ホストのプロジェクト向けです。",
+      "bitbucket": "Atlassian ホストの Git ソース。",
+      "notion": "調査サマリーとランブックを Notion ドキュメント内に表示します。",
+      "sentry": "エラーをアドミッション失敗やポストモーテムと相互リンクします。",
+      "opsgenie": "PagerDuty の代替ページングツール。",
+      "discord": "Discord サーバーチャンネルに通知を送ります。"
+    },
+    "drawer": {
+      "ariaLabel": "{{name}} の構成",
+      "account": "アカウント",
+      "installedBy": "インストール者",
+      "subscribedEvents": "購読中のイベント",
+      "noEvents": "構成されたイベントがありません。",
+      "errorNotice": "前回のポーリングで API キーが 401 を返しました。認証情報を更新するには再接続してください。",
+      "documentation": "ドキュメント",
+      "openDocs": "{{name}} のドキュメントを開く",
+      "uninstall": "アンインストール",
+      "done": "完了"
+    }
+  },
+  "webhooks": {
+    "title": "Webhook",
+    "subtitle": "組織レベルのイベントから発火する HTTP コールバックです。各エンドポイントはイベントタイプのサブセットを購読できます。",
+    "subtitleReal": "組織イベントから発火する HTTP コールバックで、HMAC-SHA256 で署名されます。各エンドポイントはイベントのサブセットを購読します。",
+    "newEndpoint": "新しいエンドポイント",
+    "urlPlaceholder": "https://hooks.example.com/se-events",
+    "descPlaceholder": "例: 内部ウェアハウスミラー",
+    "seed": {
+      "warehouse": "内部ウェアハウスへミラー",
+      "partner": "パートナーゲート結果ミラー",
+      "staging": "ステージングのみ"
+    },
+    "event": {
+      "admissionPassed": "アドミッションゲート通過",
+      "admissionFailed": "アドミッションゲート失敗",
+      "reviewRequested": "レビュー依頼",
+      "reviewApproved": "レビュー承認",
+      "agentStarted": "エージェント開始",
+      "agentCompleted": "エージェント完了",
+      "agentKilled": "エージェント停止",
+      "incidentOpened": "インシデント発生",
+      "incidentResolved": "インシデント解決",
+      "workspaceCreated": "ワークスペース作成",
+      "memberInvited": "メンバー招待"
+    },
+    "real": {
+      "allEvents": "すべてのイベント",
+      "memberInvited": "メンバー招待",
+      "memberRemoved": "メンバー削除",
+      "roleChanged": "ロール変更",
+      "invitationCanceled": "招待取り消し",
+      "orgUpdated": "組織更新",
+      "orgDeleted": "組織削除",
+      "apikeyCreated": "API キー作成",
+      "apikeyRevoked": "API キー取り消し",
+      "subscriptionUpdated": "サブスクリプション更新",
+      "paymentFailed": "支払い失敗"
+    },
+    "table": {
+      "endpoint": "エンドポイント",
+      "events": "イベント",
+      "status": "ステータス",
+      "event": "イベント",
+      "attempts": "試行回数",
+      "when": "時刻",
+      "all": "すべて"
+    },
+    "status": {
+      "enabled": "有効",
+      "paused": "一時停止"
+    },
+    "deliveryStatus": {
+      "delivered": "配信済み",
+      "failed": "失敗",
+      "exhausted": "上限到達",
+      "pending": "保留中",
+      "sending": "送信中"
+    },
+    "action": {
+      "pause": "一時停止",
+      "enable": "有効化",
+      "deleteEndpoint": "エンドポイントを削除",
+      "replay": "再送"
+    },
+    "empty": {
+      "endpointsTitle": "エンドポイントがありません",
+      "endpointsSub": "署名付きイベントコールバックを受け取るにはエンドポイントを追加してください。",
+      "deliveriesTitle": "まだ配信がありません",
+      "deliveriesSub": "エンドポイントがイベントを受け取るとここに表示されます。"
+    },
+    "recentDeliveries": "最近の配信",
+    "create": {
+      "title": "新しい Webhook エンドポイント",
+      "payloadUrl": "ペイロード URL",
+      "urlPlaceholder": "https://hooks.example.com/p0",
+      "description": "説明 (任意)",
+      "descPlaceholder": "内部ウェアハウスミラー",
+      "events": "イベント",
+      "create": "エンドポイントを作成",
+      "creating": "作成中…"
+    },
+    "signingSecret": {
+      "title": "署名シークレット",
+      "description": "各配信の x-p0-signature ヘッダー (ボディの HMAC-SHA256) をこのシークレットで検証してください。一度だけ表示されます。"
+    },
+    "deleteDialog": {
+      "title": "このエンドポイントを削除しますか？",
+      "confirm": "削除",
+      "description": "直ちにイベントの受信を停止します。配信履歴は保持されます。"
+    }
+  },
+  "api": {
+    "title": "API と OAuth",
+    "subtitle": "組織スコープの認証情報と OAuth アプリケーション。個人トークンは /me/api-tokens にあります。",
+    "newToken": "新しいトークン",
+    "registerApp": "アプリを登録",
+    "tab": {
+      "pat": "個人アクセストークン",
+      "oauth": "OAuth アプリケーション"
+    },
+    "footer": "トークンは組織として認証されます。トークンが行う操作は監査可能ですが、常に取り消せるとは限りません。",
+    "tokenCreated": "トークン「{{name}}」を作成しました",
+    "deleteDialog": {
+      "revokeTitle": "「{{name}}」を取り消しますか？",
+      "deleteTitle": "「{{name}}」を削除しますか？",
+      "revoke": "取り消し",
+      "delete": "削除",
+      "patDescription": "このトークンを使用するクライアントは直ちに 401 を受け取り始めます。この操作は取り消せません。",
+      "appDescription": "既存の OAuth インストールが無効になります。ユーザーは次回サインイン時に再認可を求められます。"
+    },
+    "pat": {
+      "empty": "まだトークンがありません。1 つ作成してマシンクライアントを組織 API に認証してください。",
+      "token": "トークン",
+      "scopes": "スコープ",
+      "expires": "期限",
+      "lastUsed": "最終使用",
+      "expired": "期限切れ",
+      "createdBy": "{{prefix}}…  · {{by}} が作成 · {{date}}",
+      "never": "なし",
+      "revoke": "トークンを取り消し"
+    },
+    "app": {
+      "app": "アプリ",
+      "redirect": "リダイレクト",
+      "status": "ステータス",
+      "installs": "インストール数",
+      "scopeCount_one": "スコープ {{count}} 件",
+      "scopeCount_other": "スコープ {{count}} 件",
+      "since": "{{date}} から",
+      "delete": "アプリを削除",
+      "appStatus": {
+        "published": "公開済み",
+        "draft": "下書き"
+      }
+    },
+    "scope": {
+      "orgRead": "組織設定を読み取り",
+      "orgWrite": "組織設定を管理",
+      "membersRead": "メンバーを読み取り",
+      "membersWrite": "メンバーの招待/削除",
+      "admissionRead": "アドミッションルールを読み取り",
+      "admissionWrite": "アドミッションルールを作成",
+      "agentsRead": "エージェントを読み取り",
+      "agentsWrite": "エージェントをトリガー",
+      "webhooksWrite": "Webhook を管理",
+      "auditRead": "監査ログを読み取り"
+    },
+    "createPat": {
+      "title": "新しい個人アクセストークン",
+      "generate": "トークンを生成",
+      "tokenName": "トークン名",
+      "tokenNamePlaceholder": "例: CI デプロイゲート",
+      "expires": "期限",
+      "days30": "30 日",
+      "days60": "60 日",
+      "days90": "90 日",
+      "year1": "1 年",
+      "noExpiration": "期限なし",
+      "scopes": "スコープ",
+      "selected": "{{count}} 件選択中"
+    }
+  },
+  "policies": {
+    "title": "ポリシー",
+    "subtitle": "組織のデフォルトアドミッションルールです。ワークスペースがこれらを継承し、ロックされていない限りワークスペースごとの設定で上書きできます。",
+    "stat": {
+      "activeRules": "アクティブなルール",
+      "hardBlocks": "ハードブロック",
+      "workspaces": "ワークスペース",
+      "inheriting": "組織デフォルトを継承中"
+    },
+    "inheritance": {
+      "title": "継承",
+      "hint": "組織デフォルトが既存および新規ワークスペースに届く方法です。",
+      "applyNew": "新規ワークスペースに適用",
+      "applyNewSub": "ワークスペースが作成されるたびに、アクティブな組織ルールをコピーしてデフォルトで適用します。",
+      "pushExisting": "既存ワークスペースに変更を伝播",
+      "pushExistingSub": "ここでルールが変更されると、ローカルでカスタマイズしていないすべてのワークスペースに新しい重大度を伝播します。"
+    },
+    "rules": {
+      "title": "ルール",
+      "hint": "各ルールには 1 つの重大度があります。Block はゲートを失敗させ、Warn はソフトなシグナルを表示します。",
+      "activeOf": "{{total}} 件中 {{active}} 件アクティブ"
+    },
+    "category": {
+      "secrets": "シークレット",
+      "review": "レビュー",
+      "tests": "テストとカバレッジ",
+      "deps": "依存関係",
+      "config": "構成"
+    },
+    "override": {
+      "title2Approvers": "承認者 2 名以上必須",
+      "desc2Approvers": "本番ブランチには少なくとも 2 名の人間による承認が必要です。オーナーは 1 回としてカウントされます。",
+      "titleStaleDeps": "365 日以上遅れた依存関係に警告"
+    },
+    "row": {
+      "workspaces": "ワークスペース {{total}} 件中 {{applied}} 件",
+      "localOverrides": " · 一部にローカルの上書きあり",
+      "lastChanged": "最終変更 {{date}}"
+    },
+    "severity": {
+      "block": "ブロック",
+      "warn": "警告",
+      "off": "オフ"
+    },
+    "footer": "保存された変更は数秒以内にワークスペースのアドミッションビューに反映されます。実行中の修正パイプラインは遡って再チェックされません。"
+  },
+  "aiPolicies": {
+    "title": "AI ポリシー",
+    "subtitle": "組織が使用できるモデル、データの保存場所、プロンプトが組織を出る前にどうサニタイズされるかを設定します。",
+    "allowedModels": {
+      "title": "許可モデル",
+      "hint": "メンバーはこのリストからのみ選択できます。モデルを無効化すると、実行中の処理が後続処理をキューに入れることが直ちに停止されます。",
+      "model": "モデル",
+      "vendor": "ベンダー",
+      "context": "コンテキスト",
+      "tier": "ティア",
+      "residency": "保存地域",
+      "notAvailable": "{{region}} では利用できません",
+      "conflict_one": "選択したモデル {{count}} 件が選択した保存地域で利用できません。メンバーは使用時にエラーを受け取ります。",
+      "conflict_other": "選択したモデル {{count}} 件が選択した保存地域で利用できません。メンバーは使用時にエラーを受け取ります。"
+    },
+    "tier": {
+      "frontier": "フロンティア",
+      "fast": "高速",
+      "cheap": "低コスト"
+    },
+    "defaults": {
+      "title": "デフォルト",
+      "hint": "メンバーがモデルを選択しない場合に適用される値です。上記の許可リストに含まれている必要があります。",
+      "defaultModel": "デフォルトモデル",
+      "defaultModelSub": "インタラクティブな用途 (チャット、インスペクト) 向け。",
+      "fastModel": "高速モデル",
+      "fastModelSub": "一括/バックグラウンド作業 (アドミッション、エージェント) 向け。コストのため高速ティアを選択してください。",
+      "reviewerOverride": "レビュアーの上書きを許可",
+      "reviewerOverrideSub": "オンにすると、個々のレビュアーが単発のレビュー実行にデフォルト以外のモデルを選択できます。"
+    },
+    "dataHandling": {
+      "title": "データ処理",
+      "hint": "プロバイダーが組織のプロンプトで行えることと、データの保存場所です。",
+      "optOut": "モデルトレーニングをオプトアウト",
+      "optOutSub": "プロバイダーにプロンプト/完了をファインチューニングに使用しないよう指示します。",
+      "residency": "データ保存地域",
+      "residencySub": "モデルは選択した地域の推論エンドポイントにのみルーティングされます。",
+      "retention": "プロバイダー保持",
+      "retentionSub": "プロバイダーがログにプロンプトを保持する日数です。",
+      "retention0": "0 日 (保持なし)",
+      "retention7": "7 日",
+      "retention30": "30 日",
+      "retention90": "90 日"
+    },
+    "promptSafety": {
+      "title": "プロンプト安全性",
+      "hint": "組織を出るすべてのプロンプトに適用される送信前フィルターです。",
+      "redactPre": "シークレットをマスク",
+      "redactSubPre": "すべてのプロンプトに対してシークレットスキャナーを実行し、一致箇所を ",
+      "redactSubPost": " に置き換えます。",
+      "blockPii": "PII をブロック",
+      "blockPiiSub": "PII (メール、社会保障番号、クレジットカード、電話番号) を含むプロンプトの送信を拒否します。"
+    },
+    "agentCaps": {
+      "title": "エージェント機能",
+      "hint": "自律エージェントが組織を代行して行える操作です。",
+      "browsing": "ウェブブラウジング",
+      "browsingSub": "エージェントが調査の一環として外部 URL を取得することを許可します。",
+      "toolUse": "ツール使用",
+      "toolUseSub": "内部ツール (アドミッション、修正パイプライン、監査) に対する関数呼び出しを許可します。"
+    },
+    "spendCap": {
+      "title": "支出上限",
+      "hint": "月間トークン支出のハード上限です。上限に達すると組織が一時停止され、管理者に呼び出しが行われます。",
+      "monthlyCap": "月間トークン上限",
+      "monthlyCapSub": "すべての許可モデルにわたって計算されます。0 で上限を解除します。",
+      "unit": "百万トークン / 月"
+    },
+    "notes": {
+      "changes": "変更は次のエージェント/チャット呼び出しに適用されます。",
+      "retention": "すでにプロバイダーにある既存のプロンプトは、送信時点で有効だった保持ポリシーに従います。",
+      "audit": "監査ログに誰が何を変更したかが毎回記録されます。レビュアーは構成スナップショットまで遡って決定を再確認できます。"
+    }
+  },
+  "samlSso": {
+    "title": "SAML SSO",
+    "subtitle": "ID プロバイダーで SAML 2.0 シングルサインオンを構成します。",
+    "status": {
+      "connected": "接続済み",
+      "connectedSub": "SAML SSO は有効で正常に動作しています。",
+      "error": "エラー",
+      "errorSub": "前回のテスト失敗: 無効な署名。",
+      "notConfigured": "未構成",
+      "notConfiguredSub": "開始するには以下に IdP メタデータを入力してください。",
+      "lastTested": "最終テスト",
+      "testConnection": "接続をテスト"
+    },
+    "idp": {
+      "title": "ID プロバイダーメタデータ",
+      "hint": "IdP の値を貼り付けるか、メタデータ XML をアップロードして自動入力してください。",
+      "upload": "メタデータ XML をアップロード",
+      "entityId": "エンティティ ID (発行者)",
+      "ssoUrl": "SSO URL",
+      "cert": "X.509 証明書"
+    },
+    "sp": {
+      "title": "サービスプロバイダーメタデータ",
+      "hint": "SAML アプリケーションを作成する際にこれらを IdP に貼り付けてください。",
+      "acsUrl": "ACS URL (応答 URL)",
+      "spEntityId": "SP エンティティ ID",
+      "nameIdFormat": "NameID 形式"
+    },
+    "mapping": {
+      "title": "属性マッピング",
+      "hint": "SAML アサーションクレームをユーザープロフィールフィールドにマッピングします。",
+      "profileField": "プロフィールフィールド",
+      "idpClaim": "IdP クレーム名"
+    },
+    "enforcement": {
+      "title": "適用",
+      "hint": "組織の SSO の使用方法を厳格にします。",
+      "requireSso": "すべてのメンバーに SSO を必須にする",
+      "requireSsoSub": "パスワードとソーシャルログインをブロックします。メンバーは IdP 経由でサインインする必要があります。",
+      "jit": "JIT プロビジョニングを許可",
+      "jitSub": "初回 SSO サインイン時にアカウントを自動作成します。そうでない場合はユーザーを事前に招待する必要があります。",
+      "defaultRole": "SSO ユーザーのデフォルトロール",
+      "defaultRoleSub": "JIT プロビジョニングされたメンバーに割り当てられるロールです。"
+    },
+    "notes": {
+      "test": "SSO を必須にする前に必ずシークレットウィンドウで接続をテストしてください — 誤って構成された IdP は全員をロックアウトする可能性があります。",
+      "recovery": "SSO が壊れても、オーナーは常にリカバリーコードでサインインできます。"
+    }
+  },
+  "sso": {
+    "title": "SAML / SSO",
+    "subtitle": "OIDC ID プロバイダーを接続します。メールドメインが一致するユーザーはログイン時に IdP にルーティングされます。エンタープライズプラン。",
+    "removeConnection": "接続を削除",
+    "status": "ステータス",
+    "connected": "接続済み",
+    "disabled": "無効",
+    "notConfigured": "未構成",
+    "secretStored": "シークレット保存済み",
+    "domainOwnership": "ドメイン所有権",
+    "verified": "確認済み",
+    "notVerified": "未確認",
+    "verifiedProven": "{{domain}} の所有権が確認されました — 一致するログインは IdP にルーティングされます。",
+    "verifyPrompt1": "この TXT レコードを ",
+    "verifyPrompt2": " のルートに追加してから確認してください。ドメインが確認されるまで、ログインは IdP に ",
+    "verifyPromptNot": "ルーティングされません",
+    "verifyPrompt3": "。",
+    "verifyDomain": "ドメインを確認",
+    "checkingDns": "DNS を確認中…",
+    "dnsNotFound": "TXT レコードがまだ見つかりません — DNS の伝播に数分かかることがあります。",
+    "field": {
+      "emailDomain": "メールドメイン",
+      "issuer": "OIDC 発行者",
+      "authEndpoint": "認可エンドポイント",
+      "tokenEndpoint": "トークンエンドポイント",
+      "jwksEndpoint": "JWKS エンドポイント",
+      "clientId": "クライアント ID",
+      "clientSecret": "クライアントシークレット",
+      "clientSecretKeep": "クライアントシークレット (維持する場合は空欄)",
+      "clientSecretPlaceholderStored": "•••••••• (保存済み)",
+      "clientSecretPlaceholder": "IdP から発行"
+    },
+    "saveChanges": "変更を保存",
+    "connectSso": "SSO を接続",
+    "saving": "保存中…",
+    "auditNote": "オーナー/管理者のみが変更できます。すべての変更が監査されます。",
+    "deleteDialog": {
+      "title": "SSO 接続を削除しますか？",
+      "confirm": "削除",
+      "description": "このドメインのユーザーはパスワードログインにフォールバックします。保存されたクライアントシークレットは削除されます。"
+    }
+  },
+  "scim": {
+    "title": "SCIM プロビジョニング",
+    "subtitle": "SCIM 2.0 で ID プロバイダーからユーザーとグループをプッシュします。",
+    "subtitleReal": "SCIM 2.0 で ID プロバイダー (Okta、Azure AD) からユーザーをプッシュします。エンタープライズプラン。",
+    "status": {
+      "connected": "接続済み",
+      "connectedSub": "SCIM コネクタは Okta からイベントを受信しています。",
+      "notConfigured": "未構成",
+      "notConfiguredSub": "トークンを生成して IdP に貼り付けてください。",
+      "lastSync": "最終同期",
+      "syncNow": "今すぐ同期"
+    },
+    "endpoint": {
+      "title": "エンドポイント",
+      "hint": "IdP の SCIM プロビジョニング構成にこれらを貼り付けてください。",
+      "baseUrl": "SCIM ベース URL",
+      "bearerToken": "ベアラートークン",
+      "bearerTokenSub": "SCIM リクエストを認証するトークンを生成してください。トークンは一度だけ表示されます。",
+      "generate": "新しいトークンを生成"
+    },
+    "syncRules": {
+      "title": "同期ルール",
+      "hint": "SCIM コネクタが行える操作です。",
+      "autoCreate": "ユーザーを自動作成",
+      "autoCreateSub": "IdP が SCIM POST を送信したときにアカウントを作成します。",
+      "autoDeactivate": "削除時に自動無効化",
+      "autoDeactivateSub": "IdP でユーザーの割り当てが解除されると、セッションを無効化しトークンを取り消します。",
+      "syncGroups": "グループ → チームを同期",
+      "syncGroupsSub": "下記のマッピングを使用して IdP グループメンバーシップを ACME チームにミラーリングします。"
+    },
+    "mapping": {
+      "title": "グループ → チームマッピング",
+      "hint": "IdP グループ名を ACME チームにマッピングします。マッピングされていないグループは無視されます。",
+      "add": "マッピングを追加",
+      "groupName": "IdP グループ名",
+      "team": "ACME チーム",
+      "groupPlaceholder": "okta-group-name",
+      "remove": "マッピングを削除"
+    },
+    "activity": {
+      "title": "最近の同期アクティビティ",
+      "hint": "直近の SCIM イベント 6 件。それ以前のイベントは監査ログにあります。",
+      "timestamp": "タイムスタンプ",
+      "action": "アクション",
+      "target": "対象",
+      "count": "数",
+      "created": "作成",
+      "updated": "更新",
+      "deactivated": "無効化"
+    },
+    "tokenCreated": "SCIM トークンを作成しました",
+    "real": {
+      "status": "ステータス",
+      "enabled": "有効",
+      "notConfigured": "未構成",
+      "disableScim": "SCIM を無効化",
+      "enableScim": "SCIM を有効化",
+      "baseUrl": "SCIM ベース URL",
+      "bearerToken": "ベアラートークン",
+      "bearerTokenSub": "作成時に一度だけ表示されます。漏洩の恐れがある場合はローテーションしてください — 古いトークンは直ちに使用できなくなります。",
+      "rotateToken": "トークンをローテーション",
+      "idpNote": "IdP で上記の SCIM ベース URL を設定し、ベアラートークンを貼り付けてください。IdP で割り当てられたユーザーがこの組織にプロビジョニングされ、割り当て解除でデプロビジョニングされます。",
+      "enablePrompt": "SCIM を有効化して ID プロバイダー用のベース URL とベアラートークンを取得してください。割り当てられたユーザーが自動的にこの組織に追加されます。",
+      "tokenDescription": "IdP の SCIM コネクタにこれを貼り付けてください。再表示はできません — 新しく取得するにはローテーションしてください。",
+      "disableTitle": "SCIM を無効化しますか？",
+      "disableConfirm": "無効化",
+      "disableDescription": "ベアラートークンが直ちに使用できなくなり、IdP はユーザーをプロビジョニングできなくなります。既存のメンバーは保持されます。"
+    }
+  },
+  "audit": {
+    "title": "監査ログ",
+    "subtitle": "組織全体のすべての特権操作です。保持ポリシーに従って保持されます。",
+    "subtitleReal": "組織全体の特権操作です。プランの保持ポリシーに従って保持されます。",
+    "exportCsv": "CSV をエクスポート",
+    "searchPlaceholder": "アクター、対象、IP を検索…",
+    "searchPlaceholderReal": "アクター、アクション、対象、IP を検索…",
+    "allActors": "すべてのアクター",
+    "actions": {
+      "all": "すべてのアクション",
+      "authLogin": "auth.login",
+      "authLoginFailed": "auth.login.failed",
+      "membersInvite": "members.invite",
+      "membersRemove": "members.remove",
+      "admissionRuleChanged": "admission.rule.changed",
+      "secretsRotate": "secrets.rotate",
+      "ssoTest": "sso.test",
+      "webhookCreated": "webhook.created",
+      "agentRun": "agent.run",
+      "orgMemberInvited": "メンバー招待",
+      "orgMemberRemoved": "メンバー削除",
+      "orgMemberRoleChanged": "ロール変更",
+      "orgInvitationCanceled": "招待取り消し",
+      "orgUpdated": "組織更新",
+      "orgDeleted": "組織削除",
+      "orgTeamCreated": "チーム作成",
+      "orgTeamDeleted": "チーム削除",
+      "security2faEnabled": "2FA 有効化",
+      "security2faDisabled": "2FA 無効化",
+      "securityPasswordChanged": "パスワード変更",
+      "securitySessionRevoked": "セッション取り消し",
+      "apikeyCreated": "API キー作成",
+      "apikeyRevoked": "API キー取り消し",
+      "billingSubscriptionUpdated": "サブスクリプション更新",
+      "billingPaymentFailed": "支払い失敗"
+    },
+    "table": {
+      "when": "時刻",
+      "actor": "アクター",
+      "action": "アクション",
+      "target": "対象",
+      "ip": "IP",
+      "result": "結果",
+      "actionTarget": "アクション / 対象"
+    },
+    "result": {
+      "success": "成功",
+      "failure": "失敗"
+    },
+    "diff": {
+      "before": "変更前",
+      "after": "変更後",
+      "noPayload": "— ペイロードなし —"
+    },
+    "showing": "8,421 件のイベント中 1–15 を表示",
+    "previous": "前へ",
+    "next": "次へ",
+    "empty": {
+      "matchingTitle": "一致するイベントがありません",
+      "matchingSub": "別のフィルターを試してください。",
+      "noEventsTitle": "まだ監査イベントがありません",
+      "noEventsSub": "特権操作がここに表示されます。"
+    },
+    "eventsCount_one": "イベント {{count}} 件",
+    "eventsCount_other": "イベント {{count}} 件",
+    "moreAvailable": " (さらにあり)",
+    "loading": "読み込み中…",
+    "loadMore": "さらに読み込む",
+    "errorContext": "監査ログ"
+  },
+  "dataResidency": {
+    "title": "データ保存地域",
+    "subtitle": "ACME データが処理・保存される場所を選択します。",
+    "controls": {
+      "title": "保存地域が制御する内容",
+      "body": "ソースコード、エージェント実行、シークレット、監査ログが選択した地域に保存されます。認証メタデータ (メール、テナント ID) はグローバルコントロールプレーンにあります。地域を切り替えると、調整されたカットオーバーを伴う一度限りの移行が発生します。"
+    },
+    "region": {
+      "title": "アクティブな地域",
+      "hint": "移行を要求するには別の地域をクリックしてください。",
+      "us": "アメリカ合衆国",
+      "eu": "ヨーロッパ",
+      "apac": "アジア太平洋",
+      "selected": "選択済み",
+      "dataCenters": "データセンター",
+      "latency": "あなたからのレイテンシ",
+      "stored": "現在の保存量",
+      "notActive": "— 非アクティブ —"
+    },
+    "settings": {
+      "title": "保存地域設定",
+      "hint": "規制対象のワークロード向けのより厳格な制御です。",
+      "noCrossReplica": "地域間レプリケーションを無効化",
+      "noCrossReplicaSub": "バックアップは選択した地域のみに保持されます。地域全体の障害時に全データ損失のリスクが高まります。",
+      "blockExport": "他地域へのデータエクスポートをブロック",
+      "blockExportSub": "CSV エクスポート、エージェント呼び出し、Webhook 配信は同一地域のエンドポイントのみを対象にできます。"
+    },
+    "certs": {
+      "title": "コンプライアンス認証",
+      "hint": "独立した第三者によって監査されています。レポートはリクエストに応じて提供されます。"
+    },
+    "footer": "地域の変更は監査ログに記録され、すべてのオーナーと管理者に通知されます。",
+    "migration": {
+      "ariaLabel": "{{region}} への移行を要求",
+      "title": "{{region}} への移行を要求しますか？",
+      "bodyPre": "すべての組織データを ",
+      "bodyMid": " でスナップショットし、",
+      "bodyPost": " へレプリケートした後、調整されたカットオーバーを実行します。",
+      "downtime": "· 推定ダウンタイム: カットオーバー中に約 12 分 (業務時間外に予約)",
+      "cost": "· 一度限りのデータ転送コスト: 現在の請求書に $420 を請求",
+      "sessions": "· カットオーバー時にアクティブなセッションはサインアウトされます",
+      "rollback": "· ロールバック期間: 移行後 7 日間",
+      "cancel": "キャンセル",
+      "confirm": "移行を要求"
+    }
+  },
+  "retention": {
+    "title": "保持ポリシー",
+    "subtitle": "ACME が自動削除の前に各データクラスをどれだけの期間保持するかを設定します。",
+    "default": {
+      "title": "デフォルト保持",
+      "hint": "「デフォルトを継承」に設定されたすべてのデータクラスに適用されます。",
+      "global": "グローバルデフォルト",
+      "globalSub": "デフォルトで保持する日数です。クラスレベルの上書きが優先されます。",
+      "days": "日"
+    },
+    "opt": {
+      "days30": "30 日",
+      "days60": "60 日",
+      "days90": "90 日",
+      "days180": "180 日",
+      "year1": "1 年",
+      "years2": "2 年",
+      "forever": "無期限"
+    },
+    "perClass": {
+      "title": "クラスごとの上書き",
+      "hint": "機密性の高いクラスは保持を厳格にし、コンプライアンス要件のあるクラスは緩和してください。",
+      "dataClass": "データクラス",
+      "retention": "保持",
+      "inherits": "継承？",
+      "inheritOption": "継承 ({{days}} 日)",
+      "inherit": "継承",
+      "override": "上書き"
+    },
+    "class": {
+      "auditLog": "監査ログ",
+      "auditLogHint": "組織全体の特権操作",
+      "agentRuns": "エージェント実行",
+      "agentRunsHint": "入力、出力、ステップトレース",
+      "webhookDeliveries": "Webhook 配信",
+      "webhookDeliveriesHint": "送信ペイロードと HTTP レスポンス",
+      "investigationChats": "調査チャット",
+      "investigationChatsHint": "インテリジェンスステージのチャットスレッド",
+      "codeReviewThreads": "コードレビュースレッド",
+      "codeReviewThreadsHint": "差分に対するレビュアーのコメント",
+      "inactiveSessions": "非アクティブセッション",
+      "inactiveSessionsHint": "活動のないブラウザセッション",
+      "deletedUserPii": "削除済みユーザーの PII",
+      "deletedUserPiiHint": "アカウント削除後のメール、名前",
+      "telemetry": "テレメトリイベント",
+      "telemetryHint": "匿名化された使用状況分析"
+    },
+    "legalHolds": {
+      "title": "リーガルホールド",
+      "hint": "訴訟や調査が進行中の間、特定の範囲の削除を一時停止します。",
+      "none": "アクティブなホールドはありません。",
+      "active": "アクティブ",
+      "createdBy": "{{creator}} が作成 · {{date}}",
+      "release": "ホールドを解除"
+    },
+    "archive": {
+      "title": "アーカイブ先",
+      "hint": "保持期限が削除をトリガーする前に、オプションでデータを自分の S3 バケットにアーカイブします。",
+      "toggle": "削除前に S3 にアーカイブ",
+      "toggleSub": "データクラスごとに一度限りの JSONL ダンプをバケットに書き込みます。",
+      "bucket": "バケット名",
+      "bucketPlaceholder": "s3://my-archive-bucket",
+      "roleArn": "AWS Role ARN",
+      "roleArnPlaceholder": "arn:aws:iam::123:role/archiver"
+    },
+    "notes": {
+      "archive": "削除は 7 日間ソフト削除された後、暗号学的にシュレッドされます。アーカイブの書き込みは削除の前夜に行われます。",
+      "apply": "保持の変更は新しいデータに適用されます。既存のレコードは次のコンパクションまで元のポリシーを維持します。"
+    },
+    "releaseDialog": {
+      "ariaLabel": "ホールド {{ref}} を解除",
+      "title": "ホールド {{ref}} を解除しますか？",
+      "body": "このホールドの対象レコードは、次のコンパクション時に保持ベースの削除の対象になります。この操作は記録され、リーガルオペレーションに通知されます。",
+      "cancel": "キャンセル",
+      "confirm": "ホールドを解除"
+    }
+  },
+  "serviceAccounts": {
+    "title": "サービスアカウント",
+    "subtitle": "CI、スクリプト、ワーカープール向けのマシンアイデンティティです。範囲を狭く指定し、トークンを 90 日ごとにローテーションしてください。",
+    "subtitleReal": "CI とワーカー向けのマシンアイデンティティです。それぞれこの組織スコープの API キーを保持します。",
+    "new": "新しいサービスアカウント",
+    "stat": {
+      "total": "合計",
+      "active": "アクティブ",
+      "tokens": "トークン"
+    },
+    "table": {
+      "name": "名前",
+      "purpose": "用途",
+      "scopes": "スコープ",
+      "tokens": "トークン",
+      "lastSeen": "最終確認",
+      "status": "ステータス",
+      "prefix": "プレフィックス",
+      "created": "作成日",
+      "expires": "期限"
+    },
+    "createdByLine": "{{id}} · {{by}} が作成",
+    "statusActive": "アクティブ",
+    "statusDisabled": "無効",
+    "action": {
+      "tokens": "トークン",
+      "rotate": "ローテーション",
+      "disable": "無効化",
+      "enable": "有効化",
+      "more": "その他"
+    },
+    "empty": {
+      "title": "サービスアカウントがありません",
+      "subtitle": "1 つ作成して CI やワーカーに API アクセスを付与してください。"
+    },
+    "fallbackName": "サービスアカウント",
+    "revoke": {
+      "menu": "キーを取り消し",
+      "title": "「{{name}}」を取り消しますか？",
+      "confirm": "取り消し",
+      "description": "このキーを使用する CI ジョブやワーカーは直ちにアクセスを失います。取り消せません。"
+    },
+    "create": {
+      "title": "新しいサービスアカウント",
+      "name": "名前",
+      "namePlaceholder": "ci-deploy-bot",
+      "keyExpiration": "キーの有効期限",
+      "days90": "90 日",
+      "year1": "1 年",
+      "noExpiry": "期限なし",
+      "create": "作成",
+      "creating": "作成中…"
+    },
+    "keyCreated": "サービスアカウント「{{name}}」を作成しました",
+    "keyFallback": "キー"
+  },
+  "usage": {
+    "title": "使用状況",
+    "subtitle": "過去 30 日間に組織が消費した内容です。コストは現在のプランにマッピングされます。請求で切り替えてください。",
+    "range": {
+      "days30": "過去 30 日",
+      "days7": "過去 7 日",
+      "days90": "過去 90 日",
+      "billingPeriod": "今回の請求期間"
+    },
+    "exportCsv": "CSV をエクスポート",
+    "metric": {
+      "seats": "アクティブシート",
+      "agents": "エージェント実行",
+      "tokens": "AI トークン",
+      "storage": "ストレージ",
+      "webhooks": "Webhook 配信",
+      "requests": "API リクエスト"
+    },
+    "unit": {
+      "seats": "/ 200",
+      "perMonth": "/ 月",
+      "tokens": "トークン / 月",
+      "storage": "GB"
+    },
+    "alert": {
+      "title": "今月はプラン上限の 92% に達する見込みです",
+      "sub": "80% で予算アラートを設定するか、余裕のためにプランをアップグレードしてください。",
+      "action": "予算アラートを設定"
+    },
+    "breakdown": {
+      "title": "ワークスペース別コスト",
+      "thisMonth": "今月",
+      "workspace": "ワークスペース",
+      "runs": "実行",
+      "tokens": "トークン",
+      "cost": "コスト",
+      "share": "割合"
+    }
+  },
+  "domains": {
+    "title": "ドメイン",
+    "subtitle": "自動参加、SSO 適用、本人確認済みの招待のためにメールドメインを取得します。",
+    "add": "ドメインを追加",
+    "primary": "プライマリ",
+    "verified": "確認済み",
+    "unverified": "未確認",
+    "ssoRequired": "SSO 必須",
+    "ssoRequiredSub": "このドメインのアカウントに SAML/OIDC を強制します",
+    "autoJoin": "自動参加",
+    "autoJoinSub": "このドメインの新しい確認済みユーザーが自動的に参加します",
+    "verify": {
+      "title": "{{domain}} を確認",
+      "body": "以下の TXT レコードを DNS に追加してから確認をクリックしてください。伝播は通常 5 分以内に完了します。",
+      "type": "タイプ",
+      "host": "ホスト",
+      "value": "値",
+      "check": "今すぐ DNS を確認"
+    }
+  },
+  "format": {
+    "expired": "期限切れ",
+    "day_one": "{{count}} 日",
+    "day_other": "{{count}} 日",
+    "emDash": "—"
+  }
+}

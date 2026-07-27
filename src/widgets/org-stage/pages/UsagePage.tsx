@@ -1,5 +1,6 @@
 import { useParams } from '@tanstack/react-router';
 import { useRef, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   TrendingUp, TrendingDown, Users, Bot, Database, Webhook, Sparkles,
   AlertTriangle, Download, BarChart3, Activity,
@@ -22,27 +23,27 @@ function curve(seed: number, base: number, slope: number) {
 
 const METRICS = [
   {
-    key: 'seats',     icon: Users,    label: 'Active seats',   value: 184, delta: 6,    unit: '/ 200',  cap: true,
+    key: 'seats',     icon: Users,    labelKey: 'usage.metric.seats',   unitKey: 'usage.unit.seats',  value: 184, delta: 6,    cap: true,
     series: curve(1, 170, 0.5), tone: 'var(--fg-accent)',
   },
   {
-    key: 'agents',    icon: Bot,      label: 'Agent runs',     value: 12482, delta: 14, unit: '/ mo',
+    key: 'agents',    icon: Bot,      labelKey: 'usage.metric.agents',  unitKey: 'usage.unit.perMonth', value: 12482, delta: 14,
     series: curve(2, 320, 1.2), tone: 'var(--fg-link)',
   },
   {
-    key: 'tokens',    icon: Sparkles, label: 'AI tokens',      value: 42_140_000, delta: 22, unit: 'tokens / mo', format: 'compact' as const,
+    key: 'tokens',    icon: Sparkles, labelKey: 'usage.metric.tokens',  unitKey: 'usage.unit.tokens', value: 42_140_000, delta: 22, format: 'compact' as const,
     series: curve(3, 1_400_000, 8_000), tone: 'var(--intent-info-fg)',
   },
   {
-    key: 'storage',   icon: Database, label: 'Storage',        value: 184, delta: -2,  unit: 'GB',
+    key: 'storage',   icon: Database, labelKey: 'usage.metric.storage', unitKey: 'usage.unit.storage', value: 184, delta: -2,
     series: curve(4, 180, 0.05), tone: 'var(--intent-warn-fg)',
   },
   {
-    key: 'webhooks',  icon: Webhook,  label: 'Webhook deliveries', value: 1_842_321, delta: 4,  unit: '/ mo', format: 'compact' as const,
+    key: 'webhooks',  icon: Webhook,  labelKey: 'usage.metric.webhooks', unitKey: 'usage.unit.perMonth', value: 1_842_321, delta: 4, format: 'compact' as const,
     series: curve(5, 60_000, 200), tone: 'var(--intent-success-fg)',
   },
   {
-    key: 'requests',  icon: Activity, label: 'API requests',   value: 184_209_111, delta: 18, unit: '/ mo', format: 'compact' as const,
+    key: 'requests',  icon: Activity, labelKey: 'usage.metric.requests', unitKey: 'usage.unit.perMonth', value: 184_209_111, delta: 18, format: 'compact' as const,
     series: curve(6, 6_000_000, 30_000), tone: 'var(--fg-accent)',
   },
 ];
@@ -64,6 +65,7 @@ function format(n: number, mode?: 'compact') {
 }
 
 export default function UsagePage() {
+  const { t } = useTranslation('org');
   // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
   const { org = '' } = useParams({ strict: false });
 
@@ -71,8 +73,8 @@ export default function UsagePage() {
     <OrgShell
       orgName={org}
       orgSlug={org}
-      title="Usage"
-      subtitle="What your org has consumed in the past 30 days. Costs map to your current plan; switch in billing."
+      title={t('usage.title')}
+      subtitle={t('usage.subtitle')}
       topRight={
         <div className="flex items-center gap-2">
           <select
@@ -83,10 +85,10 @@ export default function UsagePage() {
               color: 'var(--fg-strong)',
             }}
           >
-            <option>Last 30 days</option>
-            <option>Last 7 days</option>
-            <option>Last 90 days</option>
-            <option>This billing period</option>
+            <option>{t('usage.range.days30')}</option>
+            <option>{t('usage.range.days7')}</option>
+            <option>{t('usage.range.days90')}</option>
+            <option>{t('usage.range.billingPeriod')}</option>
           </select>
           <button
             type="button"
@@ -98,7 +100,7 @@ export default function UsagePage() {
             }}
           >
             <Download className="w-3.5 h-3.5" />
-            Export CSV
+            {t('usage.exportCsv')}
           </button>
         </div>
       }
@@ -129,10 +131,10 @@ export default function UsagePage() {
         </div>
         <div className="flex flex-col gap-0.5 flex-1">
           <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-            You&apos;re projected to hit 92% of plan limits this month
+            {t('usage.alert.title')}
           </span>
           <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-            Set a budget alert at 80%, or upgrade plans for cleaner headroom.
+            {t('usage.alert.sub')}
           </span>
         </div>
         <button
@@ -140,7 +142,7 @@ export default function UsagePage() {
           className="inline-flex items-center gap-1 h-8 px-3 rounded-md text-sm font-semibold transition-colors"
           style={{ background: 'var(--intent-warn-fg)', color: '#fff' }}
         >
-          Set budget alert
+          {t('usage.alert.action')}
         </button>
       </div>
 
@@ -149,10 +151,10 @@ export default function UsagePage() {
         <div className="flex items-center gap-2">
           <BarChart3 className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
           <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-            Cost by workspace
+            {t('usage.breakdown.title')}
           </h2>
         </div>
-        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>This month</span>
+        <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('usage.breakdown.thisMonth')}</span>
       </div>
       <div
         className="rounded-xl overflow-hidden"
@@ -166,11 +168,11 @@ export default function UsagePage() {
             borderBottom: '1px solid var(--border-muted)',
           }}
         >
-          <span>Workspace</span>
-          <span className="text-right">Runs</span>
-          <span className="text-right">Tokens</span>
-          <span className="text-right">Cost</span>
-          <span>Share</span>
+          <span>{t('usage.breakdown.workspace')}</span>
+          <span className="text-right">{t('usage.breakdown.runs')}</span>
+          <span className="text-right">{t('usage.breakdown.tokens')}</span>
+          <span className="text-right">{t('usage.breakdown.cost')}</span>
+          <span>{t('usage.breakdown.share')}</span>
         </div>
         {(() => {
           const total = BREAKDOWN.reduce((acc, b) => acc + b.runs, 0);
@@ -228,6 +230,7 @@ function BreakdownRow({ isLast, children }: { isLast: boolean; children: ReactNo
 }
 
 function MetricTile({ m }: { m: (typeof METRICS)[number] }) {
+  const { t } = useTranslation('org');
   const max = Math.max(...m.series);
   const up = m.delta >= 0;
   return (
@@ -255,13 +258,13 @@ function MetricTile({ m }: { m: (typeof METRICS)[number] }) {
       </div>
       <div className="flex flex-col gap-0.5">
         <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
-          {m.label}
+          {t(m.labelKey)}
         </span>
         <div className="flex items-baseline gap-1.5">
           <span className="text-3xl font-semibold tabular-nums tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             {format(m.value, m.format)}
           </span>
-          <span className="text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{m.unit}</span>
+          <span className="text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{t(m.unitKey)}</span>
         </div>
       </div>
       <div className="flex items-end gap-[2px] h-10">

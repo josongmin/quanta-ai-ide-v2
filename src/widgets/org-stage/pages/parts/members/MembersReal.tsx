@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { UserPlus, UserMinus } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
@@ -12,7 +13,7 @@ import {
   useOrg, removeMember, updateMemberRole,
   type OrgMember, type OrgRole,
 } from '@entities/org';
-import { ROLE_LABEL, ASSIGNABLE_ROLES, initials, shortDate } from '../../../parts/format';
+import { roleLabel, ASSIGNABLE_ROLES, initials, shortDate } from '../../../parts/format';
 import { RealInviteModal } from './RealInviteModal';
 
 // Real member roster over better-auth's org plugin. Intentionally leaner than
@@ -25,6 +26,7 @@ import { RealInviteModal } from './RealInviteModal';
 const EMPTY_MEMBERS: OrgMember[] = [];
 
 export function MembersReal() {
+  const { t } = useTranslation('org');
   // Route is always /org/$org/* so `org` (the slug) is present.
   const { org = '' } = useParams({ strict: false });
   const { detail, isPending, error, refetch } = useOrg(org);
@@ -70,8 +72,8 @@ export function MembersReal() {
     <OrgShell
       orgName={detail?.org.name ?? org}
       orgSlug={detail?.org.slug ?? org}
-      title="Members"
-      subtitle="People who can access this organization. Invite by email or change roles."
+      title={t('members.title')}
+      subtitle={t('members.subtitleReal')}
       topRight={
         <Button
           variant="primary"
@@ -80,12 +82,12 @@ export function MembersReal() {
           onClick={() => { setInviteOpen(true); }}
           disabled={!orgId}
         >
-          Invite people
+          {t('members.invitePeople')}
         </Button>
       }
     >
       <div className="flex items-center justify-end mb-3">
-        <SearchInput value={q} onChange={setQ} placeholder="Search name or email…" minWidth={220} />
+        <SearchInput value={q} onChange={setQ} placeholder={t('members.searchPlaceholderReal')} minWidth={220} />
       </div>
 
       {actionError && (
@@ -103,13 +105,13 @@ export function MembersReal() {
       ) : (
         <DataTable<OrgMember>
           columns="1fr 150px 130px 44px"
-          headers={[{ header: 'Member' }, { header: 'Role' }, { header: 'Joined' }, { header: '' }]}
+          headers={[{ header: t('members.table.member') }, { header: t('members.table.role') }, { header: t('members.table.joined') }, { header: '' }]}
           rows={filtered}
           rowKey={(m) => m.id}
           empty={
             <EmptyState
-              title={q ? `No matches for "${q}"` : 'No members yet'}
-              subtitle={q ? 'Try a different keyword.' : 'Invite people to get started.'}
+              title={q ? t('members.empty.noMatchesTitle', { query: q }) : t('members.empty.noMembersTitle')}
+              subtitle={q ? t('members.empty.noMatchesKeyword') : t('members.empty.noMembersSubtitle')}
             />
           }
           renderRow={(m) => {
@@ -128,14 +130,14 @@ export function MembersReal() {
                   <span className="flex flex-col min-w-0">
                     <span className="text-base truncate flex items-center gap-1.5" style={{ color: 'var(--fg-strong)' }}>
                       {m.name || m.email}
-                      {isSelf && <Badge variant="info" size="sm">You</Badge>}
+                      {isSelf && <Badge variant="info" size="sm">{t('members.you')}</Badge>}
                     </span>
                     <span className="text-sm truncate" style={{ color: 'var(--fg-subtle)' }}>{m.email}</span>
                   </span>
                 </div>
 
                 {isOwner ? (
-                  <Badge variant="neutral" size="sm">Owner</Badge>
+                  <Badge variant="neutral" size="sm">{t('common.role.owner')}</Badge>
                 ) : (
                   <select
                     value={m.role}
@@ -149,7 +151,7 @@ export function MembersReal() {
                     }}
                   >
                     {ASSIGNABLE_ROLES.map((r) => (
-                      <option key={r} value={r}>{ROLE_LABEL[r]}</option>
+                      <option key={r} value={r}>{roleLabel(t, r)}</option>
                     ))}
                   </select>
                 )}
@@ -161,7 +163,7 @@ export function MembersReal() {
                 <RowMenu
                   items={[
                     {
-                      label: 'Remove from organization',
+                      label: t('members.rowMenu.removeFromOrganization'),
                       icon: UserMinus,
                       danger: true,
                       disabled: isOwner || isSelf || rowBusy,
@@ -177,8 +179,7 @@ export function MembersReal() {
 
       {!error && !isPending && (
         <p className="text-sm mt-3 px-1" style={{ color: 'var(--fg-subtle)' }}>
-          {filtered.length} of {members.length} {members.length === 1 ? 'person' : 'people'} · Owner is
-          {' '}changed via ownership transfer.
+          {t('members.footerReal', { count: members.length, filtered: filtered.length, total: members.length })}
         </p>
       )}
 
@@ -194,9 +195,9 @@ export function MembersReal() {
           open
           onCancel={() => { setConfirmRemove(null); }}
           onConfirm={() => { void doRemove(confirmRemove); }}
-          title={`Remove ${confirmRemove.name || confirmRemove.email}?`}
-          confirmLabel="Remove"
-          description="Their access to this organization will end immediately. Their authored work stays attributed to them. This action can't be undone."
+          title={t('members.removeDialog.title', { name: confirmRemove.name || confirmRemove.email })}
+          confirmLabel={t('members.removeDialog.confirm')}
+          description={t('members.removeDialog.description')}
         />
       )}
     </OrgShell>

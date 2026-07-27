@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { useParams } from '@tanstack/react-router';
 import { Webhook, Plus, Trash2, Pause, Play, RotateCcw } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
@@ -16,19 +18,21 @@ import { shortDate } from '../../../parts/format';
 
 // Real org webhooks over accounts /v1/webhooks. Delivers audit-spine events; the
 // subscribable catalog is the accounts audit actions (not product events).
-const EVENT_CATALOG: { id: string; label: string }[] = [
-  { id: '*', label: 'All events' },
-  { id: 'org.member.invited', label: 'Member invited' },
-  { id: 'org.member.removed', label: 'Member removed' },
-  { id: 'org.member.role_changed', label: 'Role changed' },
-  { id: 'org.invitation.canceled', label: 'Invitation canceled' },
-  { id: 'org.updated', label: 'Org updated' },
-  { id: 'org.deleted', label: 'Org deleted' },
-  { id: 'apikey.created', label: 'API key created' },
-  { id: 'apikey.revoked', label: 'API key revoked' },
-  { id: 'billing.subscription.updated', label: 'Subscription updated' },
-  { id: 'billing.payment_failed', label: 'Payment failed' },
-];
+function eventCatalog(t: TFunction<'org'>): { id: string; label: string }[] {
+  return [
+    { id: '*', label: t('webhooks.real.allEvents') },
+    { id: 'org.member.invited', label: t('webhooks.real.memberInvited') },
+    { id: 'org.member.removed', label: t('webhooks.real.memberRemoved') },
+    { id: 'org.member.role_changed', label: t('webhooks.real.roleChanged') },
+    { id: 'org.invitation.canceled', label: t('webhooks.real.invitationCanceled') },
+    { id: 'org.updated', label: t('webhooks.real.orgUpdated') },
+    { id: 'org.deleted', label: t('webhooks.real.orgDeleted') },
+    { id: 'apikey.created', label: t('webhooks.real.apikeyCreated') },
+    { id: 'apikey.revoked', label: t('webhooks.real.apikeyRevoked') },
+    { id: 'billing.subscription.updated', label: t('webhooks.real.subscriptionUpdated') },
+    { id: 'billing.payment_failed', label: t('webhooks.real.paymentFailed') },
+  ];
+}
 
 const STATUS_VARIANT: Record<WebhookDeliveryRecord['status'], BadgeVariant> = {
   delivered: 'success', failed: 'danger', exhausted: 'warn', pending: 'neutral', sending: 'neutral',
@@ -38,6 +42,7 @@ const NO_EP: WebhookEndpointRecord[] = [];
 const NO_DEL: WebhookDeliveryRecord[] = [];
 
 export function WebhooksReal() {
+  const { t } = useTranslation('org');
   const { org = '' } = useParams({ strict: false });
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
@@ -103,11 +108,11 @@ export function WebhooksReal() {
     <OrgShell
       orgName={detail?.org.name ?? org}
       orgSlug={detail?.org.slug ?? org}
-      title="Webhooks"
-      subtitle="HTTP callbacks fired from org events, signed with HMAC-SHA256. Each endpoint subscribes to a subset of events."
+      title={t('webhooks.title')}
+      subtitle={t('webhooks.subtitleReal')}
       topRight={
         <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={() => { setCreateOpen(true); }} disabled={!orgId}>
-          New endpoint
+          {t('webhooks.newEndpoint')}
         </Button>
       }
     >
@@ -121,10 +126,10 @@ export function WebhooksReal() {
         <>
           <DataTable<WebhookEndpointRecord>
             columns="1fr 90px 110px 44px"
-            headers={[{ header: 'Endpoint' }, { header: 'Events' }, { header: 'Status' }, { header: '' }]}
+            headers={[{ header: t('webhooks.table.endpoint') }, { header: t('webhooks.table.events') }, { header: t('webhooks.table.status') }, { header: '' }]}
             rows={endpoints}
             rowKey={(e) => e.id}
-            empty={<EmptyState title="No endpoints" subtitle="Add an endpoint to receive signed event callbacks." />}
+            empty={<EmptyState title={t('webhooks.empty.endpointsTitle')} subtitle={t('webhooks.empty.endpointsSub')} />}
             renderRow={(e) => (
               <>
                 <div className="flex items-center gap-2.5 min-w-0">
@@ -135,35 +140,35 @@ export function WebhooksReal() {
                   </span>
                 </div>
                 <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>
-                  {e.events.includes('*') ? 'All' : e.events.length.toString()}
+                  {e.events.includes('*') ? t('webhooks.table.all') : e.events.length.toString()}
                 </span>
-                <Badge variant={e.enabled ? 'success' : 'neutral'} size="sm">{e.enabled ? 'Enabled' : 'Paused'}</Badge>
+                <Badge variant={e.enabled ? 'success' : 'neutral'} size="sm">{e.enabled ? t('webhooks.status.enabled') : t('webhooks.status.paused')}</Badge>
                 <RowMenu
                   items={[
-                    { label: e.enabled ? 'Pause' : 'Enable', icon: e.enabled ? Pause : Play, disabled: busyId !== null, onClick: () => { void toggle(e); } },
-                    { label: 'Delete endpoint', icon: Trash2, danger: true, disabled: busyId !== null, onClick: () => { setConfirmDelete(e); } },
+                    { label: e.enabled ? t('webhooks.action.pause') : t('webhooks.action.enable'), icon: e.enabled ? Pause : Play, disabled: busyId !== null, onClick: () => { void toggle(e); } },
+                    { label: t('webhooks.action.deleteEndpoint'), icon: Trash2, danger: true, disabled: busyId !== null, onClick: () => { setConfirmDelete(e); } },
                   ]}
                 />
               </>
             )}
           />
 
-          <h2 className="text-base font-semibold mt-8 mb-2 px-1" style={{ color: 'var(--fg-strong)' }}>Recent deliveries</h2>
+          <h2 className="text-base font-semibold mt-8 mb-2 px-1" style={{ color: 'var(--fg-strong)' }}>{t('webhooks.recentDeliveries')}</h2>
           <DataTable<WebhookDeliveryRecord>
             columns="1fr 110px 90px 130px 44px"
-            headers={[{ header: 'Event' }, { header: 'Status' }, { header: 'Attempts' }, { header: 'When' }, { header: '' }]}
+            headers={[{ header: t('webhooks.table.event') }, { header: t('webhooks.table.status') }, { header: t('webhooks.table.attempts') }, { header: t('webhooks.table.when') }, { header: '' }]}
             rows={deliveries}
             rowKey={(d) => d.id}
-            empty={<EmptyState title="No deliveries yet" subtitle="Events will show here once endpoints receive them." />}
+            empty={<EmptyState title={t('webhooks.empty.deliveriesTitle')} subtitle={t('webhooks.empty.deliveriesSub')} />}
             renderRow={(d) => (
               <>
                 <span className="font-mono text-sm truncate" style={{ color: 'var(--fg-default)' }}>{d.event}</span>
                 <Badge variant={STATUS_VARIANT[d.status]} size="sm">
-                  {d.status}{d.responseStatus ? ` · ${d.responseStatus.toString()}` : ''}
+                  {t(`webhooks.deliveryStatus.${d.status}`)}{d.responseStatus ? ` · ${d.responseStatus.toString()}` : ''}
                 </Badge>
                 <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{d.attempts}</span>
                 <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(d.createdAt)}</span>
-                <RowMenu items={[{ label: 'Replay', icon: RotateCcw, disabled: busyId !== null, onClick: () => { void replay(d); } }]} />
+                <RowMenu items={[{ label: t('webhooks.action.replay'), icon: RotateCcw, disabled: busyId !== null, onClick: () => { void replay(d); } }]} />
               </>
             )}
           />
@@ -179,9 +184,9 @@ export function WebhooksReal() {
       )}
       {revealed && (
         <RevealOnceModal
-          title="Signing secret"
+          title={t('webhooks.signingSecret.title')}
           value={revealed.secret}
-          description="Verify each delivery's x-p0-signature header (HMAC-SHA256 of the body) with this secret. Shown once."
+          description={t('webhooks.signingSecret.description')}
           onDismiss={() => { setRevealed(null); }}
           onSaved={() => { setSaved(true); }}
           saved={saved}
@@ -194,9 +199,9 @@ export function WebhooksReal() {
           busy={busyId === confirmDelete.id}
           onCancel={() => { setConfirmDelete(null); }}
           onConfirm={() => { void doDelete(confirmDelete); }}
-          title="Delete this endpoint?"
-          confirmLabel="Delete"
-          description="It will immediately stop receiving events. Delivery history is retained."
+          title={t('webhooks.deleteDialog.title')}
+          confirmLabel={t('webhooks.deleteDialog.confirm')}
+          description={t('webhooks.deleteDialog.description')}
         />
       )}
     </OrgShell>
@@ -210,6 +215,7 @@ function CreateWebhookModal({
   onClose: () => void;
   onCreated: (created: WebhookEndpointCreated) => void;
 }) {
+  const { t } = useTranslation('org');
   const [url, setUrl] = useState('https://');
   const [description, setDescription] = useState('');
   const [events, setEvents] = useState<Set<string>>(new Set(['*']));
@@ -248,23 +254,23 @@ function CreateWebhookModal({
       onClose={onClose}
       size="md"
       icon={<Webhook className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
-      title="New webhook endpoint"
+      title={t('webhooks.create.title')}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="primary" size="md" disabled={!valid || busy} onClick={() => { void submit(); }}>
-            {busy ? 'Creating…' : 'Create endpoint'}
+            {busy ? t('webhooks.create.creating') : t('webhooks.create.create')}
           </Button>
         </>
       }
     >
       {error && <InlineError message={error} onRetry={() => { setError(null); }} />}
-      <Field label="Payload URL" value={url} onChange={(e) => { setUrl(e.target.value); }} placeholder="https://hooks.example.com/p0" autoFocus />
-      <Field label="Description (optional)" value={description} onChange={(e) => { setDescription(e.target.value.slice(0, 200)); }} placeholder="Internal warehouse mirror" />
+      <Field label={t('webhooks.create.payloadUrl')} value={url} onChange={(e) => { setUrl(e.target.value); }} placeholder={t('webhooks.create.urlPlaceholder')} autoFocus />
+      <Field label={t('webhooks.create.description')} value={description} onChange={(e) => { setDescription(e.target.value.slice(0, 200)); }} placeholder={t('webhooks.create.descPlaceholder')} />
       <div className="flex flex-col gap-1.5">
-        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Events</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>{t('webhooks.create.events')}</span>
         <div className="grid grid-cols-2 gap-1.5 max-h-[180px] overflow-y-auto p-1">
-          {EVENT_CATALOG.map((ev) => {
+          {eventCatalog(t).map((ev) => {
             const on = events.has(ev.id);
             return (
               <button

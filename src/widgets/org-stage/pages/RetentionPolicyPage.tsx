@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Gavel, X, Archive, Clock, ShieldAlert } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Field, Toggle, Button, SaveBar } from '@shared/ui/forms';
@@ -13,8 +14,8 @@ type ClassId =
 
 type DataClass = {
   id: ClassId;
-  label: string;
-  hint: string;
+  labelKey: string;
+  hintKey: string;
   retention: RetentionDays | 'inherit';
 };
 
@@ -27,14 +28,14 @@ type LegalHold = {
 };
 
 const INITIAL_CLASSES: DataClass[] = [
-  { id: 'audit_log',           label: 'Audit log',             hint: 'Privileged actions across the org',     retention: 730    },
-  { id: 'agent_runs',          label: 'Agent runs',            hint: 'Inputs, outputs, and step traces',      retention: 'inherit' },
-  { id: 'webhook_deliveries',  label: 'Webhook deliveries',    hint: 'Outgoing payloads and HTTP responses',  retention: 90     },
-  { id: 'investigation_chats', label: 'Investigation chats',   hint: 'Chat threads in the Intelligence stage', retention: 'inherit' },
-  { id: 'code_review_threads', label: 'Code review threads',   hint: 'Reviewer comments on diffs',             retention: 365    },
-  { id: 'inactive_sessions',   label: 'Inactive sessions',     hint: 'Browser sessions with no activity',      retention: 30     },
-  { id: 'deleted_user_pii',    label: 'Deleted-user PII',      hint: 'Email, name after account deletion',     retention: 60     },
-  { id: 'telemetry',           label: 'Telemetry events',      hint: 'Anonymized usage analytics',             retention: 'inherit' },
+  { id: 'audit_log',           labelKey: 'retention.class.auditLog',           hintKey: 'retention.class.auditLogHint',           retention: 730    },
+  { id: 'agent_runs',          labelKey: 'retention.class.agentRuns',          hintKey: 'retention.class.agentRunsHint',          retention: 'inherit' },
+  { id: 'webhook_deliveries',  labelKey: 'retention.class.webhookDeliveries',  hintKey: 'retention.class.webhookDeliveriesHint',  retention: 90     },
+  { id: 'investigation_chats', labelKey: 'retention.class.investigationChats', hintKey: 'retention.class.investigationChatsHint', retention: 'inherit' },
+  { id: 'code_review_threads', labelKey: 'retention.class.codeReviewThreads',  hintKey: 'retention.class.codeReviewThreadsHint',  retention: 365    },
+  { id: 'inactive_sessions',   labelKey: 'retention.class.inactiveSessions',   hintKey: 'retention.class.inactiveSessionsHint',   retention: 30     },
+  { id: 'deleted_user_pii',    labelKey: 'retention.class.deletedUserPii',     hintKey: 'retention.class.deletedUserPiiHint',     retention: 60     },
+  { id: 'telemetry',           labelKey: 'retention.class.telemetry',          hintKey: 'retention.class.telemetryHint',          retention: 'inherit' },
 ];
 
 const INITIAL_HOLDS: LegalHold[] = [
@@ -42,19 +43,20 @@ const INITIAL_HOLDS: LegalHold[] = [
   { id: 'h2', ref: 'LH-2025-11',    scope: 'Agent runs + audit log for diego.ramos@acme.com', creator: 'Legal Ops',   createdAt: '2025-11-03' },
 ];
 
-const RETENTION_OPTS: { value: RetentionDays; label: string }[] = [
-  { value: 30,  label: '30 days'  },
-  { value: 60,  label: '60 days'  },
-  { value: 90,  label: '90 days'  },
-  { value: 180, label: '180 days' },
-  { value: 365, label: '1 year'   },
-  { value: 730, label: '2 years'  },
-  { value: -1,  label: 'Forever'  },
+const RETENTION_OPTS: { value: RetentionDays; labelKey: string }[] = [
+  { value: 30,  labelKey: 'retention.opt.days30'  },
+  { value: 60,  labelKey: 'retention.opt.days60'  },
+  { value: 90,  labelKey: 'retention.opt.days90'  },
+  { value: 180, labelKey: 'retention.opt.days180' },
+  { value: 365, labelKey: 'retention.opt.year1'   },
+  { value: 730, labelKey: 'retention.opt.years2'  },
+  { value: -1,  labelKey: 'retention.opt.forever' },
 ];
 
 const INITIAL_DEFAULT = 365;
 
 export default function RetentionPolicyPage() {
+  const { t } = useTranslation('org');
   const [defaultDays, setDefaultDays] = useState<number>(INITIAL_DEFAULT);
   const [classes, setClasses] = useState<DataClass[]>(INITIAL_CLASSES);
   const [holds, setHolds] = useState<LegalHold[]>(INITIAL_HOLDS);
@@ -88,11 +90,11 @@ export default function RetentionPolicyPage() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="Retention policy"
-      subtitle="How long ACME keeps each class of data before automatic deletion."
+      title={t('retention.title')}
+      subtitle={t('retention.subtitle')}
     >
-      <Section title="Default retention" hint="Applied to any data class set to “inherit default”.">
-        <Row label="Global default" sub="Number of days to retain by default. Class-level overrides take priority.">
+      <Section title={t('retention.default.title')} hint={t('retention.default.hint')}>
+        <Row label={t('retention.default.global')} sub={t('retention.default.globalSub')}>
           <div
             className="flex items-center h-9 rounded-md"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
@@ -106,12 +108,12 @@ export default function RetentionPolicyPage() {
               className="w-20 h-full bg-transparent outline-none px-3 text-base tabular-nums text-right"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="px-3 text-sm" style={{ color: 'var(--fg-subtle)' }}>days</span>
+            <span className="px-3 text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('retention.default.days')}</span>
           </div>
         </Row>
       </Section>
 
-      <Section title="Per-class overrides" hint="Tighten retention for sensitive classes; loosen for compliance-required ones.">
+      <Section title={t('retention.perClass.title')} hint={t('retention.perClass.hint')}>
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
             className="grid items-center px-3 h-9 text-xs uppercase tracking-eyebrow font-semibold"
@@ -123,9 +125,9 @@ export default function RetentionPolicyPage() {
               borderBottom: '1px solid var(--border-muted)',
             }}
           >
-            <span>Data class</span>
-            <span>Retention</span>
-            <span className="text-right">Inherits?</span>
+            <span>{t('retention.perClass.dataClass')}</span>
+            <span>{t('retention.perClass.retention')}</span>
+            <span className="text-right">{t('retention.perClass.inherits')}</span>
           </div>
           {classes.map((c) => {
             const inh = c.retention === 'inherit';
@@ -140,8 +142,8 @@ export default function RetentionPolicyPage() {
                 }}
               >
                 <div className="flex flex-col gap-0.5 min-w-0">
-                  <span className="font-medium" style={{ color: 'var(--fg-strong)' }}>{c.label}</span>
-                  <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{c.hint}</span>
+                  <span className="font-medium" style={{ color: 'var(--fg-strong)' }}>{t(c.labelKey)}</span>
+                  <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>{t(c.hintKey)}</span>
                 </div>
                 <select
                   value={inh ? 'inherit' : String(c.retention)}
@@ -157,9 +159,9 @@ export default function RetentionPolicyPage() {
                     color: 'var(--fg-strong)',
                   }}
                 >
-                  <option value="inherit">Inherit ({defaultDays}d)</option>
+                  <option value="inherit">{t('retention.perClass.inheritOption', { days: defaultDays })}</option>
                   {RETENTION_OPTS.map((o) => (
-                    <option key={o.value} value={String(o.value)}>{o.label}</option>
+                    <option key={o.value} value={String(o.value)}>{t(o.labelKey)}</option>
                   ))}
                 </select>
                 <span
@@ -170,7 +172,7 @@ export default function RetentionPolicyPage() {
                     border: `1px solid ${inh ? 'var(--border-muted)' : 'var(--fg-accent)'}`,
                   }}
                 >
-                  {inh ? 'inherit' : 'override'}
+                  {inh ? t('retention.perClass.inherit') : t('retention.perClass.override')}
                 </span>
               </div>
             );
@@ -179,15 +181,15 @@ export default function RetentionPolicyPage() {
       </Section>
 
       <Section
-        title="Legal holds"
-        hint="Suspend deletion for specific scopes while litigation or investigations are open."
+        title={t('retention.legalHolds.title')}
+        hint={t('retention.legalHolds.hint')}
       >
         {holds.length === 0 ? (
           <div
             className="text-center py-8 text-base rounded-md"
             style={{ color: 'var(--fg-subtle)', border: '1px dashed var(--border-muted)' }}
           >
-            No active holds.
+            {t('retention.legalHolds.none')}
           </div>
         ) : (
           <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
@@ -211,37 +213,37 @@ export default function RetentionPolicyPage() {
                         border: '1px solid var(--intent-warn-fg)',
                       }}
                     >
-                      active
+                      {t('retention.legalHolds.active')}
                     </span>
                   </div>
                   <span className="text-sm" style={{ color: 'var(--fg-default)' }}>{h.scope}</span>
                   <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-                    Created by {h.creator} · {h.createdAt}
+                    {t('retention.legalHolds.createdBy', { creator: h.creator, date: h.createdAt })}
                   </span>
                 </div>
-                <Button variant="ghost" onClick={() => { setConfirmRelease(h); }}>Release hold</Button>
+                <Button variant="ghost" onClick={() => { setConfirmRelease(h); }}>{t('retention.legalHolds.release')}</Button>
               </div>
             ))}
           </div>
         )}
       </Section>
 
-      <Section title="Archive destination" hint="Optionally archive data to your own S3 bucket before the retention deadline triggers deletion.">
-        <Row label="Archive to S3 before deletion" sub="Writes a one-time JSONL dump per data class to your bucket.">
+      <Section title={t('retention.archive.title')} hint={t('retention.archive.hint')}>
+        <Row label={t('retention.archive.toggle')} sub={t('retention.archive.toggleSub')}>
           <Toggle checked={archive} onChange={setArchive} />
         </Row>
         <div className="grid gap-3 pt-1" style={{ gridTemplateColumns: '1fr 1fr', opacity: archive ? 1 : 0.5, pointerEvents: archive ? 'auto' : 'none' }}>
           <Field
-            label="Bucket name"
+            label={t('retention.archive.bucket')}
             value={bucket}
             onChange={(e) => { setBucket(e.target.value); }}
-            placeholder="s3://my-archive-bucket"
+            placeholder={t('retention.archive.bucketPlaceholder')}
           />
           <Field
-            label="AWS Role ARN"
+            label={t('retention.archive.roleArn')}
             value={roleArn}
             onChange={(e) => { setRoleArn(e.target.value); }}
-            placeholder="arn:aws:iam::123:role/archiver"
+            placeholder={t('retention.archive.roleArnPlaceholder')}
           />
         </div>
       </Section>
@@ -259,11 +261,11 @@ export default function RetentionPolicyPage() {
 
       <p className="text-sm mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Archive className="w-3 h-3 mt-0.5 shrink-0" />
-        Deletions are soft for 7 days, then cryptographically shredded. Archive writes happen the night before deletion.
+        {t('retention.notes.archive')}
       </p>
       <p className="text-sm mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <Clock className="w-3 h-3 mt-0.5 shrink-0" />
-        Retention changes apply to new data. Existing records inherit their original policy until next compaction.
+        {t('retention.notes.apply')}
       </p>
 
       {confirmRelease && (
@@ -283,16 +285,17 @@ export default function RetentionPolicyPage() {
 function ConfirmRelease({
   hold, onCancel, onConfirm,
 }: { hold: LegalHold; onCancel: () => void; onConfirm: () => void }) {
+  const { t } = useTranslation('org');
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onCancel);
   return (
     <>
-      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} label="Close dialog" />
+      <ModalBackdrop onClick={onCancel} z="z-40" alpha={0.45} label={t('common.closeDialog')} />
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label={`Release hold ${hold.ref}`}
+        aria-label={t('retention.releaseDialog.ariaLabel', { ref: hold.ref })}
         tabIndex={-1}
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[440px] rounded-lg overflow-hidden outline-none"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
@@ -301,22 +304,21 @@ function ConfirmRelease({
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
             <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Release hold {hold.ref}?
+              {t('retention.releaseDialog.title', { ref: hold.ref })}
             </span>
           </div>
-          <button type="button" onClick={onCancel} aria-label="Close" className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
+          <button type="button" onClick={onCancel} aria-label={t('common.close')} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
             <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
         <div className="p-5 flex flex-col gap-2">
           <p className="text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            Records covered by this hold will become eligible for retention-driven deletion at the next compaction window.
-            This action is logged and notifies legal-ops.
+            {t('retention.releaseDialog.body')}
           </p>
         </div>
         <div className="flex items-center justify-end gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger" size="md" onClick={onConfirm}>Release hold</Button>
+          <Button variant="ghost" onClick={onCancel}>{t('retention.releaseDialog.cancel')}</Button>
+          <Button variant="danger" size="md" onClick={onConfirm}>{t('retention.releaseDialog.confirm')}</Button>
         </div>
       </div>
     </>

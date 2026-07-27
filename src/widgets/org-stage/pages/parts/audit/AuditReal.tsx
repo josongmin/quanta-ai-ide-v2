@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { useParams } from '@tanstack/react-router';
 import { Search, ChevronDown, ChevronRight, Download } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
@@ -27,25 +29,27 @@ type AuditEntryDTO = {
 type AuditResponse = { entries?: AuditEntryDTO[]; nextCursor?: string | null };
 
 // Known actions (mirror of the accounts auditAction enum) for the filter.
-const ACTIONS: { value: string; label: string }[] = [
-  { value: '', label: 'All actions' },
-  { value: 'org.member.invited', label: 'Member invited' },
-  { value: 'org.member.removed', label: 'Member removed' },
-  { value: 'org.member.role_changed', label: 'Role changed' },
-  { value: 'org.invitation.canceled', label: 'Invitation canceled' },
-  { value: 'org.updated', label: 'Org updated' },
-  { value: 'org.deleted', label: 'Org deleted' },
-  { value: 'org.team.created', label: 'Team created' },
-  { value: 'org.team.deleted', label: 'Team deleted' },
-  { value: 'security.2fa_enabled', label: '2FA enabled' },
-  { value: 'security.2fa_disabled', label: '2FA disabled' },
-  { value: 'security.password_changed', label: 'Password changed' },
-  { value: 'security.session_revoked', label: 'Session revoked' },
-  { value: 'apikey.created', label: 'API key created' },
-  { value: 'apikey.revoked', label: 'API key revoked' },
-  { value: 'billing.subscription.updated', label: 'Subscription updated' },
-  { value: 'billing.payment_failed', label: 'Payment failed' },
-];
+function auditActions(t: TFunction<'org'>): { value: string; label: string }[] {
+  return [
+    { value: '', label: t('audit.actions.all') },
+    { value: 'org.member.invited', label: t('audit.actions.orgMemberInvited') },
+    { value: 'org.member.removed', label: t('audit.actions.orgMemberRemoved') },
+    { value: 'org.member.role_changed', label: t('audit.actions.orgMemberRoleChanged') },
+    { value: 'org.invitation.canceled', label: t('audit.actions.orgInvitationCanceled') },
+    { value: 'org.updated', label: t('audit.actions.orgUpdated') },
+    { value: 'org.deleted', label: t('audit.actions.orgDeleted') },
+    { value: 'org.team.created', label: t('audit.actions.orgTeamCreated') },
+    { value: 'org.team.deleted', label: t('audit.actions.orgTeamDeleted') },
+    { value: 'security.2fa_enabled', label: t('audit.actions.security2faEnabled') },
+    { value: 'security.2fa_disabled', label: t('audit.actions.security2faDisabled') },
+    { value: 'security.password_changed', label: t('audit.actions.securityPasswordChanged') },
+    { value: 'security.session_revoked', label: t('audit.actions.securitySessionRevoked') },
+    { value: 'apikey.created', label: t('audit.actions.apikeyCreated') },
+    { value: 'apikey.revoked', label: t('audit.actions.apikeyRevoked') },
+    { value: 'billing.subscription.updated', label: t('audit.actions.billingSubscriptionUpdated') },
+    { value: 'billing.payment_failed', label: t('audit.actions.billingPaymentFailed') },
+  ];
+}
 const PAGE = 50;
 
 function fmtWhen(iso: string): string {
@@ -65,6 +69,7 @@ function dayToIso(day: string, end: boolean): string | null {
 }
 
 export function AuditReal() {
+  const { t } = useTranslation('org');
   const { org = '' } = useParams({ strict: false });
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
@@ -105,10 +110,10 @@ export function AuditReal() {
       if (res.ok) {
         setEntries(Array.isArray(res.data.entries) ? res.data.entries : []);
         setCursor(res.data.nextCursor ?? null);
-      } else setLoadError(apiErrorMessage(res.error, 'the audit log'));
+      } else setLoadError(apiErrorMessage(res.error, t('audit.errorContext')));
     }).finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [orgId, query, nonce]);
+  }, [orgId, query, nonce, t]);
 
   async function loadMore() {
     if (!cursor || loadingMore) return;
@@ -123,7 +128,7 @@ export function AuditReal() {
     if (res.ok) {
       setEntries((prev) => [...prev, ...(Array.isArray(res.data.entries) ? res.data.entries : [])]);
       setCursor(res.data.nextCursor ?? null);
-    } else setLoadError(apiErrorMessage(res.error, 'the audit log'));
+    } else setLoadError(apiErrorMessage(res.error, t('audit.errorContext')));
   }
 
   const filtered = useMemo(() => {
@@ -134,7 +139,7 @@ export function AuditReal() {
   }, [entries, q]);
 
   function exportCsv() {
-    const header = ['When', 'Actor', 'Action', 'Target', 'IP'];
+    const header = [t('audit.table.when'), t('audit.table.actor'), t('audit.table.action'), t('audit.table.target'), t('audit.table.ip')];
     const lines = [header, ...filtered.map((e) => [e.at, e.actor, e.action, e.target ?? '', e.ip ?? ''])];
     const csv = lines.map((r) => r.map(csvCell).join(',')).join('\n');
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
@@ -154,11 +159,11 @@ export function AuditReal() {
     <OrgShell
       orgName={detail?.org.name ?? org}
       orgSlug={detail?.org.slug ?? org}
-      title="Audit log"
-      subtitle="Privileged actions across the org. Retained per your plan's retention policy."
+      title={t('audit.title')}
+      subtitle={t('audit.subtitleReal')}
       topRight={
         <Button leading={<Download className="w-3.5 h-3.5" />} onClick={exportCsv} disabled={filtered.length === 0}>
-          Export CSV
+          {t('audit.exportCsv')}
         </Button>
       }
     >
@@ -171,13 +176,13 @@ export function AuditReal() {
           <input
             value={q}
             onChange={(e) => { setQ(e.target.value); }}
-            placeholder="Search actor, action, target, IP…"
+            placeholder={t('audit.searchPlaceholderReal')}
             className="flex-1 bg-transparent outline-none text-base"
             style={{ color: 'var(--fg-strong)' }}
           />
         </div>
         <select value={action} onChange={(e) => { setAction(e.target.value); }} className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer" style={selectStyle}>
-          {ACTIONS.map((a) => <option key={a.value} value={a.value}>{a.label}</option>)}
+          {auditActions(t).map((a) => <option key={a.value} value={a.value}>{a.label}</option>)}
         </select>
         <input type="date" value={from} onChange={(e) => { setFrom(e.target.value); }} className="h-9 rounded-md px-2.5 text-base outline-none" style={{ ...selectStyle, color: 'var(--fg-default)' }} />
         <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>→</span>
@@ -203,16 +208,16 @@ export function AuditReal() {
             }}
           >
             <span />
-            <span>When</span>
-            <span>Actor</span>
-            <span>Action / target</span>
-            <span>IP</span>
+            <span>{t('audit.table.when')}</span>
+            <span>{t('audit.table.actor')}</span>
+            <span>{t('audit.table.actionTarget')}</span>
+            <span>{t('audit.table.ip')}</span>
           </div>
 
           {filtered.length === 0 ? (
             <EmptyState
-              title={q || action || from || to ? 'No matching events' : 'No audit events yet'}
-              subtitle={q || action || from || to ? 'Try a different filter.' : 'Privileged actions will appear here.'}
+              title={q || action || from || to ? t('audit.empty.matchingTitle') : t('audit.empty.noEventsTitle')}
+              subtitle={q || action || from || to ? t('audit.empty.matchingSub') : t('audit.empty.noEventsSub')}
             />
           ) : filtered.map((e) => {
             const open = expanded === e.id;
@@ -242,7 +247,7 @@ export function AuditReal() {
                       className="font-mono text-sm p-2.5 rounded-md overflow-x-auto whitespace-pre-wrap"
                       style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-muted)', color: 'var(--fg-strong)' }}
                     >
-                      {e.payload != null ? JSON.stringify(e.payload, null, 2) : '— no payload —'}
+                      {e.payload != null ? JSON.stringify(e.payload, null, 2) : t('audit.diff.noPayload')}
                     </pre>
                   </div>
                 )}
@@ -255,11 +260,11 @@ export function AuditReal() {
       {!orgError && !loadError && !loading && (
         <div className="flex items-center justify-between mt-3 px-1">
           <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-            {filtered.length} {filtered.length === 1 ? 'event' : 'events'}{cursor ? ' (more available)' : ''}.
+            {t('audit.eventsCount', { count: filtered.length })}{cursor ? t('audit.moreAvailable') : ''}.
           </span>
           {cursor && (
             <Button onClick={() => { void loadMore(); }} disabled={loadingMore}>
-              {loadingMore ? 'Loading…' : 'Load more'}
+              {loadingMore ? t('audit.loading') : t('audit.loadMore')}
             </Button>
           )}
         </div>

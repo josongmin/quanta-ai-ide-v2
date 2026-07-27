@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ScrollText, ShieldCheck, FileWarning, KeyRound, GitBranch,
   TestTube2, FileLock2, ChevronDown, ChevronRight,
@@ -28,6 +29,9 @@ type Rule = AdmissionRuleCore & {
   appliedToWorkspaces: number;
   totalWorkspaces: number;
   whenChanged: string;
+  // Org-specific copy overrides carry an i18n key instead of literal text.
+  titleKey?: string;
+  descriptionKey?: string;
 };
 
 // Icons + this page's tail, keyed by canonical rule id. Icons live here (not in
@@ -40,8 +44,8 @@ type OrgTail = {
   appliedToWorkspaces: number;
   totalWorkspaces: number;
   whenChanged: string;
-  titleOverride?: string;
-  descriptionOverride?: string;
+  titleKey?: string;
+  descriptionKey?: string;
 };
 
 // Ordered id list drives this page's rows (order differs from the canonical seed).
@@ -50,8 +54,8 @@ const ORG_RULE_TAILS: (OrgTail & { id: string })[] = [
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-12' },
   { id: 'r-2-approvers', icon: ShieldCheck, severity: 'block',
     appliedToWorkspaces: 11, totalWorkspaces: 12, whenChanged: '2026-04-19',
-    titleOverride: 'Require ≥2 approvers',
-    descriptionOverride: 'Production branches need at least two human approvals. Owners count once.' },
+    titleKey: 'policies.override.title2Approvers',
+    descriptionKey: 'policies.override.desc2Approvers' },
   { id: 'r-tests-pass', icon: TestTube2, severity: 'block',
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-08' },
   { id: 'r-coverage', icon: TestTube2, severity: 'warn',
@@ -62,30 +66,20 @@ const ORG_RULE_TAILS: (OrgTail & { id: string })[] = [
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-21' },
   { id: 'r-stale-deps', icon: FileWarning, severity: 'warn',
     appliedToWorkspaces: 5, totalWorkspaces: 12, whenChanged: '2026-04-25',
-    titleOverride: 'Warn on dependencies >365 days behind' },
+    titleKey: 'policies.override.titleStaleDeps' },
   { id: 'r-protected-paths', icon: GitBranch, severity: 'block',
     appliedToWorkspaces: 12, totalWorkspaces: 12, whenChanged: '2026-04-15' },
 ];
 
-const SEED_RULES: Rule[] = ORG_RULE_TAILS.map(({ id, titleOverride, descriptionOverride, ...tail }) => {
+const SEED_RULES: Rule[] = ORG_RULE_TAILS.map(({ id, ...tail }) => {
   const core = SEED_ADMISSION_RULE_BY_ID[id];
-  return {
-    ...core,
-    ...tail,
-    title: titleOverride ?? core.title,
-    description: descriptionOverride ?? core.description,
-  };
+  return { ...core, ...tail };
 });
 
-const CATEGORIES: { id: Rule['category']; label: string }[] = [
-  { id: 'secrets', label: 'Secrets' },
-  { id: 'review',  label: 'Review' },
-  { id: 'tests',   label: 'Tests & coverage' },
-  { id: 'deps',    label: 'Dependencies' },
-  { id: 'config',  label: 'Configuration' },
-];
+const CATEGORY_IDS: Rule['category'][] = ['secrets', 'review', 'tests', 'deps', 'config'];
 
 export default function PoliciesPage() {
+  const { t } = useTranslation('org');
   const [rules, setRules] = useState<Rule[]>(SEED_RULES);
   const [propagateOverrides, setPropagateOverrides] = useState(true);
   const [enforceOnCreate, setEnforceOnCreate] = useState(true);
@@ -120,35 +114,35 @@ export default function PoliciesPage() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="Policies"
-      subtitle="Org-default admission rules. Workspaces inherit these; per-workspace settings can override unless locked."
+      title={t('policies.title')}
+      subtitle={t('policies.subtitle')}
     >
       {/* Summary band */}
       <div
         className="grid grid-cols-3 gap-3 p-4 rounded-md mb-6"
         style={{ border: '1px solid var(--border-muted)' }}
       >
-        <Stat label="Active rules"    value={`${totalActive} / ${rules.length}`} />
-        <Stat label="Hard blocks"     value={String(totalBlocking)}              tone="warn" />
-        <Stat label="Workspaces"      value={`${rules[0].totalWorkspaces}`}      sub="inheriting org defaults" />
+        <Stat label={t('policies.stat.activeRules')} value={`${totalActive} / ${rules.length}`} />
+        <Stat label={t('policies.stat.hardBlocks')}  value={String(totalBlocking)}              tone="warn" />
+        <Stat label={t('policies.stat.workspaces')}  value={`${rules[0].totalWorkspaces}`}      sub={t('policies.stat.inheriting')} />
       </div>
 
       {/* Inheritance switches */}
-      <Section title="Inheritance" hint="How org defaults reach existing and new workspaces.">
+      <Section title={t('policies.inheritance.title')} hint={t('policies.inheritance.hint')}>
         <div className="flex items-center justify-between py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
           <div className="flex flex-col gap-1 max-w-[460px]">
-            <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>Apply to new workspaces</span>
+            <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>{t('policies.inheritance.applyNew')}</span>
             <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-              Whenever a workspace is created, copy the active org rules and enforce them by default.
+              {t('policies.inheritance.applyNewSub')}
             </span>
           </div>
           <Toggle checked={enforceOnCreate} onChange={setEnforceOnCreate} />
         </div>
         <div className="flex items-center justify-between py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
           <div className="flex flex-col gap-1 max-w-[460px]">
-            <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>Push changes to existing workspaces</span>
+            <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>{t('policies.inheritance.pushExisting')}</span>
             <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-              When a rule changes here, propagate the new severity to every workspace that hasn&apos;t customized it locally.
+              {t('policies.inheritance.pushExistingSub')}
             </span>
           </div>
           <Toggle checked={propagateOverrides} onChange={setPropagateOverrides} />
@@ -156,28 +150,28 @@ export default function PoliciesPage() {
       </Section>
 
       {/* Rule list grouped by category */}
-      <Section title="Rules" hint="Each rule has a single severity. Block fails the gate; warn surfaces a soft signal.">
+      <Section title={t('policies.rules.title')} hint={t('policies.rules.hint')}>
         <div className="flex flex-col gap-3">
-          {CATEGORIES.map((c) => {
-            const inCat = rules.filter((r) => r.category === c.id);
+          {CATEGORY_IDS.map((cid) => {
+            const inCat = rules.filter((r) => r.category === cid);
             if (inCat.length === 0) return null;
-            const open = !collapsed.has(c.id);
+            const open = !collapsed.has(cid);
             return (
               <div
-                key={c.id}
+                key={cid}
                 className="overflow-hidden"
               >
                 <button
                   type="button"
-                  onClick={() => { toggleCollapse(c.id); }}
+                  onClick={() => { toggleCollapse(cid); }}
                   className="w-full flex items-center gap-2 px-3 h-8 text-left"
                 >
                   {open ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} /> : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />}
                   <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
-                    {c.label}
+                    {t(`policies.category.${cid}`)}
                   </span>
                   <span className="ml-auto text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
-                    {inCat.filter((r) => r.severity !== 'off').length} of {inCat.length} active
+                    {t('policies.rules.activeOf', { active: inCat.filter((r) => r.severity !== 'off').length, total: inCat.length })}
                   </span>
                 </button>
                 {open && inCat.map((r) => (
@@ -195,7 +189,7 @@ export default function PoliciesPage() {
 
       <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ScrollText className="w-3 h-3 mt-0.5 shrink-0" />
-        Saved changes appear in the workspace admission view within seconds. Active fix-pipeline runs are not retroactively re-checked.
+        {t('policies.footer')}
       </p>
 
       <SaveBar
@@ -212,6 +206,7 @@ export default function PoliciesPage() {
 function RuleRow({
   rule, onSetSeverity,
 }: { rule: Rule; onSetSeverity: (s: Severity) => void }) {
+  const { t } = useTranslation('org');
   const Icon = rule.icon;
   const partial = rule.appliedToWorkspaces < rule.totalWorkspaces;
   return (
@@ -221,15 +216,15 @@ function RuleRow({
     >
       <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
       <div className="flex flex-col gap-1 min-w-0 flex-1">
-        <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>{rule.title}</span>
-        <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>{rule.description}</span>
+        <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>{rule.titleKey ? t(rule.titleKey) : rule.title}</span>
+        <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>{rule.descriptionKey ? t(rule.descriptionKey) : rule.description}</span>
         <div className="flex items-center gap-3 text-xs tabular-nums mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
           <span style={{ color: partial ? 'var(--intent-warn-fg)' : 'var(--fg-subtle)' }}>
-            {rule.appliedToWorkspaces} / {rule.totalWorkspaces} workspaces
-            {partial && ' · some have local overrides'}
+            {t('policies.row.workspaces', { applied: rule.appliedToWorkspaces, total: rule.totalWorkspaces })}
+            {partial && t('policies.row.localOverrides')}
           </span>
           <span>·</span>
-          <span>last changed {rule.whenChanged}</span>
+          <span>{t('policies.row.lastChanged', { date: rule.whenChanged })}</span>
         </div>
       </div>
       <SeverityPicker value={rule.severity} onChange={onSetSeverity} />
@@ -240,10 +235,11 @@ function RuleRow({
 function SeverityPicker({
   value, onChange,
 }: { value: Severity; onChange: (v: Severity) => void }) {
+  const { t } = useTranslation('org');
   const opts: { id: Severity; label: string; bg: string; fg: string; border: string }[] = [
-    { id: 'block', label: 'Block', bg: 'var(--intent-danger-bg)',  fg: 'var(--intent-danger-fg)',  border: 'var(--intent-danger-fg)'  },
-    { id: 'warn',  label: 'Warn',  bg: 'var(--intent-warn-bg)',    fg: 'var(--intent-warn-fg)',    border: 'var(--intent-warn-fg)'    },
-    { id: 'off',   label: 'Off',   bg: 'var(--bg-surface-muted)',  fg: 'var(--fg-muted)',          border: 'var(--border-muted)'      },
+    { id: 'block', label: t('policies.severity.block'), bg: 'var(--intent-danger-bg)',  fg: 'var(--intent-danger-fg)',  border: 'var(--intent-danger-fg)'  },
+    { id: 'warn',  label: t('policies.severity.warn'),  bg: 'var(--intent-warn-bg)',    fg: 'var(--intent-warn-fg)',    border: 'var(--intent-warn-fg)'    },
+    { id: 'off',   label: t('policies.severity.off'),   bg: 'var(--bg-surface-muted)',  fg: 'var(--fg-muted)',          border: 'var(--border-muted)'      },
   ];
   return (
     <div className="inline-flex shrink-0 rounded-md overflow-hidden" style={{ border: '1px solid var(--border-default)' }}>

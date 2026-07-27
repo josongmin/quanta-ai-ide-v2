@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Trash2, Globe } from 'lucide-react';
 import { useHoverStyle } from '@shared/lib';
 import type { OAuthApp } from './types';
@@ -9,6 +10,7 @@ import type { OAuthApp } from './types';
 // first-row border are now expressible via DataTable's rowHeight/firstRowBorder
 // props, but the header-bg mismatch alone blocks migration.)
 export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OAuthApp) => void }) {
+  const { t } = useTranslation('org');
   return (
     <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
       <div
@@ -20,10 +22,10 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
           borderBottom: '1px solid var(--border-muted)',
         }}
       >
-        <span>App</span>
-        <span>Redirect</span>
-        <span>Status</span>
-        <span>Installs</span>
+        <span>{t('api.app.app')}</span>
+        <span>{t('api.app.redirect')}</span>
+        <span>{t('api.app.status')}</span>
+        <span>{t('api.app.installs')}</span>
         <span />
       </div>
       {apps.map((a) => (
@@ -41,7 +43,7 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
             <div className="flex flex-col min-w-0 gap-0.5">
               <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>{a.name}</span>
               <span className="font-mono text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>
-                {a.clientId} · {a.scopes.length} scope{a.scopes.length === 1 ? '' : 's'} · since {a.createdAt}
+                {a.clientId} · {t('api.app.scopeCount', { count: a.scopes.length })} · {t('api.app.since', { date: a.createdAt })}
               </span>
             </div>
           </div>
@@ -59,7 +61,7 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
               border: `1px solid ${a.status === 'published' ? 'var(--intent-success-fg)' : 'var(--border-muted)'}`,
             }}
           >
-            {a.status}
+            {t(`api.app.appStatus.${a.status}`)}
           </span>
           <span className="font-mono tabular-nums text-base" style={{ color: 'var(--fg-default)' }}>
             {a.installs}
@@ -69,7 +71,7 @@ export function AppList({ apps, onDelete }: { apps: OAuthApp[]; onDelete: (a: OA
             onClick={() => { onDelete(a); }}
             className="w-7 h-7 rounded-md inline-flex items-center justify-center"
             style={{ color: 'var(--fg-subtle)' }}
-            aria-label="Delete app"
+            aria-label={t('api.app.delete')}
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>

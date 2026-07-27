@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Trash2 } from 'lucide-react';
 import type { Pat } from './types';
 
@@ -7,10 +8,11 @@ import type { Pat } from './types';
 // first-row border are now expressible via DataTable's rowHeight/firstRowBorder
 // props, but the header-bg mismatch alone blocks migration.)
 export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) => void }) {
+  const { t } = useTranslation('org');
   if (pats.length === 0) {
     return (
       <div className="text-center py-12 text-base" style={{ color: 'var(--fg-subtle)' }}>
-        No tokens yet. Create one to authenticate machine clients to the org API.
+        {t('api.pat.empty')}
       </div>
     );
   }
@@ -25,10 +27,10 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
           borderBottom: '1px solid var(--border-muted)',
         }}
       >
-        <span>Token</span>
-        <span>Scopes</span>
-        <span>Expires</span>
-        <span>Last used</span>
+        <span>{t('api.pat.token')}</span>
+        <span>{t('api.pat.scopes')}</span>
+        <span>{t('api.pat.expires')}</span>
+        <span>{t('api.pat.lastUsed')}</span>
         <span />
       </div>
       {pats.map((p) => {
@@ -53,12 +55,12 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
                 {expired && (
                   <span className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                     style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)', border: '1px solid var(--intent-danger-fg)' }}>
-                    expired
+                    {t('api.pat.expired')}
                   </span>
                 )}
               </div>
               <span className="font-mono text-xs truncate" style={{ color: 'var(--fg-subtle)' }}>
-                {p.prefix}…  · created by {p.createdBy} · {p.createdAt}
+                {t('api.pat.createdBy', { prefix: p.prefix, by: p.createdBy, date: p.createdAt })}
               </span>
             </div>
             <div className="flex flex-wrap gap-1 min-w-0">
@@ -78,7 +80,7 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
               )}
             </div>
             <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-              {p.expiresAt ?? 'Never'}
+              {p.expiresAt ?? t('api.pat.never')}
             </span>
             <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>
               {p.lastUsed}
@@ -88,7 +90,7 @@ export function PatList({ pats, onDelete }: { pats: Pat[]; onDelete: (p: Pat) =>
               onClick={() => { onDelete(p); }}
               className="w-7 h-7 rounded-md inline-flex items-center justify-center"
               style={{ color: 'var(--fg-subtle)' }}
-              aria-label="Revoke token"
+              aria-label={t('api.pat.revoke')}
             >
               <Trash2 className="w-3.5 h-3.5" />
             </button>

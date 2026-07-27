@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { Mail, Plus, RotateCcw, X } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
@@ -10,13 +11,14 @@ import {
   useOrg, cancelInvitation, resendInvitation,
   type OrgInvitation,
 } from '@entities/org';
-import { ROLE_LABEL, expiresLabel } from '../../../parts/format';
+import { roleLabel, expiresLabel } from '../../../parts/format';
 import { RealInviteModal } from '../members/RealInviteModal';
 
 // Real pending-invitation list over the org plugin. The mock's sent-by / team /
 // accepted-history columns are dropped: better-auth's invitation record exposes
 // email, role, status, and expiry, and only pending invites are actionable.
 export function InvitationsReal() {
+  const { t } = useTranslation('org');
   const { org = '' } = useParams({ strict: false });
   const { detail, isPending, error, refetch } = useOrg(org);
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -48,8 +50,8 @@ export function InvitationsReal() {
     <OrgShell
       orgName={detail?.org.name ?? org}
       orgSlug={detail?.org.slug ?? org}
-      title="Invitations"
-      subtitle="Outstanding invites for this organization. Resend or revoke a pending invite."
+      title={t('invitations.title')}
+      subtitle={t('invitations.subtitleReal')}
       topRight={
         <Button
           variant="primary"
@@ -58,7 +60,7 @@ export function InvitationsReal() {
           onClick={() => { setInviteOpen(true); }}
           disabled={!orgId}
         >
-          Invite people
+          {t('invitations.invitePeople')}
         </Button>
       }
     >
@@ -77,13 +79,13 @@ export function InvitationsReal() {
       ) : (
         <DataTable<OrgInvitation>
           columns="1fr 120px 120px 44px"
-          headers={[{ header: 'Email' }, { header: 'Role' }, { header: 'Expires' }, { header: '' }]}
+          headers={[{ header: t('invitations.table.email') }, { header: t('invitations.table.role') }, { header: t('invitations.table.expires') }, { header: '' }]}
           rows={invitations}
           rowKey={(inv) => inv.id}
           empty={
             <EmptyState
-              title="No pending invitations"
-              subtitle="Invite people by email to see them here."
+              title={t('invitations.empty.title')}
+              subtitle={t('invitations.empty.subtitle')}
             />
           }
           renderRow={(inv) => {
@@ -94,14 +96,14 @@ export function InvitationsReal() {
                   <Mail className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
                   <span className="text-base truncate" style={{ color: 'var(--fg-strong)' }}>{inv.email}</span>
                 </div>
-                <Badge variant="neutral" size="sm">{ROLE_LABEL[inv.role]}</Badge>
+                <Badge variant="neutral" size="sm">{roleLabel(t, inv.role)}</Badge>
                 <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>
-                  {expiresLabel(inv.expiresAt)}
+                  {expiresLabel(t, inv.expiresAt)}
                 </span>
                 <RowMenu
                   items={[
-                    { label: 'Resend invite', icon: RotateCcw, disabled: rowBusy, onClick: () => { void resend(inv); } },
-                    { label: 'Revoke invite', icon: X, danger: true, disabled: rowBusy, onClick: () => { void revoke(inv); } },
+                    { label: t('invitations.action.resendInvite'), icon: RotateCcw, disabled: rowBusy, onClick: () => { void resend(inv); } },
+                    { label: t('invitations.action.revokeInvite'), icon: X, danger: true, disabled: rowBusy, onClick: () => { void revoke(inv); } },
                   ]}
                 />
               </>
@@ -112,7 +114,7 @@ export function InvitationsReal() {
 
       {!error && !isPending && (
         <p className="text-sm mt-3 px-1" style={{ color: 'var(--fg-subtle)' }}>
-          {invitations.length} pending {invitations.length === 1 ? 'invite' : 'invites'}.
+          {t('invitations.pendingCount', { count: invitations.length })}
         </p>
       )}
 

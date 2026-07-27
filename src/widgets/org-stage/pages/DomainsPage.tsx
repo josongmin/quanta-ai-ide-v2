@@ -1,5 +1,6 @@
 import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AtSign, Plus, Copy, Check, ShieldCheck, AlertTriangle, RefreshCw } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { useCopyToClipboard } from '@shared/lib';
@@ -20,14 +21,15 @@ const DOMAINS: Domain[] = [
 ];
 
 export default function DomainsPage() {
+  const { t } = useTranslation('org');
   // Route is always /org/$org/* so `org` is present; default keeps the type `string`.
   const { org = '' } = useParams({ strict: false });
   return (
     <OrgShell
       orgName={org}
       orgSlug={org}
-      title="Domains"
-      subtitle="Claim email domains for auto-join, SSO enforcement, and identity-verified invites."
+      title={t('domains.title')}
+      subtitle={t('domains.subtitle')}
       topRight={
         <button
           type="button"
@@ -35,7 +37,7 @@ export default function DomainsPage() {
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <Plus className="w-3.5 h-3.5" />
-          Add domain
+          {t('domains.add')}
         </button>
       }
     >
@@ -52,6 +54,7 @@ export default function DomainsPage() {
 }
 
 function DomainCard({ domain }: { domain: Domain }) {
+  const { t } = useTranslation('org');
   return (
     <div
       className="rounded-xl p-5"
@@ -80,12 +83,12 @@ function DomainCard({ domain }: { domain: Domain }) {
                   className="text-2xs uppercase tracking-eyebrow font-bold px-1.5 h-4.5 inline-flex items-center rounded"
                   style={{ color: 'var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
                 >
-                  Primary
+                  {t('domains.primary')}
                 </span>
               )}
             </div>
             <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-              {domain.members} {domain.members === 1 ? 'member' : 'members'}
+              {t('common.member', { count: domain.members })}
             </span>
           </div>
         </div>
@@ -96,7 +99,7 @@ function DomainCard({ domain }: { domain: Domain }) {
               style={{ color: 'var(--intent-success-fg)', background: 'var(--intent-success-bg)' }}
             >
               <ShieldCheck className="w-3 h-3" />
-              Verified
+              {t('domains.verified')}
             </span>
           ) : (
             <span
@@ -104,7 +107,7 @@ function DomainCard({ domain }: { domain: Domain }) {
               style={{ color: 'var(--intent-warn-fg)', background: 'var(--intent-warn-bg)' }}
             >
               <AlertTriangle className="w-3 h-3" />
-              Unverified
+              {t('domains.unverified')}
             </span>
           )}
         </div>
@@ -112,14 +115,14 @@ function DomainCard({ domain }: { domain: Domain }) {
 
       <div className="grid grid-cols-2 gap-3">
         <Toggle
-          label="SSO required"
-          sub="Force SAML/OIDC for accounts on this domain"
+          label={t('domains.ssoRequired')}
+          sub={t('domains.ssoRequiredSub')}
           on={domain.ssoRequired}
           disabled={!domain.verified}
         />
         <Toggle
-          label="Auto-join"
-          sub="New verified users on this domain join automatically"
+          label={t('domains.autoJoin')}
+          sub={t('domains.autoJoinSub')}
           on={domain.autoJoin}
           disabled={!domain.verified}
         />
@@ -169,6 +172,7 @@ function Toggle({ label, sub, on, disabled }: { label: string; sub: string; on: 
 }
 
 function UnverifiedHelper() {
+  const { t } = useTranslation('org');
   const { copied, copy } = useCopyToClipboard(1200);
   const txt = 'acme-domain-verify=ab12cd34ef56gh78';
   return (
@@ -182,20 +186,20 @@ function UnverifiedHelper() {
       <div className="flex items-center gap-2 mb-2">
         <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-warn-fg)' }} />
         <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--intent-warn-fg)' }}>
-          Verify staging.acme.com
+          {t('domains.verify.title', { domain: 'staging.acme.com' })}
         </h2>
       </div>
       <p className="text-base leading-snug mb-3" style={{ color: 'var(--fg-default)' }}>
-        Add the TXT record below to your DNS, then click verify. Propagation usually takes under 5 minutes.
+        {t('domains.verify.body')}
       </p>
       <div className="grid grid-cols-[80px_1fr_auto] gap-2 mb-3 items-center">
-        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>Type</span>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{t('domains.verify.type')}</span>
         <code className="font-mono text-base px-3 py-2 rounded" style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}>TXT</code>
         <span />
-        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>Host</span>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{t('domains.verify.host')}</span>
         <code className="font-mono text-base px-3 py-2 rounded" style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}>@</code>
         <span />
-        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>Value</span>
+        <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{t('domains.verify.value')}</span>
         <code className="font-mono text-base px-3 py-2 rounded truncate" style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}>{txt}</code>
         <button
           type="button"
@@ -212,7 +216,7 @@ function UnverifiedHelper() {
         style={{ background: 'var(--intent-warn-fg)', color: '#fff' }}
       >
         <RefreshCw className="w-3.5 h-3.5" />
-        Check DNS now
+        {t('domains.verify.check')}
       </button>
     </div>
   );

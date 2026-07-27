@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Shield, Plus, Lock, Copy, Trash2, AlertTriangle, Check, Users } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Button, Toggle } from '@shared/ui/forms';
@@ -13,42 +15,42 @@ type PermissionId =
   | 'audit.read' | 'audit.export'
   | 'secrets.read' | 'secrets.write';
 
-type PermissionGroup = { id: string; title: string; perms: { id: PermissionId; label: string; hint?: string }[] };
+type PermissionGroup = { id: string; titleKey: string; perms: { id: PermissionId; labelKey: string; hintKey?: string }[] };
 
 const PERM_GROUPS: PermissionGroup[] = [
-  { id: 'org', title: 'Organization', perms: [
-    { id: 'org.read',   label: 'View org settings' },
-    { id: 'org.manage', label: 'Manage org settings', hint: 'name, logo, defaults' },
+  { id: 'org', titleKey: 'roles.group.org', perms: [
+    { id: 'org.read',   labelKey: 'roles.perm.orgRead' },
+    { id: 'org.manage', labelKey: 'roles.perm.orgManage', hintKey: 'roles.perm.orgManageHint' },
   ]},
-  { id: 'members', title: 'Members', perms: [
-    { id: 'members.invite', label: 'Invite members' },
-    { id: 'members.remove', label: 'Remove members' },
-    { id: 'members.role',   label: 'Change member roles' },
+  { id: 'members', titleKey: 'roles.group.members', perms: [
+    { id: 'members.invite', labelKey: 'roles.perm.membersInvite' },
+    { id: 'members.remove', labelKey: 'roles.perm.membersRemove' },
+    { id: 'members.role',   labelKey: 'roles.perm.membersRole' },
   ]},
-  { id: 'workspaces', title: 'Workspaces', perms: [
-    { id: 'workspaces.create',   label: 'Create workspaces' },
-    { id: 'workspaces.delete',   label: 'Delete workspaces' },
-    { id: 'workspaces.settings', label: 'Edit workspace settings' },
+  { id: 'workspaces', titleKey: 'roles.group.workspaces', perms: [
+    { id: 'workspaces.create',   labelKey: 'roles.perm.workspacesCreate' },
+    { id: 'workspaces.delete',   labelKey: 'roles.perm.workspacesDelete' },
+    { id: 'workspaces.settings', labelKey: 'roles.perm.workspacesSettings' },
   ]},
-  { id: 'admission', title: 'Admission', perms: [
-    { id: 'admission.read',   label: 'Read admission rules' },
-    { id: 'admission.write',  label: 'Author admission rules' },
-    { id: 'admission.bypass', label: 'Bypass admission gates', hint: 'high risk' },
+  { id: 'admission', titleKey: 'roles.group.admission', perms: [
+    { id: 'admission.read',   labelKey: 'roles.perm.admissionRead' },
+    { id: 'admission.write',  labelKey: 'roles.perm.admissionWrite' },
+    { id: 'admission.bypass', labelKey: 'roles.perm.admissionBypass', hintKey: 'roles.perm.admissionBypassHint' },
   ]},
-  { id: 'agents', title: 'Agents', perms: [
-    { id: 'agents.run',       label: 'Trigger agent runs' },
-    { id: 'agents.configure', label: 'Configure agents' },
-    { id: 'agents.kill',      label: 'Kill running agents' },
+  { id: 'agents', titleKey: 'roles.group.agents', perms: [
+    { id: 'agents.run',       labelKey: 'roles.perm.agentsRun' },
+    { id: 'agents.configure', labelKey: 'roles.perm.agentsConfigure' },
+    { id: 'agents.kill',      labelKey: 'roles.perm.agentsKill' },
   ]},
-  { id: 'billing', title: 'Billing', perms: [
-    { id: 'billing.read',   label: 'View billing & usage' },
-    { id: 'billing.manage', label: 'Change plan & payment' },
+  { id: 'billing', titleKey: 'roles.group.billing', perms: [
+    { id: 'billing.read',   labelKey: 'roles.perm.billingRead' },
+    { id: 'billing.manage', labelKey: 'roles.perm.billingManage' },
   ]},
-  { id: 'observability', title: 'Audit & secrets', perms: [
-    { id: 'audit.read',    label: 'Read audit log' },
-    { id: 'audit.export',  label: 'Export audit log' },
-    { id: 'secrets.read',  label: 'Read secret names' },
-    { id: 'secrets.write', label: 'Manage secrets' },
+  { id: 'observability', titleKey: 'roles.group.observability', perms: [
+    { id: 'audit.read',    labelKey: 'roles.perm.auditRead' },
+    { id: 'audit.export',  labelKey: 'roles.perm.auditExport' },
+    { id: 'secrets.read',  labelKey: 'roles.perm.secretsRead' },
+    { id: 'secrets.write', labelKey: 'roles.perm.secretsWrite' },
   ]},
 ];
 
@@ -56,6 +58,9 @@ type Role = {
   id: string;
   name: string;
   description: string;
+  // Built-in roles carry i18n keys; custom roles use the literal name/description.
+  nameKey?: string;
+  descKey?: string;
   builtIn: boolean;
   memberCount: number;
   permissions: Set<PermissionId>;
@@ -66,10 +71,12 @@ const ALL_PERMS = new Set<PermissionId>(PERM_GROUPS.flatMap((g) => g.perms.map((
 const SEED_ROLES: Role[] = [
   {
     id: 'r-owner', name: 'Owner', description: 'Full access. Can transfer ownership and delete the org.',
+    nameKey: 'common.role.owner', descKey: 'roles.seed.owner',
     builtIn: true, memberCount: 1, permissions: new Set(ALL_PERMS),
   },
   {
     id: 'r-admin', name: 'Admin', description: 'Manage members, workspaces, and policies. No billing.',
+    nameKey: 'common.role.admin', descKey: 'roles.seed.admin',
     builtIn: true, memberCount: 2,
     permissions: new Set<PermissionId>([
       'org.read', 'org.manage', 'members.invite', 'members.remove', 'members.role',
@@ -81,21 +88,25 @@ const SEED_ROLES: Role[] = [
   },
   {
     id: 'r-member', name: 'Member', description: 'Default role. Use the product, ship code, run agents.',
+    nameKey: 'common.role.member', descKey: 'roles.seed.member',
     builtIn: true, memberCount: 6,
     permissions: new Set<PermissionId>(['org.read', 'workspaces.settings', 'admission.read', 'agents.run', 'audit.read']),
   },
   {
     id: 'r-billing', name: 'Billing', description: 'Read-only access except for billing surfaces.',
+    nameKey: 'common.role.billing', descKey: 'roles.seed.billing',
     builtIn: true, memberCount: 1,
     permissions: new Set<PermissionId>(['org.read', 'billing.read', 'billing.manage', 'audit.read']),
   },
   {
     id: 'r-guest', name: 'Guest', description: 'Limited read on shared workspaces.',
+    nameKey: 'common.role.guest', descKey: 'roles.seed.guest',
     builtIn: true, memberCount: 1,
     permissions: new Set<PermissionId>(['org.read']),
   },
   {
     id: 'r-secops', name: 'SecOps', description: 'Custom — security review and audit access.',
+    descKey: 'roles.seed.secops',
     builtIn: false, memberCount: 0,
     permissions: new Set<PermissionId>([
       'org.read', 'admission.read', 'admission.write', 'audit.read', 'audit.export', 'secrets.read',
@@ -103,7 +114,17 @@ const SEED_ROLES: Role[] = [
   },
 ];
 
+// Resolve a role's display name / description: built-ins use their i18n key,
+// custom roles use whatever the user typed.
+function roleName(t: TFunction<'org'>, r: Role): string {
+  return r.nameKey ? t(r.nameKey) : r.name;
+}
+function roleDesc(t: TFunction<'org'>, r: Role): string {
+  return r.descKey ? t(r.descKey) : r.description;
+}
+
 export default function RolesPage() {
+  const { t } = useTranslation('org');
   const [roles, setRoles] = useState<Role[]>(SEED_ROLES);
   const [selectedId, setSelectedId] = useState<string>('r-secops');
 
@@ -123,7 +144,11 @@ export default function RolesPage() {
 
   const duplicate = (r: Role) => {
     const id = `r-${Date.now()}`;
-    setRoles((all) => [...all, { ...r, id, name: `${r.name} copy`, builtIn: false, memberCount: 0, permissions: new Set(r.permissions) }]);
+    setRoles((all) => [...all, {
+      ...r, id, name: t('roles.copySuffix', { name: roleName(t, r) }),
+      description: roleDesc(t, r), nameKey: undefined, descKey: undefined,
+      builtIn: false, memberCount: 0, permissions: new Set(r.permissions),
+    }]);
     setSelectedId(id);
   };
   const remove = (id: string) => {
@@ -133,7 +158,7 @@ export default function RolesPage() {
   const addNew = () => {
     const id = `r-${Date.now()}`;
     setRoles((all) => [...all, {
-      id, name: 'New role', description: '', builtIn: false, memberCount: 0, permissions: new Set<PermissionId>(['org.read']),
+      id, name: t('roles.newRoleName'), description: '', builtIn: false, memberCount: 0, permissions: new Set<PermissionId>(['org.read']),
     }]);
     setSelectedId(id);
   };
@@ -150,11 +175,11 @@ export default function RolesPage() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="Roles"
-      subtitle="Built-in roles are locked. Duplicate one to define a custom role tuned to your team."
+      title={t('roles.title')}
+      subtitle={t('roles.subtitle')}
       topRight={
         <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={addNew}>
-          New role
+          {t('roles.newRole')}
         </Button>
       }
     >
@@ -191,12 +216,12 @@ export default function RolesPage() {
                 <div className="flex flex-col min-w-0 flex-1 gap-0.5">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>
-                      {r.name}
+                      {roleName(t, r)}
                     </span>
                     {r.builtIn && <Lock className="w-2.5 h-2.5" style={{ color: 'var(--fg-subtle)' }} />}
                   </div>
                   <span className="text-xs tabular-nums" style={{ color: 'var(--fg-muted)' }}>
-                    {r.permissions.size} perms · {r.memberCount} {r.memberCount === 1 ? 'person' : 'people'}
+                    {t('roles.permsSummary', { perms: r.permissions.size, count: r.memberCount, unit: t(r.memberCount === 1 ? 'common.person_one' : 'common.person_other') })}
                   </span>
                 </div>
               </button>
@@ -211,7 +236,7 @@ export default function RolesPage() {
             <div className="flex flex-col gap-2 flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <input
-                  value={selected.name}
+                  value={roleName(t, selected)}
                   onChange={(e) => { rename(e.target.value); }}
                   readOnly={selected.builtIn}
                   className="text-xl font-semibold tracking-tight bg-transparent outline-none flex-1 min-w-0"
@@ -222,34 +247,34 @@ export default function RolesPage() {
                     className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                     style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)', border: '1px solid var(--border-muted)' }}
                   >
-                    Built-in
+                    {t('roles.builtIn')}
                   </span>
                 )}
               </div>
               <input
-                value={selected.description}
+                value={roleDesc(t, selected)}
                 onChange={(e) => { redescribe(e.target.value); }}
                 readOnly={selected.builtIn}
-                placeholder="Describe what this role is for…"
+                placeholder={t('roles.describePlaceholder')}
                 className="text-base bg-transparent outline-none"
                 style={{ color: 'var(--fg-muted)', cursor: selected.builtIn ? 'default' : 'text' }}
               />
               <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 <span className="inline-flex items-center gap-1">
-                  <Users className="w-3 h-3" /> {selected.memberCount} assigned
+                  <Users className="w-3 h-3" /> {t('roles.assigned', { count: selected.memberCount })}
                 </span>
                 <span className="inline-flex items-center gap-1">
-                  <Check className="w-3 h-3" /> {selected.permissions.size} of {ALL_PERMS.size} permissions
+                  <Check className="w-3 h-3" /> {t('roles.permissionsOf', { count: selected.permissions.size, total: ALL_PERMS.size })}
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
               <Button leading={<Copy className="w-3 h-3" />} onClick={() => { duplicate(selected); }}>
-                Duplicate
+                {t('roles.duplicate')}
               </Button>
               {!selected.builtIn && (
                 <Button variant="ghost" leading={<Trash2 className="w-3 h-3" />} onClick={() => { remove(selected.id); }}>
-                  Delete
+                  {t('roles.delete')}
                 </Button>
               )}
             </div>
@@ -262,7 +287,7 @@ export default function RolesPage() {
               style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)', borderBottom: '1px solid var(--border-muted)' }}
             >
               <Lock className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-              <span>This is a built-in role and cannot be edited. Duplicate it to make a customized version.</span>
+              <span>{t('roles.lockNotice')}</span>
             </div>
           )}
 
@@ -274,7 +299,7 @@ export default function RolesPage() {
                   className="text-xs uppercase tracking-eyebrow font-semibold mb-3 block"
                   style={{ color: 'var(--fg-subtle)' }}
                 >
-                  {g.title}
+                  {t(g.titleKey)}
                 </span>
                 <div className="flex flex-col">
                   {g.perms.map((p) => {
@@ -288,18 +313,18 @@ export default function RolesPage() {
                       >
                         <div className="flex flex-col min-w-0 flex-1 gap-0.5">
                           <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
-                            {p.label}
+                            {t(p.labelKey)}
                           </span>
                           <span className="text-xs font-mono" style={{ color: danger ? 'var(--intent-danger-fg)' : 'var(--fg-subtle)' }}>
                             {p.id}
-                            {p.hint && <span className="ml-2" style={{ color: 'var(--fg-subtle)' }}>· {p.hint}</span>}
+                            {p.hintKey && <span className="ml-2" style={{ color: 'var(--fg-subtle)' }}>· {t(p.hintKey)}</span>}
                           </span>
                         </div>
                         <Toggle
                           checked={on}
                           onChange={() => { togglePerm(p.id); }}
                           disabled={selected.builtIn}
-                          label={p.label}
+                          label={t(p.labelKey)}
                         />
                       </div>
                     );
@@ -313,7 +338,7 @@ export default function RolesPage() {
 
       <p className="text-sm mt-3 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
-        Custom roles take effect immediately for assigned members. Audit log records every permission change.
+        {t('roles.footer')}
       </p>
     </OrgShell>
   );

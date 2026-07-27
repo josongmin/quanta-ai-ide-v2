@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { UsersRound, Plus, Trash2 } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
@@ -14,6 +15,7 @@ import { shortDate } from '../../../parts/format';
 // membership editor are product/intel concepts the accounts backend doesn't
 // model, so they stay mock-only.
 export function TeamsReal() {
+  const { t } = useTranslation('org');
   const { org = '' } = useParams({ strict: false });
   const { detail, isPending, error, refetch } = useOrg(org);
   const [createOpen, setCreateOpen] = useState(false);
@@ -24,10 +26,10 @@ export function TeamsReal() {
   const teams = detail?.teams ?? [];
   const orgId = detail?.org.id ?? '';
 
-  async function doRemove(t: OrgTeam) {
-    setBusyId(t.id);
+  async function doRemove(team: OrgTeam) {
+    setBusyId(team.id);
     setActionError(null);
-    const res = await removeTeam({ organizationId: orgId, teamId: t.id });
+    const res = await removeTeam({ organizationId: orgId, teamId: team.id });
     setBusyId(null);
     setConfirmRemove(null);
     if (!res.ok) { setActionError(res.error); return; }
@@ -38,8 +40,8 @@ export function TeamsReal() {
     <OrgShell
       orgName={detail?.org.name ?? org}
       orgSlug={detail?.org.slug ?? org}
-      title="Teams"
-      subtitle="Group people within the organization. Assign ownership and review routing in workspace settings."
+      title={t('teams.title')}
+      subtitle={t('teams.subtitleReal')}
       topRight={
         <Button
           variant="primary"
@@ -48,7 +50,7 @@ export function TeamsReal() {
           onClick={() => { setCreateOpen(true); }}
           disabled={!orgId}
         >
-          New team
+          {t('teams.newTeam')}
         </Button>
       }
     >
@@ -67,25 +69,25 @@ export function TeamsReal() {
       ) : (
         <DataTable<OrgTeam>
           columns="1fr 140px 44px"
-          headers={[{ header: 'Team' }, { header: 'Created' }, { header: '' }]}
+          headers={[{ header: t('teams.table.team') }, { header: t('teams.table.created') }, { header: '' }]}
           rows={teams}
-          rowKey={(t) => t.id}
-          empty={<EmptyState title="No teams yet" subtitle="Create a team to group members." />}
-          renderRow={(t) => (
+          rowKey={(team) => team.id}
+          empty={<EmptyState title={t('teams.empty.title')} subtitle={t('teams.empty.subtitle')} />}
+          renderRow={(team) => (
             <>
               <div className="flex items-center gap-2.5 min-w-0">
                 <UsersRound className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
-                <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>{t.name}</span>
+                <span className="text-base font-semibold truncate" style={{ color: 'var(--fg-strong)' }}>{team.name}</span>
               </div>
-              <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(t.createdAt)}</span>
+              <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(team.createdAt)}</span>
               <RowMenu
                 items={[
                   {
-                    label: 'Delete team',
+                    label: t('teams.detail.deleteTeam'),
                     icon: Trash2,
                     danger: true,
-                    disabled: busyId === t.id,
-                    onClick: () => { setConfirmRemove(t); },
+                    disabled: busyId === team.id,
+                    onClick: () => { setConfirmRemove(team); },
                   },
                 ]}
               />
@@ -106,9 +108,9 @@ export function TeamsReal() {
           open
           onCancel={() => { setConfirmRemove(null); }}
           onConfirm={() => { void doRemove(confirmRemove); }}
-          title={`Delete ${confirmRemove.name}?`}
-          confirmLabel="Delete team"
-          description="Members stay in the organization; only the team grouping is removed."
+          title={t('teams.removeDialog.title', { name: confirmRemove.name })}
+          confirmLabel={t('teams.removeDialog.confirm')}
+          description={t('teams.removeDialog.descriptionReal')}
         />
       )}
     </OrgShell>
@@ -122,6 +124,7 @@ function CreateTeamReal({
   onClose: () => void;
   onCreated: () => void;
 }) {
+  const { t } = useTranslation('org');
   const [name, setName] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -144,18 +147,18 @@ function CreateTeamReal({
       onClose={onClose}
       size="sm"
       icon={<UsersRound className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
-      title="New team"
+      title={t('teams.create.title')}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="primary" size="md" disabled={!name.trim() || saving} onClick={() => { void submit(); }}>
-            {saving ? 'Creating…' : 'Create team'}
+            {saving ? t('teams.create.creating') : t('teams.create.createTeam')}
           </Button>
         </>
       }
     >
       <Field
-        label="Team name"
+        label={t('teams.create.teamName')}
         value={name}
         onChange={(e) => { setName(e.target.value.slice(0, 50)); }}
         maxLength={50}

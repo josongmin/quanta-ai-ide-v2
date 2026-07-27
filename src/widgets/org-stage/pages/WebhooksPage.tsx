@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { OrgShell } from '../parts/OrgShell';
 import {
   WebhooksManager,
@@ -6,25 +8,29 @@ import {
   type WebhookEvent,
 } from '@widgets/_shared/WebhooksManager';
 
-const EVENT_CATALOG: WebhookEvent[] = [
-  { id: 'admission.passed',  label: 'Admission gate passed' },
-  { id: 'admission.failed',  label: 'Admission gate failed' },
-  { id: 'review.requested',  label: 'Review requested' },
-  { id: 'review.approved',   label: 'Review approved' },
-  { id: 'agent.started',     label: 'Agent started' },
-  { id: 'agent.completed',   label: 'Agent completed' },
-  { id: 'agent.killed',      label: 'Agent killed' },
-  { id: 'incident.opened',   label: 'Incident opened' },
-  { id: 'incident.resolved', label: 'Incident resolved' },
-  { id: 'workspace.created', label: 'Workspace created' },
-  { id: 'member.invited',    label: 'Member invited' },
-];
+function eventCatalog(t: TFunction<'org'>): WebhookEvent[] {
+  return [
+    { id: 'admission.passed',  label: t('webhooks.event.admissionPassed') },
+    { id: 'admission.failed',  label: t('webhooks.event.admissionFailed') },
+    { id: 'review.requested',  label: t('webhooks.event.reviewRequested') },
+    { id: 'review.approved',   label: t('webhooks.event.reviewApproved') },
+    { id: 'agent.started',     label: t('webhooks.event.agentStarted') },
+    { id: 'agent.completed',   label: t('webhooks.event.agentCompleted') },
+    { id: 'agent.killed',      label: t('webhooks.event.agentKilled') },
+    { id: 'incident.opened',   label: t('webhooks.event.incidentOpened') },
+    { id: 'incident.resolved', label: t('webhooks.event.incidentResolved') },
+    { id: 'workspace.created', label: t('webhooks.event.workspaceCreated') },
+    { id: 'member.invited',    label: t('webhooks.event.memberInvited') },
+  ];
+}
 
-const SEED_ENDPOINTS: Endpoint[] = [
-  { id: 'wh1', url: 'https://hooks.acme.io/se-events',          description: 'Mirror to internal warehouse', events: ['admission.passed', 'admission.failed', 'agent.completed'], enabled: true,  createdAt: '2026-04-21', successCount: 1842, failureCount: 3 },
-  { id: 'wh2', url: 'https://api.partner.io/webhooks/seq8f3',   description: 'Partner gate-result mirror',    events: ['admission.failed'],                                          enabled: true,  createdAt: '2026-04-25', successCount:  214, failureCount: 0 },
-  { id: 'wh3', url: 'https://staging.acme.io/se-events',        description: 'Staging only',                  events: ['agent.started', 'agent.completed', 'agent.killed'],         enabled: false, createdAt: '2026-05-01', successCount:   58, failureCount: 12 },
-];
+function seedEndpoints(t: TFunction<'org'>): Endpoint[] {
+  return [
+    { id: 'wh1', url: 'https://hooks.acme.io/se-events',          description: t('webhooks.seed.warehouse'), events: ['admission.passed', 'admission.failed', 'agent.completed'], enabled: true,  createdAt: '2026-04-21', successCount: 1842, failureCount: 3 },
+    { id: 'wh2', url: 'https://api.partner.io/webhooks/seq8f3',   description: t('webhooks.seed.partner'),   events: ['admission.failed'],                                          enabled: true,  createdAt: '2026-04-25', successCount:  214, failureCount: 0 },
+    { id: 'wh3', url: 'https://staging.acme.io/se-events',        description: t('webhooks.seed.staging'),   events: ['agent.started', 'agent.completed', 'agent.killed'],         enabled: false, createdAt: '2026-05-01', successCount:   58, failureCount: 12 },
+  ];
+}
 
 const SEED_DELIVERIES: Delivery[] = [
   { id: 'd1',  endpointId: 'wh1', event: 'admission.failed',  status: 'success', statusCode: 200, durationMs: 142, at: '2m ago'  },
@@ -38,20 +44,21 @@ const SEED_DELIVERIES: Delivery[] = [
 ];
 
 export default function WebhooksPage() {
+  const { t } = useTranslation('org');
   return (
     <WebhooksManager
-      events={EVENT_CATALOG}
-      initialEndpoints={SEED_ENDPOINTS}
+      events={eventCatalog(t)}
+      initialEndpoints={seedEndpoints(t)}
       initialDeliveries={SEED_DELIVERIES}
       defaultEvent="admission.failed"
-      urlPlaceholder="https://hooks.example.com/se-events"
-      descPlaceholder="e.g. Internal warehouse mirror"
+      urlPlaceholder={t('webhooks.urlPlaceholder')}
+      descPlaceholder={t('webhooks.descPlaceholder')}
       renderShell={({ newEndpointButton, body }) => (
         <OrgShell
           orgName="ACME, Inc."
           orgSlug="acme"
-          title="Webhooks"
-          subtitle="HTTP callbacks fired from org-level events. Each endpoint can subscribe to a subset of event types."
+          title={t('webhooks.title')}
+          subtitle={t('webhooks.subtitle')}
           topRight={newEndpointButton}
         >
           {body}

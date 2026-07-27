@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { useParams } from '@tanstack/react-router';
 import { Bot, Plus, Trash2 } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
@@ -15,15 +17,20 @@ import { shortDate } from '../../../parts/format';
 
 // Real org service accounts (machine API keys) over accounts /v1/service-accounts.
 // Create requires a Team+ plan (backend 403 → surfaced). Plaintext key shown once.
-const EXPIRY: { label: string; days: number | null }[] = [
-  { label: '90 days', days: 90 },
-  { label: '1 year', days: 365 },
-  { label: 'No expiry', days: null },
-];
+function expiryOptions(t: TFunction<'org'>): { label: string; days: number | null }[] {
+  return [
+    { label: t('serviceAccounts.create.days90'), days: 90 },
+    { label: t('serviceAccounts.create.year1'), days: 365 },
+    { label: t('serviceAccounts.create.noExpiry'), days: null },
+  ];
+}
+// Only the day values are load-bearing for the create call; labels are localized.
+const EXPIRY_DAYS: (number | null)[] = [90, 365, null];
 
 const EMPTY: ServiceAccountRecord[] = [];
 
 export function ServiceAccountsReal() {
+  const { t } = useTranslation('org');
   const { org = '' } = useParams({ strict: false });
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
@@ -64,11 +71,11 @@ export function ServiceAccountsReal() {
     <OrgShell
       orgName={detail?.org.name ?? org}
       orgSlug={detail?.org.slug ?? org}
-      title="Service accounts"
-      subtitle="Machine identities for CI and workers. Each holds an API key scoped to this org."
+      title={t('serviceAccounts.title')}
+      subtitle={t('serviceAccounts.subtitleReal')}
       topRight={
         <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={() => { setCreateOpen(true); }} disabled={!orgId}>
-          New service account
+          {t('serviceAccounts.new')}
         </Button>
       }
     >
@@ -85,21 +92,21 @@ export function ServiceAccountsReal() {
       ) : (
         <DataTable<ServiceAccountRecord>
           columns="1fr 140px 130px 130px 44px"
-          headers={[{ header: 'Name' }, { header: 'Prefix' }, { header: 'Created' }, { header: 'Expires' }, { header: '' }]}
+          headers={[{ header: t('serviceAccounts.table.name') }, { header: t('serviceAccounts.table.prefix') }, { header: t('serviceAccounts.table.created') }, { header: t('serviceAccounts.table.expires') }, { header: '' }]}
           rows={accounts}
           rowKey={(a) => a.id}
-          empty={<EmptyState title="No service accounts" subtitle="Create one to give CI or a worker API access." />}
+          empty={<EmptyState title={t('serviceAccounts.empty.title')} subtitle={t('serviceAccounts.empty.subtitle')} />}
           renderRow={(a) => (
             <>
               <div className="flex items-center gap-2.5 min-w-0">
                 <Bot className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
-                <span className="text-base truncate" style={{ color: 'var(--fg-strong)' }}>{a.name ?? 'service account'}</span>
+                <span className="text-base truncate" style={{ color: 'var(--fg-strong)' }}>{a.name ?? t('serviceAccounts.fallbackName')}</span>
               </div>
               <span className="font-mono text-sm" style={{ color: 'var(--fg-muted)' }}>{a.start ?? a.prefix ?? '—'}…</span>
               <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(a.createdAt)}</span>
               <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(a.expiresAt)}</span>
               <RowMenu
-                items={[{ label: 'Revoke key', icon: Trash2, danger: true, disabled: busyId === a.id, onClick: () => { setConfirmRevoke(a); } }]}
+                items={[{ label: t('serviceAccounts.revoke.menu'), icon: Trash2, danger: true, disabled: busyId === a.id, onClick: () => { setConfirmRevoke(a); } }]}
               />
             </>
           )}
@@ -115,7 +122,7 @@ export function ServiceAccountsReal() {
       )}
       {revealed && (
         <RevealOnceModal
-          title={`Service account "${revealed.name ?? 'key'}" created`}
+          title={t('serviceAccounts.keyCreated', { name: revealed.name ?? t('serviceAccounts.keyFallback') })}
           value={revealed.key}
           onDismiss={() => { setRevealed(null); }}
           onSaved={() => { setSaved(true); }}
@@ -129,9 +136,9 @@ export function ServiceAccountsReal() {
           busy={busyId === confirmRevoke.id}
           onCancel={() => { setConfirmRevoke(null); }}
           onConfirm={() => { void doRevoke(confirmRevoke); }}
-          title={`Revoke "${confirmRevoke.name ?? 'service account'}"?`}
-          confirmLabel="Revoke"
-          description="Any CI job or worker using this key will immediately lose access. This can't be undone."
+          title={t('serviceAccounts.revoke.title', { name: confirmRevoke.name ?? t('serviceAccounts.fallbackName') })}
+          confirmLabel={t('serviceAccounts.revoke.confirm')}
+          description={t('serviceAccounts.revoke.description')}
         />
       )}
     </OrgShell>
@@ -145,16 +152,18 @@ function CreateServiceModal({
   onClose: () => void;
   onCreated: (created: ServiceAccountCreated) => void;
 }) {
+  const { t } = useTranslation('org');
   const [name, setName] = useState('');
   const [expiryIdx, setExpiryIdx] = useState(1); // default 1 year
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const expiry = expiryOptions(t);
 
   async function submit() {
     if (!name.trim()) return;
     setBusy(true);
     setError(null);
-    const res = await createServiceAccount(orgId, { name: name.trim(), expiresInDays: EXPIRY[expiryIdx]?.days ?? null });
+    const res = await createServiceAccount(orgId, { name: name.trim(), expiresInDays: EXPIRY_DAYS[expiryIdx] ?? null });
     setBusy(false);
     if (!res.ok) { setError(res.error); return; }
     onCreated(res.data);
@@ -166,27 +175,27 @@ function CreateServiceModal({
       onClose={onClose}
       size="sm"
       icon={<Bot className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
-      title="New service account"
+      title={t('serviceAccounts.create.title')}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="primary" size="md" disabled={!name.trim() || busy} onClick={() => { void submit(); }}>
-            {busy ? 'Creating…' : 'Create'}
+            {busy ? t('serviceAccounts.create.creating') : t('serviceAccounts.create.create')}
           </Button>
         </>
       }
     >
       {error && <InlineError message={error} onRetry={() => { setError(null); }} />}
-      <Field label="Name" value={name} onChange={(e) => { setName(e.target.value.slice(0, 80)); }} placeholder="ci-deploy-bot" autoFocus />
+      <Field label={t('serviceAccounts.create.name')} value={name} onChange={(e) => { setName(e.target.value.slice(0, 80)); }} placeholder={t('serviceAccounts.create.namePlaceholder')} autoFocus />
       <label className="flex flex-col gap-1.5">
-        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Key expiration</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>{t('serviceAccounts.create.keyExpiration')}</span>
         <select
           value={expiryIdx}
           onChange={(e) => { setExpiryIdx(Number(e.target.value)); }}
           className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         >
-          {EXPIRY.map((x, i) => <option key={x.label} value={i}>{x.label}</option>)}
+          {expiry.map((x, i) => <option key={x.label} value={i}>{x.label}</option>)}
         </select>
       </label>
     </SettingsModal>

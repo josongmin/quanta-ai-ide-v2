@@ -2,11 +2,13 @@
 // One home so MembersReal / InvitationsReal / TeamsReal don't each re-derive
 // role labels, avatar initials, or date formatting.
 
+import type { TFunction } from 'i18next';
 import type { OrgRole } from '@entities/org';
 
-export const ROLE_LABEL: Record<OrgRole, string> = {
-  owner: 'Owner', admin: 'Admin', member: 'Member', billing: 'Billing', guest: 'Guest',
-};
+/** Localized role label. `t` is the `org` namespace translator. */
+export function roleLabel(t: TFunction<'org'>, role: OrgRole): string {
+  return t(`common.role.${role}`);
+}
 
 /** Roles assignable via the UI (owner is set only through ownership transfer). */
 export const ASSIGNABLE_ROLES: OrgRole[] = ['admin', 'member', 'billing', 'guest'];
@@ -28,14 +30,13 @@ export function shortDate(iso: string | null | undefined): string {
 }
 
 /** Human "expires in N days" from an ISO expiry (past → "expired"). */
-export function expiresLabel(iso: string): string {
+export function expiresLabel(t: TFunction<'org'>, iso: string): string {
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '—';
   const ms = d.getTime() - Date.now();
-  if (ms <= 0) return 'expired';
+  if (ms <= 0) return t('format.expired');
   const days = Math.ceil(ms / 86_400_000);
-  if (days === 1) return '1 day';
-  if (days < 30) return `${days.toString()} days`;
+  if (days < 30) return t('format.day', { count: days });
   return shortDate(iso);
 }

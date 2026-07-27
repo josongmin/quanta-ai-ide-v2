@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Globe, Trash2 } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { OrgShell } from '../parts/OrgShell';
@@ -32,6 +33,7 @@ const INITIAL: Form = {
 const WORKSPACES = ['monorepo', 'mobile', 'infra', 'docs-site'];
 
 function GeneralMock() {
+  const { t } = useTranslation('org');
   const [form, setForm] = useState<Form>(INITIAL);
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -54,11 +56,11 @@ function GeneralMock() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="General"
-      subtitle="Identity and defaults for this organization."
+      title={t('general.title')}
+      subtitle={t('general.subtitle')}
     >
-      <Section title="Identity" hint="How this org appears across the product and to invitees.">
-        <Row label="Logo" sub="Square PNG or SVG, at least 64×64.">
+      <Section title={t('general.identity.title')} hint={t('general.identity.hint')}>
+        <Row label={t('general.identity.logo')} sub={t('general.identity.logoSub')}>
           <div className="flex items-center gap-3">
             <div
               className="w-12 h-12 rounded-md flex items-center justify-center text-xl font-black"
@@ -69,43 +71,43 @@ function GeneralMock() {
             >
               {form.name.slice(0, 2).toUpperCase()}
             </div>
-            <Button>Upload</Button>
-            <Button variant="ghost">Remove</Button>
+            <Button>{t('general.identity.upload')}</Button>
+            <Button variant="ghost">{t('general.identity.removeLogo')}</Button>
           </div>
         </Row>
 
         <Field
-          label="Display name"
-          hint="up to 40 chars"
+          label={t('general.identity.displayName')}
+          hint={t('general.identity.displayNameHint')}
           value={form.name}
           onChange={(e) => { set('name', e.target.value.slice(0, 40)); }}
           maxLength={40}
         />
 
         <Field
-          label="URL slug"
-          hint="acme.app/{slug}"
+          label={t('general.identity.slug')}
+          hint={t('general.identity.slugHint')}
           value={form.slug}
           onChange={(e) => { set('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); }}
         />
 
         <Field
-          label="Website"
+          label={t('general.identity.website')}
           value={form.website}
           onChange={(e) => { set('website', e.target.value); }}
           trailing={<Globe className="w-3.5 h-3.5" style={{ color: 'var(--fg-subtle)' }} />}
         />
 
         <Field
-          label="Description"
-          hint="shown on the org dashboard"
+          label={t('general.identity.description')}
+          hint={t('general.identity.descriptionHint')}
           value={form.description}
           onChange={(e) => { set('description', e.target.value); }}
         />
       </Section>
 
-      <Section title="Defaults" hint="Per-user fallbacks when nothing else is selected.">
-        <Row label="Default workspace" sub="Where new members land after signing in.">
+      <Section title={t('general.defaults.title')} hint={t('general.defaults.hint')}>
+        <Row label={t('general.defaults.defaultWorkspace')} sub={t('general.defaults.defaultWorkspaceSub')}>
           <select
             value={form.defaultWorkspace}
             onChange={(e) => { set('defaultWorkspace', e.target.value); }}
@@ -122,14 +124,14 @@ function GeneralMock() {
         </Row>
       </Section>
 
-      <Section title="Danger zone" hint="Irreversible actions affecting this entire organization.">
+      <Section title={t('general.danger.title')} hint={t('general.danger.hint')}>
         <Row
-          label="Delete organization"
-          sub="Permanently remove this org, its workspaces, and all attached data. People keep their accounts."
+          label={t('general.danger.deleteLabel')}
+          sub={t('general.danger.deleteSub')}
           danger
         >
           <Button variant="danger" leading={<Trash2 className="w-3 h-3" />} onClick={() => { setConfirmDelete(true); }}>
-            Delete org
+            {t('general.danger.deleteButton')}
           </Button>
         </Row>
       </Section>
@@ -146,14 +148,13 @@ function GeneralMock() {
         open={confirmDelete}
         onCancel={() => { setConfirmDelete(false); }}
         onConfirm={() => { setConfirmDelete(false); }}
-        title={`Delete ${form.name}?`}
-        confirmLabel="I understand, delete"
+        title={t('general.deleteDialog.title', { name: form.name })}
+        confirmLabel={t('general.deleteDialog.confirm')}
         width={460}
         requireTypedConfirmation={form.name}
         description={
           <>
-            This permanently deletes the organization, every workspace inside it, billing records, and all
-            agent history. People keep their accounts but lose access. Type <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{form.name}</span> below to confirm.
+            {t('general.deleteDialog.descriptionPre')}<span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{form.name}</span>{t('general.deleteDialog.descriptionPost')}
           </>
         }
       />

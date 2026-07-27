@@ -27,34 +27,34 @@ import DataResidencyMock from './pages/DataResidencyPage';
 import RetentionMock from './pages/RetentionPolicyPage';
 
 export function RolesPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Roles" subtitle="Role permissions are managed by the platform." /> : <RolesMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.roles" subtitleKey="comingSoon.subtitles.roles" /> : <RolesMock />;
 }
 export function UsagePage() {
-  return env.useRealAuth ? <OrgComingSoon title="Usage" subtitle="Organization usage metrics." /> : <UsageMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.usage" subtitleKey="comingSoon.subtitles.usage" /> : <UsageMock />;
 }
 export function ServiceAccountsPage() {
   return env.useRealAuth ? <ServiceAccountsReal /> : <ServiceAccountsMock />;
 }
 export function DomainsPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Domains" /> : <DomainsMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.domains" /> : <DomainsMock />;
 }
 export function SecurityPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Security" /> : <SecurityMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.security" /> : <SecurityMock />;
 }
 export function IntegrationsPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Integrations" /> : <IntegrationsMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.integrations" /> : <IntegrationsMock />;
 }
 export function WebhooksPage() {
   return env.useRealAuth ? <WebhooksReal /> : <WebhooksMock />;
 }
 export function ApiOAuthPage() {
-  return env.useRealAuth ? <OrgComingSoon title="API & OAuth" /> : <ApiOAuthMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.api" /> : <ApiOAuthMock />;
 }
 export function PoliciesPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Policies" /> : <PoliciesMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.policies" /> : <PoliciesMock />;
 }
 export function AiPoliciesPage() {
-  return env.useRealAuth ? <OrgComingSoon title="AI policies" /> : <AiPoliciesMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.aiPolicies" /> : <AiPoliciesMock />;
 }
 export function SamlSsoPage() {
   return env.useRealAuth ? <SsoReal /> : <SamlSsoMock />;
@@ -63,8 +63,8 @@ export function ScimPage() {
   return env.useRealAuth ? <ScimReal /> : <ScimMock />;
 }
 export function DataResidencyPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Data residency" /> : <DataResidencyMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.dataResidency" /> : <DataResidencyMock />;
 }
 export function RetentionPolicyPage() {
-  return env.useRealAuth ? <OrgComingSoon title="Retention" /> : <RetentionMock />;
+  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.retention" /> : <RetentionMock />;
 }

@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   CheckCircle2, AlertTriangle, Circle, Upload, Copy, Check, RefreshCcw,
   ShieldCheck, KeyRound,
@@ -48,6 +49,7 @@ const SP = {
 };
 
 export default function SamlSsoPage() {
+  const { t } = useTranslation('org');
   const [form, setForm] = useState<Form>(INITIAL);
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
 
@@ -72,8 +74,8 @@ export default function SamlSsoPage() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="SAML SSO"
-      subtitle="Configure SAML 2.0 single sign-on with your identity provider."
+      title={t('samlSso.title')}
+      subtitle={t('samlSso.subtitle')}
     >
       <StatusBand
         status={form.status}
@@ -82,20 +84,20 @@ export default function SamlSsoPage() {
       />
 
       <Section
-        title="Identity provider metadata"
-        hint="Paste values from your IdP, or upload the metadata XML to autofill."
+        title={t('samlSso.idp.title')}
+        hint={t('samlSso.idp.hint')}
         right={
-          <Button leading={<Upload className="w-3 h-3" />}>Upload metadata XML</Button>
+          <Button leading={<Upload className="w-3 h-3" />}>{t('samlSso.idp.upload')}</Button>
         }
       >
         <div className="flex flex-col gap-3">
           <Field
-            label="Entity ID (Issuer)"
+            label={t('samlSso.idp.entityId')}
             value={form.entityId}
             onChange={(e) => { set('entityId', e.target.value); }}
           />
           <Field
-            label="SSO URL"
+            label={t('samlSso.idp.ssoUrl')}
             value={form.ssoUrl}
             onChange={(e) => { set('ssoUrl', e.target.value); }}
           />
@@ -104,7 +106,7 @@ export default function SamlSsoPage() {
               className="text-xs uppercase tracking-eyebrow font-medium"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              X.509 Certificate
+              {t('samlSso.idp.cert')}
             </span>
             <textarea
               value={form.cert}
@@ -124,17 +126,17 @@ export default function SamlSsoPage() {
       </Section>
 
       <Section
-        title="Service provider metadata"
-        hint="Paste these into your IdP when creating the SAML application."
+        title={t('samlSso.sp.title')}
+        hint={t('samlSso.sp.hint')}
       >
-        <CopyRow label="ACS URL (Reply URL)" value={SP.acsUrl} />
-        <CopyRow label="SP Entity ID" value={SP.spEntityId} />
-        <CopyRow label="NameID Format" value={SP.nameIdFormat} />
+        <CopyRow label={t('samlSso.sp.acsUrl')} value={SP.acsUrl} />
+        <CopyRow label={t('samlSso.sp.spEntityId')} value={SP.spEntityId} />
+        <CopyRow label={t('samlSso.sp.nameIdFormat')} value={SP.nameIdFormat} />
       </Section>
 
       <Section
-        title="Attribute mapping"
-        hint="Map SAML assertion claims onto the user profile fields."
+        title={t('samlSso.mapping.title')}
+        hint={t('samlSso.mapping.hint')}
       >
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
@@ -147,8 +149,8 @@ export default function SamlSsoPage() {
               borderBottom: '1px solid var(--border-muted)',
             }}
           >
-            <span>Profile field</span>
-            <span>IdP claim name</span>
+            <span>{t('samlSso.mapping.profileField')}</span>
+            <span>{t('samlSso.mapping.idpClaim')}</span>
           </div>
           {(['email', 'firstName', 'lastName', 'groups'] as AttrKey[]).map((k) => (
             <div
@@ -176,14 +178,14 @@ export default function SamlSsoPage() {
         </div>
       </Section>
 
-      <Section title="Enforcement" hint="Tighten how the org uses SSO.">
-        <Row label="Require SSO for all members" sub="Block password and social login. Members must sign in via your IdP.">
+      <Section title={t('samlSso.enforcement.title')} hint={t('samlSso.enforcement.hint')}>
+        <Row label={t('samlSso.enforcement.requireSso')} sub={t('samlSso.enforcement.requireSsoSub')}>
           <Toggle checked={form.requireSso} onChange={(v) => { set('requireSso', v); }} />
         </Row>
-        <Row label="Allow JIT provisioning" sub="Auto-create accounts on first SSO sign-in. Otherwise users must be pre-invited.">
+        <Row label={t('samlSso.enforcement.jit')} sub={t('samlSso.enforcement.jitSub')}>
           <Toggle checked={form.jit} onChange={(v) => { set('jit', v); }} />
         </Row>
-        <Row label="Default role for SSO users" sub="Role assigned to JIT-provisioned members.">
+        <Row label={t('samlSso.enforcement.defaultRole')} sub={t('samlSso.enforcement.defaultRoleSub')}>
           <select
             value={form.defaultRole}
             onChange={(e) => { set('defaultRole', e.target.value as Form['defaultRole']); }}
@@ -195,9 +197,9 @@ export default function SamlSsoPage() {
               minWidth: 140,
             }}
           >
-            <option value="viewer">Viewer</option>
-            <option value="member">Member</option>
-            <option value="admin">Admin</option>
+            <option value="viewer">{t('common.role.viewer')}</option>
+            <option value="member">{t('common.role.member')}</option>
+            <option value="admin">{t('common.role.admin')}</option>
           </select>
         </Row>
       </Section>
@@ -212,11 +214,11 @@ export default function SamlSsoPage() {
 
       <p className="text-sm mt-6 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ShieldCheck className="w-3 h-3 mt-0.5 shrink-0" />
-        Always test the connection in an incognito window before requiring SSO — misconfigured IdPs can lock everyone out.
+        {t('samlSso.notes.test')}
       </p>
       <p className="text-sm mt-1 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <KeyRound className="w-3 h-3 mt-0.5 shrink-0" />
-        Owners can always sign in with a recovery code if SSO breaks.
+        {t('samlSso.notes.recovery')}
       </p>
     </OrgShell>
   );
@@ -225,12 +227,13 @@ export default function SamlSsoPage() {
 function StatusBand({
   status, lastTested, onTest,
 }: { status: Status; lastTested: string; onTest: () => void }) {
+  const { t } = useTranslation('org');
   const meta: { Icon: React.ComponentType<{ className?: string; style?: CSSProperties }>; label: string; sub: string; fg: string } =
     status === 'connected'
-      ? { Icon: CheckCircle2, label: 'Connected',      sub: 'SAML SSO is active and healthy.',           fg: 'var(--intent-success-fg)' }
+      ? { Icon: CheckCircle2, label: t('samlSso.status.connected'),      sub: t('samlSso.status.connectedSub'),           fg: 'var(--intent-success-fg)' }
       : status === 'error'
-        ? { Icon: AlertTriangle, label: 'Error',         sub: 'Last test failed: invalid signature.',       fg: 'var(--intent-danger-fg)' }
-        : { Icon: Circle,        label: 'Not configured',sub: 'Fill in IdP metadata below to get started.', fg: 'var(--fg-muted)' };
+        ? { Icon: AlertTriangle, label: t('samlSso.status.error'),         sub: t('samlSso.status.errorSub'),       fg: 'var(--intent-danger-fg)' }
+        : { Icon: Circle,        label: t('samlSso.status.notConfigured'),sub: t('samlSso.status.notConfiguredSub'), fg: 'var(--fg-muted)' };
   const { Icon } = meta;
 
   return (
@@ -253,16 +256,17 @@ function StatusBand({
       </div>
       <div className="flex flex-col items-end gap-1.5 shrink-0">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Last tested
+          {t('samlSso.status.lastTested')}
         </span>
         <span className="font-mono text-sm" style={{ color: 'var(--fg-default)' }}>{lastTested}</span>
       </div>
-      <Button leading={<RefreshCcw className="w-3 h-3" />} onClick={onTest}>Test connection</Button>
+      <Button leading={<RefreshCcw className="w-3 h-3" />} onClick={onTest}>{t('samlSso.status.testConnection')}</Button>
     </div>
   );
 }
 
 function CopyRow({ label, value }: { label: string; value: string }) {
+  const { t } = useTranslation('org');
   const { copied, copy } = useCopyToClipboard(1200);
   return (
     <div className="flex items-center justify-between gap-3 py-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
@@ -273,7 +277,7 @@ function CopyRow({ label, value }: { label: string; value: string }) {
         <code className="font-mono text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{value}</code>
       </div>
       <Button leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />} onClick={() => { copy(value); }}>
-        {copied ? 'Copied' : 'Copy'}
+        {copied ? t('common.copied') : t('common.copy')}
       </Button>
     </div>
   );

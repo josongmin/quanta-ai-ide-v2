@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { SideNavShell, type SideNavGroup } from '@shared/ui';
 import { useTabVisibility } from '@features/workspace-tabs';
@@ -19,42 +20,50 @@ export type OrgPath =
   | '/org/$org/invitations' | '/org/$org/domains'
   | '/org/$org/service-accounts' | '/org/$org/usage';
 
-const NAV: SideNavGroup<OrgPath>[] = [
+// Nav skeleton with i18n keys; labels/titles are resolved per-render so the
+// side nav re-localizes when the language changes.
+type NavGroupDef = {
+  id: string;
+  titleKey: string;
+  items: { key: OrgPath; labelKey: string; icon: SideNavGroup<OrgPath>['items'][number]['icon'] }[];
+};
+
+const NAV_DEF: NavGroupDef[] = [
   {
     id: 'org',
-    title: 'Organization',
+    titleKey: 'shell.nav.groupOrg',
     items: [
-      { key: '/org/$org/general',          label: 'General',          icon: Building2 },
-      { key: '/org/$org/members',          label: 'Members',          icon: Users },
-      { key: '/org/$org/invitations',      label: 'Invitations',      icon: Mail },
-      { key: '/org/$org/teams',            label: 'Teams',            icon: UsersRound },
-      { key: '/org/$org/roles',            label: 'Roles',            icon: Shield },
-      { key: '/org/$org/service-accounts', label: 'Service accounts', icon: Bot },
-      { key: '/org/$org/domains',          label: 'Domains',          icon: AtSign },
-      { key: '/org/$org/usage',            label: 'Usage',            icon: BarChart3 },
+      { key: '/org/$org/general',          labelKey: 'shell.nav.general',         icon: Building2 },
+      { key: '/org/$org/members',          labelKey: 'shell.nav.members',         icon: Users },
+      { key: '/org/$org/invitations',      labelKey: 'shell.nav.invitations',     icon: Mail },
+      { key: '/org/$org/teams',            labelKey: 'shell.nav.teams',           icon: UsersRound },
+      { key: '/org/$org/roles',            labelKey: 'shell.nav.roles',           icon: Shield },
+      { key: '/org/$org/service-accounts', labelKey: 'shell.nav.serviceAccounts', icon: Bot },
+      { key: '/org/$org/domains',          labelKey: 'shell.nav.domains',         icon: AtSign },
+      { key: '/org/$org/usage',            labelKey: 'shell.nav.usage',           icon: BarChart3 },
     ],
   },
   {
     id: 'access',
-    title: 'Access & policy',
+    titleKey: 'shell.nav.groupAccess',
     items: [
-      { key: '/org/$org/security',     label: 'Security',     icon: Lock },
-      { key: '/org/$org/integrations', label: 'Integrations', icon: Plug },
-      { key: '/org/$org/webhooks',     label: 'Webhooks',     icon: Webhook },
-      { key: '/org/$org/api',          label: 'API & OAuth',  icon: KeySquare },
-      { key: '/org/$org/policies',     label: 'Policies',     icon: ScrollText },
-      { key: '/org/$org/ai-policies',  label: 'AI policies',  icon: Sparkles },
+      { key: '/org/$org/security',     labelKey: 'shell.nav.security',     icon: Lock },
+      { key: '/org/$org/integrations', labelKey: 'shell.nav.integrations', icon: Plug },
+      { key: '/org/$org/webhooks',     labelKey: 'shell.nav.webhooks',     icon: Webhook },
+      { key: '/org/$org/api',          labelKey: 'shell.nav.api',          icon: KeySquare },
+      { key: '/org/$org/policies',     labelKey: 'shell.nav.policies',     icon: ScrollText },
+      { key: '/org/$org/ai-policies',  labelKey: 'shell.nav.aiPolicies',   icon: Sparkles },
     ],
   },
   {
     id: 'compliance',
-    title: 'Compliance',
+    titleKey: 'shell.nav.groupCompliance',
     items: [
-      { key: '/org/$org/sso',            label: 'SAML SSO',       icon: KeyRound },
-      { key: '/org/$org/scim',           label: 'SCIM',           icon: UserCog },
-      { key: '/org/$org/audit',          label: 'Audit log',      icon: ClipboardList },
-      { key: '/org/$org/data-residency', label: 'Data residency', icon: Globe },
-      { key: '/org/$org/retention',      label: 'Retention',      icon: Archive },
+      { key: '/org/$org/sso',            labelKey: 'shell.nav.sso',           icon: KeyRound },
+      { key: '/org/$org/scim',           labelKey: 'shell.nav.scim',          icon: UserCog },
+      { key: '/org/$org/audit',          labelKey: 'shell.nav.audit',         icon: ClipboardList },
+      { key: '/org/$org/data-residency', labelKey: 'shell.nav.dataResidency', icon: Globe },
+      { key: '/org/$org/retention',      labelKey: 'shell.nav.retention',     icon: Archive },
     ],
   },
 ];
@@ -73,6 +82,7 @@ type Props = {
 // data. Nav keys are $org route templates; onSelect resolves the slug and
 // navigates. Selection matches the resolved current path.
 export function OrgShell({ orgName, orgSlug, title, subtitle, topRight, children }: Props) {
+  const { t } = useTranslation('org');
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const visible = useTabVisibility();
@@ -80,9 +90,15 @@ export function OrgShell({ orgName, orgSlug, title, subtitle, topRight, children
   // The current route as a $org template, so it matches a NAV key.
   const selectedKey = pathname.replace(`/org/${orgSlug}`, '/org/$org') as OrgPath;
 
+  const groups: SideNavGroup<OrgPath>[] = NAV_DEF.map((g) => ({
+    id: g.id,
+    title: t(g.titleKey),
+    items: g.items.map((it) => ({ key: it.key, label: t(it.labelKey), icon: it.icon })),
+  }));
+
   return (
     <SideNavShell<OrgPath>
-      groups={NAV}
+      groups={groups}
       selectedKey={selectedKey}
       onSelect={(key) => {
         void navigate({ to: key as never, params: { org: orgSlug } as never });
@@ -126,15 +142,16 @@ function OrgCard({ orgName, orgSlug }: { orgName: string; orgSlug: string }) {
 }
 
 function Breadcrumb({ orgName, pageTitle }: { orgName: string; pageTitle: string }) {
+  const { t } = useTranslation('org');
   return (
     <nav
-      aria-label="Breadcrumb"
+      aria-label={t('shell.breadcrumbAria')}
       className="flex items-center gap-1 text-sm"
       style={{ color: 'var(--fg-subtle)' }}
     >
       <span>{orgName}</span>
       <ChevronRight className="w-3 h-3 opacity-60" />
-      <span>Settings</span>
+      <span>{t('shell.settings')}</span>
       <ChevronRight className="w-3 h-3 opacity-60" />
       <span style={{ color: 'var(--fg-default)' }}>{pageTitle}</span>
     </nav>

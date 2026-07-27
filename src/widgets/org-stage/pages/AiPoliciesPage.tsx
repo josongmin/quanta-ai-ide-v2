@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Globe, Database, Cpu, BookOpen, AlertTriangle } from 'lucide-react';
 import { OrgShell } from '../parts/OrgShell';
 import { Section, Row, Toggle, SaveBar } from '@shared/ui/forms';
@@ -84,6 +85,7 @@ const INITIAL: Form = {
 };
 
 export default function AiPoliciesPage() {
+  const { t } = useTranslation('org');
   const [form, setForm] = useState<Form>(INITIAL);
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
 
@@ -125,13 +127,13 @@ export default function AiPoliciesPage() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="AI policies"
-      subtitle="Which models the org can use, where data lives, and how prompts are sanitized before they leave the org."
+      title={t('aiPolicies.title')}
+      subtitle={t('aiPolicies.subtitle')}
     >
       {/* Allowed models */}
       <Section
-        title="Allowed models"
-        hint="Members can only pick from this list. Disabling a model immediately stops in-flight runs from queuing follow-ups."
+        title={t('aiPolicies.allowedModels.title')}
+        hint={t('aiPolicies.allowedModels.hint')}
       >
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           <div
@@ -145,11 +147,11 @@ export default function AiPoliciesPage() {
             }}
           >
             <span />
-            <span>Model</span>
-            <span>Vendor</span>
-            <span>Context</span>
-            <span>Tier</span>
-            <span>Residency</span>
+            <span>{t('aiPolicies.allowedModels.model')}</span>
+            <span>{t('aiPolicies.allowedModels.vendor')}</span>
+            <span>{t('aiPolicies.allowedModels.context')}</span>
+            <span>{t('aiPolicies.allowedModels.tier')}</span>
+            <span>{t('aiPolicies.allowedModels.residency')}</span>
           </div>
           {MODELS.map((m) => {
             const on = form.allowedModels.has(m.id);
@@ -186,12 +188,12 @@ export default function AiPoliciesPage() {
                   className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded w-fit"
                   style={tierBadgeStyle(m.tier)}
                 >
-                  {m.tier}
+                  {t(`aiPolicies.tier.${m.tier}`)}
                 </span>
                 <span
                   className="text-xs font-mono"
                   style={{ color: conflict ? 'var(--intent-danger-fg)' : 'var(--fg-muted)' }}
-                  title={conflict ? `Not available in ${form.residency.toUpperCase()}` : undefined}
+                  title={conflict ? t('aiPolicies.allowedModels.notAvailable', { region: form.residency.toUpperCase() }) : undefined}
                 >
                   {m.residencyOk.join(', ')}
                 </span>
@@ -202,14 +204,14 @@ export default function AiPoliciesPage() {
         {residencyConflicts.length > 0 && (
           <p className="text-sm mt-2 flex items-start gap-1.5" style={{ color: 'var(--intent-danger-fg)' }}>
             <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
-            {residencyConflicts.length} selected model{residencyConflicts.length === 1 ? ' is' : 's are'} not available in the chosen residency. Members will get an error on use.
+            {t('aiPolicies.allowedModels.conflict', { count: residencyConflicts.length })}
           </p>
         )}
       </Section>
 
       {/* Defaults */}
-      <Section title="Defaults" hint="What members get if they don't pick a model. Must be in the allowed list above.">
-        <Row label="Default model" sub={<>For interactive use (chat, inspect).</>}>
+      <Section title={t('aiPolicies.defaults.title')} hint={t('aiPolicies.defaults.hint')}>
+        <Row label={t('aiPolicies.defaults.defaultModel')} sub={t('aiPolicies.defaults.defaultModelSub')}>
           <select
             value={form.defaultModel}
             onChange={(e) => { set('defaultModel', e.target.value as ModelId); }}
@@ -221,7 +223,7 @@ export default function AiPoliciesPage() {
             ))}
           </select>
         </Row>
-        <Row label="Fast model" sub="For bulk / background work (admission, agents). Pick a fast tier for cost.">
+        <Row label={t('aiPolicies.defaults.fastModel')} sub={t('aiPolicies.defaults.fastModelSub')}>
           <select
             value={form.fastModel}
             onChange={(e) => { set('fastModel', e.target.value as ModelId); }}
@@ -233,17 +235,17 @@ export default function AiPoliciesPage() {
             ))}
           </select>
         </Row>
-        <Row label="Allow reviewers to override" sub="If on, individual reviewers can pick a non-default model for one-off review runs.">
+        <Row label={t('aiPolicies.defaults.reviewerOverride')} sub={t('aiPolicies.defaults.reviewerOverrideSub')}>
           <Toggle checked={form.reviewerOverride} onChange={(v) => { set('reviewerOverride', v); }} />
         </Row>
       </Section>
 
       {/* Data handling */}
-      <Section title="Data handling" hint="What providers can do with org prompts, and where they live.">
-        <Row label="Opt out of model training" sub="Tell the provider not to use any prompt / completion for fine-tuning.">
+      <Section title={t('aiPolicies.dataHandling.title')} hint={t('aiPolicies.dataHandling.hint')}>
+        <Row label={t('aiPolicies.dataHandling.optOut')} sub={t('aiPolicies.dataHandling.optOutSub')}>
           <Toggle checked={form.optOutOfTraining} onChange={(v) => { set('optOutOfTraining', v); }} />
         </Row>
-        <Row label="Data residency" sub="Models will only be routed to inference endpoints in the chosen region.">
+        <Row label={t('aiPolicies.dataHandling.residency')} sub={t('aiPolicies.dataHandling.residencySub')}>
           <div className="inline-flex gap-1 rounded-md overflow-hidden" style={{ border: '1px solid var(--border-default)' }}>
             {(['us', 'eu', 'apac'] as Residency[]).map((r) => {
               const active = form.residency === r;
@@ -265,44 +267,44 @@ export default function AiPoliciesPage() {
             })}
           </div>
         </Row>
-        <Row label="Provider retention" sub="How many days the provider keeps prompts in their logs.">
+        <Row label={t('aiPolicies.dataHandling.retention')} sub={t('aiPolicies.dataHandling.retentionSub')}>
           <select
             value={form.retentionDays}
             onChange={(e) => { set('retentionDays', Number(e.target.value)); }}
             className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)', minWidth: 120 }}
           >
-            <option value={0}>0 days (zero retention)</option>
-            <option value={7}>7 days</option>
-            <option value={30}>30 days</option>
-            <option value={90}>90 days</option>
+            <option value={0}>{t('aiPolicies.dataHandling.retention0')}</option>
+            <option value={7}>{t('aiPolicies.dataHandling.retention7')}</option>
+            <option value={30}>{t('aiPolicies.dataHandling.retention30')}</option>
+            <option value={90}>{t('aiPolicies.dataHandling.retention90')}</option>
           </select>
         </Row>
       </Section>
 
       {/* Prompt safety */}
-      <Section title="Prompt safety" hint="Pre-send filters applied to every prompt that leaves the org.">
-        <Row label="Redact secrets" sub={<>Run the secret scanner against every prompt and replace matches with <span className="font-mono">[REDACTED]</span>.</>}>
+      <Section title={t('aiPolicies.promptSafety.title')} hint={t('aiPolicies.promptSafety.hint')}>
+        <Row label={t('aiPolicies.promptSafety.redactPre')} sub={<>{t('aiPolicies.promptSafety.redactSubPre')}<span className="font-mono">[REDACTED]</span>{t('aiPolicies.promptSafety.redactSubPost')}</>}>
           <Toggle checked={form.redactSecretsInPrompts} onChange={(v) => { set('redactSecretsInPrompts', v); }} />
         </Row>
-        <Row label="Block PII" sub="Refuse to send a prompt that contains PII (emails, SSNs, credit cards, phone numbers).">
+        <Row label={t('aiPolicies.promptSafety.blockPii')} sub={t('aiPolicies.promptSafety.blockPiiSub')}>
           <Toggle checked={form.blockPiiInPrompts} onChange={(v) => { set('blockPiiInPrompts', v); }} />
         </Row>
       </Section>
 
       {/* Agent capabilities */}
-      <Section title="Agent capabilities" hint="What autonomous agents are allowed to do on behalf of the org.">
-        <Row label="Web browsing" sub="Allow agents to fetch external URLs as part of investigations.">
+      <Section title={t('aiPolicies.agentCaps.title')} hint={t('aiPolicies.agentCaps.hint')}>
+        <Row label={t('aiPolicies.agentCaps.browsing')} sub={t('aiPolicies.agentCaps.browsingSub')}>
           <Toggle checked={form.allowAgentBrowsing} onChange={(v) => { set('allowAgentBrowsing', v); }} />
         </Row>
-        <Row label="Tool use" sub="Allow function-calling against internal tools (admission, fix-pipeline, audit).">
+        <Row label={t('aiPolicies.agentCaps.toolUse')} sub={t('aiPolicies.agentCaps.toolUseSub')}>
           <Toggle checked={form.allowToolUse} onChange={(v) => { set('allowToolUse', v); }} />
         </Row>
       </Section>
 
       {/* Spend cap */}
-      <Section title="Spend cap" hint="Hard limit on monthly token spend. Org gets paused on cap; admins are paged.">
-        <Row label="Monthly token cap" sub="Counted across every allowed model. 0 disables the cap.">
+      <Section title={t('aiPolicies.spendCap.title')} hint={t('aiPolicies.spendCap.hint')}>
+        <Row label={t('aiPolicies.spendCap.monthlyCap')} sub={t('aiPolicies.spendCap.monthlyCapSub')}>
           <div
             className="flex items-center gap-2 h-8 px-2.5 rounded-md"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
@@ -315,7 +317,7 @@ export default function AiPoliciesPage() {
               className="w-20 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>M tokens / month</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('aiPolicies.spendCap.unit')}</span>
           </div>
         </Row>
       </Section>
@@ -324,15 +326,15 @@ export default function AiPoliciesPage() {
         <div className="flex flex-col gap-1.5">
           <span className="flex items-start gap-1.5">
             <Cpu className="w-3 h-3 mt-0.5" />
-            Changes apply on the next agent / chat invocation.
+            {t('aiPolicies.notes.changes')}
           </span>
           <span className="flex items-start gap-1.5">
             <Database className="w-3 h-3 mt-0.5" />
-            Existing prompts already at the provider follow whatever retention was in force when they were sent.
+            {t('aiPolicies.notes.retention')}
           </span>
           <span className="flex items-start gap-1.5">
             <BookOpen className="w-3 h-3 mt-0.5" />
-            Audit log records who changed what, every time. Reviewers can re-read decisions back to a configuration snapshot.
+            {t('aiPolicies.notes.audit')}
           </span>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   UserPlus, Filter, X, UserMinus,
 } from 'lucide-react';
@@ -38,6 +39,7 @@ type StatusFilter = 'all' | 'active' | 'invited' | 'deactivated';
 type RoleFilter   = 'all' | Role;
 
 function MembersMock() {
+  const { t } = useTranslation('org');
   const [members, setMembers] = useState<Member[]>(SEED);
   const [q, setQ] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
@@ -98,14 +100,14 @@ function MembersMock() {
     <OrgShell
       orgName="ACME, Inc."
       orgSlug="acme"
-      title="Members"
-      subtitle="People who can access this organization. Invite by email, change roles, or deactivate access."
+      title={t('members.title')}
+      subtitle={t('members.subtitle')}
       topRight={
         <div className="flex items-center gap-1.5">
           {bulk.size > 0 && (
             <>
               <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-                {bulk.size} selected
+                {t('members.selected', { count: bulk.size })}
               </span>
               <Button
                 leading={<UserMinus className="w-3 h-3" />}
@@ -114,9 +116,9 @@ function MembersMock() {
                   setBulk(new Set());
                 }}
               >
-                Deactivate
+                {t('members.deactivate')}
               </Button>
-              <Button variant="ghost" onClick={() => { setBulk(new Set()); }}>
+              <Button variant="ghost" onClick={() => { setBulk(new Set()); }} aria-label={t('members.clearSelection')}>
                 <X className="w-3 h-3" />
               </Button>
             </>
@@ -127,7 +129,7 @@ function MembersMock() {
             leading={<UserPlus className="w-3.5 h-3.5" />}
             onClick={() => { setInviteOpen(true); }}
           >
-            Invite people
+            {t('members.invitePeople')}
           </Button>
         </div>
       }
@@ -151,7 +153,7 @@ function MembersMock() {
                 onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'var(--bg-hover)'; }}
                 onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'transparent'; }}
               >
-                <span className="capitalize">{id}</span>
+                <span>{t(`members.filter.${id}`)}</span>
                 <span
                   className="text-xs tabular-nums px-1.5 py-0.5 rounded"
                   style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-subtle)' }}
@@ -165,7 +167,7 @@ function MembersMock() {
 
         <div className="flex items-center gap-2">
           <RoleFilterMenu value={roleFilter} onChange={setRoleFilter} />
-          <SearchInput value={q} onChange={setQ} placeholder="Search name, email, team…" minWidth={220} />
+          <SearchInput value={q} onChange={setQ} placeholder={t('members.searchPlaceholder')} minWidth={220} />
         </div>
       </div>
 
@@ -189,17 +191,17 @@ function MembersMock() {
             indeterminate={bulk.size > 0 && bulk.size < filtered.length}
             onChange={toggleBulkAll}
           />
-          <span>Member</span>
-          <span>Role</span>
-          <span>Team</span>
-          <span>Last active</span>
+          <span>{t('members.table.member')}</span>
+          <span>{t('members.table.role')}</span>
+          <span>{t('members.table.team')}</span>
+          <span>{t('members.table.lastActive')}</span>
           <span />
         </div>
 
         {filtered.length === 0 ? (
           <EmptyState
-            title={q ? `No matches for "${q}"` : 'No people match this filter'}
-            subtitle="Try a different keyword or clear the filter."
+            title={q ? t('members.empty.noMatchesTitle', { query: q }) : t('members.empty.noFilterTitle')}
+            subtitle={t('members.empty.noMatchesSubtitle')}
           />
         ) : (
           filtered.map((m) => (
@@ -219,8 +221,7 @@ function MembersMock() {
       </div>
 
       <p className="text-sm mt-3 px-1" style={{ color: 'var(--fg-subtle)' }}>
-        {filtered.length} of {members.length} {members.length === 1 ? 'person' : 'people'} ·
-        {' '}Owner cannot be removed without first transferring ownership.
+        {t('members.footer', { count: members.length, filtered: filtered.length, total: members.length })}
       </p>
 
       {inviteOpen && <InviteModal onClose={() => { setInviteOpen(false); }} />}
@@ -229,9 +230,9 @@ function MembersMock() {
           open
           onCancel={() => { setConfirmRemove(null); }}
           onConfirm={() => { remove(confirmRemove.id); setConfirmRemove(null); }}
-          title={`Remove ${confirmRemove.name}?`}
-          confirmLabel="Remove"
-          description="Their access to this organization will end immediately. Their authored work stays attributed to them. This action can't be undone."
+          title={t('members.removeDialog.title', { name: confirmRemove.name })}
+          confirmLabel={t('members.removeDialog.confirm')}
+          description={t('members.removeDialog.description')}
         />
       )}
     </OrgShell>
@@ -241,6 +242,7 @@ function MembersMock() {
 function RoleFilterMenu({
   value, onChange,
 }: { value: RoleFilter; onChange: (v: RoleFilter) => void }) {
+  const { t } = useTranslation('org');
   return (
     <div className="relative inline-flex items-center">
       <Filter
@@ -258,12 +260,12 @@ function RoleFilterMenu({
           minWidth: 130,
         }}
       >
-        <option value="all">All roles</option>
-        <option value="owner">Owner</option>
-        <option value="admin">Admin</option>
-        <option value="member">Member</option>
-        <option value="billing">Billing</option>
-        <option value="guest">Guest</option>
+        <option value="all">{t('members.filter.allRoles')}</option>
+        <option value="owner">{t('common.role.owner')}</option>
+        <option value="admin">{t('common.role.admin')}</option>
+        <option value="member">{t('common.role.member')}</option>
+        <option value="billing">{t('common.role.billing')}</option>
+        <option value="guest">{t('common.role.guest')}</option>
       </select>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { UserPlus, AlertTriangle } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { SettingsModal } from '@shared/ui';
@@ -16,6 +17,7 @@ export function RealInviteModal({
   onClose: () => void;
   onInvited: () => void;
 }) {
+  const { t } = useTranslation('org');
   const [emails, setEmails] = useState('');
   const [role, setRole] = useState<OrgRole>('member');
   const [sending, setSending] = useState(false);
@@ -52,10 +54,10 @@ export function RealInviteModal({
       onClose={onClose}
       size="md"
       icon={<UserPlus className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
-      title="Invite people"
+      title={t('invite.title')}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
           <Button
             variant="primary"
             size="md"
@@ -63,8 +65,8 @@ export function RealInviteModal({
             onClick={() => { void send(); }}
           >
             {sending
-              ? 'Sending…'
-              : `Send ${valid.length > 0 ? `${valid.length.toString()} invite${valid.length === 1 ? '' : 's'}` : 'invites'}`}
+              ? t('invite.sending')
+              : valid.length > 0 ? t('invite.send', { count: valid.length }) : t('invite.sendEmpty')}
           </Button>
         </>
       }
@@ -74,17 +76,17 @@ export function RealInviteModal({
           className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
           style={{ color: 'var(--fg-subtle)' }}
         >
-          <span>Emails</span>
+          <span>{t('invite.emails')}</span>
           {parsed.length > 0 && (
             <span className="lowercase tracking-normal tabular-nums">
-              {valid.length} valid{invalid.length > 0 && ` · ${invalid.length.toString()} invalid`}
+              {t('invite.valid', { count: valid.length })}{invalid.length > 0 && ` · ${t('invite.invalid', { count: invalid.length })}`}
             </span>
           )}
         </span>
         <textarea
           value={emails}
           onChange={(e) => { setEmails(e.target.value); }}
-          placeholder="teammate@company.com, another@company.com…"
+          placeholder={t('invite.emailsPlaceholderReal')}
           rows={3}
           className="w-full rounded-md p-2.5 text-base outline-none resize-none"
           style={{
@@ -97,14 +99,14 @@ export function RealInviteModal({
         {invalid.length > 0 && (
           <span className="flex items-center gap-1 text-sm" style={{ color: 'var(--intent-warn-fg)' }}>
             <AlertTriangle className="w-3 h-3" />
-            Skipping {invalid.length}: {invalid.slice(0, 2).join(', ')}{invalid.length > 2 && '…'}
+            {t('invite.skipping', { count: invalid.length, list: `${invalid.slice(0, 2).join(', ')}${invalid.length > 2 ? '…' : ''}` })}
           </span>
         )}
       </label>
 
       <label className="flex flex-col gap-1.5">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Role
+          {t('invite.role')}
         </span>
         <select
           value={role}
@@ -116,10 +118,10 @@ export function RealInviteModal({
             color: 'var(--fg-strong)',
           }}
         >
-          <option value="admin">Admin</option>
-          <option value="member">Member</option>
-          <option value="billing">Billing</option>
-          <option value="guest">Guest</option>
+          <option value="admin">{t('common.role.admin')}</option>
+          <option value="member">{t('common.role.member')}</option>
+          <option value="billing">{t('common.role.billing')}</option>
+          <option value="guest">{t('common.role.guest')}</option>
         </select>
       </label>
 

@@ -1,1 +1,1218 @@
-{}
+{
+  "shell": {
+    "breadcrumbAria": "面包屑导航",
+    "settings": "设置",
+    "nav": {
+      "groupOrg": "组织",
+      "groupAccess": "访问与策略",
+      "groupCompliance": "合规",
+      "general": "常规",
+      "members": "成员",
+      "invitations": "邀请",
+      "teams": "团队",
+      "roles": "角色",
+      "serviceAccounts": "服务账户",
+      "domains": "域名",
+      "usage": "用量",
+      "security": "安全",
+      "integrations": "集成",
+      "webhooks": "Webhook",
+      "api": "API 和 OAuth",
+      "policies": "策略",
+      "aiPolicies": "AI 策略",
+      "sso": "SAML SSO",
+      "scim": "SCIM",
+      "audit": "审计日志",
+      "dataResidency": "数据驻留地",
+      "retention": "保留"
+    }
+  },
+  "comingSoon": {
+    "title": "即将推出",
+    "subtitle": "{{title}} 尚未连接到您的组织——将在后续版本中提供。",
+    "titles": {
+      "roles": "角色",
+      "usage": "用量",
+      "domains": "域名",
+      "security": "安全",
+      "integrations": "集成",
+      "api": "API 和 OAuth",
+      "policies": "策略",
+      "aiPolicies": "AI 策略",
+      "dataResidency": "数据驻留地",
+      "retention": "保留"
+    },
+    "subtitles": {
+      "roles": "角色权限由平台管理。",
+      "usage": "组织用量指标。"
+    }
+  },
+  "common": {
+    "cancel": "取消",
+    "copy": "复制",
+    "copied": "已复制",
+    "close": "关闭",
+    "closeDialog": "关闭对话框",
+    "closeDrawer": "关闭面板",
+    "remove": "移除",
+    "delete": "删除",
+    "done": "完成",
+    "save": "保存",
+    "member_one": "名",
+    "member_other": "名",
+    "person_one": "人",
+    "person_other": "人",
+    "role": {
+      "owner": "所有者",
+      "admin": "管理员",
+      "member": "成员",
+      "billing": "计费",
+      "guest": "访客",
+      "viewer": "查看者"
+    }
+  },
+  "general": {
+    "title": "常规",
+    "subtitle": "本组织的标识和默认设置。",
+    "subtitleReal": "本组织的标识。",
+    "identity": {
+      "title": "标识",
+      "hint": "本组织在产品中以及对受邀者的显示方式。",
+      "logo": "徽标",
+      "logoSub": "正方形 PNG 或 SVG，至少 64×64。",
+      "upload": "上传",
+      "removeLogo": "移除",
+      "displayName": "显示名称",
+      "displayNameHint": "最多 40 个字符",
+      "slug": "URL 短名",
+      "slugHint": "acme.app/{slug}",
+      "slugHintReal": "se-field.app/{slug}",
+      "website": "网站",
+      "description": "描述",
+      "descriptionHint": "显示在组织仪表板上"
+    },
+    "defaults": {
+      "title": "默认设置",
+      "hint": "未选择其他项时使用的每用户回退值。",
+      "defaultWorkspace": "默认工作区",
+      "defaultWorkspaceSub": "新成员登录后进入的位置。"
+    },
+    "danger": {
+      "title": "危险区域",
+      "hint": "影响整个组织且不可撤销的操作。",
+      "deleteLabel": "删除组织",
+      "deleteSub": "永久移除本组织、其工作区及所有关联数据。成员将保留其账户。",
+      "deleteButton": "删除组织"
+    },
+    "deleteDialog": {
+      "title": "确定删除 {{name}} 吗？",
+      "titleFallback": "确定删除组织吗？",
+      "confirm": "我已了解并删除",
+      "descriptionPre": "这将永久删除组织、其中的所有工作区、计费记录及所有代理历史。成员将保留账户但失去访问权限。请在下方输入 ",
+      "descriptionPost": " 以确认。"
+    }
+  },
+  "members": {
+    "title": "成员",
+    "subtitle": "可以访问本组织的人员。通过邮箱邀请、变更角色或停用访问权限。",
+    "subtitleReal": "可以访问本组织的人员。通过邮箱邀请或变更角色。",
+    "invitePeople": "邀请成员",
+    "selected": "已选择 {{count}} 项",
+    "deactivate": "停用",
+    "clearSelection": "清除选择",
+    "searchPlaceholder": "搜索姓名、邮箱、团队…",
+    "searchPlaceholderReal": "搜索姓名或邮箱…",
+    "filter": {
+      "all": "全部",
+      "active": "活跃",
+      "invited": "已邀请",
+      "deactivated": "已停用",
+      "allRoles": "所有角色"
+    },
+    "table": {
+      "member": "成员",
+      "role": "角色",
+      "team": "团队",
+      "lastActive": "最近活动",
+      "joined": "加入时间"
+    },
+    "empty": {
+      "noMatchesTitle": "没有与“{{query}}”匹配的结果",
+      "noMatchesSubtitle": "尝试其他关键词或清除筛选。",
+      "noFilterTitle": "没有符合此筛选的人员",
+      "noMembersTitle": "尚无成员",
+      "noMembersSubtitle": "邀请成员以开始。",
+      "noMatchesKeyword": "尝试其他关键词。"
+    },
+    "footer_one": "{{total}} 人中的 {{filtered}} 人 · 所有者需先转移所有权才能移除。",
+    "footer_other": "{{total}} 人中的 {{filtered}} 人 · 所有者需先转移所有权才能移除。",
+    "footerReal_one": "{{total}} 人中的 {{filtered}} 人 · 所有者仅通过所有权转移变更。",
+    "footerReal_other": "{{total}} 人中的 {{filtered}} 人 · 所有者仅通过所有权转移变更。",
+    "you": "你",
+    "removeDialog": {
+      "title": "确定移除 {{name}} 吗？",
+      "confirm": "移除",
+      "description": "其对本组织的访问权限将立即终止。其创作的成果仍归属于本人。此操作无法撤销。"
+    },
+    "rowMenu": {
+      "resendInvite": "重新发送邀请",
+      "deactivate": "停用",
+      "reactivate": "重新启用",
+      "transferOwnership": "转移所有权",
+      "removeFromOrg": "从组织移除",
+      "removeFromOrganization": "从组织移除"
+    },
+    "twoFaTitle": "已启用双重验证"
+  },
+  "invite": {
+    "title": "邀请成员",
+    "emails": "邮箱",
+    "valid": "有效 {{count}}",
+    "invalid": "无效 {{count}}",
+    "emailsPlaceholder": "alice@acme.com, bob@acme.com…",
+    "emailsPlaceholderReal": "teammate@company.com, another@company.com…",
+    "skipping": "跳过 {{count}} 个：{{list}}",
+    "role": "角色",
+    "team": "团队",
+    "orShareLink": "或分享邀请链接",
+    "send_one": "发送 {{count}} 个邀请",
+    "send_other": "发送 {{count}} 个邀请",
+    "sendEmpty": "发送邀请",
+    "sending": "发送中…"
+  },
+  "invitations": {
+    "title": "邀请",
+    "subtitle": "本组织待处理和已接受的邀请。可重新发送、撤销或复制可共享的邀请链接。",
+    "subtitleReal": "本组织未处理的邀请。重新发送或撤销待处理的邀请。",
+    "invitePeople": "邀请成员",
+    "stat": {
+      "pending": "待处理",
+      "accepted": "已接受",
+      "expired": "已过期",
+      "thisMonth": "本月"
+    },
+    "filter": {
+      "all": "全部",
+      "pending": "待处理",
+      "accepted": "已接受",
+      "expired": "已过期"
+    },
+    "table": {
+      "email": "邮箱",
+      "role": "角色",
+      "team": "团队",
+      "sentBy": "发送人",
+      "status": "状态",
+      "expires": "过期"
+    },
+    "status": {
+      "pending": "待处理",
+      "accepted": "已接受",
+      "expired": "已过期"
+    },
+    "action": {
+      "resend": "重新发送",
+      "revoke": "撤销",
+      "reinvite": "重新邀请",
+      "resendInvite": "重新发送邀请",
+      "revokeInvite": "撤销邀请"
+    },
+    "shareLink": {
+      "title": "可共享的邀请链接",
+      "sub": "来自已验证域名并持有此链接的任何人都可作为成员加入。可随时停用。"
+    },
+    "empty": {
+      "title": "没有待处理的邀请",
+      "subtitle": "通过邮箱邀请成员后会显示在此处。"
+    },
+    "pendingCount_one": "{{count}} 个待处理邀请。",
+    "pendingCount_other": "{{count}} 个待处理邀请。"
+  },
+  "teams": {
+    "title": "团队",
+    "subtitle": "为所有权路由、通知和评审分配而将人员分组。",
+    "subtitleReal": "将组织内的人员分组。所有权和评审路由在工作区设置中分配。",
+    "newTeam": "新建团队",
+    "searchPlaceholder": "搜索团队…",
+    "noMatch": "没有匹配的团队。",
+    "membersCount_one": "{{count}} 名成员",
+    "membersCount_other": "{{count}} 名成员",
+    "pathsCount": "{{count}} 条路径",
+    "noneSelected": "未选择团队",
+    "table": {
+      "team": "团队",
+      "created": "创建时间"
+    },
+    "empty": {
+      "title": "尚无团队",
+      "subtitle": "创建团队以对成员分组。"
+    },
+    "removeDialog": {
+      "title": "确定删除 {{name}} 吗？",
+      "confirm": "删除团队",
+      "description": "成员保留其组织访问权限。该团队拥有的代码路径将恢复为组织默认路由。",
+      "descriptionReal": "成员仍留在组织中，仅移除团队分组。"
+    },
+    "create": {
+      "title": "新建团队",
+      "name": "名称",
+      "namePlaceholder": "Mobile",
+      "teamName": "团队名称",
+      "handle": "标识符",
+      "handleTaken": "已被占用",
+      "handlePlaceholder": "mobile",
+      "createTeam": "创建团队",
+      "creating": "创建中…"
+    },
+    "detail": {
+      "noDescription": "尚无描述。",
+      "deleteTeam": "删除团队",
+      "membersHeader": "成员 · {{count}}",
+      "addMember": "添加成员",
+      "noMembers": "尚无成员。添加成员以开始将工作路由到此处。",
+      "lead": "负责人",
+      "makeLead": "设为负责人",
+      "removeFromTeam": "从团队移除",
+      "codeOwnershipHeader": "代码所有权 · {{count}}",
+      "codeOwnershipPre": "将评审和事件路由到此团队的通配符。标记为 Auto 的路径会在推送时添加到 ",
+      "codeOwnershipPost": "。",
+      "auto": "自动",
+      "manual": "手动",
+      "removePath": "移除路径",
+      "addPathPlaceholder": "src/features/admission/**",
+      "addPath": "添加路径",
+      "routing": "路由",
+      "notificationChannel": "通知频道",
+      "created": "创建于 {{date}}。"
+    }
+  },
+  "roles": {
+    "title": "角色",
+    "subtitle": "内置角色已锁定。复制一个以定义适合你团队的自定义角色。",
+    "newRole": "新建角色",
+    "newRoleName": "新建角色",
+    "copySuffix": "{{name}} 副本",
+    "builtIn": "内置",
+    "permsSummary": "{{perms}} 项权限 · {{count}}{{unit}}",
+    "describePlaceholder": "描述此角色的用途…",
+    "assigned": "已分配 {{count}} 人",
+    "permissionsOf": "{{total}} 项权限中的 {{count}} 项",
+    "duplicate": "复制",
+    "delete": "删除",
+    "lockNotice": "这是内置角色，无法编辑。复制它以创建自定义版本。",
+    "footer": "自定义角色会立即对已分配的成员生效。审计日志会记录每次权限变更。",
+    "group": {
+      "org": "组织",
+      "members": "成员",
+      "workspaces": "工作区",
+      "admission": "准入",
+      "agents": "代理",
+      "billing": "计费",
+      "observability": "审计与密钥"
+    },
+    "perm": {
+      "orgRead": "查看组织设置",
+      "orgManage": "管理组织设置",
+      "orgManageHint": "名称、徽标、默认值",
+      "membersInvite": "邀请成员",
+      "membersRemove": "移除成员",
+      "membersRole": "变更成员角色",
+      "workspacesCreate": "创建工作区",
+      "workspacesDelete": "删除工作区",
+      "workspacesSettings": "编辑工作区设置",
+      "admissionRead": "读取准入规则",
+      "admissionWrite": "编写准入规则",
+      "admissionBypass": "绕过准入门禁",
+      "admissionBypassHint": "高风险",
+      "agentsRun": "触发代理运行",
+      "agentsConfigure": "配置代理",
+      "agentsKill": "终止运行中的代理",
+      "billingRead": "查看计费与用量",
+      "billingManage": "变更套餐与付款",
+      "auditRead": "读取审计日志",
+      "auditExport": "导出审计日志",
+      "secretsRead": "读取密钥名称",
+      "secretsWrite": "管理密钥"
+    },
+    "seed": {
+      "owner": "完全访问权限。可转移所有权并删除组织。",
+      "admin": "管理成员、工作区和策略。不含计费。",
+      "member": "默认角色。使用产品、发布代码、运行代理。",
+      "billing": "除计费界面外为只读访问。",
+      "guest": "对共享工作区的有限读取。",
+      "secops": "自定义——安全评审和审计访问。"
+    }
+  },
+  "security": {
+    "title": "安全",
+    "subtitle": "组织级别的控制。此处更严格的设置会覆盖每用户的选择。",
+    "auth": {
+      "title": "身份验证",
+      "hint": "登录时人员证明身份的方式。",
+      "mfaRequired": "要求多重身份验证",
+      "mfaRequiredSub": "所有成员必须先注册第二重验证因子才能访问组织。",
+      "mfaMethod": "MFA 方式",
+      "mfaMethodSub": "限制为特定验证类型，或接受任何已注册的验证因子。",
+      "mfaAny": "任意（TOTP、WebAuthn、备用）",
+      "mfaTotp": "仅 TOTP",
+      "mfaWebauthn": "仅 WebAuthn / 通行密钥",
+      "passkeyAdmins": "管理员仅限通行密钥",
+      "passkeyAdminsSub": "所有者和管理员必须使用防钓鱼因子（WebAuthn）。",
+      "ssoOnly": "仅单点登录",
+      "ssoOnlySub": "阻止密码和社交登录。成员必须使用组织 IdP。"
+    },
+    "sessions": {
+      "title": "会话",
+      "hint": "已验证浏览器保持登录状态的时长。",
+      "maxDuration": "最长会话时长",
+      "maxDurationSub": "硬性上限。到期后用户将被登出并需重新验证。",
+      "inactivity": "不活动超时",
+      "inactivitySub": "在此分钟数内无活动后登出。",
+      "min15": "15 分钟",
+      "min30": "30 分钟",
+      "hour1": "1 小时",
+      "hours2": "2 小时",
+      "never": "永不",
+      "rememberMe": "允许“记住我”",
+      "rememberMeSub": "允许用户在受信任浏览器上最多 30 天跳过 MFA。",
+      "trustDevices": "信任设备",
+      "trustDevicesSub": "在后续登录时将已注册设备视为第二重因子。",
+      "hours8": "8 小时",
+      "day1": "1 天",
+      "week1": "1 周",
+      "days30": "30 天",
+      "days90": "90 天"
+    },
+    "ipAllowlist": {
+      "title": "IP 允许列表",
+      "hint": "将组织访问限制为特定的一组 CIDR 块。列表为空表示允许所有。",
+      "empty": "尚无 CIDR。添加一个以开始强制执行。",
+      "placeholder": "10.0.0.0/8",
+      "add": "添加 CIDR",
+      "lockoutWarn": "保存前请确保包含您当前的 IP——否则您将把自己锁在门外。",
+      "off": "IP 允许列表已关闭。成员可从任何网络登录。",
+      "errorCidr": "请使用 CIDR 表示法，例如 10.0.0.0/8 或 203.0.113.42/32",
+      "errorDup": "已在列表中"
+    },
+    "appAccess": {
+      "title": "应用访问",
+      "hint": "谁可以将第三方 OAuth 应用连接到组织。",
+      "install": "安装第三方应用",
+      "installSub": "成员可浏览目录，但只有允许的角色才能安装。",
+      "adminOnly": "仅管理员",
+      "all": "所有成员"
+    },
+    "notes": {
+      "effect": "变更会立即对新登录生效。现有会话将持续到下次刷新。",
+      "notify": "当 MFA、仅 SSO 或通行密钥要求变更时，会通过邮件通知成员。",
+      "recovery": "每次 MFA 方式变更时都会重新签发恢复码。"
+    }
+  },
+  "integrations": {
+    "title": "集成",
+    "subtitle": "{{total}} 个应用中已安装 {{installed}} 个。",
+    "category": {
+      "all": "全部",
+      "chat": "聊天",
+      "tracker": "问题跟踪",
+      "pager": "值班呼叫",
+      "observability": "可观测性",
+      "sourcecontrol": "源代码管理",
+      "docs": "文档"
+    },
+    "installedOnly": "仅已安装",
+    "searchPlaceholder": "搜索应用…",
+    "noMatchTitle": "没有匹配的应用。",
+    "noMatchSub": "尝试其他类别或清除搜索。",
+    "notInstalled": "未安装",
+    "configure": "配置",
+    "install": "安装",
+    "statusDot": {
+      "healthy": "正常",
+      "degraded": "降级",
+      "error": "错误"
+    },
+    "blurb": {
+      "slack": "将评审请求、代理更新和事件信号发布到频道。",
+      "jira": "准入门禁与 Jira 工单之间的双向同步。",
+      "linear": "从评审线程打开 Linear 问题。将 PR 链接回问题。",
+      "pagerduty": "当准入规则阻止部署或代理崩溃时呼叫值班人员。",
+      "datadog": "将代理和准入指标发送到 Datadog。将错误抓取回事件。",
+      "github": "拉取仓库、发布检查运行并应用 CODEOWNERS 路由。",
+      "gitlab": "与 GitHub 相同，用于 GitLab 托管的项目。",
+      "bitbucket": "Atlassian 托管的 Git 源。",
+      "notion": "在 Notion 文档中呈现调查摘要和操作手册。",
+      "sentry": "将错误与准入失败和事后分析交叉链接。",
+      "opsgenie": "PagerDuty 的替代呼叫工具。",
+      "discord": "向 Discord 服务器频道发送通知。"
+    },
+    "drawer": {
+      "ariaLabel": "{{name}} 配置",
+      "account": "账户",
+      "installedBy": "安装人",
+      "subscribedEvents": "已订阅事件",
+      "noEvents": "未配置任何事件。",
+      "errorNotice": "上次轮询时 API 密钥返回 401。请重新连接以刷新凭据。",
+      "documentation": "文档",
+      "openDocs": "打开 {{name}} 文档",
+      "uninstall": "卸载",
+      "done": "完成"
+    }
+  },
+  "webhooks": {
+    "title": "Webhook",
+    "subtitle": "由组织级别事件触发的 HTTP 回调。每个端点可订阅事件类型的子集。",
+    "subtitleReal": "由组织事件触发的 HTTP 回调，使用 HMAC-SHA256 签名。每个端点订阅事件的子集。",
+    "newEndpoint": "新建端点",
+    "urlPlaceholder": "https://hooks.example.com/se-events",
+    "descPlaceholder": "例如：内部仓库镜像",
+    "seed": {
+      "warehouse": "镜像到内部仓库",
+      "partner": "合作伙伴门禁结果镜像",
+      "staging": "仅预发布"
+    },
+    "event": {
+      "admissionPassed": "准入门禁通过",
+      "admissionFailed": "准入门禁失败",
+      "reviewRequested": "已请求评审",
+      "reviewApproved": "评审已批准",
+      "agentStarted": "代理已启动",
+      "agentCompleted": "代理已完成",
+      "agentKilled": "代理已终止",
+      "incidentOpened": "事件已打开",
+      "incidentResolved": "事件已解决",
+      "workspaceCreated": "工作区已创建",
+      "memberInvited": "成员已邀请"
+    },
+    "real": {
+      "allEvents": "所有事件",
+      "memberInvited": "成员已邀请",
+      "memberRemoved": "成员已移除",
+      "roleChanged": "角色已变更",
+      "invitationCanceled": "邀请已取消",
+      "orgUpdated": "组织已更新",
+      "orgDeleted": "组织已删除",
+      "apikeyCreated": "API 密钥已创建",
+      "apikeyRevoked": "API 密钥已撤销",
+      "subscriptionUpdated": "订阅已更新",
+      "paymentFailed": "付款失败"
+    },
+    "table": {
+      "endpoint": "端点",
+      "events": "事件",
+      "status": "状态",
+      "event": "事件",
+      "attempts": "尝试次数",
+      "when": "时间",
+      "all": "全部"
+    },
+    "status": {
+      "enabled": "已启用",
+      "paused": "已暂停"
+    },
+    "deliveryStatus": {
+      "delivered": "已送达",
+      "failed": "失败",
+      "exhausted": "已耗尽",
+      "pending": "待处理",
+      "sending": "发送中"
+    },
+    "action": {
+      "pause": "暂停",
+      "enable": "启用",
+      "deleteEndpoint": "删除端点",
+      "replay": "重放"
+    },
+    "empty": {
+      "endpointsTitle": "无端点",
+      "endpointsSub": "添加端点以接收已签名的事件回调。",
+      "deliveriesTitle": "尚无投递记录",
+      "deliveriesSub": "端点接收到事件后会显示在此处。"
+    },
+    "recentDeliveries": "最近投递",
+    "create": {
+      "title": "新建 Webhook 端点",
+      "payloadUrl": "负载 URL",
+      "urlPlaceholder": "https://hooks.example.com/p0",
+      "description": "描述（可选）",
+      "descPlaceholder": "内部仓库镜像",
+      "events": "事件",
+      "create": "创建端点",
+      "creating": "创建中…"
+    },
+    "signingSecret": {
+      "title": "签名密钥",
+      "description": "使用此密钥验证每次投递的 x-p0-signature 标头（正文的 HMAC-SHA256）。仅显示一次。"
+    },
+    "deleteDialog": {
+      "title": "确定删除此端点吗？",
+      "confirm": "删除",
+      "description": "它将立即停止接收事件。投递历史将被保留。"
+    }
+  },
+  "api": {
+    "title": "API 和 OAuth",
+    "subtitle": "组织范围的凭据和 OAuth 应用。个人令牌位于 /me/api-tokens。",
+    "newToken": "新建令牌",
+    "registerApp": "注册应用",
+    "tab": {
+      "pat": "个人访问令牌",
+      "oauth": "OAuth 应用"
+    },
+    "footer": "令牌以组织身份进行验证。其执行的任何操作均可审计，但并非始终可撤销。",
+    "tokenCreated": "已创建令牌“{{name}}”",
+    "deleteDialog": {
+      "revokeTitle": "确定撤销“{{name}}”吗？",
+      "deleteTitle": "确定删除“{{name}}”吗？",
+      "revoke": "撤销",
+      "delete": "删除",
+      "patDescription": "使用此令牌的任何客户端将立即开始收到 401。此操作无法撤销。",
+      "appDescription": "现有 OAuth 安装将失效。用户将在下次登录时被要求重新授权。"
+    },
+    "pat": {
+      "empty": "尚无令牌。创建一个以将机器客户端验证到组织 API。",
+      "token": "令牌",
+      "scopes": "范围",
+      "expires": "过期",
+      "lastUsed": "最近使用",
+      "expired": "已过期",
+      "createdBy": "{{prefix}}…  · 由 {{by}} 创建 · {{date}}",
+      "never": "永不",
+      "revoke": "撤销令牌"
+    },
+    "app": {
+      "app": "应用",
+      "redirect": "重定向",
+      "status": "状态",
+      "installs": "安装数",
+      "scopeCount_one": "{{count}} 个范围",
+      "scopeCount_other": "{{count}} 个范围",
+      "since": "自 {{date}}",
+      "delete": "删除应用",
+      "appStatus": {
+        "published": "已发布",
+        "draft": "草稿"
+      }
+    },
+    "scope": {
+      "orgRead": "读取组织设置",
+      "orgWrite": "管理组织设置",
+      "membersRead": "读取成员",
+      "membersWrite": "邀请/移除成员",
+      "admissionRead": "读取准入规则",
+      "admissionWrite": "编写准入规则",
+      "agentsRead": "读取代理",
+      "agentsWrite": "触发代理",
+      "webhooksWrite": "管理 Webhook",
+      "auditRead": "读取审计日志"
+    },
+    "createPat": {
+      "title": "新建个人访问令牌",
+      "generate": "生成令牌",
+      "tokenName": "令牌名称",
+      "tokenNamePlaceholder": "例如：CI 部署门禁",
+      "expires": "过期",
+      "days30": "30 天",
+      "days60": "60 天",
+      "days90": "90 天",
+      "year1": "1 年",
+      "noExpiration": "永不过期",
+      "scopes": "范围",
+      "selected": "已选择 {{count}} 个"
+    }
+  },
+  "policies": {
+    "title": "策略",
+    "subtitle": "组织默认准入规则。工作区会继承这些规则；除非锁定，否则可通过每个工作区的设置覆盖。",
+    "stat": {
+      "activeRules": "活跃规则",
+      "hardBlocks": "硬阻止",
+      "workspaces": "工作区",
+      "inheriting": "继承组织默认值"
+    },
+    "inheritance": {
+      "title": "继承",
+      "hint": "组织默认值如何到达现有和新工作区。",
+      "applyNew": "应用于新工作区",
+      "applyNewSub": "每当创建工作区时，复制活跃的组织规则并默认强制执行。",
+      "pushExisting": "将变更推送到现有工作区",
+      "pushExistingSub": "当此处规则变更时，将新的严重级别传播到所有未在本地自定义的工作区。"
+    },
+    "rules": {
+      "title": "规则",
+      "hint": "每条规则具有单一严重级别。Block 会使门禁失败；Warn 会显示软性信号。",
+      "activeOf": "{{total}} 条中的 {{active}} 条活跃"
+    },
+    "category": {
+      "secrets": "密钥",
+      "review": "评审",
+      "tests": "测试与覆盖率",
+      "deps": "依赖",
+      "config": "配置"
+    },
+    "override": {
+      "title2Approvers": "需要 ≥2 名批准者",
+      "desc2Approvers": "生产分支至少需要两名人工批准。所有者计一次。",
+      "titleStaleDeps": "对落后超过 365 天的依赖发出警告"
+    },
+    "row": {
+      "workspaces": "{{total}} 个工作区中的 {{applied}} 个",
+      "localOverrides": " · 部分存在本地覆盖",
+      "lastChanged": "最近变更 {{date}}"
+    },
+    "severity": {
+      "block": "阻止",
+      "warn": "警告",
+      "off": "关闭"
+    },
+    "footer": "保存的变更会在数秒内出现在工作区准入视图中。正在运行的修复流水线不会被追溯重新检查。"
+  },
+  "aiPolicies": {
+    "title": "AI 策略",
+    "subtitle": "设置组织可使用的模型、数据存放位置，以及提示词在离开组织前的清理方式。",
+    "allowedModels": {
+      "title": "允许的模型",
+      "hint": "成员只能从此列表中选择。禁用某个模型会立即停止进行中的运行排队后续任务。",
+      "model": "模型",
+      "vendor": "供应商",
+      "context": "上下文",
+      "tier": "等级",
+      "residency": "驻留地",
+      "notAvailable": "在 {{region}} 不可用",
+      "conflict_one": "所选的 {{count}} 个模型在所选驻留地不可用。成员使用时将收到错误。",
+      "conflict_other": "所选的 {{count}} 个模型在所选驻留地不可用。成员使用时将收到错误。"
+    },
+    "tier": {
+      "frontier": "前沿",
+      "fast": "快速",
+      "cheap": "经济"
+    },
+    "defaults": {
+      "title": "默认设置",
+      "hint": "成员未选择模型时使用的值。必须在上方允许列表中。",
+      "defaultModel": "默认模型",
+      "defaultModelSub": "用于交互式用途（聊天、检查）。",
+      "fastModel": "快速模型",
+      "fastModelSub": "用于批量/后台工作（准入、代理）。为节省成本请选择快速等级。",
+      "reviewerOverride": "允许评审者覆盖",
+      "reviewerOverrideSub": "开启后，各评审者可为单次评审运行选择非默认模型。"
+    },
+    "dataHandling": {
+      "title": "数据处理",
+      "hint": "供应商可对组织提示词执行的操作，以及数据的存放位置。",
+      "optOut": "退出模型训练",
+      "optOutSub": "告知供应商不将任何提示词/补全用于微调。",
+      "residency": "数据驻留地",
+      "residencySub": "模型将仅路由到所选地区的推理端点。",
+      "retention": "供应商保留",
+      "retentionSub": "供应商在其日志中保留提示词的天数。",
+      "retention0": "0 天（零保留）",
+      "retention7": "7 天",
+      "retention30": "30 天",
+      "retention90": "90 天"
+    },
+    "promptSafety": {
+      "title": "提示词安全",
+      "hint": "应用于每个离开组织的提示词的发送前过滤器。",
+      "redactPre": "遮蔽密钥",
+      "redactSubPre": "对每个提示词运行密钥扫描器，并将匹配项替换为 ",
+      "redactSubPost": "。",
+      "blockPii": "阻止 PII",
+      "blockPiiSub": "拒绝发送包含 PII（邮箱、社保号、信用卡、电话号码）的提示词。"
+    },
+    "agentCaps": {
+      "title": "代理能力",
+      "hint": "自主代理可代表组织执行的操作。",
+      "browsing": "网页浏览",
+      "browsingSub": "允许代理在调查过程中获取外部 URL。",
+      "toolUse": "工具使用",
+      "toolUseSub": "允许对内部工具（准入、修复流水线、审计）进行函数调用。"
+    },
+    "spendCap": {
+      "title": "支出上限",
+      "hint": "月度令牌支出的硬性上限。达到上限时组织将被暂停，并呼叫管理员。",
+      "monthlyCap": "月度令牌上限",
+      "monthlyCapSub": "跨所有允许的模型计算。0 表示禁用上限。",
+      "unit": "百万令牌 / 月"
+    },
+    "notes": {
+      "changes": "变更将在下次代理/聊天调用时生效。",
+      "retention": "已在供应商处的现有提示词遵循发送时生效的保留策略。",
+      "audit": "审计日志每次都会记录谁变更了什么。评审者可回溯到配置快照重新查看决策。"
+    }
+  },
+  "samlSso": {
+    "title": "SAML SSO",
+    "subtitle": "使用您的身份提供商配置 SAML 2.0 单点登录。",
+    "status": {
+      "connected": "已连接",
+      "connectedSub": "SAML SSO 已启用且运行正常。",
+      "error": "错误",
+      "errorSub": "上次测试失败：签名无效。",
+      "notConfigured": "未配置",
+      "notConfiguredSub": "在下方填写 IdP 元数据以开始。",
+      "lastTested": "上次测试",
+      "testConnection": "测试连接"
+    },
+    "idp": {
+      "title": "身份提供商元数据",
+      "hint": "粘贴您 IdP 中的值，或上传元数据 XML 以自动填充。",
+      "upload": "上传元数据 XML",
+      "entityId": "实体 ID（颁发者）",
+      "ssoUrl": "SSO URL",
+      "cert": "X.509 证书"
+    },
+    "sp": {
+      "title": "服务提供商元数据",
+      "hint": "创建 SAML 应用时将这些粘贴到您的 IdP 中。",
+      "acsUrl": "ACS URL（回复 URL）",
+      "spEntityId": "SP 实体 ID",
+      "nameIdFormat": "NameID 格式"
+    },
+    "mapping": {
+      "title": "属性映射",
+      "hint": "将 SAML 断言声明映射到用户资料字段。",
+      "profileField": "资料字段",
+      "idpClaim": "IdP 声明名称"
+    },
+    "enforcement": {
+      "title": "强制执行",
+      "hint": "收紧组织使用 SSO 的方式。",
+      "requireSso": "要求所有成员使用 SSO",
+      "requireSsoSub": "阻止密码和社交登录。成员必须通过您的 IdP 登录。",
+      "jit": "允许 JIT 预配",
+      "jitSub": "首次 SSO 登录时自动创建账户。否则用户必须预先受邀。",
+      "defaultRole": "SSO 用户默认角色",
+      "defaultRoleSub": "分配给 JIT 预配成员的角色。"
+    },
+    "notes": {
+      "test": "在要求 SSO 之前，请始终在隐身窗口中测试连接——配置错误的 IdP 可能将所有人锁在门外。",
+      "recovery": "如果 SSO 出现故障，所有者始终可以使用恢复码登录。"
+    }
+  },
+  "sso": {
+    "title": "SAML / SSO",
+    "subtitle": "连接您的 OIDC 身份提供商。邮箱域名匹配的用户在登录时会被路由到您的 IdP。企业版套餐。",
+    "removeConnection": "移除连接",
+    "status": "状态",
+    "connected": "已连接",
+    "disabled": "已禁用",
+    "notConfigured": "未配置",
+    "secretStored": "密钥已存储",
+    "domainOwnership": "域名所有权",
+    "verified": "已验证",
+    "notVerified": "未验证",
+    "verifiedProven": "{{domain}} 的所有权已得到证明——匹配的登录将路由到您的 IdP。",
+    "verifyPrompt1": "将此 TXT 记录添加到 ",
+    "verifyPrompt2": " 的根，然后验证。在域名验证之前，登录",
+    "verifyPromptNot": "不会",
+    "verifyPrompt3": "路由到您的 IdP。",
+    "verifyDomain": "验证域名",
+    "checkingDns": "正在检查 DNS…",
+    "dnsNotFound": "尚未找到 TXT 记录——DNS 传播可能需要几分钟。",
+    "field": {
+      "emailDomain": "邮箱域名",
+      "issuer": "OIDC 颁发者",
+      "authEndpoint": "授权端点",
+      "tokenEndpoint": "令牌端点",
+      "jwksEndpoint": "JWKS 端点",
+      "clientId": "客户端 ID",
+      "clientSecret": "客户端密钥",
+      "clientSecretKeep": "客户端密钥（留空以保留）",
+      "clientSecretPlaceholderStored": "••••••••（已存储）",
+      "clientSecretPlaceholder": "来自您的 IdP"
+    },
+    "saveChanges": "保存更改",
+    "connectSso": "连接 SSO",
+    "saving": "保存中…",
+    "auditNote": "只有所有者/管理员可以更改此项。每次更改都会被审计。",
+    "deleteDialog": {
+      "title": "确定移除 SSO 连接吗？",
+      "confirm": "移除",
+      "description": "此域名的用户将回退到密码登录。已存储的客户端密钥将被删除。"
+    }
+  },
+  "scim": {
+    "title": "SCIM 预配",
+    "subtitle": "使用 SCIM 2.0 从您的身份提供商推送用户和组。",
+    "subtitleReal": "使用 SCIM 2.0 从您的身份提供商（Okta、Azure AD）推送用户。企业版套餐。",
+    "status": {
+      "connected": "已连接",
+      "connectedSub": "SCIM 连接器正在接收来自 Okta 的事件。",
+      "notConfigured": "未配置",
+      "notConfiguredSub": "生成令牌并粘贴到您的 IdP 中。",
+      "lastSync": "上次同步",
+      "syncNow": "立即同步"
+    },
+    "endpoint": {
+      "title": "端点",
+      "hint": "将这些粘贴到您 IdP 的 SCIM 预配配置中。",
+      "baseUrl": "SCIM 基础 URL",
+      "bearerToken": "Bearer 令牌",
+      "bearerTokenSub": "生成令牌以验证 SCIM 请求。令牌仅显示一次。",
+      "generate": "生成新令牌"
+    },
+    "syncRules": {
+      "title": "同步规则",
+      "hint": "SCIM 连接器可执行的操作。",
+      "autoCreate": "自动创建用户",
+      "autoCreateSub": "当 IdP 发送 SCIM POST 时创建账户。",
+      "autoDeactivate": "移除时自动停用",
+      "autoDeactivateSub": "当在 IdP 中取消分配用户时，停用其会话并撤销令牌。",
+      "syncGroups": "同步组 → 团队",
+      "syncGroupsSub": "使用下方映射将 IdP 组成员关系镜像到 ACME 团队。"
+    },
+    "mapping": {
+      "title": "组 → 团队映射",
+      "hint": "将 IdP 组名映射到 ACME 团队。未映射的组将被忽略。",
+      "add": "添加映射",
+      "groupName": "IdP 组名",
+      "team": "ACME 团队",
+      "groupPlaceholder": "okta-group-name",
+      "remove": "移除映射"
+    },
+    "activity": {
+      "title": "最近同步活动",
+      "hint": "最近 6 个 SCIM 事件。更早的事件在审计日志中。",
+      "timestamp": "时间戳",
+      "action": "操作",
+      "target": "目标",
+      "count": "数量",
+      "created": "已创建",
+      "updated": "已更新",
+      "deactivated": "已停用"
+    },
+    "tokenCreated": "已创建 SCIM 令牌",
+    "real": {
+      "status": "状态",
+      "enabled": "已启用",
+      "notConfigured": "未配置",
+      "disableScim": "禁用 SCIM",
+      "enableScim": "启用 SCIM",
+      "baseUrl": "SCIM 基础 URL",
+      "bearerToken": "Bearer 令牌",
+      "bearerTokenSub": "创建时仅显示一次。如可能泄露请轮换——旧令牌会立即失效。",
+      "rotateToken": "轮换令牌",
+      "idpNote": "在您的 IdP 中，设置上方的 SCIM 基础 URL 并粘贴 Bearer 令牌。在 IdP 中分配的用户将被预配到此组织；取消分配会解除预配。",
+      "enablePrompt": "启用 SCIM 以获取用于身份提供商的基础 URL 和 Bearer 令牌。已分配的用户会自动添加到此组织。",
+      "tokenDescription": "将此粘贴到您 IdP 的 SCIM 连接器中。无法再次显示——如需新令牌请轮换。",
+      "disableTitle": "确定禁用 SCIM 吗？",
+      "disableConfirm": "禁用",
+      "disableDescription": "Bearer 令牌会立即失效，您的 IdP 将无法再预配用户。现有成员会被保留。"
+    }
+  },
+  "audit": {
+    "title": "审计日志",
+    "subtitle": "组织中的所有特权操作。按保留策略保留。",
+    "subtitleReal": "组织中的特权操作。按您套餐的保留策略保留。",
+    "exportCsv": "导出 CSV",
+    "searchPlaceholder": "搜索操作者、目标、IP…",
+    "searchPlaceholderReal": "搜索操作者、操作、目标、IP…",
+    "allActors": "所有操作者",
+    "actions": {
+      "all": "所有操作",
+      "authLogin": "auth.login",
+      "authLoginFailed": "auth.login.failed",
+      "membersInvite": "members.invite",
+      "membersRemove": "members.remove",
+      "admissionRuleChanged": "admission.rule.changed",
+      "secretsRotate": "secrets.rotate",
+      "ssoTest": "sso.test",
+      "webhookCreated": "webhook.created",
+      "agentRun": "agent.run",
+      "orgMemberInvited": "成员已邀请",
+      "orgMemberRemoved": "成员已移除",
+      "orgMemberRoleChanged": "角色已变更",
+      "orgInvitationCanceled": "邀请已取消",
+      "orgUpdated": "组织已更新",
+      "orgDeleted": "组织已删除",
+      "orgTeamCreated": "团队已创建",
+      "orgTeamDeleted": "团队已删除",
+      "security2faEnabled": "已启用 2FA",
+      "security2faDisabled": "已禁用 2FA",
+      "securityPasswordChanged": "密码已变更",
+      "securitySessionRevoked": "会话已撤销",
+      "apikeyCreated": "API 密钥已创建",
+      "apikeyRevoked": "API 密钥已撤销",
+      "billingSubscriptionUpdated": "订阅已更新",
+      "billingPaymentFailed": "付款失败"
+    },
+    "table": {
+      "when": "时间",
+      "actor": "操作者",
+      "action": "操作",
+      "target": "目标",
+      "ip": "IP",
+      "result": "结果",
+      "actionTarget": "操作 / 目标"
+    },
+    "result": {
+      "success": "成功",
+      "failure": "失败"
+    },
+    "diff": {
+      "before": "变更前",
+      "after": "变更后",
+      "noPayload": "— 无负载 —"
+    },
+    "showing": "显示 8,421 个事件中的 1–15",
+    "previous": "上一页",
+    "next": "下一页",
+    "empty": {
+      "matchingTitle": "没有匹配的事件",
+      "matchingSub": "尝试其他筛选。",
+      "noEventsTitle": "尚无审计事件",
+      "noEventsSub": "特权操作将显示在此处。"
+    },
+    "eventsCount_one": "{{count}} 个事件",
+    "eventsCount_other": "{{count}} 个事件",
+    "moreAvailable": "（还有更多）",
+    "loading": "加载中…",
+    "loadMore": "加载更多",
+    "errorContext": "审计日志"
+  },
+  "dataResidency": {
+    "title": "数据驻留地",
+    "subtitle": "选择 ACME 数据的处理和存储位置。",
+    "controls": {
+      "title": "驻留地控制的内容",
+      "body": "源代码、代理运行、密钥和审计日志存储在所选地区。身份验证元数据（邮箱、租户 ID）位于我们的全球控制平面。切换地区会触发一次性迁移并进行协调切换。"
+    },
+    "region": {
+      "title": "活跃地区",
+      "hint": "点击其他地区以请求迁移。",
+      "us": "美国",
+      "eu": "欧洲",
+      "apac": "亚太",
+      "selected": "已选择",
+      "dataCenters": "数据中心",
+      "latency": "距您的延迟",
+      "stored": "当前存储量",
+      "notActive": "— 未激活 —"
+    },
+    "settings": {
+      "title": "驻留地设置",
+      "hint": "针对受监管工作负载的更严格控制。",
+      "noCrossReplica": "禁用跨地区复制",
+      "noCrossReplicaSub": "备份仅保留在所选地区。在整个地区故障时会增加全部数据丢失的风险。",
+      "blockExport": "阻止数据导出到其他地区",
+      "blockExportSub": "CSV 导出、代理调用和 Webhook 投递只能面向同一地区的端点。"
+    },
+    "certs": {
+      "title": "合规认证",
+      "hint": "由独立第三方审计。报告可应要求提供。"
+    },
+    "footer": "地区变更会记录在审计日志中，并通知所有所有者和管理员。",
+    "migration": {
+      "ariaLabel": "请求迁移到 {{region}}",
+      "title": "确定请求迁移到 {{region}} 吗？",
+      "bodyPre": "我们将在 ",
+      "bodyMid": " 对所有组织数据进行快照，复制到 ",
+      "bodyPost": "，然后执行协调切换。",
+      "downtime": "· 预计停机时间：切换期间约 12 分钟（安排在非工作时间）",
+      "cost": "· 一次性数据传输费用：向当前发票收取 $420",
+      "sessions": "· 切换时活跃会话将被登出",
+      "rollback": "· 回滚窗口：迁移后 7 天",
+      "cancel": "取消",
+      "confirm": "请求迁移"
+    }
+  },
+  "retention": {
+    "title": "保留策略",
+    "subtitle": "设置 ACME 在自动删除前对每类数据的保留时长。",
+    "default": {
+      "title": "默认保留",
+      "hint": "应用于所有设为“继承默认值”的数据类别。",
+      "global": "全局默认值",
+      "globalSub": "默认保留的天数。类别级别的覆盖优先。",
+      "days": "天"
+    },
+    "opt": {
+      "days30": "30 天",
+      "days60": "60 天",
+      "days90": "90 天",
+      "days180": "180 天",
+      "year1": "1 年",
+      "years2": "2 年",
+      "forever": "永久"
+    },
+    "perClass": {
+      "title": "按类别覆盖",
+      "hint": "对敏感类别收紧保留；对合规要求的类别放宽。",
+      "dataClass": "数据类别",
+      "retention": "保留",
+      "inherits": "继承？",
+      "inheritOption": "继承（{{days}} 天）",
+      "inherit": "继承",
+      "override": "覆盖"
+    },
+    "class": {
+      "auditLog": "审计日志",
+      "auditLogHint": "组织中的特权操作",
+      "agentRuns": "代理运行",
+      "agentRunsHint": "输入、输出和步骤跟踪",
+      "webhookDeliveries": "Webhook 投递",
+      "webhookDeliveriesHint": "出站负载和 HTTP 响应",
+      "investigationChats": "调查聊天",
+      "investigationChatsHint": "智能阶段的聊天线程",
+      "codeReviewThreads": "代码评审线程",
+      "codeReviewThreadsHint": "对差异的评审者评论",
+      "inactiveSessions": "非活跃会话",
+      "inactiveSessionsHint": "无活动的浏览器会话",
+      "deletedUserPii": "已删除用户 PII",
+      "deletedUserPiiHint": "账户删除后的邮箱、姓名",
+      "telemetry": "遥测事件",
+      "telemetryHint": "匿名化的使用分析"
+    },
+    "legalHolds": {
+      "title": "法务保留",
+      "hint": "在诉讼或调查进行期间暂停特定范围的删除。",
+      "none": "无活跃保留。",
+      "active": "活跃",
+      "createdBy": "由 {{creator}} 创建 · {{date}}",
+      "release": "解除保留"
+    },
+    "archive": {
+      "title": "归档目标",
+      "hint": "可选择在保留期限触发删除前将数据归档到您自己的 S3 存储桶。",
+      "toggle": "删除前归档到 S3",
+      "toggleSub": "为每个数据类别向您的存储桶写入一次性 JSONL 转储。",
+      "bucket": "存储桶名称",
+      "bucketPlaceholder": "s3://my-archive-bucket",
+      "roleArn": "AWS Role ARN",
+      "roleArnPlaceholder": "arn:aws:iam::123:role/archiver"
+    },
+    "notes": {
+      "archive": "删除会先软删除 7 天，然后进行加密粉碎。归档写入在删除前一晚进行。",
+      "apply": "保留变更应用于新数据。现有记录在下次压缩前保持其原始策略。"
+    },
+    "releaseDialog": {
+      "ariaLabel": "解除保留 {{ref}}",
+      "title": "确定解除保留 {{ref}} 吗？",
+      "body": "此保留涵盖的记录将在下次压缩时符合基于保留的删除条件。此操作会被记录并通知法务运营。",
+      "cancel": "取消",
+      "confirm": "解除保留"
+    }
+  },
+  "serviceAccounts": {
+    "title": "服务账户",
+    "subtitle": "用于 CI、脚本和工作节点池的机器身份。请严格限定范围；每 90 天轮换令牌。",
+    "subtitleReal": "用于 CI 和工作节点的机器身份。每个持有一个限定于此组织范围的 API 密钥。",
+    "new": "新建服务账户",
+    "stat": {
+      "total": "总计",
+      "active": "活跃",
+      "tokens": "令牌"
+    },
+    "table": {
+      "name": "名称",
+      "purpose": "用途",
+      "scopes": "范围",
+      "tokens": "令牌",
+      "lastSeen": "最近出现",
+      "status": "状态",
+      "prefix": "前缀",
+      "created": "创建时间",
+      "expires": "过期"
+    },
+    "createdByLine": "{{id}} · 由 {{by}} 创建",
+    "statusActive": "活跃",
+    "statusDisabled": "已禁用",
+    "action": {
+      "tokens": "令牌",
+      "rotate": "轮换",
+      "disable": "禁用",
+      "enable": "启用",
+      "more": "更多"
+    },
+    "empty": {
+      "title": "无服务账户",
+      "subtitle": "创建一个以为 CI 或工作节点授予 API 访问权限。"
+    },
+    "fallbackName": "服务账户",
+    "revoke": {
+      "menu": "撤销密钥",
+      "title": "确定撤销“{{name}}”吗？",
+      "confirm": "撤销",
+      "description": "使用此密钥的任何 CI 作业或工作节点将立即失去访问权限。此操作无法撤销。"
+    },
+    "create": {
+      "title": "新建服务账户",
+      "name": "名称",
+      "namePlaceholder": "ci-deploy-bot",
+      "keyExpiration": "密钥过期",
+      "days90": "90 天",
+      "year1": "1 年",
+      "noExpiry": "永不过期",
+      "create": "创建",
+      "creating": "创建中…"
+    },
+    "keyCreated": "已创建服务账户“{{name}}”",
+    "keyFallback": "密钥"
+  },
+  "usage": {
+    "title": "用量",
+    "subtitle": "您的组织在过去 30 天内的消耗情况。费用对应您当前的套餐；在计费中切换。",
+    "range": {
+      "days30": "最近 30 天",
+      "days7": "最近 7 天",
+      "days90": "最近 90 天",
+      "billingPeriod": "本计费周期"
+    },
+    "exportCsv": "导出 CSV",
+    "metric": {
+      "seats": "活跃席位",
+      "agents": "代理运行",
+      "tokens": "AI 令牌",
+      "storage": "存储",
+      "webhooks": "Webhook 投递",
+      "requests": "API 请求"
+    },
+    "unit": {
+      "seats": "/ 200",
+      "perMonth": "/ 月",
+      "tokens": "令牌 / 月",
+      "storage": "GB"
+    },
+    "alert": {
+      "title": "预计本月将达到套餐上限的 92%",
+      "sub": "在 80% 处设置预算提醒，或升级套餐以获得更充裕的余量。",
+      "action": "设置预算提醒"
+    },
+    "breakdown": {
+      "title": "按工作区的费用",
+      "thisMonth": "本月",
+      "workspace": "工作区",
+      "runs": "运行",
+      "tokens": "令牌",
+      "cost": "费用",
+      "share": "占比"
+    }
+  },
+  "domains": {
+    "title": "域名",
+    "subtitle": "认领邮箱域名以用于自动加入、SSO 强制执行和身份验证的邀请。",
+    "add": "添加域名",
+    "primary": "主要",
+    "verified": "已验证",
+    "unverified": "未验证",
+    "ssoRequired": "SSO 必需",
+    "ssoRequiredSub": "对此域名的账户强制使用 SAML/OIDC",
+    "autoJoin": "自动加入",
+    "autoJoinSub": "此域名上新的已验证用户会自动加入",
+    "verify": {
+      "title": "验证 {{domain}}",
+      "body": "将下方的 TXT 记录添加到您的 DNS，然后点击验证。传播通常在 5 分钟内完成。",
+      "type": "类型",
+      "host": "主机",
+      "value": "值",
+      "check": "立即检查 DNS"
+    }
+  },
+  "format": {
+    "expired": "已过期",
+    "day_one": "{{count}} 天",
+    "day_other": "{{count}} 天",
+    "emDash": "—"
+  }
+}
