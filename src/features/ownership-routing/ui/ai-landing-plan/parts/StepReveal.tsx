@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { GlassCard } from '@shared/ui';
 import type { Person, StackStep, StackStepKind } from '@entities/ownership';
 import { KindPill, ReviewerChip, RiskPill, StepNumber } from './primitives';
-import { WHY_REVIEWER_BY_KIND } from './types';
+import { WHY_REVIEWER_KEY_BY_KIND } from './types';
 
 function WhyReviewer({ kind }: { kind: StackStepKind }) {
+  const { t } = useTranslation('ownership');
   return (
     <p
       className="text-[10.5px] leading-snug italic"
@@ -13,9 +15,9 @@ function WhyReviewer({ kind }: { kind: StackStepKind }) {
         className="not-italic font-black uppercase tracking-[0.22em] mr-1"
         style={{ color: 'var(--fg-subtle)', fontSize: '8.5px' }}
       >
-        Why
+        {t('plan.why')}
       </span>
-      {WHY_REVIEWER_BY_KIND[kind]}
+      {t(WHY_REVIEWER_KEY_BY_KIND[kind])}
     </p>
   );
 }
@@ -29,6 +31,7 @@ export function StepReveal({
   index: number;
   reviewer: Person | undefined;
 }) {
+  const { t } = useTranslation('ownership');
   return (
     <GlassCard tone="inner" className="px-3 py-2.5">
       <div className="grid grid-cols-[24px_1fr] gap-2.5 items-start">
@@ -52,7 +55,7 @@ export function StepReveal({
               className="text-2xs font-mono tabular-nums shrink-0"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              ~{step.estimatedDiffLines} LOC
+              {t('plan.locSuffix', { lines: step.estimatedDiffLines })}
             </span>
           </div>
           <WhyReviewer kind={step.kind} />

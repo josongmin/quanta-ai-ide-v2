@@ -1,4 +1,5 @@
 import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ApprovalPath, ApprovalStep, Person } from '@entities/ownership';
 import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
 import { PersonAvatar } from '../lib';
@@ -27,6 +28,7 @@ function StepNumber({ n }: { n: number }) {
 }
 
 function RequirementLabel({ required }: { required: boolean }) {
+  const { t } = useTranslation('ownership');
   return (
     <span
       className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
@@ -36,7 +38,7 @@ function RequirementLabel({ required }: { required: boolean }) {
         border: '1px solid var(--border-muted)',
       }}
     >
-      {required ? 'Required' : 'Optional'}
+      {required ? t('approval.required') : t('approval.optional')}
     </span>
   );
 }
@@ -52,6 +54,7 @@ function StepRow({
   person: Person | undefined;
   isLast: boolean;
 }) {
+  const { t } = useTranslation('ownership');
   return (
     <div className="relative flex gap-3">
       <div className="flex flex-col items-center">
@@ -73,13 +76,13 @@ function StepRow({
               className="text-base font-bold leading-tight truncate"
               style={{ color: 'var(--fg-default)' }}
             >
-              {person?.name ?? 'Unknown'}
+              {person?.name ?? t('approval.unknownPerson')}
             </span>
             <span
               className="text-2xs font-mono uppercase tracking-eyebrow truncate"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              {person?.team ?? '—'}
+              {person?.team ?? t('approval.noTeam')}
             </span>
           </div>
           <div className="ml-auto shrink-0">
@@ -105,22 +108,23 @@ function StepRow({
 }
 
 export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   if (!path) {
     return (
       <GlassCard className="p-3 rounded-xl">
-        <SectionHeader title="Approval path" />
-        <EmptyHint text="No approval path available for this zone." />
+        <SectionHeader title={t('approval.title')} />
+        <EmptyHint text={t('approval.empty')} />
       </GlassCard>
     );
   }
 
   const peopleById = new Map(people.map((p) => [p.id, p]));
   const approvers = path.steps.length;
-  const badge = path.parallelizable ? 'PARALLEL' : 'SEQUENTIAL';
+  const badge = path.parallelizable ? t('approval.badgeParallel') : t('approval.badgeSequential');
 
   return (
     <GlassCard className="p-3 rounded-xl">
-      <SectionHeader title="Approval path" badge={badge} />
+      <SectionHeader title={t('approval.title')} badge={badge} />
 
       <div className="flex items-stretch gap-3 mb-3">
         <div className="flex items-baseline gap-0.5">
@@ -134,14 +138,14 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
             className="text-base font-bold leading-none"
             style={{ color: 'var(--fg-muted)' }}
           >
-            h
+            {t('approval.hoursUnit')}
           </span>
         </div>
         <span
           className="text-xs font-bold tabular-nums self-center"
           style={{ color: 'var(--fg-default)' }}
         >
-          {approvers} approver{approvers === 1 ? '' : 's'}
+          {t('approval.approvers', { count: approvers })}
         </span>
         <div
           className="ml-auto self-center px-2 py-1 rounded-md border flex items-center gap-1.5"
@@ -169,7 +173,7 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
             aria-hidden
           />
           <span className="text-2xs font-black uppercase tracking-eyebrow">
-            {path.parallelizable ? 'parallel · any order' : 'serial · must run in order'}
+            {path.parallelizable ? t('approval.parallelTag') : t('approval.serialTag')}
           </span>
         </div>
       </div>
@@ -195,7 +199,7 @@ export function ApprovalPathCard({ path, people }: ApprovalPathCardProps): JSX.E
             border: '1px solid var(--border-muted)',
           }}
         >
-          Steps without explicit dependency can land in any order — sequence shown is recommended priority.
+          {t('approval.parallelNote')}
         </div>
       )}
     </GlassCard>

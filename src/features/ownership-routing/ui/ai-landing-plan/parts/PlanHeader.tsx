@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { OwnershipZone } from '@entities/ownership';
 import { GeneratedPill } from './primitives';
 
@@ -10,6 +11,7 @@ export function PlanHeader({
   footerShown: boolean;
   onSkip: () => void;
 }) {
+  const { t } = useTranslation('ownership');
   return (
     <header
       className="flex items-start justify-between gap-3 px-5 py-4 border-b"
@@ -21,7 +23,7 @@ export function PlanHeader({
             className="text-sm font-black uppercase tracking-[0.22em]"
             style={{ color: 'var(--fg-strong)' }}
           >
-            AI Landing Plan
+            {t('plan.title')}
           </h2>
           <GeneratedPill />
         </div>
@@ -50,9 +52,9 @@ export function PlanHeader({
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'transparent';
             }}
-            aria-label="Skip animation and show full plan"
+            aria-label={t('plan.skipAria')}
           >
-            Skip
+            {t('plan.skip')}
           </button>
         )}
       </div>

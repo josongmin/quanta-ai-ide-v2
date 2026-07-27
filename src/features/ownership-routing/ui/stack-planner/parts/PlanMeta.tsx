@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { RefactorStack } from '@entities/ownership';
 import { MergeStrategyPill } from './primitives';
 
@@ -75,6 +76,7 @@ function MetaCell({
 }
 
 export function PlanMeta({ stack }: { stack: RefactorStack }) {
+  const { t } = useTranslation('ownership');
   const confidencePct = Math.round(stack.splitConfidence * 100);
   const confidenceColor =
     stack.splitConfidence >= 0.7
@@ -91,14 +93,14 @@ export function PlanMeta({ stack }: { stack: RefactorStack }) {
         aria-hidden
       />
       <MetaCell
-        label="Estimate"
+        label={t('stack.estimate')}
         value={`~${stack.totalEstimatedDays}`}
-        sublabel={stack.totalEstimatedDays === 1 ? 'day' : 'days'}
+        sublabel={t('stack.dayUnit', { count: stack.totalEstimatedDays })}
       />
       <MetaCell
-        label="Steps"
+        label={t('stack.steps')}
         value={String(stack.steps.length)}
-        sublabel={stack.steps.length === 1 ? 'step' : 'steps'}
+        sublabel={t('stack.stepUnit', { count: stack.steps.length })}
       />
       <span
         className="self-stretch w-px"
@@ -107,13 +109,15 @@ export function PlanMeta({ stack }: { stack: RefactorStack }) {
       />
       <div
         className="flex flex-col gap-0.5 min-w-0"
-        title={`Confidence in this split shape — based on: ${stack.splitConfidenceBasis.join(' · ')}`}
+        title={t('stack.splitConfidenceTitle', {
+          basis: stack.splitConfidenceBasis.join(' · '),
+        })}
       >
         <span
           className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-muted)' }}
         >
-          Split confidence
+          {t('stack.splitConfidence')}
         </span>
         <div className="flex items-baseline gap-1">
           <span
@@ -135,6 +139,7 @@ export function PlanMeta({ stack }: { stack: RefactorStack }) {
 }
 
 export function SplitConfidenceBasis({ basis }: { basis: string[] }) {
+  const { t } = useTranslation('ownership');
   if (basis.length === 0) return null;
   return (
     <div>
@@ -142,7 +147,7 @@ export function SplitConfidenceBasis({ basis }: { basis: string[] }) {
         className="text-2xs font-black uppercase tracking-[0.22em] mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        Why this confidence
+        {t('stack.whyConfidence')}
       </div>
       <ul className="space-y-0.5">
         {basis.map((b, i) => (

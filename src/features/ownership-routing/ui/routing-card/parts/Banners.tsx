@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import type { ImpactNarrative, Person } from '@entities/ownership';
 
 export function ImpactNarrativeStrip({ narrative }: { narrative: ImpactNarrative }) {
+  const { t } = useTranslation('ownership');
   return (
     <div
       className="rounded-lg px-3 py-2.5 border"
@@ -17,7 +19,7 @@ export function ImpactNarrativeStrip({ narrative }: { narrative: ImpactNarrative
             color: 'var(--fg-muted)',
           }}
         >
-          AI · Impact
+          {t('routing.impact.eyebrow')}
         </span>
         <span className="flex-1 h-px" style={{ background: 'var(--border-muted)' }} />
       </div>
@@ -25,14 +27,14 @@ export function ImpactNarrativeStrip({ narrative }: { narrative: ImpactNarrative
         {narrative.summary}
       </div>
       <div className="flex items-center flex-wrap gap-1.5 text-2xs font-mono uppercase tracking-eyebrow">
-        <span style={{ color: 'var(--fg-subtle)' }}>owner</span>
+        <span style={{ color: 'var(--fg-subtle)' }}>{t('routing.impact.owner')}</span>
         <span
           className="px-1.5 py-0.5 rounded-md font-bold"
           style={{ background: 'var(--bg-elevated)', color: 'var(--fg-default)' }}
         >
           {narrative.declaredTeam}
         </span>
-        <span style={{ color: 'var(--fg-subtle)' }}>blast →</span>
+        <span style={{ color: 'var(--fg-subtle)' }}>{t('routing.impact.blast')}</span>
         {narrative.blastTeams.map((t) => (
           <span
             key={t}
@@ -57,6 +59,7 @@ export function StalePrimaryBanner({
   primary: Person;
   escalation: Person | undefined;
 }) {
+  const { t } = useTranslation('ownership');
   return (
     <div
       className="rounded-lg px-3 py-2 border"
@@ -74,19 +77,19 @@ export function StalePrimaryBanner({
           className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--intent-warn-fg)' }}
         >
-          Primary unavailable
+          {t('routing.stale.unavailable')}
         </span>
       </div>
       <div className="text-sm leading-snug" style={{ color: 'var(--fg-default)' }}>
         <span className="font-semibold">{primary.name}</span>
         <span style={{ color: 'var(--fg-muted)' }}>
-          {' '}· last active {primary.lastActiveDays}d ago
+          {t('routing.stale.lastActive', { days: primary.lastActiveDays })}
         </span>
         {escalation && (
           <>
-            <span style={{ color: 'var(--fg-muted)' }}> · routing to </span>
+            <span style={{ color: 'var(--fg-muted)' }}>{t('routing.stale.routingTo')}</span>
             <span className="font-semibold">{escalation.name}</span>
-            <span style={{ color: 'var(--fg-muted)' }}> ({escalation.team})</span>
+            <span style={{ color: 'var(--fg-muted)' }}>{t('routing.stale.teamSuffix', { team: escalation.team })}</span>
           </>
         )}
       </div>

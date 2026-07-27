@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { CrossTeamHotspot } from '@entities/ownership';
 import { GlassCard, SectionHeader } from '@shared/ui/GlassCard';
 import { EmptyHint } from '@shared/ui/EmptyHint';
@@ -13,24 +14,24 @@ export type CrossTeamHotspotBoardProps = {
 type Severity = CrossTeamHotspot['severity'];
 
 type SeverityVisual = {
-  shortLabel: string;
+  shortLabelKey: `hotspots.severity.${Severity}`;
   fgVar: string;
   bgVar: string;
 }
 
 const SEVERITY_VISUALS: Record<Severity, SeverityVisual> = {
   high: {
-    shortLabel: 'HIGH',
+    shortLabelKey: 'hotspots.severity.high',
     fgVar: 'var(--intent-danger-fg)',
     bgVar: 'var(--intent-danger-bg)',
   },
   medium: {
-    shortLabel: 'MED',
+    shortLabelKey: 'hotspots.severity.medium',
     fgVar: 'var(--intent-warn-fg)',
     bgVar: 'var(--intent-warn-bg)',
   },
   low: {
-    shortLabel: 'LOW',
+    shortLabelKey: 'hotspots.severity.low',
     fgVar: 'var(--intent-success-fg)',
     bgVar: 'var(--intent-success-bg)',
   },
@@ -52,6 +53,7 @@ function SeverityDot({ severity }: { severity: Severity }) {
 }
 
 function SeverityBadge({ severity }: { severity: Severity }) {
+  const { t } = useTranslation('ownership');
   const v = SEVERITY_VISUALS[severity];
   return (
     <span
@@ -62,7 +64,7 @@ function SeverityBadge({ severity }: { severity: Severity }) {
         borderColor: `color-mix(in srgb, ${v.fgVar} 35%, transparent)`,
       }}
     >
-      {v.shortLabel}
+      {t(v.shortLabelKey)}
     </span>
   );
 }
@@ -112,6 +114,7 @@ function HotspotRow({
   selected: boolean;
   onSelect?: (zoneId: string) => void;
 }) {
+  const { t } = useTranslation('ownership');
   const isPath = looksLikePath(hotspot.label);
   return (
     <button
@@ -167,7 +170,7 @@ function HotspotRow({
           <span style={{ color: 'var(--fg-default)' }}>
             {hotspot.weeklyCommits}
           </span>
-          /wk
+          {t('hotspots.weeklyUnit')}
         </span>
       </div>
     </button>
@@ -179,15 +182,16 @@ export function CrossTeamHotspotBoard({
   selectedZoneId,
   onSelect,
 }: CrossTeamHotspotBoardProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   return (
     <GlassCard className="rounded-lg p-3">
       <SectionHeader
-        title="Cross-team hotspots"
-        badge={`${hotspots.length} detected`}
+        title={t('hotspots.title')}
+        badge={t('hotspots.detected', { count: hotspots.length })}
       />
       {hotspots.length === 0 ? (
         <div className="py-3">
-          <EmptyHint text="No cross-team hotspots detected" />
+          <EmptyHint text={t('hotspots.empty')} />
         </div>
       ) : (
         <>
@@ -208,7 +212,7 @@ export function CrossTeamHotspotBoard({
               color: 'var(--fg-subtle)',
             }}
           >
-            Detection considers approver count, team diversity, and weekly velocity.
+            {t('hotspots.footer')}
           </div>
         </>
       )}

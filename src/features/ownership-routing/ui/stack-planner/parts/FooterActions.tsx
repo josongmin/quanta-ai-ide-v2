@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 function FooterButton({
   label,
   onClick,
@@ -45,20 +47,21 @@ function FooterButton({
 }
 
 export function FooterActions({ onPlanRefactor }: { onPlanRefactor?: () => void }) {
+  const { t } = useTranslation('ownership');
   return (
     <div className="flex items-center gap-1.5 flex-wrap pt-1">
       <FooterButton
-        label="Reorder"
-        hint="soon"
+        label={t('stack.footer.reorder')}
+        hint={t('stack.footer.reorderHint')}
         disabled
-        tooltip="Step reordering ships in Phase 2 — current order is the recommended sequence based on coupling cluster + blast radius"
+        tooltip={t('stack.footer.reorderTooltip')}
       />
       <FooterButton
-        label="Plan with AI"
+        label={t('stack.footer.planWithAi')}
         onClick={onPlanRefactor}
       />
       <FooterButton
-        label="Export"
+        label={t('stack.footer.export')}
         onClick={() => {
           console.warn('[StackPlanner] export clicked');
         }}

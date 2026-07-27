@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import type { CSSProperties, JSX } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import type { AutoDraftSuggestion } from '@entities/ownership';
 import { EmptyHint, GlassCard, SectionHeader } from '@shared/ui';
 import { confidenceTone } from '../lib';
@@ -10,20 +12,20 @@ export type AutoDraftSuggestionsProps = {
   onDismiss?: (id: string) => void;
 }
 
-const ACTION_RESULT_HINT: Record<AutoDraftSuggestion['proposedAction'], string> = {
-  'open-stack-plan': 'opens the AI landing plan modal',
-  'reroute-reviewer': 'updates suggested reviewer in routing card',
-  'flag-cross-team': 'flags zone in cross-team board',
-  'split-pr': 'opens split-pr planner',
-};
-
 type ActionKey = AutoDraftSuggestion['proposedAction'];
 
-const ACTION_LABEL: Record<ActionKey, string> = {
-  'open-stack-plan': 'OPEN STACK PLAN',
-  'reroute-reviewer': 'REROUTE REVIEWER',
-  'flag-cross-team': 'FLAG CROSS-TEAM',
-  'split-pr': 'SPLIT PR',
+const ACTION_RESULT_HINT_KEY: Record<ActionKey, `suggestions.actionResult.${ActionKey}`> = {
+  'open-stack-plan': 'suggestions.actionResult.open-stack-plan',
+  'reroute-reviewer': 'suggestions.actionResult.reroute-reviewer',
+  'flag-cross-team': 'suggestions.actionResult.flag-cross-team',
+  'split-pr': 'suggestions.actionResult.split-pr',
+};
+
+const ACTION_LABEL_KEY: Record<ActionKey, `suggestions.actionLabel.${ActionKey}`> = {
+  'open-stack-plan': 'suggestions.actionLabel.open-stack-plan',
+  'reroute-reviewer': 'suggestions.actionLabel.reroute-reviewer',
+  'flag-cross-team': 'suggestions.actionLabel.flag-cross-team',
+  'split-pr': 'suggestions.actionLabel.split-pr',
 };
 
 function actionTone(action: ActionKey): { bg: string; fg: string } {
@@ -48,35 +50,37 @@ function actionTone(action: ActionKey): { bg: string; fg: string } {
   }
 }
 
-function formatRelative(iso: string): string {
+function formatRelative(iso: string, t: TFunction<'ownership'>): string {
   const then = new Date(iso).getTime();
-  if (Number.isNaN(then)) return '—';
+  if (Number.isNaN(then)) return t('suggestions.relative.unknown');
   const diffMs = Date.now() - then;
   const sec = Math.max(0, Math.round(diffMs / 1000));
-  if (sec < 60) return `${sec}s ago`;
+  if (sec < 60) return t('suggestions.relative.seconds', { n: sec });
   const min = Math.round(sec / 60);
-  if (min < 60) return `${min}m ago`;
+  if (min < 60) return t('suggestions.relative.minutes', { n: min });
   const hr = Math.round(min / 60);
-  if (hr < 24) return `${hr}h ago`;
+  if (hr < 24) return t('suggestions.relative.hours', { n: hr });
   const day = Math.round(hr / 24);
-  if (day < 7) return `${day}d ago`;
+  if (day < 7) return t('suggestions.relative.days', { n: day });
   const wk = Math.round(day / 7);
-  return `${wk}w ago`;
+  return t('suggestions.relative.weeks', { n: wk });
 }
 
 function ActionPill({ action }: { action: ActionKey }) {
+  const { t } = useTranslation('ownership');
   const tone = actionTone(action);
   return (
     <span
       className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
       style={{ background: tone.bg, color: tone.fg }}
     >
-      {ACTION_LABEL[action]}
+      {t(ACTION_LABEL_KEY[action])}
     </span>
   );
 }
 
 function ConfidenceBar({ value }: { value: number }) {
+  const { t } = useTranslation('ownership');
   const tone = confidenceTone(value);
   const pct = Math.round(value * 100);
   return (
@@ -86,7 +90,7 @@ function ConfidenceBar({ value }: { value: number }) {
           className="text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-muted)' }}
         >
-          Confidence
+          {t('suggestions.confidence')}
         </span>
         <span
           className="text-2xs font-mono tabular-nums"
@@ -149,6 +153,8 @@ function SuggestionItem({
   onAccept: () => void;
   onDismiss: () => void;
 }) {
+  const { t } = useTranslation('ownership');
+  const resultHint = t(ACTION_RESULT_HINT_KEY[suggestion.proposedAction]);
   return (
     <GlassCard tone="inner" className="p-3 rounded-xl">
       <div className="flex items-center gap-2 mb-2">
@@ -157,7 +163,7 @@ function SuggestionItem({
           className="ml-auto text-2xs font-mono tabular-nums"
           style={{ color: 'var(--fg-subtle)' }}
         >
-          {formatRelative(suggestion.detectedAt)}
+          {formatRelative(suggestion.detectedAt, t)}
         </span>
       </div>
 
@@ -180,13 +186,13 @@ function SuggestionItem({
           <span
             className="text-2xs font-mono lowercase"
             style={{ color: 'var(--fg-subtle)' }}
-            title={`Accept ${ACTION_RESULT_HINT[suggestion.proposedAction]}`}
+            title={t('suggestions.acceptTitle', { hint: resultHint })}
           >
-            accept → {ACTION_RESULT_HINT[suggestion.proposedAction]}
+            {t('suggestions.acceptArrow', { hint: resultHint })}
           </span>
           <div className="flex items-center gap-1.5">
-            <ActionButton label="Dismiss" onClick={onDismiss} primary={false} />
-            <ActionButton label="Accept" onClick={onAccept} primary />
+            <ActionButton label={t('suggestions.dismiss')} onClick={onDismiss} primary={false} />
+            <ActionButton label={t('suggestions.accept')} onClick={onAccept} primary />
           </div>
         </div>
       </div>
@@ -199,6 +205,7 @@ export function AutoDraftSuggestions({
   onAccept,
   onDismiss,
 }: AutoDraftSuggestionsProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
   const visible = suggestions.filter((s) => !dismissed.has(s.id));
 
@@ -213,10 +220,10 @@ export function AutoDraftSuggestions({
 
   return (
     <GlassCard className="p-3 rounded-xl">
-      <SectionHeader title="AI suggestions" badge={`${visible.length} pending`} />
+      <SectionHeader title={t('suggestions.title')} badge={t('suggestions.pending', { count: visible.length })} />
 
       {visible.length === 0 ? (
-        <EmptyHint text="No active suggestions — your routing is clean." />
+        <EmptyHint text={t('suggestions.empty')} />
       ) : (
         <div className="flex flex-col gap-2">
           {visible.map((s) => (

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { EmptyHint } from '@shared/ui';
 import type {
   OwnershipLayer as OwnershipLayerKind,
@@ -15,6 +16,13 @@ const LAYER_ORDER: OwnershipLayerKind[] = [
   'impact',
 ];
 
+const LAYER_KEY: Record<OwnershipLayerKind, `routing.layer.${OwnershipLayerKind}`> = {
+  declared: 'routing.layer.declared',
+  historical: 'routing.layer.historical',
+  expertise: 'routing.layer.expertise',
+  impact: 'routing.layer.impact',
+};
+
 export function OwnershipLayer({
   scores,
   resolve,
@@ -22,6 +30,7 @@ export function OwnershipLayer({
   scores: OwnershipScore[];
   resolve: (id: PersonId) => Person | undefined;
 }) {
+  const { t } = useTranslation('ownership');
   const grouped = useMemo(() => {
     const map = new Map<OwnershipLayerKind, OwnershipScore[]>();
     for (const s of scores) {
@@ -38,7 +47,7 @@ export function OwnershipLayer({
   const layers = LAYER_ORDER.filter((l) => grouped.has(l));
 
   if (layers.length === 0) {
-    return <EmptyHint text="No ownership signals recorded." />;
+    return <EmptyHint text={t('routing.layer.empty')} />;
   }
 
   return (
@@ -52,7 +61,7 @@ export function OwnershipLayer({
                 className="text-2xs font-black uppercase tracking-eyebrow"
                 style={{ color: 'var(--fg-muted)' }}
               >
-                {layer}
+                {t(LAYER_KEY[layer])}
               </span>
               <span
                 className="flex-1 h-px"
@@ -79,7 +88,7 @@ export function OwnershipLayer({
                       className="text-sm font-semibold truncate shrink-0 max-w-[110px]"
                       style={{ color: 'var(--fg-default)' }}
                     >
-                      {person?.name ?? 'Unknown'}
+                      {person?.name ?? t('routing.unknown')}
                     </span>
                     <span
                       className="text-xs font-mono tabular-nums shrink-0"

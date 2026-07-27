@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { GlassCard } from '@shared/ui';
 import type { Person } from '@entities/ownership';
 import { PersonChip } from './primitives';
@@ -9,6 +10,7 @@ export function OwnerSplit({
   implementer: Person | undefined;
   approver: Person | undefined;
 }) {
+  const { t } = useTranslation('ownership');
   const sameTeam =
     implementer && implementer.team === approver?.team;
   const samePerson =
@@ -20,7 +22,7 @@ export function OwnerSplit({
           className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
           style={{ color: 'var(--fg-muted)' }}
         >
-          Implements
+          {t('routing.roleImplements')}
         </div>
         <PersonChip person={implementer} size={28} emphasis />
       </GlassCard>
@@ -36,10 +38,10 @@ export function OwnerSplit({
           }}
           title={
             samePerson
-              ? 'Same person implements and approves'
+              ? t('routing.handoff.samePerson')
               : sameTeam
-                ? 'Same team'
-                : 'Cross-team handoff'
+                ? t('routing.handoff.sameTeam')
+                : t('routing.handoff.crossTeam')
           }
         >
           {samePerson ? '=' : '↔'}
@@ -51,7 +53,7 @@ export function OwnerSplit({
               color: sameTeam ? 'var(--fg-subtle)' : 'var(--intent-warn-fg)',
             }}
           >
-            {sameTeam ? 'same team' : 'cross team'}
+            {sameTeam ? t('routing.handoff.sameTeamShort') : t('routing.handoff.crossTeamShort')}
           </span>
         )}
       </div>
@@ -60,7 +62,7 @@ export function OwnerSplit({
           className="text-2xs font-black uppercase tracking-eyebrow mb-1.5"
           style={{ color: 'var(--fg-muted)' }}
         >
-          Approves
+          {t('routing.roleApproves')}
         </div>
         <PersonChip person={approver} size={28} emphasis />
       </GlassCard>
@@ -77,6 +79,7 @@ export function RoleColumn({
   person: Person | undefined | null;
   dimmed?: boolean;
 }) {
+  const { t } = useTranslation('ownership');
   return (
     <div
       className="min-w-0 flex flex-col gap-1.5"
@@ -109,7 +112,7 @@ export function RoleColumn({
             className="text-sm italic"
             style={{ color: 'var(--fg-subtle)' }}
           >
-            none
+            {t('routing.roleNone')}
           </span>
         </div>
       )}

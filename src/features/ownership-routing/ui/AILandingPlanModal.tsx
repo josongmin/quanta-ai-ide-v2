@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, EmptyHint } from '@shared/ui';
 import {
   type OwnershipZone,
@@ -38,6 +39,7 @@ export function AILandingPlanModal({
 }: AILandingPlanModalProps): JSX.Element | null {
   // Stage index — 0 nothing, 1 rationale, 2 strategy, 3..3+steps-1 each step,
   // 3+steps footer revealed.
+  const { t } = useTranslation('ownership');
   const [revealed, setRevealed] = useState(0);
   const timersRef = useRef<number[]>([]);
 
@@ -118,7 +120,7 @@ export function AILandingPlanModal({
   // Empty / fallback path — still renders a real modal.
   if (!zone || !stack) {
     return (
-      <Modal open={open} onClose={onClose} ariaLabel="AI landing plan" width={520}>
+      <Modal open={open} onClose={onClose} ariaLabel={t('plan.ariaLabel')} width={520}>
         <style>{ANIM_STYLE}</style>
         <div className="px-5 py-4 space-y-3">
           <header className="flex items-center justify-between gap-2">
@@ -126,11 +128,11 @@ export function AILandingPlanModal({
               className="text-sm font-black uppercase tracking-[0.22em]"
               style={{ color: 'var(--fg-strong)' }}
             >
-              AI Landing Plan
+              {t('plan.title')}
             </h2>
-            <FooterButton label="Close" onClick={onClose} />
+            <FooterButton label={t('plan.close')} onClick={onClose} />
           </header>
-          <EmptyHint text="No stack to plan for this zone." />
+          <EmptyHint text={t('plan.emptyModal')} />
         </div>
       </Modal>
     );
@@ -142,7 +144,7 @@ export function AILandingPlanModal({
     <Modal
       open={open}
       onClose={onClose}
-      ariaLabel="AI landing plan"
+      ariaLabel={t('plan.ariaLabel')}
       width="100%"
       maxWidth={640}
       align="top"

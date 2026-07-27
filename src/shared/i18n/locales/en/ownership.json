@@ -1,1 +1,267 @@
-{}
+{
+  "heat": {
+    "title": "Ownership Heat",
+    "zoneBadge_one": "{{count}} zone",
+    "zoneBadge_other": "{{count}} zones",
+    "empty": "No ownership zones available",
+    "noOwners": "no owners",
+    "avatarTitle": "{{name}} · {{team}}",
+    "avatarTitleStale": "{{name}} · {{team}} · stale",
+    "state": {
+      "orphan": "orphan",
+      "overloaded": "overloaded",
+      "fragmented": "fragmented",
+      "siloed": "siloed",
+      "crossTeam": "cross-team",
+      "healthy": "healthy"
+    },
+    "summary": {
+      "orphanActive_one": "{{count}} contributor · primary inactive",
+      "orphanActive_other": "{{count}} contributors · primary inactive",
+      "orphanNoBackup": "primary left rotation · no active backup",
+      "overloadedBackup_one": "{{count}} contributor · 1 carries the load",
+      "overloadedBackup_other": "{{count}} contributors · 1 carries the load",
+      "overloadedNoBackup_one": "{{count}} contributor · no backup",
+      "overloadedNoBackup_other": "{{count}} contributors · no backup",
+      "fragmented_one": "{{count}} contributor · no clear primary",
+      "fragmented_other": "{{count}} contributors · no clear primary",
+      "siloedBackup": "single primary · thin backup",
+      "siloedNoBackup": "single team, single person",
+      "crossTeam_one": "{{count}} contributor · spans multiple teams",
+      "crossTeam_other": "{{count}} contributors · spans multiple teams",
+      "healthy_one": "{{count}} contributor · clear primary + backup",
+      "healthy_other": "{{count}} contributors · clear primary + backup"
+    }
+  },
+  "routing": {
+    "title": "Smart Routing",
+    "empty": "Select a zone to see routing.",
+    "roleImplements": "Implements",
+    "roleApproves": "Approves",
+    "rolePrimary": "Primary",
+    "roleBackup": "Backup",
+    "roleReviewer": "Reviewer",
+    "roleEscalation": "Escalation",
+    "roleNone": "none",
+    "whyReviewer": "Why this reviewer?",
+    "ownershipSignals": "Ownership signals",
+    "handoff": {
+      "samePerson": "Same person implements and approves",
+      "sameTeam": "Same team",
+      "crossTeam": "Cross-team handoff",
+      "sameTeamShort": "same team",
+      "crossTeamShort": "cross team"
+    },
+    "impact": {
+      "eyebrow": "AI · Impact",
+      "owner": "owner",
+      "blast": "blast →"
+    },
+    "stale": {
+      "unavailable": "Primary unavailable",
+      "lastActive": " · last active {{days}}d ago",
+      "routingTo": " · routing to ",
+      "teamSuffix": " ({{team}})"
+    },
+    "confidence": {
+      "ownerConfidence": "Owner confidence",
+      "ownerConfidenceTitle": "Confidence in the recommended primary owner — combined signal across the 4 ownership layers",
+      "signalStrength": "signal strength"
+    },
+    "confidenceLabel": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "rationale": {
+      "touchedArea": "Touched area",
+      "recentReviewer": "Recent reviewer",
+      "incidentResolver": "Incident resolver",
+      "codeOwner": "Code owner",
+      "top": "top",
+      "topTitle": "Tiebreaker — strongest signal in this rationale"
+    },
+    "layer": {
+      "declared": "declared",
+      "historical": "historical",
+      "expertise": "expertise",
+      "impact": "impact",
+      "empty": "No ownership signals recorded."
+    },
+    "unknown": "Unknown",
+    "staleTag": "stale",
+    "staleDays": "{{days}}d",
+    "staleDotTitle": "stale · {{days}}d since active"
+  },
+  "approval": {
+    "title": "Approval path",
+    "empty": "No approval path available for this zone.",
+    "badgeParallel": "PARALLEL",
+    "badgeSequential": "SEQUENTIAL",
+    "hoursUnit": "h",
+    "approvers_one": "{{count}} approver",
+    "approvers_other": "{{count}} approvers",
+    "parallelTag": "parallel · any order",
+    "serialTag": "serial · must run in order",
+    "required": "Required",
+    "optional": "Optional",
+    "unknownPerson": "Unknown",
+    "noTeam": "—",
+    "parallelNote": "Steps without explicit dependency can land in any order — sequence shown is recommended priority."
+  },
+  "stack": {
+    "title": "Refactor Stack",
+    "empty": "No refactor stack for this zone — pick a zone with a planned stack.",
+    "estimate": "Estimate",
+    "dayUnit_one": "day",
+    "dayUnit_other": "days",
+    "steps": "Steps",
+    "stepUnit_one": "step",
+    "stepUnit_other": "steps",
+    "splitConfidence": "Split confidence",
+    "splitConfidenceTitle": "Confidence in this split shape — based on: {{basis}}",
+    "whyConfidence": "Why this confidence",
+    "mergeStrategy": "Merge strategy",
+    "alternative": "Alternative",
+    "exitCriteria": "Exit criteria",
+    "reviewer": "Reviewer",
+    "unassigned": "unassigned",
+    "locSuffix": "~{{lines}} LOC",
+    "moreModules_one": "+{{count}} more",
+    "moreModules_other": "+{{count}} more",
+    "stepsEmpty": "No steps planned yet for this stack.",
+    "footer": {
+      "reorder": "Reorder",
+      "reorderHint": "soon",
+      "reorderTooltip": "Step reordering ships in Phase 2 — current order is the recommended sequence based on coupling cluster + blast radius",
+      "planWithAi": "Plan with AI",
+      "export": "Export"
+    }
+  },
+  "mergeStrategy": {
+    "split-now": "SPLIT NOW",
+    "keep-as-one": "KEEP AS ONE",
+    "land-bottom-up": "LAND BOTTOM-UP",
+    "parallelizable": "PARALLELIZABLE",
+    "risky-serial": "RISKY SERIAL"
+  },
+  "kind": {
+    "prep": "PREP",
+    "adapter": "ADAPTER",
+    "migration": "MIGRATION",
+    "cleanup": "CLEANUP",
+    "gate": "GATE"
+  },
+  "risk": {
+    "low": "LOW RISK",
+    "medium": "MED RISK",
+    "high": "HIGH RISK"
+  },
+  "suggestions": {
+    "title": "AI suggestions",
+    "pending_one": "{{count}} pending",
+    "pending_other": "{{count}} pending",
+    "empty": "No active suggestions — your routing is clean.",
+    "confidence": "Confidence",
+    "dismiss": "Dismiss",
+    "accept": "Accept",
+    "acceptArrow": "accept → {{hint}}",
+    "acceptTitle": "Accept {{hint}}",
+    "actionResult": {
+      "open-stack-plan": "opens the AI landing plan modal",
+      "reroute-reviewer": "updates suggested reviewer in routing card",
+      "flag-cross-team": "flags zone in cross-team board",
+      "split-pr": "opens split-pr planner"
+    },
+    "actionLabel": {
+      "open-stack-plan": "OPEN STACK PLAN",
+      "reroute-reviewer": "REROUTE REVIEWER",
+      "flag-cross-team": "FLAG CROSS-TEAM",
+      "split-pr": "SPLIT PR"
+    },
+    "relative": {
+      "unknown": "—",
+      "seconds": "{{n}}s ago",
+      "minutes": "{{n}}m ago",
+      "hours": "{{n}}h ago",
+      "days": "{{n}}d ago",
+      "weeks": "{{n}}w ago"
+    }
+  },
+  "hotspots": {
+    "title": "Cross-team hotspots",
+    "detected_one": "{{count}} detected",
+    "detected_other": "{{count}} detected",
+    "empty": "No cross-team hotspots detected",
+    "weeklyUnit": "/wk",
+    "footer": "Detection considers approver count, team diversity, and weekly velocity.",
+    "severity": {
+      "high": "HIGH",
+      "medium": "MED",
+      "low": "LOW"
+    }
+  },
+  "proof": {
+    "title": "Proof obligations",
+    "empty": "No proof obligations recorded for this stack.",
+    "phaseBadge": "Phase {{phase}}",
+    "phaseNote": "Proof obligations are derived from your codebase — slots below are reserved for future auto-detection.",
+    "slotFuture": "future input — AI not yet able to derive",
+    "legend": {
+      "satisfied": "Sat {{count}}",
+      "pending": "Pen {{count}}",
+      "unknown": "Unk {{count}}",
+      "slot": "Slot {{count}}"
+    },
+    "status": {
+      "satisfied": "SATISFIED",
+      "pending": "PENDING",
+      "unknown": "UNKNOWN",
+      "placeholder": "SLOT"
+    }
+  },
+  "seams": {
+    "title": "Safe seams",
+    "detected_one": "{{count}} detected",
+    "detected_other": "{{count}} detected",
+    "empty": "No safe seams identified yet.",
+    "phaseBadge": "Phase 3",
+    "phaseNote": "Detected seams come from import-graph + behavior-diff. Slots are reserved for future auto-detection.",
+    "slotHint": "manual hint — AI has not identified this yet",
+    "statusDetected": "DETECTED",
+    "statusSlot": "SLOT"
+  },
+  "plan": {
+    "ariaLabel": "AI landing plan",
+    "title": "AI Landing Plan",
+    "generated": "Generated",
+    "close": "Close",
+    "emptyModal": "No stack to plan for this zone.",
+    "skip": "Skip",
+    "skipAria": "Skip animation and show full plan",
+    "reasoning": "Reasoning",
+    "mergeStrategy": "Merge strategy",
+    "consideredAlternative": "Considered alternative:",
+    "stackSteps": "Stack steps",
+    "stepsEmpty": "No steps planned for this stack.",
+    "unassigned": "unassigned",
+    "why": "Why",
+    "locSuffix": "~{{lines}} LOC",
+    "footer": {
+      "planReady": "Plan ready",
+      "estimatedPrefix": "estimated",
+      "dayUnit_one": "day",
+      "dayUnit_other": "days",
+      "openDrafts": "Open as draft PRs",
+      "copyChecklist": "Copy as checklist",
+      "close": "Close"
+    },
+    "whyReviewer": {
+      "prep": "lowest blast radius — backup engineer can prep without page-time risk",
+      "adapter": "shape change touches both sides — interface owner spots the seam",
+      "migration": "primary owner sees every callsite already; fastest to verify",
+      "cleanup": "historical author recognises legacy traps the linter cannot",
+      "gate": "platform reviewer holds canary keys and rollout dashboards"
+    }
+  }
+}

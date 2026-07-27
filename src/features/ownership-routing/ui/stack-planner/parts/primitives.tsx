@@ -1,17 +1,21 @@
+import { useTranslation } from 'react-i18next';
 import type { MergeStrategy, RiskBadge } from '@entities/ownership';
 import { PersonAvatar, riskTone } from '../../../lib';
 
 export { PersonAvatar };
 
-export const MERGE_STRATEGY_SHORT: Record<MergeStrategy, string> = {
-  'split-now': 'SPLIT NOW',
-  'keep-as-one': 'KEEP AS ONE',
-  'land-bottom-up': 'LAND BOTTOM-UP',
-  parallelizable: 'PARALLELIZABLE',
-  'risky-serial': 'RISKY SERIAL',
+// Enum → i18n key map (ownership namespace). Labels resolved via t() at the
+// rendering component so this module stays hook-free.
+export const MERGE_STRATEGY_SHORT_KEY: Record<MergeStrategy, `mergeStrategy.${MergeStrategy}`> = {
+  'split-now': 'mergeStrategy.split-now',
+  'keep-as-one': 'mergeStrategy.keep-as-one',
+  'land-bottom-up': 'mergeStrategy.land-bottom-up',
+  parallelizable: 'mergeStrategy.parallelizable',
+  'risky-serial': 'mergeStrategy.risky-serial',
 };
 
 export function MergeStrategyPill({ strategy }: { strategy: MergeStrategy }) {
+  const { t } = useTranslation('ownership');
   return (
     <span
       className="inline-flex items-center px-2 py-1 rounded-md text-2xs font-black uppercase tracking-eyebrow"
@@ -21,12 +25,13 @@ export function MergeStrategyPill({ strategy }: { strategy: MergeStrategy }) {
         border: '1px solid var(--border-muted)',
       }}
     >
-      {MERGE_STRATEGY_SHORT[strategy]}
+      {t(MERGE_STRATEGY_SHORT_KEY[strategy])}
     </span>
   );
 }
 
 export function RiskBadgePill({ risk }: { risk: RiskBadge }) {
+  const { t } = useTranslation('ownership');
   const tone = riskTone(risk);
   return (
     <span
@@ -37,7 +42,7 @@ export function RiskBadgePill({ risk }: { risk: RiskBadge }) {
         border: '1px solid color-mix(in srgb, currentColor 28%, transparent)',
       }}
     >
-      {tone.label}
+      {t(tone.labelKey)}
     </span>
   );
 }

@@ -1,1 +1,267 @@
-{}
+{
+  "heat": {
+    "title": "オーナーシップヒート",
+    "zoneBadge_one": "ゾーン{{count}}件",
+    "zoneBadge_other": "ゾーン{{count}}件",
+    "empty": "利用可能なオーナーシップゾーンがありません",
+    "noOwners": "オーナーなし",
+    "avatarTitle": "{{name}} · {{team}}",
+    "avatarTitleStale": "{{name}} · {{team}} · 非アクティブ",
+    "state": {
+      "orphan": "孤立",
+      "overloaded": "過負荷",
+      "fragmented": "分散",
+      "siloed": "サイロ化",
+      "crossTeam": "チーム横断",
+      "healthy": "正常"
+    },
+    "summary": {
+      "orphanActive_one": "貢献者{{count}}名 · 主担当が非アクティブ",
+      "orphanActive_other": "貢献者{{count}}名 · 主担当が非アクティブ",
+      "orphanNoBackup": "主担当が離脱 · アクティブなバックアップなし",
+      "overloadedBackup_one": "貢献者{{count}}名 · 1名が負荷を担う",
+      "overloadedBackup_other": "貢献者{{count}}名 · 1名が負荷を担う",
+      "overloadedNoBackup_one": "貢献者{{count}}名 · バックアップなし",
+      "overloadedNoBackup_other": "貢献者{{count}}名 · バックアップなし",
+      "fragmented_one": "貢献者{{count}}名 · 明確な主担当なし",
+      "fragmented_other": "貢献者{{count}}名 · 明確な主担当なし",
+      "siloedBackup": "単一の主担当 · 薄いバックアップ",
+      "siloedNoBackup": "単一チーム、単一人員",
+      "crossTeam_one": "貢献者{{count}}名 · 複数チームにまたがる",
+      "crossTeam_other": "貢献者{{count}}名 · 複数チームにまたがる",
+      "healthy_one": "貢献者{{count}}名 · 明確な主担当 + バックアップ",
+      "healthy_other": "貢献者{{count}}名 · 明確な主担当 + バックアップ"
+    }
+  },
+  "routing": {
+    "title": "スマートルーティング",
+    "empty": "ルーティングを表示するゾーンを選択してください。",
+    "roleImplements": "実装",
+    "roleApproves": "承認",
+    "rolePrimary": "主担当",
+    "roleBackup": "バックアップ",
+    "roleReviewer": "レビュアー",
+    "roleEscalation": "エスカレーション",
+    "roleNone": "なし",
+    "whyReviewer": "なぜこのレビュアー？",
+    "ownershipSignals": "オーナーシップシグナル",
+    "handoff": {
+      "samePerson": "同一人物が実装と承認を担当",
+      "sameTeam": "同一チーム",
+      "crossTeam": "チーム横断の引き継ぎ",
+      "sameTeamShort": "同一チーム",
+      "crossTeamShort": "チーム横断"
+    },
+    "impact": {
+      "eyebrow": "AI · インパクト",
+      "owner": "オーナー",
+      "blast": "影響 →"
+    },
+    "stale": {
+      "unavailable": "主担当が不在",
+      "lastActive": " · 最終アクティブ {{days}}日前",
+      "routingTo": " · ルーティング先 ",
+      "teamSuffix": " ({{team}})"
+    },
+    "confidence": {
+      "ownerConfidence": "オーナー信頼度",
+      "ownerConfidenceTitle": "推奨される主担当オーナーへの信頼度 — 4つのオーナーシップレイヤーを統合したシグナル",
+      "signalStrength": "シグナル強度"
+    },
+    "confidenceLabel": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "rationale": {
+      "touchedArea": "変更領域",
+      "recentReviewer": "最近のレビュアー",
+      "incidentResolver": "インシデント解決者",
+      "codeOwner": "コードオーナー",
+      "top": "最上位",
+      "topTitle": "タイブレーカー — この根拠で最も強いシグナル"
+    },
+    "layer": {
+      "declared": "宣言",
+      "historical": "履歴",
+      "expertise": "専門性",
+      "impact": "インパクト",
+      "empty": "記録されたオーナーシップシグナルはありません。"
+    },
+    "unknown": "不明",
+    "staleTag": "非アクティブ",
+    "staleDays": "{{days}}日",
+    "staleDotTitle": "非アクティブ · 最終アクティブ {{days}}日前"
+  },
+  "approval": {
+    "title": "承認パス",
+    "empty": "このゾーンに利用可能な承認パスはありません。",
+    "badgeParallel": "並列",
+    "badgeSequential": "順次",
+    "hoursUnit": "時間",
+    "approvers_one": "承認者{{count}}名",
+    "approvers_other": "承認者{{count}}名",
+    "parallelTag": "並列 · 順不同",
+    "serialTag": "順次 · 順番に実行必須",
+    "required": "必須",
+    "optional": "任意",
+    "unknownPerson": "不明",
+    "noTeam": "—",
+    "parallelNote": "明示的な依存関係のないステップは任意の順序で反映できます — 表示順は推奨優先度です。"
+  },
+  "stack": {
+    "title": "リファクタースタック",
+    "empty": "このゾーンにはリファクタースタックがありません — 計画済みスタックのあるゾーンを選択してください。",
+    "estimate": "見積り",
+    "dayUnit_one": "日",
+    "dayUnit_other": "日",
+    "steps": "ステップ",
+    "stepUnit_one": "ステップ",
+    "stepUnit_other": "ステップ",
+    "splitConfidence": "分割信頼度",
+    "splitConfidenceTitle": "この分割形状への信頼度 — 根拠: {{basis}}",
+    "whyConfidence": "この信頼度の根拠",
+    "mergeStrategy": "マージ戦略",
+    "alternative": "代替案",
+    "exitCriteria": "終了基準",
+    "reviewer": "レビュアー",
+    "unassigned": "未割り当て",
+    "locSuffix": "~{{lines}} LOC",
+    "moreModules_one": "他{{count}}件",
+    "moreModules_other": "他{{count}}件",
+    "stepsEmpty": "このスタックに計画されたステップはまだありません。",
+    "footer": {
+      "reorder": "並べ替え",
+      "reorderHint": "近日",
+      "reorderTooltip": "ステップの並べ替えはPhase 2で提供されます — 現在の順序はカップリングクラスタ + 影響範囲に基づく推奨順序です",
+      "planWithAi": "AIで計画",
+      "export": "エクスポート"
+    }
+  },
+  "mergeStrategy": {
+    "split-now": "今すぐ分割",
+    "keep-as-one": "1つに保持",
+    "land-bottom-up": "下位から反映",
+    "parallelizable": "並列可能",
+    "risky-serial": "リスクのある順次"
+  },
+  "kind": {
+    "prep": "準備",
+    "adapter": "アダプター",
+    "migration": "マイグレーション",
+    "cleanup": "クリーンアップ",
+    "gate": "ゲート"
+  },
+  "risk": {
+    "low": "低リスク",
+    "medium": "中リスク",
+    "high": "高リスク"
+  },
+  "suggestions": {
+    "title": "AI提案",
+    "pending_one": "{{count}}件保留中",
+    "pending_other": "{{count}}件保留中",
+    "empty": "アクティブな提案なし — ルーティングは良好です。",
+    "confidence": "信頼度",
+    "dismiss": "却下",
+    "accept": "承諾",
+    "acceptArrow": "承諾 → {{hint}}",
+    "acceptTitle": "承諾すると{{hint}}",
+    "actionResult": {
+      "open-stack-plan": "AIランディングプランのモーダルを開きます",
+      "reroute-reviewer": "ルーティングカードの推奨レビュアーを更新します",
+      "flag-cross-team": "チーム横断ボードにゾーンをフラグします",
+      "split-pr": "split-prプランナーを開きます"
+    },
+    "actionLabel": {
+      "open-stack-plan": "スタックプランを開く",
+      "reroute-reviewer": "レビュアー再ルーティング",
+      "flag-cross-team": "チーム横断フラグ",
+      "split-pr": "PR分割"
+    },
+    "relative": {
+      "unknown": "—",
+      "seconds": "{{n}}秒前",
+      "minutes": "{{n}}分前",
+      "hours": "{{n}}時間前",
+      "days": "{{n}}日前",
+      "weeks": "{{n}}週間前"
+    }
+  },
+  "hotspots": {
+    "title": "チーム横断ホットスポット",
+    "detected_one": "{{count}}件検出",
+    "detected_other": "{{count}}件検出",
+    "empty": "検出されたチーム横断ホットスポットはありません",
+    "weeklyUnit": "/週",
+    "footer": "検出は承認者数、チームの多様性、週間ベロシティを考慮します。",
+    "severity": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    }
+  },
+  "proof": {
+    "title": "証明義務",
+    "empty": "このスタックに記録された証明義務はありません。",
+    "phaseBadge": "Phase {{phase}}",
+    "phaseNote": "証明義務はコードベースから導出されます — 以下のスロットは将来の自動検出のために予約されています。",
+    "slotFuture": "将来の入力 — AIはまだ導出できません",
+    "legend": {
+      "satisfied": "充足 {{count}}",
+      "pending": "保留 {{count}}",
+      "unknown": "不明 {{count}}",
+      "slot": "スロット {{count}}"
+    },
+    "status": {
+      "satisfied": "充足",
+      "pending": "保留中",
+      "unknown": "不明",
+      "placeholder": "スロット"
+    }
+  },
+  "seams": {
+    "title": "セーフシーム",
+    "detected_one": "{{count}}件検出",
+    "detected_other": "{{count}}件検出",
+    "empty": "まだ特定されたセーフシームはありません。",
+    "phaseBadge": "Phase 3",
+    "phaseNote": "検出されたシームはインポートグラフ + 動作diffから得られます。スロットは将来の自動検出のために予約されています。",
+    "slotHint": "手動ヒント — AIはまだ特定していません",
+    "statusDetected": "検出済み",
+    "statusSlot": "スロット"
+  },
+  "plan": {
+    "ariaLabel": "AIランディングプラン",
+    "title": "AIランディングプラン",
+    "generated": "生成済み",
+    "close": "閉じる",
+    "emptyModal": "このゾーンに計画するスタックがありません。",
+    "skip": "スキップ",
+    "skipAria": "アニメーションをスキップして全プランを表示",
+    "reasoning": "推論",
+    "mergeStrategy": "マージ戦略",
+    "consideredAlternative": "検討した代替案:",
+    "stackSteps": "スタックステップ",
+    "stepsEmpty": "このスタックに計画されたステップはありません。",
+    "unassigned": "未割り当て",
+    "why": "理由",
+    "locSuffix": "~{{lines}} LOC",
+    "footer": {
+      "planReady": "プラン準備完了",
+      "estimatedPrefix": "見積り",
+      "dayUnit_one": "日",
+      "dayUnit_other": "日",
+      "openDrafts": "ドラフトPRとして開く",
+      "copyChecklist": "チェックリストとしてコピー",
+      "close": "閉じる"
+    },
+    "whyReviewer": {
+      "prep": "最も低い影響範囲 — バックアップエンジニアが呼び出しリスクなしで準備可能",
+      "adapter": "形状変更が両側に及ぶ — インターフェースオーナーがシームを見抜く",
+      "migration": "主担当オーナーがすべての呼び出し箇所を既に把握 — 検証が最速",
+      "cleanup": "履歴の作成者がリンターでは捉えられないレガシーの罠を認識",
+      "gate": "プラットフォームレビュアーがカナリアキーとロールアウトダッシュボードを保持"
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { GlassCard, EmptyHint } from '@shared/ui';
 import {
   findPerson,
@@ -6,7 +7,7 @@ import {
 } from '@entities/ownership';
 import { BlinkingCursor, PhaseLabel, RevealedBlock, StrategyPill } from './primitives';
 import { StepReveal } from './StepReveal';
-import { MERGE_STRATEGY_LABEL } from './types';
+import { MERGE_STRATEGY_KEY } from './types';
 
 export function PlanBody({
   stack,
@@ -17,6 +18,7 @@ export function PlanBody({
   revealed: number;
   personIndex: Map<string, Person>;
 }) {
+  const { t } = useTranslation('ownership');
   const advice = stack.mergeStrategyAdvice;
   const stepsRevealedCount = Math.max(0, Math.min(stack.steps.length, revealed - 2));
   const rationaleStillWriting = revealed === 1;
@@ -26,7 +28,7 @@ export function PlanBody({
       {/* Phase 1: Reasoning */}
       <RevealedBlock shown={revealed >= 1}>
         <GlassCard tone="inner" className="px-3 py-2.5">
-          <PhaseLabel>Reasoning</PhaseLabel>
+          <PhaseLabel>{t('plan.reasoning')}</PhaseLabel>
           <p
             className="text-[12.5px] leading-snug"
             style={{ color: 'var(--fg-default)' }}
@@ -41,7 +43,7 @@ export function PlanBody({
       <RevealedBlock shown={revealed >= 2}>
         <GlassCard tone="inner" className="px-3 py-2.5 space-y-2">
           <div className="flex items-center justify-between gap-2 flex-wrap">
-            <PhaseLabel>Merge strategy</PhaseLabel>
+            <PhaseLabel>{t('plan.mergeStrategy')}</PhaseLabel>
             <StrategyPill strategy={advice.strategy} />
           </div>
           <p
@@ -55,12 +57,12 @@ export function PlanBody({
               className="text-sm leading-snug italic"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              Considered alternative:{' '}
+              {t('plan.consideredAlternative')}{' '}
               <span
                 className="not-italic font-black uppercase tracking-eyebrow"
                 style={{ color: 'var(--fg-muted)' }}
               >
-                {MERGE_STRATEGY_LABEL[advice.alternative.strategy]}
+                {t(MERGE_STRATEGY_KEY[advice.alternative.strategy])}
               </span>{' '}
               — {advice.alternative.reason}
             </p>
@@ -71,12 +73,12 @@ export function PlanBody({
       {/* Phase 3: Steps */}
       {stack.steps.length === 0 ? (
         <RevealedBlock shown={revealed >= 2}>
-          <EmptyHint text="No steps planned for this stack." />
+          <EmptyHint text={t('plan.stepsEmpty')} />
         </RevealedBlock>
       ) : (
         <div>
           <RevealedBlock shown={revealed >= 2}>
-            <PhaseLabel>Stack steps</PhaseLabel>
+            <PhaseLabel>{t('plan.stackSteps')}</PhaseLabel>
           </RevealedBlock>
           <ol className="space-y-2 list-none">
             {stack.steps.slice(0, stepsRevealedCount).map((step, idx) => {

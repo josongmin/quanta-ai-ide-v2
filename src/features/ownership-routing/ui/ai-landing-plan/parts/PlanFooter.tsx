@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { OwnershipZone, RefactorStack } from '@entities/ownership';
 import { FooterButton } from './primitives';
 
@@ -10,6 +11,7 @@ export function PlanFooter({
   stack: RefactorStack;
   onClose: () => void;
 }) {
+  const { t } = useTranslation('ownership');
   return (
     <footer
       className="px-5 py-3 border-t flex items-center justify-between gap-3 flex-wrap"
@@ -23,17 +25,17 @@ export function PlanFooter({
           className="text-2xs font-black uppercase tracking-[0.22em] mr-1.5"
           style={{ color: 'var(--fg-subtle)' }}
         >
-          Plan ready
+          {t('plan.footer.planReady')}
         </span>
-        estimated{' '}
+        {t('plan.footer.estimatedPrefix')}{' '}
         <span style={{ color: 'var(--fg-strong)' }}>
           {stack.totalEstimatedDays}
         </span>{' '}
-        {stack.totalEstimatedDays === 1 ? 'day' : 'days'}
+        {t('plan.footer.dayUnit', { count: stack.totalEstimatedDays })}
       </div>
       <div className="flex items-center gap-1.5 flex-wrap">
         <FooterButton
-          label="Open as draft PRs"
+          label={t('plan.footer.openDrafts')}
           onClick={() => {
             console.warn('[AILandingPlanModal] open-as-draft-prs', {
               zoneId: zone.id,
@@ -42,7 +44,7 @@ export function PlanFooter({
           }}
         />
         <FooterButton
-          label="Copy as checklist"
+          label={t('plan.footer.copyChecklist')}
           onClick={() => {
             console.warn('[AILandingPlanModal] copy-as-checklist', {
               zoneId: zone.id,
@@ -50,7 +52,7 @@ export function PlanFooter({
             });
           }}
         />
-        <FooterButton label="Close" onClick={onClose} primary />
+        <FooterButton label={t('plan.footer.close')} onClick={onClose} primary />
       </div>
     </footer>
   );

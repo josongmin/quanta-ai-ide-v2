@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import type { MergeStrategyAdvice } from '@entities/ownership';
-import { MERGE_STRATEGY_SHORT, MergeStrategyPill } from './primitives';
+import { MERGE_STRATEGY_SHORT_KEY, MergeStrategyPill } from './primitives';
 
 export function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
+  const { t } = useTranslation('ownership');
   return (
     <div
       className="rounded-lg px-3 py-2.5 border space-y-2"
@@ -15,7 +17,7 @@ export function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
           className="text-2xs font-black uppercase tracking-[0.22em]"
           style={{ color: 'var(--fg-subtle)' }}
         >
-          Merge strategy
+          {t('stack.mergeStrategy')}
         </span>
         <span className="flex-1 h-px" style={{ background: 'var(--border-muted)' }} />
         <MergeStrategyPill strategy={advice.strategy} />
@@ -39,7 +41,7 @@ export function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
               className="text-2xs font-black uppercase tracking-[0.22em]"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              Alternative
+              {t('stack.alternative')}
             </span>
             <span
               className="text-2xs font-black uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md"
@@ -49,7 +51,7 @@ export function MergeStrategyCard({ advice }: { advice: MergeStrategyAdvice }) {
                 border: '1px solid var(--border-muted)',
               }}
             >
-              {MERGE_STRATEGY_SHORT[advice.alternative.strategy]}
+              {t(MERGE_STRATEGY_SHORT_KEY[advice.alternative.strategy])}
             </span>
           </div>
           <p

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { GlassCard, EmptyHint } from '@shared/ui';
 import type {
   Person,
@@ -7,21 +8,22 @@ import type {
 } from '@entities/ownership';
 import { PersonAvatar, RiskBadgePill } from './primitives';
 
-const KIND_LABEL: Record<StackStepKind, string> = {
-  prep: 'PREP',
-  adapter: 'ADAPTER',
-  migration: 'MIGRATION',
-  cleanup: 'CLEANUP',
-  gate: 'GATE',
+const KIND_KEY: Record<StackStepKind, `kind.${StackStepKind}`> = {
+  prep: 'kind.prep',
+  adapter: 'kind.adapter',
+  migration: 'kind.migration',
+  cleanup: 'kind.cleanup',
+  gate: 'kind.gate',
 };
 
 function KindLabel({ kind }: { kind: StackStepKind }) {
+  const { t } = useTranslation('ownership');
   return (
     <span
       className="inline-flex items-center text-2xs font-black uppercase tracking-[0.22em]"
       style={{ color: 'var(--fg-subtle)' }}
     >
-      {KIND_LABEL[kind]}
+      {t(KIND_KEY[kind])}
     </span>
   );
 }
@@ -60,6 +62,7 @@ function CheckPill({ label }: { label: string }) {
 }
 
 function ExitCriteria({ items }: { items: string[] }) {
+  const { t } = useTranslation('ownership');
   if (items.length === 0) return null;
   return (
     <div className="mb-2">
@@ -67,7 +70,7 @@ function ExitCriteria({ items }: { items: string[] }) {
         className="text-2xs font-black uppercase tracking-[0.22em] mb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        Exit criteria
+        {t('stack.exitCriteria')}
       </div>
       <ul className="space-y-0.5">
         {items.map((c, i) => (
@@ -90,6 +93,7 @@ function ExitCriteria({ items }: { items: string[] }) {
 }
 
 function TouchedModules({ modules }: { modules: string[] }) {
+  const { t } = useTranslation('ownership');
   if (modules.length === 0) return null;
   const visible = modules.slice(0, 3);
   const extra = modules.length - visible.length;
@@ -110,7 +114,7 @@ function TouchedModules({ modules }: { modules: string[] }) {
           className="text-xs font-mono leading-tight"
           style={{ color: 'var(--fg-subtle)' }}
         >
-          +{extra} more
+          {t('stack.moreModules', { count: extra })}
         </li>
       )}
     </ul>
@@ -118,6 +122,7 @@ function TouchedModules({ modules }: { modules: string[] }) {
 }
 
 function ReviewerChip({ person }: { person: Person | undefined }) {
+  const { t } = useTranslation('ownership');
   if (!person) {
     return (
       <div className="flex items-center gap-1.5 min-w-0">
@@ -126,7 +131,7 @@ function ReviewerChip({ person }: { person: Person | undefined }) {
           className="text-xs italic truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
-          unassigned
+          {t('stack.unassigned')}
         </span>
       </div>
     );
@@ -165,6 +170,7 @@ function StepCard({
   isLast: boolean;
   reviewer: Person | undefined;
 }) {
+  const { t } = useTranslation('ownership');
   return (
     <li className="relative">
       <div className="grid grid-cols-[24px_1fr] gap-2.5 items-start">
@@ -194,7 +200,7 @@ function StepCard({
                 className="text-2xs font-mono tabular-nums"
                 style={{ color: 'var(--fg-subtle)' }}
               >
-                ~{step.estimatedDiffLines} LOC
+                {t('stack.locSuffix', { lines: step.estimatedDiffLines })}
               </span>
             </div>
             <RiskBadgePill risk={step.blastRadius} />
@@ -232,7 +238,7 @@ function StepCard({
                 className="text-2xs font-black uppercase tracking-[0.22em] mb-0.5"
                 style={{ color: 'var(--fg-subtle)' }}
               >
-                Reviewer
+                {t('stack.reviewer')}
               </div>
               <ReviewerChip person={reviewer} />
             </div>
@@ -250,8 +256,9 @@ export function StepGroup({
   steps: StackStep[];
   personIndex: Map<PersonId, Person>;
 }) {
+  const { t } = useTranslation('ownership');
   if (steps.length === 0) {
-    return <EmptyHint text="No steps planned yet for this stack." />;
+    return <EmptyHint text={t('stack.stepsEmpty')} />;
   }
   return (
     <ol className="space-y-2 list-none">

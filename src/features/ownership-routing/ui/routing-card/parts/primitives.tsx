@@ -1,20 +1,22 @@
+import { useTranslation } from 'react-i18next';
 import type { Person } from '@entities/ownership';
 import { PersonAvatar } from '../../../lib';
 
 export { PersonAvatar };
 
 function StaleDot({ days }: { days: number }) {
+  const { t } = useTranslation('ownership');
   return (
     <span
       className="inline-flex items-center gap-1 text-2xs font-mono uppercase tracking-[0.12em]"
       style={{ color: 'var(--fg-subtle)' }}
-      title={`stale · ${days}d since active`}
+      title={t('routing.staleDotTitle', { days })}
     >
       <span
         className="w-1 h-1 rounded-full"
         style={{ background: 'var(--intent-warn-fg)' }}
       />
-      {days}d
+      {t('routing.staleDays', { days })}
     </span>
   );
 }
@@ -28,6 +30,7 @@ export function PersonChip({
   size?: number;
   emphasis?: boolean;
 }) {
+  const { t } = useTranslation('ownership');
   if (!person) {
     return (
       <div className="flex items-center gap-2 min-w-0">
@@ -36,7 +39,7 @@ export function PersonChip({
           className="text-sm truncate"
           style={{ color: 'var(--fg-subtle)' }}
         >
-          Unknown
+          {t('routing.unknown')}
         </span>
       </div>
     );
@@ -63,7 +66,7 @@ export function PersonChip({
           {!person.active && (
             <>
               {' · '}
-              <span style={{ color: 'var(--intent-warn-fg)' }}>stale</span>
+              <span style={{ color: 'var(--intent-warn-fg)' }}>{t('routing.staleTag')}</span>
             </>
           )}
         </div>

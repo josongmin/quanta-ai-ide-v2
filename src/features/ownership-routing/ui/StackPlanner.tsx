@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GlassCard, SectionHeader, EmptyHint } from '@shared/ui';
 import type { Person, PersonId, RefactorStack } from '@entities/ownership';
 import {
-  MERGE_STRATEGY_SHORT,
+  MERGE_STRATEGY_SHORT_KEY,
   PlanMeta,
   RationaleStrip,
   SplitConfidenceBasis,
@@ -19,6 +20,7 @@ export type StackPlannerProps = {
 }
 
 export function StackPlanner({ stack, people, onPlanRefactor }: StackPlannerProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   const personIndex = useMemo(() => {
     const m = new Map<PersonId, Person>();
     for (const p of people) m.set(p.id, p);
@@ -28,17 +30,17 @@ export function StackPlanner({ stack, people, onPlanRefactor }: StackPlannerProp
   if (!stack) {
     return (
       <GlassCard className="px-3.5 py-3">
-        <SectionHeader title="Refactor Stack" />
-        <EmptyHint text="No refactor stack for this zone — pick a zone with a planned stack." />
+        <SectionHeader title={t('stack.title')} />
+        <EmptyHint text={t('stack.empty')} />
       </GlassCard>
     );
   }
 
-  const badge = MERGE_STRATEGY_SHORT[stack.mergeStrategy];
+  const badge = t(MERGE_STRATEGY_SHORT_KEY[stack.mergeStrategy]);
 
   return (
     <GlassCard className="px-3.5 py-3 space-y-3.5">
-      <SectionHeader title="Refactor Stack" badge={badge} />
+      <SectionHeader title={t('stack.title')} badge={badge} />
 
       <RationaleStrip text={stack.rationale} />
 

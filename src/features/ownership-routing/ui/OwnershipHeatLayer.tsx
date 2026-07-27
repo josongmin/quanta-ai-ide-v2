@@ -1,4 +1,6 @@
 import type { CSSProperties, JSX } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import {
   MOCK_PEOPLE,
   type OwnershipState,
@@ -16,7 +18,7 @@ export type OwnershipHeatLayerProps = {
 }
 
 type StateVisual = {
-  label: string;
+  labelKey: string;
   bgVar: string;
   fgVar: string;
   borderVar: string;
@@ -24,38 +26,38 @@ type StateVisual = {
 
 const STATE_VISUALS: Record<OwnershipState, StateVisual> = {
   orphan: {
-    label: 'orphan',
+    labelKey: 'heat.state.orphan',
     bgVar: 'var(--intent-danger-bg)',
     fgVar: 'var(--intent-danger-fg)',
     borderVar: 'var(--intent-danger-fg)',
   },
   overloaded: {
-    label: 'overloaded',
+    labelKey: 'heat.state.overloaded',
     bgVar: 'var(--intent-warn-bg)',
     fgVar: 'var(--intent-warn-fg)',
     borderVar: 'var(--intent-warn-fg)',
   },
   fragmented: {
-    label: 'fragmented',
+    labelKey: 'heat.state.fragmented',
     bgVar: 'color-mix(in srgb, var(--identity-out-of-scope) 12%, transparent)',
     fgVar: 'var(--identity-out-of-scope)',
     borderVar: 'var(--identity-out-of-scope)',
   },
   siloed: {
-    label: 'siloed',
+    labelKey: 'heat.state.siloed',
     // Orange-ish: blend warn vivid toward danger to bias warmer than amber.
     bgVar: 'color-mix(in srgb, var(--intent-warn-vivid) 12%, transparent)',
     fgVar: 'var(--intent-warn-vivid)',
     borderVar: 'var(--intent-warn-vivid)',
   },
   'cross-team': {
-    label: 'cross-team',
+    labelKey: 'heat.state.crossTeam',
     bgVar: 'color-mix(in srgb, var(--fg-link) 14%, transparent)',
     fgVar: 'var(--fg-link)',
     borderVar: 'var(--fg-link)',
   },
   healthy: {
-    label: 'healthy',
+    labelKey: 'heat.state.healthy',
     bgVar: 'var(--intent-success-bg)',
     fgVar: 'var(--intent-success-fg)',
     borderVar: 'var(--intent-success-fg)',
@@ -94,7 +96,7 @@ function uniquePersonIds(zone: OwnershipZone): PersonId[] {
   return Array.from(new Set(zone.scores.map((s) => s.personId)));
 }
 
-function summaryFor(zone: OwnershipZone): string {
+function summaryFor(zone: OwnershipZone, t: TFunction<'ownership'>): string {
   const ids = uniquePersonIds(zone);
   const contributorCount = ids.length;
   const primary = findPersonLocal(zone.primary);
@@ -104,26 +106,27 @@ function summaryFor(zone: OwnershipZone): string {
   switch (zone.state) {
     case 'orphan':
       return primaryActive
-        ? `${contributorCount} contributors · primary inactive`
-        : 'primary left rotation · no active backup';
+        ? t('heat.summary.orphanActive', { count: contributorCount })
+        : t('heat.summary.orphanNoBackup');
     case 'overloaded':
       return backup
-        ? `${contributorCount} contributors · 1 carries the load`
-        : `${contributorCount} contributors · no backup`;
+        ? t('heat.summary.overloadedBackup', { count: contributorCount })
+        : t('heat.summary.overloadedNoBackup', { count: contributorCount });
     case 'fragmented':
-      return `${contributorCount} contributors · no clear primary`;
+      return t('heat.summary.fragmented', { count: contributorCount });
     case 'siloed':
       return backup
-        ? 'single primary · thin backup'
-        : 'single team, single person';
+        ? t('heat.summary.siloedBackup')
+        : t('heat.summary.siloedNoBackup');
     case 'cross-team':
-      return `${contributorCount} contributors · spans multiple teams`;
+      return t('heat.summary.crossTeam', { count: contributorCount });
     case 'healthy':
-      return `${contributorCount} contributors · clear primary + backup`;
+      return t('heat.summary.healthy', { count: contributorCount });
   }
 }
 
 function StateBadge({ state }: { state: OwnershipState }) {
+  const { t } = useTranslation('ownership');
   const v = STATE_VISUALS[state];
   return (
     <span
@@ -134,7 +137,7 @@ function StateBadge({ state }: { state: OwnershipState }) {
         borderColor: `color-mix(in srgb, ${v.borderVar} 35%, transparent)`,
       }}
     >
-      {v.label}
+      {t(v.labelKey)}
     </span>
   );
 }
@@ -146,6 +149,7 @@ function Avatar({
   person: Person;
   z: number;
 }) {
+  const { t } = useTranslation('ownership');
   const stale = !person.active;
   // hsl() is permitted only for deterministic per-person identity color.
   const sat = stale ? 8 : 50;
@@ -161,7 +165,9 @@ function Avatar({
   };
   return (
     <span
-      title={`${person.name} · ${person.team}${stale ? ' · stale' : ''}`}
+      title={stale
+        ? t('heat.avatarTitleStale', { name: person.name, team: person.team })
+        : t('heat.avatarTitle', { name: person.name, team: person.team })}
       className="relative inline-flex items-center justify-center w-6 h-6 rounded-full border text-2xs font-bold uppercase tracking-tight select-none"
       style={style}
     >
@@ -180,13 +186,14 @@ function Avatar({
 }
 
 function AvatarStack({ owners }: { owners: Person[] }) {
+  const { t } = useTranslation('ownership');
   if (owners.length === 0) {
     return (
       <span
         className="text-2xs italic"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        no owners
+        {t('heat.noOwners')}
       </span>
     );
   }
@@ -208,8 +215,9 @@ function ZoneRow({
   selected: boolean;
   onSelect?: (id: string) => void;
 }) {
+  const { t } = useTranslation('ownership');
   const owners = topOwners(zone, 3);
-  const summary = summaryFor(zone);
+  const summary = summaryFor(zone, t);
 
   return (
     <button
@@ -259,6 +267,7 @@ function ZoneRow({
 }
 
 function Legend({ zones }: { zones: OwnershipZone[] }) {
+  const { t } = useTranslation('ownership');
   const counts = STATE_ORDER.reduce<Record<OwnershipState, number>>(
     (acc, s) => {
       acc[s] = 0;
@@ -289,7 +298,7 @@ function Legend({ zones }: { zones: OwnershipZone[] }) {
               className="inline-block w-1.5 h-1.5 rounded-full"
               style={{ background: v.fgVar }}
             />
-            {v.label}
+            {t(v.labelKey)}
             <span style={{ color: 'var(--fg-subtle)' }}>
               {counts[s]}
             </span>
@@ -305,15 +314,16 @@ export function OwnershipHeatLayer({
   selectedZoneId,
   onZoneSelect,
 }: OwnershipHeatLayerProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   return (
     <GlassCard className="rounded-lg p-3">
       <SectionHeader
-        title="Ownership Heat"
-        badge={`${zones.length} zones`}
+        title={t('heat.title')}
+        badge={t('heat.zoneBadge', { count: zones.length })}
       />
       {zones.length === 0 ? (
         <div className="py-3">
-          <EmptyHint text="No ownership zones available" />
+          <EmptyHint text={t('heat.empty')} />
         </div>
       ) : (
         <>

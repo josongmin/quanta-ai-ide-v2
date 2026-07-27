@@ -1,4 +1,5 @@
 import type { CSSProperties, JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GlassCard, SectionHeader, StackedRatioBar, EmptyHint } from '@shared/ui';
 import type { ProofObligation } from '@entities/ownership';
 
@@ -22,11 +23,11 @@ const STATUS_FG: Record<Status, string> = {
   placeholder: 'var(--fg-subtle)',
 };
 
-const STATUS_LABEL: Record<Status, string> = {
-  satisfied: 'SATISFIED',
-  pending: 'PENDING',
-  unknown: 'UNKNOWN',
-  placeholder: 'SLOT',
+const STATUS_LABEL_KEY: Record<Status, `proof.status.${Status}`> = {
+  satisfied: 'proof.status.satisfied',
+  pending: 'proof.status.pending',
+  unknown: 'proof.status.unknown',
+  placeholder: 'proof.status.placeholder',
 };
 
 function StatusDot({ status }: { status: Status }): JSX.Element {
@@ -60,6 +61,7 @@ function StatusDot({ status }: { status: Status }): JSX.Element {
 }
 
 function PhasePreviewBanner({ phase, text }: { phase: string; text: string }) {
+  const { t } = useTranslation('ownership');
   return (
     <div
       className="mt-1 mb-2 rounded-md px-2.5 py-1.5 border flex items-center gap-2"
@@ -77,7 +79,7 @@ function PhasePreviewBanner({ phase, text }: { phase: string; text: string }) {
           border: '1px solid var(--border-muted)',
         }}
       >
-        Phase {phase}
+        {t('proof.phaseBadge', { phase })}
       </span>
       <span
         className="text-[10.5px] leading-snug"
@@ -90,6 +92,7 @@ function PhasePreviewBanner({ phase, text }: { phase: string; text: string }) {
 }
 
 export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   const { obligations } = props;
   const total = obligations.length;
   const satisfiedCount = obligations.filter((o) => o.status === 'satisfied').length;
@@ -99,15 +102,15 @@ export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Elem
 
   return (
     <GlassCard className="rounded-xl p-3">
-      <SectionHeader title="Proof obligations" badge={`${satisfiedCount}/${total}`} />
+      <SectionHeader title={t('proof.title')} badge={`${satisfiedCount}/${total}`} />
 
       <PhasePreviewBanner
         phase="3"
-        text="Proof obligations are derived from your codebase — slots below are reserved for future auto-detection."
+        text={t('proof.phaseNote')}
       />
 
       {total === 0 ? (
-        <EmptyHint text="No proof obligations recorded for this stack." />
+        <EmptyHint text={t('proof.empty')} />
       ) : (
         <>
           <div className="mt-1 mb-2.5">
@@ -124,10 +127,10 @@ export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Elem
               className="flex items-center gap-3 mt-1.5 text-2xs tracking-eyebrow uppercase font-semibold"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              <LegendDot color={STATUS_COLOR.satisfied} text={`Sat ${satisfiedCount}`} />
-              <LegendDot color={STATUS_COLOR.pending} text={`Pen ${pendingCount}`} />
-              <LegendDot color={STATUS_COLOR.unknown} text={`Unk ${unknownCount}`} />
-              <LegendDot color={STATUS_COLOR.placeholder} text={`Slot ${placeholderCount}`} dashed />
+              <LegendDot color={STATUS_COLOR.satisfied} text={t('proof.legend.satisfied', { count: satisfiedCount })} />
+              <LegendDot color={STATUS_COLOR.pending} text={t('proof.legend.pending', { count: pendingCount })} />
+              <LegendDot color={STATUS_COLOR.unknown} text={t('proof.legend.unknown', { count: unknownCount })} />
+              <LegendDot color={STATUS_COLOR.placeholder} text={t('proof.legend.slot', { count: placeholderCount })} dashed />
             </div>
           </div>
 
@@ -153,13 +156,13 @@ export function ProofObligationsCard(props: ProofObligationsCardProps): JSX.Elem
                       className="text-2xs font-bold tracking-eyebrow"
                       style={{ color: STATUS_FG[o.status] }}
                     >
-                      {STATUS_LABEL[o.status]}
+                      {t(STATUS_LABEL_KEY[o.status])}
                     </div>
                     <div
                       className={`text-base font-semibold ${isSlot ? 'italic' : ''}`}
                       style={{ color: isSlot ? 'var(--fg-muted)' : 'var(--fg-default)' }}
                     >
-                      {isSlot ? 'future input — AI not yet able to derive' : o.label}
+                      {isSlot ? t('proof.slotFuture') : o.label}
                     </div>
                     {o.detail && (
                       <div

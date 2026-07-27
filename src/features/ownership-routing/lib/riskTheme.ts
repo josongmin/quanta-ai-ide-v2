@@ -3,7 +3,8 @@ import type { RiskBadge } from '@entities/ownership';
 export type RiskTone = {
   fg: string;
   bg: string;
-  label: string;
+  /** i18n key (ownership namespace) — resolved by the rendering component. */
+  labelKey: 'risk.low' | 'risk.medium' | 'risk.high';
 }
 
 export function riskTone(risk: RiskBadge): RiskTone {
@@ -11,19 +12,19 @@ export function riskTone(risk: RiskBadge): RiskTone {
     return {
       fg: 'var(--intent-success-fg)',
       bg: 'var(--intent-success-bg)',
-      label: 'LOW RISK',
+      labelKey: 'risk.low',
     };
   }
   if (risk === 'medium') {
     return {
       fg: 'var(--intent-warn-fg)',
       bg: 'var(--intent-warn-bg)',
-      label: 'MED RISK',
+      labelKey: 'risk.medium',
     };
   }
   return {
     fg: 'var(--intent-danger-fg)',
     bg: 'var(--intent-danger-bg)',
-    label: 'HIGH RISK',
+    labelKey: 'risk.high',
   };
 }

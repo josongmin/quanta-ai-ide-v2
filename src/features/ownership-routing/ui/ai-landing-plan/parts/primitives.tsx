@@ -1,6 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import type { MergeStrategy, Person, RiskBadge, StackStepKind } from '@entities/ownership';
 import { PersonAvatar, riskTone } from '../../../lib';
-import { KIND_LABEL, MERGE_STRATEGY_LABEL } from './types';
+import { KIND_KEY, MERGE_STRATEGY_KEY } from './types';
 
 export { PersonAvatar };
 
@@ -53,6 +54,7 @@ export function PhaseLabel({ children }: { children: React.ReactNode }) {
 }
 
 export function StrategyPill({ strategy }: { strategy: MergeStrategy }) {
+  const { t } = useTranslation('ownership');
   return (
     <span
       className="inline-flex items-center px-2 py-1 rounded-md text-xs font-black uppercase tracking-eyebrow"
@@ -62,12 +64,13 @@ export function StrategyPill({ strategy }: { strategy: MergeStrategy }) {
         border: '1px solid var(--border-default)',
       }}
     >
-      {MERGE_STRATEGY_LABEL[strategy]}
+      {t(MERGE_STRATEGY_KEY[strategy])}
     </span>
   );
 }
 
 export function RiskPill({ risk }: { risk: RiskBadge }) {
+  const { t } = useTranslation('ownership');
   const tone = riskTone(risk);
   return (
     <span
@@ -78,12 +81,13 @@ export function RiskPill({ risk }: { risk: RiskBadge }) {
         border: '1px solid color-mix(in srgb, currentColor 28%, transparent)',
       }}
     >
-      {tone.label}
+      {t(tone.labelKey)}
     </span>
   );
 }
 
 export function KindPill({ kind }: { kind: StackStepKind }) {
+  const { t } = useTranslation('ownership');
   return (
     <span
       className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
@@ -93,18 +97,19 @@ export function KindPill({ kind }: { kind: StackStepKind }) {
         border: '1px solid var(--border-muted)',
       }}
     >
-      {KIND_LABEL[kind]}
+      {t(KIND_KEY[kind])}
     </span>
   );
 }
 
 export function ReviewerChip({ person }: { person: Person | undefined }) {
+  const { t } = useTranslation('ownership');
   if (!person) {
     return (
       <div className="flex items-center gap-1.5 min-w-0">
         <PersonAvatar person={undefined} size={22} />
         <span className="text-xs italic" style={{ color: 'var(--fg-subtle)' }}>
-          unassigned
+          {t('plan.unassigned')}
         </span>
       </div>
     );
@@ -152,6 +157,7 @@ export function StepNumber({ n }: { n: number }) {
 }
 
 export function GeneratedPill() {
+  const { t } = useTranslation('ownership');
   return (
     <span
       className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-2xs font-black uppercase tracking-[0.22em]"
@@ -166,7 +172,7 @@ export function GeneratedPill() {
         className="inline-block w-1 h-1 rounded-full"
         style={{ background: 'var(--fg-muted)' }}
       />
-      Generated
+      {t('plan.generated')}
     </span>
   );
 }

@@ -2,7 +2,8 @@ export type ConfidenceTone = {
   fg: string;
   bg: string;
   vivid: string;
-  label: string;
+  /** i18n key (ownership namespace) — resolved by the rendering component. */
+  labelKey: 'routing.confidenceLabel.high' | 'routing.confidenceLabel.medium' | 'routing.confidenceLabel.low';
 }
 
 export function confidenceTone(value: number): ConfidenceTone {
@@ -11,7 +12,7 @@ export function confidenceTone(value: number): ConfidenceTone {
       fg: 'var(--intent-success-fg)',
       bg: 'var(--intent-success-bg)',
       vivid: 'var(--intent-success-vivid)',
-      label: 'High',
+      labelKey: 'routing.confidenceLabel.high',
     };
   }
   if (value >= 0.4) {
@@ -19,13 +20,13 @@ export function confidenceTone(value: number): ConfidenceTone {
       fg: 'var(--intent-warn-fg)',
       bg: 'var(--intent-warn-bg)',
       vivid: 'var(--intent-warn-vivid)',
-      label: 'Medium',
+      labelKey: 'routing.confidenceLabel.medium',
     };
   }
   return {
     fg: 'var(--intent-danger-fg)',
     bg: 'var(--intent-danger-bg)',
     vivid: 'var(--intent-danger-vivid)',
-    label: 'Low',
+    labelKey: 'routing.confidenceLabel.low',
   };
 }

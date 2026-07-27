@@ -1,16 +1,18 @@
+import { useTranslation } from 'react-i18next';
 import type { ReviewerRationale } from '@entities/ownership';
 
 const RATIONALE_FIELDS: readonly {
   key: keyof ReviewerRationale;
-  label: string;
+  labelKey: string;
 }[] = [
-  { key: 'touchedAreaFamiliarity', label: 'Touched area' },
-  { key: 'recentReviewer', label: 'Recent reviewer' },
-  { key: 'incidentResolver', label: 'Incident resolver' },
-  { key: 'codeOwner', label: 'Code owner' },
+  { key: 'touchedAreaFamiliarity', labelKey: 'routing.rationale.touchedArea' },
+  { key: 'recentReviewer', labelKey: 'routing.rationale.recentReviewer' },
+  { key: 'incidentResolver', labelKey: 'routing.rationale.incidentResolver' },
+  { key: 'codeOwner', labelKey: 'routing.rationale.codeOwner' },
 ];
 
 export function ReviewerRow({ rationale }: { rationale: ReviewerRationale }) {
+  const { t } = useTranslation('ownership');
   const dominantKey = RATIONALE_FIELDS.reduce((acc, f) =>
     rationale[f.key] > rationale[acc.key] ? f : acc,
   ).key;
@@ -18,7 +20,7 @@ export function ReviewerRow({ rationale }: { rationale: ReviewerRationale }) {
   const dominantStrong = dominantValue >= 0.55;
   return (
     <div className="space-y-1.5">
-      {RATIONALE_FIELDS.map(({ key, label }) => {
+      {RATIONALE_FIELDS.map(({ key, labelKey }) => {
         const v = rationale[key];
         const pct = Math.round(v * 100);
         const isDominant = key === dominantKey && dominantStrong;
@@ -34,7 +36,7 @@ export function ReviewerRow({ rationale }: { rationale: ReviewerRationale }) {
               className="w-[120px] shrink-0 truncate"
               style={{ color: 'var(--fg-muted)' }}
             >
-              {label}
+              {t(labelKey)}
             </span>
             <div
               className="flex-1 h-1.5 rounded-full overflow-hidden"
@@ -64,9 +66,9 @@ export function ReviewerRow({ rationale }: { rationale: ReviewerRationale }) {
                   color: 'var(--fg-muted)',
                   border: '1px solid var(--border-muted)',
                 }}
-                title="Tiebreaker — strongest signal in this rationale"
+                title={t('routing.rationale.topTitle')}
               >
-                top
+                {t('routing.rationale.top')}
               </span>
             )}
           </div>

@@ -1,4 +1,5 @@
 import type { CSSProperties, JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GlassCard, SectionHeader, EmptyHint } from '@shared/ui';
 import type { SafeSeamCandidate } from '@entities/ownership';
 
@@ -7,6 +8,7 @@ export type SafeSeamsCardProps = {
 }
 
 function StatusBadge({ status }: { status: SafeSeamCandidate['status'] }): JSX.Element {
+  const { t } = useTranslation('ownership');
   const detected = status === 'detected';
   const style: CSSProperties = {
     background: 'var(--bg-surface-muted)',
@@ -18,18 +20,19 @@ function StatusBadge({ status }: { status: SafeSeamCandidate['status'] }): JSX.E
       className="inline-flex items-center px-1.5 py-0.5 rounded-md text-2xs font-bold uppercase tracking-eyebrow flex-none"
       style={style}
     >
-      {detected ? 'DETECTED' : 'SLOT'}
+      {detected ? t('seams.statusDetected') : t('seams.statusSlot')}
     </span>
   );
 }
 
 export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   const { seams } = props;
   const detectedCount = seams.filter((s) => s.status === 'detected').length;
 
   return (
     <GlassCard className="rounded-xl p-3">
-      <SectionHeader title="Safe seams" badge={`${detectedCount} detected`} />
+      <SectionHeader title={t('seams.title')} badge={t('seams.detected', { count: detectedCount })} />
 
       <div
         className="mt-1 mb-2 rounded-md px-2.5 py-1.5 border flex items-center gap-2"
@@ -47,18 +50,18 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
             border: '1px solid var(--border-muted)',
           }}
         >
-          Phase 3
+          {t('seams.phaseBadge')}
         </span>
         <span
           className="text-[10.5px] leading-snug"
           style={{ color: 'var(--fg-muted)' }}
         >
-          Detected seams come from import-graph + behavior-diff. Slots are reserved for future auto-detection.
+          {t('seams.phaseNote')}
         </span>
       </div>
 
       {seams.length === 0 ? (
-        <EmptyHint text="No safe seams identified yet." />
+        <EmptyHint text={t('seams.empty')} />
       ) : (
         <>
           <ul className="flex flex-col gap-1.5 mt-1">
@@ -90,7 +93,7 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
                       style={{ color: isSlot ? 'var(--fg-muted)' : 'var(--fg-default)' }}
                       title={s.module}
                     >
-                      {isSlot ? 'manual hint — AI has not identified this yet' : s.module}
+                      {isSlot ? t('seams.slotHint') : s.module}
                     </span>
                     <StatusBadge status={s.status} />
                   </div>
@@ -109,8 +112,7 @@ export function SafeSeamsCard(props: SafeSeamsCardProps): JSX.Element {
             className="mt-2.5 pt-2 text-xs leading-snug border-t"
             style={{ color: 'var(--fg-subtle)', borderColor: 'var(--border-muted)' }}
           >
-            Detected seams come from import-graph + behavior-diff. Slots are reserved for future
-            auto-detection.
+            {t('seams.phaseNote')}
           </div>
         </>
       )}

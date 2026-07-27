@@ -1,1 +1,267 @@
-{}
+{
+  "heat": {
+    "title": "归属热力图",
+    "zoneBadge_one": "{{count}} 个区域",
+    "zoneBadge_other": "{{count}} 个区域",
+    "empty": "暂无可用的归属区域",
+    "noOwners": "无负责人",
+    "avatarTitle": "{{name}} · {{team}}",
+    "avatarTitleStale": "{{name}} · {{team}} · 不活跃",
+    "state": {
+      "orphan": "无主",
+      "overloaded": "过载",
+      "fragmented": "分散",
+      "siloed": "孤岛",
+      "crossTeam": "跨团队",
+      "healthy": "健康"
+    },
+    "summary": {
+      "orphanActive_one": "{{count}} 位贡献者 · 主负责人不活跃",
+      "orphanActive_other": "{{count}} 位贡献者 · 主负责人不活跃",
+      "orphanNoBackup": "主负责人已退出 · 无活跃备份",
+      "overloadedBackup_one": "{{count}} 位贡献者 · 1 人承担负载",
+      "overloadedBackup_other": "{{count}} 位贡献者 · 1 人承担负载",
+      "overloadedNoBackup_one": "{{count}} 位贡献者 · 无备份",
+      "overloadedNoBackup_other": "{{count}} 位贡献者 · 无备份",
+      "fragmented_one": "{{count}} 位贡献者 · 无明确主负责人",
+      "fragmented_other": "{{count}} 位贡献者 · 无明确主负责人",
+      "siloedBackup": "单一主负责人 · 备份薄弱",
+      "siloedNoBackup": "单一团队、单一人员",
+      "crossTeam_one": "{{count}} 位贡献者 · 跨越多个团队",
+      "crossTeam_other": "{{count}} 位贡献者 · 跨越多个团队",
+      "healthy_one": "{{count}} 位贡献者 · 主负责人 + 备份明确",
+      "healthy_other": "{{count}} 位贡献者 · 主负责人 + 备份明确"
+    }
+  },
+  "routing": {
+    "title": "智能路由",
+    "empty": "选择一个区域以查看路由。",
+    "roleImplements": "实现",
+    "roleApproves": "审批",
+    "rolePrimary": "主负责人",
+    "roleBackup": "备份",
+    "roleReviewer": "评审人",
+    "roleEscalation": "升级",
+    "roleNone": "无",
+    "whyReviewer": "为何选择该评审人？",
+    "ownershipSignals": "归属信号",
+    "handoff": {
+      "samePerson": "同一人负责实现与审批",
+      "sameTeam": "同一团队",
+      "crossTeam": "跨团队交接",
+      "sameTeamShort": "同一团队",
+      "crossTeamShort": "跨团队"
+    },
+    "impact": {
+      "eyebrow": "AI · 影响",
+      "owner": "负责人",
+      "blast": "影响 →"
+    },
+    "stale": {
+      "unavailable": "主负责人不可用",
+      "lastActive": " · 上次活跃于 {{days}} 天前",
+      "routingTo": " · 路由至 ",
+      "teamSuffix": "（{{team}}）"
+    },
+    "confidence": {
+      "ownerConfidence": "负责人置信度",
+      "ownerConfidenceTitle": "对推荐主负责人的置信度 — 综合 4 个归属层的信号",
+      "signalStrength": "信号强度"
+    },
+    "confidenceLabel": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "rationale": {
+      "touchedArea": "改动区域",
+      "recentReviewer": "近期评审人",
+      "incidentResolver": "事故处理人",
+      "codeOwner": "代码负责人",
+      "top": "首选",
+      "topTitle": "决胜项 — 此依据中最强的信号"
+    },
+    "layer": {
+      "declared": "声明",
+      "historical": "历史",
+      "expertise": "专长",
+      "impact": "影响",
+      "empty": "未记录归属信号。"
+    },
+    "unknown": "未知",
+    "staleTag": "不活跃",
+    "staleDays": "{{days}} 天",
+    "staleDotTitle": "不活跃 · 上次活跃于 {{days}} 天前"
+  },
+  "approval": {
+    "title": "审批路径",
+    "empty": "此区域暂无可用的审批路径。",
+    "badgeParallel": "并行",
+    "badgeSequential": "顺序",
+    "hoursUnit": "小时",
+    "approvers_one": "{{count}} 位审批人",
+    "approvers_other": "{{count}} 位审批人",
+    "parallelTag": "并行 · 顺序不限",
+    "serialTag": "顺序 · 必须按序执行",
+    "required": "必需",
+    "optional": "可选",
+    "unknownPerson": "未知",
+    "noTeam": "—",
+    "parallelNote": "无明确依赖关系的步骤可按任意顺序落地 — 所示顺序为推荐优先级。"
+  },
+  "stack": {
+    "title": "重构栈",
+    "empty": "此区域暂无重构栈 — 请选择有计划栈的区域。",
+    "estimate": "预估",
+    "dayUnit_one": "天",
+    "dayUnit_other": "天",
+    "steps": "步骤",
+    "stepUnit_one": "步",
+    "stepUnit_other": "步",
+    "splitConfidence": "拆分置信度",
+    "splitConfidenceTitle": "对此拆分形态的置信度 — 依据：{{basis}}",
+    "whyConfidence": "此置信度的依据",
+    "mergeStrategy": "合并策略",
+    "alternative": "备选方案",
+    "exitCriteria": "退出标准",
+    "reviewer": "评审人",
+    "unassigned": "未分配",
+    "locSuffix": "~{{lines}} LOC",
+    "moreModules_one": "还有 {{count}} 个",
+    "moreModules_other": "还有 {{count}} 个",
+    "stepsEmpty": "此栈尚未规划任何步骤。",
+    "footer": {
+      "reorder": "重新排序",
+      "reorderHint": "即将推出",
+      "reorderTooltip": "步骤重排将在 Phase 2 推出 — 当前顺序为基于耦合簇 + 影响范围的推荐序列",
+      "planWithAi": "用 AI 规划",
+      "export": "导出"
+    }
+  },
+  "mergeStrategy": {
+    "split-now": "立即拆分",
+    "keep-as-one": "保持为一体",
+    "land-bottom-up": "自底向上落地",
+    "parallelizable": "可并行",
+    "risky-serial": "高风险顺序"
+  },
+  "kind": {
+    "prep": "准备",
+    "adapter": "适配器",
+    "migration": "迁移",
+    "cleanup": "清理",
+    "gate": "门禁"
+  },
+  "risk": {
+    "low": "低风险",
+    "medium": "中风险",
+    "high": "高风险"
+  },
+  "suggestions": {
+    "title": "AI 建议",
+    "pending_one": "{{count}} 项待处理",
+    "pending_other": "{{count}} 项待处理",
+    "empty": "暂无活跃建议 — 你的路由很干净。",
+    "confidence": "置信度",
+    "dismiss": "忽略",
+    "accept": "接受",
+    "acceptArrow": "接受 → {{hint}}",
+    "acceptTitle": "接受后{{hint}}",
+    "actionResult": {
+      "open-stack-plan": "打开 AI 落地计划弹窗",
+      "reroute-reviewer": "更新路由卡片中的建议评审人",
+      "flag-cross-team": "在跨团队看板中标记该区域",
+      "split-pr": "打开 split-pr 规划器"
+    },
+    "actionLabel": {
+      "open-stack-plan": "打开栈计划",
+      "reroute-reviewer": "重新路由评审人",
+      "flag-cross-team": "标记跨团队",
+      "split-pr": "拆分 PR"
+    },
+    "relative": {
+      "unknown": "—",
+      "seconds": "{{n}} 秒前",
+      "minutes": "{{n}} 分钟前",
+      "hours": "{{n}} 小时前",
+      "days": "{{n}} 天前",
+      "weeks": "{{n}} 周前"
+    }
+  },
+  "hotspots": {
+    "title": "跨团队热点",
+    "detected_one": "检测到 {{count}} 处",
+    "detected_other": "检测到 {{count}} 处",
+    "empty": "未检测到跨团队热点",
+    "weeklyUnit": "/周",
+    "footer": "检测综合考虑审批人数量、团队多样性和每周提交速度。",
+    "severity": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    }
+  },
+  "proof": {
+    "title": "证明义务",
+    "empty": "此栈未记录任何证明义务。",
+    "phaseBadge": "Phase {{phase}}",
+    "phaseNote": "证明义务由你的代码库推导得出 — 下方槽位为未来自动检测预留。",
+    "slotFuture": "未来输入 — AI 尚无法推导",
+    "legend": {
+      "satisfied": "满足 {{count}}",
+      "pending": "待定 {{count}}",
+      "unknown": "未知 {{count}}",
+      "slot": "槽位 {{count}}"
+    },
+    "status": {
+      "satisfied": "已满足",
+      "pending": "待处理",
+      "unknown": "未知",
+      "placeholder": "槽位"
+    }
+  },
+  "seams": {
+    "title": "安全接缝",
+    "detected_one": "检测到 {{count}} 处",
+    "detected_other": "检测到 {{count}} 处",
+    "empty": "尚未识别到安全接缝。",
+    "phaseBadge": "Phase 3",
+    "phaseNote": "检测到的接缝来自导入图 + 行为差异。槽位为未来自动检测预留。",
+    "slotHint": "手动提示 — AI 尚未识别到此项",
+    "statusDetected": "已检测",
+    "statusSlot": "槽位"
+  },
+  "plan": {
+    "ariaLabel": "AI 落地计划",
+    "title": "AI 落地计划",
+    "generated": "已生成",
+    "close": "关闭",
+    "emptyModal": "此区域没有可规划的栈。",
+    "skip": "跳过",
+    "skipAria": "跳过动画并显示完整计划",
+    "reasoning": "推理",
+    "mergeStrategy": "合并策略",
+    "consideredAlternative": "考虑过的备选方案：",
+    "stackSteps": "栈步骤",
+    "stepsEmpty": "此栈没有已规划的步骤。",
+    "unassigned": "未分配",
+    "why": "原因",
+    "locSuffix": "~{{lines}} LOC",
+    "footer": {
+      "planReady": "计划就绪",
+      "estimatedPrefix": "预估",
+      "dayUnit_one": "天",
+      "dayUnit_other": "天",
+      "openDrafts": "作为草稿 PR 打开",
+      "copyChecklist": "复制为清单",
+      "close": "关闭"
+    },
+    "whyReviewer": {
+      "prep": "影响范围最小 — 备份工程师可在无值班风险下准备",
+      "adapter": "形态变更涉及两端 — 接口负责人能看出接缝",
+      "migration": "主负责人已熟悉每个调用点 — 验证最快",
+      "cleanup": "历史作者能识别 linter 无法捕获的遗留陷阱",
+      "gate": "平台评审人掌握金丝雀密钥和发布看板"
+    }
+  }
+}

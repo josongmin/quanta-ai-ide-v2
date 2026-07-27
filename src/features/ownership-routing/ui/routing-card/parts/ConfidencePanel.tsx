@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { confidenceTone } from '../../../lib';
 
 export function ConfidencePanel({ value }: { value: number }) {
+  const { t } = useTranslation('ownership');
   const tone = confidenceTone(value);
   const pct = Math.round(value * 100);
   return (
@@ -23,9 +25,9 @@ export function ConfidencePanel({ value }: { value: number }) {
         <div
           className="mt-1 text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: 'var(--fg-muted)' }}
-          title="Confidence in the recommended primary owner — combined signal across the 4 ownership layers"
+          title={t('routing.confidence.ownerConfidenceTitle')}
         >
-          Owner confidence
+          {t('routing.confidence.ownerConfidence')}
         </div>
       </div>
       <div className="flex-1 flex flex-col justify-center min-w-0">
@@ -34,7 +36,7 @@ export function ConfidencePanel({ value }: { value: number }) {
             className="text-2xs font-mono uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-subtle)' }}
           >
-            signal strength
+            {t('routing.confidence.signalStrength')}
           </span>
           <span
             className="text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded-md"
@@ -43,7 +45,7 @@ export function ConfidencePanel({ value }: { value: number }) {
               color: tone.fg,
             }}
           >
-            {tone.label}
+            {t(tone.labelKey)}
           </span>
         </div>
         <div

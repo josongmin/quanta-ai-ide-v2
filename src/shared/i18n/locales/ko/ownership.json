@@ -1,1 +1,267 @@
-{}
+{
+  "heat": {
+    "title": "오너십 히트맵",
+    "zoneBadge_one": "존 {{count}}개",
+    "zoneBadge_other": "존 {{count}}개",
+    "empty": "사용 가능한 오너십 존이 없습니다",
+    "noOwners": "오너 없음",
+    "avatarTitle": "{{name}} · {{team}}",
+    "avatarTitleStale": "{{name}} · {{team}} · 비활성",
+    "state": {
+      "orphan": "고아",
+      "overloaded": "과부하",
+      "fragmented": "분산",
+      "siloed": "고립",
+      "crossTeam": "교차 팀",
+      "healthy": "정상"
+    },
+    "summary": {
+      "orphanActive_one": "기여자 {{count}}명 · 주 담당 비활성",
+      "orphanActive_other": "기여자 {{count}}명 · 주 담당 비활성",
+      "orphanNoBackup": "주 담당 이탈 · 활성 백업 없음",
+      "overloadedBackup_one": "기여자 {{count}}명 · 1명이 부하를 짊어짐",
+      "overloadedBackup_other": "기여자 {{count}}명 · 1명이 부하를 짊어짐",
+      "overloadedNoBackup_one": "기여자 {{count}}명 · 백업 없음",
+      "overloadedNoBackup_other": "기여자 {{count}}명 · 백업 없음",
+      "fragmented_one": "기여자 {{count}}명 · 명확한 주 담당 없음",
+      "fragmented_other": "기여자 {{count}}명 · 명확한 주 담당 없음",
+      "siloedBackup": "단일 주 담당 · 얕은 백업",
+      "siloedNoBackup": "단일 팀, 단일 인원",
+      "crossTeam_one": "기여자 {{count}}명 · 여러 팀에 걸침",
+      "crossTeam_other": "기여자 {{count}}명 · 여러 팀에 걸침",
+      "healthy_one": "기여자 {{count}}명 · 명확한 주 담당 + 백업",
+      "healthy_other": "기여자 {{count}}명 · 명확한 주 담당 + 백업"
+    }
+  },
+  "routing": {
+    "title": "스마트 라우팅",
+    "empty": "라우팅을 보려면 존을 선택하세요.",
+    "roleImplements": "구현",
+    "roleApproves": "승인",
+    "rolePrimary": "주 담당",
+    "roleBackup": "백업",
+    "roleReviewer": "리뷰어",
+    "roleEscalation": "에스컬레이션",
+    "roleNone": "없음",
+    "whyReviewer": "왜 이 리뷰어인가요?",
+    "ownershipSignals": "오너십 시그널",
+    "handoff": {
+      "samePerson": "동일 인원이 구현 및 승인",
+      "sameTeam": "동일 팀",
+      "crossTeam": "교차 팀 인계",
+      "sameTeamShort": "동일 팀",
+      "crossTeamShort": "교차 팀"
+    },
+    "impact": {
+      "eyebrow": "AI · 영향도",
+      "owner": "오너",
+      "blast": "영향 →"
+    },
+    "stale": {
+      "unavailable": "주 담당 부재",
+      "lastActive": " · 마지막 활동 {{days}}일 전",
+      "routingTo": " · 다음으로 라우팅 ",
+      "teamSuffix": " ({{team}})"
+    },
+    "confidence": {
+      "ownerConfidence": "오너 신뢰도",
+      "ownerConfidenceTitle": "권장 주 담당 오너에 대한 신뢰도 — 4개 오너십 레이어를 종합한 시그널",
+      "signalStrength": "시그널 강도"
+    },
+    "confidenceLabel": {
+      "high": "높음",
+      "medium": "보통",
+      "low": "낮음"
+    },
+    "rationale": {
+      "touchedArea": "수정 영역",
+      "recentReviewer": "최근 리뷰어",
+      "incidentResolver": "인시던트 해결자",
+      "codeOwner": "코드 오너",
+      "top": "최상",
+      "topTitle": "타이브레이커 — 이 근거에서 가장 강한 시그널"
+    },
+    "layer": {
+      "declared": "선언",
+      "historical": "이력",
+      "expertise": "전문성",
+      "impact": "영향도",
+      "empty": "기록된 오너십 시그널이 없습니다."
+    },
+    "unknown": "알 수 없음",
+    "staleTag": "비활성",
+    "staleDays": "{{days}}일",
+    "staleDotTitle": "비활성 · 마지막 활동 {{days}}일 전"
+  },
+  "approval": {
+    "title": "승인 경로",
+    "empty": "이 존에 사용 가능한 승인 경로가 없습니다.",
+    "badgeParallel": "병렬",
+    "badgeSequential": "순차",
+    "hoursUnit": "시간",
+    "approvers_one": "승인자 {{count}}명",
+    "approvers_other": "승인자 {{count}}명",
+    "parallelTag": "병렬 · 순서 무관",
+    "serialTag": "순차 · 순서대로 진행 필수",
+    "required": "필수",
+    "optional": "선택",
+    "unknownPerson": "알 수 없음",
+    "noTeam": "—",
+    "parallelNote": "명시적 의존성이 없는 단계는 임의 순서로 진행할 수 있습니다 — 표시된 순서는 권장 우선순위입니다."
+  },
+  "stack": {
+    "title": "리팩터 스택",
+    "empty": "이 존에는 리팩터 스택이 없습니다 — 계획된 스택이 있는 존을 선택하세요.",
+    "estimate": "예상",
+    "dayUnit_one": "일",
+    "dayUnit_other": "일",
+    "steps": "단계",
+    "stepUnit_one": "단계",
+    "stepUnit_other": "단계",
+    "splitConfidence": "분할 신뢰도",
+    "splitConfidenceTitle": "이 분할 형태에 대한 신뢰도 — 근거: {{basis}}",
+    "whyConfidence": "이 신뢰도의 근거",
+    "mergeStrategy": "머지 전략",
+    "alternative": "대안",
+    "exitCriteria": "종료 기준",
+    "reviewer": "리뷰어",
+    "unassigned": "미지정",
+    "locSuffix": "~{{lines}} LOC",
+    "moreModules_one": "+{{count}}개 더",
+    "moreModules_other": "+{{count}}개 더",
+    "stepsEmpty": "이 스택에 계획된 단계가 아직 없습니다.",
+    "footer": {
+      "reorder": "순서 변경",
+      "reorderHint": "예정",
+      "reorderTooltip": "단계 순서 변경은 Phase 2에서 제공됩니다 — 현재 순서는 커플링 클러스터 + 영향 범위 기반 권장 순서입니다",
+      "planWithAi": "AI로 계획",
+      "export": "내보내기"
+    }
+  },
+  "mergeStrategy": {
+    "split-now": "지금 분할",
+    "keep-as-one": "하나로 유지",
+    "land-bottom-up": "하위부터 반영",
+    "parallelizable": "병렬 가능",
+    "risky-serial": "위험한 순차"
+  },
+  "kind": {
+    "prep": "준비",
+    "adapter": "어댑터",
+    "migration": "마이그레이션",
+    "cleanup": "정리",
+    "gate": "게이트"
+  },
+  "risk": {
+    "low": "낮은 위험",
+    "medium": "중간 위험",
+    "high": "높은 위험"
+  },
+  "suggestions": {
+    "title": "AI 제안",
+    "pending_one": "{{count}}건 대기 중",
+    "pending_other": "{{count}}건 대기 중",
+    "empty": "활성 제안 없음 — 라우팅이 깔끔합니다.",
+    "confidence": "신뢰도",
+    "dismiss": "무시",
+    "accept": "수락",
+    "acceptArrow": "수락 → {{hint}}",
+    "acceptTitle": "수락하면 {{hint}}",
+    "actionResult": {
+      "open-stack-plan": "AI 랜딩 플랜 모달을 엽니다",
+      "reroute-reviewer": "라우팅 카드의 권장 리뷰어를 업데이트합니다",
+      "flag-cross-team": "교차 팀 보드에 존을 플래그합니다",
+      "split-pr": "split-pr 플래너를 엽니다"
+    },
+    "actionLabel": {
+      "open-stack-plan": "스택 플랜 열기",
+      "reroute-reviewer": "리뷰어 재라우팅",
+      "flag-cross-team": "교차 팀 플래그",
+      "split-pr": "PR 분할"
+    },
+    "relative": {
+      "unknown": "—",
+      "seconds": "{{n}}초 전",
+      "minutes": "{{n}}분 전",
+      "hours": "{{n}}시간 전",
+      "days": "{{n}}일 전",
+      "weeks": "{{n}}주 전"
+    }
+  },
+  "hotspots": {
+    "title": "교차 팀 핫스팟",
+    "detected_one": "{{count}}건 감지",
+    "detected_other": "{{count}}건 감지",
+    "empty": "감지된 교차 팀 핫스팟이 없습니다",
+    "weeklyUnit": "/주",
+    "footer": "감지는 승인자 수, 팀 다양성, 주간 속도를 고려합니다.",
+    "severity": {
+      "high": "높음",
+      "medium": "중간",
+      "low": "낮음"
+    }
+  },
+  "proof": {
+    "title": "증명 의무",
+    "empty": "이 스택에 기록된 증명 의무가 없습니다.",
+    "phaseBadge": "Phase {{phase}}",
+    "phaseNote": "증명 의무는 코드베이스에서 도출됩니다 — 아래 슬롯은 향후 자동 감지를 위해 예약되어 있습니다.",
+    "slotFuture": "향후 입력 — AI가 아직 도출할 수 없습니다",
+    "legend": {
+      "satisfied": "충족 {{count}}",
+      "pending": "대기 {{count}}",
+      "unknown": "미상 {{count}}",
+      "slot": "슬롯 {{count}}"
+    },
+    "status": {
+      "satisfied": "충족됨",
+      "pending": "대기 중",
+      "unknown": "알 수 없음",
+      "placeholder": "슬롯"
+    }
+  },
+  "seams": {
+    "title": "안전 이음새",
+    "detected_one": "{{count}}건 감지",
+    "detected_other": "{{count}}건 감지",
+    "empty": "아직 식별된 안전 이음새가 없습니다.",
+    "phaseBadge": "Phase 3",
+    "phaseNote": "감지된 이음새는 임포트 그래프 + 동작 diff에서 나옵니다. 슬롯은 향후 자동 감지를 위해 예약되어 있습니다.",
+    "slotHint": "수동 힌트 — AI가 아직 식별하지 못했습니다",
+    "statusDetected": "감지됨",
+    "statusSlot": "슬롯"
+  },
+  "plan": {
+    "ariaLabel": "AI 랜딩 플랜",
+    "title": "AI 랜딩 플랜",
+    "generated": "생성됨",
+    "close": "닫기",
+    "emptyModal": "이 존에 계획할 스택이 없습니다.",
+    "skip": "건너뛰기",
+    "skipAria": "애니메이션을 건너뛰고 전체 계획 표시",
+    "reasoning": "추론",
+    "mergeStrategy": "머지 전략",
+    "consideredAlternative": "검토한 대안:",
+    "stackSteps": "스택 단계",
+    "stepsEmpty": "이 스택에 계획된 단계가 없습니다.",
+    "unassigned": "미지정",
+    "why": "이유",
+    "locSuffix": "~{{lines}} LOC",
+    "footer": {
+      "planReady": "계획 준비 완료",
+      "estimatedPrefix": "예상",
+      "dayUnit_one": "일",
+      "dayUnit_other": "일",
+      "openDrafts": "드래프트 PR로 열기",
+      "copyChecklist": "체크리스트로 복사",
+      "close": "닫기"
+    },
+    "whyReviewer": {
+      "prep": "가장 낮은 영향 범위 — 백업 엔지니어가 호출 위험 없이 준비 가능",
+      "adapter": "형태 변경이 양쪽에 걸침 — 인터페이스 오너가 이음새를 파악",
+      "migration": "주 담당 오너가 모든 호출부를 이미 파악 — 검증이 가장 빠름",
+      "cleanup": "이력 작성자가 린터로 잡을 수 없는 레거시 함정을 인식",
+      "gate": "플랫폼 리뷰어가 카나리 키와 롤아웃 대시보드를 보유"
+    }
+  }
+}

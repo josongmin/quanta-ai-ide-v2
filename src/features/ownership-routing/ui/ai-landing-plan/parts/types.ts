@@ -7,30 +7,32 @@ import type { MergeStrategy, StackStepKind } from '@entities/ownership';
 export const STEP_DELAY_MS = 850;
 export const RATIONALE_DELAY_MS = 1100;
 
-export const MERGE_STRATEGY_LABEL: Record<MergeStrategy, string> = {
-  'split-now': 'SPLIT NOW',
-  'keep-as-one': 'KEEP AS ONE',
-  'land-bottom-up': 'LAND BOTTOM-UP',
-  parallelizable: 'PARALLELIZABLE',
-  'risky-serial': 'RISKY SERIAL',
+// Enum → i18n key maps (ownership namespace). Labels are resolved via t() by
+// the rendering component, keeping these modules hook-free.
+export const MERGE_STRATEGY_KEY: Record<MergeStrategy, `mergeStrategy.${MergeStrategy}`> = {
+  'split-now': 'mergeStrategy.split-now',
+  'keep-as-one': 'mergeStrategy.keep-as-one',
+  'land-bottom-up': 'mergeStrategy.land-bottom-up',
+  parallelizable: 'mergeStrategy.parallelizable',
+  'risky-serial': 'mergeStrategy.risky-serial',
 };
 
-export const KIND_LABEL: Record<StackStepKind, string> = {
-  prep: 'PREP',
-  adapter: 'ADAPTER',
-  migration: 'MIGRATION',
-  cleanup: 'CLEANUP',
-  gate: 'GATE',
+export const KIND_KEY: Record<StackStepKind, `kind.${StackStepKind}`> = {
+  prep: 'kind.prep',
+  adapter: 'kind.adapter',
+  migration: 'kind.migration',
+  cleanup: 'kind.cleanup',
+  gate: 'kind.gate',
 };
 
-// Deterministic but hand-feeling reviewer-fit copy per step kind. The plan
+// Deterministic reviewer-fit copy per step kind, keyed for i18n. The plan
 // reference asks for "Why this reviewer for this step?" — short, signal-y.
-export const WHY_REVIEWER_BY_KIND: Record<StackStepKind, string> = {
-  prep: 'lowest blast radius — backup engineer can prep without page-time risk',
-  adapter: 'shape change touches both sides — interface owner spots the seam',
-  migration: 'primary owner sees every callsite already; fastest to verify',
-  cleanup: 'historical author recognises legacy traps the linter cannot',
-  gate: 'platform reviewer holds canary keys and rollout dashboards',
+export const WHY_REVIEWER_KEY_BY_KIND: Record<StackStepKind, `plan.whyReviewer.${StackStepKind}`> = {
+  prep: 'plan.whyReviewer.prep',
+  adapter: 'plan.whyReviewer.adapter',
+  migration: 'plan.whyReviewer.migration',
+  cleanup: 'plan.whyReviewer.cleanup',
+  gate: 'plan.whyReviewer.gate',
 };
 
 // Ambient keyframes injected once. Only opacity + height/margin animations

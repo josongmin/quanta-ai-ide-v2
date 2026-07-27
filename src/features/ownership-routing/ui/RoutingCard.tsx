@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { JSX } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   GlassCard,
   SectionHeader,
@@ -27,6 +28,7 @@ export type RoutingCardProps = {
 }
 
 export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
+  const { t } = useTranslation('ownership');
   const [signalsOpen, setSignalsOpen] = useState(false);
 
   const personIndex = useMemo(() => {
@@ -41,8 +43,8 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
   if (!zone?.id || !zone.label) {
     return (
       <GlassCard className="px-3.5 py-3">
-        <SectionHeader title="Smart Routing" />
-        <EmptyHint text="Select a zone to see routing." />
+        <SectionHeader title={t('routing.title')} />
+        <EmptyHint text={t('routing.empty')} />
       </GlassCard>
     );
   }
@@ -59,7 +61,7 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
 
   return (
     <GlassCard className="px-3.5 py-3 space-y-3.5">
-      <SectionHeader title="Smart Routing" badge={badge.toUpperCase()} />
+      <SectionHeader title={t('routing.title')} badge={badge.toUpperCase()} />
 
       {primary && !primary.active && (
         <StalePrimaryBanner
@@ -71,10 +73,10 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
       <OwnerSplit implementer={implementer} approver={approver} />
 
       <div className="grid grid-cols-4 gap-3">
-        <RoleColumn label="Primary" person={primary} dimmed={primary && !primary.active} />
-        <RoleColumn label="Backup" person={backup} />
-        <RoleColumn label="Reviewer" person={reviewer} />
-        <RoleColumn label="Escalation" person={escalation} />
+        <RoleColumn label={t('routing.rolePrimary')} person={primary} dimmed={primary && !primary.active} />
+        <RoleColumn label={t('routing.roleBackup')} person={backup} />
+        <RoleColumn label={t('routing.roleReviewer')} person={reviewer} />
+        <RoleColumn label={t('routing.roleEscalation')} person={escalation} />
       </div>
 
       <div
@@ -92,7 +94,7 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
       />
 
       <Section
-        title="Why this reviewer?"
+        title={t('routing.whyReviewer')}
         subtitle={reviewer ? reviewer.name : undefined}
       >
         <ReviewerRow rationale={zone.reviewerRationale} />
@@ -109,7 +111,7 @@ export function RoutingCard({ zone, people }: RoutingCardProps): JSX.Element {
             className="text-2xs font-black uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-muted)' }}
           >
-            Ownership signals
+            {t('routing.ownershipSignals')}
           </span>
           <span
             className="flex-1 h-px"
