@@ -19,7 +19,7 @@ export function ModeToggle({
             type="button"
             onClick={() => { onChange(o.id); }}
             className="flex flex-col items-start gap-1 p-4 transition-colors text-left"
-            style={{ background: active ? 'var(--bg-active)' : 'var(--bg-canvas)' }}
+            style={{ background: 'var(--bg-canvas)', boxShadow: active ? 'inset 0 0 0 1px var(--fg-accent)' : 'none' }}
             onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'var(--bg-hover)'; }}
             onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'var(--bg-canvas)'; }}
           >

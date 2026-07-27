@@ -77,7 +77,7 @@ export default function RoutineEditorModal({
                 aria-pressed={tab === tk}
                 className={`flex-1 px-2 py-1 rounded text-xs font-mono transition-colors ${
                   tab === tk
-                    ? 'bg-[var(--bg-selected)] text-[var(--fg-strong)]'
+                    ? 'ring-1 ring-inset ring-[var(--fg-accent)] text-[var(--fg-strong)]'
                     : 'text-[var(--fg-subtle)] hover:text-[var(--fg-default)]'
                 }`}
               >

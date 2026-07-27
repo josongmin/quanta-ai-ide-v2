@@ -45,10 +45,11 @@ export function SeedRail({
                   onClick={() => { onSelectSeed(seed.id); }}
                   className="w-full text-left rounded-md px-2 py-2 transition-colors"
                   style={{
-                    background: selected ? 'var(--bg-active)' : 'transparent',
+                    // Selection = brand-fg inset ring, never a grey fill.
+                    background: 'transparent',
                     color: selected ? 'var(--fg-strong)' : 'var(--fg-default)',
-                    border: '1px solid',
-                    borderColor: selected ? 'var(--border-default)' : 'transparent',
+                    border: '1px solid transparent',
+                    boxShadow: selected ? 'inset 0 0 0 1px var(--fg-accent)' : undefined,
                   }}
                 >
                   <div className="text-sm font-bold mb-0.5">{seed.kind.toUpperCase()}</div>
@@ -101,11 +102,12 @@ export function SeedRail({
                     onClick={() => { onSelectCandidate(c.id); }}
                     className="w-full text-left rounded-md px-2 py-2 transition-colors"
                     style={{
-                      background: selected ? 'var(--bg-active)' : 'transparent',
+                      // Selection = brand-fg inset ring, never a grey fill.
+                      background: 'transparent',
                       color: dismissed ? 'var(--fg-subtle)' : 'var(--fg-default)',
                       opacity: dismissed ? 0.6 : 1,
-                      border: '1px solid',
-                      borderColor: selected ? 'var(--border-default)' : 'transparent',
+                      border: '1px solid transparent',
+                      boxShadow: selected ? 'inset 0 0 0 1px var(--fg-accent)' : undefined,
                     }}
                   >
                     <div className="flex items-center gap-1.5 mb-0.5">

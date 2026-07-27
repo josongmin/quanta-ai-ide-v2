@@ -102,13 +102,12 @@ function ActivityRow({
         : 'var(--fg-muted)';
 
   return (
-    <li
-      className="flex items-start gap-2 px-3 py-2 rounded-lg bg-[var(--bg-surface-muted)]"
-      style={{ borderLeft: `2px solid ${verdictColor}` }}
-    >
+    <li className="flex items-start gap-2 px-3 py-2 rounded-lg bg-[var(--bg-surface-muted)]">
       <Avatar login={item.authorLogin} size={20} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
+          {/* Verdict signalled by an inline dot, not a coloured left-edge stripe. */}
+          <span aria-hidden className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: verdictColor }} />
           <span className="text-base font-bold text-[var(--fg-strong)]">{displayName(item.authorLogin)}</span>
           {isReview && (
             <Badge
