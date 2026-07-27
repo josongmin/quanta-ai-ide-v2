@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { SettingsModal } from '@shared/ui';
@@ -8,6 +9,7 @@ import { ALL_SCOPES, type SecretScope } from './types';
 export function NewSecretModal({
   onCancel, onCreate,
 }: { onCancel: () => void; onCreate: (name: string, scopes: SecretScope[], exp: number | null) => void }) {
+  const { t } = useTranslation('ws');
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
   const [reveal, setReveal] = useState(false);
@@ -28,30 +30,30 @@ export function NewSecretModal({
     <SettingsModal
       open
       onClose={onCancel}
-      title="New secret"
+      title={t('secrets.modal.title')}
       size="lg"
       footer={(
         <>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+          <Button variant="ghost" onClick={onCancel}>{t('secrets.modal.cancel')}</Button>
           <Button
             variant="primary"
             size="md"
             disabled={!valid}
             onClick={() => { onCreate(name, Array.from(scopes), exp); }}
           >
-            Generate
+            {t('secrets.modal.generate')}
           </Button>
         </>
       )}
     >
       <label className="flex flex-col gap-1.5">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Name (uppercase, snake_case)
+          {t('secrets.modal.nameLabel')}
         </span>
         <input
           value={name}
           onChange={(e) => { setName(e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, '')); }}
-          placeholder="e.g. STRIPE_API_KEY"
+          placeholder={t('secrets.modal.namePlaceholder')}
           className="h-9 rounded-md px-3 text-base outline-none font-mono"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         />
@@ -59,7 +61,7 @@ export function NewSecretModal({
 
       <label className="flex flex-col gap-1.5">
         <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between" style={{ color: 'var(--fg-subtle)' }}>
-          <span>Value</span>
+          <span>{t('secrets.modal.valueLabel')}</span>
           <button
             type="button"
             onClick={() => { setReveal((v) => !v); }}
@@ -67,13 +69,13 @@ export function NewSecretModal({
             style={{ color: 'var(--fg-muted)' }}
           >
             {reveal ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-            {reveal ? 'hide' : 'show'}
+            {reveal ? t('secrets.modal.hide') : t('secrets.modal.show')}
           </button>
         </span>
         <textarea
           value={value}
           onChange={(e) => { setValue(e.target.value); }}
-          placeholder="paste secret value"
+          placeholder={t('secrets.modal.valuePlaceholder')}
           rows={3}
           className="w-full rounded-md p-2.5 text-base outline-none resize-none font-mono"
           style={{
@@ -87,7 +89,7 @@ export function NewSecretModal({
 
       <div className="flex flex-col gap-2">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Scopes
+          {t('secrets.modal.scopesLabel')}
         </span>
         <div className="grid grid-cols-2 gap-1.5">
           {ALL_SCOPES.map((s) => {
@@ -116,7 +118,7 @@ export function NewSecretModal({
 
       <label className="flex flex-col gap-1.5">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Expiration
+          {t('secrets.modal.expirationLabel')}
         </span>
         <select
           value={exp == null ? 'never' : String(exp)}
@@ -124,10 +126,10 @@ export function NewSecretModal({
           className="h-9 rounded-md px-3 text-base outline-none cursor-pointer"
           style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
         >
-          <option value="never">Never</option>
-          <option value="30">30 days</option>
-          <option value="90">90 days</option>
-          <option value="365">365 days</option>
+          <option value="never">{t('secrets.modal.never')}</option>
+          <option value="30">{t('secrets.modal.days', { count: 30 })}</option>
+          <option value="90">{t('secrets.modal.days', { count: 90 })}</option>
+          <option value="365">{t('secrets.modal.days', { count: 365 })}</option>
         </select>
       </label>
     </SettingsModal>

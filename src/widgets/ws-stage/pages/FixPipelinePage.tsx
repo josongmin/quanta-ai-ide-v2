@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Plus, X, AlertTriangle, GitBranch } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
@@ -42,17 +43,19 @@ const INITIAL: Form = {
   rollbackChannel: '#fix-pipeline-rollback',
 };
 
-const OBLIGATION_INFO: { id: Obligation; label: string; sub: string }[] = [
-  { id: 'no-secrets', label: 'no-secrets',  sub: 'No diff lines match the secret scanner before fix-pipeline acts.' },
-  { id: 'tests-pass', label: 'tests-pass',  sub: 'All required test suites must be green on the source SHA.' },
-  { id: 'type-check', label: 'type-check',  sub: 'tsc / project-language type checker exits 0.' },
-  { id: 'lint-clean', label: 'lint-clean',  sub: 'Lint passes with no errors (warnings allowed).' },
+// label/sub resolved from ws:fix.obligations.<key>.* at render time.
+const OBLIGATION_INFO: { id: Obligation; key: string }[] = [
+  { id: 'no-secrets', key: 'noSecrets' },
+  { id: 'tests-pass', key: 'testsPass' },
+  { id: 'type-check', key: 'typeCheck' },
+  { id: 'lint-clean', key: 'lintClean' },
 ];
 
 // Approximate mock spend so the warning band logic has something to react to.
 const MOCK_SPEND_USD = 1310;
 
 export default function FixPipelinePage() {
+  const { t } = useTranslation('ws');
   const [form, setForm] = useState<Form>(INITIAL);
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [branchDraft, setBranchDraft] = useState('');
@@ -102,29 +105,29 @@ export default function FixPipelinePage() {
       orgSlug="acme"
       wsName="monorepo"
       wsSlug="monorepo"
-      title="Fix pipeline"
-      subtitle="What the autonomous fix pipeline is allowed to do, how much it can spend, and where it pings humans."
+      title={t('fix.title')}
+      subtitle={t('fix.subtitle')}
     >
       {/* Permissions */}
       <Section
-        title="Permissions"
-        hint="Each switch widens fix-pipeline's blast radius. Off means a human still has to ratify the action."
+        title={t('fix.permissions.title')}
+        hint={t('fix.permissions.hint')}
       >
         <Row
-          label="Allow auto-PR creation"
-          sub="Fix-pipeline can open a PR with the proposed patch. The PR still needs human merge."
+          label={t('fix.allowAutoPr.label')}
+          sub={t('fix.allowAutoPr.sub')}
         >
           <Toggle checked={form.allowAutoPr} onChange={(v) => { set('allowAutoPr', v); }} />
         </Row>
         <Row
-          label="Allow auto-merge on green"
-          sub="If checks pass and obligations below are met, fix-pipeline merges without human approval. Highest blast radius."
+          label={t('fix.allowAutoMerge.label')}
+          sub={t('fix.allowAutoMerge.sub')}
         >
           <Toggle checked={form.allowAutoMerge} onChange={(v) => { set('allowAutoMerge', v); }} />
         </Row>
         <Row
-          label="Allow rollback"
-          sub="Fix-pipeline can revert its own merged PRs if downstream signals (errors, latency) regress."
+          label={t('fix.allowRollback.label')}
+          sub={t('fix.allowRollback.sub')}
         >
           <Toggle checked={form.allowRollback} onChange={(v) => { set('allowRollback', v); }} />
         </Row>
@@ -132,10 +135,10 @@ export default function FixPipelinePage() {
 
       {/* Resource caps */}
       <Section
-        title="Resource caps"
-        hint="Hard ceilings so a runaway loop can't drain the budget."
+        title={t('fix.resourceCaps.title')}
+        hint={t('fix.resourceCaps.hint')}
       >
-        <Row label="Monthly budget cap" sub={`Current month-to-date spend: $${formatNumber(MOCK_SPEND_USD)}.`}>
+        <Row label={t('fix.monthlyBudget.label')} sub={t('fix.monthlyBudget.sub', { spend: formatNumber(MOCK_SPEND_USD) })}>
           <div
             className="flex items-center gap-2 h-8 px-2.5 rounded-md"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
@@ -149,7 +152,7 @@ export default function FixPipelinePage() {
               className="w-24 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>USD / month</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('fix.usdPerMonth')}</span>
           </div>
         </Row>
 
@@ -164,7 +167,7 @@ export default function FixPipelinePage() {
           >
             <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
             <div className="flex flex-col gap-1 flex-1 min-w-0">
-              <span className="font-medium">Spend at {spendPct}% of cap</span>
+              <span className="font-medium">{t('fix.spendAtCap', { pct: spendPct })}</span>
               <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: 'var(--bg-surface-muted)' }}>
                 <div
                   className="h-full"
@@ -172,13 +175,13 @@ export default function FixPipelinePage() {
                 />
               </div>
               <span style={{ color: 'var(--fg-muted)' }}>
-                Fix-pipeline will pause itself when month-to-date spend hits the cap.
+                {t('fix.spendPauseNote')}
               </span>
             </div>
           </div>
         )}
 
-        <Row label="Per-run token cap" sub="Caps a single fix attempt. The pipeline will short-circuit and report partial findings.">
+        <Row label={t('fix.perRunTokenCap.label')} sub={t('fix.perRunTokenCap.sub')}>
           <div
             className="flex items-center gap-2 h-8 px-2.5 rounded-md"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
@@ -191,11 +194,11 @@ export default function FixPipelinePage() {
               className="w-20 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>k tokens / run</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('fix.kTokensPerRun')}</span>
           </div>
         </Row>
 
-        <Row label="Per-run wall-time cap" sub="Real time, not CPU time. A run exceeding this is killed and marked timed-out.">
+        <Row label={t('fix.perRunWallTime.label')} sub={t('fix.perRunWallTime.sub')}>
           <div
             className="flex items-center gap-2 h-8 px-2.5 rounded-md"
             style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)' }}
@@ -208,15 +211,15 @@ export default function FixPipelinePage() {
               className="w-16 bg-transparent outline-none text-base tabular-nums"
               style={{ color: 'var(--fg-strong)' }}
             />
-            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>minutes</span>
+            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('fix.minutes')}</span>
           </div>
         </Row>
       </Section>
 
       {/* Allowed branches */}
       <Section
-        title="Allowed branches"
-        hint="Glob patterns. Fix-pipeline will only open PRs against branches matching one of these."
+        title={t('fix.allowedBranches.title')}
+        hint={t('fix.allowedBranches.hint')}
       >
         <div
           className="flex flex-wrap gap-1.5 p-3 rounded-md min-h-[60px]"
@@ -224,7 +227,7 @@ export default function FixPipelinePage() {
         >
           {form.branches.length === 0 && (
             <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-              No patterns. Fix-pipeline is effectively disabled.
+              {t('fix.noPatterns')}
             </span>
           )}
           {form.branches.map((b) => (
@@ -244,7 +247,7 @@ export default function FixPipelinePage() {
                 onClick={() => { removeBranch(b); }}
                 className="w-5 h-5 inline-flex items-center justify-center rounded"
                 style={{ color: 'var(--fg-subtle)' }}
-                aria-label={`Remove ${b}`}
+                aria-label={t('fix.removeBranchAria', { branch: b })}
               >
                 <X className="w-3 h-3" />
               </button>
@@ -256,7 +259,7 @@ export default function FixPipelinePage() {
             value={branchDraft}
             onChange={(e) => { setBranchDraft(e.target.value); }}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addBranch(); } }}
-            placeholder="e.g. release/*"
+            placeholder={t('fix.branchPlaceholder')}
             className="flex-1 h-8 rounded-md px-2.5 text-base outline-none font-mono"
             style={{
               background: 'var(--bg-surface-muted)',
@@ -265,15 +268,15 @@ export default function FixPipelinePage() {
             }}
           />
           <Button leading={<Plus className="w-3 h-3" />} onClick={addBranch} disabled={!branchDraft.trim()}>
-            Add pattern
+            {t('fix.addPattern')}
           </Button>
         </div>
       </Section>
 
       {/* Required obligations */}
       <Section
-        title="Required obligations"
-        hint="Gates that must pass before fix-pipeline is allowed to act. If any fail, the run is held for human review."
+        title={t('fix.requiredObligations.title')}
+        hint={t('fix.requiredObligations.hint')}
       >
         <div className="rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           {OBLIGATION_INFO.map((o, i) => {
@@ -295,10 +298,10 @@ export default function FixPipelinePage() {
                 />
                 <div className="flex flex-col gap-0.5 min-w-0 flex-1">
                   <span className="font-mono text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
-                    {o.label}
+                    {t(`fix.obligations.${o.key}.label`)}
                   </span>
                   <span className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
-                    {o.sub}
+                    {t(`fix.obligations.${o.key}.sub`)}
                   </span>
                 </div>
               </label>
@@ -309,22 +312,22 @@ export default function FixPipelinePage() {
 
       {/* Notification routing */}
       <Section
-        title="Notification routing"
-        hint="Where fix-pipeline pings humans for each outcome. Channel input accepts Slack channels or emails."
+        title={t('fix.notificationRouting.title')}
+        hint={t('fix.notificationRouting.hint')}
       >
-        <Row label="On success" sub="A short note on the merged PR and target channel.">
+        <Row label={t('fix.onSuccess.label')} sub={t('fix.onSuccess.sub')}>
           <ChannelInput value={form.successChannel} onChange={(v) => { set('successChannel', v); }} />
         </Row>
-        <Row label="On failure" sub="Posted with the failing obligation, last error, and a link to the run.">
+        <Row label={t('fix.onFailure.label')} sub={t('fix.onFailure.sub')}>
           <div className="flex items-center gap-2">
             <ChannelInput value={form.failureChannel} onChange={(v) => { set('failureChannel', v); }} />
             <label className="inline-flex items-center gap-1.5 text-sm" style={{ color: 'var(--fg-muted)' }}>
               <Toggle checked={form.failurePageOnCall} onChange={(v) => { set('failurePageOnCall', v); }} />
-              Page on-call
+              {t('fix.pageOnCall')}
             </label>
           </div>
         </Row>
-        <Row label="On rollback" sub="Distinct channel so reverts don't get lost in the failure stream.">
+        <Row label={t('fix.onRollback.label')} sub={t('fix.onRollback.sub')}>
           <ChannelInput value={form.rollbackChannel} onChange={(v) => { set('rollbackChannel', v); }} />
         </Row>
       </Section>
@@ -341,11 +344,12 @@ export default function FixPipelinePage() {
 }
 
 function ChannelInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { t } = useTranslation('ws');
   return (
     <input
       value={value}
       onChange={(e) => { onChange(e.target.value); }}
-      placeholder="#channel or person@org"
+      placeholder={t('fix.channelPlaceholder')}
       className="h-8 rounded-md px-2.5 text-base outline-none font-mono"
       style={{
         background: 'var(--bg-surface-muted)',

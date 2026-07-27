@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { SideNavShell, type SideNavGroup } from '@shared/ui';
 import { useTabVisibility } from '@features/workspace-tabs';
@@ -13,41 +14,43 @@ export type WsPath =
   | '/$org/$ws/settings/agents' | '/$org/$ws/settings/secrets' | '/$org/$ws/settings/environments'
   | '/$org/$ws/settings/webhooks' | '/$org/$ws/settings/labels' | '/$org/$ws/settings/danger';
 
-const NAV: SideNavGroup<WsPath>[] = [
+type TFn = (key: string) => string;
+
+const buildNav = (t: TFn): SideNavGroup<WsPath>[] => [
   {
     id: 'core',
-    title: 'Workspace',
+    title: t('nav.core'),
     items: [
-      { key: '/$org/$ws/settings/general',  label: 'General',           icon: SlidersHorizontal },
-      { key: '/$org/$ws/settings/source',   label: 'Source connection', icon: GitBranch },
-      { key: '/$org/$ws/settings/ownership',label: 'Ownership',         icon: Users },
+      { key: '/$org/$ws/settings/general',  label: t('nav.general'),   icon: SlidersHorizontal },
+      { key: '/$org/$ws/settings/source',   label: t('nav.source'),    icon: GitBranch },
+      { key: '/$org/$ws/settings/ownership',label: t('nav.ownership'), icon: Users },
     ],
   },
   {
     id: 'pipeline',
-    title: 'Pipeline',
+    title: t('nav.pipeline'),
     items: [
-      { key: '/$org/$ws/settings/admission', label: 'Admission rules', icon: ShieldCheck },
-      { key: '/$org/$ws/settings/review',    label: 'Review policy',   icon: Eye },
-      { key: '/$org/$ws/settings/fix',       label: 'Fix pipeline',    icon: Wrench },
-      { key: '/$org/$ws/settings/agents',    label: 'Agents',          icon: Bot },
+      { key: '/$org/$ws/settings/admission', label: t('nav.admission'), icon: ShieldCheck },
+      { key: '/$org/$ws/settings/review',    label: t('nav.review'),    icon: Eye },
+      { key: '/$org/$ws/settings/fix',       label: t('nav.fix'),       icon: Wrench },
+      { key: '/$org/$ws/settings/agents',    label: t('nav.agents'),    icon: Bot },
     ],
   },
   {
     id: 'infra',
-    title: 'Infrastructure',
+    title: t('nav.infra'),
     items: [
-      { key: '/$org/$ws/settings/secrets',     label: 'Secrets',     icon: Lock },
-      { key: '/$org/$ws/settings/environments',label: 'Environments',icon: Layers },
-      { key: '/$org/$ws/settings/webhooks',    label: 'Webhooks',    icon: Webhook },
-      { key: '/$org/$ws/settings/labels',      label: 'Labels',      icon: Tag },
+      { key: '/$org/$ws/settings/secrets',     label: t('nav.secrets'),      icon: Lock },
+      { key: '/$org/$ws/settings/environments',label: t('nav.environments'), icon: Layers },
+      { key: '/$org/$ws/settings/webhooks',    label: t('nav.webhooks'),     icon: Webhook },
+      { key: '/$org/$ws/settings/labels',      label: t('nav.labels'),       icon: Tag },
     ],
   },
   {
     id: 'risk',
-    title: 'Risk',
+    title: t('nav.risk'),
     items: [
-      { key: '/$org/$ws/settings/danger', label: 'Danger zone', icon: Trash2 },
+      { key: '/$org/$ws/settings/danger', label: t('nav.danger'), icon: Trash2 },
     ],
   },
 ];
@@ -68,6 +71,7 @@ type Props = {
 // Nav keys are $org/$ws route templates; onSelect resolves both slugs and
 // navigates. Selection matches the resolved current path.
 export function WsShell({ orgName, orgSlug, wsName, wsSlug, title, subtitle, topRight, children }: Props) {
+  const { t } = useTranslation('ws');
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const visible = useTabVisibility();
@@ -78,7 +82,7 @@ export function WsShell({ orgName, orgSlug, wsName, wsSlug, title, subtitle, top
 
   return (
     <SideNavShell<WsPath>
-      groups={NAV}
+      groups={buildNav(t)}
       selectedKey={selectedKey}
       onSelect={(key) => {
         void navigate({ to: key as never, params: { org: orgSlug, ws: wsSlug } as never });
@@ -124,9 +128,10 @@ function WsCard({ orgSlug, wsName, wsSlug }: { orgSlug: string; wsName: string; 
 function Breadcrumb({
   orgName, wsName, pageTitle,
 }: { orgName: string; wsName: string; pageTitle: string }) {
+  const { t } = useTranslation('ws');
   return (
     <nav
-      aria-label="Breadcrumb"
+      aria-label={t('shell.breadcrumbAria')}
       className="flex items-center gap-1 text-sm"
       style={{ color: 'var(--fg-subtle)' }}
     >
@@ -134,7 +139,7 @@ function Breadcrumb({
       <ChevronRight className="w-3 h-3 opacity-60" />
       <span>{wsName}</span>
       <ChevronRight className="w-3 h-3 opacity-60" />
-      <span>Settings</span>
+      <span>{t('shell.settings')}</span>
       <ChevronRight className="w-3 h-3 opacity-60" />
       <span style={{ color: 'var(--fg-default)' }}>{pageTitle}</span>
     </nav>

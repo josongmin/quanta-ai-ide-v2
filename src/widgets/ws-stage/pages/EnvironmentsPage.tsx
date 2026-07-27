@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button } from '@shared/ui/forms';
@@ -6,6 +7,7 @@ import { EnvCard, EnvDrawer, CreateEnvModal, SEED_ENVS } from './environments-pa
 import type { Environment, Region } from './environments-parts';
 
 export default function EnvironmentsPage() {
+  const { t } = useTranslation('ws');
   const [envs, setEnvs] = useState<Environment[]>(SEED_ENVS);
   const [drawer, setDrawer] = useState<Environment | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
@@ -26,7 +28,7 @@ export default function EnvironmentsPage() {
 
   const promote = (id: string) => {
     // Demo only: bump deployedAt to "promoting…" briefly.
-    updateEnv(id, { deployedAt: 'promoting…' });
+    updateEnv(id, { deployedAt: t('environments.promoting') });
   };
 
   return (
@@ -35,16 +37,16 @@ export default function EnvironmentsPage() {
       orgSlug="acme"
       wsName="monorepo"
       wsSlug="monorepo"
-      title="Environments"
-      subtitle="Targets this workspace deploys to. Each environment owns its own URL, region, and promotion gate."
+      title={t('environments.title')}
+      subtitle={t('environments.subtitle')}
       topRight={
         <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={() => { setCreateOpen(true); }}>
-          New environment
+          {t('environments.newEnvironment')}
         </Button>
       }
     >
       <h2 className="text-xs uppercase tracking-eyebrow font-semibold mb-2" style={{ color: 'var(--fg-subtle)' }}>
-        Environments · {envs.length}
+        {t('environments.heading', { count: envs.length })}
       </h2>
       <div
         className="grid gap-3"

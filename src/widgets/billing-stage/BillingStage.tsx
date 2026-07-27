@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { env } from '@shared/config/env';
 import { useTheme } from '@shared/theme';
 import { ScrollPane } from '@shared/ui';
@@ -29,6 +30,7 @@ export default function BillingStage() {
 // sections are separated by hairlines and large whitespace, à la Linear /
 // Vercel settings. Anchor links in the header jump down the page.
 function BillingMock() {
+  const { t } = useTranslation('billing');
   const { isDark } = useTheme();
   const [cycle, setCycle] = useState<'monthly' | 'annual'>('annual');
   const [planId, setPlanId] = useState<PlanId>('team');
@@ -55,10 +57,10 @@ function BillingMock() {
       <div className="max-w-[860px] mx-auto px-10 pt-12 pb-32">
         <BillingHeader
           orgName="ACME, Inc."
-          breadcrumb={['ACME', 'Settings', 'Billing']}
+          breadcrumb={['ACME', t('breadcrumb.settings'), t('title')]}
         />
 
-        <Section anchor="plan" title="Plan" hint="Annual billing saves 17%.">
+        <Section anchor="plan" title={t('sections.plan.title')} hint={t('sections.plan.hint')}>
           <CurrentPlanRow
             plan={plan}
             cycle={cycle}
@@ -72,8 +74,8 @@ function BillingMock() {
 
         <Section
           anchor="lineup"
-          title="Available plans"
-          hint="Switch any time. Pro-rated on the next invoice."
+          title={t('sections.lineup.title')}
+          hint={t('sections.lineup.hint')}
           right={<CycleToggle cycle={cycle} onChange={setCycle} />}
         >
           <PlanLineup
@@ -85,25 +87,25 @@ function BillingMock() {
 
         <Divider />
 
-        <Section anchor="usage" title="Usage" hint="May 1 — May 31, 2026.">
+        <Section anchor="usage" title={t('sections.usage.title')} hint={t('sections.usage.hint')}>
           <UsageGrid usage={USAGE} />
         </Section>
 
         <Divider />
 
-        <Section anchor="invoices" title="Invoices">
+        <Section anchor="invoices" title={t('sections.invoices.title')}>
           <InvoicesList invoices={INVOICES} />
         </Section>
 
         <Divider />
 
-        <Section anchor="payment" title="Payment methods">
+        <Section anchor="payment" title={t('sections.payment.title')}>
           <PaymentList methods={PAYMENT_METHODS} />
         </Section>
 
         <Divider />
 
-        <Section anchor="profile" title="Billing profile">
+        <Section anchor="profile" title={t('sections.profile.title')}>
           <ProfileGrid profile={BILLING_PROFILE} />
         </Section>
 
@@ -111,8 +113,8 @@ function BillingMock() {
 
         <Section
           anchor="tax"
-          title="Tax & VAT"
-          hint="Per-jurisdiction tax IDs applied to invoices."
+          title={t('sections.tax.title')}
+          hint={t('sections.tax.hint')}
         >
           <TaxSection />
         </Section>
@@ -121,8 +123,8 @@ function BillingMock() {
 
         <Section
           anchor="contracts"
-          title="Contracts"
-          hint="Counter-signed agreements on file with ACME, Inc."
+          title={t('sections.contracts.title')}
+          hint={t('sections.contracts.hint', { orgName: 'ACME, Inc.' })}
         >
           <ContractsSection />
         </Section>
@@ -134,6 +136,7 @@ function BillingMock() {
 function CycleToggle({
   cycle, onChange,
 }: { cycle: 'monthly' | 'annual'; onChange: (c: 'monthly' | 'annual') => void }) {
+  const { t } = useTranslation('billing');
   return (
     <div
       className="inline-flex items-center gap-0.5 p-0.5 rounded-md"
@@ -156,7 +159,7 @@ function CycleToggle({
               boxShadow: active ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
             }}
           >
-            {c === 'annual' ? 'Annual' : 'Monthly'}
+            {c === 'annual' ? t('cycle.annual') : t('cycle.monthly')}
           </button>
         );
       })}

@@ -4,93 +4,72 @@ import type { PlanId } from '@entities/plan';
 
 export type { PlanId };
 
+// Copy (name/tagline/highlights/limit labels) is resolved from the `billing`
+// i18n namespace at render time. Data here holds only structure: ids, prices,
+// i18n key refs, and machine-readable limit values.
+export type LimitKey = 'workspaces' | 'seats' | 'agents' | 'retention';
+export type LimitValue =
+  | { kind: 'raw'; text: string }
+  | { kind: 'unlimited' }
+  | { kind: 'custom' }
+  | { kind: 'days'; count: number }
+  | { kind: 'years'; count: number };
+
 export type Plan = {
   id: PlanId;
-  name: string;
-  tagline: string;
   monthly: number | null;     // USD per seat / month. null = "Talk to us"
   annual: number | null;
-  highlights: string[];
-  limits: { label: string; value: string }[];
+  highlights: string[];       // i18n key suffixes under plans.<id>.highlights.*
+  limits: { key: LimitKey; value: LimitValue }[];
 };
 
 export const PLANS: Plan[] = [
   {
     id: 'free',
-    name: 'Free',
-    tagline: 'For individuals exploring the dot-field.',
     monthly: 0,
     annual: 0,
-    highlights: [
-      '1 workspace',
-      'Up to 3 seats',
-      'Community support',
-      '7-day audit retention',
-    ],
+    highlights: ['workspaces', 'seats', 'support', 'retention'],
     limits: [
-      { label: 'Workspaces', value: '1' },
-      { label: 'Seats', value: '3' },
-      { label: 'AI agents (concurrent)', value: '1' },
-      { label: 'Audit retention', value: '7 days' },
+      { key: 'workspaces', value: { kind: 'raw', text: '1' } },
+      { key: 'seats', value: { kind: 'raw', text: '3' } },
+      { key: 'agents', value: { kind: 'raw', text: '1' } },
+      { key: 'retention', value: { kind: 'days', count: 7 } },
     ],
   },
   {
     id: 'team',
-    name: 'Team',
-    tagline: 'For small teams shipping together.',
     monthly: 24,
     annual: 20,
-    highlights: [
-      '5 workspaces',
-      'Unlimited seats',
-      'Custom admission rules',
-      '30-day audit retention',
-    ],
+    highlights: ['workspaces', 'seats', 'admission', 'retention'],
     limits: [
-      { label: 'Workspaces', value: '5' },
-      { label: 'Seats', value: 'Unlimited' },
-      { label: 'AI agents (concurrent)', value: '3' },
-      { label: 'Audit retention', value: '30 days' },
+      { key: 'workspaces', value: { kind: 'raw', text: '5' } },
+      { key: 'seats', value: { kind: 'unlimited' } },
+      { key: 'agents', value: { kind: 'raw', text: '3' } },
+      { key: 'retention', value: { kind: 'days', count: 30 } },
     ],
   },
   {
     id: 'business',
-    name: 'Business',
-    tagline: 'For organizations standardizing review & gating.',
     monthly: 64,
     annual: 54,
-    highlights: [
-      'Unlimited workspaces',
-      'SAML / SCIM',
-      'Data residency',
-      '1-year audit retention',
-      'Priority routing',
-    ],
+    highlights: ['workspaces', 'saml', 'residency', 'retention', 'routing'],
     limits: [
-      { label: 'Workspaces', value: 'Unlimited' },
-      { label: 'Seats', value: 'Unlimited' },
-      { label: 'AI agents (concurrent)', value: '10' },
-      { label: 'Audit retention', value: '1 year' },
+      { key: 'workspaces', value: { kind: 'unlimited' } },
+      { key: 'seats', value: { kind: 'unlimited' } },
+      { key: 'agents', value: { kind: 'raw', text: '10' } },
+      { key: 'retention', value: { kind: 'years', count: 1 } },
     ],
   },
   {
     id: 'enterprise',
-    name: 'Enterprise',
-    tagline: 'For regulated and self-hosted deployments.',
     monthly: null,
     annual: null,
-    highlights: [
-      'Self-host / VPC option',
-      'Custom data retention',
-      'Custom SLA',
-      'Dedicated CSM',
-      'Procurement & MSA support',
-    ],
+    highlights: ['selfHost', 'retention', 'sla', 'csm', 'procurement'],
     limits: [
-      { label: 'Workspaces', value: 'Unlimited' },
-      { label: 'Seats', value: 'Unlimited' },
-      { label: 'AI agents (concurrent)', value: 'Custom' },
-      { label: 'Audit retention', value: 'Custom' },
+      { key: 'workspaces', value: { kind: 'unlimited' } },
+      { key: 'seats', value: { kind: 'unlimited' } },
+      { key: 'agents', value: { kind: 'custom' } },
+      { key: 'retention', value: { kind: 'custom' } },
     ],
   },
 ];
@@ -98,22 +77,22 @@ export const PLANS: Plan[] = [
 // Current usage relative to the active plan. The bars in UsageMeters bind to
 // `used / limit`. `limit: null` renders as unmetered ("∞"). Numbers chosen
 // to land at varied fill % so the meter visualizations have signal.
+// Copy (label/unit/hint) resolved from billing:usage.<key>.* at render time.
+// `hintCount` feeds a pluralized hint (e.g. pending invitations).
 export type UsageRow = {
   key: string;
-  label: string;
   used: number;
   limit: number | null;
-  unit: string;
-  hint?: string;
+  hintCount?: number;
 };
 
 export const USAGE: UsageRow[] = [
-  { key: 'seats',     label: 'Seats',                 used: 18,    limit: 25,    unit: 'seats',  hint: '7 invitations pending' },
-  { key: 'workspaces',label: 'Workspaces',            used: 3,     limit: 5,     unit: 'ws' },
-  { key: 'agents',    label: 'AI agent runs',         used: 2_184, limit: 5_000, unit: 'runs',   hint: 'Resets May 31' },
-  { key: 'tokens',    label: 'AI tokens',             used: 12.4,  limit: 30,    unit: 'M tok',  hint: '$0.42 / M overage' },
-  { key: 'scans',     label: 'Repository scans',      used: 412,   limit: 1_000, unit: 'scans' },
-  { key: 'storage',   label: 'Artifact storage',      used: 7.8,   limit: 50,    unit: 'GB' },
+  { key: 'seats',      used: 18,    limit: 25,    hintCount: 7 },
+  { key: 'workspaces', used: 3,     limit: 5 },
+  { key: 'agents',     used: 2_184, limit: 5_000 },
+  { key: 'tokens',     used: 12.4,  limit: 30 },
+  { key: 'scans',      used: 412,   limit: 1_000 },
+  { key: 'storage',    used: 7.8,   limit: 50 },
 ];
 
 export type Invoice = {
@@ -190,7 +169,7 @@ export const TAX_IDS: TaxId[] = [
 // is intentionally short; a real workspace would paginate.
 export type Contract = {
   id: string;
-  name: string;
+  nameKey: string;         // billing:contracts.names.<nameKey>
   abbr: string;            // short tag rendered as monospace pill
   version: string;         // e.g. "v3.2"
   effective: string;       // ISO yyyy-mm-dd
@@ -200,8 +179,8 @@ export type Contract = {
 };
 
 export const CONTRACTS: Contract[] = [
-  { id: 'ct_1', name: 'Master Services Agreement',     abbr: 'MSA', version: 'v3.2', effective: '2025-09-14', expires: '2027-09-13', sizeKb: 412, pdfUrl: '#' },
-  { id: 'ct_2', name: 'Data Processing Addendum',      abbr: 'DPA', version: 'v2.1', effective: '2025-09-14', expires: null,         sizeKb: 188, pdfUrl: '#' },
-  { id: 'ct_3', name: 'Business Associate Agreement',  abbr: 'BAA', version: 'v1.4', effective: '2026-01-22', expires: '2027-01-21', sizeKb: 226, pdfUrl: '#' },
-  { id: 'ct_4', name: 'Standard Contractual Clauses',  abbr: 'SCC', version: 'v1.0', effective: '2025-09-14', expires: null,         sizeKb: 154, pdfUrl: '#' },
+  { id: 'ct_1', nameKey: 'msa', abbr: 'MSA', version: 'v3.2', effective: '2025-09-14', expires: '2027-09-13', sizeKb: 412, pdfUrl: '#' },
+  { id: 'ct_2', nameKey: 'dpa', abbr: 'DPA', version: 'v2.1', effective: '2025-09-14', expires: null,         sizeKb: 188, pdfUrl: '#' },
+  { id: 'ct_3', nameKey: 'baa', abbr: 'BAA', version: 'v1.4', effective: '2026-01-22', expires: '2027-01-21', sizeKb: 226, pdfUrl: '#' },
+  { id: 'ct_4', nameKey: 'scc', abbr: 'SCC', version: 'v1.0', effective: '2025-09-14', expires: null,         sizeKb: 154, pdfUrl: '#' },
 ];

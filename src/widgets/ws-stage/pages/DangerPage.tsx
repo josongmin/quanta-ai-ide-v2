@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ArrowRightLeft, Trash2, AlertTriangle } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Toggle, Button } from '@shared/ui/forms';
@@ -13,6 +14,7 @@ const TARGET_ORGS = [
 const WS_NAME = 'monorepo';
 
 export default function DangerPage() {
+  const { t } = useTranslation('ws');
   const [archived, setArchived] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -23,23 +25,23 @@ export default function DangerPage() {
       orgSlug="acme"
       wsName={WS_NAME}
       wsSlug={WS_NAME}
-      title="Danger zone"
-      subtitle="Irreversible actions that affect this entire workspace."
+      title={t('danger.title')}
+      subtitle={t('danger.subtitle')}
     >
-      <Section title="Archive workspace" hint="Hide this workspace from default views without losing any data.">
+      <Section title={t('danger.archive.title')} hint={t('danger.archive.hint')}>
         <Row
-          label="Archived"
-          sub="Archived workspaces are read-only. Pipelines pause and the workspace is hidden from the launcher. You can restore at any time."
+          label={t('danger.archivedRow.label')}
+          sub={t('danger.archivedRow.sub')}
           danger
         >
-          <Toggle checked={archived} onChange={setArchived} label="Archive workspace" />
+          <Toggle checked={archived} onChange={setArchived} label={t('danger.archivedRow.toggle')} />
         </Row>
       </Section>
 
-      <Section title="Transfer workspace" hint="Move this workspace to a different organization you own.">
+      <Section title={t('danger.transfer.title')} hint={t('danger.transfer.hint')}>
         <Row
-          label="Transfer to another org"
-          sub="The new org becomes the billing owner. Members keep access if they belong to the destination org."
+          label={t('danger.transferRow.label')}
+          sub={t('danger.transferRow.sub')}
           danger
         >
           <Button
@@ -47,15 +49,15 @@ export default function DangerPage() {
             leading={<ArrowRightLeft className="w-3 h-3" />}
             onClick={() => { setTransferOpen(true); }}
           >
-            Transfer workspace
+            {t('danger.transferRow.button')}
           </Button>
         </Row>
       </Section>
 
-      <Section title="Delete workspace" hint="Permanently remove this workspace and all attached data.">
+      <Section title={t('danger.delete.title')} hint={t('danger.delete.hint')}>
         <Row
-          label="Permanently delete workspace"
-          sub="Deletes pipelines, agent history, secrets, labels, and webhooks. Source repository is untouched."
+          label={t('danger.deleteRow.label')}
+          sub={t('danger.deleteRow.sub')}
           danger
         >
           <Button
@@ -63,7 +65,7 @@ export default function DangerPage() {
             leading={<Trash2 className="w-3 h-3" />}
             onClick={() => { setDeleteOpen(true); }}
           >
-            Delete workspace
+            {t('danger.deleteRow.button')}
           </Button>
         </Row>
       </Section>
@@ -80,15 +82,15 @@ export default function DangerPage() {
           open
           onCancel={() => { setDeleteOpen(false); }}
           onConfirm={() => { setDeleteOpen(false); }}
-          title={`Delete ${WS_NAME}?`}
-          confirmLabel="I understand, delete"
+          title={t('danger.deleteDialog.title', { name: WS_NAME })}
+          confirmLabel={t('danger.deleteDialog.confirm')}
           width={460}
           requireTypedConfirmation={WS_NAME}
           description={(
             <>
-              This permanently deletes the workspace, every pipeline run, agent thread,
-              secret, label, and webhook attached to it. The source repository is not touched.
-              Type <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{WS_NAME}</span> below to confirm.
+              {t('danger.deleteDialog.descriptionPrefix')}{' '}
+              <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{WS_NAME}</span>{' '}
+              {t('danger.deleteDialog.descriptionSuffix')}
             </>
           )}
         />
@@ -100,6 +102,7 @@ export default function DangerPage() {
 function ConfirmTransfer({
   wsName, onCancel, onConfirm,
 }: { wsName: string; onCancel: () => void; onConfirm: () => void }) {
+  const { t } = useTranslation('ws');
   const [target, setTarget] = useState(TARGET_ORGS[0].id);
   const [typed, setTyped] = useState('');
   const matches = typed === wsName;
@@ -113,7 +116,7 @@ function ConfirmTransfer({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label={`Transfer ${wsName}`}
+        aria-label={t('danger.transferDialog.aria', { name: wsName })}
         tabIndex={-1}
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[480px] rounded-lg overflow-hidden outline-none"
         style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
@@ -122,17 +125,18 @@ function ConfirmTransfer({
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" style={{ color: 'var(--intent-warn-fg)' }} />
             <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Transfer {wsName}?
+              {t('danger.transferDialog.title', { name: wsName })}
             </span>
           </div>
           <p className="text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            This moves the workspace to the destination org and re-attaches billing.
-            Type <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{wsName}</span> below to confirm.
+            {t('danger.transferDialog.descriptionPrefix')}{' '}
+            <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{wsName}</span>{' '}
+            {t('danger.transferDialog.descriptionSuffix')}
           </p>
 
           <label className="flex flex-col gap-1.5">
             <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-              Destination org
+              {t('danger.transferDialog.destinationOrg')}
             </span>
             <select
               value={target}
@@ -150,7 +154,7 @@ function ConfirmTransfer({
 
           <label className="flex flex-col gap-1.5">
             <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-              Type to confirm
+              {t('danger.transferDialog.typeToConfirm')}
             </span>
             <input
               value={typed}
@@ -165,9 +169,9 @@ function ConfirmTransfer({
           className="flex items-center justify-end gap-2 px-4 py-3"
           style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}
         >
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+          <Button variant="ghost" onClick={onCancel}>{t('danger.transferDialog.cancel')}</Button>
           <Button variant="danger" size="md" disabled={!matches} onClick={onConfirm}>
-            Transfer to {target}
+            {t('danger.transferDialog.confirmButton', { target })}
           </Button>
         </div>
       </div>

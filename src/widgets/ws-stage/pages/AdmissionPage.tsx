@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ShieldCheck, KeyRound, FileWarning, TestTube2, FileLock2, GitBranch,
   ChevronDown, ChevronRight, RotateCcw, ScrollText,
@@ -49,15 +50,17 @@ const SEED_RULES: Rule[] = SEED_ADMISSION_RULES
   .filter((r) => r.id in RULE_TAIL)
   .map((r) => ({ ...r, ...RULE_TAIL[r.id] }));
 
-const CATEGORIES: { id: Rule['category']; label: string; icon: React.ComponentType<{ className?: string; style?: CSSProperties }> }[] = [
-  { id: 'secrets', label: 'Secrets',         icon: KeyRound },
-  { id: 'review',  label: 'Review',          icon: ShieldCheck },
-  { id: 'tests',   label: 'Tests & coverage',icon: TestTube2 },
-  { id: 'deps',    label: 'Dependencies',    icon: FileWarning },
-  { id: 'config',  label: 'Configuration',   icon: GitBranch },
+// Category label resolved from ws:admission.categories.<id> at render time.
+const CATEGORIES: { id: Rule['category']; icon: React.ComponentType<{ className?: string; style?: CSSProperties }> }[] = [
+  { id: 'secrets', icon: KeyRound },
+  { id: 'review',  icon: ShieldCheck },
+  { id: 'tests',   icon: TestTube2 },
+  { id: 'deps',    icon: FileWarning },
+  { id: 'config',  icon: GitBranch },
 ];
 
 export default function AdmissionPage() {
+  const { t } = useTranslation('ws');
   const [rules, setRules] = useState<Rule[]>(SEED_RULES);
   const [collapsed, setCollapsed] = useState<Set<Rule['category']>>(new Set());
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
@@ -96,20 +99,20 @@ export default function AdmissionPage() {
       orgSlug="acme"
       wsName="monorepo"
       wsSlug="monorepo"
-      title="Admission rules"
-      subtitle="Workspace-scoped admission gates. Inherits org defaults; per-rule overrides shown below."
+      title={t('admission.title')}
+      subtitle={t('admission.subtitle')}
     >
       {/* Summary band */}
       <div
         className="grid grid-cols-3 gap-3 p-4 rounded-md mb-6"
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
-        <Stat label="Active rules"  value={`${totalActive} / ${rules.length}`} />
-        <Stat label="Hard blocks"   value={String(totalBlocking)} tone="warn" />
-        <Stat label="Inherited"     value={`${inheritedCount} / ${rules.length}`} sub={`${rules.length - inheritedCount} overridden`} />
+        <Stat label={t('admission.activeRules')} value={`${totalActive} / ${rules.length}`} />
+        <Stat label={t('admission.hardBlocks')} value={String(totalBlocking)} tone="warn" />
+        <Stat label={t('admission.inherited')} value={`${inheritedCount} / ${rules.length}`} sub={t('admission.overriddenSub', { count: rules.length - inheritedCount })} />
       </div>
 
-      <Section title="Rules" hint="Override an org default by changing severity. Use Reset to fall back to inheritance.">
+      <Section title={t('admission.rulesSection.title')} hint={t('admission.rulesSection.hint')}>
         <div className="flex flex-col gap-3">
           {CATEGORIES.map((c) => {
             const inCat = rules.filter((r) => r.category === c.id);
@@ -134,7 +137,7 @@ export default function AdmissionPage() {
                     : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />}
                   <CatIcon className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />
                   <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
-                    {c.label}
+                    {t(`admission.categories.${c.id}`)}
                   </span>
                   <span className="ml-auto flex items-center gap-2 text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
                     {overriddenInCat > 0 && (
@@ -146,10 +149,10 @@ export default function AdmissionPage() {
                           border: '1px solid var(--intent-warn-fg)',
                         }}
                       >
-                        {overriddenInCat} overridden
+                        {t('admission.overriddenBadge', { count: overriddenInCat })}
                       </span>
                     )}
-                    <span>{inCat.filter((r) => r.effective !== 'off').length} of {inCat.length} active</span>
+                    <span>{t('admission.activeOfTotal', { active: inCat.filter((r) => r.effective !== 'off').length, total: inCat.length })}</span>
                   </span>
                 </button>
                 {open && inCat.map((r) => (
@@ -168,7 +171,7 @@ export default function AdmissionPage() {
 
       <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <ScrollText className="w-3 h-3 mt-0.5 shrink-0" />
-        Org owners can lock a rule, which removes the override option for this workspace.
+        {t('admission.lockNote')}
       </p>
 
       <SaveBar
@@ -185,6 +188,7 @@ export default function AdmissionPage() {
 function RuleRow({
   rule, onSetSeverity, onReset,
 }: { rule: Rule; onSetSeverity: (s: Severity) => void; onReset: () => void }) {
+  const { t } = useTranslation('ws');
   const Icon = rule.icon;
   const overridden = rule.effective !== rule.orgDefault;
 
@@ -209,7 +213,7 @@ function RuleRow({
               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
             >
               <RotateCcw className="w-2.5 h-2.5" />
-              Reset to org default
+              {t('admission.resetToOrgDefault')}
             </button>
           )}
         </div>
@@ -222,13 +226,14 @@ function RuleRow({
 function InheritanceBadge({
   orgDefault, overridden,
 }: { orgDefault: Severity; overridden: boolean }) {
+  const { t } = useTranslation('ws');
   const label = orgDefault.toUpperCase();
   return (
     <span
       className="inline-flex items-center gap-1.5 text-xs"
       style={{ color: 'var(--fg-subtle)' }}
     >
-      <span>Org default:</span>
+      <span>{t('admission.orgDefault')}</span>
       <span
         className="px-1 py-0.5 rounded text-2xs uppercase tracking-eyebrow font-semibold"
         style={{
@@ -248,7 +253,7 @@ function InheritanceBadge({
             border: '1px solid var(--intent-warn-fg)',
           }}
         >
-          overridden
+          {t('admission.overridden')}
         </span>
       ) : (
         <span
@@ -259,7 +264,7 @@ function InheritanceBadge({
             border: '1px solid var(--intent-success-fg)',
           }}
         >
-          inherited
+          {t('admission.inheritedBadge')}
         </span>
       )}
     </span>
@@ -269,10 +274,11 @@ function InheritanceBadge({
 function SeverityPicker({
   value, onChange,
 }: { value: Severity; onChange: (v: Severity) => void }) {
+  const { t } = useTranslation('ws');
   const opts: { id: Severity; label: string; bg: string; fg: string }[] = [
-    { id: 'block', label: 'Block', bg: 'var(--intent-danger-bg)',  fg: 'var(--intent-danger-fg)'  },
-    { id: 'warn',  label: 'Warn',  bg: 'var(--intent-warn-bg)',    fg: 'var(--intent-warn-fg)'    },
-    { id: 'off',   label: 'Off',   bg: 'var(--bg-surface-muted)',  fg: 'var(--fg-muted)'          },
+    { id: 'block', label: t('admission.severity.block'), bg: 'var(--intent-danger-bg)',  fg: 'var(--intent-danger-fg)'  },
+    { id: 'warn',  label: t('admission.severity.warn'),  bg: 'var(--intent-warn-bg)',    fg: 'var(--intent-warn-fg)'    },
+    { id: 'off',   label: t('admission.severity.off'),   bg: 'var(--bg-surface-muted)',  fg: 'var(--fg-muted)'          },
   ];
   return (
     <div className="inline-flex shrink-0 rounded-md overflow-hidden" style={{ border: '1px solid var(--border-default)' }}>

@@ -1,4 +1,5 @@
 import { RotateCw, ShieldCheck, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { RowMenu } from '@shared/ui';
 
 import type { Secret } from './types';
@@ -6,6 +7,7 @@ import type { Secret } from './types';
 export function SecretRow({
   secret, onRotate, onDelete,
 }: { secret: Secret; onRotate: () => void; onDelete: () => void }) {
+  const { t } = useTranslation('ws');
   return (
     <div
       role="row"
@@ -49,9 +51,9 @@ export function SecretRow({
         itemPadding="wide"
         triggerColor="var(--fg-subtle)"
         items={[
-          { icon: RotateCw, label: 'Rotate', onClick: onRotate },
-          { icon: ShieldCheck, label: 'View scopes' },
-          { icon: Trash2, label: 'Delete', onClick: onDelete, danger: true },
+          { icon: RotateCw, label: t('secrets.row.rotate'), onClick: onRotate },
+          { icon: ShieldCheck, label: t('secrets.row.viewScopes') },
+          { icon: Trash2, label: t('secrets.row.delete'), onClick: onDelete, danger: true },
         ]}
       />
     </div>

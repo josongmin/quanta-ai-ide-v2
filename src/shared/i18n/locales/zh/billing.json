@@ -1,1 +1,197 @@
-{}
+{
+  "title": "账单",
+  "breadcrumb": {
+    "settings": "设置"
+  },
+  "cycle": {
+    "monthly": "按月",
+    "annual": "按年"
+  },
+  "anchors": {
+    "plan": "套餐",
+    "lineup": "套餐列表",
+    "usage": "用量",
+    "invoices": "发票",
+    "payment": "支付方式",
+    "profile": "资料",
+    "tax": "税务",
+    "contracts": "合同"
+  },
+  "nav": {
+    "breadcrumbAria": "面包屑导航",
+    "sectionsAria": "分区"
+  },
+  "sections": {
+    "plan": { "title": "套餐", "hint": "按年付费可省 17%。" },
+    "lineup": { "title": "可选套餐", "hint": "随时切换。将在下一张发票按比例计费。" },
+    "plans": { "title": "套餐", "hint": "升级或更改套餐。支付由 Stripe 安全处理。" },
+    "usage": { "title": "用量", "hint": "2026 年 5 月 1 日 — 5 月 31 日。" },
+    "invoices": { "title": "发票" },
+    "payment": { "title": "支付方式" },
+    "profile": { "title": "账单资料" },
+    "tax": { "title": "税务与 VAT", "hint": "按辖区的税号将应用于发票。" },
+    "contracts": { "title": "合同", "hint": "已存有与 {{orgName}} 双方签署的协议。" }
+  },
+  "plans": {
+    "free": {
+      "name": "Free",
+      "tagline": "适合探索点阵的个人。",
+      "highlights": {
+        "workspaces": "1 个工作区",
+        "seats": "最多 3 个席位",
+        "support": "社区支持",
+        "retention": "审计记录保留 7 天"
+      }
+    },
+    "team": {
+      "name": "Team",
+      "tagline": "适合共同交付的小型团队。",
+      "highlights": {
+        "workspaces": "5 个工作区",
+        "seats": "无限席位",
+        "admission": "自定义准入规则",
+        "retention": "审计记录保留 30 天"
+      }
+    },
+    "business": {
+      "name": "Business",
+      "tagline": "适合规范化审查与门控的组织。",
+      "highlights": {
+        "workspaces": "无限工作区",
+        "saml": "SAML / SCIM",
+        "residency": "数据驻留",
+        "retention": "审计记录保留 1 年",
+        "routing": "优先路由"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "tagline": "适合受监管及自托管部署。",
+      "highlights": {
+        "selfHost": "自托管 / VPC 选项",
+        "retention": "自定义数据保留",
+        "sla": "自定义 SLA",
+        "csm": "专属 CSM",
+        "procurement": "采购与 MSA 支持"
+      }
+    }
+  },
+  "limits": {
+    "workspaces": "工作区",
+    "seats": "席位",
+    "agents": "AI 智能体（并发）",
+    "retention": "审计记录保留",
+    "value": {
+      "unlimited": "无限",
+      "custom": "自定义",
+      "days_one": "{{count}} 天",
+      "days_other": "{{count}} 天",
+      "year_one": "{{count}} 年",
+      "year_other": "{{count}} 年"
+    }
+  },
+  "usage": {
+    "seats": { "label": "席位", "unit": "席", "hint_one": "{{count}} 个邀请待处理", "hint_other": "{{count}} 个邀请待处理" },
+    "workspaces": { "label": "工作区", "unit": "个" },
+    "agents": { "label": "AI 智能体运行", "unit": "次", "hint": "5 月 31 日重置" },
+    "tokens": { "label": "AI 令牌", "unit": "M 令牌", "hint": "$0.42 / M 超额" },
+    "scans": { "label": "仓库扫描", "unit": "次" },
+    "storage": { "label": "构件存储", "unit": "GB" },
+    "percentUsed": "已使用 {{pct}}%"
+  },
+  "currentPlan": {
+    "monthlyCost": "月度费用",
+    "seats_one": "{{count}} 个席位",
+    "seats_other": "{{count}} 个席位",
+    "nextInvoice": "下一张发票",
+    "autoCharge": "自动扣款",
+    "status": "状态",
+    "active": "有效",
+    "noIssues": "无异常",
+    "manageSubscription": "管理订阅"
+  },
+  "planLineup": {
+    "current": "当前",
+    "custom": "自定义",
+    "perSeatMonth": "/席/月",
+    "billedAnnually": "按年计费",
+    "billedMonthly": "按月计费",
+    "talkToSales": "联系销售",
+    "switchPlan": "切换套餐"
+  },
+  "invoices": {
+    "download": "PDF",
+    "status": {
+      "paid": "已支付",
+      "open": "未支付",
+      "void": "作废",
+      "past_due": "逾期"
+    }
+  },
+  "payment": {
+    "brand": {
+      "visa": "Visa",
+      "mastercard": "Mastercard",
+      "amex": "Amex"
+    },
+    "exp": "有效期 {{exp}}",
+    "default": "默认",
+    "makeDefault": "设为默认",
+    "add": "添加支付方式"
+  },
+  "profile": {
+    "legalName": "法定名称",
+    "email": "账单邮箱",
+    "country": "国家/地区",
+    "taxId": "税号",
+    "address": "地址",
+    "poNumber": "采购单号"
+  },
+  "tax": {
+    "intro": "在此登记的税号将显示在每张发票上，并在适用时启用反向征税 / 零税率 VAT。预扣税须由您的财务团队另行申报。",
+    "verified": "已验证",
+    "verify": "验证",
+    "add": "添加税号",
+    "removeAria": "删除 {{type}} {{value}}"
+  },
+  "contracts": {
+    "statusEnterprise_one": "Enterprise · {{count}} 份有效合同",
+    "statusEnterprise_other": "Enterprise · {{count}} 份有效合同",
+    "statusSelfServe": "自助服务 · 适用标准服务条款",
+    "names": {
+      "msa": "主服务协议（MSA）",
+      "dpa": "数据处理附录（DPA）",
+      "baa": "业务合作协议（BAA）",
+      "scc": "标准合同条款（SCC）"
+    },
+    "ongoing": "持续有效",
+    "sizeKb": "{{size}} KB",
+    "download": "PDF",
+    "cta": {
+      "title": "需要企业合同吗？",
+      "body": "自定义 MSA、DPA、BAA、批注、安全审查以及采购支持。",
+      "button": "联系销售"
+    }
+  },
+  "real": {
+    "settings": "设置",
+    "manageBilling": "管理账单",
+    "renews": "{{date}} 续订",
+    "noActiveSubscription": "无有效订阅",
+    "renewalNone": "—",
+    "plansNote": "发票、支付方式和取消均在 Stripe 账单门户（上方“管理账单”）中管理。",
+    "status": {
+      "none": "无订阅",
+      "trialing": "试用中",
+      "active": "有效",
+      "past_due": "逾期",
+      "canceled": "已取消"
+    }
+  },
+  "return": {
+    "successTitle": "支付成功",
+    "cancelTitle": "结账已取消",
+    "successBody": "您的订阅正在激活。正在跳转到账单页面…",
+    "cancelBody": "未产生任何扣款。正在返回账单页面…"
+  }
+}

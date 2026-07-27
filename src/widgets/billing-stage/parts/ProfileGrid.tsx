@@ -1,16 +1,18 @@
+import { useTranslation } from 'react-i18next';
 import type { BillingProfile } from './data';
 
 type Props = { profile: BillingProfile };
 
 export function ProfileGrid({ profile }: Props) {
+  const { t } = useTranslation('billing');
   return (
     <dl className="grid grid-cols-2 gap-x-12 gap-y-5 max-w-[600px]">
-      <Field label="Legal name"   value={profile.legalName} />
-      <Field label="Billing email" value={profile.email} mono />
-      <Field label="Country"      value={profile.country} />
-      <Field label="Tax ID"       value={profile.taxId} mono />
-      <Field label="Address"      value={profile.address} colSpan={2} />
-      {profile.poNumber && <Field label="PO number" value={profile.poNumber} mono />}
+      <Field label={t('profile.legalName')} value={profile.legalName} />
+      <Field label={t('profile.email')} value={profile.email} mono />
+      <Field label={t('profile.country')} value={profile.country} />
+      <Field label={t('profile.taxId')} value={profile.taxId} mono />
+      <Field label={t('profile.address')} value={profile.address} colSpan={2} />
+      {profile.poNumber && <Field label={t('profile.poNumber')} value={profile.poNumber} mono />}
     </dl>
   );
 }

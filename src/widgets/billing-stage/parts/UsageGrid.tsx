@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { UsageRow } from './data';
 import { formatNumber } from '@shared/i18n';
 
@@ -12,9 +13,13 @@ export function UsageGrid({ usage }: Props) {
 }
 
 function UsageCell({ row }: { row: UsageRow }) {
+  const { t, i18n } = useTranslation('billing');
   const pct = row.limit == null ? 0 : Math.min(100, (row.used / row.limit) * 100);
   const fmt = (n: number) =>
     n >= 1000 ? formatNumber(n) : (Number.isInteger(n) ? String(n) : n.toFixed(1));
+  const hint = i18n.exists(`billing:usage.${row.key}.hint`, { count: row.hintCount })
+    ? t(`usage.${row.key}.hint`, { count: row.hintCount ?? 0 })
+    : null;
 
   // Bar tone shifts only at the >90% / >75% break — otherwise neutral. The
   // value text never colour-shifts; that lives on the bar to keep text calm.
@@ -29,7 +34,7 @@ function UsageCell({ row }: { row: UsageRow }) {
         className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        {row.label}
+        {t(`usage.${row.key}.label`)}
       </div>
 
       <div className="flex items-baseline gap-1">
@@ -40,7 +45,7 @@ function UsageCell({ row }: { row: UsageRow }) {
           {fmt(row.used)}
         </span>
         <span className="text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
-          / {row.limit == null ? '∞' : fmt(row.limit)} {row.unit}
+          / {row.limit == null ? '∞' : fmt(row.limit)} {t(`usage.${row.key}.unit`)}
         </span>
       </div>
 
@@ -55,8 +60,8 @@ function UsageCell({ row }: { row: UsageRow }) {
       </div>
 
       <div className="flex items-center justify-between text-xs tabular-nums">
-        <span style={{ color: 'var(--fg-subtle)' }}>{Math.round(pct)}% used</span>
-        {row.hint && <span style={{ color: 'var(--fg-subtle)' }}>{row.hint}</span>}
+        <span style={{ color: 'var(--fg-subtle)' }}>{t('usage.percentUsed', { pct: Math.round(pct) })}</span>
+        {hint && <span style={{ color: 'var(--fg-subtle)' }}>{hint}</span>}
       </div>
     </div>
   );

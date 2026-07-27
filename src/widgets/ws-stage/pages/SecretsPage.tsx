@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, Plus, X, AlertTriangle } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Button } from '@shared/ui/forms';
@@ -20,6 +21,7 @@ const SEED: Secret[] = [
 ];
 
 export default function SecretsPage() {
+  const { t } = useTranslation('ws');
   const [secrets, setSecrets] = useState<Secret[]>(SEED);
   const [query, setQuery] = useState('');
   const [creating, setCreating] = useState(false);
@@ -80,11 +82,11 @@ export default function SecretsPage() {
       orgSlug="acme"
       wsName="monorepo"
       wsSlug="monorepo"
-      title="Secrets"
-      subtitle="Encrypted values used by CI runs, agents, and webhooks. Values are write-once: once stored, they can be rotated but not re-displayed."
+      title={t('secrets.title')}
+      subtitle={t('secrets.subtitle')}
       topRight={
         <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={() => { setCreating(true); }}>
-          New secret
+          {t('secrets.newSecret')}
         </Button>
       }
     >
@@ -97,7 +99,7 @@ export default function SecretsPage() {
         <input
           value={query}
           onChange={(e) => { setQuery(e.target.value); }}
-          placeholder="Search by name or scope…"
+          placeholder={t('secrets.searchPlaceholder')}
           className="flex-1 bg-transparent outline-none text-base"
           style={{ color: 'var(--fg-strong)' }}
         />
@@ -107,7 +109,7 @@ export default function SecretsPage() {
             onClick={() => { setQuery(''); }}
             className="w-5 h-5 inline-flex items-center justify-center rounded"
             style={{ color: 'var(--fg-subtle)' }}
-            aria-label="Clear search"
+            aria-label={t('secrets.clearSearchAria')}
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -126,15 +128,15 @@ export default function SecretsPage() {
             borderBottom: '1px solid var(--border-muted)',
           }}
         >
-          <span>Name</span>
-          <span>Scope</span>
-          <span>Last rotated</span>
-          <span>Last accessed</span>
+          <span>{t('secrets.colName')}</span>
+          <span>{t('secrets.colScope')}</span>
+          <span>{t('secrets.colLastRotated')}</span>
+          <span>{t('secrets.colLastAccessed')}</span>
           <span />
         </div>
         {filtered.length === 0 ? (
           <div className="text-center py-12 text-base" style={{ color: 'var(--fg-subtle)' }}>
-            No secrets match &quot;{query}&quot;.
+            {t('secrets.noMatch', { query })}
           </div>
         ) : (
           filtered.map((s) => (
@@ -159,14 +161,14 @@ export default function SecretsPage() {
         <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-danger-fg)' }} />
         <div className="flex flex-col gap-1 flex-1 min-w-0">
           <span className="text-base font-semibold" style={{ color: 'var(--intent-danger-fg)' }}>
-            Rotate all secrets
+            {t('secrets.rotateAll.title')}
           </span>
           <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
-            Generates new values for every secret in this workspace. Any CI run / agent run still using the old value will fail until it picks up the new one.
+            {t('secrets.rotateAll.body')}
           </span>
         </div>
         <Button variant="danger" size="md" onClick={() => { setConfirmRotateAll(true); }}>
-          Rotate all
+          {t('secrets.rotateAll.button')}
         </Button>
       </div>
 
@@ -178,10 +180,10 @@ export default function SecretsPage() {
       )}
       {revealed && (
         <RevealOnceModal
-          title={`${revealed.name} stored`}
+          title={t('secrets.stored', { name: revealed.name })}
           titleMono
           value={revealed.value}
-          description="Copy this value now — for security, it can't be shown again. You can rotate to generate a new one later."
+          description={t('secrets.storedDescription')}
           onDismiss={() => { setRevealed(null); }}
         />
       )}
@@ -190,10 +192,10 @@ export default function SecretsPage() {
           open
           onCancel={() => { setConfirmDelete(null); }}
           onConfirm={() => { remove(confirmDelete); }}
-          title={`Delete ${confirmDelete.name}?`}
+          title={t('secrets.deleteTitle', { name: confirmDelete.name })}
           monoTitle
-          confirmLabel="Delete"
-          description="Any CI run, agent, or webhook resolving this secret will start failing immediately. This cannot be undone."
+          confirmLabel={t('secrets.deleteConfirm')}
+          description={t('secrets.deleteDescription')}
         />
       )}
       {confirmRotateAll && (
@@ -201,10 +203,10 @@ export default function SecretsPage() {
           open
           onCancel={() => { setConfirmRotateAll(false); }}
           onConfirm={rotateAll}
-          title={`Rotate all ${secrets.length} secrets?`}
-          confirmLabel="Rotate all"
+          title={t('secrets.rotateAllTitle', { count: secrets.length })}
+          confirmLabel={t('secrets.rotateAllConfirm')}
           width={440}
-          description="New values will be generated for every secret in this workspace. In-flight runs holding the old values will fail until they pick up the new ones. New values will be shown once, then never again."
+          description={t('secrets.rotateAllDescription')}
         />
       )}
     </WsShell>

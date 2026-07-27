@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { WsShell } from '../parts/WsShell';
 import {
   WebhooksManager,
@@ -7,22 +9,17 @@ import {
 } from '@widgets/_shared/WebhooksManager';
 
 // Workspace-scoped events: PR / branch / deploy / quality signals.
-const EVENT_CATALOG: WebhookEvent[] = [
-  { id: 'pr.opened',                  label: 'Pull request opened' },
-  { id: 'pr.merged',                  label: 'Pull request merged' },
-  { id: 'branch.protected.violated',  label: 'Protected branch rule violated' },
-  { id: 'commit.signed',              label: 'Signed commit pushed' },
-  { id: 'deploy.started',             label: 'Deploy started' },
-  { id: 'deploy.completed',           label: 'Deploy completed' },
-  { id: 'flaky.test.detected',        label: 'Flaky test detected' },
-  { id: 'coverage.dropped',           label: 'Coverage dropped' },
-  { id: 'bundle.size.exceeded',       label: 'Bundle size budget exceeded' },
-];
-
-const SEED_ENDPOINTS: Endpoint[] = [
-  { id: 'wh1', url: 'https://hooks.acme.io/monorepo/ci',          description: 'CI mirror for PR + deploy events',     events: ['pr.opened', 'pr.merged', 'deploy.started', 'deploy.completed'], enabled: true,  createdAt: '2026-04-22', successCount: 2914, failureCount:  4 },
-  { id: 'wh2', url: 'https://hooks.acme.io/monorepo/quality',     description: 'Quality bot — flake + coverage signal', events: ['flaky.test.detected', 'coverage.dropped', 'bundle.size.exceeded'], enabled: true,  createdAt: '2026-04-26', successCount:  612, failureCount:  1 },
-  { id: 'wh3', url: 'https://api.partner.io/se/branch-policy',    description: 'Partner — branch protection audit',     events: ['branch.protected.violated', 'commit.signed'],                       enabled: false, createdAt: '2026-05-02', successCount:   34, failureCount: 18 },
+// event ids stay stable; labels resolve from ws:webhooks.events.* at render.
+const EVENT_IDS: { id: string; key: string }[] = [
+  { id: 'pr.opened',                 key: 'prOpened' },
+  { id: 'pr.merged',                 key: 'prMerged' },
+  { id: 'branch.protected.violated', key: 'branchViolated' },
+  { id: 'commit.signed',             key: 'commitSigned' },
+  { id: 'deploy.started',            key: 'deployStarted' },
+  { id: 'deploy.completed',          key: 'deployCompleted' },
+  { id: 'flaky.test.detected',       key: 'flakyDetected' },
+  { id: 'coverage.dropped',          key: 'coverageDropped' },
+  { id: 'bundle.size.exceeded',      key: 'bundleExceeded' },
 ];
 
 const SEED_DELIVERIES: Delivery[] = [
@@ -37,14 +34,27 @@ const SEED_DELIVERIES: Delivery[] = [
 ];
 
 export default function WebhooksPage() {
+  const { t } = useTranslation('ws');
+
+  const eventCatalog = useMemo<WebhookEvent[]>(
+    () => EVENT_IDS.map(({ id, key }) => ({ id, label: t(`webhooks.events.${key}`) })),
+    [t],
+  );
+
+  const seedEndpoints = useMemo<Endpoint[]>(() => [
+    { id: 'wh1', url: 'https://hooks.acme.io/monorepo/ci',       description: t('webhooks.endpoints.ci'),      events: ['pr.opened', 'pr.merged', 'deploy.started', 'deploy.completed'], enabled: true,  createdAt: '2026-04-22', successCount: 2914, failureCount:  4 },
+    { id: 'wh2', url: 'https://hooks.acme.io/monorepo/quality',  description: t('webhooks.endpoints.quality'), events: ['flaky.test.detected', 'coverage.dropped', 'bundle.size.exceeded'], enabled: true,  createdAt: '2026-04-26', successCount:  612, failureCount:  1 },
+    { id: 'wh3', url: 'https://api.partner.io/se/branch-policy', description: t('webhooks.endpoints.partner'), events: ['branch.protected.violated', 'commit.signed'],                       enabled: false, createdAt: '2026-05-02', successCount:   34, failureCount: 18 },
+  ], [t]);
+
   return (
     <WebhooksManager
-      events={EVENT_CATALOG}
-      initialEndpoints={SEED_ENDPOINTS}
+      events={eventCatalog}
+      initialEndpoints={seedEndpoints}
       initialDeliveries={SEED_DELIVERIES}
       defaultEvent="pr.merged"
-      urlPlaceholder="https://hooks.example.com/monorepo"
-      descPlaceholder="e.g. CI mirror for PR + deploy events"
+      urlPlaceholder={t('webhooks.urlPlaceholder')}
+      descPlaceholder={t('webhooks.descPlaceholder')}
       inlinePauseButton
       renderShell={({ newEndpointButton, body }) => (
         <WsShell
@@ -52,8 +62,8 @@ export default function WebhooksPage() {
           orgSlug="acme"
           wsName="monorepo"
           wsSlug="monorepo"
-          title="Webhooks"
-          subtitle="HTTP callbacks fired from workspace-level events: pull requests, branch policy, deploys, and code-quality signals."
+          title={t('webhooks.title')}
+          subtitle={t('webhooks.subtitle')}
           topRight={newEndpointButton}
         >
           {body}

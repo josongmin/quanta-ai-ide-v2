@@ -1,1 +1,197 @@
-{}
+{
+  "title": "請求",
+  "breadcrumb": {
+    "settings": "設定"
+  },
+  "cycle": {
+    "monthly": "月額",
+    "annual": "年額"
+  },
+  "anchors": {
+    "plan": "プラン",
+    "lineup": "プラン一覧",
+    "usage": "使用量",
+    "invoices": "請求書",
+    "payment": "支払い方法",
+    "profile": "プロフィール",
+    "tax": "税金",
+    "contracts": "契約書"
+  },
+  "nav": {
+    "breadcrumbAria": "パンくずリスト",
+    "sectionsAria": "セクション"
+  },
+  "sections": {
+    "plan": { "title": "プラン", "hint": "年額請求で17%お得になります。" },
+    "lineup": { "title": "利用可能なプラン", "hint": "いつでも変更できます。次回の請求書で日割り計算されます。" },
+    "plans": { "title": "プラン", "hint": "プランのアップグレードや変更ができます。支払いはStripeで安全に処理されます。" },
+    "usage": { "title": "使用量", "hint": "2026年5月1日 — 5月31日。" },
+    "invoices": { "title": "請求書" },
+    "payment": { "title": "支払い方法" },
+    "profile": { "title": "請求プロフィール" },
+    "tax": { "title": "税金・VAT", "hint": "管轄ごとの税務IDが請求書に適用されます。" },
+    "contracts": { "title": "契約書", "hint": "{{orgName}}との相互署名済み契約書が保管されています。" }
+  },
+  "plans": {
+    "free": {
+      "name": "Free",
+      "tagline": "ドットフィールドを試す個人向け。",
+      "highlights": {
+        "workspaces": "ワークスペース1つ",
+        "seats": "最大3席",
+        "support": "コミュニティサポート",
+        "retention": "監査ログ7日間保持"
+      }
+    },
+    "team": {
+      "name": "Team",
+      "tagline": "共同でリリースする小規模チーム向け。",
+      "highlights": {
+        "workspaces": "ワークスペース5つ",
+        "seats": "無制限の席",
+        "admission": "カスタム承認ルール",
+        "retention": "監査ログ30日間保持"
+      }
+    },
+    "business": {
+      "name": "Business",
+      "tagline": "レビューとゲーティングを標準化する組織向け。",
+      "highlights": {
+        "workspaces": "無制限のワークスペース",
+        "saml": "SAML / SCIM",
+        "residency": "データレジデンシー",
+        "retention": "監査ログ1年間保持",
+        "routing": "優先ルーティング"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "tagline": "規制対象およびセルフホスト展開向け。",
+      "highlights": {
+        "selfHost": "セルフホスト / VPCオプション",
+        "retention": "カスタムデータ保持",
+        "sla": "カスタムSLA",
+        "csm": "専任CSM",
+        "procurement": "調達・MSAサポート"
+      }
+    }
+  },
+  "limits": {
+    "workspaces": "ワークスペース",
+    "seats": "席",
+    "agents": "AIエージェント（同時）",
+    "retention": "監査ログ保持",
+    "value": {
+      "unlimited": "無制限",
+      "custom": "カスタム",
+      "days_one": "{{count}}日",
+      "days_other": "{{count}}日",
+      "year_one": "{{count}}年",
+      "year_other": "{{count}}年"
+    }
+  },
+  "usage": {
+    "seats": { "label": "席", "unit": "席", "hint_one": "招待 {{count}}件保留中", "hint_other": "招待 {{count}}件保留中" },
+    "workspaces": { "label": "ワークスペース", "unit": "個" },
+    "agents": { "label": "AIエージェント実行", "unit": "回", "hint": "5月31日にリセット" },
+    "tokens": { "label": "AIトークン", "unit": "M トークン", "hint": "$0.42 / M 超過分" },
+    "scans": { "label": "リポジトリスキャン", "unit": "回" },
+    "storage": { "label": "アーティファクトストレージ", "unit": "GB" },
+    "percentUsed": "{{pct}}% 使用"
+  },
+  "currentPlan": {
+    "monthlyCost": "月額費用",
+    "seats_one": "{{count}}席",
+    "seats_other": "{{count}}席",
+    "nextInvoice": "次回の請求書",
+    "autoCharge": "自動請求",
+    "status": "ステータス",
+    "active": "有効",
+    "noIssues": "問題なし",
+    "manageSubscription": "サブスクリプション管理"
+  },
+  "planLineup": {
+    "current": "現在",
+    "custom": "カスタム",
+    "perSeatMonth": "/席/月",
+    "billedAnnually": "年額請求",
+    "billedMonthly": "月額請求",
+    "talkToSales": "営業に相談",
+    "switchPlan": "プラン変更"
+  },
+  "invoices": {
+    "download": "PDF",
+    "status": {
+      "paid": "支払い済み",
+      "open": "未払い",
+      "void": "無効",
+      "past_due": "延滞"
+    }
+  },
+  "payment": {
+    "brand": {
+      "visa": "Visa",
+      "mastercard": "Mastercard",
+      "amex": "Amex"
+    },
+    "exp": "有効期限 {{exp}}",
+    "default": "デフォルト",
+    "makeDefault": "デフォルトに設定",
+    "add": "支払い方法を追加"
+  },
+  "profile": {
+    "legalName": "法人名",
+    "email": "請求メール",
+    "country": "国",
+    "taxId": "税務ID",
+    "address": "住所",
+    "poNumber": "PO番号"
+  },
+  "tax": {
+    "intro": "ここに登録した税務IDはすべての請求書に表示され、該当する場合はリバースチャージ／ゼロ税率VATが適用されます。源泉徴収税は財務チームが別途請求する必要があります。",
+    "verified": "確認済み",
+    "verify": "確認",
+    "add": "税務IDを追加",
+    "removeAria": "{{type}} {{value}} を削除"
+  },
+  "contracts": {
+    "statusEnterprise_one": "Enterprise · 有効な契約 {{count}}件",
+    "statusEnterprise_other": "Enterprise · 有効な契約 {{count}}件",
+    "statusSelfServe": "セルフサービス · 標準利用規約適用",
+    "names": {
+      "msa": "マスターサービス契約（MSA）",
+      "dpa": "データ処理付属書（DPA）",
+      "baa": "事業提携契約（BAA）",
+      "scc": "標準契約条項（SCC）"
+    },
+    "ongoing": "継続中",
+    "sizeKb": "{{size}} KB",
+    "download": "PDF",
+    "cta": {
+      "title": "エンタープライズ契約が必要ですか？",
+      "body": "カスタムMSA、DPA、BAA、レッドライン、セキュリティレビュー、調達サポート。",
+      "button": "営業に問い合わせる"
+    }
+  },
+  "real": {
+    "settings": "設定",
+    "manageBilling": "請求管理",
+    "renews": "{{date}} に更新",
+    "noActiveSubscription": "有効なサブスクリプションなし",
+    "renewalNone": "—",
+    "plansNote": "請求書、支払い方法、キャンセルはStripe請求ポータル（上記の「請求管理」）で管理します。",
+    "status": {
+      "none": "サブスクリプションなし",
+      "trialing": "トライアル中",
+      "active": "有効",
+      "past_due": "延滞",
+      "canceled": "キャンセル済み"
+    }
+  },
+  "return": {
+    "successTitle": "支払い完了",
+    "cancelTitle": "チェックアウトがキャンセルされました",
+    "successBody": "サブスクリプションを有効化しています。請求ページに移動します…",
+    "cancelBody": "請求は発生していません。請求ページに戻ります…"
+  }
+}

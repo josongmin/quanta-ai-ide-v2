@@ -1,4 +1,5 @@
 import { Download, FileText, ArrowUpRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { CONTRACTS, type Contract } from './data';
 import { formatDate } from '@shared/i18n';
 
@@ -23,9 +24,10 @@ export function ContractsSection() {
 }
 
 function StatusPill({ enterprise, count }: { enterprise: boolean; count: number }) {
+  const { t } = useTranslation('billing');
   const label = enterprise
-    ? `Enterprise · ${count} active contract${count === 1 ? '' : 's'}`
-    : 'Self-serve · Standard ToS apply';
+    ? t('contracts.statusEnterprise', { count })
+    : t('contracts.statusSelfServe');
 
   return (
     <div
@@ -49,6 +51,7 @@ function StatusPill({ enterprise, count }: { enterprise: boolean; count: number 
 }
 
 function ContractRow({ contract, top }: { contract: Contract; top: boolean }) {
+  const { t } = useTranslation('billing');
   const eff = formatDate(new Date(contract.effective), {
     year: 'numeric', month: 'short', day: 'numeric',
   });
@@ -56,7 +59,7 @@ function ContractRow({ contract, top }: { contract: Contract; top: boolean }) {
     ? formatDate(new Date(contract.expires), {
         year: 'numeric', month: 'short', day: 'numeric',
       })
-    : 'Ongoing';
+    : t('contracts.ongoing');
 
   return (
     <a
@@ -73,7 +76,7 @@ function ContractRow({ contract, top }: { contract: Contract; top: boolean }) {
         className="text-base font-medium flex-1 truncate"
         style={{ color: 'var(--fg-strong)' }}
       >
-        {contract.name}
+        {t(`contracts.names.${contract.nameKey}`)}
       </span>
       <span
         className="font-mono text-xs tabular-nums w-[44px] shrink-0 text-right"
@@ -97,14 +100,14 @@ function ContractRow({ contract, top }: { contract: Contract; top: boolean }) {
         className="text-xs tabular-nums w-[56px] shrink-0 text-right"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        {contract.sizeKb} KB
+        {t('contracts.sizeKb', { size: contract.sizeKb })}
       </span>
       <span
         className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-sm"
         style={{ color: 'var(--fg-muted)' }}
       >
         <Download className="w-3 h-3" />
-        PDF
+        {t('contracts.download')}
       </span>
     </a>
   );
@@ -129,6 +132,7 @@ function AbbrGlyph({ abbr }: { abbr: string }) {
 // stat / CTA bands — outlined card on canvas reads as a deliberate surface
 // without the muddy grey wash.
 function SalesCta() {
+  const { t } = useTranslation('billing');
   return (
     <div
       className="flex items-center gap-4 p-4 rounded-md"
@@ -152,10 +156,10 @@ function SalesCta() {
           className="text-base font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
-          Need an enterprise contract?
+          {t('contracts.cta.title')}
         </div>
         <div className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-          Custom MSA, DPA, BAA, redlines, security review, and procurement support.
+          {t('contracts.cta.body')}
         </div>
       </div>
       <button
@@ -169,7 +173,7 @@ function SalesCta() {
         onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(0.92)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; }}
       >
-        Contact sales
+        {t('contracts.cta.button')}
         <ArrowUpRight className="w-3 h-3" />
       </button>
     </div>

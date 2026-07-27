@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   orgName: string;
@@ -6,23 +7,16 @@ type Props = {
 };
 
 // Anchor nav for the single-page scroll. Order mirrors the section order in
-// BillingStage.tsx — the IDs match the Section `anchor` props.
-const ANCHORS: { id: string; label: string }[] = [
-  { id: 'plan',      label: 'Plan' },
-  { id: 'lineup',    label: 'Plans' },
-  { id: 'usage',     label: 'Usage' },
-  { id: 'invoices',  label: 'Invoices' },
-  { id: 'payment',   label: 'Payment' },
-  { id: 'profile',   label: 'Profile' },
-  { id: 'tax',       label: 'Tax' },
-  { id: 'contracts', label: 'Contracts' },
-];
+// BillingStage.tsx — the IDs match the Section `anchor` props. Labels resolve
+// from billing:anchors.<id>.
+const ANCHOR_IDS = ['plan', 'lineup', 'usage', 'invoices', 'payment', 'profile', 'tax', 'contracts'] as const;
 
 export function BillingHeader({ orgName, breadcrumb }: Props) {
+  const { t } = useTranslation('billing');
   return (
     <header className="flex flex-col gap-3 mb-12">
       <nav
-        aria-label="Breadcrumb"
+        aria-label={t('nav.breadcrumbAria')}
         className="flex items-center gap-1 text-sm"
         style={{ color: 'var(--fg-subtle)' }}
       >
@@ -44,7 +38,7 @@ export function BillingHeader({ orgName, breadcrumb }: Props) {
           className="text-3xl font-semibold tracking-tight leading-none"
           style={{ color: 'var(--fg-strong)' }}
         >
-          Billing
+          {t('title')}
         </h1>
         <span className="text-base" style={{ color: 'var(--fg-subtle)' }}>
           {orgName}
@@ -52,12 +46,12 @@ export function BillingHeader({ orgName, breadcrumb }: Props) {
       </div>
 
       <nav
-        aria-label="Sections"
+        aria-label={t('nav.sectionsAria')}
         className="flex items-center gap-1 mt-2 pb-2 -mx-1 overflow-x-auto"
         style={{ borderBottom: '1px solid var(--border-muted)' }}
       >
-        {ANCHORS.map((a) => (
-          <AnchorLink key={a.id} href={`#${a.id}`} label={a.label} />
+        {ANCHOR_IDS.map((id) => (
+          <AnchorLink key={id} href={`#${id}`} label={t(`anchors.${id}`)} />
         ))}
       </nav>
     </header>

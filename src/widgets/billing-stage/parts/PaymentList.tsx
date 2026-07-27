@@ -1,17 +1,13 @@
 import { useRef, useState } from 'react';
 import { Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useHoverStyle } from '@shared/lib';
 import type { PaymentMethod } from './data';
 
 type Props = { methods: PaymentMethod[] };
 
-const BRAND: Record<PaymentMethod['brand'], string> = {
-  visa: 'Visa',
-  mastercard: 'Mastercard',
-  amex: 'Amex',
-};
-
 export function PaymentList({ methods }: Props) {
+  const { t } = useTranslation('billing');
   const [items, setItems] = useState(methods);
   const setDefault = (id: string) => {
     setItems((prev) => prev.map((m) => ({ ...m, default: m.id === id })));
@@ -42,7 +38,7 @@ export function PaymentList({ methods }: Props) {
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
       >
         <Plus className="w-3 h-3" />
-        Add payment method
+        {t('payment.add')}
       </button>
     </div>
   );
@@ -51,6 +47,7 @@ export function PaymentList({ methods }: Props) {
 function PaymentRow({
   method, top, onMakeDefault,
 }: { method: PaymentMethod; top: boolean; onMakeDefault: () => void }) {
+  const { t } = useTranslation('billing');
   const ref = useRef<HTMLDivElement>(null);
   useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
@@ -66,10 +63,10 @@ function PaymentRow({
         className="text-base font-medium tabular-nums"
         style={{ color: 'var(--fg-strong)' }}
       >
-        {BRAND[method.brand]} ···· {method.last4}
+        {t(`payment.brand.${method.brand}`)} ···· {method.last4}
       </span>
       <span className="text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
-        Exp {method.exp}
+        {t('payment.exp', { exp: method.exp })}
       </span>
       <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
         {method.holder}
@@ -79,7 +76,7 @@ function PaymentRow({
           className="text-xs uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-accent)' }}
         >
-          Default
+          {t('payment.default')}
         </span>
       )}
       <span className="flex-1" />
@@ -90,7 +87,7 @@ function PaymentRow({
           className="opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium"
           style={{ color: 'var(--fg-link)' }}
         >
-          Make default
+          {t('payment.makeDefault')}
         </button>
       )}
     </div>

@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useHoverStyle } from '@shared/lib';
 import { TAX_IDS, type TaxId } from './data';
 
 // Tax IDs section. Sits inside the page-level Section primitive so this
 // component renders only the body — header / anchor handled upstream.
 export function TaxSection() {
+  const { t } = useTranslation('billing');
   const [items, setItems] = useState<TaxId[]>(TAX_IDS);
 
   const verify = (id: string) => {
@@ -18,9 +20,7 @@ export function TaxSection() {
   return (
     <div className="flex flex-col gap-5">
       <p className="text-base leading-relaxed max-w-[560px]" style={{ color: 'var(--fg-muted)' }}>
-        Tax IDs registered here appear on every invoice and unlock reverse-charge
-        / zero-rated VAT where applicable. Withholding tax must be claimed
-        separately by your finance team.
+        {t('tax.intro')}
       </p>
 
       <div className="flex flex-col">
@@ -47,7 +47,7 @@ export function TaxSection() {
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
       >
         <Plus className="w-3 h-3" />
-        Add tax ID
+        {t('tax.add')}
       </button>
     </div>
   );
@@ -56,6 +56,7 @@ export function TaxSection() {
 function TaxRow({
   tax, top, onVerify, onRemove,
 }: { tax: TaxId; top: boolean; onVerify: () => void; onRemove: () => void }) {
+  const { t } = useTranslation('billing');
   const ref = useRef<HTMLDivElement>(null);
   useHoverStyle(ref, { background: 'var(--bg-hover)' }, { background: 'transparent' });
   return (
@@ -92,7 +93,7 @@ function TaxRow({
           style={{ color: 'var(--intent-success-fg)' }}
         >
           <Check className="w-3 h-3" />
-          Verified
+          {t('tax.verified')}
         </span>
       ) : (
         <button
@@ -101,14 +102,14 @@ function TaxRow({
           className="text-sm font-medium transition-opacity"
           style={{ color: 'var(--fg-accent)' }}
         >
-          Verify
+          {t('tax.verify')}
         </button>
       )}
 
       <button
         type="button"
         onClick={onRemove}
-        aria-label={`Remove ${tax.type} ${tax.value}`}
+        aria-label={t('tax.removeAria', { type: tax.type, value: tax.value })}
         className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center justify-center w-6 h-6 rounded"
         style={{ color: 'var(--fg-subtle)' }}
         onMouseEnter={(e) => {

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Users, Plus, Trash2, ShieldCheck, FileWarning, CheckCircle2, X,
 } from 'lucide-react';
@@ -43,6 +44,7 @@ const UNCOVERED_FILES = 234;
 const TOTAL_FILES = 1842;
 
 export default function OwnershipPage() {
+  const { t } = useTranslation('ws');
   const [rules, setRules] = useState<Rule[]>(SEED_RULES);
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [validate, setValidate] = useState<'idle' | 'checking' | 'ok'>('idle');
@@ -50,7 +52,7 @@ export default function OwnershipPage() {
   const dirty = !shallowEqual(rules, SEED_RULES);
 
   const codeowners = useMemo(() => {
-    const header = '# CODEOWNERS — generated from rule editor\n# Last match wins. Add specific rules below the catch-all.\n\n';
+    const header = `${t('ownership.generatedHeader.line1')}\n${t('ownership.generatedHeader.line2')}\n\n`;
     const body = rules
       .filter((r) => r.pattern.trim())
       .map((r) => {
@@ -59,7 +61,7 @@ export default function OwnershipPage() {
       })
       .join('\n');
     return header + body + '\n';
-  }, [rules]);
+  }, [rules, t]);
 
   const setRulePattern = (id: string, pattern: string) => {
     setRules((all) => all.map((r) => (r.id === id ? { ...r, pattern } : r)));
@@ -108,8 +110,8 @@ export default function OwnershipPage() {
       orgSlug="acme"
       wsName="monorepo"
       wsSlug="monorepo"
-      title="Ownership"
-      subtitle="Map repo paths to owning teams. Rules generate the live CODEOWNERS file used by review automation."
+      title={t('ownership.title')}
+      subtitle={t('ownership.subtitle')}
       topRight={
         <Button
           size="md"
@@ -121,7 +123,7 @@ export default function OwnershipPage() {
           onClick={runValidate}
           disabled={validate !== 'idle'}
         >
-          {validate === 'checking' ? 'Validating…' : validate === 'ok' ? 'All patterns resolve' : 'Validate'}
+          {validate === 'checking' ? t('ownership.validating') : validate === 'ok' ? t('ownership.allResolve') : t('ownership.validate')}
         </Button>
       }
     >
@@ -130,14 +132,14 @@ export default function OwnershipPage() {
         className="grid grid-cols-3 gap-3 p-4 rounded-md mb-6"
         style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}
       >
-        <Stat label="Coverage"     value={`${coveragePct}%`}                      sub={`${TOTAL_FILES - UNCOVERED_FILES} of ${TOTAL_FILES} files`} />
-        <Stat label="Unowned files" value={`${UNCOVERED_FILES} of ${TOTAL_FILES}`} sub="lack an owner" tone="warn" />
-        <Stat label="Active rules"  value={`${rules.length}`}                      sub={`${rules.filter((r) => r.owners.length > 0).length} have owners`} />
+        <Stat label={t('ownership.coverage')} value={`${coveragePct}%`} sub={t('ownership.coverageSub', { covered: TOTAL_FILES - UNCOVERED_FILES, total: TOTAL_FILES })} />
+        <Stat label={t('ownership.unownedFiles')} value={t('ownership.unownedValue', { count: UNCOVERED_FILES, total: TOTAL_FILES })} sub={t('ownership.unownedSub')} tone="warn" />
+        <Stat label={t('ownership.activeRules')} value={`${rules.length}`} sub={t('ownership.activeRulesSub', { count: rules.filter((r) => r.owners.length > 0).length })} />
       </div>
 
       <Section
-        title="CODEOWNERS"
-        hint="Left: live preview generated from the rule editor. Right: structured edit surface."
+        title={t('ownership.codeowners.title')}
+        hint={t('ownership.codeowners.hint')}
       >
         <div className="grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
           {/* Left: read-only generated file */}
@@ -153,7 +155,7 @@ export default function OwnershipPage() {
                 .github/CODEOWNERS
               </span>
               <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
-                generated · read-only
+                {t('ownership.generatedReadOnly')}
               </span>
             </div>
             <textarea
@@ -184,18 +186,18 @@ export default function OwnershipPage() {
                 borderBottom: '1px solid var(--border-muted)',
               }}
             >
-              <span>Pattern</span>
-              <span>Owners</span>
+              <span>{t('ownership.colPattern')}</span>
+              <span>{t('ownership.colOwners')}</span>
               <span />
             </div>
             {rules.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-2 py-10 px-4 text-center">
                 <Users className="w-5 h-5" style={{ color: 'var(--fg-subtle)' }} />
                 <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-                  No ownership rules yet
+                  {t('ownership.emptyTitle')}
                 </span>
                 <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-                  Add a rule to start mapping paths to teams.
+                  {t('ownership.emptySub')}
                 </span>
               </div>
             ) : (
@@ -215,10 +217,10 @@ export default function OwnershipPage() {
               style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}
             >
               <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-                Order matters — last matching rule wins.
+                {t('ownership.orderMatters')}
               </span>
               <Button leading={<Plus className="w-3 h-3" />} onClick={addRule}>
-                Add rule
+                {t('ownership.addRule')}
               </Button>
             </div>
           </div>
@@ -227,7 +229,7 @@ export default function OwnershipPage() {
 
       <p className="text-sm mt-4 px-1 flex items-start gap-1.5" style={{ color: 'var(--fg-subtle)' }}>
         <FileWarning className="w-3 h-3 mt-0.5 shrink-0" />
-        Saving writes <span className="font-mono">.github/CODEOWNERS</span> on the default branch via the integration bot.
+        <span>{t('ownership.savingNote', { path: '.github/CODEOWNERS' })}</span>
       </p>
 
       <SaveBar
@@ -252,9 +254,10 @@ function RuleRow({
   onToggleOwner: (o: string) => void;
   onRemove: () => void;
 }) {
+  const { t } = useTranslation('ws');
   const [picking, setPicking] = useState(false);
   const empty = rule.owners.length === 0;
-  const remaining = pool.filter((t) => !rule.owners.includes(t));
+  const remaining = pool.filter((owner) => !rule.owners.includes(owner));
 
   return (
     <div
@@ -268,7 +271,7 @@ function RuleRow({
       <input
         value={rule.pattern}
         onChange={(e) => { onPatternChange(e.target.value); }}
-        placeholder="/path/glob/"
+        placeholder={t('ownership.patternPlaceholder')}
         className="h-7 px-2 rounded-md text-base font-mono outline-none"
         style={{
           background: 'var(--bg-surface-muted)',
@@ -294,7 +297,7 @@ function RuleRow({
               onClick={() => { onToggleOwner(o); }}
               className="w-4 h-4 inline-flex items-center justify-center rounded-full"
               style={{ color: 'var(--fg-accent)' }}
-              aria-label={`Remove ${o}`}
+              aria-label={t('ownership.removeOwnerAria', { owner: o })}
             >
               <X className="w-2.5 h-2.5" />
             </button>
@@ -302,7 +305,7 @@ function RuleRow({
         ))}
         {empty && (
           <span className="text-sm" style={{ color: 'var(--intent-warn-fg)' }}>
-            no owners — files will be flagged
+            {t('ownership.noOwners')}
           </span>
         )}
         <button
@@ -314,7 +317,7 @@ function RuleRow({
             border: '1px dashed var(--border-default)',
             color: 'var(--fg-muted)',
           }}
-          aria-label="Add owner"
+          aria-label={t('ownership.addOwnerAria')}
           disabled={remaining.length === 0}
         >
           <Plus className="w-3 h-3" />
@@ -322,7 +325,7 @@ function RuleRow({
 
         {picking && remaining.length > 0 && (
           <>
-            <button type="button" aria-label="Dismiss menu" className="fixed inset-0 z-30 bg-transparent border-0 p-0 cursor-default" onClick={() => { setPicking(false); }} />
+            <button type="button" aria-label={t('ownership.dismissMenuAria')} className="fixed inset-0 z-30 bg-transparent border-0 p-0 cursor-default" onClick={() => { setPicking(false); }} />
             <div
               className="absolute left-0 top-full mt-1 z-40 min-w-[160px] py-1 rounded-md"
               style={{
@@ -357,7 +360,7 @@ function RuleRow({
           style={{ color: 'var(--fg-muted)' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-          aria-label="Remove rule"
+          aria-label={t('ownership.removeRuleAria')}
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>

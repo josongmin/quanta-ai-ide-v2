@@ -1,1 +1,197 @@
-{}
+{
+  "title": "결제",
+  "breadcrumb": {
+    "settings": "설정"
+  },
+  "cycle": {
+    "monthly": "월간",
+    "annual": "연간"
+  },
+  "anchors": {
+    "plan": "플랜",
+    "lineup": "플랜 목록",
+    "usage": "사용량",
+    "invoices": "청구서",
+    "payment": "결제 수단",
+    "profile": "프로필",
+    "tax": "세금",
+    "contracts": "계약서"
+  },
+  "nav": {
+    "breadcrumbAria": "탐색 경로",
+    "sectionsAria": "섹션"
+  },
+  "sections": {
+    "plan": { "title": "플랜", "hint": "연간 결제 시 17% 절약됩니다." },
+    "lineup": { "title": "이용 가능한 플랜", "hint": "언제든 변경할 수 있으며 다음 청구서에서 일할 계산됩니다." },
+    "plans": { "title": "플랜", "hint": "플랜을 업그레이드하거나 변경하세요. 결제는 Stripe를 통해 안전하게 처리됩니다." },
+    "usage": { "title": "사용량", "hint": "2026년 5월 1일 — 5월 31일." },
+    "invoices": { "title": "청구서" },
+    "payment": { "title": "결제 수단" },
+    "profile": { "title": "결제 프로필" },
+    "tax": { "title": "세금 및 VAT", "hint": "관할별 세금 ID가 청구서에 적용됩니다." },
+    "contracts": { "title": "계약서", "hint": "{{orgName}}와(과) 상호 서명된 계약서가 보관되어 있습니다." }
+  },
+  "plans": {
+    "free": {
+      "name": "Free",
+      "tagline": "닷 필드를 탐색하는 개인용.",
+      "highlights": {
+        "workspaces": "워크스페이스 1개",
+        "seats": "최대 3석",
+        "support": "커뮤니티 지원",
+        "retention": "감사 기록 7일 보관"
+      }
+    },
+    "team": {
+      "name": "Team",
+      "tagline": "함께 배포하는 소규모 팀용.",
+      "highlights": {
+        "workspaces": "워크스페이스 5개",
+        "seats": "무제한 석",
+        "admission": "맞춤형 승인 규칙",
+        "retention": "감사 기록 30일 보관"
+      }
+    },
+    "business": {
+      "name": "Business",
+      "tagline": "리뷰와 게이팅을 표준화하는 조직용.",
+      "highlights": {
+        "workspaces": "무제한 워크스페이스",
+        "saml": "SAML / SCIM",
+        "residency": "데이터 상주",
+        "retention": "감사 기록 1년 보관",
+        "routing": "우선 라우팅"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "tagline": "규제 환경 및 자체 호스팅 배포용.",
+      "highlights": {
+        "selfHost": "자체 호스팅 / VPC 옵션",
+        "retention": "맞춤형 데이터 보관",
+        "sla": "맞춤형 SLA",
+        "csm": "전담 CSM",
+        "procurement": "조달 및 MSA 지원"
+      }
+    }
+  },
+  "limits": {
+    "workspaces": "워크스페이스",
+    "seats": "석",
+    "agents": "AI 에이전트(동시)",
+    "retention": "감사 기록 보관",
+    "value": {
+      "unlimited": "무제한",
+      "custom": "맞춤",
+      "days_one": "{{count}}일",
+      "days_other": "{{count}}일",
+      "year_one": "{{count}}년",
+      "year_other": "{{count}}년"
+    }
+  },
+  "usage": {
+    "seats": { "label": "석", "unit": "석", "hint_one": "초대 {{count}}건 대기 중", "hint_other": "초대 {{count}}건 대기 중" },
+    "workspaces": { "label": "워크스페이스", "unit": "개" },
+    "agents": { "label": "AI 에이전트 실행", "unit": "회", "hint": "5월 31일 초기화" },
+    "tokens": { "label": "AI 토큰", "unit": "M 토큰", "hint": "$0.42 / M 초과분" },
+    "scans": { "label": "저장소 스캔", "unit": "회" },
+    "storage": { "label": "아티팩트 저장소", "unit": "GB" },
+    "percentUsed": "{{pct}}% 사용"
+  },
+  "currentPlan": {
+    "monthlyCost": "월 비용",
+    "seats_one": "{{count}}석",
+    "seats_other": "{{count}}석",
+    "nextInvoice": "다음 청구서",
+    "autoCharge": "자동 청구",
+    "status": "상태",
+    "active": "활성",
+    "noIssues": "이상 없음",
+    "manageSubscription": "구독 관리"
+  },
+  "planLineup": {
+    "current": "현재",
+    "custom": "맞춤",
+    "perSeatMonth": "/석/월",
+    "billedAnnually": "연간 청구",
+    "billedMonthly": "월간 청구",
+    "talkToSales": "영업팀 문의",
+    "switchPlan": "플랜 변경"
+  },
+  "invoices": {
+    "download": "PDF",
+    "status": {
+      "paid": "결제됨",
+      "open": "미결제",
+      "void": "무효",
+      "past_due": "연체"
+    }
+  },
+  "payment": {
+    "brand": {
+      "visa": "Visa",
+      "mastercard": "Mastercard",
+      "amex": "Amex"
+    },
+    "exp": "만료 {{exp}}",
+    "default": "기본",
+    "makeDefault": "기본으로 설정",
+    "add": "결제 수단 추가"
+  },
+  "profile": {
+    "legalName": "법인명",
+    "email": "결제 이메일",
+    "country": "국가",
+    "taxId": "세금 ID",
+    "address": "주소",
+    "poNumber": "PO 번호"
+  },
+  "tax": {
+    "intro": "여기에 등록된 세금 ID는 모든 청구서에 표시되며, 해당되는 경우 리버스 차지 / 영세율 VAT가 적용됩니다. 원천징수세는 재무팀이 별도로 청구해야 합니다.",
+    "verified": "확인됨",
+    "verify": "확인",
+    "add": "세금 ID 추가",
+    "removeAria": "{{type}} {{value}} 삭제"
+  },
+  "contracts": {
+    "statusEnterprise_one": "Enterprise · 활성 계약 {{count}}건",
+    "statusEnterprise_other": "Enterprise · 활성 계약 {{count}}건",
+    "statusSelfServe": "셀프서비스 · 표준 이용약관 적용",
+    "names": {
+      "msa": "마스터 서비스 계약(MSA)",
+      "dpa": "데이터 처리 부속서(DPA)",
+      "baa": "비즈니스 준수 계약(BAA)",
+      "scc": "표준 계약 조항(SCC)"
+    },
+    "ongoing": "진행 중",
+    "sizeKb": "{{size}} KB",
+    "download": "PDF",
+    "cta": {
+      "title": "엔터프라이즈 계약이 필요하신가요?",
+      "body": "맞춤형 MSA, DPA, BAA, 레드라인, 보안 검토, 조달 지원.",
+      "button": "영업팀 문의"
+    }
+  },
+  "real": {
+    "settings": "설정",
+    "manageBilling": "결제 관리",
+    "renews": "{{date}} 갱신",
+    "noActiveSubscription": "활성 구독 없음",
+    "renewalNone": "—",
+    "plansNote": "청구서, 결제 수단, 취소는 Stripe 결제 포털(위의 “결제 관리”)에서 관리됩니다.",
+    "status": {
+      "none": "구독 없음",
+      "trialing": "체험 중",
+      "active": "활성",
+      "past_due": "연체",
+      "canceled": "취소됨"
+    }
+  },
+  "return": {
+    "successTitle": "결제 완료",
+    "cancelTitle": "결제 취소됨",
+    "successBody": "구독이 활성화되는 중입니다. 결제 페이지로 이동합니다…",
+    "cancelBody": "청구되지 않았습니다. 결제 페이지로 돌아갑니다…"
+  }
+}

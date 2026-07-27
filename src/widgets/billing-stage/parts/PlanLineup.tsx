@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@shared/theme';
 import type { Plan, PlanId } from './data';
 import { PLANS } from './data';
@@ -34,6 +35,7 @@ export function PlanLineup({ currentPlan, cycle, onSelect }: Props) {
 function PlanCell({
   plan, cycle, current, pageBg, onSelect,
 }: { plan: Plan; cycle: 'monthly' | 'annual'; current: boolean; pageBg: string; onSelect: () => void }) {
+  const { t } = useTranslation('billing');
   const price = cycle === 'annual' ? plan.annual : plan.monthly;
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -62,14 +64,14 @@ function PlanCell({
           className="text-base font-semibold"
           style={{ color: 'var(--fg-strong)' }}
         >
-          {plan.name}
+          {t(`plans.${plan.id}.name`)}
         </span>
         {current && (
           <span
             className="text-2xs font-semibold uppercase tracking-eyebrow"
             style={{ color: 'var(--fg-accent)' }}
           >
-            Current
+            {t('planLineup.current')}
           </span>
         )}
       </div>
@@ -77,7 +79,7 @@ function PlanCell({
       <div className="flex flex-col gap-0.5 min-h-[44px]">
         {price == null ? (
           <span className="text-[20px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-            Custom
+            {t('planLineup.custom')}
           </span>
         ) : (
           <>
@@ -89,11 +91,11 @@ function PlanCell({
                 ${price}
               </span>
               <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-                /seat/mo
+                {t('planLineup.perSeatMonth')}
               </span>
             </div>
             <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-              {cycle === 'annual' ? 'Billed annually' : 'Billed monthly'}
+              {cycle === 'annual' ? t('planLineup.billedAnnually') : t('planLineup.billedMonthly')}
             </span>
           </>
         )}
@@ -107,7 +109,7 @@ function PlanCell({
             style={{ color: 'var(--fg-default)' }}
           >
             <Check className="w-3 h-3 shrink-0 mt-[2px]" style={{ color: 'var(--fg-muted)' }} />
-            <span>{h}</span>
+            <span>{t(`plans.${plan.id}.highlights.${h}`)}</span>
           </li>
         ))}
       </ul>
@@ -130,7 +132,7 @@ function PlanCell({
           if (!current) e.currentTarget.style.background = 'var(--bg-surface-muted)';
         }}
       >
-        {current ? 'Current' : plan.id === 'enterprise' ? 'Talk to sales' : 'Switch plan'}
+        {current ? t('planLineup.current') : plan.id === 'enterprise' ? t('planLineup.talkToSales') : t('planLineup.switchPlan')}
       </button>
     </div>
   );

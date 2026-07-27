@@ -1,1 +1,197 @@
-{}
+{
+  "title": "Billing",
+  "breadcrumb": {
+    "settings": "Settings"
+  },
+  "cycle": {
+    "monthly": "Monthly",
+    "annual": "Annual"
+  },
+  "anchors": {
+    "plan": "Plan",
+    "lineup": "Plans",
+    "usage": "Usage",
+    "invoices": "Invoices",
+    "payment": "Payment",
+    "profile": "Profile",
+    "tax": "Tax",
+    "contracts": "Contracts"
+  },
+  "nav": {
+    "breadcrumbAria": "Breadcrumb",
+    "sectionsAria": "Sections"
+  },
+  "sections": {
+    "plan": { "title": "Plan", "hint": "Annual billing saves 17%." },
+    "lineup": { "title": "Available plans", "hint": "Switch any time. Pro-rated on the next invoice." },
+    "plans": { "title": "Plans", "hint": "Upgrade or change your plan. Payment is handled securely by Stripe." },
+    "usage": { "title": "Usage", "hint": "May 1 — May 31, 2026." },
+    "invoices": { "title": "Invoices" },
+    "payment": { "title": "Payment methods" },
+    "profile": { "title": "Billing profile" },
+    "tax": { "title": "Tax & VAT", "hint": "Per-jurisdiction tax IDs applied to invoices." },
+    "contracts": { "title": "Contracts", "hint": "Counter-signed agreements on file with {{orgName}}." }
+  },
+  "plans": {
+    "free": {
+      "name": "Free",
+      "tagline": "For individuals exploring the dot-field.",
+      "highlights": {
+        "workspaces": "1 workspace",
+        "seats": "Up to 3 seats",
+        "support": "Community support",
+        "retention": "7-day audit retention"
+      }
+    },
+    "team": {
+      "name": "Team",
+      "tagline": "For small teams shipping together.",
+      "highlights": {
+        "workspaces": "5 workspaces",
+        "seats": "Unlimited seats",
+        "admission": "Custom admission rules",
+        "retention": "30-day audit retention"
+      }
+    },
+    "business": {
+      "name": "Business",
+      "tagline": "For organizations standardizing review & gating.",
+      "highlights": {
+        "workspaces": "Unlimited workspaces",
+        "saml": "SAML / SCIM",
+        "residency": "Data residency",
+        "retention": "1-year audit retention",
+        "routing": "Priority routing"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "tagline": "For regulated and self-hosted deployments.",
+      "highlights": {
+        "selfHost": "Self-host / VPC option",
+        "retention": "Custom data retention",
+        "sla": "Custom SLA",
+        "csm": "Dedicated CSM",
+        "procurement": "Procurement & MSA support"
+      }
+    }
+  },
+  "limits": {
+    "workspaces": "Workspaces",
+    "seats": "Seats",
+    "agents": "AI agents (concurrent)",
+    "retention": "Audit retention",
+    "value": {
+      "unlimited": "Unlimited",
+      "custom": "Custom",
+      "days_one": "{{count}} day",
+      "days_other": "{{count}} days",
+      "year_one": "{{count}} year",
+      "year_other": "{{count}} years"
+    }
+  },
+  "usage": {
+    "seats": { "label": "Seats", "unit": "seats", "hint_one": "{{count}} invitation pending", "hint_other": "{{count}} invitations pending" },
+    "workspaces": { "label": "Workspaces", "unit": "ws" },
+    "agents": { "label": "AI agent runs", "unit": "runs", "hint": "Resets May 31" },
+    "tokens": { "label": "AI tokens", "unit": "M tok", "hint": "$0.42 / M overage" },
+    "scans": { "label": "Repository scans", "unit": "scans" },
+    "storage": { "label": "Artifact storage", "unit": "GB" },
+    "percentUsed": "{{pct}}% used"
+  },
+  "currentPlan": {
+    "monthlyCost": "Monthly cost",
+    "seats_one": "{{count}} seat",
+    "seats_other": "{{count}} seats",
+    "nextInvoice": "Next invoice",
+    "autoCharge": "Auto-charge",
+    "status": "Status",
+    "active": "Active",
+    "noIssues": "No issues",
+    "manageSubscription": "Manage subscription"
+  },
+  "planLineup": {
+    "current": "Current",
+    "custom": "Custom",
+    "perSeatMonth": "/seat/mo",
+    "billedAnnually": "Billed annually",
+    "billedMonthly": "Billed monthly",
+    "talkToSales": "Talk to sales",
+    "switchPlan": "Switch plan"
+  },
+  "invoices": {
+    "download": "PDF",
+    "status": {
+      "paid": "Paid",
+      "open": "Open",
+      "void": "Void",
+      "past_due": "Past due"
+    }
+  },
+  "payment": {
+    "brand": {
+      "visa": "Visa",
+      "mastercard": "Mastercard",
+      "amex": "Amex"
+    },
+    "exp": "Exp {{exp}}",
+    "default": "Default",
+    "makeDefault": "Make default",
+    "add": "Add payment method"
+  },
+  "profile": {
+    "legalName": "Legal name",
+    "email": "Billing email",
+    "country": "Country",
+    "taxId": "Tax ID",
+    "address": "Address",
+    "poNumber": "PO number"
+  },
+  "tax": {
+    "intro": "Tax IDs registered here appear on every invoice and unlock reverse-charge / zero-rated VAT where applicable. Withholding tax must be claimed separately by your finance team.",
+    "verified": "Verified",
+    "verify": "Verify",
+    "add": "Add tax ID",
+    "removeAria": "Remove {{type}} {{value}}"
+  },
+  "contracts": {
+    "statusEnterprise_one": "Enterprise · {{count}} active contract",
+    "statusEnterprise_other": "Enterprise · {{count}} active contracts",
+    "statusSelfServe": "Self-serve · Standard ToS apply",
+    "names": {
+      "msa": "Master Services Agreement",
+      "dpa": "Data Processing Addendum",
+      "baa": "Business Associate Agreement",
+      "scc": "Standard Contractual Clauses"
+    },
+    "ongoing": "Ongoing",
+    "sizeKb": "{{size}} KB",
+    "download": "PDF",
+    "cta": {
+      "title": "Need an enterprise contract?",
+      "body": "Custom MSA, DPA, BAA, redlines, security review, and procurement support.",
+      "button": "Contact sales"
+    }
+  },
+  "real": {
+    "settings": "Settings",
+    "manageBilling": "Manage billing",
+    "renews": "Renews {{date}}",
+    "noActiveSubscription": "No active subscription",
+    "renewalNone": "—",
+    "plansNote": "Invoices, payment methods, and cancellation are managed in the Stripe billing portal (“Manage billing” above).",
+    "status": {
+      "none": "No subscription",
+      "trialing": "Trialing",
+      "active": "Active",
+      "past_due": "Past due",
+      "canceled": "Canceled"
+    }
+  },
+  "return": {
+    "successTitle": "Payment successful",
+    "cancelTitle": "Checkout canceled",
+    "successBody": "Your subscription is being activated. Taking you to billing…",
+    "cancelBody": "No charge was made. Taking you back to billing…"
+  }
+}

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Check, XCircle, Loader2 } from 'lucide-react';
 import { useActiveOrgSlug } from '@entities/org';
@@ -7,6 +8,7 @@ import { useActiveOrgSlug } from '@entities/org';
 // the accounts backend to the FE origin). Confirms the outcome and routes the
 // user to their org's billing page (where the refreshed status shows).
 function BillingReturn({ kind }: { kind: 'success' | 'cancel' }) {
+  const { t } = useTranslation('billing');
   const navigate = useNavigate();
   const slug = useActiveOrgSlug();
   const [waited, setWaited] = useState(false);
@@ -48,12 +50,10 @@ function BillingReturn({ kind }: { kind: 'success' | 'cancel' }) {
             : <XCircle className="w-5 h-5" style={{ color: 'var(--fg-muted)' }} />}
         </div>
         <h1 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-          {ok ? 'Payment successful' : 'Checkout canceled'}
+          {ok ? t('return.successTitle') : t('return.cancelTitle')}
         </h1>
         <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
-          {ok
-            ? 'Your subscription is being activated. Taking you to billing…'
-            : 'No charge was made. Taking you back to billing…'}
+          {ok ? t('return.successBody') : t('return.cancelBody')}
         </p>
         <Loader2 className="w-4 h-4 animate-spin mt-1" style={{ color: 'var(--fg-subtle)' }} />
       </div>

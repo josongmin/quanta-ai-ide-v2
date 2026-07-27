@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { Button, Toggle, Field } from '@shared/ui/forms';
 import { ModalBackdrop, useDialogA11y } from '@shared/ui';
@@ -14,8 +15,9 @@ export function EnvDrawer({
   onClose: () => void;
   onChange: (patch: Partial<Environment>) => void;
 }) {
+  const { t } = useTranslation('ws');
   const promoteOptions: { id: string; label: string }[] = [
-    { id: 'none', label: '(no auto-promote)' },
+    { id: 'none', label: t('environments.drawer.noAutoPromote') },
     ...allEnvs.filter((e) => e.id !== env.id).map((e) => ({ id: e.name, label: e.name })),
   ];
   const dialogRef = useRef<HTMLElement>(null);
@@ -28,7 +30,7 @@ export function EnvDrawer({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label={`Environment ${env.name}`}
+        aria-label={t('environments.drawer.aria', { name: env.name })}
         tabIndex={-1}
         className="fixed right-0 top-0 bottom-0 z-50 w-[460px] flex flex-col outline-none"
         style={{ background: 'var(--bg-elevated)', borderLeft: '1px solid var(--border-default)', boxShadow: 'var(--shadow-md)' }}
@@ -41,27 +43,27 @@ export function EnvDrawer({
             <TierBadge tier={env.tier} />
             <RegionChip region={env.region} />
           </div>
-          <button type="button" onClick={onClose} aria-label="Close" className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
+          <button type="button" onClick={onClose} aria-label={t('environments.drawer.closeAria')} className="w-7 h-7 inline-flex items-center justify-center" style={{ color: 'var(--fg-muted)' }}>
             <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5">
           <Field
-            label="Name"
+            label={t('environments.drawer.nameLabel')}
             value={env.name}
             onChange={(e) => { onChange({ name: e.target.value }); }}
           />
 
           <Field
-            label="URL"
+            label={t('environments.drawer.urlLabel')}
             value={env.url}
             onChange={(e) => { onChange({ url: e.target.value }); }}
           />
 
           <div className="flex flex-col gap-1.5">
             <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-              Region
+              {t('environments.drawer.regionLabel')}
             </span>
             <select
               value={env.region}
@@ -80,7 +82,7 @@ export function EnvDrawer({
           </div>
 
           <Field
-            label="Required reviewers to deploy"
+            label={t('environments.drawer.reviewersLabel')}
             type="number"
             min={0}
             max={5}
@@ -94,22 +96,22 @@ export function EnvDrawer({
           >
             <div className="flex flex-col gap-0.5 min-w-0">
               <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
-                Block direct push
+                {t('environments.drawer.blockDirectPush')}
               </span>
               <span className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
-                Only the promotion gate can deploy here. Direct pushes are rejected.
+                {t('environments.drawer.blockDirectPushSub')}
               </span>
             </div>
             <Toggle
               checked={env.blockDirectPush}
               onChange={(v) => { onChange({ blockDirectPush: v }); }}
-              label="Block direct push"
+              label={t('environments.drawer.blockDirectPush')}
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
             <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-              Promotes from
+              {t('environments.drawer.promotesFrom')}
             </span>
             <select
               value={env.promotesFrom}
@@ -129,12 +131,12 @@ export function EnvDrawer({
 
           <div className="flex flex-col gap-2">
             <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
-              Recent deploys
+              {t('environments.drawer.recentDeploys')}
             </span>
             <ul className="flex flex-col rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
               {env.deploys.length === 0 ? (
                 <li className="px-3 py-3 text-sm text-center" style={{ color: 'var(--fg-subtle)' }}>
-                  No deploys yet.
+                  {t('environments.drawer.noDeploys')}
                 </li>
               ) : env.deploys.slice(0, 5).map((d) => (
                 <li
@@ -162,8 +164,8 @@ export function EnvDrawer({
           className="flex items-center justify-end gap-2 px-4 py-3"
           style={{ borderTop: '1px solid var(--border-muted)', background: 'var(--bg-surface-muted)' }}
         >
-          <Button variant="ghost" onClick={onClose}>Close</Button>
-          <Button variant="primary" size="md" onClick={onClose}>Done</Button>
+          <Button variant="ghost" onClick={onClose}>{t('environments.drawer.close')}</Button>
+          <Button variant="primary" size="md" onClick={onClose}>{t('environments.drawer.done')}</Button>
         </div>
       </aside>
     </>

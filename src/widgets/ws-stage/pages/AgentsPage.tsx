@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Eye, Wrench, ShieldCheck, FileText, Package, Bug, ScanLine, Sparkles,
   MoreHorizontal, Settings, Square, ScrollText,
@@ -11,10 +12,10 @@ type AgentId =
   | 'review-bot' | 'fix-pipeline' | 'admission-bot' | 'doc-writer'
   | 'dep-bumper' | 'flake-fixer' | 'security-scanner' | 'refactor-suggester';
 
+// name/description resolved from ws:agents.items.<key>.* at render time.
 type Agent = {
   id: AgentId;
-  name: string;
-  description: string;
+  key: string;
   icon: React.ComponentType<{ className?: string }>;
   enabled: boolean;
   model: ModelId;
@@ -25,50 +26,42 @@ type Agent = {
 
 const SEED: Agent[] = [
   {
-    id: 'review-bot', name: 'Review bot', icon: Eye,
-    description: 'Drafts PR review comments and suggestions on opened PRs.',
+    id: 'review-bot', key: 'reviewBot', icon: Eye,
     enabled: true, model: 'sonnet', concurrency: 6,
     runs7d: [42, 51, 38, 47, 60, 55, 49],
   },
   {
-    id: 'fix-pipeline', name: 'Fix pipeline', icon: Wrench,
-    description: 'Autonomously patches failing checks and opens PRs.',
+    id: 'fix-pipeline', key: 'fixPipeline', icon: Wrench,
     enabled: true, model: 'opus', concurrency: 3,
     runs7d: [8, 12, 10, 14, 9, 11, 13],
   },
   {
-    id: 'admission-bot', name: 'Admission bot', icon: ShieldCheck,
-    description: 'Evaluates admission rules on each PR; posts the verdict.',
+    id: 'admission-bot', key: 'admissionBot', icon: ShieldCheck,
     enabled: true, model: 'haiku', concurrency: 12,
     runs7d: [110, 98, 121, 105, 132, 119, 124],
   },
   {
-    id: 'doc-writer', name: 'Doc writer', icon: FileText,
-    description: 'Updates README and inline docs when public APIs change.',
+    id: 'doc-writer', key: 'docWriter', icon: FileText,
     enabled: false, model: 'sonnet', concurrency: 2,
     runs7d: [3, 5, 0, 4, 6, 2, 5],
   },
   {
-    id: 'dep-bumper', name: 'Dep bumper', icon: Package,
-    description: 'Opens PRs to bump dependencies, with changelog summaries.',
+    id: 'dep-bumper', key: 'depBumper', icon: Package,
     enabled: true, model: 'haiku', concurrency: 4,
     runs7d: [6, 8, 5, 7, 9, 4, 7],
   },
   {
-    id: 'flake-fixer', name: 'Flake fixer', icon: Bug,
-    description: 'Detects flaky tests and proposes deflaking patches.',
+    id: 'flake-fixer', key: 'flakeFixer', icon: Bug,
     enabled: false, model: 'sonnet', concurrency: 2,
     runs7d: [1, 0, 2, 1, 3, 0, 1],
   },
   {
-    id: 'security-scanner', name: 'Security scanner', icon: ScanLine,
-    description: 'Scans diffs for vulnerable patterns and CVE-affected deps.',
+    id: 'security-scanner', key: 'securityScanner', icon: ScanLine,
     enabled: true, model: 'sonnet', concurrency: 8,
     runs7d: [25, 30, 28, 33, 27, 31, 29],
   },
   {
-    id: 'refactor-suggester', name: 'Refactor suggester', icon: Sparkles,
-    description: 'Spots high-churn modules and proposes structural cleanups.',
+    id: 'refactor-suggester', key: 'refactorSuggester', icon: Sparkles,
     enabled: false, model: 'opus', concurrency: 1,
     runs7d: [2, 1, 3, 2, 4, 1, 2],
   },
@@ -81,6 +74,7 @@ const MODEL_OPTIONS: { id: ModelId; label: string }[] = [
 ];
 
 export default function AgentsPage() {
+  const { t } = useTranslation('ws');
   const [agents, setAgents] = useState<Agent[]>(SEED);
 
   const setAgent = (id: AgentId, patch: Partial<Agent>) => {
@@ -98,8 +92,8 @@ export default function AgentsPage() {
       orgSlug="acme"
       wsName="monorepo"
       wsSlug="monorepo"
-      title="Agents"
-      subtitle="Per-workspace agent activation. Disabled agents won't be triggered by any event in this workspace."
+      title={t('agents.title')}
+      subtitle={t('agents.subtitle')}
     >
       {/* Stats band */}
       <div
@@ -110,10 +104,10 @@ export default function AgentsPage() {
           border: '1px solid var(--border-default)',
         }}
       >
-        <Stat label="Active agents" value={`${activeCount} / ${agents.length}`} />
-        <Stat label="Running now" value={String(runningNow)} accent />
-        <Stat label="Queued" value={String(queued)} />
-        <Stat label="Spend MTD" value={`$${monthlyCost.toFixed(2)}`} last />
+        <Stat label={t('agents.stats.activeAgents')} value={`${activeCount} / ${agents.length}`} />
+        <Stat label={t('agents.stats.runningNow')} value={String(runningNow)} accent />
+        <Stat label={t('agents.stats.queued')} value={String(queued)} />
+        <Stat label={t('agents.stats.spendMtd')} value={`$${monthlyCost.toFixed(2)}`} last />
       </div>
 
       {/* Agent table */}
@@ -128,11 +122,11 @@ export default function AgentsPage() {
             borderBottom: '1px solid var(--border-muted)',
           }}
         >
-          <span>Agent</span>
-          <span>On</span>
-          <span>Model</span>
-          <span>Concurrency</span>
-          <span>7-day runs</span>
+          <span>{t('agents.colAgent')}</span>
+          <span>{t('agents.colOn')}</span>
+          <span>{t('agents.colModel')}</span>
+          <span>{t('agents.colConcurrency')}</span>
+          <span>{t('agents.col7dRuns')}</span>
           <span />
         </div>
         {agents.map((a) => (
@@ -145,7 +139,7 @@ export default function AgentsPage() {
       </div>
 
       <p className="text-sm mt-4 px-1" style={{ color: 'var(--fg-subtle)' }}>
-        Agents share the workspace token cap and inherit org-level AI policies. Concurrency is per agent, not per repo.
+        {t('agents.footerNote')}
       </p>
     </WsShell>
   );
@@ -171,8 +165,10 @@ function Stat({ label, value, accent = false, last = false }: { label: string; v
 }
 
 function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial<Agent>) => void }) {
+  const { t } = useTranslation('ws');
   const [menuOpen, setMenuOpen] = useState(false);
   const Icon = agent.icon;
+  const name = t(`agents.items.${agent.key}.name`);
   return (
     <div
       role="row"
@@ -199,15 +195,15 @@ function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial
         </div>
         <div className="flex flex-col min-w-0 gap-0.5">
           <span className="font-medium truncate" style={{ color: 'var(--fg-strong)' }}>
-            {agent.name}
+            {name}
           </span>
           <span className="text-sm leading-snug truncate" style={{ color: 'var(--fg-muted)' }}>
-            {agent.description}
+            {t(`agents.items.${agent.key}.description`)}
           </span>
         </div>
       </div>
 
-      <Toggle checked={agent.enabled} onChange={(v) => { onChange({ enabled: v }); }} label={`Enable ${agent.name}`} />
+      <Toggle checked={agent.enabled} onChange={(v) => { onChange({ enabled: v }); }} label={t('agents.enableAgentAria', { name })} />
 
       <select
         value={agent.model}
@@ -249,7 +245,7 @@ function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial
           style={{ color: 'var(--fg-subtle)' }}
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-          aria-label="Row actions"
+          aria-label={t('agents.rowActionsAria')}
         >
           <MoreHorizontal className="w-4 h-4" />
         </button>
@@ -262,6 +258,7 @@ function AgentRow({ agent, onChange }: { agent: Agent; onChange: (patch: Partial
 }
 
 function Sparkbars({ data, dim }: { data: number[]; dim: boolean }) {
+  const { t } = useTranslation('ws');
   const max = Math.max(1, ...data);
   return (
     <div className="flex items-end gap-0.5 h-8">
@@ -282,7 +279,7 @@ function Sparkbars({ data, dim }: { data: number[]; dim: boolean }) {
               opacity: dim ? 0.4 : 0.85,
               minWidth: 4,
             }}
-            title={`${v} runs`}
+            title={t('agents.runsTitle', { count: v })}
           />
         );
       })}
@@ -291,9 +288,10 @@ function Sparkbars({ data, dim }: { data: number[]; dim: boolean }) {
 }
 
 function RowMenu({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('ws');
   return (
     <>
-      <button type="button" aria-label="Dismiss menu" className="fixed inset-0 z-30 bg-transparent border-0 p-0 cursor-default" onClick={onClose} />
+      <button type="button" aria-label={t('agents.dismissMenuAria')} className="fixed inset-0 z-30 bg-transparent border-0 p-0 cursor-default" onClick={onClose} />
       <div
         className="absolute right-0 top-full mt-1 z-40 min-w-[180px] py-1 rounded-md"
         style={{
@@ -302,9 +300,9 @@ function RowMenu({ onClose }: { onClose: () => void }) {
           boxShadow: 'var(--shadow-md)',
         }}
       >
-        <MenuItem icon={Settings} label="Configure" onClick={onClose} />
-        <MenuItem icon={Square}   label="Kill all running" onClick={onClose} danger />
-        <MenuItem icon={ScrollText} label="View logs" onClick={onClose} />
+        <MenuItem icon={Settings} label={t('agents.menu.configure')} onClick={onClose} />
+        <MenuItem icon={Square}   label={t('agents.menu.killAll')} onClick={onClose} danger />
+        <MenuItem icon={ScrollText} label={t('agents.menu.viewLogs')} onClick={onClose} />
       </div>
     </>
   );

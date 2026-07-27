@@ -1,4 +1,5 @@
 import { Download } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Invoice } from './data';
 import { formatDate } from '@shared/i18n';
 
@@ -18,6 +19,7 @@ export function InvoicesList({ invoices }: Props) {
 }
 
 function InvoiceRow({ invoice, top }: { invoice: Invoice; top: boolean }) {
+  const { t } = useTranslation('billing');
   const date = formatDate(new Date(invoice.date), {
     year: 'numeric', month: 'short', day: 'numeric',
   });
@@ -56,7 +58,7 @@ function InvoiceRow({ invoice, top }: { invoice: Invoice; top: boolean }) {
         style={{ color: 'var(--fg-muted)' }}
       >
         <Download className="w-3 h-3" />
-        PDF
+        {t('invoices.download')}
       </span>
     </a>
   );
@@ -64,22 +66,23 @@ function InvoiceRow({ invoice, top }: { invoice: Invoice; top: boolean }) {
 
 function StatusInline({ status }: { status: Invoice['status'] }) {
   // Inline text + dot — no chip background. Keeps the row visually flat.
-  const m = STATUS[status];
+  const { t } = useTranslation('billing');
+  const fg = STATUS_FG[status];
   return (
-    <span className="inline-flex items-center gap-1.5 text-sm" style={{ color: m.fg }}>
+    <span className="inline-flex items-center gap-1.5 text-sm" style={{ color: fg }}>
       <span
         className="w-1.5 h-1.5 rounded-full"
-        style={{ background: m.fg }}
+        style={{ background: fg }}
         aria-hidden
       />
-      {m.label}
+      {t(`invoices.status.${status}`)}
     </span>
   );
 }
 
-const STATUS: Record<Invoice['status'], { label: string; fg: string }> = {
-  paid:     { label: 'Paid',     fg: 'var(--intent-success-fg)' },
-  open:     { label: 'Open',     fg: 'var(--fg-muted)' },
-  void:     { label: 'Void',     fg: 'var(--fg-subtle)' },
-  past_due: { label: 'Past due', fg: 'var(--intent-danger-fg)' },
+const STATUS_FG: Record<Invoice['status'], string> = {
+  paid:     'var(--intent-success-fg)',
+  open:     'var(--fg-muted)',
+  void:     'var(--fg-subtle)',
+  past_due: 'var(--intent-danger-fg)',
 };

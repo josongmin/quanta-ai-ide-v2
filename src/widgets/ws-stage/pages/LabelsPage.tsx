@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Plus, Pencil, Trash2, X, Check,
 } from 'lucide-react';
@@ -10,19 +11,19 @@ import {
 
 type ColorChoice = {
   id: string;
-  label: string;
   value: string; // CSS color (var() or hex)
 };
 
+// label aria labels resolve from ws:labels.colors.<id> at render time.
 const COLORS: ColorChoice[] = [
-  { id: 'success', label: 'Success', value: 'var(--intent-success-fg)' },
-  { id: 'warn',    label: 'Warn',    value: 'var(--intent-warn-fg)' },
-  { id: 'danger',  label: 'Danger',  value: 'var(--intent-danger-fg)' },
-  { id: 'brand',   label: 'Brand',   value: 'var(--fg-accent)' },
-  { id: 'indigo',  label: 'Indigo',  value: '#6366f1' },
-  { id: 'amber',   label: 'Amber',   value: '#f59e0b' },
-  { id: 'teal',    label: 'Teal',    value: '#14b8a6' },
-  { id: 'slate',   label: 'Slate',   value: '#64748b' },
+  { id: 'success', value: 'var(--intent-success-fg)' },
+  { id: 'warn',    value: 'var(--intent-warn-fg)' },
+  { id: 'danger',  value: 'var(--intent-danger-fg)' },
+  { id: 'brand',   value: 'var(--fg-accent)' },
+  { id: 'indigo',  value: '#6366f1' },
+  { id: 'amber',   value: '#f59e0b' },
+  { id: 'teal',    value: '#14b8a6' },
+  { id: 'slate',   value: '#64748b' },
 ];
 
 type Label = {
@@ -33,19 +34,21 @@ type Label = {
   usage: number;
 };
 
-const SEED: Label[] = [
-  { id: 'l1',  name: 'bug',          description: 'Something is not working as expected.',         colorId: 'danger',  usage: 142 },
-  { id: 'l2',  name: 'feature',      description: 'New capability or product surface.',             colorId: 'brand',   usage: 87  },
-  { id: 'l3',  name: 'security',     description: 'Vulnerability, hardening, or auth-related.',     colorId: 'danger',  usage: 23  },
-  { id: 'l4',  name: 'breaking',     description: 'Backwards-incompatible API or behavior change.', colorId: 'warn',    usage: 11  },
-  { id: 'l5',  name: 'perf',         description: 'Performance regression, profiling, or fix.',     colorId: 'amber',   usage: 34  },
-  { id: 'l6',  name: 'docs',         description: 'Documentation, examples, comments.',             colorId: 'teal',    usage: 56  },
-  { id: 'l7',  name: 'good-first',   description: 'Approachable for new contributors.',             colorId: 'success', usage: 19  },
-  { id: 'l8',  name: 'refactor',     description: 'Internal restructuring with no behavior change.',colorId: 'slate',   usage: 41  },
-  { id: 'l9',  name: 'chore',        description: 'Tooling, deps, or maintenance.',                 colorId: 'slate',   usage: 73  },
-  { id: 'l10', name: 'design',       description: 'UI, UX, or visual system change.',               colorId: 'indigo',  usage: 28  },
-  { id: 'l11', name: 'discussion',   description: 'Open question, RFC, or design debate.',          colorId: 'indigo',  usage: 9   },
-  { id: 'l12', name: 'wontfix',      description: 'Closed without action by design.',               colorId: 'slate',   usage: 6   },
+// name = code-token tag (rendered mono, not translated); description seeded
+// from ws:labels.seed.<seedKey> at mount.
+const SEED_META: { id: string; name: string; seedKey: string; colorId: string; usage: number }[] = [
+  { id: 'l1',  name: 'bug',        seedKey: 'bug',        colorId: 'danger',  usage: 142 },
+  { id: 'l2',  name: 'feature',    seedKey: 'feature',    colorId: 'brand',   usage: 87  },
+  { id: 'l3',  name: 'security',   seedKey: 'security',   colorId: 'danger',  usage: 23  },
+  { id: 'l4',  name: 'breaking',   seedKey: 'breaking',   colorId: 'warn',    usage: 11  },
+  { id: 'l5',  name: 'perf',       seedKey: 'perf',       colorId: 'amber',   usage: 34  },
+  { id: 'l6',  name: 'docs',       seedKey: 'docs',       colorId: 'teal',    usage: 56  },
+  { id: 'l7',  name: 'good-first', seedKey: 'goodFirst',  colorId: 'success', usage: 19  },
+  { id: 'l8',  name: 'refactor',   seedKey: 'refactor',   colorId: 'slate',   usage: 41  },
+  { id: 'l9',  name: 'chore',      seedKey: 'chore',      colorId: 'slate',   usage: 73  },
+  { id: 'l10', name: 'design',     seedKey: 'design',     colorId: 'indigo',  usage: 28  },
+  { id: 'l11', name: 'discussion', seedKey: 'discussion', colorId: 'indigo',  usage: 9   },
+  { id: 'l12', name: 'wontfix',    seedKey: 'wontfix',    colorId: 'slate',   usage: 6   },
 ];
 
 type Editing =
@@ -54,7 +57,12 @@ type Editing =
   | null;
 
 export default function LabelsPage() {
-  const [labels, setLabels] = useState<Label[]>(SEED);
+  const { t } = useTranslation('ws');
+  const seed = useMemo<Label[]>(
+    () => SEED_META.map((m) => ({ id: m.id, name: m.name, description: t(`labels.seed.${m.seedKey}`), colorId: m.colorId, usage: m.usage })),
+    [t],
+  );
+  const [labels, setLabels] = useState<Label[]>(seed);
   const [q, setQ] = useState('');
   const [editing, setEditing] = useState<Editing>(null);
   const [confirmDelete, setConfirmDelete] = useState<Label | null>(null);
@@ -85,8 +93,8 @@ export default function LabelsPage() {
       orgSlug="acme"
       wsName="monorepo"
       wsSlug="monorepo"
-      title="Labels"
-      subtitle="Tag taxonomy for issues and pull requests in this workspace."
+      title={t('labels.title')}
+      subtitle={t('labels.subtitle')}
       topRight={
         <Button
           variant="primary"
@@ -94,16 +102,16 @@ export default function LabelsPage() {
           leading={<Plus className="w-3.5 h-3.5" />}
           onClick={() => { setEditing({ mode: 'new' }); }}
         >
-          New label
+          {t('labels.newLabel')}
         </Button>
       }
     >
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 mb-3">
         <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-          {filtered.length} of {labels.length} labels
+          {t('labels.count', { shown: filtered.length, total: labels.length })}
         </span>
-        <SearchInput value={q} onChange={setQ} placeholder="Search labels…" />
+        <SearchInput value={q} onChange={setQ} placeholder={t('labels.searchPlaceholder')} />
       </div>
 
       {/* Inline editor */}
@@ -130,17 +138,17 @@ export default function LabelsPage() {
       <DataTable
         columns="180px 1fr 80px 70px"
         headers={[
-          { header: 'Label' },
-          { header: 'Description' },
-          { header: 'Usage', align: 'right' },
+          { header: t('labels.colLabel') },
+          { header: t('labels.colDescription') },
+          { header: t('labels.colUsage'), align: 'right' },
           { header: '' },
         ]}
         rows={filtered}
         rowKey={(l) => l.id}
         empty={
           <EmptyState
-            title={q ? `No matches for "${q}"` : 'No labels yet'}
-            subtitle={q ? 'Try a different keyword.' : 'Create your first label to get started.'}
+            title={q ? t('labels.emptyMatchTitle', { query: q }) : t('labels.emptyTitle')}
+            subtitle={q ? t('labels.emptyMatchSub') : t('labels.emptySub')}
           />
         }
         renderRow={(l) => {
@@ -153,12 +161,12 @@ export default function LabelsPage() {
               <div className="flex justify-end items-center gap-0.5">
                 <RowAction
                   icon={Pencil}
-                  label="Edit"
+                  label={t('labels.edit')}
                   onClick={() => { setEditing({ mode: 'edit', id: l.id }); }}
                 />
                 <RowAction
                   icon={Trash2}
-                  label="Delete"
+                  label={t('labels.delete')}
                   danger
                   onClick={() => { setConfirmDelete(l); }}
                 />
@@ -173,12 +181,12 @@ export default function LabelsPage() {
           open
           onCancel={() => { setConfirmDelete(null); }}
           onConfirm={() => { remove(confirmDelete.id); setConfirmDelete(null); }}
-          title="Delete label?"
-          confirmLabel="Delete label"
+          title={t('labels.deleteTitle')}
+          confirmLabel={t('labels.deleteConfirm')}
           description={
             <>
-              <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{confirmDelete.name}</span> will be
-              removed from {confirmDelete.usage} {confirmDelete.usage === 1 ? 'item' : 'items'}. This can&apos;t be undone.
+              <span className="font-mono" style={{ color: 'var(--fg-strong)' }}>{confirmDelete.name}</span>{' '}
+              {t('labels.deleteDescription', { count: confirmDelete.usage })}
             </>
           }
         />
@@ -237,6 +245,7 @@ function LabelEditor({
   onCancel: () => void;
   onSave: (payload: { name: string; description: string; colorId: string }) => void;
 }) {
+  const { t } = useTranslation('ws');
   const [name, setName] = useState(initial?.name ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
   const [colorId, setColorId] = useState(initial?.colorId ?? COLORS[0].id);
@@ -255,18 +264,18 @@ function LabelEditor({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-            {initial ? 'Edit label' : 'New label'}
+            {initial ? t('labels.editLabel') : t('labels.newLabel')}
           </span>
-          <Chip color={previewColor} name={name.trim() || 'preview'} />
+          <Chip color={previewColor} name={name.trim() || t('labels.preview')} />
         </div>
-        <IconButton icon={X} label="Close editor" onClick={onCancel} size="sm" />
+        <IconButton icon={X} label={t('labels.closeEditorAria')} onClick={onCancel} size="sm" />
       </div>
 
       <div className="grid grid-cols-[180px_1fr] gap-2">
         <input
           value={name}
           onChange={(e) => { setName(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); }}
-          placeholder="label-name"
+          placeholder={t('labels.namePlaceholder')}
           className="h-8 rounded-md px-2.5 text-base outline-none font-mono"
           style={{
             background: 'var(--bg-canvas)',
@@ -277,7 +286,7 @@ function LabelEditor({
         <input
           value={description}
           onChange={(e) => { setDescription(e.target.value); }}
-          placeholder="Short description shown in pickers and lists"
+          placeholder={t('labels.descPlaceholder')}
           className="h-8 rounded-md px-2.5 text-base outline-none"
           style={{
             background: 'var(--bg-canvas)',
@@ -289,7 +298,7 @@ function LabelEditor({
 
       <div className="flex items-center gap-1.5 flex-wrap">
         <span className="text-xs uppercase tracking-eyebrow font-medium mr-1" style={{ color: 'var(--fg-subtle)' }}>
-          Color
+          {t('labels.colorLabel')}
         </span>
         {COLORS.map((c) => {
           const active = c.id === colorId;
@@ -298,7 +307,7 @@ function LabelEditor({
               key={c.id}
               type="button"
               onClick={() => { setColorId(c.id); }}
-              aria-label={c.label}
+              aria-label={t(`labels.colors.${c.id}`)}
               className="w-6 h-6 rounded-full inline-flex items-center justify-center transition-transform"
               style={{
                 background: c.value,
@@ -313,13 +322,13 @@ function LabelEditor({
       </div>
 
       <div className="flex items-center justify-end gap-2">
-        <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+        <Button variant="ghost" onClick={onCancel}>{t('labels.cancel')}</Button>
         <Button
           variant="primary"
           disabled={!valid}
           onClick={() => { onSave({ name: name.trim(), description: description.trim(), colorId }); }}
         >
-          {initial ? 'Save changes' : 'Create label'}
+          {initial ? t('labels.saveChanges') : t('labels.createLabel')}
         </Button>
       </div>
     </div>

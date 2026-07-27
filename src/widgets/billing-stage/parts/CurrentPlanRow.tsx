@@ -1,4 +1,5 @@
 import { ArrowUpRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Plan } from './data';
 import { formatDate } from '@shared/i18n';
 
@@ -16,6 +17,7 @@ const fmtUsd = (n: number) =>
 export function CurrentPlanRow({
   plan, cycle, seats, monthlyUsd, nextBillDate,
 }: Props) {
+  const { t } = useTranslation('billing');
   const next = formatDate(new Date(nextBillDate), {
     month: 'short', day: 'numeric', year: 'numeric',
   });
@@ -28,7 +30,7 @@ export function CurrentPlanRow({
             className="text-4xl font-semibold tracking-tight leading-none"
             style={{ color: 'var(--fg-strong)' }}
           >
-            {plan.name}
+            {t(`plans.${plan.id}.name`)}
           </span>
           <span
             className="text-xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
@@ -37,21 +39,21 @@ export function CurrentPlanRow({
               background: 'var(--bg-surface-muted)',
             }}
           >
-            {cycle}
+            {t(`cycle.${cycle}`)}
           </span>
         </div>
         <div className="text-base" style={{ color: 'var(--fg-subtle)' }}>
-          {plan.tagline}
+          {t(`plans.${plan.id}.tagline`)}
         </div>
       </div>
 
       <dl className="grid grid-cols-3 gap-x-10 gap-y-1 text-base">
-        <Cell label="Monthly cost" value={fmtUsd(monthlyUsd)} sub={`${seats} seats`} />
-        <Cell label="Next invoice" value={next} sub="Auto-charge" />
+        <Cell label={t('currentPlan.monthlyCost')} value={fmtUsd(monthlyUsd)} sub={t('currentPlan.seats', { count: seats })} />
+        <Cell label={t('currentPlan.nextInvoice')} value={next} sub={t('currentPlan.autoCharge')} />
         <Cell
-          label="Status"
-          value={<span style={{ color: 'var(--fg-accent)' }}>Active</span>}
-          sub="No issues"
+          label={t('currentPlan.status')}
+          value={<span style={{ color: 'var(--fg-accent)' }}>{t('currentPlan.active')}</span>}
+          sub={t('currentPlan.noIssues')}
         />
       </dl>
 
@@ -66,7 +68,7 @@ export function CurrentPlanRow({
         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface-muted)'; }}
       >
-        Manage subscription
+        {t('currentPlan.manageSubscription')}
         <ArrowUpRight className="w-3 h-3 opacity-70" />
       </button>
     </div>
