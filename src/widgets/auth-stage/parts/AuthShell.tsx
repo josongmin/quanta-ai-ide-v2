@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
 import { useTheme } from '@shared/theme';
 
 type Props = {
@@ -75,9 +76,9 @@ export function AuthShell({ title, subtitle, footer, topRight, children }: Props
       >
         <span>© ACME, Inc.</span>
         <div className="flex items-center gap-5">
-          <button type="button" className="hover:opacity-100 bg-transparent border-0 p-0 cursor-pointer" style={{ opacity: 0.85, color: 'inherit', font: 'inherit', letterSpacing: 'inherit' }}>Terms</button>
-          <button type="button" className="hover:opacity-100 bg-transparent border-0 p-0 cursor-pointer" style={{ opacity: 0.85, color: 'inherit', font: 'inherit', letterSpacing: 'inherit' }}>Privacy</button>
-          <button type="button" className="hover:opacity-100 bg-transparent border-0 p-0 cursor-pointer" style={{ opacity: 0.85, color: 'inherit', font: 'inherit', letterSpacing: 'inherit' }}>Status</button>
+          <Link to={'/legal/terms' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>Terms</Link>
+          <Link to={'/legal/privacy' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>Privacy</Link>
+          <Link to={'/status' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>Status</Link>
         </div>
       </footer>
     </div>

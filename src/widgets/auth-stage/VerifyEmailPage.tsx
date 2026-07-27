@@ -56,8 +56,8 @@ export default function VerifyEmailPage() {
       }
       footer={
         phase === 'wasnt-me'
-          ? <span>We&apos;ve revoked the token. <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Contact support</button> if you need help.</span>
-          : <><span>Need help?</span><button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Contact support</button></>
+          ? <span>We&apos;ve revoked the token. <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link> if you need help.</span>
+          : <><span>Need help?</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link></>
       }
     >
       <div className="flex flex-col items-center gap-5 py-2">

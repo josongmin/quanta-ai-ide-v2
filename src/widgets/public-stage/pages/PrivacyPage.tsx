@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
-import { Download, ShieldCheck, Eye, Edit3, Download as DownloadIco, Trash2, Slash, FileWarning } from 'lucide-react';
+import { ShieldCheck, Eye, Edit3, Download as DownloadIco, Trash2, Slash, FileWarning } from 'lucide-react';
 import { PublicShell } from '@shared/ui/marketing';
 import { LegalSubNav } from '../parts/LegalSubNav';
-
-const LAST_UPDATED = '2026-04-22';
-const EFFECTIVE = '2026-05-01';
+import { DownloadPdfButton } from '../parts/DownloadPdfButton';
+import { LEGAL_LAST_UPDATED as LAST_UPDATED, LEGAL_EFFECTIVE as EFFECTIVE } from '../lib/legalDates';
 
 const DATA_TABLE: { category: string; examples: string; purpose: string }[] = [
   { category: 'Account data',     examples: 'Name, email, organization, role',                    purpose: 'Authenticate and provision access' },
@@ -196,19 +195,7 @@ function DocHeader() {
         <span style={{ color: 'var(--border-default)' }}>·</span>
         <span>Effective <span style={{ color: 'var(--fg-default)' }}>{EFFECTIVE}</span></span>
       </div>
-      <button
-        type="button"
-        onClick={() => { /* no-op */ }}
-        className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-base font-medium"
-        style={{
-          background: 'var(--bg-surface-muted)',
-          border: '1px solid var(--border-default)',
-          color: 'var(--fg-default)',
-        }}
-      >
-        <Download size={13} />
-        Download PDF
-      </button>
+      <DownloadPdfButton />
     </div>
   );
 }

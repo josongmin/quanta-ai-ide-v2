@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link as RouterLink } from '@tanstack/react-router';
 import {
-  Download,
   Scale,
   Lock,
   KeyRound,
@@ -15,9 +14,8 @@ import {
 } from 'lucide-react';
 import { PublicShell } from '@shared/ui/marketing';
 import { LegalSubNav } from '../parts/LegalSubNav';
-
-const LAST_UPDATED = '2026-04-22';
-const EFFECTIVE = '2026-05-01';
+import { DownloadPdfButton } from '../parts/DownloadPdfButton';
+import { LEGAL_LAST_UPDATED as LAST_UPDATED, LEGAL_EFFECTIVE as EFFECTIVE } from '../lib/legalDates';
 
 const DEFINITIONS: { term: string; def: string }[] = [
   { term: 'Controller',         def: 'The natural or legal person that determines the purposes and means of processing Personal Data — typically the Customer.' },
@@ -223,19 +221,7 @@ function DocHeader() {
         <span style={{ color: 'var(--border-default)' }}>·</span>
         <span>Version <span style={{ color: 'var(--fg-default)' }}>v3.2</span></span>
       </div>
-      <button
-        type="button"
-        onClick={() => { /* no-op */ }}
-        className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-base font-medium"
-        style={{
-          background: 'var(--bg-surface-muted)',
-          border: '1px solid var(--border-default)',
-          color: 'var(--fg-default)',
-        }}
-      >
-        <Download size={13} />
-        Download PDF
-      </button>
+      <DownloadPdfButton />
     </div>
   );
 }

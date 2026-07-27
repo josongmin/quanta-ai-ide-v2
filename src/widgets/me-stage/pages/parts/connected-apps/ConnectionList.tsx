@@ -161,11 +161,28 @@ function ConnectionRow({
             ))}
           </ul>
           <div className="flex items-center gap-3 mt-3 text-sm">
-            <button type="button" className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>
+            {/* Demo build: no real OAuth-app URL is stored per connection and
+                there is no re-authorization flow, so these are honestly
+                disabled rather than rendered as clickable no-ops. */}
+            <button
+              type="button"
+              disabled
+              aria-disabled
+              title="Not available in this demo build."
+              className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-not-allowed"
+              style={{ color: 'var(--fg-subtle)', font: 'inherit', opacity: 0.6 }}
+            >
               View on {conn.provider}
               <ExternalLink className="w-2.5 h-2.5" />
             </button>
-            <button type="button" className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>
+            <button
+              type="button"
+              disabled
+              aria-disabled
+              title="Not available in this demo build."
+              className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-not-allowed"
+              style={{ color: 'var(--fg-subtle)', font: 'inherit', opacity: 0.6 }}
+            >
               Re-authorize for new scopes
             </button>
           </div>

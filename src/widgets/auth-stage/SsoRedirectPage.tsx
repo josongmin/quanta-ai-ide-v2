@@ -46,7 +46,7 @@ export default function SsoRedirectPage() {
         footer={
           <>
             <span>Don&apos;t have SSO configured?</span>
-            <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Talk to your admin</button>
+            <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Talk to your admin</Link>
           </>
         }
       >

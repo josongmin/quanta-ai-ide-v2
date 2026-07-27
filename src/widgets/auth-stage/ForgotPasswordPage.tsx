@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
       <AuthShell
         title="Too many reset requests"
         subtitle="For security, we've paused reset requests from this device. Try again later or contact your admin."
-        footer={<><span>Need help?</span><button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Contact support</button></>}
+        footer={<><span>Need help?</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link></>}
       >
         <div
           className="flex items-start gap-3 px-3 py-3 rounded-md"

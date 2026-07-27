@@ -67,7 +67,7 @@ function MfaChallengeMock() {
       footer={
         <>
           <span>Lost access to all methods?</span>
-          <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Contact your admin</button>
+          <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact your admin</Link>
         </>
       }
     >

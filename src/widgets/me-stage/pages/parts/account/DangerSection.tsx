@@ -1,13 +1,19 @@
 import { useCallback, useRef, useState } from 'react';
-import { AlertTriangle, Loader2, Trash2 } from 'lucide-react';
+import { AlertTriangle, Trash2 } from 'lucide-react';
 import { Row, Field, Button, Divider } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
+
+// Demo-only account panel. Real account deletion is wired in
+// me-stage/real/AccountReal.tsx (requestAccountDeletion over better-auth),
+// which renders instead whenever env.useRealAuth is on. In this standalone
+// demo there is no backend, so the primary action is honestly DISABLED with
+// an accessible reason rather than faking a successful deletion.
+const DEMO_REASON = 'Not available in this demo build — account deletion needs a signed-in backend.';
 
 export function DangerSection() {
   const [open, setOpen] = useState(false);
   const [confirmText, setConfirmText] = useState('');
   const [reason, setReason] = useState('');
-  const [phase, setPhase] = useState<'idle' | 'submitting'>('idle');
 
   const required = 'delete sora@acme.com';
   const matched = confirmText.trim().toLowerCase() === required;
@@ -117,6 +123,10 @@ export function DangerSection() {
               </label>
             </div>
 
+            <p className="text-sm leading-snug -mt-1" style={{ color: 'var(--fg-subtle)' }}>
+              {DEMO_REASON}
+            </p>
+
             <div className="flex items-center justify-end gap-2 pt-1">
               <Button variant="ghost" size="md" onClick={close}>
                 Cancel
@@ -124,16 +134,11 @@ export function DangerSection() {
               <Button
                 variant="danger"
                 size="md"
-                disabled={!matched || phase === 'submitting'}
-                onClick={() => {
-                  setPhase('submitting');
-                  setTimeout(() => {
-                    setPhase('idle'); setOpen(false); setConfirmText('');
-                  }, 1200);
-                }}
+                disabled
+                title={DEMO_REASON}
               >
-                {phase === 'submitting' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
-                {phase === 'submitting' ? 'Scheduling deletion…' : 'Permanently delete'}
+                <Trash2 className="w-3.5 h-3.5" />
+                Permanently delete
               </Button>
             </div>
           </div>

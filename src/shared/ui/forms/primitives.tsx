@@ -257,10 +257,12 @@ type ButtonProps = {
   disabled?: boolean;
   type?: 'button' | 'submit';
   leading?: ReactNode;
+  // Native tooltip; also surfaces the reason a disabled control is unavailable.
+  title?: string;
 };
 
 export function Button({
-  children, variant = 'secondary', size = 'sm', onClick, disabled, type = 'button', leading,
+  children, variant = 'secondary', size = 'sm', onClick, disabled, type = 'button', leading, title,
 }: ButtonProps) {
   const h = size === 'md' ? 'h-9' : 'h-7';
   const px = size === 'md' ? 'px-3' : 'px-2.5';
@@ -279,8 +281,10 @@ export function Button({
     <button
       // eslint-disable-next-line react/button-has-type
       type={type}
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
       disabled={disabled}
+      aria-disabled={disabled}
+      title={title}
       className={`inline-flex items-center gap-1.5 ${h} ${px} ${fs} rounded-md font-medium transition-colors`}
       style={{ ...styles, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'pointer' }}
       onMouseEnter={(e) => {

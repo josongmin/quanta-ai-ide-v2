@@ -57,7 +57,7 @@ export default function SessionExpiredPage() {
       title="Your session has ended"
       subtitle="For your security, we sign you out after a period of inactivity. Sign in again to continue where you left off."
       topRight={<DemoStatePicker />}
-      footer={<><span>Not you?</span><button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Report this session</button></>}
+      footer={<><span>Not you?</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Report this session</Link></>}
     >
       <div className="flex flex-col gap-4">
         <ReasonBanner reason={reason} meta={reasonMeta} />
