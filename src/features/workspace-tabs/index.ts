@@ -10,7 +10,7 @@ export {
   type SurfaceRuntimeEntry,
 } from './model/RegistryContext';
 export {
-  DEFAULT_SURFACE_IDS,
+  FIRST_LAUNCH_SURFACE_IDS,
   SURFACE_IDS_ORDERED,
   surfaceIdFromPath,
   surfaceIdsByGroup,

@@ -3,8 +3,8 @@ import { ArrowRight, Search } from 'lucide-react';
 import { Modal } from '@shared/ui';
 import { useWorkspaceTabsStore } from '../model/store';
 import { useNavigateToTab } from './WorkspaceTabsHost';
-import { SURFACE_IDS_ORDERED, getSurfaceMeta } from '@shared/config/surfaces';
-import { HERO_SURFACE_IDS, RECENT_REPOS } from './parts/addTabData';
+import { SURFACE_IDS_ORDERED, getSurfaceMeta, HERO_SURFACES, browseAllSurfaceId } from '@shared/config/surfaces';
+import { RECENT_REPOS } from './parts/addTabData';
 import { HeroTile } from './parts/HeroTile';
 import { RepoRow } from './parts/RepoRow';
 
@@ -21,9 +21,10 @@ export default function AddTabModal({ open, onClose }: Props) {
   const navigateToTab = useNavigateToTab();
   const [query, setQuery] = useState('');
 
+  const heroSurfaceIds = useMemo(() => new Set(HERO_SURFACES.map((h) => h.surfaceId)), []);
   const moreSurfaceIds = useMemo(
-    () => SURFACE_IDS_ORDERED.filter((id) => !HERO_SURFACE_IDS.includes(id)),
-    [],
+    () => SURFACE_IDS_ORDERED.filter((id) => !heroSurfaceIds.has(id)),
+    [heroSurfaceIds],
   );
 
   const filteredRepos = useMemo(() => {
@@ -84,8 +85,14 @@ export default function AddTabModal({ open, onClose }: Props) {
 
         {/* Hero tiles */}
         <div className="grid grid-cols-3 gap-2.5 px-6 pb-5">
-          {HERO_SURFACE_IDS.map((surfaceId) => (
-            <HeroTile key={surfaceId} surfaceId={surfaceId} onPick={handlePick} />
+          {HERO_SURFACES.map((hero) => (
+            <HeroTile
+              key={hero.surfaceId}
+              surfaceId={hero.surfaceId}
+              title={hero.title}
+              sub={hero.sub}
+              onPick={handlePick}
+            />
           ))}
         </div>
 
@@ -115,7 +122,7 @@ export default function AddTabModal({ open, onClose }: Props) {
           </div>
           <button
             type="button"
-            onClick={() => { handlePick('core.catalog'); }}
+            onClick={() => { handlePick(browseAllSurfaceId()); }}
             className="inline-flex items-center gap-1.5 text-2xs font-semibold uppercase px-2 py-1 rounded transition-colors hover:[background:var(--bg-hover)] shrink-0"
             style={{
               color: 'var(--fg-default)',

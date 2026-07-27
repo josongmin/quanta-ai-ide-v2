@@ -1,16 +1,18 @@
 import { FolderClosed } from 'lucide-react';
-import { getSurfaceMeta } from '@shared/config/surfaces';
-import { HERO_COPY } from './addTabData';
 
+// Hero copy (title/sub) travels with the surface metadata SoT (HERO_SURFACES in
+// @shared/config/surfaces); the tile renders whatever the caller passes.
 export function HeroTile({
   surfaceId,
+  title,
+  sub,
   onPick,
 }: {
   surfaceId: string;
+  title: string;
+  sub: string;
   onPick: (surfaceId: string) => void;
 }) {
-  const meta = getSurfaceMeta(surfaceId);
-  const copy = HERO_COPY[surfaceId] ?? { title: meta?.title ?? surfaceId, sub: '' };
   return (
     <button
       type="button"
@@ -35,13 +37,13 @@ export function HeroTile({
         className="text-base font-semibold mb-0.5"
         style={{ color: 'var(--fg-default)' }}
       >
-        {copy.title}
+        {title}
       </div>
       <div
         className="text-xs leading-[1.4]"
         style={{ color: 'var(--fg-muted)' }}
       >
-        {copy.sub}
+        {sub}
       </div>
     </button>
   );

@@ -5,11 +5,17 @@ import {
   type StateStorage,
 } from 'zustand/middleware';
 import { STORAGE_KEYS, systemRuntimeEnv } from '@shared/lib';
-import { DEFAULT_SURFACE_IDS, SURFACE_IDS_ORDERED, isKnownSurface, instancingFor } from '@shared/config/surfaces';
+import {
+  FIRST_LAUNCH_SURFACE_IDS,
+  SURFACE_IDS_ORDERED,
+  isKnownSurface,
+  instancingFor,
+  firstLaunchActiveSurfaceId,
+  lastTabFallbackSurfaceId,
+} from '@shared/config/surfaces';
 import { migrateTabs, TAB_STATE_VERSION } from './migrateTabs';
 
 const KNOWN_SURFACE_IDS = new Set(SURFACE_IDS_ORDERED);
-const DEFAULT_SURFACE_ID = 'core.intelligence';
 
 // Throttle window for localStorage writes. Tab activations cluster (e.g.
 // the user cycles through tabs with Cmd+Alt+Arrow) — without throttling,
@@ -162,7 +168,8 @@ function defaultTab(surfaceId: string, active = false): WorkspaceTab {
 }
 
 function defaultTabs(): WorkspaceTab[] {
-  return DEFAULT_SURFACE_IDS.map((surfaceId, index) => defaultTab(surfaceId, index === 0));
+  const active = firstLaunchActiveSurfaceId();
+  return FIRST_LAUNCH_SURFACE_IDS.map((surfaceId) => defaultTab(surfaceId, surfaceId === active));
 }
 
 function sanitizeTab(raw: WorkspaceTab): WorkspaceTab {
@@ -202,9 +209,13 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
   persist(
     (set, get) => {
       const initial = defaultTabs();
+      // The first-launch active surface (not merely index 0) boots focused; it
+      // is the tab defaultTabs() marked with a lastFocusedAt timestamp.
+      const initialActive =
+        initial.find((t) => t.lastFocusedAt !== undefined) ?? initial[0];
       return {
         tabs: initial,
-        activeId: initial[0].id,
+        activeId: initialActive.id,
 
         setActive: (id) => {
           set((s) => {
@@ -243,7 +254,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
             // Last-tab guard — closing the only tab would strand the user.
             // Linear/Notion both replace the closed tab with a new default.
             if (s.tabs.length === 1) {
-              const fresh = defaultTab(DEFAULT_SURFACE_ID, true);
+              const fresh = defaultTab(lastTabFallbackSurfaceId(), true);
               return { tabs: [fresh], activeId: fresh.id };
             }
             const idx = s.tabs.findIndex((t) => t.id === id);

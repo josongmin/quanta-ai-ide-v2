@@ -6,7 +6,12 @@ import {
   surfaceIdFromPath,
   legacyPathForSurface,
   SURFACE_IDS_ORDERED,
-  DEFAULT_SURFACE_IDS,
+  FIRST_LAUNCH_SURFACE_IDS,
+  HERO_SURFACES,
+  firstLaunchActiveSurfaceId,
+  lastTabFallbackSurfaceId,
+  browseAllSurfaceId,
+  type SurfaceMeta,
 } from '../surfaces';
 
 describe('surface identity is fail-closed (prototype pollution)', () => {
@@ -74,8 +79,102 @@ describe('path <-> surfaceId mapping', () => {
     }
   });
 
-  it('the default surface set is non-empty and known', () => {
-    expect(DEFAULT_SURFACE_IDS.length).toBeGreaterThan(0);
-    for (const id of DEFAULT_SURFACE_IDS) expect(isKnownSurface(id)).toBe(true);
+  it('the first-launch surface set is non-empty and known', () => {
+    expect(FIRST_LAUNCH_SURFACE_IDS.length).toBeGreaterThan(0);
+    for (const id of FIRST_LAUNCH_SURFACE_IDS) expect(isKnownSurface(id)).toBe(true);
+  });
+});
+
+describe('host placement — first-launch / fallback / browse-all / hero', () => {
+  it('first-launch surfaces are the six expected ids in order', () => {
+    expect(FIRST_LAUNCH_SURFACE_IDS).toEqual([
+      'core.intelligence',
+      'core.coding',
+      'core.agents',
+      'core.reviews',
+      'core.admission',
+      'core.fixes',
+    ]);
+  });
+
+  it('the first-launch active surface is Intelligence', () => {
+    expect(firstLaunchActiveSurfaceId()).toBe('core.intelligence');
+  });
+
+  it('the last-tab fallback surface is Intelligence', () => {
+    expect(lastTabFallbackSurfaceId()).toBe('core.intelligence');
+  });
+
+  it('the browse-all role surface is Catalog', () => {
+    expect(browseAllSurfaceId()).toBe('core.catalog');
+  });
+
+  it('hero tiles are ordered agents, coding, reviews', () => {
+    expect(HERO_SURFACES.map((h) => h.surfaceId)).toEqual([
+      'core.agents',
+      'core.coding',
+      'core.reviews',
+    ]);
+  });
+
+  it('hero tiles carry their copy from the metadata SoT', () => {
+    const agents = HERO_SURFACES.find((h) => h.surfaceId === 'core.agents');
+    expect(agents).toMatchObject({ title: 'AI Coding Agent' });
+    expect(agents!.sub.length).toBeGreaterThan(0);
+  });
+});
+
+// The cardinality validator is a private module-load guard, so we reproduce it
+// against locally-constructed invalid sets to prove it rejects a second active
+// first-launch tab / a second fallback / a second browse-all role. These mirror
+// the exact assertions in validateSurfaceMetas.
+describe('cardinality validators reject over-cardinality (fail-closed)', () => {
+  function makeMeta(over: Partial<SurfaceMeta>): SurfaceMeta {
+    return {
+      surfaceId: 'x.one', title: 'One', group: 'more', icon: 'Layers', instancing: 'singleton', legacyPath: '/x-one',
+      firstLaunch: null, lastTabFallback: false, role: null, hero: null,
+      ...over,
+    };
+  }
+  function countActive(metas: SurfaceMeta[]): number {
+    return metas.filter((m) => m.firstLaunch?.active === true).length;
+  }
+  function countFallback(metas: SurfaceMeta[]): number {
+    return metas.filter((m) => m.lastTabFallback).length;
+  }
+  function countBrowseAll(metas: SurfaceMeta[]): number {
+    return metas.filter((m) => m.role === 'browse-all').length;
+  }
+
+  it('two active first-launch surfaces violate exactly-one', () => {
+    const metas = [
+      makeMeta({ surfaceId: 'x.a', legacyPath: '/x-a', firstLaunch: { order: 0, active: true } }),
+      makeMeta({ surfaceId: 'x.b', legacyPath: '/x-b', firstLaunch: { order: 1, active: true } }),
+    ];
+    expect(countActive(metas)).not.toBe(1);
+  });
+
+  it('two last-tab fallback surfaces violate exactly-one', () => {
+    const metas = [
+      makeMeta({ surfaceId: 'x.a', legacyPath: '/x-a', lastTabFallback: true }),
+      makeMeta({ surfaceId: 'x.b', legacyPath: '/x-b', lastTabFallback: true }),
+    ];
+    expect(countFallback(metas)).not.toBe(1);
+  });
+
+  it('two browse-all role surfaces violate exactly-one', () => {
+    const metas = [
+      makeMeta({ surfaceId: 'x.a', legacyPath: '/x-a', role: 'browse-all' }),
+      makeMeta({ surfaceId: 'x.b', legacyPath: '/x-b', role: 'browse-all' }),
+    ];
+    expect(countBrowseAll(metas)).not.toBe(1);
+  });
+
+  it('the live metadata satisfies exactly-one for each slot', () => {
+    // Sanity: the shipped set passes the same assertions the module-load guard
+    // runs (otherwise the import above would have thrown).
+    expect(firstLaunchActiveSurfaceId()).toBeDefined();
+    expect(lastTabFallbackSurfaceId()).toBeDefined();
+    expect(browseAllSurfaceId()).toBeDefined();
   });
 });

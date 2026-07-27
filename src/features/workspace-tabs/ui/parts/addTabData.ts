@@ -1,5 +1,5 @@
-// Hero tiles — the three entry points the start page leads with (surfaceIds).
-export const HERO_SURFACE_IDS: string[] = ['core.agents', 'core.coding', 'core.reviews'];
+// Hero tiles (surfaceId + copy + order) now live with the surface metadata SoT
+// in @shared/config/surfaces (HERO_SURFACES) — placement travels with identity.
 
 export type RecentRepo = {
   slug: string;
@@ -60,21 +60,6 @@ export const RECENT_REPOS: RecentRepo[] = [
     lastTouched: '2d ago',
   },
 ];
-
-export const HERO_COPY: Readonly<Record<string, { title: string; sub: string }>> = {
-  'core.agents': {
-    title: 'AI Coding Agent',
-    sub: 'Start a coding session with full engine context.',
-  },
-  'core.coding': {
-    title: 'Code Editor',
-    sub: 'Workspace editor with engine signals and overlays.',
-  },
-  'core.reviews': {
-    title: 'PR Review',
-    sub: 'Review pull requests with auto-fix and blast radius.',
-  },
-};
 
 export function formatCount(n: number): string {
   if (n >= 1000) return `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k`;

@@ -1,6 +1,6 @@
 import { beforeEach, describe, it, expect } from 'vitest';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../store';
-import { DEFAULT_SURFACE_IDS } from '@shared/config/surfaces';
+import { FIRST_LAUNCH_SURFACE_IDS } from '@shared/config/surfaces';
 
 // The workspace-tabs store is the browser-style tab strip: open/close/focus/
 // pin/reorder with a last-tab guard and a persist layer whose `merge` fn
@@ -28,7 +28,7 @@ function seedTabs(kinds: string[]): void {
 beforeEach(() => {
   // Restore a clean default-tab slice. setAll enforces the same invariants
   // the store guarantees at runtime (non-empty, valid surface ids).
-  seedTabs(DEFAULT_SURFACE_IDS.map((id) => id.replace('core.', '')));
+  seedTabs(FIRST_LAUNCH_SURFACE_IDS.map((id) => id.replace('core.', '')));
 });
 
 describe('workspace-tabs store — close', () => {

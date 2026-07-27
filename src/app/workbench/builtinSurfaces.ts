@@ -8,6 +8,7 @@
 // activation.
 import { SURFACE_IDS_ORDERED, getSurfaceMeta } from '@shared/config/surfaces';
 import { buildSurfaceCatalog, type SurfaceActivator, type SurfaceCatalog, type SurfaceManifest } from './surfaceCatalog';
+import { SURFACE_ICONS } from './icons';
 
 // Legacy tab kind → canonical surface id (migration only).
 export function surfaceIdForKind(kind: string): string {
@@ -20,6 +21,12 @@ export function surfaceIdForKind(kind: string): string {
 const SURFACES: readonly SurfaceManifest[] = SURFACE_IDS_ORDERED.map((surfaceId) => {
   const meta = getSurfaceMeta(surfaceId);
   if (meta === undefined) throw new Error(`no surface metadata for ${surfaceId}`);
+  // Every meta.icon must resolve in the icon registry. An unknown icon name is
+  // a hard programming error — throw rather than mount a surface whose icon
+  // silently renders `undefined`.
+  if (!(meta.icon in SURFACE_ICONS)) {
+    throw new Error(`surface ${surfaceId} references unknown icon '${meta.icon}' (not in SURFACE_ICONS)`);
+  }
   return {
     id: surfaceId,
     owner: 'core',
@@ -45,6 +52,25 @@ const ACTIVATORS: Readonly<Record<string, SurfaceActivator>> = {
   'core.catalog': () => import('@widgets/catalog').then((m) => ({ Component: m.CatalogStage })),
   'core.inbox': () => import('@widgets/me-stage').then((m) => ({ Component: m.InboxPage })),
 };
+
+// Fail-closed 1:1 guard: the metadata id set (SURFACE_IDS_ORDERED) and the
+// activator id set must be exactly equal — every declared surface has an
+// activator and no activator refers to a phantom surface. buildSurfaceCatalog
+// re-checks manifest<->activator, but this asserts directly against the
+// metadata SoT so a drift is caught at its source with a clear message.
+(function assertActivatorSetMatchesMetadata(): void {
+  const metaIds = new Set(SURFACE_IDS_ORDERED);
+  const activatorIds = new Set(Object.keys(ACTIVATORS));
+  const missingActivator = [...metaIds].filter((id) => !activatorIds.has(id));
+  const orphanActivator = [...activatorIds].filter((id) => !metaIds.has(id));
+  if (missingActivator.length > 0 || orphanActivator.length > 0) {
+    throw new Error(
+      `built-in surface activators are not 1:1 with metadata: ` +
+        `missing activator=[${missingActivator.join(', ')}] ` +
+        `orphan activator=[${orphanActivator.join(', ')}]`,
+    );
+  }
+})();
 
 // Materialised once. An invalid built-in set is a hard programming error.
 export const builtinCatalog: SurfaceCatalog = (() => {
