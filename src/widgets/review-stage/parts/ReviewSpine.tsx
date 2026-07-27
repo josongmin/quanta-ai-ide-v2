@@ -33,7 +33,7 @@ import {
   ActivityScene, ChecksScene, DecisionHeadsUp, DecisionPipeline, EngineScene,
   FilesScene, OverviewScene, RiskScene, VerdictHero,
 } from '../ui/scenes';
-import type { ReviewTabKey } from '../ReviewStage';
+import type { ReviewTabKey } from '../model/types';
 
 type Props = {
   pr: PullRequest;

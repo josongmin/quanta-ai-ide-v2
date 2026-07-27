@@ -1,5 +1,5 @@
 import { Filter, Inbox, ListFilter, User } from 'lucide-react';
-import type { QueueScope } from '../LeftQueue';
+import type { QueueScope } from './types';
 
 // ─────────────────────────────────────────────────────────────────────────
 // 3. ScopeStrip — 3-way (전체 / 내 작업 / 보관) with leading filter glyph.

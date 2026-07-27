@@ -1,5 +1,5 @@
 import { type SemanticTokens, type Theme } from '@shared/tokens';
-import type { GlobalTokenSections, Tokens } from './TokensContext';
+import type { GlobalTokenSections, Tokens } from './tokens-types';
 
 const SEMANTIC_TO_CSS_VAR: Record<keyof SemanticTokens, string> = {
   bgCanvas: '--bg-canvas',

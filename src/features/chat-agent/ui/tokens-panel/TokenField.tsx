@@ -1,4 +1,4 @@
-import type { GlobalTokenSections } from '../../model/TokensContext';
+import type { GlobalTokenSections } from '../../model/tokens-types';
 import { humanizeKey, isCssColor, isHexColor } from './colorUtils';
 
 export function GlobalTokenGroup<S extends keyof GlobalTokenSections>({

@@ -11,7 +11,7 @@ import { useReviewKeyboard } from '../lib/keyboard';
 import { getSession, saveSession } from '../lib/sota';
 import { DEFAULT_WEIGHTS, type InspectionWeights } from '../ui/InspectionWeights';
 import { type QueueScope } from '../ui/LeftQueue';
-import type { ReviewTabKey } from '../ReviewStage';
+import type { ReviewTabKey } from './types';
 
 // Hoisted so the table is allocated once at module load instead of on every
 // hook call. `setTab` can then list a stable identity in its dependency

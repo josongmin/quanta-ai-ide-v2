@@ -43,13 +43,30 @@
     // reachable via the tab picker / canonical route but not statically imported.
     "src/widgets/agent-fleet-stage/index.ts",
     "src/widgets/catalog/index.ts",
-    "src/widgets/me-stage/index.ts"
+    "src/widgets/me-stage/index.ts",
+
+    // Tauri shell e2e specs (wdio/mocha). Not a vitest surface, so Knip's
+    // vitest plugin doesn't auto-promote them — declaring them keeps
+    // @wdio/globals + mocha + @types/mocha from being flagged as unused.
+    // (wdio.conf.ts itself is auto-detected by Knip's webdriverio plugin.)
+    "e2e/**/*.spec.ts"
   ],
 
   // What we consider source. Test files (`*.test.ts`, `__tests__/**`) are
-  // promoted to entries automatically by Knip's vitest plugin.
+  // promoted to entries automatically by Knip's vitest plugin; the e2e tree
+  // is not vitest, so it's listed explicitly.
   "project": [
-    "src/**/*.{ts,tsx}"
+    "src/**/*.{ts,tsx}",
+    "e2e/**/*.ts"
+  ],
+
+  // wdio runtime deps that are referenced by config, not by import, so Knip
+  // can't trace them: `@wdio/local-runner` is selected via `runner: 'local'`
+  // (a string) in wdio.conf.ts, and `@wdio/types` is a peer providing the
+  // runner Options types. Both are genuinely used by `pnpm test:tauri`.
+  "ignoreDependencies": [
+    "@wdio/local-runner",
+    "@wdio/types"
   ],
 
   // Path-alias mirror of tsconfig.app.json. Knip reads tsConfig.paths

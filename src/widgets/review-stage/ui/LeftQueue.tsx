@@ -54,11 +54,13 @@ import { ScopeStrip } from './left-queue/ScopeStrip';
 import { RepoGroup } from './left-queue/RepoGroup';
 import { QueueRow } from './left-queue/QueueRow';
 import { triageTier, computeNeedsReReview } from './left-queue/styling';
-import type { Annotated } from './left-queue/types';
+import type { Annotated, QueueScope } from './left-queue/types';
 
 // ── Public types ─────────────────────────────────────────────────────────
 
-export type QueueScope = 'all' | 'mine' | 'archived';
+// QueueScope moved to ./left-queue/types (leaf) to break the LeftQueue↔lib/parts
+// cycle. Re-exported so existing consumers importing it from LeftQueue keep working.
+export type { QueueScope } from './left-queue/types';
 
 type Props = {
   prs: PullRequest[];

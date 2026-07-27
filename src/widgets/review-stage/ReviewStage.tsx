@@ -8,11 +8,10 @@ import QueuePanel from './parts/QueuePanel';
 import ContextPanel from './parts/ContextPanel';
 import ReviewSpine from './parts/ReviewSpine';
 
-// Re-exported so the keyboard hook (and any external consumers) keep working.
-// The new layout is sectioned rather than tabbed, but the hook still uses
-// these as anchor IDs to scroll to / focus.
-export type ReviewTabKey =
-  | 'overview' | 'insights' | 'files' | 'risk' | 'checks' | 'activity';
+// ReviewTabKey moved to ./model/types (leaf) to break the component↔model↔lib
+// cycle. Re-exported here so the keyboard hook and any external consumers that
+// import it from this module keep working.
+export type { ReviewTabKey } from './model/types';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Mission Control — full-dark review surface.

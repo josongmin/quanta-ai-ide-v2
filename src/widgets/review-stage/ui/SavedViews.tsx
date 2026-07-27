@@ -32,7 +32,7 @@ import {
   computePrRisk, summariseChecks, type PullRequest,
 } from '@entities/pr';
 import type { RepoData } from '@entities/repo';
-import type { QueueScope } from './LeftQueue';
+import type { QueueScope } from './left-queue/types';
 import {
   loadCustomViews, addCustomView, removeCustomView,
   type CustomView,

@@ -3,6 +3,10 @@ import type {
   PullRequest,
 } from '@entities/pr';
 
+// Queue scope filter. Lives on this leaf types module (not LeftQueue.tsx) so the
+// lib helpers and sibling parts import it without a cycle back through LeftQueue.
+export type QueueScope = 'all' | 'mine' | 'archived';
+
 // ── Annotated PR — pre-computed signals consumed by sort + render ────────
 export type Annotated = {
   pr: PullRequest;

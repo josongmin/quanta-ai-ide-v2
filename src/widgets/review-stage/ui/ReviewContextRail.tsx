@@ -16,7 +16,7 @@ import {
   ParticipantsSection,
   ReviewRailSection,
 } from './ReviewContextSections';
-import type { ReviewTabKey } from '../ReviewStage';
+import type { ReviewTabKey } from '../model/types';
 
 export function ContextRail({
   pr,

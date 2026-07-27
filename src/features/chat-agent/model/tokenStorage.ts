@@ -1,6 +1,6 @@
 import { safeLocalGet, STORAGE_KEYS } from '@shared/lib';
 import { components, semantic, type SemanticTokens } from '@shared/tokens';
-import type { GlobalTokenSections, Tokens } from './TokensContext';
+import type { GlobalTokenSections, Tokens } from './tokens-types';
 
 // Bumped v2 → v3: the glass-tint / fillAlphaDark token semantics changed
 // (applyGlassTints, dark alpha 0.04 → 0.5). Stale persisted v2 tokens

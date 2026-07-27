@@ -6,78 +6,12 @@ import { useTheme } from '@shared/theme';
 import { applyTokens, type SemanticTokens, type Theme } from '@shared/tokens';
 import { createDefaults, load, STORAGE_KEY } from './tokenStorage';
 import { applyGlassTints, applyGlobalTokens, applySemanticTheme } from './applyTokens';
+import type { GlobalTokenSections, Tokens } from './tokens-types';
 
-export type GlobalTokenSections = {
-  glass: {
-    radius: string;
-    blur: string;
-    fillAlphaDark: number;
-    fillAlphaLight: number;
-    borderDark: number;
-    borderLight: number;
-    borderWidth: number;
-    shadow: string;
-  };
-  card: {
-    padding: string;
-    paddingCompact: string;
-    radius: string;
-    radiusInner: string;
-    gap: string;
-  };
-  chip: {
-    padding: string;
-    paddingCompact: string;
-    radius: string;
-    radiusPill: string;
-  };
-  pill: {
-    paddingX: string;
-    paddingY: string;
-    paddingCompactX: string;
-    paddingCompactY: string;
-    radius: string;
-    gap: string;
-  };
-  panel: {
-    width: string;
-    inset: string;
-    maxHeight: string;
-  };
-  header: {
-    height: string;
-    paddingX: string;
-  };
-  tab: {
-    indicatorHeight: string;
-    paddingX: string;
-    paddingY: string;
-  };
-  dropdown: {
-    width: string;
-    offset: string;
-    radius: string;
-    padding: string;
-  };
-  tooltip: {
-    paddingX: string;
-    paddingY: string;
-    radius: string;
-    fontSize: string;
-  };
-  focus: {
-    ring: string;
-    outline: string;
-  };
-};
-
-export type Tokens = {
-  semantic: {
-    dark: SemanticTokens;
-    light: SemanticTokens;
-  };
-  global: GlobalTokenSections;
-};
+// Token shapes moved to ./tokens-types (leaf) to break the value↔type cycle
+// with applyTokens/tokenStorage. Re-exported here so existing consumers that
+// import them from the context module keep working.
+export type { GlobalTokenSections, Tokens } from './tokens-types';
 
 type Ctx = {
   tokens: Tokens;

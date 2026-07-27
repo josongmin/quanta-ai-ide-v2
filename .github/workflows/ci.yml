@@ -54,6 +54,15 @@ jobs:
       - name: Lint (strict)
         run: pnpm lint:strict
 
+      # Architecture gates: no import cycles, no unused dependencies. Both are
+      # narrow and currently green; the full dead-export knip sweep is a separate
+      # follow-up and is intentionally NOT gated here.
+      - name: Import cycles (madge)
+        run: pnpm deps:cycles
+
+      - name: Dead dependency gate (knip)
+        run: pnpm knip:deps
+
       - name: Setup Python (for semgrep)
         uses: actions/setup-python@v5
         with:

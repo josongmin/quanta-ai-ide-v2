@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { clamp, isEditableTarget as inEditableTarget } from '@shared/lib';
-import type { ReviewTabKey } from '../ReviewStage';
+import type { ReviewTabKey } from '../model/types';
 
 // Two-key chord timeout ("g o" → Overview). 1.2s mirrors common Vim-bindings
 // in browser apps (gmail, linear). Long enough that humans can hit it; short

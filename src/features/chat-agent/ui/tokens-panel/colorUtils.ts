@@ -1,5 +1,5 @@
 import { semantic } from '@shared/tokens';
-import type { Tokens } from '../../model/TokensContext';
+import type { Tokens } from '../../model/tokens-types';
 
 export function humanizeKey(key: string): string {
   return key

@@ -3,7 +3,7 @@ import type { RepoData } from '@entities/repo';
 import { ContextRail } from '../ui/ReviewContextRail';
 import { RailEmpty } from '../ui/ReviewChromeBits';
 import { SEV, TIER_COLOR } from '../lib/severityColors';
-import type { ReviewTabKey } from '../ReviewStage';
+import type { ReviewTabKey } from '../model/types';
 
 type Props = {
   pr: PullRequest | null;

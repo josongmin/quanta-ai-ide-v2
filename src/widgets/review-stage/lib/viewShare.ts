@@ -15,7 +15,7 @@
 // Compact, human-inspectable, easy to extend with more fields later.
 // ─────────────────────────────────────────────────────────────────────────
 
-import type { QueueScope } from '../ui/LeftQueue';
+import type { QueueScope } from '../ui/left-queue/types';
 
 const HASH_PREFIX = 'review:';
 

@@ -19,7 +19,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import { STORAGE_KEYS } from '@shared/lib';
-import type { QueueScope } from '../ui/LeftQueue';
+import type { QueueScope } from '../ui/left-queue/types';
 import { createTtlMapStore } from './ttlMapStore';
 
 const STORAGE_KEY = STORAGE_KEYS.reviewCustomViews;

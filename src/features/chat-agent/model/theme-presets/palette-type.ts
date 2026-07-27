@@ -3,7 +3,7 @@
 // collections in this directory.
 
 import type { SemanticTokens } from '@shared/tokens';
-import type { Tokens } from '../TokensContext';
+import type { Tokens } from '../tokens-types';
 
 export type Tone = 'dark' | 'light';
 

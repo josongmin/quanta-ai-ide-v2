@@ -21,7 +21,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, Link2 } from 'lucide-react';
 import { buildShareUrl, copyToClipboard } from '../lib/viewShare';
-import type { QueueScope } from './LeftQueue';
+import type { QueueScope } from './left-queue/types';
 
 type Props = {
   scope: QueueScope;
