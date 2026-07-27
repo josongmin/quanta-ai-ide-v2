@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, ArrowRight, Hash, Slash, Sparkles } from 'lucide-react';
+import { useDialogA11y } from '@shared/ui';
 import type { Task } from '../types';
 import { useCodingStage } from '../../model/CodingStageContext';
 
@@ -45,6 +46,12 @@ export function CommandPalette({
   const [query, setQuery] = useState('');
   const [index, setIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Shared dialog a11y: focus-trap + focus-restore + Escape close.
+  // The palette keeps its own ↑↓/Enter handling and input auto-focus below;
+  // this only adds the modal trap/restore/escape contract.
+  useDialogA11y(dialogRef, open, onClose, { modal: true });
 
   // Reset state every time the palette opens. Auto-focus the input on
   // the next frame so the cursor lands inside it before the user starts
@@ -117,12 +124,8 @@ export function CommandPalette({
       e.preventDefault();
       const row = rows[index];
       if (row) dispatch(row);
-      return;
     }
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      onClose();
-    }
+    // Escape is owned by useDialogA11y (topmost-layer aware).
   }
 
   if (!open) return null;
@@ -140,14 +143,15 @@ export function CommandPalette({
         aria-label="Close command palette"
         className="absolute inset-0 cursor-default bg-[color:var(--bg-scrim)] backdrop-blur-sm"
         onClick={onClose}
-        onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
       />
 
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Command palette"
-        className="relative w-full max-w-[600px] rounded-xl border shadow-2xl overflow-hidden bg-[var(--bg-elevated)] border-[color:var(--border-default)]"
+        tabIndex={-1}
+        className="relative w-full max-w-[600px] rounded-xl border shadow-2xl overflow-hidden bg-[var(--bg-elevated)] border-[color:var(--border-default)] outline-none"
         style={isDark ? {
           backdropFilter: 'blur(22px) saturate(160%)',
           WebkitBackdropFilter: 'blur(22px) saturate(160%)',

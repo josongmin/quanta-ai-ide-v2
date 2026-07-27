@@ -105,6 +105,7 @@ export function HistoryButton({
                     <button type="button"
                       onClick={(e) => { e.stopPropagation(); onClose(k); }}
                       className="shrink-0 p-0.5 rounded-md transition-colors opacity-0 group-hover:opacity-100 text-[var(--fg-subtle)] hover:text-[var(--fg-strong)] hover:bg-[var(--bg-active)]"
+                      aria-label={t('stack_axis.closeTab')}
                       title={t('stack_axis.closeTab')}
                     >
                       <X className="w-2.5 h-2.5" />

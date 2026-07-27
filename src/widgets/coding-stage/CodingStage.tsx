@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from '@shared/i18n';
+import { useDialogA11y } from '@shared/ui';
 import { safeLocalGet, safeLocalSet, STORAGE_KEYS, STORAGE_KEY_PREFIX } from '@shared/lib';
 import { TaskRail } from './parts/chrome/TaskRail';
 import { type ComposerModelId } from './parts/Composer';
@@ -467,13 +468,10 @@ function BudgetSoftCapModal({
   onOverride: () => void;
   onStop: () => void;
 }) {
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); onStop(); }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); };
-  }, [onStop]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // Shared dialog a11y: focus-trap + focus-restore + managed initial focus +
+  // Escape close (Escape maps to onStop — the no-spend safe choice).
+  useDialogA11y(dialogRef, true, onStop, { modal: true });
   const surface = 'bg-[var(--bg-elevated)] border-[color:var(--border-default)]';
   const heading = 'text-[color:var(--fg-strong)]';
   const muted = 'text-[color:var(--fg-muted)]';
@@ -488,13 +486,14 @@ function BudgetSoftCapModal({
         aria-label="Close dialog"
         className="absolute inset-0 cursor-default bg-[color:var(--bg-scrim)] backdrop-blur-sm"
         onClick={onStop}
-        onKeyDown={(e) => { if (e.key === 'Escape') onStop(); }}
       />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Soft cap reached"
-        className={`relative w-full max-w-[480px] rounded-xl border shadow-2xl ${surface} coding-pill-rise`}
+        tabIndex={-1}
+        className={`relative w-full max-w-[480px] rounded-xl border shadow-2xl outline-none ${surface} coding-pill-rise`}
       >
         <div className="px-5 py-4">
           <div className={`flex items-center gap-2 mb-1`}>
@@ -508,7 +507,6 @@ function BudgetSoftCapModal({
             <button
               type="button"
               onClick={onAutoDowngrade}
-              autoFocus
               style={{
                 borderColor: 'color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)',
                 background: 'var(--intent-success-bg)',
