@@ -1018,6 +1018,12 @@
     }
   },
   "retention": {
+    "real": {
+      "subtitle": "Data retention is set by your plan and applied automatically. Higher plans keep audit history longer.",
+      "planLabel": "Current plan",
+      "auditLabel": "Audit-log retention",
+      "note": "Retention is fixed by your plan and cannot be changed here. Upgrade for longer retention."
+    },
     "title": "Retention policy",
     "subtitle": "How long ACME keeps each class of data before automatic deletion.",
     "default": {

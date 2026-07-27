@@ -11,6 +11,7 @@ import { AccountReal } from './real/AccountReal';
 import { SecurityReal } from './real/SecurityReal';
 import { ApiTokensReal } from './real/ApiTokensReal';
 import { InboxReal } from './real/InboxReal';
+import { ConnectedAppsReal } from './real/ConnectedAppsReal';
 
 import ProfileMock from './pages/ProfilePage';
 import AccountMock from './pages/AccountPage';
@@ -31,8 +32,7 @@ export function SecurityPage() {
   return env.useRealAuth ? <SecurityReal /> : <SecurityMock />;
 }
 export function ConnectedAppsPage() {
-  const { t } = useTranslation('me');
-  return env.useRealAuth ? <MeComingSoon title={t('comingSoon.connectedApps')} /> : <ConnectedAppsMock />;
+  return env.useRealAuth ? <ConnectedAppsReal /> : <ConnectedAppsMock />;
 }
 export function ApiTokensPage() {
   return env.useRealAuth ? <ApiTokensReal /> : <ApiTokensMock />;

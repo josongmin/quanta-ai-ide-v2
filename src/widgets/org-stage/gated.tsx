@@ -10,6 +10,7 @@ import { ServiceAccountsReal } from './pages/parts/service-accounts/ServiceAccou
 import { WebhooksReal } from './pages/parts/webhooks/WebhooksReal';
 import { ScimReal } from './pages/parts/scim/ScimReal';
 import { SsoReal } from './pages/parts/sso/SsoReal';
+import { RetentionReal } from './pages/parts/retention/RetentionReal';
 
 import RolesMock from './pages/RolesPage';
 import UsageMock from './pages/UsagePage';
@@ -66,5 +67,5 @@ export function DataResidencyPage() {
   return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.dataResidency" /> : <DataResidencyMock />;
 }
 export function RetentionPolicyPage() {
-  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.retention" /> : <RetentionMock />;
+  return env.useRealAuth ? <RetentionReal /> : <RetentionMock />;
 }

@@ -43,3 +43,8 @@ export {
   type NotificationRecord,
   type NotificationPage,
 } from './model/notifications';
+export {
+  listLinkedAccounts,
+  unlinkAccount,
+  type LinkedAccount,
+} from './model/connectedAccounts';
