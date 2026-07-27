@@ -143,5 +143,12 @@
       "activity": "查看 AI 活动",
       "help": "键盘快捷键"
     }
+  },
+  "workspaceTabs": {
+    "closeNamed": "关闭 {{label}}",
+    "closeTab": "关闭标签页",
+    "openNewTab": "打开新标签页",
+    "newTab": "新标签页",
+    "searchRepos": "搜索仓库"
   }
 }

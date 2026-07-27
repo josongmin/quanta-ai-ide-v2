@@ -1,6 +1,7 @@
 import { forwardRef, useState, type CSSProperties, type DragEvent } from 'react';
 import { Box, Pin, X } from 'lucide-react';
 import { useTheme } from '@shared/theme';
+import { useTranslation } from '@shared/i18n';
 import type { WorkspaceTab } from '../../model/store';
 import { useSurfaceEntry } from '../../model/RegistryContext';
 import { CLOSE_WIDTH_THRESHOLD, type TabDensity } from './types';
@@ -52,6 +53,7 @@ export const TabChip = forwardRef<HTMLDivElement, TabChipProps>(function TabChip
 }, ref) {
   const Icon = useSurfaceEntry(tab.surfaceId)?.icon ?? Box;
   const { isDark } = useTheme();
+  const { t } = useTranslation('app');
   const [dropSide, setDropSide] = useState<'left' | 'right' | null>(null);
   const resolvedWidth = width;
   const showLabel = true;
@@ -243,8 +245,8 @@ export const TabChip = forwardRef<HTMLDivElement, TabChipProps>(function TabChip
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); onClose(); }}
-                aria-label={`Close ${label}`}
-                title="Close tab"
+                aria-label={t('workspaceTabs.closeNamed', { label })}
+                title={t('workspaceTabs.closeTab')}
                 className={`rounded-md p-0.5 transition-all ${
                   invertedActive
                     ? 'hover:[background:rgba(255,255,255,0.12)]'

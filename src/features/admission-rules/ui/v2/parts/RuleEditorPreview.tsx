@@ -1,4 +1,5 @@
 import { Activity, Eye, Clock } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { RepoData } from '@entities/repo';
 import { SEVERITY_COLOR, type V2Theme } from './tokens';
 import { V2Card } from './primitives';
@@ -150,6 +151,7 @@ function RetroBadge({ label, value, color, t }: { label: string; value: number; 
 
 // Version history card: recent revisions with summary + relative time.
 export function VersionHistoryCard({ versions, t }: { versions: RuleVersion[]; t: V2Theme }) {
+  const { t: tA } = useTranslation('admission');
   return (
     <V2Card className="p-4">
       <div className="flex items-center gap-2 mb-3">
@@ -164,7 +166,7 @@ export function VersionHistoryCard({ versions, t }: { versions: RuleVersion[]; t
           className="ml-auto text-2xs font-mono"
           style={{ color: t.textSubtle }}
         >
-          {versions.length} revision{versions.length === 1 ? '' : 's'}
+          {tA('gate.card.revisions', { count: versions.length })}
         </span>
       </div>
       <ul className="space-y-1.5">

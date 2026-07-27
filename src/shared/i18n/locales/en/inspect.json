@@ -392,14 +392,15 @@
   "semanticConflict": {
     "title": "Semantic conflict",
     "clear": "Clear",
-    "summary": "{{n}} candidates",
     "cleanHint": "No open PRs touch the same call-graph neighborhood. Safe to merge.",
     "note": "Predicted from the call graph — git diff alone wouldn’t flag these.",
     "severity": {
       "high": "High",
       "medium": "Medium",
       "low": "Low"
-    }
+    },
+    "summary_one": "{{count}} candidate",
+    "summary_other": "{{count}} candidates"
   },
   "safeRename": {
     "title": "Safe-rename confidence",
@@ -505,5 +506,9 @@
     "util": "util",
     "test": "test",
     "vendor": "vendor"
+  },
+  "depsCarousel": {
+    "prev": "Previous",
+    "next": "Next"
   }
 }

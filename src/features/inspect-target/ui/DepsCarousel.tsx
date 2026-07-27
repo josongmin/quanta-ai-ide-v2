@@ -109,7 +109,7 @@ export default function DepsCarousel({ repo, isDark, size = 260 }: Props) {
           <button
             type="button"
             onClick={() => { go(-1); }}
-            aria-label="Previous"
+            aria-label={t('depsCarousel.prev')}
             className="w-5 h-5 rounded-md grid place-items-center transition-colors"
             style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)' }}
           >
@@ -124,7 +124,7 @@ export default function DepsCarousel({ repo, isDark, size = 260 }: Props) {
           <button
             type="button"
             onClick={() => { go(1); }}
-            aria-label="Next"
+            aria-label={t('depsCarousel.next')}
             className="w-5 h-5 rounded-md grid place-items-center transition-colors"
             style={{ background: 'var(--bg-surface-muted)', color: 'var(--fg-muted)' }}
           >

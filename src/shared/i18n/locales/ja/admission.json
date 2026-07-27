@@ -262,7 +262,15 @@
       "suppressForFile": "このファイルで抑制",
       "draftFix": "エージェントで修正案",
       "overrideWithReason": "理由付きでオーバーライド",
-      "noFix": "自動修正は利用できません。"
+      "noFix": "自動修正は利用できません。",
+      "rulesFired_one": "ルール{{count}}件が発火",
+      "rulesFired_other": "ルール{{count}}件が発火",
+      "rulesPassed_one": "ルール{{count}}件が合格",
+      "rulesPassed_other": "ルール{{count}}件が合格",
+      "prOverrides_one": "このPRにオーバーライド{{count}}件",
+      "prOverrides_other": "このPRにオーバーライド{{count}}件",
+      "revisions_one": "リビジョン{{count}}件",
+      "revisions_other": "リビジョン{{count}}件"
     },
     "fixHint": {
       "semgrep": "パターンベース — エージェントがパッチを起草できます。",

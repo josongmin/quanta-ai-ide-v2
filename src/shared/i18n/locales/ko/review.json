@@ -149,5 +149,13 @@
   "palette": {
     "pinTitle": "#{{number}} 핀 고정 (⌘⇧P)",
     "unpinTitle": "#{{number}} 핀 해제 (⌘⇧P)"
+  },
+  "files": {
+    "overlapsIncidents_one": "이전 인시던트 {{count}}건 중복: {{list}}",
+    "overlapsIncidents_other": "이전 인시던트 {{count}}건 중복: {{list}}"
+  },
+  "engine": {
+    "applyFixBatch_one": "수정 {{count}}건 일괄 적용",
+    "applyFixBatch_other": "수정 {{count}}건 일괄 적용"
   }
 }

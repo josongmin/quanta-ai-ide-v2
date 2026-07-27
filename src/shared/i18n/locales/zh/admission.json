@@ -262,7 +262,15 @@
       "suppressForFile": "为该文件抑制",
       "draftFix": "用代理草拟修复",
       "overrideWithReason": "附理由覆盖",
-      "noFix": "无可用的自动修复。"
+      "noFix": "无可用的自动修复。",
+      "rulesFired_one": "{{count}} 条规则触发",
+      "rulesFired_other": "{{count}} 条规则触发",
+      "rulesPassed_one": "{{count}} 条规则通过",
+      "rulesPassed_other": "{{count}} 条规则通过",
+      "prOverrides_one": "此 PR 上 {{count}} 次覆盖",
+      "prOverrides_other": "此 PR 上 {{count}} 次覆盖",
+      "revisions_one": "{{count}} 个修订",
+      "revisions_other": "{{count}} 个修订"
     },
     "fixHint": {
       "semgrep": "基于模式 — 代理可草拟补丁。",

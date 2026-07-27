@@ -54,7 +54,7 @@ export function DismissModal({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Dismiss candidate fix"
+        aria-label={tr('dismissModal.dialogLabel')}
         className="relative z-50 w-[480px] max-w-[92vw] rounded-lg border overflow-hidden"
         style={{
           background: t.cardBacking,

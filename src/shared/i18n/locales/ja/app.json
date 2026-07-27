@@ -143,5 +143,12 @@
       "activity": "AI アクティビティ",
       "help": "キーボードショートカット"
     }
+  },
+  "workspaceTabs": {
+    "closeNamed": "{{label}} を閉じる",
+    "closeTab": "タブを閉じる",
+    "openNewTab": "新しいタブを開く",
+    "newTab": "新しいタブ",
+    "searchRepos": "リポジトリを検索"
   }
 }

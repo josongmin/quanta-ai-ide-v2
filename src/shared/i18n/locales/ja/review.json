@@ -149,5 +149,13 @@
   "palette": {
     "pinTitle": "#{{number}} をピン留め (⌘⇧P)",
     "unpinTitle": "#{{number}} のピンを外す (⌘⇧P)"
+  },
+  "files": {
+    "overlapsIncidents_one": "過去のインシデント{{count}}件 と重複: {{list}}",
+    "overlapsIncidents_other": "過去のインシデント{{count}}件 と重複: {{list}}"
+  },
+  "engine": {
+    "applyFixBatch_one": "修正{{count}}件を一括適用",
+    "applyFixBatch_other": "修正{{count}}件を一括適用"
   }
 }

@@ -392,14 +392,15 @@
   "semanticConflict": {
     "title": "의미적 충돌",
     "clear": "안전",
-    "summary": "후보 {{n}}건",
     "cleanHint": "같은 콜그래프 영역을 만지는 열린 PR이 없습니다. 머지 안전합니다.",
     "note": "콜그래프 기반 예측 — 단순 git diff로는 잡히지 않습니다.",
     "severity": {
       "high": "높음",
       "medium": "중간",
       "low": "낮음"
-    }
+    },
+    "summary_one": "후보 {{count}}건",
+    "summary_other": "후보 {{count}}건"
   },
   "safeRename": {
     "title": "안전 리네임 신뢰도",
@@ -505,5 +506,9 @@
     "util": "util",
     "test": "test",
     "vendor": "vendor"
+  },
+  "depsCarousel": {
+    "prev": "이전",
+    "next": "다음"
   }
 }

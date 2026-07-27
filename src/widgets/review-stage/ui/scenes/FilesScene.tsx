@@ -107,6 +107,7 @@ function FileScannerRow({
   onClick: () => void;
   onToggleViewed: () => void;
 }) {
+  const { t } = useTranslation('review');
   const total = f.added + f.removed;
   const ratio = totalDelta > 0 ? Math.min(1, total / totalDelta) : 0;
   const isHot = f.hunks.length >= 3 && total >= 40;
@@ -134,7 +135,7 @@ function FileScannerRow({
         {prodIncidents !== null && prodIncidents.length > 0 && (
           <span
             className="shrink-0 inline-flex items-center px-1 h-4 rounded-sm text-2xs font-bold uppercase tracking-eyebrow"
-            title={`Overlaps ${String(prodIncidents.length)} prior incident${prodIncidents.length === 1 ? '' : 's'}: ${prodIncidents.join(', ')}`}
+            title={t('files.overlapsIncidents', { count: prodIncidents.length, list: prodIncidents.join(', ') })}
             style={{ background: 'var(--intent-danger-bg)', color: 'var(--intent-danger-fg)', border: '1px solid color-mix(in srgb, var(--intent-danger-fg) 45%, transparent)' }}
           >
             prod

@@ -262,7 +262,15 @@
       "suppressForFile": "Suppress for this file",
       "draftFix": "Draft fix with agent",
       "overrideWithReason": "Override with reason",
-      "noFix": "No automated fix available."
+      "noFix": "No automated fix available.",
+      "rulesFired_one": "{{count}} rule fired",
+      "rulesFired_other": "{{count}} rules fired",
+      "rulesPassed_one": "{{count}} rule passed",
+      "rulesPassed_other": "{{count}} rules passed",
+      "prOverrides_one": "{{count}} override on this PR",
+      "prOverrides_other": "{{count}} overrides on this PR",
+      "revisions_one": "{{count}} revision",
+      "revisions_other": "{{count}} revisions"
     },
     "fixHint": {
       "semgrep": "Pattern-based — agent can draft a patch.",

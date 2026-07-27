@@ -143,5 +143,12 @@
       "activity": "Show AI activity",
       "help": "Keyboard shortcuts"
     }
+  },
+  "workspaceTabs": {
+    "closeNamed": "Close {{label}}",
+    "closeTab": "Close tab",
+    "openNewTab": "Open new tab",
+    "newTab": "New tab",
+    "searchRepos": "Search repositories"
   }
 }

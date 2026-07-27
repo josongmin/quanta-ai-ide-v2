@@ -255,6 +255,7 @@
       "breaks-convention": "컨벤션 위반",
       "unsafe-during-rollout": "롤아웃 중 위험",
       "reviewer-disagrees": "리뷰어 불일치"
-    }
+    },
+    "dialogLabel": "후보 수정 기각"
   }
 }

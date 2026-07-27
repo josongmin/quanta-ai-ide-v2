@@ -145,12 +145,12 @@ export function GatePage({
                 <div className="flex items-center gap-2">
                   <Icon className="w-4 h-4" style={{ color: accent }} />
                   <span className="text-sm font-bold uppercase tracking-eyebrow" style={{ color: accent }}>
-                    {fired.length} rule{fired.length === 1 ? '' : 's'} fired
+                    {tA('gate.card.rulesFired', { count: fired.length })}
                   </span>
                   <div className="flex-1" />
                   {prOverrides.length > 0 && (
                     <span className="text-xs font-mono" style={{ color: t.textSubtle }}>
-                      {prOverrides.length} override{prOverrides.length === 1 ? '' : 's'} on this PR
+                      {tA('gate.card.prOverrides', { count: prOverrides.length })}
                     </span>
                   )}
                 </div>
@@ -274,7 +274,7 @@ export function GatePage({
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-3.5 h-3.5" style={{ color: t.ok }} />
                 <span className="text-xs font-bold uppercase tracking-eyebrow" style={{ color: t.textMuted }}>
-                  {passed.length} rule{passed.length === 1 ? '' : 's'} passed
+                  {tA('gate.card.rulesPassed', { count: passed.length })}
                 </span>
                 <div className="flex-1" />
                 <span className="text-xs font-mono" style={{ color: t.textSubtle }}>

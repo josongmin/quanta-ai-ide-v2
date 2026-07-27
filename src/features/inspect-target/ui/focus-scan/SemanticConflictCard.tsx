@@ -94,10 +94,7 @@ export function SemanticConflictCard({ file }: { file: FileRecord }) {
           className="ml-auto text-2xs font-black uppercase tracking-eyebrow"
           style={{ color: headerAccent }}
         >
-          {t('semanticConflict.summary', {
-            n: conflicts.length,
-            defaultValue: `${conflicts.length} candidate${conflicts.length === 1 ? '' : 's'}`,
-          })}
+          {t('semanticConflict.summary', { count: conflicts.length })}
         </span>
       </div>
 

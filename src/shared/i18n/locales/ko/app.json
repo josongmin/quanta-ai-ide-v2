@@ -143,5 +143,12 @@
       "activity": "AI 활동 보기",
       "help": "단축키 도움말"
     }
+  },
+  "workspaceTabs": {
+    "closeNamed": "{{label}} 닫기",
+    "closeTab": "탭 닫기",
+    "openNewTab": "새 탭 열기",
+    "newTab": "새 탭",
+    "searchRepos": "저장소 검색"
   }
 }

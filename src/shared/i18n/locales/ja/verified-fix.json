@@ -255,6 +255,7 @@
       "breaks-convention": "コンベンション違反",
       "unsafe-during-rollout": "ロールアウト中に危険",
       "reviewer-disagrees": "レビュアー不同意"
-    }
+    },
+    "dialogLabel": "候補修正を却下"
   }
 }

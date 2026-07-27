@@ -392,14 +392,15 @@
   "semanticConflict": {
     "title": "语义冲突",
     "clear": "无冲突",
-    "summary": "{{n}} 个候选",
     "cleanHint": "没有触及相同调用图邻域的打开 PR。可以安全合并。",
     "note": "基于调用图预测 — 单纯 git diff 无法检测。",
     "severity": {
       "high": "高",
       "medium": "中",
       "low": "低"
-    }
+    },
+    "summary_one": "{{count}} 个候选",
+    "summary_other": "{{count}} 个候选"
   },
   "safeRename": {
     "title": "安全重命名置信度",
@@ -505,5 +506,9 @@
     "util": "util",
     "test": "test",
     "vendor": "vendor"
+  },
+  "depsCarousel": {
+    "prev": "上一个",
+    "next": "下一个"
   }
 }

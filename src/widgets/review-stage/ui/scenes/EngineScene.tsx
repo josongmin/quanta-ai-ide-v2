@@ -116,7 +116,7 @@ export function EngineScene({
               }}
             >
               <Wand2 className="w-3 h-3" />
-              Apply {summary.autoFix} fix{summary.autoFix === 1 ? '' : 'es'} in batch
+              {t('engine.applyFixBatch', { count: summary.autoFix })}
             </button>
           )}
         </div>

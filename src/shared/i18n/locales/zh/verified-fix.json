@@ -255,6 +255,7 @@
       "breaks-convention": "违反规约",
       "unsafe-during-rollout": "上线期间不安全",
       "reviewer-disagrees": "审核者不同意"
-    }
+    },
+    "dialogLabel": "驳回候选修复"
   }
 }

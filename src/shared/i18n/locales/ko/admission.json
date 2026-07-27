@@ -262,7 +262,15 @@
       "suppressForFile": "이 파일에서 억제",
       "draftFix": "에이전트로 수정 초안",
       "overrideWithReason": "사유와 함께 오버라이드",
-      "noFix": "자동 수정을 사용할 수 없습니다."
+      "noFix": "자동 수정을 사용할 수 없습니다.",
+      "rulesFired_one": "규칙 {{count}}건 발동",
+      "rulesFired_other": "규칙 {{count}}건 발동",
+      "rulesPassed_one": "규칙 {{count}}건 통과",
+      "rulesPassed_other": "규칙 {{count}}건 통과",
+      "prOverrides_one": "이 PR에 오버라이드 {{count}}건",
+      "prOverrides_other": "이 PR에 오버라이드 {{count}}건",
+      "revisions_one": "개정 {{count}}건",
+      "revisions_other": "개정 {{count}}건"
     },
     "fixHint": {
       "semgrep": "패턴 기반 — 에이전트가 패치 초안을 작성할 수 있습니다.",

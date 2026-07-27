@@ -149,5 +149,13 @@
   "palette": {
     "pinTitle": "固定 #{{number}} (⌘⇧P)",
     "unpinTitle": "取消固定 #{{number}} (⌘⇧P)"
+  },
+  "files": {
+    "overlapsIncidents_one": "重叠 {{count}} 起历史事故：{{list}}",
+    "overlapsIncidents_other": "重叠 {{count}} 起历史事故：{{list}}"
+  },
+  "engine": {
+    "applyFixBatch_one": "批量应用 {{count}} 处修复",
+    "applyFixBatch_other": "批量应用 {{count}} 处修复"
   }
 }

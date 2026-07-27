@@ -255,6 +255,7 @@
       "breaks-convention": "breaks-convention",
       "unsafe-during-rollout": "unsafe-during-rollout",
       "reviewer-disagrees": "reviewer-disagrees"
-    }
+    },
+    "dialogLabel": "Dismiss candidate fix"
   }
 }

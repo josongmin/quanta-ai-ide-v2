@@ -1,4 +1,5 @@
 import { Save, X as XIcon } from 'lucide-react';
+import { useTranslation } from '@shared/i18n';
 import type { V2Theme } from './tokens';
 
 // Drawer header: title, cost + version badges, Save + Close actions.
@@ -12,6 +13,7 @@ export function RuleEditorHeader({
   onClose: () => void;
   t: V2Theme;
 }) {
+  const { t: tA } = useTranslation('admission');
   return (
     <div
       className="shrink-0 px-5 py-4 flex items-center gap-2 border-b"
@@ -55,7 +57,7 @@ export function RuleEditorHeader({
       </button>
       <button
         type="button"
-        aria-label="Close"
+        aria-label={tA('gate.modal.close')}
         onClick={onClose}
         className="p-1.5 rounded-md transition-colors"
         style={{ color: t.textMuted }}

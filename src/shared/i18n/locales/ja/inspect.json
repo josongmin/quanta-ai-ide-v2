@@ -392,14 +392,15 @@
   "semanticConflict": {
     "title": "意味的コンフリクト",
     "clear": "クリア",
-    "summary": "候補 {{n}} 件",
     "cleanHint": "同じコールグラフ領域に触れているオープン PR はありません。マージ安全。",
     "note": "コールグラフ予測 — 単純な git diff では検出できません。",
     "severity": {
       "high": "高",
       "medium": "中",
       "low": "低"
-    }
+    },
+    "summary_one": "候補 {{count}} 件",
+    "summary_other": "候補 {{count}} 件"
   },
   "safeRename": {
     "title": "安全リネーム信頼度",
@@ -505,5 +506,9 @@
     "util": "util",
     "test": "test",
     "vendor": "vendor"
+  },
+  "depsCarousel": {
+    "prev": "前へ",
+    "next": "次へ"
   }
 }

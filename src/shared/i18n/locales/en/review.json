@@ -149,5 +149,13 @@
   "palette": {
     "pinTitle": "Pin #{{number}} (⌘⇧P)",
     "unpinTitle": "Unpin #{{number}} (⌘⇧P)"
+  },
+  "files": {
+    "overlapsIncidents_one": "Overlaps {{count}} prior incident: {{list}}",
+    "overlapsIncidents_other": "Overlaps {{count}} prior incidents: {{list}}"
+  },
+  "engine": {
+    "applyFixBatch_one": "Apply {{count}} fix in batch",
+    "applyFixBatch_other": "Apply {{count}} fixes in batch"
   }
 }

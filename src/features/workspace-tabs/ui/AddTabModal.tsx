@@ -7,6 +7,7 @@ import { SURFACE_IDS_ORDERED, getSurfaceMeta, HERO_SURFACES, browseAllSurfaceId 
 import { RECENT_REPOS } from './parts/addTabData';
 import { HeroTile } from './parts/HeroTile';
 import { RepoRow } from './parts/RepoRow';
+import { useTranslation } from '@shared/i18n';
 
 type Props = {
   open: boolean;
@@ -20,6 +21,7 @@ export default function AddTabModal({ open, onClose }: Props) {
   const openSurface = useWorkspaceTabsStore((s) => s.openSurface);
   const navigateToTab = useNavigateToTab();
   const [query, setQuery] = useState('');
+  const { t } = useTranslation('app');
 
   const heroSurfaceIds = useMemo(() => new Set(HERO_SURFACES.map((h) => h.surfaceId)), []);
   const moreSurfaceIds = useMemo(
@@ -156,7 +158,7 @@ export default function AddTabModal({ open, onClose }: Props) {
             <input
               value={query}
               onChange={(e) => { setQuery(e.target.value); }}
-              placeholder="Search repositories"
+              placeholder={t('workspaceTabs.searchRepos')}
               className="flex-1 bg-transparent outline-none text-sm min-w-0"
               style={{ color: 'var(--fg-default)' }}
             />
