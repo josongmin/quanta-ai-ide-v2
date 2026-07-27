@@ -2,7 +2,8 @@
 //
 // Domain types + sample seeds + seed validator. Features are free to add
 // their own mock generators on top, but the core types live here so two
-// features (e.g. confidence + delivery-gate) cannot drift on the same shape.
+// the fix-pipeline feature's several consumers (e.g. confidence scoring +
+// tier/gate decisioning) cannot drift on the same shape.
 
 export type {
   FixSeed,

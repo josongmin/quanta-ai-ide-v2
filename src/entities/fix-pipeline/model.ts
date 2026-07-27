@@ -98,8 +98,8 @@ export type FixCandidate = {
   rejectedReason?: string;
 };
 
-// Three tiers from the spec. The numeric thresholds live in delivery-gate;
-// this is just the vocabulary the rest of the pipeline consumes.
+// Three tiers from the spec. The numeric thresholds live in fix-pipeline's
+// `lib/decideTier.ts`; this is just the vocabulary the rest of the pipeline consumes.
 type DeliveryTier = 'safe-mechanical' | 'guarded' | 'human-required';
 
 export type DeliveryDecision = {

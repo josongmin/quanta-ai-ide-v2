@@ -30,6 +30,17 @@ describe('Tauri CSP connect-src permits the agent-bridge WebSocket', () => {
     expect(connectSrc()).toContain('ws://127.0.0.1:4096');
   });
 
+  it('allows every loopback host isAllowedWsUrl accepts (127.0.0.1, localhost, [::1])', () => {
+    // Lockstep with config.ts isAllowedWsUrl: it accepts ws:// on 127.0.0.1,
+    // localhost, and the IPv6 loopback [::1]. If CSP omits one, a daemon on that
+    // host passes the app allowlist but the socket is refused by the webview —
+    // the exact silent-degrade P0-2 fixed. Keep the two in sync.
+    const directive = connectSrc();
+    expect(directive).toContain('ws://127.0.0.1:4096');
+    expect(directive).toContain('ws://localhost:4096');
+    expect(directive).toContain('ws://[::1]:4096');
+  });
+
   it('allows encrypted wss:// daemons (prod / injected / deeplink)', () => {
     expect(connectSrc()).toMatch(/\bwss:/);
   });

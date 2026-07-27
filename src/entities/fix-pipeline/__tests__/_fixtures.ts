@@ -1,5 +1,5 @@
 // Shared builders for fix-pipeline domain shapes, used by the pure-logic tests
-// (delivery-gate, trust-signal, loop, submit) that all consume the same
+// (decideTier, loop, submit, permissions, buildObligations, computeConfidence) that all consume the same
 // FixCandidate / ValidationResult / PermissionLedger / DeliveryDecision types.
 //
 // Defaults-with-overrides: every builder returns a valid "clean baseline" and

@@ -13,7 +13,7 @@
 //         node scripts/audit-cross-slice.mjs --json
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -104,27 +104,31 @@ function* walk(dir) {
   }
 }
 
+// Catches every specifier form: `import/export ... from '...'`, dynamic
+// `import('...')`, and bare side-effect `import '...'`. Group 1|2|3 holds the
+// specifier depending on which alternative matched. (The old regex matched only
+// the `from` form, so a dynamic or bare cross-slice import evaded the gate.)
 const IMPORT_RE =
-  /(?:^|\n)\s*(?:import|export)[^'"]*?from\s+['"]([^'"]+)['"]/g;
+  /(?:^|\n)\s*(?:import|export)[^'"]*?from\s+['"]([^'"]+)['"]|import\s*\(\s*['"]([^'"]+)['"]\s*\)|(?:^|\n)\s*import\s+['"]([^'"]+)['"]/g;
 
 /**
- * Extract the target slice name from a module specifier given the layer.
- * Returns null if not a cross-layer import.
+ * Extract the target slice name from a module specifier given the layer and the
+ * importing file. Returns null if not a same-layer cross-slice import.
  *
- * Matches both alias (`@features/foo`) and relative-traversal forms
- * (`../../features/foo/...`). Same-slice imports are filtered out by
- * the caller.
+ * Alias form is matched directly. Relative forms are RESOLVED to an absolute
+ * path first (not string-matched), so any number of `../` — including a short
+ * climb to a sibling like `../_shared/x` that never re-spells the layer name —
+ * is classified correctly. Same-slice imports are filtered out by the caller.
  */
-function resolveSlice(spec, layer) {
-  // Alias form.
-  const aliasRe = new RegExp(`^@${layer}/([^/]+)(?:/|$)`);
-  const aliasMatch = aliasRe.exec(spec);
+function resolveSlice(spec, layer, fromFile) {
+  // Alias form (`@features/foo/...`).
+  const aliasMatch = new RegExp(`^@${layer}/([^/]+)(?:/|$)`).exec(spec);
   if (aliasMatch) return aliasMatch[1];
-  // Relative traversal form.
-  const relRe = new RegExp(`(?:^|/)${layer}/([^/]+)(?:/|$)`);
+  // Relative form — resolve against the importing file, then classify by folder.
   if (spec.startsWith('.')) {
-    const relMatch = relRe.exec(spec);
-    if (relMatch) return relMatch[1];
+    const rel = relative(SRC, resolve(dirname(fromFile), spec));
+    const m = new RegExp(`^${layer}[/\\\\]([^/\\\\]+)`).exec(rel);
+    if (m) return m[1];
   }
   return null;
 }
@@ -146,8 +150,9 @@ function auditLayer(layer) {
       let m;
       IMPORT_RE.lastIndex = 0;
       while ((m = IMPORT_RE.exec(src)) !== null) {
-        const spec = m[1];
-        const target = resolveSlice(spec, layer);
+        const spec = m[1] ?? m[2] ?? m[3];
+        if (!spec) continue;
+        const target = resolveSlice(spec, layer, file);
         if (!target || target === slice) continue;
         report[slice] ??= {};
         report[slice][target] ??= { count: 0, examples: [] };

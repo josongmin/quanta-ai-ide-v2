@@ -344,7 +344,7 @@ export const useFixPipelineStore = create<Store>()((set, get) => ({
 
       // Self-healing loop. If the loop hasn't terminated and obligations
       // are still failing, synthesise a re-patched candidate and append
-      // it. The loop bounds (`fix-pipeline-loop`) decided we're allowed
+      // it. The loop bounds (`lib/loop.ts`) decided we're allowed
       // to keep going; otherwise we'd be in `terminated`.
       if (reason === null) {
         const result = critiqueAndRepatch({

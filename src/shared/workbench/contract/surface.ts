@@ -10,8 +10,8 @@ export type SurfaceDescriptor = DeepReadonly<z.infer<typeof surfaceSchema>>;
 export type Surface = SurfaceDescriptor;
 
 // A host-composed arrangement of surfaces into named slots. JSON-safe: slot ->
-// ordered surface ids. Layout *runtime* state (v3 LayoutStore) lives in the
-// kernel; this is only the declarative preset a manifest/host can ship.
+// ordered surface ids. There is no separate layout *runtime* store in the kernel
+// today; this is only the declarative preset a manifest/host can ship.
 export type LayoutPreset = {
   readonly id: string;
   readonly title: string;

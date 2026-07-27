@@ -277,7 +277,6 @@ export default tseslint.config(
   // the state machines remain portable and independently testable.
   {
     files: [
-      'src/shared/ui/runtime/CommandService.ts',
       'src/shared/ui/runtime/DialogService.ts',
       'src/shared/ui/runtime/LayerManager.ts',
       'src/shared/ui/runtime/types.ts',

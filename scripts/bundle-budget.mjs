@@ -38,23 +38,30 @@ const FORBIDDEN_VENDOR_CHUNKS = [
 
 // Heavy app SOURCE ROOTS that must stay behind a dynamic import. App code returns
 // `undefined` from manualChunks, so Vite hash-names its chunks — matching emitted
-// file names (`coding-stage`, `viz-modes`, …) is NOT reliable and silently
-// matched nothing (or, worse, coincidentally matched i18n locale resource chunks
-// like `coding.json`). We fence on SOURCE MEMBERSHIP instead: the vite manifest
-// is keyed by source module id, so we assert none of these roots appears as a key
-// in the entry's transitive STATIC closure. Because every one of these areas is
-// also a dynamic-import target (its facade chunk always exists), a stray static
-// import pulls that same facade key into the static closure and is caught here;
-// the initialGz backstop covers any pathological inline-into-entry case.
-const FORBIDDEN_SOURCE_ROOTS = [
-  'src/features/switch-mode/lib/', // three.js viz engines (DotFieldMode / UniverseMode)
-  'src/features/chat-agent/',
-  'src/widgets/coding-stage/',
-  'src/widgets/review-stage/',
-  'src/features/admission-rules/',
-  'src/widgets/agent-fleet-stage/',
-  'src/widgets/fix-pipeline-stage/',
-];
+// file names (`coding-stage`, `viz-modes`, …) is NOT reliable (it silently matched
+// nothing, or coincidentally matched i18n locale chunks like `coding.json`). We
+// fence on SOURCE MEMBERSHIP instead: the vite manifest is keyed by source module
+// id, so we assert none of these roots appears as a key in the entry's transitive
+// STATIC closure.
+//
+// This is BY CONSTRUCTION rather than a hand-picked list: EVERY `src/widgets/
+// *-stage/` root plus the switch-mode three.js viz engines is a lazy-only surface
+// and must never be static from the entry. A hand list drifts — e.g. org-stage
+// (58KB gz) / me-stage (55KB) are heavier than a hand-listed coding-stage (53KB)
+// yet would be omitted — so a new stage is covered automatically here.
+//
+// Caveat (honest): the manifest keys only facade/barrel modules (entry + dynamic
+// targets), so this catches a stray static import of a heavy root's FACADE — its
+// facade chunk always exists because the area is also a dynamic target. A static
+// DEEP import that bypasses the barrel inlines into the entry chunk with no
+// per-file manifest key; only the initialGz ceiling backstops that case.
+function isForbiddenSourceRoot(manifestKey) {
+  return (
+    /^src\/widgets\/[^/]+-stage\//.test(manifestKey) ||
+    manifestKey.startsWith('src/features/switch-mode/lib/') || // three.js viz engines
+    manifestKey.startsWith('src/features/chat-agent/')
+  );
+}
 
 const BUDGETS = {
   // Critical-path JS before interactivity. The honest floor is ~236 KB gz:
@@ -122,7 +129,7 @@ const initialGz = initialFiles.reduce((a, f) => a + gzOf(f), 0);
 // is keyed by source id, unlike the hash-named emitted files).
 {
   const vendorLeaks = initialFiles.filter((f) => FORBIDDEN_VENDOR_CHUNKS.some((re) => re.test(f)));
-  const sourceLeaks = [...initialKeys].filter((k) => FORBIDDEN_SOURCE_ROOTS.some((root) => k.includes(root)));
+  const sourceLeaks = [...initialKeys].filter((k) => isForbiddenSourceRoot(k));
   const leaks = [...vendorLeaks, ...sourceLeaks];
   if (leaks.length) {
     report.push(`FAIL initial closure leaks heavy/lazy code (must be dynamic-only): ${leaks.join(', ')}`);

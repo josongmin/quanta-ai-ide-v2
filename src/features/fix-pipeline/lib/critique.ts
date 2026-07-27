@@ -11,7 +11,7 @@ import type {
 // it as a follow-up iteration. A real impl re-prompts the LLM with the
 // failure as context.
 //
-// Bounded by `fix-pipeline-loop` — this module just builds the *what*,
+// Bounded by `lib/loop.ts` — this module just builds the *what*,
 // the store decides *whether* to actually run another iteration.
 
 export type CritiqueResult = {
