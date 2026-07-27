@@ -59,8 +59,11 @@ constrained at two layers, and the two are kept in lockstep by tests
   never reads a URL/token from the address bar) over deeplinks where possible.
 
 **Adding a production daemon** therefore requires TWO pinned changes, not a wildcard:
-1. add the daemon's exact origin to `connect-src` (e.g. `wss://daemon.example`),
-   ideally interpolated from a build-time var rather than hardcoded; and
+1. add the daemon's exact origin **and port** to `connect-src` (e.g.
+   `wss://daemon.example`), ideally interpolated from a build-time var rather than
+   hardcoded; this applies to a **local non-4096 env/injected daemon too** — e.g.
+   `VITE_QUANTA_WS_URL=ws://127.0.0.1:5000` bypasses `isAllowedWsUrl` but is still
+   refused by the `:4096`-only CSP and silently degrades chat (the P0-2 class); and
 2. widen `isAllowedWsUrl` **only if** deeplinks to that pinned host are wanted
    (they usually are not — prefer env/injected).
 

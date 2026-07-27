@@ -64,8 +64,12 @@ test('chat-agent: eager theme model is allowlisted; UI and non-theme model are f
   );
 });
 
-test('lazy core FEATURE surfaces (admission-rules, verified-fix) are fenced too (BB1-R2-001)', () => {
-  for (const p of ['src/features/admission-rules/ui/AdmissionRoot.tsx', 'src/features/verified-fix/ui/VerifiedFixRoot.tsx']) {
+test('every lazy surface is fenced: features (admission-rules, verified-fix) AND the non-`-stage` catalog widget (BB1-R2-001 / BB1-R3-001)', () => {
+  for (const p of [
+    'src/features/admission-rules/ui/AdmissionRoot.tsx',
+    'src/features/verified-fix/ui/VerifiedFixRoot.tsx',
+    'src/widgets/catalog/CatalogStage.tsx', // no `-stage` suffix — the round-3 gap
+  ]) {
     assert.deepEqual(
       findStageLeaks(bundle([{ fileName: 'index.js', isEntry: true, imports: [], modules: { [`${ROOT}/${p}`]: {} } }])),
       [`${ROOT}/${p}`],

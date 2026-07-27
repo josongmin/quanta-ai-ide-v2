@@ -15,6 +15,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -104,16 +105,18 @@ function* walk(dir) {
   }
 }
 
-// Catches every specifier form: `import/export ... from '...'` (incl. `export *
-// from`, mid-line, and multiple per line), dynamic `import('...')`, and bare
-// side-effect `import '...'`. Group 1|2|3 holds the specifier. NOTE: no line-start
-// anchor on the from-form — a `\b(?:import|export)\b` word boundary fires after
-// any statement boundary (`a; import {x} from '../sib'` on one line would else
-// evade this hard CI gate). The bare-import form keeps a statement-boundary guard
-// so it doesn't mis-fire on `import(` (dynamic) or an identifier ending in
-// `import`. `[^'";]` (not `[^'"]`) stops a from-match from spanning across a `;`.
-const IMPORT_RE =
-  /\b(?:import|export)\b[^'";]*?\bfrom\s*['"]([^'"]+)['"]|\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)|(?:^|[;{}]|\n)\s*import\s+['"]([^'"]+)['"]/g;
+// Extract every imported specifier from a TS/TSX source, using the TypeScript
+// compiler's own scanner (ts.preProcessFile) instead of an ad-hoc regex.
+// preProcessFile covers static `import/export ... from`, `export * from`, dynamic
+// `import('...')`, bare side-effect `import '...'`, and `import type` — and, being
+// a real scanner, it does NOT match import-shaped text inside comments, string
+// literals, regex literals, or template interpolations. Three rounds of a
+// hand-rolled comment/regex/division tokenizer proved that ambiguity is
+// unwinnable by regex; this is the correct, complete replacement.
+function extractSpecifiers(src) {
+  return ts.preProcessFile(src, /*readImportFiles*/ true, /*detectJavaScriptImports*/ true)
+    .importedFiles.map((f) => f.fileName);
+}
 
 /**
  * Extract the target slice name from a module specifier given the layer and the
@@ -150,12 +153,7 @@ function auditLayer(layer) {
   for (const slice of slices) {
     const sliceDir = join(SRC, layer, slice);
     for (const file of walk(sliceDir)) {
-      const src = stripComments(readFileSync(file, 'utf8'));
-      let m;
-      IMPORT_RE.lastIndex = 0;
-      while ((m = IMPORT_RE.exec(src)) !== null) {
-        const spec = m[1] ?? m[2] ?? m[3];
-        if (!spec) continue;
+      for (const spec of extractSpecifiers(readFileSync(file, 'utf8'))) {
         const target = resolveSlice(spec, layer, file);
         if (!target || target === slice) continue;
         report[slice] ??= {};
@@ -212,59 +210,9 @@ function printTable(rows) {
   }
 }
 
-// Blank out comments so neither a commented-out import (false positive) nor a
-// `/*` hiding inside a string/line-comment/regex (which a naive two-regex strip
-// would treat as a phantom block comment and use to SWALLOW real imports — a
-// silent false negative on this hard gate) can fool IMPORT_RE. A single linear
-// scan that recognises string literals, template literals, regex literals, and
-// both comment forms is the only correct way; regex/division and `/*`-in-string
-// are exactly what an ad-hoc regex gets wrong. Non-comment text is preserved
-// verbatim (offsets don't matter here — we only re-scan for import specifiers).
-const REGEX_PREV = new Set(['', '=', '(', '[', '{', ',', ';', ':', '!', '&', '|', '?', '+', '-', '~', '*', '%', '^', '<', '>', 'n' /* retur[n] */, 'f' /* typeo[f] */, 'o' /* d[o] */]);
-function stripComments(src) {
-  let out = '';
-  let lastSig = '';
-  for (let i = 0; i < src.length;) {
-    const c = src[i];
-    const d = src[i + 1];
-    if (c === '"' || c === "'" || c === '`') { // string / template literal
-      out += c; i++;
-      while (i < src.length) {
-        out += src[i];
-        if (src[i] === '\\') { i++; if (i < src.length) out += src[i]; i++; continue; }
-        if (src[i] === c) { i++; break; }
-        i++;
-      }
-      lastSig = c;
-      continue;
-    }
-    if (c === '/' && d === '/') { while (i < src.length && src[i] !== '\n') i++; continue; }
-    if (c === '/' && d === '*') { i += 2; while (i < src.length && !(src[i] === '*' && src[i + 1] === '/')) i++; i += 2; continue; }
-    if (c === '/' && REGEX_PREV.has(lastSig)) { // regex literal
-      out += c; i++;
-      let inClass = false;
-      while (i < src.length) {
-        const ch = src[i]; out += ch;
-        if (ch === '\\') { i++; if (i < src.length) out += src[i]; i++; continue; }
-        if (ch === '[') inClass = true;
-        else if (ch === ']') inClass = false;
-        else if (ch === '/' && !inClass) { i++; break; }
-        else if (ch === '\n') break;
-        i++;
-      }
-      lastSig = '/';
-      continue;
-    }
-    out += c;
-    if (!/\s/.test(c)) lastSig = c;
-    i++;
-  }
-  return out;
-}
-
 // Exported for regression tests (scripts/__tests__). The CLI body below only
 // runs when this file is executed directly, so importing it does NOT run the audit.
-export { IMPORT_RE, resolveSlice, isAllowed, ALLOWLIST, stripComments };
+export { extractSpecifiers, resolveSlice, isAllowed, ALLOWLIST };
 
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (!isMain) {

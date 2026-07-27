@@ -9,8 +9,12 @@
 // core surfaces that live under `src/features/` (dynamic-import targets in
 // builtinSurfaces.ts: admission-rules, verified-fix) and the switch-mode three.js
 // viz engines and the chat-agent feature.
+// Mirrors the lazy dynamic-import targets in app/workbench/builtinSurfaces.ts
+// ACTIVATORS. Most lazy surfaces are `widgets/*-stage`, but `catalog` and
+// `me-stage` are widgets too and `admission-rules`/`verified-fix` are features —
+// all must stay off the critical path. Keep in sync when a lazy surface is added.
 export const HEAVY_ROOT_RES = [
-  /\/src\/widgets\/[^/]+-stage\//,
+  /\/src\/widgets\/(?:[^/]+-stage|catalog)\//,
   /\/src\/features\/switch-mode\/lib\//,
   /\/src\/features\/chat-agent\//,
   /\/src\/features\/admission-rules\//,

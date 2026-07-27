@@ -47,11 +47,14 @@ const FORBIDDEN_VENDOR_CHUNKS = [
 // as cheap post-build defense-in-depth; the initialGz ceiling is the final backstop.
 function isForbiddenSourceRoot(manifestKey) {
   return (
-    /^src\/widgets\/[^/]+-stage\//.test(manifestKey) ||
+    /^src\/widgets\/(?:[^/]+-stage|catalog)\//.test(manifestKey) || // lazy surfaces (incl. non-`-stage` catalog)
     manifestKey.startsWith('src/features/switch-mode/lib/') || // three.js viz engines
     manifestKey.startsWith('src/features/admission-rules/') || // lazy core surface
     manifestKey.startsWith('src/features/verified-fix/') || // lazy core surface
-    manifestKey.startsWith('src/features/chat-agent/ui/') // chat UI (model/ is the eager theme system)
+    // whole chat-agent feature EXCEPT the eager app-root theme system (mirrors
+    // stageLeakGuard's HEAVY_ROOT_RES + EAGER_ALLOW_RES so the two fences agree).
+    (manifestKey.startsWith('src/features/chat-agent/') &&
+      !/^src\/features\/chat-agent\/model\/(TokensContext|applyTokens|tokenStorage|tokens-types)\b/.test(manifestKey))
   );
 }
 
