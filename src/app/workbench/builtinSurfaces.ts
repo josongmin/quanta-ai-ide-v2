@@ -35,10 +35,7 @@ const SURFACES: readonly SurfaceManifest[] = SURFACE_IDS_ORDERED.map((surfaceId)
 });
 
 const ACTIVATORS: Readonly<Record<string, SurfaceActivator>> = {
-  'core.intelligence': () =>
-    Promise.all([import('@app/router/intelligence'), import('@app/providers/IntelligenceTabProviders')]).then(
-      ([m, p]) => ({ Component: m.IntelligenceLayout, Provider: p.IntelligenceTabProviders }),
-    ),
+  'core.intelligence': () => import('@widgets/intelligence-stage').then((m) => ({ Component: m.IntelligenceStage })),
   'core.coding': () => import('@widgets/coding-stage').then((m) => ({ Component: m.CodingStage })),
   'core.agents': () => import('@widgets/agent-fleet-stage').then((m) => ({ Component: m.AgentFleetStage })),
   'core.reviews': () => import('@widgets/review-stage').then((m) => ({ Component: m.ReviewStage })),

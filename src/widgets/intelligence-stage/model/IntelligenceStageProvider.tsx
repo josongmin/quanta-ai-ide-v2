@@ -5,7 +5,12 @@ import { BoundaryProvider } from '@features/inspect-boundaries/model/BoundaryCon
 import { StackProvider } from '@features/inspect-target/model/StackContext';
 import { InvestigationRunnerProvider } from '@features/investigation/model/InvestigationContext';
 
-export function IntelligenceTabProviders({ children }: { children: ReactNode }) {
+// The Intelligence surface's OWN provider tree — surface-scoped, not global.
+// (App-wide capabilities like Jobs/InvestigationNotebook live in AppProviders
+// and are intentionally NOT composed here.) Lives with the surface so the
+// surface is self-contained and the activator can return a plain { Component };
+// there is no separate Provider slot in the surface-module contract.
+export function IntelligenceStageProvider({ children }: { children: ReactNode }) {
   return (
     <ViewModeProvider>
       <OverlayProvider>

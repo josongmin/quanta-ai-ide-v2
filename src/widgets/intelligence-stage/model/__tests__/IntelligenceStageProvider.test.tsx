@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { useViewMode } from '@features/switch-mode';
-import { IntelligenceTabProviders } from '../IntelligenceTabProviders';
+import { IntelligenceStageProvider } from '../IntelligenceStageProvider';
 import { InvestigationNotebookProvider } from '@features/investigation';
 
 function Probe({ name }: { name: string }) {
@@ -13,12 +13,15 @@ function Probe({ name }: { name: string }) {
   );
 }
 
-describe('IntelligenceTabProviders', () => {
-  it('isolates mutable view state between duplicate tab instances', () => {
+describe('IntelligenceStageProvider', () => {
+  it('isolates mutable view state between duplicate surface instances', () => {
+    // InvestigationNotebook is an APP-global capability (AppProviders), so it
+    // wraps both surface instances here — it is deliberately NOT part of the
+    // per-surface provider tree.
     render(
       <InvestigationNotebookProvider>
-        <IntelligenceTabProviders><Probe name="first" /></IntelligenceTabProviders>
-        <IntelligenceTabProviders><Probe name="second" /></IntelligenceTabProviders>
+        <IntelligenceStageProvider><Probe name="first" /></IntelligenceStageProvider>
+        <IntelligenceStageProvider><Probe name="second" /></IntelligenceStageProvider>
       </InvestigationNotebookProvider>,
     );
 

@@ -11,11 +11,12 @@ import { type Result, type WorkbenchError, type SurfaceDescriptor, ownerOf, ok, 
 // not define a second shape — a manifest IS a `SurfaceDescriptor`.
 export type SurfaceManifest = SurfaceDescriptor;
 
-// The runtime view a surface activates into. `Component` is the view; `Provider`
-// is an optional per-surface wrapper. Both are opaque here (typed as `unknown`)
-// so the catalog stays free of a hard React dependency — the React host casts
-// them at the mount boundary.
-export type SurfaceModule = { readonly Component: unknown; readonly Provider?: unknown };
+// The runtime view a surface activates into. `Component` is the view — opaque
+// here (typed as `unknown`) so the catalog stays free of a hard React
+// dependency; the React host casts it at the mount boundary. There is no
+// Provider slot: a surface that needs providers folds them inside its own
+// Component (uniform single-path assembly, see surfaceView).
+export type SurfaceModule = { readonly Component: unknown };
 
 // Lazy activator: resolves the React view only when the surface is activated.
 export type SurfaceActivator = () => Promise<SurfaceModule>;

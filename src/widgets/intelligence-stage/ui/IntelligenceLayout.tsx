@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { ErrorBoundary } from '@app/providers';
+import { ErrorBoundary } from '@shared/ui';
 import { useTheme } from '@shared/theme';
 import { SearchBar } from '@features/search-dsl';
 import { ModeSwitcher, useViewMode } from '@features/switch-mode';
