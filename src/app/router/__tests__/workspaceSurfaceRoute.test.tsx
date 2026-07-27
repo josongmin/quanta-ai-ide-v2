@@ -1,9 +1,11 @@
+import { Suspense, useEffect } from 'react';
 import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { WorkbenchRoot } from '@shared/workbench/react';
 import { resolveSurfaceRoute, WorkspaceSurface, WorkspaceSurfaceGuard, builtinAdmission, type AdmissionPolicy } from '../workspaceSurfaceRoute';
 import { builtinCatalog } from '@app/workbench/builtinSurfaces';
 import { buildSurfaceCatalog, type SurfaceManifest } from '@app/workbench/surfaceCatalog';
+import { surfaceView } from '@app/workbench/surfaceView';
 
 describe('resolveSurfaceRoute', () => {
   it('resolves a known built-in surface and preserves workspace/surface identity', () => {
@@ -117,4 +119,55 @@ describe('WorkspaceSurfaceGuard (the wired route form)', () => {
     expect(container.querySelector('[data-surface="acme.counted@ws"]')).toBeNull();
     expect(mounts).toBe(0);
   });
+});
+
+// The P0 defect was a surface mounting TWICE — once via the keep-mounted host
+// (which mounts through surfaceView) and once via the canonical route. This is
+// the integration lock: the two code paths that could each mount the surface,
+// rendered TOGETHER for the same surfaceId, must produce EXACTLY ONE mount.
+describe('P0 double-mount lock: host mounter + route guard together', () => {
+  it('mounts a surface exactly once when both the surfaceView mounter and the route guard are present', async () => {
+    let mounts = 0;
+    const descriptor: SurfaceManifest = {
+      id: 'acme.once', owner: 'acme', trust: 'untrusted', title: 'Once',
+      group: 'acme.group', icon: 'Box', instancing: 'singleton', contextKinds: [],
+    };
+    const Counting = () => {
+      useEffect(() => { mounts += 1; }, []);
+      return <div data-counted />;
+    };
+    const built = buildSurfaceCatalog([descriptor], { 'acme.once': () => Promise.resolve({ Component: Counting }) });
+    if (!built.ok) throw new Error('catalog build failed');
+    const entry = built.value.resolve('acme.once');
+    if (entry === undefined) throw new Error('entry missing');
+    // surfaceView IS the exact mechanism the keep-mounted host mounts through.
+    const HostMount = surfaceView(entry);
+    const admitAll: AdmissionPolicy = () => 'ok';
+
+    render(
+      <WorkbenchRoot>
+        {/* route path: the wired guard renders null for a valid surface */}
+        <WorkspaceSurfaceGuard workspaceId="ws" surfaceId="acme.once" admit={admitAll} catalog={built.value} />
+        {/* host path: the keep-mounted host mounts via surfaceView */}
+        <Suspense fallback={null}><HostMount /></Suspense>
+      </WorkbenchRoot>,
+    );
+
+    await waitFor(() => { expect(mounts).toBe(1); });
+    // Let any erroneous second mount (the P0 regression) surface before asserting.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(mounts).toBe(1);
+  });
+});
+
+// Malformed / non-canonical surface ids must degrade to a typed `unknown` state
+// (a typed error surface), never throw or partially resolve.
+describe('resolveSurfaceRoute rejects malformed surface ids gracefully', () => {
+  it.each(['CORE.coding', 'coding', 'core..name', 'core.', '', 'core.<script>'])(
+    'resolves %o to unknown',
+    (bad) => {
+      const state = resolveSurfaceRoute(builtinCatalog, builtinAdmission, 'ws', bad);
+      expect(state.status).toBe('unknown');
+    },
+  );
 });

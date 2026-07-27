@@ -27,22 +27,20 @@
   "entry": [
     "src/app/App.tsx",
     "src/app/router/router.tsx",
-    "src/app/router/workspaceTabsRegistry.tsx",
     "src/app/providers/AppProviders.tsx",
 
-    // Lazy route stages (router.tsx)
-    "src/app/router/intelligence/index.ts",
+    // Lazy route stages (router.tsx) + surface activators (builtinSurfaces.ts)
+    "src/widgets/intelligence-stage/index.ts",
     "src/widgets/coding-stage/index.ts",
     "src/widgets/review-stage/index.ts",
     "src/widgets/fix-pipeline-stage/index.ts",
-    "src/widgets/investigate-stage/index.ts",
     "src/features/admission-rules/index.ts",
     "src/features/verified-fix/index.ts",
     "src/features/investigation/index.ts",
     "src/features/investigation/handoff/index.ts",
 
-    // Lazy tab roots (workspaceTabsRegistry.tsx) — also surface widgets
-    // that are NOT in the router tree but are reachable via the tab picker.
+    // Lazy surface roots (builtinSurfaces.ts activators) — surface widgets
+    // reachable via the tab picker / canonical route but not statically imported.
     "src/widgets/agent-fleet-stage/index.ts",
     "src/widgets/catalog/index.ts",
     "src/widgets/me-stage/index.ts"
