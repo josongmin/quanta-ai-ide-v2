@@ -3,7 +3,8 @@ import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { useShallow } from 'zustand/react/shallow';
 import { ErrorBoundary, SurfaceScope } from '@shared/ui';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
-import { surfaceIdFromPath, getSurfaceMeta, legacyPathForSurface } from '@shared/config/surfaces';
+import { surfaceIdFromPath, legacyPathForSurface } from '@shared/config/surfaces';
+import { useSurfaceTitle } from '../lib/useSurfaceTitle';
 import { useSurfaceRuntime, type SurfaceRuntimeEntry } from '../model/RegistryContext';
 import { TabVisibilityProvider } from './TabVisibilityContext';
 import { reconcileMountedTabs } from '../model/lifecycle';
@@ -81,12 +82,13 @@ const TabPanel = memo(function TabPanel({
   surfaceRuntime: Readonly<Record<string, SurfaceRuntimeEntry>>;
 }) {
   const entry = surfaceRuntime[tab.surfaceId];
+  const surfaceTitle = useSurfaceTitle();
   const owner = useMemo(() => ({
     ownerId: `workspace-surface:${tab.surfaceId}`,
     scopeInstanceId: `tab:${tab.id}`,
     tabId: tab.id,
   }), [tab.id, tab.surfaceId]);
-  const title = getSurfaceMeta(tab.surfaceId)?.title ?? tab.surfaceId;
+  const title = surfaceTitle(tab.surfaceId);
 
   const style: CSSProperties = visible
     ? { position: 'absolute', inset: 0 }

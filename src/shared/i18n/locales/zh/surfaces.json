@@ -1,0 +1,13 @@
+{
+  "core": {
+    "intelligence": "智能",
+    "coding": "编码",
+    "agents": "智能体",
+    "reviews": "评审",
+    "admission": "准入",
+    "fixes": "修复",
+    "fix-pipeline": "修复流水线",
+    "catalog": "目录",
+    "inbox": "收件箱"
+  }
+}

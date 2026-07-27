@@ -6,9 +6,9 @@ import {
   useState,
   type DragEvent,
 } from 'react';
-import { getSurfaceMeta } from '@shared/config/surfaces';
 import { isTauri } from '@shared/lib';
 import { useWorkspaceTabsStore, type WorkspaceTab } from '../model/store';
+import { useSurfaceTitle } from '../lib/useSurfaceTitle';
 import { useNavigateToTab } from './WorkspaceTabsHost';
 import AddTabModal from './AddTabModal';
 import { TabChip } from './parts/TabChip';
@@ -32,6 +32,7 @@ export default function WorkspaceTabsStrip() {
   const reorder = useWorkspaceTabsStore((s) => s.reorder);
   const focusRelative = useWorkspaceTabsStore((s) => s.focusRelative);
   const navigateToTab = useNavigateToTab();
+  const surfaceTitle = useSurfaceTitle();
   const [pickerOpen, setPickerOpen] = useState(false);
   const [focusId, setFocusId] = useState(activeId);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -61,8 +62,8 @@ export default function WorkspaceTabsStrip() {
 
   const visibleTabs = tabs;
   const labelMap = useMemo(
-    () => new Map(tabs.map((tab) => [tab.id, getResolvedLabel(tab, tabs)])),
-    [tabs],
+    () => new Map(tabs.map((tab) => [tab.id, getResolvedLabel(tab, tabs, surfaceTitle)])),
+    [tabs, surfaceTitle],
   );
 
   const scrollTabIntoView = useCallback((id: string, behavior: ScrollBehavior = 'smooth') => {
@@ -294,7 +295,7 @@ export default function WorkspaceTabsStrip() {
                 key={tab.id}
                 ref={(el) => { itemRefs.current[tab.id] = el; }}
                 tab={tab}
-                label={labelMap.get(tab.id) ?? getSurfaceMeta(tab.surfaceId)?.title ?? tab.surfaceId}
+                label={labelMap.get(tab.id) ?? surfaceTitle(tab.surfaceId)}
                 index={i}
                 active={tab.id === activeId}
                 focused={tab.id === focusId}

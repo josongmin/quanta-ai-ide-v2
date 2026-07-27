@@ -3,10 +3,11 @@ import { ArrowRight, Search } from 'lucide-react';
 import { Modal } from '@shared/ui';
 import { useWorkspaceTabsStore } from '../model/store';
 import { useNavigateToTab } from './WorkspaceTabsHost';
-import { SURFACE_IDS_ORDERED, getSurfaceMeta, HERO_SURFACES, browseAllSurfaceId } from '@shared/config/surfaces';
+import { SURFACE_IDS_ORDERED, HERO_SURFACES, browseAllSurfaceId } from '@shared/config/surfaces';
 import { RECENT_REPOS } from './parts/addTabData';
 import { HeroTile } from './parts/HeroTile';
 import { RepoRow } from './parts/RepoRow';
+import { useSurfaceTitle } from '../lib/useSurfaceTitle';
 import { useTranslation } from '@shared/i18n';
 
 type Props = {
@@ -21,6 +22,7 @@ export default function AddTabModal({ open, onClose }: Props) {
   const openSurface = useWorkspaceTabsStore((s) => s.openSurface);
   const navigateToTab = useNavigateToTab();
   const [query, setQuery] = useState('');
+  const surfaceTitle = useSurfaceTitle();
   const { t } = useTranslation('app');
 
   const heroSurfaceIds = useMemo(() => new Set(HERO_SURFACES.map((h) => h.surfaceId)), []);
@@ -118,7 +120,7 @@ export default function AddTabModal({ open, onClose }: Props) {
                 className="text-sm font-medium transition-colors hover:[color:var(--fg-default)]"
                 style={{ color: 'var(--fg-muted)' }}
               >
-                {getSurfaceMeta(surfaceId)?.title ?? surfaceId}
+                {surfaceTitle(surfaceId)}
               </button>
             ))}
           </div>

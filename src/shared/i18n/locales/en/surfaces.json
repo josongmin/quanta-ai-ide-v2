@@ -1,0 +1,13 @@
+{
+  "core": {
+    "intelligence": "Intelligence",
+    "coding": "Coding",
+    "agents": "Agents",
+    "reviews": "Reviews",
+    "admission": "Admission",
+    "fixes": "Fixes",
+    "fix-pipeline": "Fix Pipeline",
+    "catalog": "Catalog",
+    "inbox": "Inbox"
+  }
+}

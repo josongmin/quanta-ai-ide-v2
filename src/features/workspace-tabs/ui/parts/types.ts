@@ -1,4 +1,3 @@
-import { getSurfaceMeta } from '@shared/config/surfaces';
 import type { WorkspaceTab } from '../../model/store';
 
 export const TAB_WIDTH_FIXED = 152;
@@ -8,8 +7,14 @@ export type TabDensity = 'comfortable';
 
 export { clamp, isEditableTarget } from '@shared/lib';
 
-export function getResolvedLabel(tab: WorkspaceTab, tabs: WorkspaceTab[]): string {
-  const base = tab.label ?? getSurfaceMeta(tab.surfaceId)?.title ?? tab.surfaceId;
+// `titleFor` resolves a surfaceId to its (localized) display title — injected so
+// this stays a pure function while the caller owns the i18n lookup.
+export function getResolvedLabel(
+  tab: WorkspaceTab,
+  tabs: WorkspaceTab[],
+  titleFor: (surfaceId: string) => string,
+): string {
+  const base = tab.label ?? titleFor(tab.surfaceId);
   if (tab.label) return base;
   const peers = tabs.filter((t) => t.surfaceId === tab.surfaceId);
   if (peers.length <= 1) return base;

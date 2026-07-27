@@ -1,0 +1,13 @@
+{
+  "core": {
+    "intelligence": "인텔리전스",
+    "coding": "코딩",
+    "agents": "에이전트",
+    "reviews": "리뷰",
+    "admission": "승인",
+    "fixes": "수정",
+    "fix-pipeline": "수정 파이프라인",
+    "catalog": "카탈로그",
+    "inbox": "받은 편지함"
+  }
+}

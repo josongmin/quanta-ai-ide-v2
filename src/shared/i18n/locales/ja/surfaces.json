@@ -1,0 +1,13 @@
+{
+  "core": {
+    "intelligence": "インテリジェンス",
+    "coding": "コーディング",
+    "agents": "エージェント",
+    "reviews": "レビュー",
+    "admission": "アドミッション",
+    "fixes": "修正",
+    "fix-pipeline": "修正パイプライン",
+    "catalog": "カタログ",
+    "inbox": "受信トレイ"
+  }
+}
