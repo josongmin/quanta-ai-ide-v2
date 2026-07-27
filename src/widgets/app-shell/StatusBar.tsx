@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties } from 'react';
 import { Database, GitBranch, FileCheck2, Coins, Bot, ListChecks } from 'lucide-react';
 import { useFilterRepo } from '@entities/filter-state';
-import { useFixPipelineStore } from '@features/fix-pipeline-state';
+import { useFixPipelineStore } from '@features/fix-pipeline';
 import { useActivityStore } from '@features/ai-activity';
 import { useJobs } from '@features/investigation';
 

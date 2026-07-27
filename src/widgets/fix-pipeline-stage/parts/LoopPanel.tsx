@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import type { LoopState } from '@entities/fix-pipeline';
 import { GlassCard, SectionHeader } from '@shared/ui';
-import { describeReason } from '@features/fix-pipeline-loop';
+import { describeReason } from '@features/fix-pipeline';
 
 type Props = {
   loop: LoopState;

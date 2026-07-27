@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import type { CostTelemetry, CycleCost } from '@entities/fix-pipeline';
 import { GlassCard, SectionHeader } from '@shared/ui';
-import { formatTokens, formatUsd } from '@features/fix-pipeline-cost';
+import { formatTokens, formatUsd } from '@features/fix-pipeline';
 
 type Props = {
   cost: CostTelemetry;

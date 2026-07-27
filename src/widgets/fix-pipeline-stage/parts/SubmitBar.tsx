@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import type { DeliveryDecision, PermissionLedger, SubmissionRecord } from '@entities/fix-pipeline';
 import { GlassCard, SectionHeader } from '@shared/ui';
-import { decideSubmissionAction } from '@features/fix-pipeline-submit';
+import { decideSubmissionAction } from '@features/fix-pipeline';
 
 type Props = {
   candidateId: string;

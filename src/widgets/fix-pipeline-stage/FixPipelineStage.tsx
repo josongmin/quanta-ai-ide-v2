@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from '@shared/i18n';
-import { useFixPipelineStore } from '@features/fix-pipeline-state';
+import { useFixPipelineStore } from '@features/fix-pipeline';
 import { SeedRail } from './parts/SeedRail';
 import { RootCausePane } from './parts/RootCausePane';
 import { DiffPane } from './parts/DiffPane';

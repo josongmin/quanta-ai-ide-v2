@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { TFunction } from 'i18next';
 import type { CandidateDismissal, ConfidenceScore, DismissReason } from '@entities/fix-pipeline';
 import { GlassCard, SectionHeader } from '@shared/ui';
-import { levelLabel } from '@features/trust-signal';
+import { levelLabel } from '@features/fix-pipeline';
 
 type Props = {
   candidateId: string;

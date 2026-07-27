@@ -25,33 +25,22 @@ import {
   type SubmissionRecord,
   type ValidationResult,
 } from '@entities/fix-pipeline';
-import {
-  addCost,
-  applyPartialAccept,
-  blockedRecord,
-  buildObligations,
-  buildReanalysis,
-  buildRollback,
-  computeConfidence,
-  critiqueAndRepatch,
-  currentFailureKey,
-  decideSubmissionAction,
-  decideTermination,
-  decideTier,
-  estimateCycleCost,
-  INITIAL_LEDGER,
-  INITIAL_LOOP,
-  markRan,
-  recordSuccess,
-  simulateGenerate,
-  simulateRunValidation,
-  submit,
-  suggestReviewer,
-  summariseObligations,
-  toggleHunk,
-  unsubmittedRecord,
-  ZERO_COST,
-} from '../lib/pipelineIntegrations';
+// Pipeline steps as lib/ submodules (collapsed from 13 sibling features into
+// this one feature; each was consumed only here). Imported per-file rather than
+// through a re-export barrel so the store's true dependency fan-out is visible.
+import { simulateGenerate } from '../lib/generate';
+import { addCost, estimateCycleCost, ZERO_COST } from '../lib/cycleCost';
+import { currentFailureKey, decideTermination, INITIAL_LOOP } from '../lib/loop';
+import { applyPartialAccept, toggleHunk } from '../lib/partialAccept';
+import { INITIAL_LEDGER, recordSuccess } from '../lib/permissions';
+import { buildReanalysis, markRan } from '../lib/reanalyze';
+import { buildRollback } from '../lib/rollback';
+import { suggestReviewer } from '../lib/routing';
+import { critiqueAndRepatch } from '../lib/critique';
+import { blockedRecord, decideSubmissionAction, submit, unsubmittedRecord } from '../lib/submit';
+import { buildObligations, simulateRunValidation, summariseObligations } from '../lib/buildObligations';
+import { decideTier } from '../lib/decideTier';
+import { computeConfidence } from '../lib/computeConfidence';
 
 // Single store. The whole point of feature 06 is keeping every sub-feature
 // in lock-step: candidate / verification / gate / trust-signal / cost /
