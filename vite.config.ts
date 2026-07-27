@@ -67,16 +67,17 @@ export default defineConfig({
     // imports are recorded separately, which is exactly the split we budget on.
     manifest: true,
     // Vite's default is to emit `<link rel="modulepreload">` for every chunk
-    // reachable from the entry — including dynamic-import targets. That
-    // would defeat the whole point of code-splitting three.js / chat-agent
-    // off the critical path. We filter the preload list down to chunks that
-    // belong to the *static* dependency graph of the entry (vendor-react,
-    // vendor-icons) and drop the lazy ones (`vendor-three`, `viz-modes`,
-    // any chat-agent chunk). The polyfill stays on for older Tauri webviews.
+    // reachable from the entry — including dynamic-import targets. That would
+    // defeat code-splitting three.js / auth off the critical path. We drop the
+    // heavy vendor chunks from the preload list; app lazy chunks are hash-named
+    // (manualChunks returns undefined for app code) and aren't static deps of
+    // the entry, so they never reach this filter — the bundle-budget leak guard
+    // is the real enforcement (by source membership, not by name). The polyfill
+    // stays on for older Tauri webviews.
     modulePreload: {
       polyfill: true,
       resolveDependencies: (_filename, deps) =>
-        deps.filter((d) => !/vendor-three|viz-modes|chat-agent|admission-|coding-|review-/.test(d)),
+        deps.filter((d) => !/vendor-three|vendor-auth/.test(d)),
     },
     rollupOptions: {
       output: {

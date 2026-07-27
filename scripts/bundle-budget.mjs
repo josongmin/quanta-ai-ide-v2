@@ -28,18 +28,32 @@ if (!fs.existsSync(MANIFEST)) {
 }
 const manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
 
-// Chunks that must NEVER appear in the initial static closure — each is either a
-// heavy vendor lib or a per-surface stage that must stay behind a dynamic import.
-// A match here means a static import leaked it onto the critical path.
-const FORBIDDEN_IN_INITIAL = [
+// Heavy vendor CHUNKS that must never appear in the initial static closure.
+// These are named by manualChunks (vite.config), so matching the emitted file
+// name is reliable for them.
+const FORBIDDEN_VENDOR_CHUNKS = [
   /vendor-three/,
   /vendor-auth/,
-  /coding-turn/,
-  /coding-stage/,
-  /admission-/,
-  /review-stage/,
-  /chat-agent/,
-  /viz-modes/,
+];
+
+// Heavy app SOURCE ROOTS that must stay behind a dynamic import. App code returns
+// `undefined` from manualChunks, so Vite hash-names its chunks — matching emitted
+// file names (`coding-stage`, `viz-modes`, …) is NOT reliable and silently
+// matched nothing (or, worse, coincidentally matched i18n locale resource chunks
+// like `coding.json`). We fence on SOURCE MEMBERSHIP instead: the vite manifest
+// is keyed by source module id, so we assert none of these roots appears as a key
+// in the entry's transitive STATIC closure. Because every one of these areas is
+// also a dynamic-import target (its facade chunk always exists), a stray static
+// import pulls that same facade key into the static closure and is caught here;
+// the initialGz backstop covers any pathological inline-into-entry case.
+const FORBIDDEN_SOURCE_ROOTS = [
+  'src/features/switch-mode/lib/', // three.js viz engines (DotFieldMode / UniverseMode)
+  'src/features/chat-agent/',
+  'src/widgets/coding-stage/',
+  'src/widgets/review-stage/',
+  'src/features/admission-rules/',
+  'src/widgets/agent-fleet-stage/',
+  'src/widgets/fix-pipeline-stage/',
 ];
 
 const BUDGETS = {
@@ -102,14 +116,19 @@ const initialGz = initialFiles.reduce((a, f) => a + gzOf(f), 0);
   if (!ok) failed = true;
 }
 
-// ── Leak guard: no heavy/lazy chunk may be in the initial static closure ────
+// ── Leak guard: no heavy/lazy area may be in the initial static closure ─────
+// Two checks: vendor chunks by emitted name (reliable — manualChunks names them),
+// app areas by SOURCE-module membership in the closure (reliable — the manifest
+// is keyed by source id, unlike the hash-named emitted files).
 {
-  const leaks = initialFiles.filter((f) => FORBIDDEN_IN_INITIAL.some((re) => re.test(f)));
+  const vendorLeaks = initialFiles.filter((f) => FORBIDDEN_VENDOR_CHUNKS.some((re) => re.test(f)));
+  const sourceLeaks = [...initialKeys].filter((k) => FORBIDDEN_SOURCE_ROOTS.some((root) => k.includes(root)));
+  const leaks = [...vendorLeaks, ...sourceLeaks];
   if (leaks.length) {
-    report.push(`FAIL initial closure leaks lazy/heavy chunks (must be dynamic-only): ${leaks.join(', ')}`);
+    report.push(`FAIL initial closure leaks heavy/lazy code (must be dynamic-only): ${leaks.join(', ')}`);
     failed = true;
   } else {
-    report.push('OK   initial closure contains no forbidden heavy/lazy chunk');
+    report.push('OK   initial closure contains no forbidden heavy/lazy vendor chunk or app source root');
   }
 }
 
