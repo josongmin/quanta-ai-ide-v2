@@ -6,7 +6,7 @@ import {
 import { env } from '@shared/config/env';
 import { requestPasswordReset } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
-import { Field, Button } from './parts/AuthForm';
+import { AuthField as Field, AuthButton as Button } from '@shared/ui/forms';
 import { useRateLimit } from './lib/rateLimit';
 import { lookupIdP, PROVIDER_LABEL } from './lib/idpDirectory';
 

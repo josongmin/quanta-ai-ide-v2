@@ -5,7 +5,7 @@ import {
   Copy, ExternalLink,
 } from 'lucide-react';
 import { AuthShell } from './parts/AuthShell';
-import { Field, Button } from './parts/AuthForm';
+import { AuthField as Field, AuthButton as Button } from '@shared/ui/forms';
 import { OAuthRedirectOverlay } from './parts/OAuthRedirectOverlay';
 import { lookupIdP, PROVIDER_LABEL, type IdPRecord } from './lib/idpDirectory';
 

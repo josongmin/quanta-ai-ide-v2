@@ -1,5 +1,5 @@
 import { Fingerprint } from 'lucide-react';
-import { Button } from '../AuthForm';
+import { AuthButton as Button } from '@shared/ui/forms';
 import type { Phase } from './types';
 
 // WebAuthn — animated fingerprint pulse + state machine.

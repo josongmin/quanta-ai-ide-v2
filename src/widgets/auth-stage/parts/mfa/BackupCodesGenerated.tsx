@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Download, Copy, Check } from 'lucide-react';
 import { AuthShell } from '../AuthShell';
-import { Button } from '../AuthForm';
+import { AuthButton as Button } from '@shared/ui/forms';
 import { generateCodes } from '../../lib/generateCodes';
 import { useCopyToClipboard } from '@shared/lib';
 

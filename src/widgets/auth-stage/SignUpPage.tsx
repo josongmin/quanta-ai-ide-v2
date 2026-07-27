@@ -7,10 +7,9 @@ import { env } from '@shared/config/env';
 import { signUpWithPassword, signInWithProvider, type OAuthProvider } from '@entities/session';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { AuthShell } from './parts/AuthShell';
-import { Field, Button, HRule } from './parts/AuthForm';
+import { AuthField as Field, AuthButton as Button, AuthHRule as HRule } from '@shared/ui/forms';
 import { OAuthRedirectOverlay } from './parts/OAuthRedirectOverlay';
-import { PasswordStrengthPanel } from './parts/PasswordStrengthPanel';
-import { evaluatePassword } from './lib/passwordRules';
+import { PasswordStrengthPanel, evaluatePassword } from '@features/password-strength';
 import { lookupIdP, PROVIDER_LABEL } from './lib/idpDirectory';
 import { formatTime } from '@shared/i18n';
 

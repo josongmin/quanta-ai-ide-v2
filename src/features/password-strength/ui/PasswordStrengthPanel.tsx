@@ -1,5 +1,5 @@
 import { Check, AlertTriangle, ShieldAlert } from 'lucide-react';
-import type { PasswordReport } from '../lib/passwordRules';
+import type { PasswordReport } from '../model/passwordRules';
 
 const STRENGTH_FG: Record<PasswordReport['score'], string> = {
   0: 'var(--fg-subtle)',

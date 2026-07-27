@@ -3,7 +3,7 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { verifyTotp, verifyBackupCode } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
-import { Button } from './parts/AuthForm';
+import { AuthButton as Button } from '@shared/ui/forms';
 import { TotpInput, BackupInput, TrustDevice, type Phase } from './parts/mfa';
 
 // Real 2FA challenge during sign-in (reached when signIn reports twoFactorRedirect).

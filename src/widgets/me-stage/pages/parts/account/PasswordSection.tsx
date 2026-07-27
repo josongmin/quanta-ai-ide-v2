@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import { Section, Row, Field, Button } from '@shared/ui/forms';
-import { PasswordStrengthPanel, evaluatePassword } from '@widgets/auth-stage';
+import { PasswordStrengthPanel, evaluatePassword } from '@features/password-strength';
 
 export function PasswordSection() {
   const [editing, setEditing] = useState(false);

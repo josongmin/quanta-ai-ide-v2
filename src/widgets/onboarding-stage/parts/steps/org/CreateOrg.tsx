@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react';
 import { Check, Loader2, X, Upload } from 'lucide-react';
-import { Field } from '@widgets/auth-stage';
+import { AuthField as Field } from '@shared/ui/forms';
 import { useAvailability } from '../../../lib/availability';
 import type { OrgStepProps } from './types';
 import { INDUSTRIES, SIZES } from './data';

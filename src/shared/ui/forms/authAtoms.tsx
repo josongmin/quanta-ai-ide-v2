@@ -1,11 +1,15 @@
 import { forwardRef, type ReactNode, type InputHTMLAttributes } from 'react';
 import { Link } from '@tanstack/react-router';
 
-// Tight form primitives used across the auth pages. They all collapse to
-// the same input height (h-9), border treatment, and label rhythm so
-// every page reads as one family.
+// Vertical form atoms (label-above-input) with a tight, single-family rhythm:
+// every control collapses to the same input height (h-9), border treatment,
+// and label spacing. Distinct from the horizontal settings kit in
+// ./primitives (AuthField/AuthButton/AuthHRule vs Field/Button/Divider) — the
+// two families intentionally coexist. Named `Auth*` because this is the visual
+// language of the auth flow, but they carry no auth/session logic and are
+// reused by onboarding wizards too.
 
-type FieldProps = {
+type AuthFieldProps = {
   label: string;
   hint?: string;
   hintTo?: string;       // when set, hint becomes a router Link
@@ -13,7 +17,7 @@ type FieldProps = {
   error?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
+export const AuthField = forwardRef<HTMLInputElement, AuthFieldProps>(function AuthField(
   { label, hint, hintTo, trailing, error, ...rest }, ref,
 ) {
   return (
@@ -60,7 +64,7 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
   );
 });
 
-type ButtonProps = {
+type AuthButtonProps = {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'ghost';
   full?: boolean;
@@ -70,10 +74,10 @@ type ButtonProps = {
   disabled?: boolean;
 };
 
-export function Button({
+export function AuthButton({
   children, variant = 'primary', full = true, type = 'button',
   onClick, leading, disabled,
-}: ButtonProps) {
+}: AuthButtonProps) {
   const base = `inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold tracking-tight transition-colors ${full ? 'w-full' : ''}`;
 
   const styles =
@@ -108,7 +112,7 @@ export function Button({
   );
 }
 
-export function HRule({ label = 'or' }: { label?: string }) {
+export function AuthHRule({ label = 'or' }: { label?: string }) {
   return (
     <div className="flex items-center gap-3 text-xs uppercase tracking-eyebrow"
       style={{ color: 'var(--fg-subtle)' }}
@@ -119,4 +123,3 @@ export function HRule({ label = 'or' }: { label?: string }) {
     </div>
   );
 }
-

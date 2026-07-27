@@ -4,7 +4,7 @@ import { Check, AlertCircle, Loader2, UserPlus } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { acceptInvitation } from '@entities/org';
 import { AuthShell } from './parts/AuthShell';
-import { Button } from './parts/AuthForm';
+import { AuthButton as Button } from '@shared/ui/forms';
 
 type Phase = 'accepting' | 'success' | 'error';
 

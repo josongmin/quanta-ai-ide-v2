@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { AuthShell } from './parts/AuthShell';
-import { Button } from './parts/AuthForm';
+import { AuthButton as Button } from '@shared/ui/forms';
 import {
   MethodTabs, TotpInput, WebAuthnPrompt, BackupInput,
   TrustDevice, LowBackupBanner, FallbackHint, BackupCodesGenerated,

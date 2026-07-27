@@ -3,7 +3,7 @@ import { Mail, Loader2, Check, Eye, EyeOff, AlertTriangle, Trash2 } from 'lucide
 import { MeShell } from '../parts/MeShell';
 import { Section, Row, Field, Button, Divider } from '@shared/ui/forms';
 import { InlineError } from '@shared/ui';
-import { PasswordStrengthPanel, evaluatePassword } from '@widgets/auth-stage';
+import { PasswordStrengthPanel, evaluatePassword } from '@features/password-strength';
 import {
   useSession, changeEmail, changePassword, requestAccountDeletion,
 } from '@entities/session';

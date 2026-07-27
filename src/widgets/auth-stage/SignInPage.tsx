@@ -8,7 +8,7 @@ import { signInWithPassword, signInWithProvider, type OAuthProvider } from '@ent
 import { resolveSso } from '@entities/org';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { AuthShell } from './parts/AuthShell';
-import { Field, Button, HRule } from './parts/AuthForm';
+import { AuthField as Field, AuthButton as Button, AuthHRule as HRule } from '@shared/ui/forms';
 import { OAuthRedirectOverlay } from './parts/OAuthRedirectOverlay';
 import { useRateLimit } from './lib/rateLimit';
 import { lookupIdP, PROVIDER_LABEL } from './lib/idpDirectory';

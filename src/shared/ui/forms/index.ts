@@ -17,3 +17,12 @@ export {
   Button,
   SaveBar,
 } from './primitives';
+
+// Vertical auth/onboarding form atoms (label-above-input). Kept as distinct
+// exports from the horizontal settings Field/Button above — different public
+// API and rhythm, so they must not collide.
+export {
+  AuthField,
+  AuthButton,
+  AuthHRule,
+} from './authAtoms';

@@ -6,7 +6,7 @@ import {
 import { env } from '@shared/config/env';
 import { verifyEmail } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
-import { Button } from './parts/AuthForm';
+import { AuthButton as Button } from '@shared/ui/forms';
 import { formatTime, formatDate } from '@shared/i18n';
 
 type Phase = 'verifying' | 'success' | 'expired' | 'reused' | 'wasnt-me';

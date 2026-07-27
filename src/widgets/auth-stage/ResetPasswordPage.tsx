@@ -6,9 +6,8 @@ import {
 import { env } from '@shared/config/env';
 import { resetPassword } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
-import { Field, Button } from './parts/AuthForm';
-import { PasswordStrengthPanel } from './parts/PasswordStrengthPanel';
-import { evaluatePassword } from './lib/passwordRules';
+import { AuthField as Field, AuthButton as Button } from '@shared/ui/forms';
+import { PasswordStrengthPanel, evaluatePassword } from '@features/password-strength';
 import { formatTime } from '@shared/i18n';
 
 type Phase = 'form' | 'submitting' | 'success' | 'token-invalid';

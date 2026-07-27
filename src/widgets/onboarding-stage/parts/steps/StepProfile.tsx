@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Field } from '@widgets/auth-stage';
+import { AuthField as Field } from '@shared/ui/forms';
 import { useAvailability } from '../../lib/availability';
 import { detectBrowserTimezone, detectBrowserLocale } from '../../lib/timezones';
 import type { WizardData } from '../wizard';
