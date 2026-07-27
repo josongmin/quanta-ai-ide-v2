@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GitBranch } from 'lucide-react';
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export function PlannerLauncher({ onRun, running }: Props) {
+  const { t } = useTranslation('investigation');
   const disabled = running;
   const style: CSSProperties = {
     background: disabled ? 'var(--bg-surface-muted)' : 'var(--bg-active)',
@@ -22,10 +24,10 @@ export function PlannerLauncher({ onRun, running }: Props) {
       onClick={disabled ? undefined : onRun}
       style={style}
       className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium"
-      title={running ? 'Reflection loop running…' : 'Run a multi-hop reflection over the gathered evidence'}
+      title={running ? t('planner.launcher.runningTitle') : t('planner.launcher.runTitle')}
     >
       <GitBranch size={12} aria-hidden="true" />
-      <span>{running ? 'Reflecting…' : 'Run reflection loop'}</span>
+      <span>{running ? t('planner.launcher.running') : t('planner.launcher.run')}</span>
     </button>
   );
 }

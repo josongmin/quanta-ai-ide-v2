@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 export function ShortcutsHint() {
+  const { t } = useTranslation('investigation');
   return (
     <span
       className="font-mono truncate"
@@ -12,7 +15,7 @@ export function ShortcutsHint() {
       }}
       aria-hidden="true"
     >
-      ESC close · n toggle mode · j/k navigate · ⌘R regenerate
+      {t('shortcuts.hint')}
     </span>
   );
 }

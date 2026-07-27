@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { UnknownTag as UnknownTagType } from '@entities/investigation';
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 // provided the tag becomes a button so users can convert an unknown into a
 // follow-up question without leaving the answer view.
 export function UnknownTag({ tag, onClick }: Props) {
+  const { t } = useTranslation('investigation');
   const interactive = Boolean(onClick);
   const style: CSSProperties = {
     background: 'var(--bg-surface-muted)',
@@ -21,7 +23,7 @@ export function UnknownTag({ tag, onClick }: Props) {
     cursor: interactive ? 'pointer' : 'default',
   };
   const titleAttr = interactive
-    ? `${tag.reason} — click to ask a follow-up`
+    ? t('unknownTag.clickHint', { reason: tag.reason })
     : tag.reason;
 
   if (interactive) {
@@ -29,7 +31,7 @@ export function UnknownTag({ tag, onClick }: Props) {
       <button
         type="button"
         title={titleAttr}
-        aria-label={`Resolve unknown: ${tag.label}`}
+        aria-label={t('unknownTag.resolveAria', { label: tag.label })}
         style={style}
         onClick={() => onClick?.(tag)}
         className="inline-flex items-center px-1.5 py-0.5 rounded font-mono transition-colors hover:[background:var(--bg-hover)]"

@@ -1,1 +1,258 @@
-{}
+{
+  "common": {
+    "investigation": "조사",
+    "investigate": "조사하기"
+  },
+  "action": {
+    "comingSoon": "준비 중"
+  },
+  "answer": {
+    "section": {
+      "conclusion": "결론",
+      "hypothesis": "가설",
+      "unknowns": "미확인 항목",
+      "actions": "액션"
+    },
+    "noneReported": "(보고된 항목 없음)",
+    "clickUnknownHint": "미확인 항목을 클릭하면 후속 질문을 할 수 있습니다."
+  },
+  "confidence": {
+    "label": "신뢰도: {{level}}",
+    "level": {
+      "high": "높음",
+      "medium": "중간",
+      "low": "낮음",
+      "unknown": "미확인"
+    }
+  },
+  "coverage": {
+    "label": "커버리지",
+    "reason": {
+      "dispatch_overapprox": "디스패치 과대 근사",
+      "runtime_missing": "런타임 데이터 없음",
+      "index_stale": "인덱스 오래됨",
+      "analysis_truncated": "분석 잘림"
+    },
+    "partialReasons": "부분 커버리지 사유: {{reasons}}",
+    "allFresh": "모든 증거가 최신 상태",
+    "tooltip": "커버리지 {{pct}}% — 최신 {{fresh}}, 오래됨 {{stale}}, 부분 {{partial}}. {{reasonText}}."
+  },
+  "evidence": {
+    "detail": "상세",
+    "hideDetail": "상세 숨기기",
+    "partial": {
+      "dispatch_overapprox": "부분: 디스패치 과대 근사",
+      "runtime_missing": "부분: 런타임 없음",
+      "index_stale": "부분: 인덱스 오래됨",
+      "analysis_truncated": "부분: 분석 잘림"
+    }
+  },
+  "gathering": {
+    "gathering": "증거 수집 중…",
+    "soFar_one": "지금까지 증거 {{count}}개 · 계속 수집 중…",
+    "soFar_other": "지금까지 증거 {{count}}개 · 계속 수집 중…",
+    "running": "실행 중: {{tool}}"
+  },
+  "hypothesis": {
+    "confidence": "가설 신뢰도",
+    "supporting": "지지 증거",
+    "refuting": "반박 증거",
+    "none": "(없음)"
+  },
+  "staleness": {
+    "fresh": "최신",
+    "stale": "오래됨",
+    "unknown": "?"
+  },
+  "sourceTool": {
+    "short": {
+      "taint_flow": "taint",
+      "find_references": "refs",
+      "change_impact": "impact",
+      "function_summary": "fnsum",
+      "semantic_search": "sem",
+      "lexical_search": "lex",
+      "hybrid_search": "hybrid",
+      "go_to_definition": "def",
+      "graph_path": "graph",
+      "proof_analysis": "proof",
+      "index_status": "idx",
+      "incremental": "inc",
+      "explain": "expl"
+    },
+    "full": {
+      "lexical_search": "렉시컬 검색",
+      "semantic_search": "시맨틱 검색",
+      "hybrid_search": "하이브리드 검색",
+      "go_to_definition": "정의로 이동",
+      "find_references": "참조 찾기",
+      "function_summary": "함수 요약",
+      "graph_path": "그래프 경로",
+      "taint_flow": "테인트 흐름",
+      "change_impact": "변경 영향",
+      "proof_analysis": "증명 분석",
+      "index_status": "인덱스 상태",
+      "incremental": "증분 분석",
+      "explain": "설명"
+    }
+  },
+  "unknownTag": {
+    "clickHint": "{{reason}} — 클릭하여 후속 질문하기",
+    "resolveAria": "미확인 항목 해결: {{label}}"
+  },
+  "followup": {
+    "title": "후속 질문",
+    "from": "출처: {{reason}}"
+  },
+  "handoff": {
+    "banner": {
+      "title": "증거를 fix pipeline으로 전달했습니다",
+      "meta_one": "증거 {{count}}개",
+      "meta_other": "증거 {{count}}개",
+      "hypothesis": "가설 1개",
+      "dismiss": "전달 배너 닫기"
+    },
+    "breadcrumb": {
+      "back": "뒤로",
+      "backAria": "조사로 돌아가기",
+      "from": "조사 출처:",
+      "evidence_one": "증거 {{count}}개",
+      "evidence_other": "증거 {{count}}개",
+      "dismiss": "경로 표시 닫기"
+    },
+    "notice": {
+      "sending": "증거를 fix pipeline으로 보내는 중…"
+    }
+  },
+  "jobs": {
+    "status": {
+      "queued": "대기 중",
+      "running": "실행 중",
+      "partial": "부분",
+      "stale": "오래됨",
+      "completed": "완료",
+      "cancelled": "취소됨",
+      "failed": "실패"
+    },
+    "cancel": "작업 취소",
+    "tray": {
+      "title": "조사 작업",
+      "close": "닫기",
+      "closeAria": "작업 목록 닫기",
+      "settledActive": "완료 {{settled}}개 · 진행 {{active}}개",
+      "clearCompleted": "완료 항목 지우기"
+    }
+  },
+  "notebook": {
+    "ask": "질문",
+    "askButton": "질문",
+    "addQuestion": "질문 추가",
+    "pickTargetPlaceholder": "대상을 선택하면 질문을 시작할 수 있습니다…",
+    "askAboutPlaceholder": "{{label}}에 대해 질문하기…",
+    "findings": "발견 사항",
+    "noFindings": "아직 발견 사항이 없습니다 — 답변된 질문이 여기에 표시됩니다.",
+    "pendingUnknowns": "미해결 항목",
+    "noOutstandingUnknowns": "미해결 항목이 없습니다.",
+    "actions": "액션",
+    "noActions": "아직 제안된 액션이 없습니다.",
+    "resolveUnknown": "미확인 항목 해결: {{label}}",
+    "followUpTitle": "클릭하여 후속 질문: {{reason}}",
+    "body": {
+      "noEntry": "이 대상에 대한 노트북 항목이 아직 없습니다."
+    }
+  },
+  "planner": {
+    "launcher": {
+      "running": "추론 중…",
+      "run": "리플렉션 루프 실행",
+      "runningTitle": "리플렉션 루프 실행 중…",
+      "runTitle": "수집된 증거에 대해 다단계 리플렉션 실행"
+    },
+    "trace": {
+      "title": "리플렉션 추적",
+      "step": "단계 {{index}}",
+      "stepPending": "단계 {{index}}…",
+      "reflecting": "추론 중",
+      "next": "다음: {{question}}",
+      "end": "(종료)",
+      "final": "최종"
+    }
+  },
+  "similar": {
+    "code": "유사 코드",
+    "incidentFallback": "유사 인시던트",
+    "dateUnknown": "(날짜 미상)",
+    "cases": "유사 사례"
+  },
+  "cta": {
+    "title": "조사하기"
+  },
+  "launcher": {
+    "openTitle": "조사 워크스페이스 열기",
+    "meta": "데모 대상 {{targets}}개 · 실행 중인 작업 {{jobs}}개"
+  },
+  "panel": {
+    "ariaLabel": "조사 워크스페이스",
+    "owner": {
+      "queued": "소유자 할당이 대기열에 추가됨"
+    },
+    "deepScanLabel": "심층 스캔: {{label}}",
+    "resolveUnknown": "미확인 항목 해결: {{label}}"
+  },
+  "allEvidence": {
+    "regionAria": "전체 증거",
+    "title": "전체 증거 ({{count}})"
+  },
+  "answerBody": {
+    "answerAria": "답변",
+    "similarAria": "유사 사례",
+    "followupAria": "후속 질문",
+    "reflectionAria": "리플렉션 추적",
+    "failed": "조사에 실패했습니다.",
+    "retry": "다시 시도"
+  },
+  "targetKind": {
+    "file": "파일",
+    "symbol": "심볼",
+    "incident": "인시던트"
+  },
+  "empty": {
+    "kind": {
+      "file": "파일",
+      "symbol": "심볼",
+      "incident": "인시던트"
+    },
+    "title": "진행 중인 조사가 없습니다",
+    "subtitle": "데모 대상을 선택하세요 — 파일, 심볼, 인시던트."
+  },
+  "footer": {
+    "targetSummary": "증거 {{count}}개 · {{status}}",
+    "noTargetSummary": "데모 대상 {{count}}개 · 위에서 하나를 선택하세요",
+    "regenerate": "다시 생성",
+    "regenerateAria": "조사 다시 생성"
+  },
+  "header": {
+    "title": "조사",
+    "reset": "초기화",
+    "resetTitle": "현재 대상 지우기 — 데모 목록으로 돌아가기",
+    "close": "조사 닫기"
+  },
+  "tabs": {
+    "modeAria": "조사 보기 모드",
+    "answer": "답변",
+    "notebook": "노트북",
+    "questionType": {
+      "why_risky": "왜 위험한가?",
+      "blast_of_change": "변경의 영향 범위?",
+      "incident_suspect": "인시던트 용의 대상?"
+    },
+    "short": {
+      "why_risky": "위험",
+      "blast_of_change": "영향",
+      "incident_suspect": "용의"
+    }
+  },
+  "shortcuts": {
+    "hint": "ESC 닫기 · n 모드 전환 · j/k 이동 · ⌘R 다시 생성"
+  }
+}

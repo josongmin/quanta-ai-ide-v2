@@ -1,15 +1,9 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { BundleCoverage, WhyPartial } from '@entities/investigation';
 
 type Props = {
   coverage: BundleCoverage | undefined;
-};
-
-const REASON_LABELS: Record<NonNullable<WhyPartial>, string> = {
-  dispatch_overapprox: 'dispatch over-approximated',
-  runtime_missing: 'runtime data missing',
-  index_stale: 'index stale',
-  analysis_truncated: 'analysis truncated',
 };
 
 function colorForScore(score: number): string {
@@ -19,18 +13,27 @@ function colorForScore(score: number): string {
 }
 
 export function CoverageBadge({ coverage }: Props) {
+  const { t } = useTranslation('investigation');
   if (!coverage) return null;
   const pct = Math.round(coverage.score * 100);
   const fillColor = colorForScore(coverage.score);
 
   const reasonText = coverage.partialReasons.length > 0
-    ? `Partial reasons: ${coverage.partialReasons
-        .filter((r): r is NonNullable<WhyPartial> => r !== null)
-        .map((r) => REASON_LABELS[r])
-        .join(', ')}`
-    : 'All evidence fresh';
+    ? t('coverage.partialReasons', {
+        reasons: coverage.partialReasons
+          .filter((r): r is NonNullable<WhyPartial> => r !== null)
+          .map((r) => t(`coverage.reason.${r}`))
+          .join(', '),
+      })
+    : t('coverage.allFresh');
 
-  const tooltip = `Coverage ${pct}% — fresh ${coverage.fresh}, stale ${coverage.stale}, partial ${coverage.partial}. ${reasonText}.`;
+  const tooltip = t('coverage.tooltip', {
+    pct,
+    fresh: coverage.fresh,
+    stale: coverage.stale,
+    partial: coverage.partial,
+    reasonText,
+  });
 
   const wrapperStyle: CSSProperties = {
     background: 'var(--bg-surface-muted)',
@@ -63,7 +66,7 @@ export function CoverageBadge({ coverage }: Props) {
       style={wrapperStyle}
       title={tooltip}
     >
-      <span style={{ color: 'var(--fg-subtle)' }}>cov</span>
+      <span style={{ color: 'var(--fg-subtle)' }}>{t('coverage.label')}</span>
       <span style={trackStyle}>
         <span style={fillStyle} />
       </span>

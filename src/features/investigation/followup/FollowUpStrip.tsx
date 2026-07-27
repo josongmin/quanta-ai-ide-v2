@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { FollowUp } from './buildFollowUps';
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export function FollowUpStrip({ followups, onPick }: Props) {
+  const { t } = useTranslation('investigation');
   if (followups.length === 0) return null;
 
   const chipStyle: CSSProperties = {
@@ -23,7 +25,7 @@ export function FollowUpStrip({ followups, onPick }: Props) {
         className="font-mono uppercase tracking-wider"
         style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
       >
-        Follow up
+        {t('followup.title')}
       </div>
       <div className="flex flex-wrap gap-2">
         {followups.map((f) => (
@@ -45,7 +47,7 @@ export function FollowUpStrip({ followups, onPick }: Props) {
               className="font-mono"
               style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
             >
-              from {f.reason}
+              {t('followup.from', { reason: f.reason })}
             </span>
           </button>
         ))}

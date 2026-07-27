@@ -1,4 +1,5 @@
 import type { CSSProperties, ComponentType } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Search,
   Radar,
@@ -22,21 +23,21 @@ const KIND_ICON: Record<JobKind, ComponentType<LucideProps>> = {
   refactor_plan: Wrench,
 };
 
-const STATUS_TONE: Record<JobStatus, { fg: string; label: string }> = {
-  queued: { fg: 'var(--fg-muted)', label: 'queued' },
-  running: { fg: 'var(--fg-default)', label: 'running' },
-  partial: { fg: 'var(--fg-default)', label: 'partial' },
-  stale: { fg: 'var(--intent-warn-vivid)', label: 'stale' },
-  completed: { fg: 'var(--intent-success-vivid)', label: 'done' },
-  cancelled: { fg: 'var(--fg-subtle)', label: 'cancelled' },
-  failed: { fg: 'var(--intent-danger-vivid)', label: 'failed' },
+const STATUS_TONE: Record<JobStatus, string> = {
+  queued: 'var(--fg-muted)',
+  running: 'var(--fg-default)',
+  partial: 'var(--fg-default)',
+  stale: 'var(--intent-warn-vivid)',
+  completed: 'var(--intent-success-vivid)',
+  cancelled: 'var(--fg-subtle)',
+  failed: 'var(--intent-danger-vivid)',
 };
 
 function StatusPill({ status }: { status: JobStatus }) {
-  const tone = STATUS_TONE[status];
+  const { t } = useTranslation('investigation');
   const style: CSSProperties = {
     background: 'var(--bg-surface-muted)',
-    color: tone.fg,
+    color: STATUS_TONE[status],
     border: '1px solid var(--border-default)',
     fontSize: '9px',
     lineHeight: 1.1,
@@ -46,12 +47,13 @@ function StatusPill({ status }: { status: JobStatus }) {
       style={style}
       className="inline-flex items-center px-1.5 py-0.5 rounded font-mono uppercase tracking-wider"
     >
-      {tone.label}
+      {t(`jobs.status.${status}`)}
     </span>
   );
 }
 
 export function JobRow({ job, onCancel }: Props) {
+  const { t } = useTranslation('investigation');
   const Icon = KIND_ICON[job.kind];
   const isActive = isActiveJobStatus(job.status);
 
@@ -88,7 +90,7 @@ export function JobRow({ job, onCancel }: Props) {
           <button
             type="button"
             onClick={() => { onCancel(job.id); }}
-            title="Cancel job"
+            title={t('jobs.cancel')}
             className="p-0.5 rounded hover:[background:var(--bg-hover)]"
             style={{ color: 'var(--fg-muted)' }}
           >

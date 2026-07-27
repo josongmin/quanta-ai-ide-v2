@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { FileText, Bug, Code2 } from 'lucide-react';
 import type { InvestigationTarget } from '@entities/investigation';
 
@@ -8,6 +9,7 @@ const TARGET_KIND_ICON: Record<InvestigationTarget['kind'], React.ComponentType<
 };
 
 export function TargetKindBadge({ kind }: { kind: InvestigationTarget['kind'] }) {
+  const { t } = useTranslation('investigation');
   const Icon = TARGET_KIND_ICON[kind];
   return (
     <span
@@ -19,7 +21,7 @@ export function TargetKindBadge({ kind }: { kind: InvestigationTarget['kind'] })
       }}
     >
       <Icon className="w-3 h-3" />
-      {kind}
+      {t(`targetKind.${kind}`)}
     </span>
   );
 }

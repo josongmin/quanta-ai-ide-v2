@@ -1,16 +1,12 @@
+import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
 import { FIXTURE_TARGETS, type InvestigationTarget } from '@entities/investigation';
 import { FixtureRow } from './FixtureRow';
 
-const KIND_GROUP_LABEL: Record<InvestigationTarget['kind'], string> = {
-  file: 'Files',
-  symbol: 'Symbols',
-  incident: 'Incidents',
-};
-
 const KIND_ORDER: InvestigationTarget['kind'][] = ['file', 'symbol', 'incident'];
 
 export function EmptyBody({ onPick }: { onPick: (target: InvestigationTarget) => void }) {
+  const { t } = useTranslation('investigation');
   const grouped = KIND_ORDER
     .map((kind) => ({
       kind,
@@ -30,13 +26,13 @@ export function EmptyBody({ onPick }: { onPick: (target: InvestigationTarget) =>
             className="text-base font-bold"
             style={{ color: 'var(--fg-default)' }}
           >
-            No investigation in progress
+            {t('empty.title')}
           </div>
           <div
             className="text-xs mt-1"
             style={{ color: 'var(--fg-subtle)' }}
           >
-            Pick a demo target — files, symbols, or incidents.
+            {t('empty.subtitle')}
           </div>
         </div>
       </div>
@@ -46,7 +42,7 @@ export function EmptyBody({ onPick }: { onPick: (target: InvestigationTarget) =>
             className="text-2xs font-black uppercase tracking-eyebrow mb-1 px-0.5 flex items-center justify-between"
             style={{ color: 'var(--fg-muted)' }}
           >
-            <span>{KIND_GROUP_LABEL[kind]}</span>
+            <span>{t(`empty.kind.${kind}`)}</span>
             <span style={{ color: 'var(--fg-subtle)' }}>{items.length.toString()}</span>
           </div>
           <div className="flex flex-col">

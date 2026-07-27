@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { EvidenceItem } from '@entities/investigation';
 import { EvidenceCard } from '../../evidence';
@@ -12,13 +13,14 @@ export function AllEvidenceSection({
   pickedId: string | null;
   onPick: (id: string | null) => void;
 }) {
+  const { t } = useTranslation('investigation');
   const [open, setOpen] = useState(true);
   if (evidence.length === 0) return null;
   return (
     <div
       className="py-3"
       role="region"
-      aria-label="All evidence"
+      aria-label={t('allEvidence.regionAria')}
       style={{ borderTop: '1px solid var(--border-default)' }}
     >
       <button
@@ -37,7 +39,7 @@ export function AllEvidenceSection({
       >
         {open ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
         <span className="font-mono uppercase tracking-wider">
-          All evidence ({evidence.length})
+          {t('allEvidence.title', { count: evidence.length })}
         </span>
       </button>
       {open ? (

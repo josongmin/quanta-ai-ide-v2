@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type {
   ActionRecommendation,
   ContextBundle,
@@ -21,8 +22,9 @@ export function NotebookBody({
   onArchive: (questionId: string) => void;
   onAction: (action: ActionRecommendation) => void;
 }) {
+  const { t } = useTranslation('investigation');
   return (
-    <section role="region" aria-label="Notebook">
+    <section role="region" aria-label={t('tabs.notebook')}>
       {activeEntry ? (
         <Notebook
           entry={activeEntry}
@@ -37,7 +39,7 @@ export function NotebookBody({
           style={{ color: 'var(--fg-subtle)', fontSize: 11 }}
           className="py-4"
         >
-          No notebook entry for this target yet.
+          {t('notebook.body.noEntry')}
         </div>
       )}
     </section>

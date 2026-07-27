@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import type { QuestionType } from '@entities/investigation';
-import { QUESTION_TYPES, QUESTION_TYPE_META } from '../../lib';
+import { QUESTION_TYPES } from '../../lib';
 
 type ViewMode = 'answer' | 'notebook';
 
@@ -67,6 +68,7 @@ export function PanelTabs({
   questionType: QuestionType;
   onQuestionTypeChange: (qt: QuestionType) => void;
 }) {
+  const { t } = useTranslation('investigation');
   return (
     <div
       className="flex items-center gap-2 px-3 shrink-0"
@@ -80,18 +82,18 @@ export function PanelTabs({
     >
       <div
         role="tablist"
-        aria-label="Investigation view mode"
+        aria-label={t('tabs.modeAria')}
         className="flex items-center gap-1"
       >
-        <ModeTab label="Answer" active={mode === 'answer'} onClick={() => { onModeChange('answer'); }} />
-        <ModeTab label="Notebook" active={mode === 'notebook'} onClick={() => { onModeChange('notebook'); }} />
+        <ModeTab label={t('tabs.answer')} active={mode === 'answer'} onClick={() => { onModeChange('answer'); }} />
+        <ModeTab label={t('tabs.notebook')} active={mode === 'notebook'} onClick={() => { onModeChange('notebook'); }} />
       </div>
       {mode === 'answer' ? (
         <div className="flex items-center gap-1 ml-1">
           {QUESTION_TYPES.map((qt) => (
             <QuestionTab
               key={qt}
-              label={QUESTION_TYPE_META[qt].tab}
+              label={t(`tabs.questionType.${qt}`)}
               active={questionType === qt}
               onClick={() => { onQuestionTypeChange(qt); }}
             />

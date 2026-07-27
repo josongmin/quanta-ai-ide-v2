@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { EvidenceItem, Hypothesis } from '@entities/investigation';
 import { EvidenceKindIcon } from './EvidenceKindIcon';
 
@@ -31,6 +32,7 @@ function Column({
   ids: string[];
   evidenceById: Record<string, EvidenceItem>;
 }) {
+  const { t } = useTranslation('investigation');
   const resolved = ids
     .map((id) => evidenceById[id] ?? null)
     .filter((x): x is EvidenceItem => x !== null);
@@ -47,7 +49,7 @@ function Column({
         {title}
       </div>
       {resolved.length === 0 ? (
-        <div style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>(none)</div>
+        <div style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>{t('hypothesis.none')}</div>
       ) : (
         <ul className="m-0 p-0 list-none">
           {resolved.map((ev) => (
@@ -66,6 +68,7 @@ function colorForConfidence(score: number): string {
 }
 
 function ConfidenceGauge({ score }: { score: number }) {
+  const { t } = useTranslation('investigation');
   const pct = Math.round(score * 100);
   const fillColor = colorForConfidence(score);
   const trackStyle: CSSProperties = {
@@ -89,7 +92,7 @@ function ConfidenceGauge({ score }: { score: number }) {
         className="font-mono"
         style={{ color: 'var(--fg-subtle)', fontSize: 9 }}
       >
-        Hypothesis confidence
+        {t('hypothesis.confidence')}
       </span>
       <span style={trackStyle}>
         <span style={fillStyle} />
@@ -105,6 +108,7 @@ function ConfidenceGauge({ score }: { score: number }) {
 }
 
 export function HypothesisBlock({ hypothesis, evidenceById }: Props) {
+  const { t } = useTranslation('investigation');
   return (
     <div className="flex flex-col gap-2">
       {typeof hypothesis.confidence === 'number' ? (
@@ -118,12 +122,12 @@ export function HypothesisBlock({ hypothesis, evidenceById }: Props) {
       </div>
       <div className="flex gap-4">
         <Column
-          title="supporting"
+          title={t('hypothesis.supporting')}
           ids={hypothesis.supporting}
           evidenceById={evidenceById}
         />
         <Column
-          title="refuting"
+          title={t('hypothesis.refuting')}
           ids={hypothesis.refuting}
           evidenceById={evidenceById}
         />

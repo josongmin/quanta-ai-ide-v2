@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Wrench, X } from 'lucide-react';
 import { GlassCard, IconButton } from '@shared/ui';
 import { consumePendingHandoff, type FixHandoffPayload } from './fixHandoff';
 
 export function FixPipelineHandoffBanner() {
+  const { t } = useTranslation('investigation');
   const [payload, setPayload] = useState<FixHandoffPayload | null>(null);
 
   useEffect(() => {
@@ -34,16 +36,16 @@ export function FixPipelineHandoffBanner() {
           <Wrench size={14} style={{ color: 'var(--intent-success-vivid)' }} aria-hidden="true" />
           <div className="flex flex-col leading-tight">
             <span style={{ color: 'var(--fg-default)' }} className="font-semibold">
-              Evidence handed off to fix pipeline
+              {t('handoff.banner.title')}
             </span>
             <span style={{ color: 'var(--fg-subtle)', fontSize: 10 }} className="font-mono">
-              {payload.target.label} · {evidenceCount.toString()} evidence
-              {payload.hypothesis ? ' · 1 hypothesis' : ''}
+              {payload.target.label} · {t('handoff.banner.meta', { count: evidenceCount })}
+              {payload.hypothesis ? ` · ${t('handoff.banner.hypothesis')}` : ''}
             </span>
           </div>
           <IconButton
             icon={X}
-            label="Dismiss handoff banner"
+            label={t('handoff.banner.dismiss')}
             onClick={() => { setPayload(null); }}
             size="sm"
           />

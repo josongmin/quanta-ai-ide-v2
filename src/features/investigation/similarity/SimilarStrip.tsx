@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { ContextBundle } from '@entities/investigation';
 import { SimilarIncidentCard } from './SimilarIncidentCard';
 import { SimilarCodeCard } from './SimilarCodeCard';
@@ -5,6 +6,7 @@ import { SimilarCodeCard } from './SimilarCodeCard';
 type Props = { bundle: ContextBundle | null };
 
 export function SimilarStrip({ bundle }: Props) {
+  const { t } = useTranslation('investigation');
   if (!bundle) return null;
   const incidents = bundle.evidence.filter((e) => e.kind === 'similar_incident');
   const codes = bundle.evidence.filter((e) => e.kind === 'similar_code');
@@ -16,7 +18,7 @@ export function SimilarStrip({ bundle }: Props) {
         className="font-mono uppercase tracking-wider"
         style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
       >
-        Similar cases
+        {t('similar.cases')}
       </div>
       <div className="flex flex-wrap gap-2">
         {incidents.map((ev) => (

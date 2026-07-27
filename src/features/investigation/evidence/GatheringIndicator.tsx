@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { BundleStatus, EvidenceItem, SourceTool } from '@entities/investigation';
 import { SourceToolBadge } from './SourceToolBadge';
 
@@ -8,27 +9,12 @@ type Props = {
   recentEvidence?: EvidenceItem[];
 };
 
-const TOOL_LABEL: Record<SourceTool, string> = {
-  lexical_search: 'lexical search',
-  semantic_search: 'semantic search',
-  hybrid_search: 'hybrid search',
-  go_to_definition: 'go to definition',
-  find_references: 'find references',
-  function_summary: 'function summary',
-  graph_path: 'graph path',
-  taint_flow: 'taint flow',
-  change_impact: 'change impact',
-  proof_analysis: 'proof analysis',
-  index_status: 'index status',
-  incremental: 'incremental analysis',
-  explain: 'explain',
-};
-
 // Streaming progress indicator. Shows the static-analysis tools that produced
 // the most recent evidence chunks — turns the "gathering" state from a vague
 // spinner into a visible reasoning trace. animate-pulse only — no rotation,
 // since transform on glass parents kills backdrop-filter.
 export function GatheringIndicator({ status, count, recentEvidence = [] }: Props) {
+  const { t } = useTranslation('investigation');
   if (status !== 'gathering' && status !== 'partial') return null;
 
   const dotStyle: CSSProperties = {
@@ -42,8 +28,8 @@ export function GatheringIndicator({ status, count, recentEvidence = [] }: Props
 
   const text =
     status === 'gathering'
-      ? 'Gathering evidence…'
-      : `${count.toString()} evidence so far · gathering more…`;
+      ? t('gathering.gathering')
+      : t('gathering.soFar', { count });
 
   const recentTools = uniqueRecentTools(recentEvidence, 3);
   const lastTool = recentTools[0];
@@ -65,7 +51,7 @@ export function GatheringIndicator({ status, count, recentEvidence = [] }: Props
             className="font-mono"
             style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
           >
-            running: {TOOL_LABEL[lastTool]}
+            {t('gathering.running', { tool: t(`sourceTool.full.${lastTool}`) })}
           </span>
         ) : null}
       </div>

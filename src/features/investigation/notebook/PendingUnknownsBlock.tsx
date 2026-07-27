@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { NotebookEntry, UnknownTag as UnknownTagType } from '@entities/investigation';
 import { UnknownTag } from '../evidence';
 
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export function PendingUnknownsBlock({ entry, onResolveUnknown }: Props) {
+  const { t } = useTranslation('investigation');
   const aggregated = useMemo<UnknownTagType[]>(() => {
     const seen = new Set<string>();
     const out: UnknownTagType[] = [];
@@ -25,7 +27,7 @@ export function PendingUnknownsBlock({ entry, onResolveUnknown }: Props) {
   if (aggregated.length === 0) {
     return (
       <div style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>
-        No outstanding unknowns.
+        {t('notebook.noOutstandingUnknowns')}
       </div>
     );
   }
@@ -37,7 +39,7 @@ export function PendingUnknownsBlock({ entry, onResolveUnknown }: Props) {
           key={u.id}
           type="button"
           onClick={() => { onResolveUnknown(u.label); }}
-          title={`Click to follow up: ${u.reason}`}
+          title={t('notebook.followUpTitle', { reason: u.reason })}
           className="appearance-none p-0 border-0 bg-transparent"
           style={{ cursor: 'pointer' }}
         >

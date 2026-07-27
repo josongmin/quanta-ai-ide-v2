@@ -1,4 +1,5 @@
 import { useMemo, useState, type CSSProperties, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Send } from 'lucide-react';
 import type {
   ActionRecommendation,
@@ -7,7 +8,7 @@ import type {
   QuestionType,
 } from '@entities/investigation';
 import { ActionButton } from '../evidence';
-import { QUESTION_TYPES, QUESTION_TYPE_META } from '../lib';
+import { QUESTION_TYPES } from '../lib';
 import { FindingsBlock } from './FindingsBlock';
 import { PendingUnknownsBlock } from './PendingUnknownsBlock';
 
@@ -42,6 +43,7 @@ export function Notebook({
   onArchive: _onArchive,
   onAction,
 }: Props) {
+  const { t } = useTranslation('investigation');
   const [text, setText] = useState('');
   const [pickedQt, setPickedQt] = useState<QuestionType>(currentQuestionType);
   const disabled = !entry?.target;
@@ -73,7 +75,7 @@ export function Notebook({
   };
 
   const handleResolveUnknown = (label: string) => {
-    onAddQuestion(`Resolve unknown: ${label}`, currentQuestionType);
+    onAddQuestion(t('notebook.resolveUnknown', { label }), currentQuestionType);
   };
 
   const sectionDivider: CSSProperties = {
@@ -91,7 +93,7 @@ export function Notebook({
     <div className="flex flex-col">
       {/* 1. Question composer */}
       <div className="py-3">
-        <SectionLabel>Ask</SectionLabel>
+        <SectionLabel>{t('notebook.ask')}</SectionLabel>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <input
@@ -100,8 +102,8 @@ export function Notebook({
               onChange={(e) => { setText(e.target.value); }}
               placeholder={
                 disabled
-                  ? 'Pick a target to start asking…'
-                  : `Ask about ${entry.target.label}…`
+                  ? t('notebook.pickTargetPlaceholder')
+                  : t('notebook.askAboutPlaceholder', { label: entry.target.label })
               }
               disabled={disabled}
               style={inputStyle}
@@ -110,7 +112,7 @@ export function Notebook({
             <button
               type="submit"
               disabled={disabled || !text.trim()}
-              title="Add question"
+              title={t('notebook.addQuestion')}
               style={{
                 background: 'var(--bg-active)',
                 color: 'var(--fg-strong)',
@@ -121,7 +123,7 @@ export function Notebook({
               className="inline-flex items-center gap-1 px-2 py-1.5 rounded text-sm font-medium"
             >
               <Send size={12} aria-hidden="true" />
-              Ask
+              {t('notebook.askButton')}
             </button>
           </div>
           <div className="flex items-center gap-1">
@@ -142,7 +144,7 @@ export function Notebook({
                   style={pillStyle}
                   className="px-1.5 py-0.5 rounded font-mono uppercase tracking-wider"
                 >
-                  {QUESTION_TYPE_META[qt].short}
+                  {t(`tabs.short.${qt}`)}
                 </button>
               );
             })}
@@ -152,10 +154,10 @@ export function Notebook({
 
       {/* 2. Findings */}
       <div className="py-3" style={sectionDivider}>
-        <SectionLabel>Findings</SectionLabel>
+        <SectionLabel>{t('notebook.findings')}</SectionLabel>
         {answeredQuestions.length === 0 ? (
           <div style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>
-            No findings yet — answered questions will appear here.
+            {t('notebook.noFindings')}
           </div>
         ) : (
           <div className="flex flex-col gap-4">
@@ -168,16 +170,16 @@ export function Notebook({
 
       {/* 3. Pending unknowns */}
       <div className="py-3" style={sectionDivider}>
-        <SectionLabel>Pending unknowns</SectionLabel>
+        <SectionLabel>{t('notebook.pendingUnknowns')}</SectionLabel>
         <PendingUnknownsBlock entry={entry} onResolveUnknown={handleResolveUnknown} />
       </div>
 
       {/* 4. Actions */}
       <div className="py-3" style={sectionDivider}>
-        <SectionLabel>Actions</SectionLabel>
+        <SectionLabel>{t('notebook.actions')}</SectionLabel>
         {aggregatedActions.length === 0 ? (
           <div style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>
-            No actions surfaced yet.
+            {t('notebook.noActions')}
           </div>
         ) : (
           <div className="flex flex-wrap gap-1.5">

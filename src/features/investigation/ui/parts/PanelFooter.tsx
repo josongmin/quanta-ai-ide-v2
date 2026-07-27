@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { RefreshCw } from 'lucide-react';
 import type { BundleStatus, InvestigationTarget } from '@entities/investigation';
 import { ShortcutsHint } from './ShortcutsHint';
@@ -15,6 +16,7 @@ export function PanelFooter({
   demoTargetCount: number;
   onRegenerate: () => void;
 }) {
+  const { t } = useTranslation('investigation');
   return (
     <div
       className="flex items-center justify-between gap-2 px-3 shrink-0"
@@ -27,8 +29,8 @@ export function PanelFooter({
     >
       <span className="shrink-0">
         {activeTarget
-          ? `${evidenceCount.toString()} evidence · ${status}`
-          : `${demoTargetCount.toString()} demo targets · pick one above`}
+          ? t('footer.targetSummary', { count: evidenceCount, status })
+          : t('footer.noTargetSummary', { count: demoTargetCount })}
       </span>
       {activeTarget ? <ShortcutsHint /> : null}
       {activeTarget ? (
@@ -42,10 +44,10 @@ export function PanelFooter({
             color: 'var(--fg-muted)',
             cursor: 'pointer',
           }}
-          aria-label="Regenerate investigation"
+          aria-label={t('footer.regenerateAria')}
         >
           <RefreshCw className="w-3 h-3" />
-          Regenerate
+          {t('footer.regenerate')}
         </button>
       ) : null}
     </div>

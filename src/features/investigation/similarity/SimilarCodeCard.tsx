@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Copy } from 'lucide-react';
 import type { EvidenceItem } from '@entities/investigation';
 import { ConfidenceDot, SourceToolBadge } from '../evidence';
@@ -12,6 +13,7 @@ function readPath(payload: Record<string, unknown> | undefined): string | null {
 }
 
 export function SimilarCodeCard({ evidence }: Props) {
+  const { t } = useTranslation('investigation');
   if (evidence.kind !== 'similar_code') return null;
 
   const cardStyle: CSSProperties = {
@@ -31,7 +33,7 @@ export function SimilarCodeCard({ evidence }: Props) {
           className="font-mono uppercase tracking-wider"
           style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
         >
-          Similar code
+          {t('similar.code')}
         </span>
       </div>
       <div

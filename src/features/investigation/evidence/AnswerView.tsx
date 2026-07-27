@@ -1,4 +1,5 @@
 import { useMemo, type CSSProperties, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import type {
   ActionRecommendation,
   ContextBundle,
@@ -47,6 +48,7 @@ export function AnswerView({
   pickedEvidenceId,
   onResolveUnknown,
 }: Props) {
+  const { t } = useTranslation('investigation');
   const evidenceById = useMemo<Record<string, EvidenceItem>>(() => {
     const map: Record<string, EvidenceItem> = {};
     for (const ev of bundle.evidence) {
@@ -101,7 +103,7 @@ export function AnswerView({
 
       {/* 2. Conclusion */}
       <div className="py-3" style={sectionDivider}>
-        <SectionHeader>Conclusion</SectionHeader>
+        <SectionHeader>{t('answer.section.conclusion')}</SectionHeader>
         <div
           style={{
             color: 'var(--fg-default)',
@@ -116,7 +118,7 @@ export function AnswerView({
       {/* 2b. Hypothesis (optional) */}
       {answer.hypothesis ? (
         <div className="py-3" style={sectionDivider}>
-          <SectionHeader>Hypothesis</SectionHeader>
+          <SectionHeader>{t('answer.section.hypothesis')}</SectionHeader>
           <HypothesisBlock
             hypothesis={answer.hypothesis}
             evidenceById={evidenceById}
@@ -126,10 +128,10 @@ export function AnswerView({
 
       {/* 3. Unknowns */}
       <div className="py-3" style={sectionDivider}>
-        <SectionHeader>Unknowns</SectionHeader>
+        <SectionHeader>{t('answer.section.unknowns')}</SectionHeader>
         {answer.unknowns.length === 0 ? (
           <div style={{ color: 'var(--fg-subtle)', fontSize: '11px' }}>
-            (none reported)
+            {t('answer.noneReported')}
           </div>
         ) : (
           <>
@@ -147,7 +149,7 @@ export function AnswerView({
                 className="mt-1.5"
                 style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
               >
-                Click any unknown to ask a follow-up.
+                {t('answer.clickUnknownHint')}
               </div>
             ) : null}
           </>
@@ -156,7 +158,7 @@ export function AnswerView({
 
       {/* 4. Actions */}
       <div className="py-3" style={sectionDivider}>
-        <SectionHeader>Actions</SectionHeader>
+        <SectionHeader>{t('answer.section.actions')}</SectionHeader>
         <div className="flex flex-wrap gap-1.5">
           {answer.actions.map((a) => (
             <ActionButton key={a.id} action={a} onRun={onAction} />

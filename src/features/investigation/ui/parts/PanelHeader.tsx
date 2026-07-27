@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Sparkles, X } from 'lucide-react';
 import { IconButton } from '@shared/ui';
 import type { InvestigationTarget } from '@entities/investigation';
@@ -11,6 +12,7 @@ export function PanelHeader({
   onClear: () => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation('investigation');
   return (
     <div
       className="flex items-center gap-2 px-3 shrink-0"
@@ -27,7 +29,7 @@ export function PanelHeader({
         className="font-mono font-bold text-base shrink-0"
         style={{ color: 'var(--fg-default)' }}
       >
-        Investigation
+        {t('header.title')}
       </span>
       <div className="flex-1 min-w-0 flex flex-col items-start ml-2">
         {activeTarget ? (
@@ -59,12 +61,12 @@ export function PanelHeader({
             color: 'var(--fg-subtle)',
             cursor: 'pointer',
           }}
-          title="Clear current target — back to demo list"
+          title={t('header.resetTitle')}
         >
-          Reset
+          {t('header.reset')}
         </button>
       ) : null}
-      <IconButton icon={X} label="Close investigation" size="sm" onClick={onClose} />
+      <IconButton icon={X} label={t('header.close')} size="sm" onClick={onClose} />
     </div>
   );
 }

@@ -1,1 +1,258 @@
-{}
+{
+  "common": {
+    "investigation": "調査",
+    "investigate": "調査する"
+  },
+  "action": {
+    "comingSoon": "近日公開"
+  },
+  "answer": {
+    "section": {
+      "conclusion": "結論",
+      "hypothesis": "仮説",
+      "unknowns": "未確認項目",
+      "actions": "アクション"
+    },
+    "noneReported": "(報告なし)",
+    "clickUnknownHint": "未確認項目をクリックするとフォローアップの質問ができます。"
+  },
+  "confidence": {
+    "label": "信頼度: {{level}}",
+    "level": {
+      "high": "高",
+      "medium": "中",
+      "low": "低",
+      "unknown": "不明"
+    }
+  },
+  "coverage": {
+    "label": "カバレッジ",
+    "reason": {
+      "dispatch_overapprox": "ディスパッチの過大近似",
+      "runtime_missing": "ランタイムデータ欠落",
+      "index_stale": "インデックスが古い",
+      "analysis_truncated": "解析が打ち切られた"
+    },
+    "partialReasons": "部分的な理由: {{reasons}}",
+    "allFresh": "すべての証拠が最新",
+    "tooltip": "カバレッジ {{pct}}% — 最新 {{fresh}}、古い {{stale}}、部分 {{partial}}。{{reasonText}}。"
+  },
+  "evidence": {
+    "detail": "詳細",
+    "hideDetail": "詳細を隠す",
+    "partial": {
+      "dispatch_overapprox": "部分: ディスパッチ過大近似",
+      "runtime_missing": "部分: ランタイム欠落",
+      "index_stale": "部分: インデックスが古い",
+      "analysis_truncated": "部分: 解析打ち切り"
+    }
+  },
+  "gathering": {
+    "gathering": "証拠を収集中…",
+    "soFar_one": "これまでに証拠 {{count}} 件 · さらに収集中…",
+    "soFar_other": "これまでに証拠 {{count}} 件 · さらに収集中…",
+    "running": "実行中: {{tool}}"
+  },
+  "hypothesis": {
+    "confidence": "仮説の信頼度",
+    "supporting": "支持する証拠",
+    "refuting": "反証する証拠",
+    "none": "(なし)"
+  },
+  "staleness": {
+    "fresh": "最新",
+    "stale": "古い",
+    "unknown": "?"
+  },
+  "sourceTool": {
+    "short": {
+      "taint_flow": "taint",
+      "find_references": "refs",
+      "change_impact": "impact",
+      "function_summary": "fnsum",
+      "semantic_search": "sem",
+      "lexical_search": "lex",
+      "hybrid_search": "hybrid",
+      "go_to_definition": "def",
+      "graph_path": "graph",
+      "proof_analysis": "proof",
+      "index_status": "idx",
+      "incremental": "inc",
+      "explain": "expl"
+    },
+    "full": {
+      "lexical_search": "字句検索",
+      "semantic_search": "セマンティック検索",
+      "hybrid_search": "ハイブリッド検索",
+      "go_to_definition": "定義へ移動",
+      "find_references": "参照を検索",
+      "function_summary": "関数サマリー",
+      "graph_path": "グラフパス",
+      "taint_flow": "テイントフロー",
+      "change_impact": "変更影響",
+      "proof_analysis": "証明解析",
+      "index_status": "インデックス状態",
+      "incremental": "インクリメンタル解析",
+      "explain": "説明"
+    }
+  },
+  "unknownTag": {
+    "clickHint": "{{reason}} — クリックしてフォローアップ",
+    "resolveAria": "未確認項目を解決: {{label}}"
+  },
+  "followup": {
+    "title": "フォローアップ",
+    "from": "出典: {{reason}}"
+  },
+  "handoff": {
+    "banner": {
+      "title": "証拠を fix pipeline に引き継ぎました",
+      "meta_one": "証拠 {{count}} 件",
+      "meta_other": "証拠 {{count}} 件",
+      "hypothesis": "仮説 1 件",
+      "dismiss": "引き継ぎバナーを閉じる"
+    },
+    "breadcrumb": {
+      "back": "戻る",
+      "backAria": "調査に戻る",
+      "from": "調査元:",
+      "evidence_one": "証拠 {{count}} 件",
+      "evidence_other": "証拠 {{count}} 件",
+      "dismiss": "パンくずを閉じる"
+    },
+    "notice": {
+      "sending": "証拠を fix pipeline に送信中…"
+    }
+  },
+  "jobs": {
+    "status": {
+      "queued": "待機中",
+      "running": "実行中",
+      "partial": "部分",
+      "stale": "古い",
+      "completed": "完了",
+      "cancelled": "キャンセル",
+      "failed": "失敗"
+    },
+    "cancel": "ジョブをキャンセル",
+    "tray": {
+      "title": "調査ジョブ",
+      "close": "閉じる",
+      "closeAria": "ジョブを閉じる",
+      "settledActive": "完了 {{settled}} · 進行中 {{active}}",
+      "clearCompleted": "完了分をクリア"
+    }
+  },
+  "notebook": {
+    "ask": "質問",
+    "askButton": "質問",
+    "addQuestion": "質問を追加",
+    "pickTargetPlaceholder": "対象を選択して質問を始めましょう…",
+    "askAboutPlaceholder": "{{label}} について質問…",
+    "findings": "調査結果",
+    "noFindings": "まだ調査結果はありません — 回答済みの質問がここに表示されます。",
+    "pendingUnknowns": "未解決項目",
+    "noOutstandingUnknowns": "未解決の項目はありません。",
+    "actions": "アクション",
+    "noActions": "まだ提案されたアクションはありません。",
+    "resolveUnknown": "未確認項目を解決: {{label}}",
+    "followUpTitle": "クリックしてフォローアップ: {{reason}}",
+    "body": {
+      "noEntry": "この対象のノートブックエントリーはまだありません。"
+    }
+  },
+  "planner": {
+    "launcher": {
+      "running": "リフレクション中…",
+      "run": "リフレクションループを実行",
+      "runningTitle": "リフレクションループ実行中…",
+      "runTitle": "収集した証拠に対してマルチホップのリフレクションを実行"
+    },
+    "trace": {
+      "title": "リフレクショントレース",
+      "step": "ステップ {{index}}",
+      "stepPending": "ステップ {{index}}…",
+      "reflecting": "リフレクション中",
+      "next": "次: {{question}}",
+      "end": "(終了)",
+      "final": "最終"
+    }
+  },
+  "similar": {
+    "code": "類似コード",
+    "incidentFallback": "類似インシデント",
+    "dateUnknown": "(日付不明)",
+    "cases": "類似ケース"
+  },
+  "cta": {
+    "title": "調査する"
+  },
+  "launcher": {
+    "openTitle": "調査ワークスペースを開く",
+    "meta": "デモ対象 {{targets}} 件 · 実行中のジョブ {{jobs}} 件"
+  },
+  "panel": {
+    "ariaLabel": "調査ワークスペース",
+    "owner": {
+      "queued": "オーナー割り当てをキューに追加しました"
+    },
+    "deepScanLabel": "ディープスキャン: {{label}}",
+    "resolveUnknown": "未確認項目を解決: {{label}}"
+  },
+  "allEvidence": {
+    "regionAria": "すべての証拠",
+    "title": "すべての証拠 ({{count}})"
+  },
+  "answerBody": {
+    "answerAria": "回答",
+    "similarAria": "類似ケース",
+    "followupAria": "フォローアップの質問",
+    "reflectionAria": "リフレクショントレース",
+    "failed": "調査に失敗しました。",
+    "retry": "再試行"
+  },
+  "targetKind": {
+    "file": "ファイル",
+    "symbol": "シンボル",
+    "incident": "インシデント"
+  },
+  "empty": {
+    "kind": {
+      "file": "ファイル",
+      "symbol": "シンボル",
+      "incident": "インシデント"
+    },
+    "title": "進行中の調査はありません",
+    "subtitle": "デモ対象を選択してください — ファイル、シンボル、インシデント。"
+  },
+  "footer": {
+    "targetSummary": "証拠 {{count}} 件 · {{status}}",
+    "noTargetSummary": "デモ対象 {{count}} 件 · 上から 1 つ選択してください",
+    "regenerate": "再生成",
+    "regenerateAria": "調査を再生成"
+  },
+  "header": {
+    "title": "調査",
+    "reset": "リセット",
+    "resetTitle": "現在の対象をクリア — デモ一覧に戻る",
+    "close": "調査を閉じる"
+  },
+  "tabs": {
+    "modeAria": "調査ビューモード",
+    "answer": "回答",
+    "notebook": "ノートブック",
+    "questionType": {
+      "why_risky": "なぜ危険か?",
+      "blast_of_change": "変更の影響範囲は?",
+      "incident_suspect": "インシデントの容疑対象は?"
+    },
+    "short": {
+      "why_risky": "リスク",
+      "blast_of_change": "影響",
+      "incident_suspect": "容疑"
+    }
+  },
+  "shortcuts": {
+    "hint": "ESC 閉じる · n モード切替 · j/k 移動 · ⌘R 再生成"
+  }
+}

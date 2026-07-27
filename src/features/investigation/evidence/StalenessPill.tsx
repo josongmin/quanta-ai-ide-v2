@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Clock } from 'lucide-react';
 import type { Staleness } from '@entities/investigation';
 
@@ -10,12 +11,13 @@ type Props = {
 // reads as chrome rather than a state banner; foreground colour and a
 // small leading glyph carry the signal so it's scannable from a distance.
 export function StalenessPill({ staleness }: Props) {
+  const { t } = useTranslation('investigation');
   let label: string;
   let color: string;
   let glyph: ReactNode = null;
   switch (staleness) {
     case 'fresh':
-      label = 'fresh';
+      label = t('staleness.fresh');
       color = 'var(--intent-success-vivid)';
       glyph = (
         <span
@@ -31,13 +33,13 @@ export function StalenessPill({ staleness }: Props) {
       );
       break;
     case 'stale':
-      label = 'stale';
+      label = t('staleness.stale');
       color = 'var(--intent-warn-vivid)';
       glyph = <Clock size={9} aria-hidden="true" />;
       break;
     case 'unknown':
     default:
-      label = '?';
+      label = t('staleness.unknown');
       color = 'var(--fg-subtle)';
       break;
   }

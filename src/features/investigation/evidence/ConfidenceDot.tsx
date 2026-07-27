@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Confidence } from '@entities/investigation';
 
 type Props = {
@@ -26,7 +27,8 @@ function colorFor(c: Confidence): string {
 // approved signal. The 1px ring in surface colour keeps it readable
 // regardless of which background it lands on.
 export function ConfidenceDot({ confidence, size = 8, title }: Props) {
-  const aria = title ?? `confidence: ${confidence}`;
+  const { t } = useTranslation('investigation');
+  const aria = title ?? t('confidence.label', { level: t(`confidence.level.${confidence}`) });
 
   if (confidence === 'unknown') {
     const glyphStyle: CSSProperties = {

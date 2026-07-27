@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
 import { GlassCard } from '@shared/ui';
 import { FIXTURE_TARGETS } from '@entities/investigation';
@@ -5,6 +6,7 @@ import { useInvestigationRunner } from '../model/InvestigationContext';
 import { useJobs } from '../jobs';
 
 export default function InvestigateLauncher() {
+  const { t } = useTranslation('investigation');
   const { panelOpen, openPanel } = useInvestigationRunner();
   const { jobs } = useJobs();
   if (panelOpen) return null;
@@ -23,20 +25,20 @@ export default function InvestigateLauncher() {
             color: 'var(--fg-default)',
             cursor: 'pointer',
           }}
-          title="Open investigation workspace"
-          aria-label="Open investigation workspace"
+          title={t('launcher.openTitle')}
+          aria-label={t('launcher.openTitle')}
         >
           <Sparkles
             className="w-3.5 h-3.5 shrink-0"
             style={{ color: 'var(--intent-success-vivid)' }}
           />
           <span className="flex flex-col items-start leading-tight">
-            <span className="text-sm font-medium">Investigate</span>
+            <span className="text-sm font-medium">{t('common.investigate')}</span>
             <span
               style={{ fontSize: 9, color: 'var(--fg-subtle)' }}
               className="font-mono whitespace-nowrap"
             >
-              {FIXTURE_TARGETS.length} demo targets · {runningCount} jobs running
+              {t('launcher.meta', { targets: FIXTURE_TARGETS.length, jobs: runningCount })}
             </span>
           </span>
         </button>

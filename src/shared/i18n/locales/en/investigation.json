@@ -1,1 +1,258 @@
-{}
+{
+  "common": {
+    "investigation": "Investigation",
+    "investigate": "Investigate"
+  },
+  "action": {
+    "comingSoon": "coming soon"
+  },
+  "answer": {
+    "section": {
+      "conclusion": "Conclusion",
+      "hypothesis": "Hypothesis",
+      "unknowns": "Unknowns",
+      "actions": "Actions"
+    },
+    "noneReported": "(none reported)",
+    "clickUnknownHint": "Click any unknown to ask a follow-up."
+  },
+  "confidence": {
+    "label": "confidence: {{level}}",
+    "level": {
+      "high": "high",
+      "medium": "medium",
+      "low": "low",
+      "unknown": "unknown"
+    }
+  },
+  "coverage": {
+    "label": "cov",
+    "reason": {
+      "dispatch_overapprox": "dispatch over-approximated",
+      "runtime_missing": "runtime data missing",
+      "index_stale": "index stale",
+      "analysis_truncated": "analysis truncated"
+    },
+    "partialReasons": "Partial reasons: {{reasons}}",
+    "allFresh": "All evidence fresh",
+    "tooltip": "Coverage {{pct}}% — fresh {{fresh}}, stale {{stale}}, partial {{partial}}. {{reasonText}}."
+  },
+  "evidence": {
+    "detail": "detail",
+    "hideDetail": "hide detail",
+    "partial": {
+      "dispatch_overapprox": "partial: dispatch over-approx",
+      "runtime_missing": "partial: runtime missing",
+      "index_stale": "partial: index stale",
+      "analysis_truncated": "partial: analysis truncated"
+    }
+  },
+  "gathering": {
+    "gathering": "Gathering evidence…",
+    "soFar_one": "{{count}} evidence so far · gathering more…",
+    "soFar_other": "{{count}} evidence so far · gathering more…",
+    "running": "running: {{tool}}"
+  },
+  "hypothesis": {
+    "confidence": "Hypothesis confidence",
+    "supporting": "supporting",
+    "refuting": "refuting",
+    "none": "(none)"
+  },
+  "staleness": {
+    "fresh": "fresh",
+    "stale": "stale",
+    "unknown": "?"
+  },
+  "sourceTool": {
+    "short": {
+      "taint_flow": "taint",
+      "find_references": "refs",
+      "change_impact": "impact",
+      "function_summary": "fnsum",
+      "semantic_search": "sem",
+      "lexical_search": "lex",
+      "hybrid_search": "hybrid",
+      "go_to_definition": "def",
+      "graph_path": "graph",
+      "proof_analysis": "proof",
+      "index_status": "idx",
+      "incremental": "inc",
+      "explain": "expl"
+    },
+    "full": {
+      "lexical_search": "lexical search",
+      "semantic_search": "semantic search",
+      "hybrid_search": "hybrid search",
+      "go_to_definition": "go to definition",
+      "find_references": "find references",
+      "function_summary": "function summary",
+      "graph_path": "graph path",
+      "taint_flow": "taint flow",
+      "change_impact": "change impact",
+      "proof_analysis": "proof analysis",
+      "index_status": "index status",
+      "incremental": "incremental analysis",
+      "explain": "explain"
+    }
+  },
+  "unknownTag": {
+    "clickHint": "{{reason}} — click to ask a follow-up",
+    "resolveAria": "Resolve unknown: {{label}}"
+  },
+  "followup": {
+    "title": "Follow up",
+    "from": "from {{reason}}"
+  },
+  "handoff": {
+    "banner": {
+      "title": "Evidence handed off to fix pipeline",
+      "meta_one": "{{count}} evidence",
+      "meta_other": "{{count}} evidence",
+      "hypothesis": "1 hypothesis",
+      "dismiss": "Dismiss handoff banner"
+    },
+    "breadcrumb": {
+      "back": "Back",
+      "backAria": "Back to investigation",
+      "from": "From investigation:",
+      "evidence_one": "{{count}} evidence",
+      "evidence_other": "{{count}} evidence",
+      "dismiss": "Dismiss breadcrumb"
+    },
+    "notice": {
+      "sending": "Sending evidence to fix pipeline…"
+    }
+  },
+  "jobs": {
+    "status": {
+      "queued": "queued",
+      "running": "running",
+      "partial": "partial",
+      "stale": "stale",
+      "completed": "done",
+      "cancelled": "cancelled",
+      "failed": "failed"
+    },
+    "cancel": "Cancel job",
+    "tray": {
+      "title": "Investigation jobs",
+      "close": "Close",
+      "closeAria": "Close jobs",
+      "settledActive": "{{settled}} settled · {{active}} active",
+      "clearCompleted": "Clear completed"
+    }
+  },
+  "notebook": {
+    "ask": "Ask",
+    "askButton": "Ask",
+    "addQuestion": "Add question",
+    "pickTargetPlaceholder": "Pick a target to start asking…",
+    "askAboutPlaceholder": "Ask about {{label}}…",
+    "findings": "Findings",
+    "noFindings": "No findings yet — answered questions will appear here.",
+    "pendingUnknowns": "Pending unknowns",
+    "noOutstandingUnknowns": "No outstanding unknowns.",
+    "actions": "Actions",
+    "noActions": "No actions surfaced yet.",
+    "resolveUnknown": "Resolve unknown: {{label}}",
+    "followUpTitle": "Click to follow up: {{reason}}",
+    "body": {
+      "noEntry": "No notebook entry for this target yet."
+    }
+  },
+  "planner": {
+    "launcher": {
+      "running": "Reflecting…",
+      "run": "Run reflection loop",
+      "runningTitle": "Reflection loop running…",
+      "runTitle": "Run a multi-hop reflection over the gathered evidence"
+    },
+    "trace": {
+      "title": "Reflection trace",
+      "step": "step {{index}}",
+      "stepPending": "step {{index}}…",
+      "reflecting": "reflecting",
+      "next": "Next: {{question}}",
+      "end": "(end)",
+      "final": "Final"
+    }
+  },
+  "similar": {
+    "code": "Similar code",
+    "incidentFallback": "Similar incident",
+    "dateUnknown": "(date unknown)",
+    "cases": "Similar cases"
+  },
+  "cta": {
+    "title": "Investigate"
+  },
+  "launcher": {
+    "openTitle": "Open investigation workspace",
+    "meta": "{{targets}} demo targets · {{jobs}} jobs running"
+  },
+  "panel": {
+    "ariaLabel": "Investigation workspace",
+    "owner": {
+      "queued": "Owner assignment queued"
+    },
+    "deepScanLabel": "Deep scan: {{label}}",
+    "resolveUnknown": "Resolve unknown: {{label}}"
+  },
+  "allEvidence": {
+    "regionAria": "All evidence",
+    "title": "All evidence ({{count}})"
+  },
+  "answerBody": {
+    "answerAria": "Answer",
+    "similarAria": "Similar cases",
+    "followupAria": "Follow-up questions",
+    "reflectionAria": "Reflection trace",
+    "failed": "Investigation failed.",
+    "retry": "Retry"
+  },
+  "targetKind": {
+    "file": "file",
+    "symbol": "symbol",
+    "incident": "incident"
+  },
+  "empty": {
+    "kind": {
+      "file": "Files",
+      "symbol": "Symbols",
+      "incident": "Incidents"
+    },
+    "title": "No investigation in progress",
+    "subtitle": "Pick a demo target — files, symbols, or incidents."
+  },
+  "footer": {
+    "targetSummary": "{{count}} evidence · {{status}}",
+    "noTargetSummary": "{{count}} demo targets · pick one above",
+    "regenerate": "Regenerate",
+    "regenerateAria": "Regenerate investigation"
+  },
+  "header": {
+    "title": "Investigation",
+    "reset": "Reset",
+    "resetTitle": "Clear current target — back to demo list",
+    "close": "Close investigation"
+  },
+  "tabs": {
+    "modeAria": "Investigation view mode",
+    "answer": "Answer",
+    "notebook": "Notebook",
+    "questionType": {
+      "why_risky": "Why risky?",
+      "blast_of_change": "Blast of change?",
+      "incident_suspect": "Suspect for incident?"
+    },
+    "short": {
+      "why_risky": "Risk",
+      "blast_of_change": "Blast",
+      "incident_suspect": "Suspect"
+    }
+  },
+  "shortcuts": {
+    "hint": "ESC close · n toggle mode · j/k navigate · ⌘R regenerate"
+  }
+}

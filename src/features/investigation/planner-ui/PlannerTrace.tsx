@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ContextBundle, EvidenceItem } from '@entities/investigation';
 import { EvidenceStrip } from '../evidence';
 import type { PlannerStep, PlannerTrace as PlannerTraceData } from '../planner';
@@ -29,6 +30,7 @@ function StepCard({
   index: number;
   bundle: ContextBundle | null;
 }) {
+  const { t } = useTranslation('investigation');
   const cardStyle: CSSProperties = {
     background: 'var(--bg-surface)',
     borderColor: 'var(--border-default)',
@@ -41,7 +43,7 @@ function StepCard({
           className="font-mono uppercase tracking-wider"
           style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
         >
-          step {index + 1}
+          {t('planner.trace.step', { index: index + 1 })}
         </span>
         <span
           className="font-medium leading-snug"
@@ -64,7 +66,7 @@ function StepCard({
         className="italic"
         style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
       >
-        {step.nextQuestion ? `Next: ${step.nextQuestion}` : '(end)'}
+        {step.nextQuestion ? t('planner.trace.next', { question: step.nextQuestion }) : t('planner.trace.end')}
       </div>
     </div>
   );
@@ -85,6 +87,7 @@ function Connector() {
 }
 
 function PendingStep({ index }: { index: number }) {
+  const { t } = useTranslation('investigation');
   const cardStyle: CSSProperties = {
     background: 'var(--bg-surface-muted)',
     borderColor: 'var(--border-muted)',
@@ -103,9 +106,9 @@ function PendingStep({ index }: { index: number }) {
         className="font-mono uppercase tracking-wider"
         style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
       >
-        step {index + 1}…
+        {t('planner.trace.stepPending', { index: index + 1 })}
       </span>
-      <span style={{ color: 'var(--fg-muted)', fontSize: '11px' }}>reflecting</span>
+      <span style={{ color: 'var(--fg-muted)', fontSize: '11px' }}>{t('planner.trace.reflecting')}</span>
     </div>
   );
 }
@@ -113,6 +116,7 @@ function PendingStep({ index }: { index: number }) {
 const TOTAL_STEPS = 3;
 
 export function PlannerTrace({ trace, streamingSteps, bundle }: Props) {
+  const { t } = useTranslation('investigation');
   const steps: PlannerStep[] = trace ? trace.steps : (streamingSteps ?? []);
   const isStreaming = !trace && (streamingSteps?.length ?? 0) > 0;
   const showPending = isStreaming && steps.length < TOTAL_STEPS;
@@ -125,7 +129,7 @@ export function PlannerTrace({ trace, streamingSteps, bundle }: Props) {
         className="font-mono uppercase tracking-wider"
         style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
       >
-        Reflection trace
+        {t('planner.trace.title')}
       </div>
       <div className="flex flex-col">
         {steps.map((step, i) => (
@@ -149,7 +153,7 @@ export function PlannerTrace({ trace, streamingSteps, bundle }: Props) {
             className="font-mono uppercase tracking-wider mb-1"
             style={{ color: 'var(--fg-subtle)', fontSize: '10px' }}
           >
-            Final
+            {t('planner.trace.final')}
           </div>
           <div
             className="leading-snug"

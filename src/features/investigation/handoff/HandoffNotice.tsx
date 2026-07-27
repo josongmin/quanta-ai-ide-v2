@@ -1,10 +1,12 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Wrench } from 'lucide-react';
 import type { FixHandoffPayload } from './fixHandoff';
 
 type Props = { payload: FixHandoffPayload | null };
 
 export function HandoffNotice({ payload }: Props) {
+  const { t } = useTranslation('investigation');
   if (!payload) return null;
 
   const style: CSSProperties = {
@@ -22,7 +24,7 @@ export function HandoffNotice({ payload }: Props) {
       style={style}
     >
       <Wrench size={12} aria-hidden="true" style={{ color: 'var(--fg-subtle)' }} />
-      <span>Sending evidence to fix pipeline…</span>
+      <span>{t('handoff.notice.sending')}</span>
       <span
         className="font-mono truncate"
         style={{ color: 'var(--fg-subtle)', fontSize: '10px', maxWidth: 220 }}

@@ -1,1 +1,258 @@
-{}
+{
+  "common": {
+    "investigation": "调查",
+    "investigate": "调查"
+  },
+  "action": {
+    "comingSoon": "即将推出"
+  },
+  "answer": {
+    "section": {
+      "conclusion": "结论",
+      "hypothesis": "假设",
+      "unknowns": "未知项",
+      "actions": "操作"
+    },
+    "noneReported": "(无报告)",
+    "clickUnknownHint": "点击任一未知项即可提出追问。"
+  },
+  "confidence": {
+    "label": "置信度：{{level}}",
+    "level": {
+      "high": "高",
+      "medium": "中",
+      "low": "低",
+      "unknown": "未知"
+    }
+  },
+  "coverage": {
+    "label": "覆盖率",
+    "reason": {
+      "dispatch_overapprox": "分派过度近似",
+      "runtime_missing": "缺少运行时数据",
+      "index_stale": "索引过期",
+      "analysis_truncated": "分析被截断"
+    },
+    "partialReasons": "部分覆盖原因：{{reasons}}",
+    "allFresh": "所有证据均为最新",
+    "tooltip": "覆盖率 {{pct}}% — 最新 {{fresh}}，过期 {{stale}}，部分 {{partial}}。{{reasonText}}。"
+  },
+  "evidence": {
+    "detail": "详情",
+    "hideDetail": "隐藏详情",
+    "partial": {
+      "dispatch_overapprox": "部分：分派过度近似",
+      "runtime_missing": "部分：缺少运行时",
+      "index_stale": "部分：索引过期",
+      "analysis_truncated": "部分：分析被截断"
+    }
+  },
+  "gathering": {
+    "gathering": "正在收集证据…",
+    "soFar_one": "已收集 {{count}} 条证据 · 继续收集中…",
+    "soFar_other": "已收集 {{count}} 条证据 · 继续收集中…",
+    "running": "正在运行：{{tool}}"
+  },
+  "hypothesis": {
+    "confidence": "假设置信度",
+    "supporting": "支持证据",
+    "refuting": "反驳证据",
+    "none": "(无)"
+  },
+  "staleness": {
+    "fresh": "最新",
+    "stale": "过期",
+    "unknown": "?"
+  },
+  "sourceTool": {
+    "short": {
+      "taint_flow": "taint",
+      "find_references": "refs",
+      "change_impact": "impact",
+      "function_summary": "fnsum",
+      "semantic_search": "sem",
+      "lexical_search": "lex",
+      "hybrid_search": "hybrid",
+      "go_to_definition": "def",
+      "graph_path": "graph",
+      "proof_analysis": "proof",
+      "index_status": "idx",
+      "incremental": "inc",
+      "explain": "expl"
+    },
+    "full": {
+      "lexical_search": "词法搜索",
+      "semantic_search": "语义搜索",
+      "hybrid_search": "混合搜索",
+      "go_to_definition": "跳转到定义",
+      "find_references": "查找引用",
+      "function_summary": "函数摘要",
+      "graph_path": "图路径",
+      "taint_flow": "污点流",
+      "change_impact": "变更影响",
+      "proof_analysis": "证明分析",
+      "index_status": "索引状态",
+      "incremental": "增量分析",
+      "explain": "解释"
+    }
+  },
+  "unknownTag": {
+    "clickHint": "{{reason}} — 点击以提出追问",
+    "resolveAria": "解决未知项：{{label}}"
+  },
+  "followup": {
+    "title": "追问",
+    "from": "来自 {{reason}}"
+  },
+  "handoff": {
+    "banner": {
+      "title": "证据已移交至 fix pipeline",
+      "meta_one": "{{count}} 条证据",
+      "meta_other": "{{count}} 条证据",
+      "hypothesis": "1 个假设",
+      "dismiss": "关闭移交横幅"
+    },
+    "breadcrumb": {
+      "back": "返回",
+      "backAria": "返回调查",
+      "from": "来自调查：",
+      "evidence_one": "{{count}} 条证据",
+      "evidence_other": "{{count}} 条证据",
+      "dismiss": "关闭路径提示"
+    },
+    "notice": {
+      "sending": "正在将证据发送至 fix pipeline…"
+    }
+  },
+  "jobs": {
+    "status": {
+      "queued": "排队中",
+      "running": "运行中",
+      "partial": "部分",
+      "stale": "过期",
+      "completed": "完成",
+      "cancelled": "已取消",
+      "failed": "失败"
+    },
+    "cancel": "取消任务",
+    "tray": {
+      "title": "调查任务",
+      "close": "关闭",
+      "closeAria": "关闭任务列表",
+      "settledActive": "已结束 {{settled}} · 进行中 {{active}}",
+      "clearCompleted": "清除已完成"
+    }
+  },
+  "notebook": {
+    "ask": "提问",
+    "askButton": "提问",
+    "addQuestion": "添加问题",
+    "pickTargetPlaceholder": "选择目标后即可开始提问…",
+    "askAboutPlaceholder": "就 {{label}} 提问…",
+    "findings": "调查结果",
+    "noFindings": "暂无调查结果 — 已回答的问题将显示在此处。",
+    "pendingUnknowns": "待处理未知项",
+    "noOutstandingUnknowns": "没有待处理的未知项。",
+    "actions": "操作",
+    "noActions": "暂无建议的操作。",
+    "resolveUnknown": "解决未知项：{{label}}",
+    "followUpTitle": "点击以追问：{{reason}}",
+    "body": {
+      "noEntry": "该目标暂无笔记本条目。"
+    }
+  },
+  "planner": {
+    "launcher": {
+      "running": "反思中…",
+      "run": "运行反思循环",
+      "runningTitle": "反思循环运行中…",
+      "runTitle": "对收集到的证据运行多跳反思"
+    },
+    "trace": {
+      "title": "反思轨迹",
+      "step": "步骤 {{index}}",
+      "stepPending": "步骤 {{index}}…",
+      "reflecting": "反思中",
+      "next": "下一步：{{question}}",
+      "end": "(结束)",
+      "final": "最终"
+    }
+  },
+  "similar": {
+    "code": "相似代码",
+    "incidentFallback": "相似事件",
+    "dateUnknown": "(日期未知)",
+    "cases": "相似案例"
+  },
+  "cta": {
+    "title": "调查"
+  },
+  "launcher": {
+    "openTitle": "打开调查工作区",
+    "meta": "{{targets}} 个演示目标 · {{jobs}} 个任务运行中"
+  },
+  "panel": {
+    "ariaLabel": "调查工作区",
+    "owner": {
+      "queued": "负责人分配已加入队列"
+    },
+    "deepScanLabel": "深度扫描：{{label}}",
+    "resolveUnknown": "解决未知项：{{label}}"
+  },
+  "allEvidence": {
+    "regionAria": "全部证据",
+    "title": "全部证据 ({{count}})"
+  },
+  "answerBody": {
+    "answerAria": "答案",
+    "similarAria": "相似案例",
+    "followupAria": "追问",
+    "reflectionAria": "反思轨迹",
+    "failed": "调查失败。",
+    "retry": "重试"
+  },
+  "targetKind": {
+    "file": "文件",
+    "symbol": "符号",
+    "incident": "事件"
+  },
+  "empty": {
+    "kind": {
+      "file": "文件",
+      "symbol": "符号",
+      "incident": "事件"
+    },
+    "title": "没有正在进行的调查",
+    "subtitle": "选择一个演示目标 — 文件、符号或事件。"
+  },
+  "footer": {
+    "targetSummary": "{{count}} 条证据 · {{status}}",
+    "noTargetSummary": "{{count}} 个演示目标 · 请从上方选择一个",
+    "regenerate": "重新生成",
+    "regenerateAria": "重新生成调查"
+  },
+  "header": {
+    "title": "调查",
+    "reset": "重置",
+    "resetTitle": "清除当前目标 — 返回演示列表",
+    "close": "关闭调查"
+  },
+  "tabs": {
+    "modeAria": "调查视图模式",
+    "answer": "答案",
+    "notebook": "笔记本",
+    "questionType": {
+      "why_risky": "为何有风险？",
+      "blast_of_change": "变更影响范围？",
+      "incident_suspect": "事件嫌疑对象？"
+    },
+    "short": {
+      "why_risky": "风险",
+      "blast_of_change": "影响",
+      "incident_suspect": "嫌疑"
+    }
+  },
+  "shortcuts": {
+    "hint": "ESC 关闭 · n 切换模式 · j/k 导航 · ⌘R 重新生成"
+  }
+}

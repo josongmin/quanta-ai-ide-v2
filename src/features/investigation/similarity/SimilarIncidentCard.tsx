@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { History } from 'lucide-react';
 import type { EvidenceItem } from '@entities/investigation';
 import { ConfidenceDot, SourceToolBadge } from '../evidence';
@@ -9,20 +10,21 @@ const INCIDENT_ID_RE = /INC-\d+/;
 const RELATIVE_TIME_RE = /\d+\s*(d|w|mo|y|months?|days?|weeks?|years?)\s*(ago)?/i;
 const PAREN_AGO_RE = /\(\d+\s+(months?|days?|weeks?|years?)\s+ago\)/i;
 
-function parseId(summary: string): string {
+function parseId(summary: string, fallback: string): string {
   const m = INCIDENT_ID_RE.exec(summary);
-  return m ? m[0] : 'Similar incident';
+  return m ? m[0] : fallback;
 }
 
-function parseAge(summary: string): string {
+function parseAge(summary: string, fallback: string): string {
   const paren = PAREN_AGO_RE.exec(summary);
   if (paren) return paren[0].replace(/[()]/g, '');
   const rel = RELATIVE_TIME_RE.exec(summary);
   if (rel) return rel[0];
-  return '(date unknown)';
+  return fallback;
 }
 
 export function SimilarIncidentCard({ evidence }: Props) {
+  const { t } = useTranslation('investigation');
   if (evidence.kind !== 'similar_incident') return null;
 
   const cardStyle: CSSProperties = {
@@ -32,8 +34,8 @@ export function SimilarIncidentCard({ evidence }: Props) {
     maxWidth: 280,
   };
 
-  const incidentId = parseId(evidence.summary);
-  const age = parseAge(evidence.summary);
+  const incidentId = parseId(evidence.summary, t('similar.incidentFallback'));
+  const age = parseAge(evidence.summary, t('similar.dateUnknown'));
 
   return (
     <div className="border rounded-md p-2.5 flex flex-col gap-1.5" style={cardStyle}>

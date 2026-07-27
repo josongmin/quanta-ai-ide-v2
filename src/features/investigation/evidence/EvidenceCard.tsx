@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { EvidenceItem, WhyPartial } from '@entities/investigation';
 import { ConfidenceDot } from './ConfidenceDot';
@@ -12,27 +13,28 @@ type Props = {
   onToggle?: () => void;
 };
 
-function partialLabel(why: WhyPartial): string {
-  switch (why) {
-    case 'dispatch_overapprox':
-      return 'partial: dispatch over-approx';
-    case 'runtime_missing':
-      return 'partial: runtime missing';
-    case 'index_stale':
-      return 'partial: index stale';
-    case 'analysis_truncated':
-      return 'partial: analysis truncated';
-    case null:
-    default:
-      return '';
-  }
-}
-
 // Single evidence card. Lives inside an already-glassy panel, so we use
 // a plain <div> with a flat surface — wrapping in another GlassCard
 // stacks blur and looks muddy. NO LEFT STRIPE: confidence is the dot to
 // the right of the kind label (memory rule).
+function partialLabelKey(why: WhyPartial): string | null {
+  switch (why) {
+    case 'dispatch_overapprox':
+      return 'evidence.partial.dispatch_overapprox';
+    case 'runtime_missing':
+      return 'evidence.partial.runtime_missing';
+    case 'index_stale':
+      return 'evidence.partial.index_stale';
+    case 'analysis_truncated':
+      return 'evidence.partial.analysis_truncated';
+    case null:
+    default:
+      return null;
+  }
+}
+
 export function EvidenceCard({ evidence, expanded, onToggle }: Props) {
+  const { t } = useTranslation('investigation');
   const [internalExpanded, setInternalExpanded] = useState(false);
   const isControlled = expanded !== undefined;
   const open = isControlled ? expanded : internalExpanded;
@@ -46,7 +48,8 @@ export function EvidenceCard({ evidence, expanded, onToggle }: Props) {
     background: 'var(--bg-surface)',
     borderColor: 'var(--border-default)',
   };
-  const partial = partialLabel(evidence.whyPartial);
+  const partialKey = partialLabelKey(evidence.whyPartial);
+  const partial = partialKey ? t(partialKey) : '';
   const hasDetail = Boolean(evidence.detail);
 
   return (
@@ -89,7 +92,7 @@ export function EvidenceCard({ evidence, expanded, onToggle }: Props) {
         >
           {open ? <ChevronDown size={10} /> : <ChevronRight size={10} />}
           <span className="font-mono uppercase tracking-wider">
-            {open ? 'hide detail' : 'detail'}
+            {open ? t('evidence.hideDetail') : t('evidence.detail')}
           </span>
         </button>
       ) : null}

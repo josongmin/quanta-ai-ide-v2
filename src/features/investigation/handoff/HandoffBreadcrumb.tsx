@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, X } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import { GlassCard, IconButton } from '@shared/ui';
@@ -9,6 +10,7 @@ import {
 } from './fixHandoff';
 
 export function HandoffBreadcrumb() {
+  const { t } = useTranslation('investigation');
   const navigate = useNavigate();
   const [crumb, setCrumb] = useState<FixHandoffBreadcrumb | null>(() => readHandoffBreadcrumb());
 
@@ -40,15 +42,15 @@ export function HandoffBreadcrumb() {
           <button
             type="button"
             onClick={handleBack}
-            aria-label="Back to investigation"
+            aria-label={t('handoff.breadcrumb.backAria')}
             className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 transition-colors hover:[background:var(--bg-hover)]"
             style={{ color: 'var(--fg-default)', cursor: 'pointer' }}
           >
             <ChevronLeft size={12} aria-hidden="true" />
-            <span style={{ fontSize: 10 }}>Back</span>
+            <span style={{ fontSize: 10 }}>{t('handoff.breadcrumb.back')}</span>
           </button>
           <span style={{ color: 'var(--fg-subtle)', fontSize: 10 }}>
-            From investigation:
+            {t('handoff.breadcrumb.from')}
           </span>
           <span
             className="font-mono"
@@ -57,7 +59,7 @@ export function HandoffBreadcrumb() {
             {crumb.target.label}
           </span>
           <span style={{ color: 'var(--fg-subtle)', fontSize: 10 }}>
-            · {crumb.evidenceCount.toString()} evidence
+            · {t('handoff.breadcrumb.evidence', { count: crumb.evidenceCount })}
           </span>
           {crumb.hypothesisStatement ? (
             <span
@@ -74,7 +76,7 @@ export function HandoffBreadcrumb() {
           ) : null}
           <IconButton
             icon={X}
-            label="Dismiss breadcrumb"
+            label={t('handoff.breadcrumb.dismiss')}
             onClick={handleDismiss}
             size="sm"
           />

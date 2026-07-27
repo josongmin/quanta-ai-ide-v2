@@ -1,4 +1,5 @@
 import { type CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import { GlassCard } from '@shared/ui';
 import { useJobs } from './JobsContext';
@@ -10,6 +11,7 @@ import { isTerminalJobStatus } from './jobStatus';
 // share one source of truth. Anchored just above the status bar so it
 // reads as "pulled up out of the bar".
 export function JobsTray() {
+  const { t } = useTranslation('investigation');
   const { jobs, cancel, clearCompleted, open, setOpen } = useJobs();
 
   if (!open || jobs.length === 0) return null;
@@ -49,7 +51,7 @@ export function JobsTray() {
           style={headerStyle}
         >
           <span className="font-mono uppercase tracking-wider flex-1">
-            Investigation jobs
+            {t('jobs.tray.title')}
           </span>
           <span
             style={countStyle}
@@ -60,8 +62,8 @@ export function JobsTray() {
           <button
             type="button"
             onClick={() => { setOpen(false); }}
-            title="Close"
-            aria-label="Close jobs"
+            title={t('jobs.tray.close')}
+            aria-label={t('jobs.tray.closeAria')}
             className="p-0.5 rounded hover:[background:var(--bg-hover)]"
             style={{ color: 'var(--fg-muted)' }}
           >
@@ -78,7 +80,7 @@ export function JobsTray() {
           style={footerStyle}
         >
           <span>
-            {completedCount} settled · {jobs.length - completedCount} active
+            {t('jobs.tray.settledActive', { settled: completedCount, active: jobs.length - completedCount })}
           </span>
           <button
             type="button"
@@ -91,7 +93,7 @@ export function JobsTray() {
             }}
             className="font-mono uppercase tracking-wider px-1.5 py-0.5 rounded hover:[background:var(--bg-hover)]"
           >
-            Clear completed
+            {t('jobs.tray.clearCompleted')}
           </button>
         </div>
       </GlassCard>

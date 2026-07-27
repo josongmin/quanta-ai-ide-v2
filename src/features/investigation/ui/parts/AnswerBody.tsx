@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { RefreshCw } from 'lucide-react';
 import type {
   ActionRecommendation,
@@ -47,6 +48,7 @@ export function AnswerBody({
   onRunPlanner,
   onRegenerate,
 }: AnswerBodyProps) {
+  const { t } = useTranslation('investigation');
   const evidenceCount = bundle?.evidence.length ?? 0;
 
   if (status === 'gathering' || status === 'partial') {
@@ -67,7 +69,7 @@ export function AnswerBody({
   if (status === 'complete' && wiredAnswer && bundle) {
     return (
       <>
-        <section role="region" aria-label="Answer">
+        <section role="region" aria-label={t('answerBody.answerAria')}>
           <AnswerView
             answer={wiredAnswer}
             bundle={bundle}
@@ -85,7 +87,7 @@ export function AnswerBody({
         <div
           className="py-3"
           role="region"
-          aria-label="Similar cases"
+          aria-label={t('answerBody.similarAria')}
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
           <SimilarStrip bundle={bundle} />
@@ -93,7 +95,7 @@ export function AnswerBody({
         <div
           className="py-3"
           role="region"
-          aria-label="Follow-up questions"
+          aria-label={t('answerBody.followupAria')}
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
           <FollowUpStrip followups={followups} onPick={onFollowUp} />
@@ -101,7 +103,7 @@ export function AnswerBody({
         <div
           className="py-3 flex flex-col gap-2"
           role="region"
-          aria-label="Reflection trace"
+          aria-label={t('answerBody.reflectionAria')}
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
           <PlannerLauncher onRun={onRunPlanner} running={plannerRunning} />
@@ -122,7 +124,7 @@ export function AnswerBody({
           className="text-sm"
           style={{ color: 'var(--intent-danger-vivid)' }}
         >
-          Investigation failed.
+          {t('answerBody.failed')}
         </div>
         <button
           type="button"
@@ -136,7 +138,7 @@ export function AnswerBody({
           }}
         >
           <RefreshCw className="w-3 h-3" />
-          Retry
+          {t('answerBody.retry')}
         </button>
       </div>
     );

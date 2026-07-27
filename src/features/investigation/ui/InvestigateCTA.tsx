@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
 import type { InvestigationTarget } from '@entities/investigation';
 import { useInvestigationRunner } from '../model/InvestigationContext';
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export default function InvestigateCTA({ target, onClick }: Props) {
+  const { t } = useTranslation('investigation');
   const { start } = useInvestigationRunner();
   const handleClick = () => {
     start(target);
@@ -23,13 +25,13 @@ export default function InvestigateCTA({ target, onClick }: Props) {
         color: 'var(--fg-default)',
         cursor: 'pointer',
       }}
-      title="Investigate"
+      title={t('cta.title')}
     >
       <Sparkles
         className="w-3 h-3"
         style={{ color: 'var(--intent-success-vivid)' }}
       />
-      Investigate
+      {t('cta.title')}
     </button>
   );
 }

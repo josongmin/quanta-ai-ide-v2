@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GlassCard } from '@shared/ui';
 import {
   FIXTURE_TARGETS,
@@ -32,6 +33,7 @@ const WIRED_ACTION_KINDS = new Set<ActionRecommendation['kind']>([
 ]);
 
 export default function InvestigatePanel() {
+  const { t } = useTranslation('investigation');
   const {
     activeTarget,
     bundle,
@@ -100,7 +102,7 @@ export default function InvestigatePanel() {
     }
     if (action.kind === 'run_deep_scan') {
       if (!activeTarget) return;
-      const label = `Deep scan: ${activeTarget.label}`;
+      const label = t('panel.deepScanLabel', { label: activeTarget.label });
       jobs.enqueue('deep_scan', activeTarget, label);
       return;
     }
@@ -117,10 +119,10 @@ export default function InvestigatePanel() {
     }
     if (action.kind === 'assign_owner') {
       console.warn('[investigation] assign_owner queued', action);
-      setOwnerBanner('Owner assignment queued');
+      setOwnerBanner(t('panel.owner.queued'));
       return;
     }
-  }, [activeTarget, bundle, answer, stack, jobs, requestFixHandoff]);
+  }, [activeTarget, bundle, answer, stack, jobs, requestFixHandoff, t]);
 
   // Build a transformed answer where wired actions are forced enabled.
   const wiredAnswer = useMemo<InvestigationAnswer | null>(() => {
@@ -149,10 +151,10 @@ export default function InvestigatePanel() {
   const handleResolveUnknown = useCallback(
     (tag: UnknownTag) => {
       if (!activeTarget) return;
-      addQuestion(activeTarget.id, `Resolve unknown: ${tag.label}`, questionType);
+      addQuestion(activeTarget.id, t('panel.resolveUnknown', { label: tag.label }), questionType);
       setMode('notebook');
     },
-    [activeTarget, addQuestion, questionType],
+    [activeTarget, addQuestion, questionType, t],
   );
 
   const handleNotebookAddQuestion = useCallback(
@@ -219,7 +221,7 @@ export default function InvestigatePanel() {
       style={outerStyle}
       aria-hidden={!panelOpen}
       role="dialog"
-      aria-label="Investigation workspace"
+      aria-label={t('panel.ariaLabel')}
       aria-modal="false"
     >
       <GlassCard className="h-full flex flex-col rounded-l-2xl rounded-r-none">
