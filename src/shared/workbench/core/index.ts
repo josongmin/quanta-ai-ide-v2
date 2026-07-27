@@ -1,53 +1,9 @@
-// Public boundary of the workbench kernel (WBT-02). Consumers reach these
-// through `@shared/workbench`; nothing here bypasses the WBT-01 contract.
+// Public boundary of the workbench kernel. After the surface-authority
+// convergence the kernel's single load-bearing primitive is the scope tree
+// (ScopeNode) — the app-root scope + child-first disposable teardown that the
+// React host projects via WorkbenchRoot/appScope. The former contribution/
+// command/context-key/intent/surface/layout classes were never wired into the
+// runtime (the real command axis is KeybindingService; the real surface axis is
+// the zustand tab store + SURFACE_RUNTIME), so they were removed rather than
+// left as dead parallel authority.
 export { ScopeNode, type Disposable } from './ScopeNode';
-export {
-  ContributionRegistry,
-  type RegistryEntry,
-  type RegistrySnapshot,
-  type RegistryObserver,
-} from './ContributionRegistry';
-export {
-  CommandService,
-  type CommandHandler,
-  type CommandRegisterOptions,
-  type CommandExecuteOptions,
-} from './CommandService';
-export { ContextKeyService, type ContextValue } from './ContextKeyService';
-export {
-  IntentBus,
-  type Intent,
-  type DeliveryMode,
-  type BusLimits,
-  type IntentHandler,
-  type FlushResult,
-} from './IntentBus';
-export {
-  WorkspaceSession,
-  type WorkspaceIdentity,
-  type WorkspaceHandle,
-  type Generation,
-} from './WorkspaceSession';
-export { ContextStore, type ContextHandle, type Lease, type PutOptions } from './ContextStore';
-export {
-  SurfaceService,
-  type ResolvedSurface,
-  type SurfaceResolverPort,
-  type NavigationPort,
-  type ReuseMode,
-  type OpenRequest,
-  type OpenResult,
-} from './SurfaceService';
-export {
-  LayoutStore,
-  layoutV3Schema,
-  type LayoutV3,
-  type LayoutOp,
-  type PersistencePort,
-  type MigrationReceipt,
-} from './LayoutStore';
-export {
-  ActivationRail,
-  type QuarantineReceipt,
-  type ActivationOutcome,
-} from './ActivationRail';

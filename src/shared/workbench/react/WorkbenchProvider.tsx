@@ -1,41 +1,30 @@
-// Workbench composition root (WB-301/304).
+// Workbench composition root.
 //
-// Creates the canonical kernel session (app-root ScopeNode + registry + command +
-// context-key + intent) and projects it into React. On unmount the app scope is
-// disposed, cascading child-first teardown. StrictMode's mount/unmount/mount is
-// handled by recreating the session if a prior cleanup disposed it, so there is
-// no resource leak and no use of a disposed scope after settle.
+// Creates the canonical session and projects it into React. The session holds
+// the two primitives that are actually load-bearing at runtime:
+//   - appScope: the app-root ScopeNode. On unmount it disposes, cascading
+//     child-first teardown; per-surface child scopes are created off it by
+//     SurfaceScope (shared/ui/runtime).
+//   - keybindings: the single keybinding-dispatch authority, fed by
+//     useShortcut / useGlobalShortcuts and drained by the UI runtime keydown.
+// StrictMode's mount/unmount/mount is handled by recreating the session if a
+// prior cleanup disposed it, so there is no resource leak and no use of a
+// disposed scope after settle.
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import {
-  ScopeNode,
-  ContributionRegistry,
-  CommandService,
-  ContextKeyService,
-  IntentBus,
-  type BusLimits,
-} from '../core';
+import { ScopeNode } from '../core';
 import type { ScopeIdentity } from '../contract';
 import { KeybindingService } from './KeybindingService';
 
 export type WorkbenchSession = {
   readonly appScope: ScopeNode;
-  readonly registry: ContributionRegistry;
-  readonly commands: CommandService;
-  readonly contextKeys: ContextKeyService;
-  readonly intents: IntentBus;
   readonly keybindings: KeybindingService;
 };
 
 const APP_SCOPE: ScopeIdentity = { id: 'core.app', kind: 'root', owner: { owner: 'core', trust: 'core' } };
-const DEFAULT_BUS_LIMITS: BusLimits = { maxCount: 256, maxBytes: 1 << 20, ttlMs: 30_000 };
 
 export function createWorkbenchSession(): WorkbenchSession {
   return {
     appScope: new ScopeNode(APP_SCOPE),
-    registry: new ContributionRegistry(),
-    commands: new CommandService(),
-    contextKeys: new ContextKeyService(),
-    intents: new IntentBus(DEFAULT_BUS_LIMITS),
     keybindings: new KeybindingService(),
   };
 }

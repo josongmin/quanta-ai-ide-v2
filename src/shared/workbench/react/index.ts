@@ -1,5 +1,8 @@
-// Public boundary of the workbench React host (WBT-04). This is the ONLY layer
-// that imports React; contract and core stay host-neutral.
+// Public boundary of the workbench React host. This is the ONLY layer that
+// imports React; contract and core stay host-neutral. The host projects the two
+// primitives that are actually load-bearing at runtime: the app-scope dispose
+// tree (WorkbenchRoot/appScope) and the keybinding dispatch authority
+// (KeybindingService, driven by useShortcut / useGlobalShortcuts).
 export {
   WorkbenchRoot,
   useWorkbench,
@@ -8,14 +11,3 @@ export {
   type WorkbenchSession,
 } from './WorkbenchProvider';
 export { KeybindingService, type Keybinding, type KeybindingRegistration } from './KeybindingService';
-export { ScopeProvider, useWorkbenchScope } from './ScopeProvider';
-export { useCommand, useContextKey } from './hooks';
-export { CrashBoundary, type CrashState } from './CrashBoundary';
-export { SurfaceHost } from './SurfaceHost';
-export {
-  SurfaceLifecycle,
-  isMounted,
-  isVisible,
-  type SurfaceState,
-  type SurfaceEvent,
-} from './lifecycle';
