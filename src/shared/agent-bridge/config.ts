@@ -48,10 +48,16 @@ function fromInjectedConfig(): QuantaConfig | null {
 // prod daemon must arrive via the trusted env/injected path with its host pinned
 // in the CSP (see docs/security/ui-runtime-threat-model.md), never via a deeplink.
 const LOOPBACK_HOSTS = new Set(['127.0.0.1', 'localhost', '[::1]']);
+// Must stay a strict subset of the packaged CSP connect-src, which pins the
+// daemon PORT (4096). Accepting a different loopback port here would pass the app
+// gate but be refused by the webview CSP → a silent degrade to offline mode. The
+// port pin keeps the app allowlist == the CSP allowlist (csp.test.ts asserts the
+// subset relation). DEV_DEFAULT_WS_URL uses the same port.
+const DAEMON_PORT = '4096';
 function isAllowedWsUrl(url: string): boolean {
   try {
     const u = new URL(url);
-    return u.protocol === 'ws:' && LOOPBACK_HOSTS.has(u.hostname);
+    return u.protocol === 'ws:' && LOOPBACK_HOSTS.has(u.hostname) && u.port === DAEMON_PORT;
   } catch {
     return false;
   }

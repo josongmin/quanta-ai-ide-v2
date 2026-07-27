@@ -212,17 +212,59 @@ function printTable(rows) {
   }
 }
 
-// Strip line + block comments so a commented-out import (`// import X from
-// '../sibling'`) can't false-positive the gate. Naive but sufficient — it does
-// not track string literals, so an import-like specifier inside a runtime string
-// could still match; that is a rare, FAIL-LOUD case (safe), not a silent evasion.
+// Blank out comments so neither a commented-out import (false positive) nor a
+// `/*` hiding inside a string/line-comment/regex (which a naive two-regex strip
+// would treat as a phantom block comment and use to SWALLOW real imports — a
+// silent false negative on this hard gate) can fool IMPORT_RE. A single linear
+// scan that recognises string literals, template literals, regex literals, and
+// both comment forms is the only correct way; regex/division and `/*`-in-string
+// are exactly what an ad-hoc regex gets wrong. Non-comment text is preserved
+// verbatim (offsets don't matter here — we only re-scan for import specifiers).
+const REGEX_PREV = new Set(['', '=', '(', '[', '{', ',', ';', ':', '!', '&', '|', '?', '+', '-', '~', '*', '%', '^', '<', '>', 'n' /* retur[n] */, 'f' /* typeo[f] */, 'o' /* d[o] */]);
 function stripComments(src) {
-  return src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+  let out = '';
+  let lastSig = '';
+  for (let i = 0; i < src.length;) {
+    const c = src[i];
+    const d = src[i + 1];
+    if (c === '"' || c === "'" || c === '`') { // string / template literal
+      out += c; i++;
+      while (i < src.length) {
+        out += src[i];
+        if (src[i] === '\\') { i++; if (i < src.length) out += src[i]; i++; continue; }
+        if (src[i] === c) { i++; break; }
+        i++;
+      }
+      lastSig = c;
+      continue;
+    }
+    if (c === '/' && d === '/') { while (i < src.length && src[i] !== '\n') i++; continue; }
+    if (c === '/' && d === '*') { i += 2; while (i < src.length && !(src[i] === '*' && src[i + 1] === '/')) i++; i += 2; continue; }
+    if (c === '/' && REGEX_PREV.has(lastSig)) { // regex literal
+      out += c; i++;
+      let inClass = false;
+      while (i < src.length) {
+        const ch = src[i]; out += ch;
+        if (ch === '\\') { i++; if (i < src.length) out += src[i]; i++; continue; }
+        if (ch === '[') inClass = true;
+        else if (ch === ']') inClass = false;
+        else if (ch === '/' && !inClass) { i++; break; }
+        else if (ch === '\n') break;
+        i++;
+      }
+      lastSig = '/';
+      continue;
+    }
+    out += c;
+    if (!/\s/.test(c)) lastSig = c;
+    i++;
+  }
+  return out;
 }
 
 // Exported for regression tests (scripts/__tests__). The CLI body below only
 // runs when this file is executed directly, so importing it does NOT run the audit.
-export { IMPORT_RE, resolveSlice, isAllowed, ALLOWLIST };
+export { IMPORT_RE, resolveSlice, isAllowed, ALLOWLIST, stripComments };
 
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (!isMain) {

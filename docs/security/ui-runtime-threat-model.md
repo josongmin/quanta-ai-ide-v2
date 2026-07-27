@@ -44,9 +44,19 @@ constrained at two layers, and the two are kept in lockstep by tests
   daemon exists.
 - **App layer (`config.ts`)** — resolution order is injected → deeplink → env →
   dev-default. Only the **untrusted deeplink** (`?ws=…&token=…`) is gated by
-  `isAllowedWsUrl`, which permits **loopback `ws://` only** — a deeplink may not
-  retarget the socket + token at a remote host (ws or wss). The trusted
-  env/injected paths may set a remote host but bypass this gate by design.
+  `isAllowedWsUrl`, which permits **loopback `ws://` on the pinned daemon port
+  (4096) only** — a deeplink may not retarget the socket + token at a remote host
+  (ws or wss) nor at another local port (which the CSP would refuse anyway,
+  silently degrading chat to offline). The gate's accept-set is a strict subset
+  of the CSP connect-src; `csp.test.ts` asserts this so the two can't drift. The
+  trusted env/injected paths may set a remote host but bypass this gate by design.
+
+  **Residual risk (accepted):** a deeplink is still permitted to point at loopback
+  over plaintext `ws://`, so it can hand the auth token to *whatever local process
+  owns 127.0.0.1:4096*. On a shared / multi-user / dev host a malicious local
+  listener is a real (weaker, non-remote) exfil path. Treat the token as
+  low-value / short-TTL on such hosts, and prefer the trusted injected path (which
+  never reads a URL/token from the address bar) over deeplinks where possible.
 
 **Adding a production daemon** therefore requires TWO pinned changes, not a wildcard:
 1. add the daemon's exact origin to `connect-src` (e.g. `wss://daemon.example`),

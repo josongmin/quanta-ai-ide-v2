@@ -49,7 +49,9 @@ function isForbiddenSourceRoot(manifestKey) {
   return (
     /^src\/widgets\/[^/]+-stage\//.test(manifestKey) ||
     manifestKey.startsWith('src/features/switch-mode/lib/') || // three.js viz engines
-    manifestKey.startsWith('src/features/chat-agent/ui/') // chat UI only; model/ is the eager theme system
+    manifestKey.startsWith('src/features/admission-rules/') || // lazy core surface
+    manifestKey.startsWith('src/features/verified-fix/') || // lazy core surface
+    manifestKey.startsWith('src/features/chat-agent/ui/') // chat UI (model/ is the eager theme system)
   );
 }
 

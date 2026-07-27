@@ -5,15 +5,27 @@
 // a stage inlines its modules into the entry chunk with NO separate manifest
 // key, so the manifest-key fence in bundle-budget.mjs cannot see it; this can.
 //
-// Heavy lazy-only roots: every `src/widgets/*-stage/` surface, the switch-mode
-// three.js viz engines, and the chat-agent UI panel. NOTE chat-agent is only
-// fenced at `/ui/` — its `model/` holds the app-wide token/theme system
-// (TokensProvider is mounted eagerly at the app root by AppProviders), so the
-// model is legitimately on the critical path; only the chat/tokens UI is lazy.
+// Heavy lazy-only roots: every `src/widgets/*-stage/` surface, plus the lazy
+// core surfaces that live under `src/features/` (dynamic-import targets in
+// builtinSurfaces.ts: admission-rules, verified-fix) and the switch-mode three.js
+// viz engines and the chat-agent feature.
 export const HEAVY_ROOT_RES = [
   /\/src\/widgets\/[^/]+-stage\//,
   /\/src\/features\/switch-mode\/lib\//,
-  /\/src\/features\/chat-agent\/ui\//,
+  /\/src\/features\/chat-agent\//,
+  /\/src\/features\/admission-rules\//,
+  /\/src\/features\/verified-fix\//,
+];
+
+// Eager EXCEPTIONS inside a heavy root that are legitimately on the critical
+// path. chat-agent's `model/` holds the app-wide token/theme system
+// (TokensProvider is mounted at the app root by AppProviders); only these theme
+// modules are eager — the chat UI, the palette data, and any future chat-runtime
+// module under model/ stay fenced. Fencing the whole feature + allowlisting the
+// known-eager files means a NEW heavy module (in model/ or ui/) is caught by
+// default, closing the round-2 gap where a model/ addition escaped a /ui/-only fence.
+export const EAGER_ALLOW_RES = [
+  /\/src\/features\/chat-agent\/model\/(TokensContext|applyTokens|tokenStorage|tokens-types)\b/,
 ];
 
 // Given a Rollup output bundle, return the heavy-root module ids that are
@@ -38,7 +50,9 @@ export function findStageLeaks(bundle) {
   for (const fn of seen) {
     for (const modId of Object.keys(byFile.get(fn).modules ?? {})) {
       const norm = modId.replace(/\\/g, '/');
-      if (HEAVY_ROOT_RES.some((re) => re.test(norm))) leaks.push(modId);
+      if (HEAVY_ROOT_RES.some((re) => re.test(norm)) && !EAGER_ALLOW_RES.some((re) => re.test(norm))) {
+        leaks.push(modId);
+      }
     }
   }
   return leaks;

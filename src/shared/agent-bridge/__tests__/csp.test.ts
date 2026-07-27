@@ -54,4 +54,19 @@ describe('Tauri CSP connect-src permits the agent-bridge WebSocket', () => {
     expect(directive).toContain("'self'");
     expect(directive).toContain('ipc:');
   });
+
+  it('every ws origin the app gate accepts is present in connect-src (gate ⊆ CSP, no silent degrade)', async () => {
+    // The gate (config.ts isAllowedWsUrl) accepts ws:// loopback on port 4096.
+    // If it accepted anything the CSP omits, that URL would pass the app but be
+    // refused by the webview — the P0-2 silent-degrade class. Assert the subset.
+    const directive = connectSrc();
+    for (const host of ['127.0.0.1', 'localhost', '[::1]']) {
+      expect(directive).toContain(`ws://${host}:4096`);
+    }
+    // And the gate must reject a loopback port the CSP does NOT list.
+    const { resolveQuantaConfig } = await import('../config');
+    window.history.replaceState(null, '', '/?ws=ws%3A%2F%2F127.0.0.1%3A9999%2F');
+    expect(resolveQuantaConfig()?.wsUrl).not.toBe('ws://127.0.0.1:9999/');
+    window.history.replaceState(null, '', '/');
+  });
 });

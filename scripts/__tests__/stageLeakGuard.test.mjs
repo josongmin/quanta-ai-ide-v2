@@ -43,15 +43,32 @@ test('non-stage app modules (app-shell, shared) are not flagged', () => {
   assert.deepEqual(findStageLeaks(b), []);
 });
 
-test('chat-agent MODEL (eager app theme) is NOT a leak, but chat-agent UI is', () => {
+test('chat-agent: eager theme model is allowlisted; UI and non-theme model are fenced', () => {
   const eager = bundle([
     { fileName: 'index.js', isEntry: true, imports: [],
-      modules: { [`${ROOT}/src/features/chat-agent/model/TokensContext.tsx`]: {} } }, // TokensProvider at app root
+      modules: {
+        [`${ROOT}/src/features/chat-agent/model/TokensContext.tsx`]: {}, // eager theme — allowlisted
+        [`${ROOT}/src/features/chat-agent/model/applyTokens.ts`]: {},
+      } },
   ]);
   assert.deepEqual(findStageLeaks(eager), []);
-  const lazyLeak = bundle([
-    { fileName: 'index.js', isEntry: true, imports: [],
-      modules: { [`${ROOT}/src/features/chat-agent/ui/ChatAgent.tsx`]: {} } },
-  ]);
-  assert.deepEqual(findStageLeaks(lazyLeak), [`${ROOT}/src/features/chat-agent/ui/ChatAgent.tsx`]);
+  // UI leak
+  assert.deepEqual(
+    findStageLeaks(bundle([{ fileName: 'index.js', isEntry: true, imports: [], modules: { [`${ROOT}/src/features/chat-agent/ui/ChatAgent.tsx`]: {} } }])),
+    [`${ROOT}/src/features/chat-agent/ui/ChatAgent.tsx`],
+  );
+  // a NON-theme model module (e.g. chat runtime) is NOT allowlisted → fenced (BB1-R2-002)
+  assert.deepEqual(
+    findStageLeaks(bundle([{ fileName: 'index.js', isEntry: true, imports: [], modules: { [`${ROOT}/src/features/chat-agent/model/useQuantaChat.ts`]: {} } }])),
+    [`${ROOT}/src/features/chat-agent/model/useQuantaChat.ts`],
+  );
+});
+
+test('lazy core FEATURE surfaces (admission-rules, verified-fix) are fenced too (BB1-R2-001)', () => {
+  for (const p of ['src/features/admission-rules/ui/AdmissionRoot.tsx', 'src/features/verified-fix/ui/VerifiedFixRoot.tsx']) {
+    assert.deepEqual(
+      findStageLeaks(bundle([{ fileName: 'index.js', isEntry: true, imports: [], modules: { [`${ROOT}/${p}`]: {} } }])),
+      [`${ROOT}/${p}`],
+    );
+  }
 });
