@@ -113,9 +113,37 @@ function* walk(dir) {
 // literals, regex literals, or template interpolations. Three rounds of a
 // hand-rolled comment/regex/division tokenizer proved that ambiguity is
 // unwinnable by regex; this is the correct, complete replacement.
+//
+// preProcessFile has two blind spots we backfill from a real AST/scan (XS-R4):
+//   (1) `export * as ns from '<spec>'` — the namespace re-export form is NOT
+//       reported in importedFiles (plain `export * from` and `export {x} from`
+//       ARE), so a slice re-exporting a sibling this way would otherwise slip
+//       the gate. We walk ExportDeclaration/NamespaceExport nodes to recover it.
+//   (2) triple-slash `/// <reference path="..." />` — routed to referencedFiles,
+//       not importedFiles. We fold those in so a reference-path to a sibling
+//       slice's .d.ts is classified too.
 function extractSpecifiers(src) {
-  return ts.preProcessFile(src, /*readImportFiles*/ true, /*detectJavaScriptImports*/ true)
-    .importedFiles.map((f) => f.fileName);
+  const pre = ts.preProcessFile(src, /*readImportFiles*/ true, /*detectJavaScriptImports*/ true);
+  const specs = pre.importedFiles.map((f) => f.fileName);
+  // (2) reference-path directives (relative paths only; `types="..."` vendor
+  // directives go to typeReferenceDirectives and are out of scope).
+  for (const r of pre.referencedFiles) specs.push(r.fileName);
+  // (1) `export * as ns from '<spec>'` namespace re-exports, via a real AST walk.
+  const sf = ts.createSourceFile('__scan.tsx', src, ts.ScriptTarget.Latest, /*setParentNodes*/ true, ts.ScriptKind.TSX);
+  const visit = (node) => {
+    if (
+      ts.isExportDeclaration(node) &&
+      node.exportClause &&
+      ts.isNamespaceExport(node.exportClause) &&
+      node.moduleSpecifier &&
+      ts.isStringLiteral(node.moduleSpecifier)
+    ) {
+      specs.push(node.moduleSpecifier.text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return specs;
 }
 
 /**

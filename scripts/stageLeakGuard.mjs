@@ -28,8 +28,13 @@ export const HEAVY_ROOT_RES = [
 // module under model/ stay fenced. Fencing the whole feature + allowlisting the
 // known-eager files means a NEW heavy module (in model/ or ui/) is caught by
 // default, closing the round-2 gap where a model/ addition escaped a /ui/-only fence.
+// Anchor the extension explicitly (`\.(ts|tsx)$`) rather than a `\b` word
+// boundary: `\b` matches at the `.` before the extension, so it also admitted
+// `<token>.<anything>.ts` siblings (e.g. `applyTokens.helpers.ts`) — a NEW heavy
+// eager-reachable file that must stay fenced. The anchored form matches exactly
+// the four real theme modules and nothing else (XS/BB-R4 fix).
 export const EAGER_ALLOW_RES = [
-  /\/src\/features\/chat-agent\/model\/(TokensContext|applyTokens|tokenStorage|tokens-types)\b/,
+  /\/src\/features\/chat-agent\/model\/(TokensContext|applyTokens|tokenStorage|tokens-types)\.(ts|tsx)$/,
 ];
 
 // Given a Rollup output bundle, return the heavy-root module ids that are

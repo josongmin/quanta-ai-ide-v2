@@ -54,7 +54,7 @@ function isForbiddenSourceRoot(manifestKey) {
     // whole chat-agent feature EXCEPT the eager app-root theme system (mirrors
     // stageLeakGuard's HEAVY_ROOT_RES + EAGER_ALLOW_RES so the two fences agree).
     (manifestKey.startsWith('src/features/chat-agent/') &&
-      !/^src\/features\/chat-agent\/model\/(TokensContext|applyTokens|tokenStorage|tokens-types)\b/.test(manifestKey))
+      !/^src\/features\/chat-agent\/model\/(TokensContext|applyTokens|tokenStorage|tokens-types)\.(ts|tsx)$/.test(manifestKey))
   );
 }
 

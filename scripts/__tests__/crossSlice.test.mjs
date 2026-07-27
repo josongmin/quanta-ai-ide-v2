@@ -12,6 +12,16 @@ test('extractSpecifiers catches static, dynamic, bare, export-star, and mid-line
   assert.deepEqual(extractSpecifiers(`import type { T } from '@features/other';`), ['@features/other']);
 });
 
+test('extractSpecifiers catches `export * as ns from` and `/// <reference path` (XS-R4 gaps)', () => {
+  // XS-R4-1: namespace re-export — preProcessFile drops this, we recover it via AST walk.
+  assert.deepEqual(extractSpecifiers(`export * as ns from '@features/other';`), ['@features/other']);
+  // no double-count against the plain forms preProcessFile already handles
+  assert.deepEqual(extractSpecifiers(`export * from '@features/other';`), ['@features/other']);
+  assert.deepEqual(extractSpecifiers(`import {a} from '@features/other';`), ['@features/other']);
+  // XS-R4-2: relative reference-path directive — folded in from referencedFiles.
+  assert.deepEqual(extractSpecifiers(`/// <reference path="../other/x.ts" />`), ['../other/x.ts']);
+});
+
 test('extractSpecifiers ignores import-shaped text in comments / strings / regex / templates (XS-R3 regressions)', () => {
   // commented out — not an import
   assert.deepEqual(extractSpecifiers(`// import { x } from '@features/other'\nexport const y = 1;`), []);
