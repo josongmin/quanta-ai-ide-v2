@@ -2,15 +2,9 @@ import { useMemo, useState } from 'react';
 import { ScrollText, Sparkles, Network, FileSearch, ShieldAlert } from 'lucide-react';
 import { useFilterRepo } from '@entities/filter-state';
 import type { FileRecord } from '@entities/repo';
-// Intelligence layout constants — duplicated here to avoid features → app
-// boundary violation. Source of truth is @app/router/intelligence/panelLayout.
-const INTELLIGENCE_LAYOUT = {
-  sideInset: 12,
-  panelGap: 20,
-  topInset: 12,
-  bottomInset: 12,
-  centerReserve: 88,
-} as const;
+// Layout constants from the shared SoT (features may import @shared freely — the
+// earlier local copy was avoidable duplication, not a boundary workaround).
+import { INTELLIGENCE_LAYOUT } from '@shared/lib/panelLayout';
 import { GlassCard, Portal } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import { Badge } from './shared';

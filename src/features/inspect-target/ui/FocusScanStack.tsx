@@ -2,15 +2,9 @@ import { useEffect } from 'react';
 import { useFilterRepo } from '@entities/filter-state';
 import { useTranslation } from '@shared/i18n';
 import { ResizeHandle } from '@shared/ui';
-// Intelligence layout constants — duplicated here to avoid features → app
-// boundary violation. Source of truth is @app/router/intelligence/panelLayout.
-const INTELLIGENCE_LAYOUT = {
-  sideInset: 12,
-  panelGap: 20,
-  topInset: 12,
-  bottomInset: 12,
-  centerReserve: 88,
-} as const;
+// Layout constants live in the shared SoT (features may import @shared freely —
+// no boundary violation; the earlier local copy was avoidable duplication).
+import { INTELLIGENCE_LAYOUT } from '@shared/lib/panelLayout';
 import { useStack, stackKey } from '../model/StackContext';
 import FocusScanPanel from './focus-scan/FocusScanPanel';
 import InspectPanel from './InspectPanel';
