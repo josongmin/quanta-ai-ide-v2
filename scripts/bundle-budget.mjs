@@ -36,30 +36,20 @@ const FORBIDDEN_VENDOR_CHUNKS = [
   /vendor-auth/,
 ];
 
-// Heavy app SOURCE ROOTS that must stay behind a dynamic import. App code returns
-// `undefined` from manualChunks, so Vite hash-names its chunks — matching emitted
-// file names (`coding-stage`, `viz-modes`, …) is NOT reliable (it silently matched
-// nothing, or coincidentally matched i18n locale chunks like `coding.json`). We
-// fence on SOURCE MEMBERSHIP instead: the vite manifest is keyed by source module
-// id, so we assert none of these roots appears as a key in the entry's transitive
-// STATIC closure.
-//
-// This is BY CONSTRUCTION rather than a hand-picked list: EVERY `src/widgets/
-// *-stage/` root plus the switch-mode three.js viz engines is a lazy-only surface
-// and must never be static from the entry. A hand list drifts — e.g. org-stage
-// (58KB gz) / me-stage (55KB) are heavier than a hand-listed coding-stage (53KB)
-// yet would be omitted — so a new stage is covered automatically here.
-//
-// Caveat (honest): the manifest keys only facade/barrel modules (entry + dynamic
-// targets), so this catches a stray static import of a heavy root's FACADE — its
-// facade chunk always exists because the area is also a dynamic target. A static
-// DEEP import that bypasses the barrel inlines into the entry chunk with no
-// per-file manifest key; only the initialGz ceiling backstops that case.
+// SECONDARY fence over heavy app SOURCE ROOTS. This checks the vite manifest,
+// which is keyed by source module id — but ONLY for facade modules (entry +
+// dynamic-import targets). It therefore catches a stray static import that pulls
+// a heavy root's still-separate FACADE chunk into the entry's static closure, but
+// it CANNOT see a static import whose modules inline into the entry chunk (those
+// get no manifest key). The AUTHORITATIVE, by-construction check for that case is
+// the `stage-leak-guard` Vite plugin (scripts/stageLeakGuard.mjs), which inspects
+// Rollup's module-level bundle at build time and fails the build. This fence stays
+// as cheap post-build defense-in-depth; the initialGz ceiling is the final backstop.
 function isForbiddenSourceRoot(manifestKey) {
   return (
     /^src\/widgets\/[^/]+-stage\//.test(manifestKey) ||
     manifestKey.startsWith('src/features/switch-mode/lib/') || // three.js viz engines
-    manifestKey.startsWith('src/features/chat-agent/')
+    manifestKey.startsWith('src/features/chat-agent/ui/') // chat UI only; model/ is the eager theme system
   );
 }
 

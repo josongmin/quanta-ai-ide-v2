@@ -104,12 +104,16 @@ function* walk(dir) {
   }
 }
 
-// Catches every specifier form: `import/export ... from '...'`, dynamic
-// `import('...')`, and bare side-effect `import '...'`. Group 1|2|3 holds the
-// specifier depending on which alternative matched. (The old regex matched only
-// the `from` form, so a dynamic or bare cross-slice import evaded the gate.)
+// Catches every specifier form: `import/export ... from '...'` (incl. `export *
+// from`, mid-line, and multiple per line), dynamic `import('...')`, and bare
+// side-effect `import '...'`. Group 1|2|3 holds the specifier. NOTE: no line-start
+// anchor on the from-form — a `\b(?:import|export)\b` word boundary fires after
+// any statement boundary (`a; import {x} from '../sib'` on one line would else
+// evade this hard CI gate). The bare-import form keeps a statement-boundary guard
+// so it doesn't mis-fire on `import(` (dynamic) or an identifier ending in
+// `import`. `[^'";]` (not `[^'"]`) stops a from-match from spanning across a `;`.
 const IMPORT_RE =
-  /(?:^|\n)\s*(?:import|export)[^'"]*?from\s+['"]([^'"]+)['"]|import\s*\(\s*['"]([^'"]+)['"]\s*\)|(?:^|\n)\s*import\s+['"]([^'"]+)['"]/g;
+  /\b(?:import|export)\b[^'";]*?\bfrom\s*['"]([^'"]+)['"]|\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)|(?:^|[;{}]|\n)\s*import\s+['"]([^'"]+)['"]/g;
 
 /**
  * Extract the target slice name from a module specifier given the layer and the
@@ -146,7 +150,7 @@ function auditLayer(layer) {
   for (const slice of slices) {
     const sliceDir = join(SRC, layer, slice);
     for (const file of walk(sliceDir)) {
-      const src = readFileSync(file, 'utf8');
+      const src = stripComments(readFileSync(file, 'utf8'));
       let m;
       IMPORT_RE.lastIndex = 0;
       while ((m = IMPORT_RE.exec(src)) !== null) {
@@ -207,6 +211,23 @@ function printTable(rows) {
     );
   }
 }
+
+// Strip line + block comments so a commented-out import (`// import X from
+// '../sibling'`) can't false-positive the gate. Naive but sufficient — it does
+// not track string literals, so an import-like specifier inside a runtime string
+// could still match; that is a rare, FAIL-LOUD case (safe), not a silent evasion.
+function stripComments(src) {
+  return src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+}
+
+// Exported for regression tests (scripts/__tests__). The CLI body below only
+// runs when this file is executed directly, so importing it does NOT run the audit.
+export { IMPORT_RE, resolveSlice, isAllowed, ALLOWLIST };
+
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (!isMain) {
+  // imported (test) — skip the CLI run.
+} else {
 
 const layers = layerFilter ? [layerFilter] : LAYERS;
 const all = {};
@@ -273,3 +294,5 @@ if (asJson) {
     'These are permitted today. Audit periodically and consider promoting hot edges.\n',
   );
 }
+
+} // end isMain

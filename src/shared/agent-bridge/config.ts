@@ -40,16 +40,18 @@ function fromInjectedConfig(): QuantaConfig | null {
   return { wsUrl: c.wsUrl, token: c.authToken ?? c.token ?? null };
 }
 
-// Only encrypted wss:// — or a local ws:// dev daemon — is honored from an
-// untrusted source (a deeplink). This blocks a crafted `?ws=…&token=…` link
-// from retargeting the socket at an attacker host to exfiltrate the token +
-// chat over plaintext.
+// Gate for the UNTRUSTED deeplink source (`?ws=…&token=…`) only — env/injected
+// config is trusted and bypasses this. A deeplink may target ONLY a local
+// loopback ws:// daemon; it may NOT set a remote host (ws OR wss). Allowing a
+// remote wss here was an exfil hole: a crafted link could point the socket +
+// token at `wss://attacker` (which the packaged CSP also permitted). A remote
+// prod daemon must arrive via the trusted env/injected path with its host pinned
+// in the CSP (see docs/security/ui-runtime-threat-model.md), never via a deeplink.
+const LOOPBACK_HOSTS = new Set(['127.0.0.1', 'localhost', '[::1]']);
 function isAllowedWsUrl(url: string): boolean {
   try {
     const u = new URL(url);
-    if (u.protocol === 'wss:') return true;
-    return u.protocol === 'ws:'
-      && (u.hostname === '127.0.0.1' || u.hostname === 'localhost' || u.hostname === '[::1]');
+    return u.protocol === 'ws:' && LOOPBACK_HOSTS.has(u.hostname);
   } catch {
     return false;
   }

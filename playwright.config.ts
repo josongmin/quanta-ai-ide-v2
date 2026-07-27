@@ -12,6 +12,14 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    // The shipped macOS engine is WKWebView (WebKit). Run ONLY the CSP receipt
+    // under WebKit so connect-src enforcement is verified on the real engine
+    // family, without paying WebKit cost for the whole renderer suite.
+    {
+      name: 'webkit-csp',
+      use: { ...devices['Desktop Safari'] },
+      testMatch: /csp-websocket\.spec\.ts$/,
+    },
   ],
   webServer: [
     {

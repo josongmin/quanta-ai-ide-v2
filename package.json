@@ -30,6 +30,7 @@
     "ui-infra:audit": "node scripts/ui-infra-audit.mjs",
     "ui-infra:update": "node scripts/ui-infra-audit.mjs --update",
     "test:ui-infra-audit": "node --test scripts/ui-infra-audit.test.mjs",
+    "test:scripts": "node --test scripts/__tests__/stageLeakGuard.test.mjs scripts/__tests__/crossSlice.test.mjs",
     "test:workbench": "vitest run src/shared/workbench",
     "audit:cross-slice": "node scripts/audit-cross-slice.mjs",
     "audit:cross-slice:check": "node scripts/audit-cross-slice.mjs --check",

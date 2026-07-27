@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
+import { stageLeakGuardPlugin } from './scripts/stageLeakGuard.mjs';
 
 // Tauri injects TAURI_ENV_* at dev/build time. We use them to flip a few
 // targets so the same vite.config works for browser and desktop.
@@ -8,7 +9,10 @@ const host = process.env.TAURI_DEV_HOST;
 const isTauri = process.env.TAURI_ENV_PLATFORM !== undefined;
 
 export default defineConfig({
-  plugins: [react()],
+  // stageLeakGuard fails the build (by construction, at the module level) if a
+  // heavy lazy-only stage/viz area is statically pulled onto the critical path —
+  // the invariant bundle-budget.mjs's manifest-key fence structurally cannot see.
+  plugins: [react(), stageLeakGuardPlugin()],
   resolve: {
     alias: {
       '@app':      path.resolve(__dirname, 'src/app'),

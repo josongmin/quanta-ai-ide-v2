@@ -29,3 +29,31 @@ Any new native command or window must provide:
 3. workspace-trust behavior and secret handling;
 4. negative tests for unauthorized window and invalid input;
 5. renderer and native E2E receipts where the boundary is user-visible.
+
+## Agent-bridge WebSocket egress (CSP `connect-src`)
+
+The chat feature dials the quanta agent daemon over a WebSocket. Egress is
+constrained at two layers, and the two are kept in lockstep by tests
+(`src/shared/agent-bridge/__tests__/csp.test.ts`, `config.test.ts`):
+
+- **Network layer (CSP `connect-src`, `src-tauri/tauri.conf.json`)** — allows
+  only the loopback dev daemon: `ws://127.0.0.1:4096`, `ws://localhost:4096`,
+  `ws://[::1]:4096`. A bare `wss:` scheme-source is **deliberately not shipped**:
+  it would authorize WebSocket egress to *any* host, i.e. a token/chat exfil
+  channel for a compromised dependency or XSS. Fail-closed until a real prod
+  daemon exists.
+- **App layer (`config.ts`)** — resolution order is injected → deeplink → env →
+  dev-default. Only the **untrusted deeplink** (`?ws=…&token=…`) is gated by
+  `isAllowedWsUrl`, which permits **loopback `ws://` only** — a deeplink may not
+  retarget the socket + token at a remote host (ws or wss). The trusted
+  env/injected paths may set a remote host but bypass this gate by design.
+
+**Adding a production daemon** therefore requires TWO pinned changes, not a wildcard:
+1. add the daemon's exact origin to `connect-src` (e.g. `wss://daemon.example`),
+   ideally interpolated from a build-time var rather than hardcoded; and
+2. widen `isAllowedWsUrl` **only if** deeplinks to that pinned host are wanted
+   (they usually are not — prefer env/injected).
+
+A runtime receipt (`e2e/renderer/csp-websocket.spec.ts`) asserts the CSP permits
+the loopback socket and blocks a remote host, so a future CSP edit that reopens
+wildcard egress fails CI.

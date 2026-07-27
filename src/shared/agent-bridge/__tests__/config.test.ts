@@ -7,10 +7,14 @@ import { resolveQuantaConfig } from '../config';
 afterEach(() => { window.history.replaceState(null, '', '/'); });
 
 describe('resolveQuantaConfig — deeplink security', () => {
-  it('accepts a wss:// deeplink and scrubs ws/token from the URL', () => {
+  it('REJECTS a remote wss:// deeplink (exfil guard) but still scrubs ws/token from the URL', () => {
+    // A deeplink is untrusted: it may not point the socket + token at a remote
+    // host, even over TLS — that is a token/chat exfil channel. Only the trusted
+    // env/injected path may set a remote (pinned) host. The credential params are
+    // still scrubbed from the address bar regardless.
     window.history.replaceState(null, '', '/?ws=wss%3A%2F%2Fapi.example.com%2F&token=secret&keep=1');
     const cfg = resolveQuantaConfig();
-    expect(cfg).toEqual({ wsUrl: 'wss://api.example.com/', token: 'secret' });
+    expect(cfg?.wsUrl).not.toBe('wss://api.example.com/'); // must NOT connect to the remote host
     expect(window.location.search).toBe('?keep=1'); // credentials scrubbed, rest kept
   });
 

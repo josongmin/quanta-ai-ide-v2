@@ -41,8 +41,12 @@ describe('Tauri CSP connect-src permits the agent-bridge WebSocket', () => {
     expect(directive).toContain('ws://[::1]:4096');
   });
 
-  it('allows encrypted wss:// daemons (prod / injected / deeplink)', () => {
-    expect(connectSrc()).toMatch(/\bwss:/);
+  it('does NOT open a bare wss: scheme-source (fail-closed until a prod host is pinned)', () => {
+    // A bare `wss:` authorizes WebSocket egress to ANY host — an exfil channel
+    // for a compromised dep / XSS. No prod daemon host is configured in this
+    // repo, so connect-src stays loopback-ws only; a real remote daemon must pin
+    // its exact origin here (see docs/security/ui-runtime-threat-model.md).
+    expect(connectSrc()).not.toMatch(/(^|\s)wss:(\s|$)/);
   });
 
   it("keeps 'self' and the Tauri IPC origin (does not regress the base policy)", () => {

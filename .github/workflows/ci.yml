@@ -38,6 +38,7 @@ jobs:
       - name: Architecture guardrail (fast-fail)
         run: |
           pnpm test:ui-infra-audit
+          pnpm test:scripts
           pnpm ui-infra:audit
 
       # Fast owner-local workbench suite (WB-105+): contract + kernel. Runs after
@@ -92,8 +93,10 @@ jobs:
       - name: Build Storybook
         run: pnpm storybook:build
 
-      - name: Install Playwright browser
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        # webkit for the CSP receipt (csp-websocket.spec runs under webkit-csp) —
+        # WKWebView is WebKit, the shipped macOS engine family.
+        run: pnpm exec playwright install --with-deps chromium webkit
 
       - name: Renderer interaction and accessibility tests
         run: pnpm test:renderer
