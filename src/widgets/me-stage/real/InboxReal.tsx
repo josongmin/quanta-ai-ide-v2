@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { CheckCheck, Shield, CreditCard, Users, KeyRound, Building2 } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Button } from '@shared/ui/forms';
@@ -12,25 +14,28 @@ import {
 // Honest to the data: an activity feed of account/org events, not the product
 // mention/review mock. Unread = brand dot + stronger text (no edge stripe, no
 // grey fill — per house rules).
-const ACTION_LABEL: Record<string, string> = {
-  'org.member.invited': 'Member invited',
-  'org.member.removed': 'Member removed',
-  'org.member.role_changed': 'Member role changed',
-  'org.invitation.canceled': 'Invitation canceled',
-  'org.updated': 'Organization updated',
-  'org.deleted': 'Organization deleted',
-  'org.team.created': 'Team created',
-  'org.team.deleted': 'Team deleted',
-  'security.2fa_enabled': 'Two-factor enabled',
-  'security.2fa_disabled': 'Two-factor disabled',
-  'security.password_changed': 'Password changed',
-  'security.session_revoked': 'Session revoked',
-  'apikey.created': 'API key created',
-  'apikey.revoked': 'API key revoked',
-  'billing.subscription.updated': 'Subscription updated',
-  'billing.payment_failed': 'Payment failed',
+const ACTION_LABEL_KEY: Record<string, string> = {
+  'org.member.invited': 'real.inbox.actions.orgMemberInvited',
+  'org.member.removed': 'real.inbox.actions.orgMemberRemoved',
+  'org.member.role_changed': 'real.inbox.actions.orgMemberRoleChanged',
+  'org.invitation.canceled': 'real.inbox.actions.orgInvitationCanceled',
+  'org.updated': 'real.inbox.actions.orgUpdated',
+  'org.deleted': 'real.inbox.actions.orgDeleted',
+  'org.team.created': 'real.inbox.actions.orgTeamCreated',
+  'org.team.deleted': 'real.inbox.actions.orgTeamDeleted',
+  'security.2fa_enabled': 'real.inbox.actions.security2faEnabled',
+  'security.2fa_disabled': 'real.inbox.actions.security2faDisabled',
+  'security.password_changed': 'real.inbox.actions.securityPasswordChanged',
+  'security.session_revoked': 'real.inbox.actions.securitySessionRevoked',
+  'apikey.created': 'real.inbox.actions.apikeyCreated',
+  'apikey.revoked': 'real.inbox.actions.apikeyRevoked',
+  'billing.subscription.updated': 'real.inbox.actions.billingSubscriptionUpdated',
+  'billing.payment_failed': 'real.inbox.actions.billingPaymentFailed',
 };
-const labelFor = (a: string) => ACTION_LABEL[a] ?? a;
+const labelFor = (a: string, t: TFunction) => {
+  const key = ACTION_LABEL_KEY[a];
+  return key ? t(key) : a;
+};
 
 function iconFor(action: string) {
   if (action.startsWith('security.')) return Shield;
@@ -40,23 +45,24 @@ function iconFor(action: string) {
   return Building2;
 }
 
-function relTime(iso: string): string {
+function relTime(iso: string, t: TFunction): string {
   const then = new Date(iso).getTime();
   if (Number.isNaN(then)) return '';
   const s = Math.max(0, Math.round((Date.now() - then) / 1000));
-  if (s < 60) return 'just now';
+  if (s < 60) return t('real.inbox.relTime.justNow');
   const m = Math.round(s / 60);
-  if (m < 60) return `${m.toString()}m ago`;
+  if (m < 60) return t('real.inbox.relTime.minutes', { count: m });
   const h = Math.round(m / 60);
-  if (h < 24) return `${h.toString()}h ago`;
+  if (h < 24) return t('real.inbox.relTime.hours', { count: h });
   const d = Math.round(h / 24);
-  if (d < 30) return `${d.toString()}d ago`;
+  if (d < 30) return t('real.inbox.relTime.days', { count: d });
   return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 const NONE: NotificationRecord[] = [];
 
 export function InboxReal() {
+  const { t } = useTranslation('me');
   const [items, setItems] = useState<NotificationRecord[]>(NONE);
   const [cursor, setCursor] = useState<string | null>(null);
   const [unread, setUnread] = useState(0);
@@ -128,8 +134,8 @@ export function InboxReal() {
 
   return (
     <MeShell
-      title="Inbox"
-      subtitle="Account and organization activity. Security alerts about your account, plus changes across orgs you administer."
+      title={t('real.inbox.title')}
+      subtitle={t('real.inbox.subtitle')}
       topRight={
         <Button
           variant="ghost" size="md"
@@ -137,12 +143,12 @@ export function InboxReal() {
           disabled={busy || unread === 0}
           onClick={() => { void markAll(); }}
         >
-          Mark all read
+          {t('real.inbox.markAllRead')}
         </Button>
       }
     >
       <div className="flex items-center gap-1.5 mb-3">
-        {([['all', 'All'], ['unread', `Unread${unread > 0 ? ` · ${unread.toString()}` : ''}`]] as const).map(([id, label]) => {
+        {([['all', t('real.inbox.all')], ['unread', unread > 0 ? t('real.inbox.unreadCount', { count: unread }) : t('real.inbox.unread')]] as const).map(([id, label]) => {
           const on = (id === 'unread') === unreadOnly;
           return (
             <button
@@ -169,7 +175,7 @@ export function InboxReal() {
       {loading ? (
         <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}><SkeletonText lines={6} /></div>
       ) : items.length === 0 ? (
-        <EmptyState title="No notifications" subtitle={unreadOnly ? 'Nothing unread.' : 'Account and org activity will show up here.'} />
+        <EmptyState title={t('real.inbox.emptyTitle')} subtitle={unreadOnly ? t('real.inbox.emptyUnread') : t('real.inbox.emptyAll')} />
       ) : (
         <div className="flex flex-col rounded-md overflow-hidden" style={{ border: '1px solid var(--border-muted)' }}>
           {items.map((n, i) => {
@@ -187,14 +193,14 @@ export function InboxReal() {
                 </span>
                 <span className="flex flex-col min-w-0 flex-1">
                   <span className={`text-sm truncate ${n.read ? '' : 'font-semibold'}`} style={{ color: n.read ? 'var(--fg-muted)' : 'var(--fg-strong)' }}>
-                    {!n.read && <span className="sr-only">Unread: </span>}
-                    {labelFor(n.action)}
+                    {!n.read && <span className="sr-only">{t('real.inbox.unreadPrefix')}</span>}
+                    {labelFor(n.action, t)}
                   </span>
                   <span className="text-2xs truncate" style={{ color: 'var(--fg-subtle)' }}>
-                    {n.target ? `${n.target} · ` : ''}by {n.actor}
+                    {n.target ? t('real.inbox.targetByActor', { target: n.target, actor: n.actor }) : t('real.inbox.byActor', { actor: n.actor })}
                   </span>
                 </span>
-                <span className="shrink-0 text-2xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{relTime(n.createdAt)}</span>
+                <span className="shrink-0 text-2xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>{relTime(n.createdAt, t)}</span>
                 {/* 미읽음 표시 = 인라인 브랜드 점(엣지 스트라이프 아님) */}
                 <span
                   className="shrink-0 w-2 h-2 rounded-full"
@@ -210,7 +216,7 @@ export function InboxReal() {
       {cursor && !loading && (
         <div className="mt-3 flex justify-center">
           <Button variant="ghost" size="md" disabled={loadingMore} onClick={() => { void loadMore(); }}>
-            {loadingMore ? 'Loading…' : 'Load more'}
+            {loadingMore ? t('real.inbox.loading') : t('real.inbox.loadMore')}
           </Button>
         </div>
       )}

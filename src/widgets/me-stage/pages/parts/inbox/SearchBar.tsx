@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { Search } from 'lucide-react';
 
 export function SearchBar({ q, onChange }: { q: string; onChange: (v: string) => void }) {
+  const { t } = useTranslation('me');
   return (
     <div
       className="flex items-center gap-2 h-9 px-3"
@@ -10,7 +12,7 @@ export function SearchBar({ q, onChange }: { q: string; onChange: (v: string) =>
       <input
         value={q}
         onChange={(e) => { onChange(e.target.value); }}
-        placeholder="Search inbox…"
+        placeholder={t('inbox.searchPlaceholder')}
         className="flex-1 bg-transparent outline-none text-base"
         style={{ color: 'var(--fg-strong)' }}
       />

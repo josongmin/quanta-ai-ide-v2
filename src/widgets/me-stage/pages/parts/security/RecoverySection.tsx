@@ -1,21 +1,23 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshCw } from 'lucide-react';
 import { Section, Row, Button } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
 import { useGeneratedCodes, downloadCodes } from './types';
 
 export function RecoverySection({ onShow }: { onShow: () => void }) {
+  const { t } = useTranslation('me');
   return (
     <Section
-      title="Recovery codes"
-      hint="Single-use codes that work if you lose access to all your 2FA methods. Store them somewhere safe."
+      title={t('security.recovery.title')}
+      hint={t('security.recovery.hint')}
     >
       <Row
-        label="10 of 10 codes available"
-        sub={<span>Last generated 2026-02-12. Each code is 12 alphanumeric characters and can be used once.</span>}
+        label={t('security.recovery.available')}
+        sub={<span>{t('security.recovery.sub')}</span>}
       >
         <Button leading={<RefreshCw className="w-3 h-3" />} onClick={onShow}>
-          View / regenerate codes
+          {t('security.recovery.view')}
         </Button>
       </Row>
     </Section>
@@ -23,6 +25,7 @@ export function RecoverySection({ onShow }: { onShow: () => void }) {
 }
 
 export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('me');
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onClose);
   const codes = useGeneratedCodes(10);
@@ -45,10 +48,10 @@ export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
       >
         <div className="flex flex-col gap-1.5">
           <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-            Save your recovery codes
+            {t('security.recovery.modalTitle')}
           </h3>
           <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
-            Each code can only be used once. Keep them somewhere outside this app — a password manager, printed copy, or encrypted note.
+            {t('security.recovery.modalBody')}
           </p>
         </div>
         <div
@@ -68,17 +71,17 @@ export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <Button variant="secondary" size="md" onClick={() => { void navigator.clipboard?.writeText(codes.join('\n')); }}>
-            Copy all
+            {t('security.recovery.copyAll')}
           </Button>
           <Button variant="secondary" size="md" onClick={() => { downloadCodes(codes); }}>
-            Download .txt
+            {t('security.recovery.download')}
           </Button>
           <Button variant="secondary" size="md" onClick={() => { window.print(); }}>
-            Print
+            {t('security.recovery.print')}
           </Button>
         </div>
         <div className="flex items-center justify-end gap-2 pt-1">
-          <Button variant="primary" size="md" onClick={onClose}>I&apos;ve saved them</Button>
+          <Button variant="primary" size="md" onClick={onClose}>{t('security.recovery.saved')}</Button>
         </div>
       </div>
     </div>

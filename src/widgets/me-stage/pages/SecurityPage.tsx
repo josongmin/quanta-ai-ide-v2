@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MeShell } from '../parts/MeShell';
 import { Section, Row, Toggle, Divider } from '@shared/ui/forms';
 import { INITIAL_METHODS, type MfaKind, type MfaMethod } from './parts/security/types';
@@ -10,6 +11,7 @@ import { HistorySection } from './parts/security/HistorySection';
 import { SignOutEverywhere } from './parts/security/SignOutEverywhere';
 
 export default function SecurityPage() {
+  const { t } = useTranslation('me');
   const [methods, setMethods] = useState<MfaMethod[]>(INITIAL_METHODS);
   const [trustDevicesEnabled, setTrustDevicesEnabled] = useState(true);
   const [showCodes, setShowCodes] = useState(false);
@@ -17,8 +19,8 @@ export default function SecurityPage() {
 
   return (
     <MeShell
-      title="Security"
-      subtitle="Two-factor methods, active sessions, and your sign-in history."
+      title={t('security.title')}
+      subtitle={t('security.subtitle')}
     >
       <MfaSection
         methods={methods}
@@ -30,14 +32,14 @@ export default function SecurityPage() {
       <RecoverySection onShow={() => { setShowCodes(true); }} />
 
       <Section
-        title="Trusted devices"
-        hint="When enabled, devices that have completed 2FA can skip future prompts for 30 days."
+        title={t('security.trusted.title')}
+        hint={t('security.trusted.hint')}
       >
         <Row
-          label="Trust this device after 2FA"
-          sub="A signed cookie stays on the device. Removing the cookie or signing out resets it."
+          label={t('security.trusted.label')}
+          sub={t('security.trusted.sub')}
         >
-          <Toggle checked={trustDevicesEnabled} onChange={setTrustDevicesEnabled} label="Trust device" />
+          <Toggle checked={trustDevicesEnabled} onChange={setTrustDevicesEnabled} label={t('security.trusted.toggle')} />
         </Row>
       </Section>
 

@@ -3,6 +3,7 @@
 // inbox) need backends that land in Phase 2-3, so real mode shows MeComingSoon
 // instead of the demo's fabricated data. Appearance/Preferences/Keyboard are
 // client-only and exported straight from ./pages (no gate needed).
+import { useTranslation } from 'react-i18next';
 import { env } from '@shared/config/env';
 import { MeComingSoon } from './real/MeComingSoon';
 import { ProfileReal } from './real/ProfileReal';
@@ -30,16 +31,19 @@ export function SecurityPage() {
   return env.useRealAuth ? <SecurityReal /> : <SecurityMock />;
 }
 export function ConnectedAppsPage() {
-  return env.useRealAuth ? <MeComingSoon title="Connected apps" /> : <ConnectedAppsMock />;
+  const { t } = useTranslation('me');
+  return env.useRealAuth ? <MeComingSoon title={t('comingSoon.connectedApps')} /> : <ConnectedAppsMock />;
 }
 export function ApiTokensPage() {
   return env.useRealAuth ? <ApiTokensReal /> : <ApiTokensMock />;
 }
 export function NotificationsPage() {
-  return env.useRealAuth ? <MeComingSoon title="Notifications" /> : <NotificationsMock />;
+  const { t } = useTranslation('me');
+  return env.useRealAuth ? <MeComingSoon title={t('comingSoon.notifications')} /> : <NotificationsMock />;
 }
 export function AiPage() {
-  return env.useRealAuth ? <MeComingSoon title="AI" /> : <AiMock />;
+  const { t } = useTranslation('me');
+  return env.useRealAuth ? <MeComingSoon title={t('comingSoon.ai')} /> : <AiMock />;
 }
 export function InboxPage() {
   return env.useRealAuth ? <InboxReal /> : <InboxMock />;

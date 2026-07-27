@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Sun, Moon, Monitor, Check } from 'lucide-react';
 import type { ThemeMode } from './types';
 
@@ -5,10 +6,11 @@ import type { ThemeMode } from './types';
 // Theme picker — 3 visual cards
 
 export function ThemePicker({ value, onChange }: { value: ThemeMode; onChange: (v: ThemeMode) => void }) {
+  const { t } = useTranslation('me');
   const opts: { id: ThemeMode; label: string; icon: React.ComponentType<{ className?: string }>; }[] = [
-    { id: 'light',  label: 'Light',  icon: Sun },
-    { id: 'dark',   label: 'Dark',   icon: Moon },
-    { id: 'system', label: 'System', icon: Monitor },
+    { id: 'light',  label: t('appearance.theme.light'),  icon: Sun },
+    { id: 'dark',   label: t('appearance.theme.dark'),   icon: Moon },
+    { id: 'system', label: t('appearance.theme.system'), icon: Monitor },
   ];
   return (
     <div className="grid grid-cols-3 gap-2">

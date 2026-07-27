@@ -1,15 +1,17 @@
+import { useTranslation } from 'react-i18next';
 import type { Accent } from './types';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Accent picker — 5 swatches
 
 export function AccentPicker({ value, onChange }: { value: Accent; onChange: (v: Accent) => void }) {
+  const { t } = useTranslation('me');
   const opts: { id: Accent; label: string; color: string }[] = [
-    { id: 'cobalt',  label: 'Cobalt indigo', color: '#4F5BFF' },
-    { id: 'violet',  label: 'Violet',         color: '#8B5CF6' },
-    { id: 'amber',   label: 'Amber',          color: '#F59E0B' },
-    { id: 'crimson', label: 'Crimson',        color: '#DC2626' },
-    { id: 'mint',    label: 'Mint',           color: '#10B981' },
+    { id: 'cobalt',  label: t('appearance.accent.cobalt'),  color: '#4F5BFF' },
+    { id: 'violet',  label: t('appearance.accent.violet'),  color: '#8B5CF6' },
+    { id: 'amber',   label: t('appearance.accent.amber'),   color: '#F59E0B' },
+    { id: 'crimson', label: t('appearance.accent.crimson'), color: '#DC2626' },
+    { id: 'mint',    label: t('appearance.accent.mint'),    color: '#10B981' },
   ];
   return (
     <div className="grid grid-cols-5 gap-2">

@@ -1,1 +1,888 @@
-{}
+{
+  "shell": {
+    "breadcrumbRoot": "个人",
+    "breadcrumbAria": "面包屑导航",
+    "fallbackName": "你",
+    "nav": {
+      "identity": "身份",
+      "access": "访问与集成",
+      "experience": "体验",
+      "streams": "信息流",
+      "profile": "个人资料",
+      "account": "账户",
+      "security": "安全",
+      "connectedApps": "已连接应用",
+      "apiTokens": "API 令牌",
+      "notifications": "通知",
+      "appearance": "外观",
+      "preferences": "偏好设置",
+      "keyboard": "键盘",
+      "ai": "AI",
+      "inbox": "收件箱"
+    }
+  },
+  "comingSoon": {
+    "connectedApps": "已连接应用",
+    "notifications": "通知",
+    "ai": "AI",
+    "availableSoon": "即将推出",
+    "subtitle": "{{title}} 尚未连接到你的账户 — 将在后续版本中提供。"
+  },
+  "real": {
+    "profile": {
+      "title": "个人资料",
+      "subtitle": "在提及和评审中向团队成员展示的样子。",
+      "identity": "身份",
+      "identityHint": "显示名称会出现在整个产品中。",
+      "fullName": "姓名",
+      "namePlaceholder": "你的姓名"
+    },
+    "account": {
+      "title": "账户",
+      "subtitle": "邮箱、密码和账户删除。",
+      "email": {
+        "title": "邮箱地址",
+        "hint": "用于登录。更改需要通过新地址确认。",
+        "label": "邮箱地址",
+        "change": "更改邮箱",
+        "sentTitle": "已向 {{email}} 发送验证邮件",
+        "sentBody": "点击邮件中的链接以完成更改。在此之前，你将继续使用当前地址登录。",
+        "new": "新邮箱",
+        "newPlaceholder": "you@company.com",
+        "sending": "发送中…",
+        "send": "发送验证邮件"
+      },
+      "password": {
+        "title": "密码",
+        "hint": "至少 12 个字符，包含大小写、数字和符号。更改时其他会话将被登出。",
+        "sub": "更改你的登录密码。",
+        "change": "更改密码",
+        "current": "当前密码",
+        "new": "新密码",
+        "newPlaceholder": "至少 12 个字符",
+        "confirm": "确认新密码",
+        "mismatch": "密码不匹配",
+        "show": "显示",
+        "hide": "隐藏",
+        "updating": "更新中…",
+        "updated": "已更新",
+        "update": "更新密码"
+      },
+      "danger": {
+        "zone": "危险区",
+        "deleteLabel": "删除此账户",
+        "deleteSub": "永久删除你的个人资料和令牌，并将你从所有组织中移除。此操作无法撤销。",
+        "deleteButton": "删除账户",
+        "emailedPrefix": "已向 ",
+        "emailedSuffix": " 发送确认链接。从该邮件确认后账户将被删除。",
+        "confirmLabel": "输入 \"{{phrase}}\" 以确认",
+        "noMatch": "不完全匹配。",
+        "sending": "发送中…",
+        "emailLink": "将删除链接发送到我的邮箱"
+      }
+    },
+    "security": {
+      "title": "安全",
+      "subtitle": "两步验证、活动会话和登录。",
+      "unknownDevice": "未知设备",
+      "sessions": {
+        "title": "活动会话",
+        "hint": "当前登录到你账户的设备。",
+        "colDevice": "设备",
+        "colIp": "IP",
+        "colSignedIn": "登录时间",
+        "emptyTitle": "无活动会话",
+        "emptySubtitle": "会话将显示在此处。",
+        "thisDevice": "此设备",
+        "revoke": "吊销"
+      },
+      "signOut": {
+        "title": "在所有设备上登出",
+        "hint": "结束除此设备外的所有会话。",
+        "label": "其他会话",
+        "sub_one": "还有 {{count}} 个其他会话已登录。",
+        "sub_other": "还有 {{count}} 个其他会话已登录。",
+        "button": "登出其他会话",
+        "confirmTitle": "登出其他会话？",
+        "confirmLabel": "登出其他",
+        "confirmDescription": "所有其他已登录的设备将立即被登出。此设备保持登录状态。"
+      },
+      "twoFactor": {
+        "title": "两步验证",
+        "hint": "登录时要求提供验证器应用的一次性验证码。",
+        "label": "验证器应用 (TOTP)",
+        "enabledSub": "已启用 — 登录时需要 6 位验证码。",
+        "disabledSub": "使用基于时间的一次性验证码保护你的账户。",
+        "enabled": "已启用",
+        "regenerate": "重新生成备用码",
+        "disable": "停用",
+        "enable": "启用两步验证",
+        "enableTitle": "启用两步验证",
+        "enrollFailed": "注册失败 — 请重试。",
+        "checking": "检查中…",
+        "continue": "继续",
+        "verifying": "验证中…",
+        "verifyEnable": "验证并启用",
+        "confirmPassword": "确认你的密码以开始设置两步验证。",
+        "password": "密码",
+        "scanTitle": "使用验证器扫描",
+        "scanBody": "1Password、Authy、Google Authenticator 等。然后在下方输入 6 位验证码以激活。",
+        "backupSave": "备用码 — 请保存",
+        "copied": "已复制",
+        "copyAll": "全部复制",
+        "backupNote": "若你丢失验证器，每个验证码可使用一次。请妥善保管。",
+        "code": "6 位验证码",
+        "codePlaceholder": "123456",
+        "regenerateTitle": "重新生成备用码",
+        "done": "完成",
+        "generating": "生成中…",
+        "regenerateAction": "重新生成",
+        "newCodes": "新验证码 — 旧的一组不再有效。",
+        "regenerateBody": "这将使你现有的备用码失效并发放一组新的。请确认你的密码。",
+        "disableTitle": "停用两步验证",
+        "disabling": "停用中…",
+        "disableAction": "停用两步验证",
+        "disableBody": "移除两步验证会降低你的账户安全性。请确认你的密码以继续。"
+      }
+    },
+    "tokens": {
+      "title": "API 令牌",
+      "subtitle": "用于 API 和 CLI 的个人访问令牌。请像对待密码一样对待它们。",
+      "newToken": "新建令牌",
+      "colToken": "令牌",
+      "colPrefix": "前缀",
+      "colCreated": "创建时间",
+      "colExpires": "过期时间",
+      "fallbackName": "令牌",
+      "emptyTitle": "还没有令牌",
+      "emptySubtitle": "创建一个令牌以使用 API 或 CLI。",
+      "revokeToken": "吊销令牌",
+      "createdTitle": "已创建令牌 \"{{name}}\"",
+      "revokeConfirmTitle": "吊销 \"{{name}}\"？",
+      "revoke": "吊销",
+      "revokeDescription": "使用此令牌的所有客户端将立即失去访问权限。此操作无法撤销。",
+      "createTitle": "新建 API 令牌",
+      "generating": "生成中…",
+      "generate": "生成令牌",
+      "name": "名称",
+      "namePlaceholder": "CI 流水线",
+      "expiration": "过期",
+      "expiry": {
+        "days30": "30 天",
+        "days60": "60 天",
+        "days90": "90 天",
+        "year1": "1 年",
+        "none": "永不过期"
+      }
+    },
+    "inbox": {
+      "title": "收件箱",
+      "subtitle": "账户和组织活动。关于你账户的安全提醒，以及你管理的组织中的变更。",
+      "markAllRead": "全部标为已读",
+      "all": "全部",
+      "unread": "未读",
+      "unreadCount": "未读 · {{count}}",
+      "emptyTitle": "无通知",
+      "emptyUnread": "没有未读项。",
+      "emptyAll": "账户和组织活动将显示在此处。",
+      "unreadPrefix": "未读：",
+      "byActor": "由 {{actor}}",
+      "targetByActor": "{{target}} · 由 {{actor}}",
+      "loading": "加载中…",
+      "loadMore": "加载更多",
+      "relTime": {
+        "justNow": "刚刚",
+        "minutes": "{{count}} 分钟前",
+        "hours": "{{count}} 小时前",
+        "days": "{{count}} 天前"
+      },
+      "actions": {
+        "orgMemberInvited": "已邀请成员",
+        "orgMemberRemoved": "已移除成员",
+        "orgMemberRoleChanged": "已更改成员角色",
+        "orgInvitationCanceled": "已取消邀请",
+        "orgUpdated": "已更新组织",
+        "orgDeleted": "已删除组织",
+        "orgTeamCreated": "已创建团队",
+        "orgTeamDeleted": "已删除团队",
+        "security2faEnabled": "已启用两步验证",
+        "security2faDisabled": "已停用两步验证",
+        "securityPasswordChanged": "已更改密码",
+        "securitySessionRevoked": "已吊销会话",
+        "apikeyCreated": "已创建 API 密钥",
+        "apikeyRevoked": "已吊销 API 密钥",
+        "billingSubscriptionUpdated": "已更新订阅",
+        "billingPaymentFailed": "支付失败"
+      }
+    }
+  },
+  "common": {
+    "cancel": "取消",
+    "done": "完成",
+    "demoReasonShort": "此演示版本中不可用。"
+  },
+  "profile": {
+    "title": "个人资料",
+    "subtitle": "在提及、评审和点阵图中向团队成员展示的样子。",
+    "hidePreview": "隐藏预览",
+    "showPreview": "预览公开资料",
+    "photo": {
+      "title": "照片",
+      "hint": "方形图片效果最佳。PNG、JPG、GIF 或 WebP，最大 2MB。",
+      "custom": "自定义照片",
+      "generated": "生成的头像",
+      "customSub": "在提及和成员列表中将裁剪为圆形。",
+      "generatedSub": "首字母根据你的姓名生成。上传照片以覆盖。"
+    },
+    "identity": {
+      "title": "身份",
+      "hint": "姓名和用户名会在整个产品中一起显示。",
+      "fullName": "姓名",
+      "pronouns": "代词",
+      "handle": "用户名",
+      "jobTitle": "职位",
+      "location": "所在地"
+    },
+    "bio": {
+      "title": "简介",
+      "hint": "最多 280 个字符。支持 Markdown。",
+      "label": "简短简介",
+      "placeholder": "用一两行介绍你自己、你的角色和你的工作。"
+    },
+    "social": {
+      "title": "社交链接",
+      "hint": "启用后显示在公开资料上。空白字段将被隐藏。",
+      "placeholder": "用户名"
+    },
+    "visibility": {
+      "title": "可见性",
+      "hint": "控制你的公开资料所展示的内容。",
+      "publicProfile": "公开资料",
+      "publicProfileSubPrefix": "任何拥有链接的人都可以在以下地址查看你的资料：",
+      "showEmail": "在公开资料上显示邮箱",
+      "showEmailSub": "查看你公开资料的任何人都能看到你的工作邮箱。",
+      "toggleShowEmail": "显示邮箱"
+    },
+    "avatar": {
+      "upload": "上传头像",
+      "remove": "移除照片",
+      "altYours": "你的",
+      "altProfile": "资料"
+    },
+    "preview": {
+      "eyebrow": "公开预览 · 他人看到的样子",
+      "unnamed": "未命名",
+      "disabled": "公开资料当前已禁用。上方预览是启用后他人看到的样子。"
+    }
+  },
+  "account": {
+    "title": "账户",
+    "subtitle": "邮箱、密码、导出和账户删除。",
+    "email": {
+      "title": "邮箱地址",
+      "hint": "用于登录和账户相关通知。更改需要通过两个地址确认。",
+      "currentLabel": "当前邮箱",
+      "label": "邮箱地址",
+      "verified": "· 已验证",
+      "change": "更改邮箱",
+      "newEmail": "新邮箱",
+      "newEmailPlaceholder": "you@company.com",
+      "send": "发送验证邮件",
+      "sending": "发送中…",
+      "willSendPrefix": "我们将向 ",
+      "willSendMiddle": " 发送确认链接。在你点击之前，你将继续使用 ",
+      "willSendSuffix": " 登录。",
+      "newAddressFallback": "新地址",
+      "sentTitle": "已向 {{email}} 发送验证邮件",
+      "sentBodyPrefix": "请在 30 分钟内点击邮件中的链接以完成更改。我们也已通知 ",
+      "sentBodySuffix": "，以便在非本人操作时撤销。",
+      "useDifferent": "使用其他邮箱",
+      "ssoWarningSuffix": " 要求使用 SSO。更改为此地址后，你将通过 IdP 登录，密码将被停用。"
+    },
+    "password": {
+      "title": "密码",
+      "hint": "至少 12 个字符，包含大小写、数字和符号。更改时其他会话将被登出。",
+      "meta": "上次更改于 3 个月前。强 · 14 个字符。",
+      "change": "更改密码",
+      "current": "当前密码",
+      "wrongCurrent": "密码不正确。请重试。",
+      "new": "新密码",
+      "newPlaceholder": "至少 12 个字符",
+      "confirm": "确认新密码",
+      "mismatch": "密码不匹配",
+      "updating": "更新中…",
+      "updated": "已更新",
+      "update": "更新密码",
+      "show": "显示",
+      "hide": "隐藏",
+      "demoHintPrefix": "演示：当前密码为 ",
+      "demoHintSuffix": "。任何其他输入都会触发密码错误分支。"
+    },
+    "export": {
+      "title": "导出你的数据",
+      "hint": "符合 GDPR 的导出。包含个人资料、评论、评审、已使用的 AI 令牌和审计历史。",
+      "label": "数据导出",
+      "requestedSub": "已于 {{time}} 请求。平均准备时间约 10 分钟；准备好后我们会通过邮件通知你。",
+      "idleSub": "生成一个包含我们为你账户保存的所有数据的 zip 文件（JSON + CSV）。",
+      "preparing": "正在准备导出",
+      "request": "请求导出"
+    },
+    "danger": {
+      "reason": "此演示版本中不可用 — 删除账户需要已登录的后端。",
+      "zone": "危险区",
+      "deleteLabel": "删除此账户",
+      "deleteSub": "永久删除你的个人资料、评论和令牌。你将被从所有组织中移除。此操作无法撤销。",
+      "deleteButton": "删除账户",
+      "modalTitle": "删除你的账户？",
+      "modalBodyPrefix": "此操作将永久删除 ",
+      "modalBodySuffix": "、你的评审、评论、AI 使用历史和个人访问令牌。你将被从 3 个组织中移除。你的贡献仍归属于已删除的用户。",
+      "confirmLabel": "输入 \"{{phrase}}\" 以确认",
+      "noMatch": "不完全匹配。",
+      "reasonLabel": "离开原因（可选）",
+      "reasonOptions": {
+        "none": "无原因",
+        "duplicate": "我有另一个账户",
+        "notUsing": "我不再使用了",
+        "tooExpensive": "太贵了",
+        "missingFeature": "缺少我需要的功能",
+        "foundAlternative": "找到了替代品",
+        "other": "其他"
+      },
+      "confirmDelete": "永久删除"
+    }
+  },
+  "security": {
+    "title": "安全",
+    "subtitle": "两步验证方法、活动会话和登录历史。",
+    "mfa": {
+      "title": "两步验证",
+      "hint": "至少需要一种方法。添加一个备用方法，以免丢失设备时被锁定。",
+      "addAuthenticator": "验证器应用",
+      "addSecurityKey": "安全密钥",
+      "noneTitle": "未配置两步验证 — 你的账户风险更高",
+      "noneSub": "请至少添加一种方法。我们建议使用验证器应用 + 安全密钥作为备用。",
+      "primary": "主要",
+      "kindTotp": "TOTP",
+      "kindWebauthn": "WebAuthn",
+      "kindSms": "短信",
+      "addedUsed": "添加于 {{added}} · 上次使用 {{lastUsed}}",
+      "makePrimary": "设为主要",
+      "remove": "移除"
+    },
+    "recovery": {
+      "title": "恢复码",
+      "hint": "当你无法访问所有两步验证方法时可用的一次性验证码。请妥善保管。",
+      "available": "10 个中有 10 个恢复码可用",
+      "sub": "上次生成于 2026-02-12。每个恢复码为 12 位字母数字，仅可使用一次。",
+      "view": "查看 / 重新生成恢复码",
+      "modalTitle": "保存你的恢复码",
+      "modalBody": "每个恢复码仅可使用一次。请将其保存在此应用之外的安全位置 — 密码管理器、打印副本或加密笔记。",
+      "copyAll": "全部复制",
+      "download": "下载 .txt",
+      "print": "打印",
+      "saved": "我已保存"
+    },
+    "addMfa": {
+      "titleTotp": "添加验证器应用",
+      "titleWebauthn": "添加安全密钥",
+      "totpScan": "使用 1Password、Authy、Google Authenticator 等扫描。然后输入其生成的 6 位验证码。",
+      "codeAria": "6 位身份验证码",
+      "codePlaceholder": "6 位验证码",
+      "webauthnPrompt": "触碰你的安全密钥，或使用 Touch ID / Windows Hello 进行注册。",
+      "label": "标签",
+      "labelPlaceholder": "例如 1Password",
+      "add": "添加方法"
+    },
+    "trusted": {
+      "title": "受信任的设备",
+      "hint": "启用后，已完成两步验证的设备可在 30 天内跳过后续提示。",
+      "label": "两步验证后信任此设备",
+      "sub": "签名的 Cookie 会保留在设备上。移除 Cookie 或登出会将其重置。",
+      "toggle": "信任设备"
+    },
+    "sessions": {
+      "title": "活动会话",
+      "hint_one": "你所有设备上共有 {{count}} 个会话。吊销任何你不认识的会话。",
+      "hint_other": "你所有设备上共有 {{count}} 个会话。吊销任何你不认识的会话。",
+      "thisDevice": "此设备",
+      "revoke": "吊销"
+    },
+    "history": {
+      "title": "登录历史",
+      "hint": "你账户过去 90 天的身份验证事件。失败的尝试和异常位置会被高亮显示。"
+    },
+    "signOut": {
+      "reason": "此演示版本中不可用 — 吊销会话需要已登录的后端。",
+      "title": "在所有设备上登出",
+      "hint": "结束除此设备外所有设备上的活动会话。",
+      "label": "从所有其他设备登出",
+      "sub": "其他设备需要重新登录并再次完成两步验证。当你怀疑账户被入侵时很有用。",
+      "confirm": "是的，在所有设备上登出",
+      "trigger": "登出其他设备"
+    }
+  },
+  "connectedApps": {
+    "title": "已连接应用",
+    "subtitle": "链接到你账户的登录提供方和第三方集成。",
+    "providers": {
+      "title": "登录提供方",
+      "hint": "你可以使用其中任意一种登录。你的主要提供方将在登录界面上首先显示。"
+    },
+    "integrations": {
+      "title": "集成",
+      "hint": "代表你执行操作的第三方工具。移除其中一个会停止所有相关的通知和操作。"
+    },
+    "available": {
+      "title": "可添加",
+      "hint": "连接另一个应用。你将被重定向以授权范围 — 我们绝不会看到你的密码。",
+      "connect": "连接"
+    },
+    "list": {
+      "empty": "尚未连接任何内容。",
+      "primary": "主要",
+      "connectedMeta": "{{account}} · 连接于 {{connectedAt}} · {{lastUsed}}",
+      "makePrimary": "设为主要",
+      "scopes_one": "{{count}} 个范围",
+      "scopes_other": "{{count}} 个范围",
+      "disconnect": "断开连接",
+      "authorizedScopes": "已授权的范围",
+      "required": "必需",
+      "viewOn": "在 {{provider}} 上查看",
+      "reauthorize": "为新范围重新授权"
+    },
+    "remove": {
+      "title": "断开 {{provider}} 连接？",
+      "identityBody": "此后你将无法使用 {{provider}} 登录。请先确保你有其他登录方式。",
+      "integrationBody": "停止所有 {{provider}} 操作和通知。排队中的任何内容都将被取消。",
+      "confirm": "断开连接"
+    }
+  },
+  "apiTokens": {
+    "title": "API 令牌",
+    "subtitle": "个人访问令牌 (PAT) 以你的身份对脚本、CLI 和集成进行身份验证。请像对待密码一样对待它们。",
+    "newToken": "新建令牌",
+    "active": {
+      "title": "活动令牌",
+      "hint": "已使用 25 个中的 {{count}} 个。90 天未使用的令牌会被标记。"
+    },
+    "using": {
+      "title": "使用你的令牌",
+      "hint": "将令牌作为 Bearer 头传递。我们记录每个请求 — 详情请查看审计日志。"
+    },
+    "list": {
+      "empty": "还没有令牌。创建一个以使用 API。",
+      "expired": "已过期",
+      "unused": "未使用",
+      "created": "创建于 {{date}}",
+      "expires": "· 过期于 {{date}}",
+      "neverExpires": "· 永不过期",
+      "lastUsed": "· 上次使用 {{value}}",
+      "revoke": "吊销"
+    },
+    "code": {
+      "docs": "API 文档"
+    },
+    "create": {
+      "title": "新建个人访问令牌",
+      "name": "名称",
+      "namePlaceholder": "例如 \"ci · gh-actions\"",
+      "nameHint": "帮助未来的自己记住这个令牌的用途。",
+      "expiration": "过期",
+      "never": "永不（不推荐）",
+      "days": "{{count}} 天",
+      "scopes": "范围",
+      "destructive": "破坏性",
+      "dangerWarning_one": "你即将授予 {{count}} 个破坏性范围。持有此令牌的任何人都可以以这些权限进行操作。",
+      "dangerWarning_other": "你即将授予 {{count}} 个破坏性范围。持有此令牌的任何人都可以以这些权限进行操作。",
+      "generate": "生成令牌"
+    },
+    "reveal": {
+      "title": "保存你的新令牌",
+      "onlyOnce": "这是我们唯一一次显示它。",
+      "afterClose": " 关闭此对话框后，将只显示前缀。",
+      "copied": "已复制",
+      "copy": "复制",
+      "show": "显示",
+      "hide": "隐藏",
+      "scopeCount_one": "{{count}} 个范围",
+      "scopeCount_other": "{{count}} 个范围",
+      "expiresNever": "永不",
+      "expires": "过期于 {{value}}",
+      "saved": "我已保存"
+    },
+    "revoke": {
+      "title": "吊销 \"{{name}}\"？",
+      "body": "使用此令牌的任何脚本、CLI 或集成都将立即开始失败。我们会在你的审计跟踪中记录此次吊销。",
+      "confirm": "吊销令牌"
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "subtitle": "选择你希望收到哪些通知以及在何处收到。免打扰时间和摘要模式适用于所有渠道。",
+    "muted": "所有通知已静音",
+    "muteEverything": "全部静音",
+    "muteBanner": "所有通知已暂停。重要的安全提醒仍会送达。",
+    "channels": {
+      "title": "投递渠道",
+      "hint": "每个渠道都有自己的投递目标。下方的矩阵用于选择哪些事件发往何处。"
+    },
+    "matrix": {
+      "title": "矩阵",
+      "hint": "切换每个单元格以控制哪些事件发往哪些渠道。点击标签可复制一行。",
+      "event": "事件",
+      "enableAll": "为此事件启用所有渠道",
+      "disableAll": "为此事件禁用所有渠道",
+      "cellLabel": "{{event}} → {{channel}}"
+    },
+    "cadence": {
+      "title": "投递频率",
+      "hint": "将通知打包以减少干扰。实时表示每个事件在发生时立即触发。",
+      "digest": "摘要模式",
+      "digestSub": "影响邮件和 Slack。应用内始终为实时。",
+      "realtime": "实时",
+      "realtimeSub": "每个事件发生时立即发送",
+      "hourly": "每小时摘要",
+      "hourlySub": "每小时汇总一次",
+      "daily": "每天上午 9 点摘要",
+      "dailySub": "每天一封邮件",
+      "weekly": "每周一摘要",
+      "weeklySub": "工作日保持安静"
+    },
+    "quiet": {
+      "title": "免打扰时间",
+      "hint": "在特定时段内将非关键渠道静音。安全提醒始终送达。",
+      "enable": "启用免打扰时间",
+      "enableSub": "在下方时间段内将 Slack 和移动推送静音。邮件将排入摘要队列。",
+      "toggle": "免打扰时间",
+      "from": "从",
+      "to": "至",
+      "timezone": "时区",
+      "muteWindow": "静音时段：",
+      "durationLabel": "{{hours}} 小时 {{minutes}} 分钟的安静时间",
+      "dnd": "请勿打扰",
+      "dndSub": "接下来 4 小时的一次性静音。会自动重置。",
+      "dndToggle": "请勿打扰"
+    }
+  },
+  "appearance": {
+    "title": "外观",
+    "subtitle": "主题、密度、动效和强调色。大多数更改会立即生效，因此你可以在保存前预览。",
+    "theme": {
+      "title": "主题",
+      "hint": "浅色、深色，或跟随你的操作系统。",
+      "light": "浅色",
+      "dark": "深色",
+      "system": "系统"
+    },
+    "accent": {
+      "title": "强调色",
+      "hint": "用于主要 CTA、当前状态标记和点阵图主色。",
+      "cobalt": "钴蓝靛蓝",
+      "violet": "紫罗兰",
+      "amber": "琥珀",
+      "crimson": "绯红",
+      "mint": "薄荷绿"
+    },
+    "density": {
+      "title": "密度",
+      "hint": "在评审和文件面板等密集列表中为每行分配的空间。",
+      "compact": "紧凑",
+      "comfortable": "适中",
+      "roomy": "宽松"
+    },
+    "text": {
+      "title": "文本",
+      "hint": "代码的字体大小和等宽字体。影响差异和内联代码块。",
+      "fontScale": "字体大小",
+      "fontScaleSub": "小 (12px) · 中 (13px，默认) · 大 (15px) 基准。",
+      "monoFont": "等宽字体",
+      "monoFontSub": "用于代码、文件路径、ID。",
+      "systemDefault": "系统默认",
+      "syntaxTheme": "语法主题",
+      "syntaxThemeSub": "差异块和代码块内的配色方案。",
+      "dim": "暗淡",
+      "midnight": "午夜",
+      "paper": "纸张"
+    },
+    "a11y": {
+      "title": "无障碍",
+      "hint": "在会造成干扰的地方减少视觉噪音。",
+      "reduceMotion": "减少动效",
+      "reduceMotionSub": "禁用非必要的动画（面板、粒子、过渡）。",
+      "highContrast": "高对比度",
+      "highContrastSub": "提高边框对比度并移除暗淡的文本变体。"
+    },
+    "previewSection": {
+      "title": "预览",
+      "hint": "使用你当前的选择，典型行的显示效果。"
+    },
+    "livePreview": {
+      "prTitle": "PR #4821 · 为仅 SSO 生产环境添加准入规则",
+      "approved": "已批准",
+      "summary": "已评审 4 个文件。3 名评审者已批准。准入重新运行后即可合并。",
+      "footer": "使用你当前的选择渲染的预览"
+    }
+  },
+  "preferences": {
+    "title": "偏好设置",
+    "subtitle": "每个工作台的默认行为方式。这些仅适用于你 — 你的团队有各自的设置。",
+    "startup": {
+      "title": "启动时",
+      "hint": "登录后打开应用时到达的位置。",
+      "startingWorkbench": "起始工作台",
+      "startingWorkbenchSub": "选择固定标签页，或选择“上次访问”以恢复到之前的位置。",
+      "lastVisited": "上次访问",
+      "intelligence": "智能",
+      "coding": "编码",
+      "agents": "智能体",
+      "reviews": "评审",
+      "admission": "准入",
+      "fixes": "修复"
+    },
+    "intelligence": {
+      "title": "智能",
+      "hint": "点阵图、矩阵视图和宇宙模式。",
+      "defaultViz": "默认可视化",
+      "dotField": "点阵图",
+      "matrix": "矩阵",
+      "universe": "宇宙",
+      "autoOpenInspect": "点击时自动打开检查",
+      "autoOpenInspectSub": "点击某个点会自动打开右侧的检查面板。",
+      "autoOpenInspectToggle": "自动打开检查",
+      "showScoreLabels": "在点阵图中显示分数标签",
+      "showScoreLabelsSub": "在每个点旁显示风险 + 置信度的数字标签。",
+      "showScoreLabelsToggle": "分数标签",
+      "confidenceFloor": "置信度下限",
+      "confidenceFloorSub": "默认隐藏低于此置信度的点。",
+      "low": "低（显示全部）",
+      "medium": "中（推荐）",
+      "high": "高（仅显示确定的）"
+    },
+    "coding": {
+      "title": "编码",
+      "hint": "编码阶段的编辑器和 AI 行为。",
+      "sideBySide": "并排差异",
+      "sideBySideSub": "以两列显示旧/新，而非统一视图。",
+      "sideBySideToggle": "并排",
+      "softWrap": "长行软换行",
+      "softWrapSub": "换行超过编辑器宽度的行。",
+      "softWrapToggle": "软换行",
+      "whitespace": "显示空白标记",
+      "whitespaceSub": "用点/箭头渲染空格和制表符。",
+      "whitespaceToggle": "显示空白",
+      "autoSave": "自动保存草稿",
+      "autoSaveSub": "草稿保存在浏览器中；关闭后需要显式保存。",
+      "autoSaveToggle": "自动保存草稿",
+      "inline": "内联 AI 建议",
+      "inlineSub": "输入时的幽灵文本建议。",
+      "always": "始终显示",
+      "onHotkey": "仅热键 · ⌘.",
+      "never": "从不"
+    },
+    "reviews": {
+      "title": "评审",
+      "hint": "PR 评审行为。",
+      "defaultSort": "默认排序",
+      "defaultSortSub": "打开评审标签页时 PR 列表的排序方式。",
+      "reviewRequested": "评审请求优先",
+      "updated": "最近更新",
+      "opened": "最近打开",
+      "risk": "风险最高优先",
+      "ciBefore": "批准前显示 CI 摘要",
+      "ciBeforeSub": "在批准按钮上方显示通过/失败条。",
+      "ciBeforeToggle": "批准前 CI",
+      "resolveAll": "要求解决所有会话",
+      "resolveAllSub": "如果存在未解决的讨论串，则禁用批准按钮。",
+      "resolveAllToggle": "全部解决"
+    },
+    "agents": {
+      "title": "智能体",
+      "hint": "默认智能体和运行时策略。",
+      "defaultAgent": "默认智能体",
+      "fixPipeline": "修复流水线",
+      "reviewBot": "评审机器人",
+      "investigation": "调查",
+      "confirm": "启动前确认",
+      "confirmSub": "在任何智能体启动前显示摘要弹窗。",
+      "confirmToggle": "确认启动",
+      "maxParallel": "最大并行运行数",
+      "maxParallelSub": "限制你并发的智能体运行数。",
+      "parallel3": "3（默认）",
+      "parallel5": "5（仅付费方案）"
+    },
+    "admission": {
+      "title": "准入",
+      "hint": "检查失败时的门禁行为。",
+      "showProof": "失败时显示证明义务",
+      "showProofSub": "展开显示每项检查所测试的义务的细分。",
+      "showProofToggle": "显示证明",
+      "autoLink": "自动关联修复候选",
+      "autoLinkSub": "在每项失败的义务旁建议一个修复候选。",
+      "autoLinkToggle": "自动关联修复"
+    },
+    "reset": {
+      "title": "重置为默认值",
+      "hint": "将此页面的所有设置恢复为出厂默认值。",
+      "label": "重置所有偏好设置",
+      "sub": "其他人的设置、你的密码和你的令牌不受影响。",
+      "button": "重置为默认值"
+    }
+  },
+  "keyboard": {
+    "title": "键盘",
+    "subtitle": "自定义快捷键。使用搜索可快速找到 — 当你录制新组合时，我们会检测冲突。",
+    "export": "导出",
+    "import": "导入",
+    "resetAll": "全部重置",
+    "searchPlaceholder": "按命令、组或按键搜索…",
+    "clear": "清除",
+    "conflicts_one": "检测到 {{count}} 个冲突",
+    "conflicts_other": "检测到 {{count}} 个冲突",
+    "conflictBody": "当两个命令共享相同组合时，只有最后定义的会触发。受影响：{{list}}。",
+    "noMatch": "没有与 \"{{query}}\" 匹配的快捷键。",
+    "row": {
+      "recordNew": "录制新的",
+      "reset": "重置"
+    },
+    "record": {
+      "title": "为 \"{{label}}\" 录制快捷键",
+      "bodyPrefix": "按下你想使用的键。仅修饰键的组合（如单独的 ⇧）不会被捕获。要取消而不保存，请按 ",
+      "bodySuffix": " 两次。",
+      "listening": "监听中…",
+      "defaultLabel": "默认：",
+      "use": "使用此快捷键"
+    }
+  },
+  "ai": {
+    "title": "AI",
+    "subtitle": "为每个工作台选择模型，决定代表你自动运行的内容，并限制成本。",
+    "models": {
+      "title": "模型选择",
+      "hint": "每个工作台可以使用不同的模型。对嘈杂的场景更快更便宜；在重要之处进行更深入的推理。"
+    },
+    "tier": {
+      "fast": "快速",
+      "balanced": "均衡",
+      "best": "最佳"
+    },
+    "behavior": {
+      "title": "行为",
+      "hint": "AI 提供建议和代表你完成任务的积极程度。",
+      "inline": "内联建议",
+      "inlineSub": "输入时编辑器中的幽灵文本。",
+      "inlineToggle": "内联建议",
+      "verbosity": "建议详细度",
+      "verbositySub": "简洁的补丁对比段落长度的解释。",
+      "brief": "简洁",
+      "briefSub": "最小补丁，无散文",
+      "normal": "正常",
+      "normalSub": "默认",
+      "verbose": "详细",
+      "verboseSub": "解释每处更改",
+      "autoCommit": "自动编写提交信息",
+      "autoCommitSub": "从差异生成 Conventional Commits 标题。",
+      "autoCommitToggle": "自动提交信息",
+      "autoSummary": "自动总结 PR",
+      "autoSummarySub": "在评审中为每个 PR 描述添加 3 条要点摘要。",
+      "autoSummaryToggle": "自动 PR 摘要",
+      "autoEvidence": "自动关联证据",
+      "autoEvidenceSub": "自动将相关日志 / 指标 / 过往 PR 附加到调查中。",
+      "autoEvidenceToggle": "自动证据",
+      "contextDepth": "上下文深度",
+      "contextDepthSub": "AI 每次调用允许读取的代码库范围。",
+      "file": "单个文件",
+      "fileSub": "最便宜、最窄",
+      "module": "所在模块",
+      "moduleSub": "均衡",
+      "workspace": "整个工作区",
+      "workspaceSub": "最准确"
+    },
+    "privacy": {
+      "title": "隐私与训练",
+      "hint": "控制你的代码是否帮助训练模型。",
+      "optOut": "退出模型训练",
+      "optOutSub": "你的提示和代码绝不会用于训练上游模型。",
+      "optOutToggle": "退出训练",
+      "redact": "发送前脱敏机密",
+      "redactSub": "检测提示中的 API 密钥 / 令牌，并用占位符替换它们。",
+      "redactToggle": "脱敏机密"
+    },
+    "spend": {
+      "title": "支出控制",
+      "hint": "限制你的 AI 使用，以免失控的循环耗尽你每月的令牌。组织管理员可以覆盖。",
+      "dailyCap": "每日成本上限",
+      "dailyCapSubPrefix": "阻止你的账户在每天超过此金额后进行 AI 调用。 ",
+      "today": "今天：${{amount}}",
+      "perDay": "/ 天",
+      "noCap": "未设上限",
+      "meterToday": "今天已用 ${{spent}}，共 ${{cap}}",
+      "meterAlert": "已超过你的警告阈值（上限的 {{pct}}%）。已发送收件箱通知。",
+      "alertWhen": "警告时机",
+      "alertWhenSub": "当每日支出超过上限的此百分比时，在收件箱中通知你。",
+      "alert50": "上限的 50%",
+      "alert75": "上限的 75%",
+      "alert90": "上限的 90%",
+      "alert100": "100%（已达上限）",
+      "fallback": "接近上限时回退到快速模型",
+      "fallbackSub": "在上限的 {{pct}}% 时，无论场景偏好如何，后续调用都将使用 Haiku/GPT-mini。",
+      "fallbackToggle": "回退到快速"
+    }
+  },
+  "inbox": {
+    "title": "收件箱",
+    "subtitle": "提及、评审请求、门禁失败和智能体更新 — 全部在一个信息流中。",
+    "selected": "已选择 {{count}} 项",
+    "markRead": "标为已读",
+    "archive": "归档",
+    "clearSelection": "清除选择",
+    "markAllRead": "全部标为已读",
+    "searchPlaceholder": "搜索收件箱…",
+    "buckets": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "earlier": "更早"
+    },
+    "filters": {
+      "unread": "未读",
+      "mentions": "提及",
+      "reviews": "评审",
+      "starred": "已加星标",
+      "all": "全部",
+      "archived": "已归档"
+    },
+    "item": {
+      "unread": "未读",
+      "star": "加星标",
+      "unstar": "取消星标"
+    },
+    "types": {
+      "mention": "提及",
+      "review": "评审",
+      "admission": "准入",
+      "fix": "修复",
+      "agent": "智能体",
+      "security": "安全"
+    },
+    "detail": {
+      "snooze": "稍后提醒",
+      "archive": "归档",
+      "openIn": "在 {{where}} 中打开",
+      "from": "来自",
+      "in": "位于",
+      "diffContext": "差异上下文",
+      "quickReply": "快速回复",
+      "replyPlaceholder": "输入回复或命令（Cmd+Enter 发送）…",
+      "sendReply": "发送回复"
+    },
+    "empty": {
+      "noMatches": "没有与 \"{{query}}\" 匹配的项",
+      "listClear": "你的{{filter}}列表已清空",
+      "tryDifferent": "尝试其他关键词或更改筛选条件。",
+      "nothingWaiting": "没有等待你处理的内容。休息一下吧。",
+      "detailTitle": "选择要阅读的内容",
+      "detailBodyPrefix": "点击左侧任意项即可在此打开。使用 ",
+      "detailBodyMiddle": " / ",
+      "detailBodySuffix": " 进行导航。"
+    }
+  }
+}

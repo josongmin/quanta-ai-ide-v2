@@ -1,22 +1,24 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Loader2, Download } from 'lucide-react';
 import { Section, Row, Button } from '@shared/ui/forms';
 import { formatTime } from '@shared/i18n';
 
 export function ExportSection() {
+  const { t } = useTranslation('me');
   const [requested, setRequested] = useState(false);
   const requestedAt = useMemo(() => new Date(), []);
   return (
     <Section
-      title="Export your data"
-      hint="GDPR-compatible export. Includes profile, comments, reviews, AI tokens used, and audit history."
+      title={t('account.export.title')}
+      hint={t('account.export.hint')}
     >
       <Row
-        label="Data export"
+        label={t('account.export.label')}
         sub={
           requested
-            ? <span>Requested at {formatTime(requestedAt, { hour: '2-digit', minute: '2-digit' })}. Average prep time is ~10 minutes; we&apos;ll email you when it&apos;s ready.</span>
-            : <span>Generates a zip file (JSON + CSV) with everything we have on file for your account.</span>
+            ? <span>{t('account.export.requestedSub', { time: formatTime(requestedAt, { hour: '2-digit', minute: '2-digit' }) })}</span>
+            : <span>{t('account.export.idleSub')}</span>
         }
       >
         <Button
@@ -24,7 +26,7 @@ export function ExportSection() {
           onClick={() => { setRequested(true); }}
           disabled={requested}
         >
-          {requested ? 'Preparing export' : 'Request export'}
+          {requested ? t('account.export.preparing') : t('account.export.request')}
         </Button>
       </Row>
     </Section>

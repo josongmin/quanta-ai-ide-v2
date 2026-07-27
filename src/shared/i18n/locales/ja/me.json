@@ -1,1 +1,888 @@
-{}
+{
+  "shell": {
+    "breadcrumbRoot": "個人",
+    "breadcrumbAria": "パンくずリスト",
+    "fallbackName": "あなた",
+    "nav": {
+      "identity": "アイデンティティ",
+      "access": "アクセスと連携",
+      "experience": "エクスペリエンス",
+      "streams": "ストリーム",
+      "profile": "プロフィール",
+      "account": "アカウント",
+      "security": "セキュリティ",
+      "connectedApps": "連携アプリ",
+      "apiTokens": "APIトークン",
+      "notifications": "通知",
+      "appearance": "外観",
+      "preferences": "環境設定",
+      "keyboard": "キーボード",
+      "ai": "AI",
+      "inbox": "受信トレイ"
+    }
+  },
+  "comingSoon": {
+    "connectedApps": "連携アプリ",
+    "notifications": "通知",
+    "ai": "AI",
+    "availableSoon": "近日提供予定",
+    "subtitle": "{{title}} はまだアカウントに接続されていません。今後のリリースで提供予定です。"
+  },
+  "real": {
+    "profile": {
+      "title": "プロフィール",
+      "subtitle": "メンションやレビューでチームメンバーに表示される内容です。",
+      "identity": "アイデンティティ",
+      "identityHint": "表示名は製品全体に表示されます。",
+      "fullName": "氏名",
+      "namePlaceholder": "お名前"
+    },
+    "account": {
+      "title": "アカウント",
+      "subtitle": "メール、パスワード、アカウント削除。",
+      "email": {
+        "title": "メールアドレス",
+        "hint": "サインインに使用します。変更には新しいアドレスでの確認が必要です。",
+        "label": "メールアドレス",
+        "change": "メールを変更",
+        "sentTitle": "{{email}} に確認メールを送信しました",
+        "sentBody": "メール内のリンクをクリックすると変更が完了します。それまでは現在のアドレスでサインインし続けます。",
+        "new": "新しいメール",
+        "newPlaceholder": "you@company.com",
+        "sending": "送信中…",
+        "send": "確認メールを送信"
+      },
+      "password": {
+        "title": "パスワード",
+        "hint": "大文字小文字・数字・記号を含む12文字以上。変更時に他のセッションはサインアウトされます。",
+        "sub": "サインインパスワードを変更します。",
+        "change": "パスワードを変更",
+        "current": "現在のパスワード",
+        "new": "新しいパスワード",
+        "newPlaceholder": "12文字以上",
+        "confirm": "新しいパスワードの確認",
+        "mismatch": "パスワードが一致しません",
+        "show": "表示",
+        "hide": "非表示",
+        "updating": "更新中…",
+        "updated": "更新しました",
+        "update": "パスワードを更新"
+      },
+      "danger": {
+        "zone": "危険な操作",
+        "deleteLabel": "このアカウントを削除",
+        "deleteSub": "プロフィールとトークンを完全に削除し、すべての組織から除外されます。元に戻せません。",
+        "deleteButton": "アカウントを削除",
+        "emailedPrefix": "確認リンクを ",
+        "emailedSuffix": " に送信しました。そのメールで確認するとアカウントが削除されます。",
+        "confirmLabel": "確認するには「{{phrase}}」と入力してください",
+        "noMatch": "完全に一致していません。",
+        "sending": "送信中…",
+        "emailLink": "削除リンクをメールで送る"
+      }
+    },
+    "security": {
+      "title": "セキュリティ",
+      "subtitle": "2要素認証、アクティブなセッション、サインイン。",
+      "unknownDevice": "不明なデバイス",
+      "sessions": {
+        "title": "アクティブなセッション",
+        "hint": "現在アカウントにサインインしているデバイスです。",
+        "colDevice": "デバイス",
+        "colIp": "IP",
+        "colSignedIn": "サインイン",
+        "emptyTitle": "アクティブなセッションなし",
+        "emptySubtitle": "セッションはここに表示されます。",
+        "thisDevice": "このデバイス",
+        "revoke": "取り消し"
+      },
+      "signOut": {
+        "title": "すべてでサインアウト",
+        "hint": "このデバイス以外のすべてのセッションを終了します。",
+        "label": "他のセッション",
+        "sub_one": "他に {{count}} 件のセッションがサインインしています。",
+        "sub_other": "他に {{count}} 件のセッションがサインインしています。",
+        "button": "他のセッションをサインアウト",
+        "confirmTitle": "他のセッションをサインアウトしますか？",
+        "confirmLabel": "他をサインアウト",
+        "confirmDescription": "他のすべてのサインイン済みデバイスが直ちにサインアウトされます。このデバイスはサインインしたままです。"
+      },
+      "twoFactor": {
+        "title": "2要素認証",
+        "hint": "サインイン時に認証アプリのワンタイムコードを要求します。",
+        "label": "認証アプリ (TOTP)",
+        "enabledSub": "有効 — サインイン時に6桁のコードが必要です。",
+        "disabledSub": "時間ベースのワンタイムコードでアカウントを保護しましょう。",
+        "enabled": "有効",
+        "regenerate": "バックアップコードを再生成",
+        "disable": "無効化",
+        "enable": "2FAを有効化",
+        "enableTitle": "2要素認証を有効化",
+        "enrollFailed": "登録に失敗しました。もう一度お試しください。",
+        "checking": "確認中…",
+        "continue": "続行",
+        "verifying": "検証中…",
+        "verifyEnable": "検証して有効化",
+        "confirmPassword": "2要素認証のセットアップを開始するにはパスワードを確認してください。",
+        "password": "パスワード",
+        "scanTitle": "認証アプリでスキャン",
+        "scanBody": "1Password、Authy、Google Authenticator など。その後、下に6桁のコードを入力して有効化してください。",
+        "backupSave": "バックアップコード — 保存してください",
+        "copied": "コピーしました",
+        "copyAll": "すべてコピー",
+        "backupNote": "認証アプリを紛失した場合、各コードは一度だけ使用できます。安全な場所に保管してください。",
+        "code": "6桁のコード",
+        "codePlaceholder": "123456",
+        "regenerateTitle": "バックアップコードを再生成",
+        "done": "完了",
+        "generating": "生成中…",
+        "regenerateAction": "再生成",
+        "newCodes": "新しいコード — 古いセットはもう使えません。",
+        "regenerateBody": "既存のバックアップコードが無効になり、新しいセットが発行されます。パスワードを確認してください。",
+        "disableTitle": "2要素認証を無効化",
+        "disabling": "無効化中…",
+        "disableAction": "2FAを無効化",
+        "disableBody": "2要素認証を削除するとアカウントのセキュリティが低下します。続行するにはパスワードを確認してください。"
+      }
+    },
+    "tokens": {
+      "title": "APIトークン",
+      "subtitle": "APIとCLI用の個人アクセストークン。パスワードと同様に扱ってください。",
+      "newToken": "新しいトークン",
+      "colToken": "トークン",
+      "colPrefix": "プレフィックス",
+      "colCreated": "作成日",
+      "colExpires": "有効期限",
+      "fallbackName": "トークン",
+      "emptyTitle": "まだトークンがありません",
+      "emptySubtitle": "APIまたはCLIを使用するにはトークンを作成してください。",
+      "revokeToken": "トークンを取り消し",
+      "createdTitle": "トークン「{{name}}」を作成しました",
+      "revokeConfirmTitle": "「{{name}}」を取り消しますか？",
+      "revoke": "取り消し",
+      "revokeDescription": "このトークンを使用するすべてのクライアントが直ちにアクセスを失います。元に戻せません。",
+      "createTitle": "新しいAPIトークン",
+      "generating": "生成中…",
+      "generate": "トークンを生成",
+      "name": "名前",
+      "namePlaceholder": "CIパイプライン",
+      "expiration": "有効期限",
+      "expiry": {
+        "days30": "30日",
+        "days60": "60日",
+        "days90": "90日",
+        "year1": "1年",
+        "none": "有効期限なし"
+      }
+    },
+    "inbox": {
+      "title": "受信トレイ",
+      "subtitle": "アカウントおよび組織のアクティビティ。アカウントに関するセキュリティ通知と、管理する組織全体の変更です。",
+      "markAllRead": "すべて既読にする",
+      "all": "すべて",
+      "unread": "未読",
+      "unreadCount": "未読 · {{count}}",
+      "emptyTitle": "通知なし",
+      "emptyUnread": "未読はありません。",
+      "emptyAll": "アカウントと組織のアクティビティがここに表示されます。",
+      "unreadPrefix": "未読: ",
+      "byActor": "{{actor}} により",
+      "targetByActor": "{{target}} · {{actor}} により",
+      "loading": "読み込み中…",
+      "loadMore": "さらに読み込む",
+      "relTime": {
+        "justNow": "たった今",
+        "minutes": "{{count}}分前",
+        "hours": "{{count}}時間前",
+        "days": "{{count}}日前"
+      },
+      "actions": {
+        "orgMemberInvited": "メンバーを招待",
+        "orgMemberRemoved": "メンバーを削除",
+        "orgMemberRoleChanged": "メンバーの役割を変更",
+        "orgInvitationCanceled": "招待をキャンセル",
+        "orgUpdated": "組織を更新",
+        "orgDeleted": "組織を削除",
+        "orgTeamCreated": "チームを作成",
+        "orgTeamDeleted": "チームを削除",
+        "security2faEnabled": "2要素認証を有効化",
+        "security2faDisabled": "2要素認証を無効化",
+        "securityPasswordChanged": "パスワードを変更",
+        "securitySessionRevoked": "セッションを取り消し",
+        "apikeyCreated": "APIキーを作成",
+        "apikeyRevoked": "APIキーを取り消し",
+        "billingSubscriptionUpdated": "サブスクリプションを更新",
+        "billingPaymentFailed": "支払いに失敗"
+      }
+    }
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "done": "完了",
+    "demoReasonShort": "このデモビルドでは利用できません。"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "subtitle": "メンション、レビュー、ドットフィールドでチームメンバーに表示される内容です。",
+    "hidePreview": "プレビューを隠す",
+    "showPreview": "公開プロフィールをプレビュー",
+    "photo": {
+      "title": "写真",
+      "hint": "正方形の画像が最適です。PNG、JPG、GIF、WebP、最大2MB。",
+      "custom": "カスタム写真",
+      "generated": "生成されたアバター",
+      "customSub": "メンションやメンバー一覧では円形にトリミングされます。",
+      "generatedSub": "イニシャルは名前から生成されます。写真をアップロードして上書きできます。"
+    },
+    "identity": {
+      "title": "アイデンティティ",
+      "hint": "名前とハンドルは製品全体で一緒に表示されます。",
+      "fullName": "氏名",
+      "pronouns": "代名詞",
+      "handle": "ハンドル",
+      "jobTitle": "役職",
+      "location": "所在地"
+    },
+    "bio": {
+      "title": "自己紹介",
+      "hint": "最大280文字。マークダウン対応。",
+      "label": "短い自己紹介",
+      "placeholder": "あなた、役割、取り組んでいることについて1〜2行で紹介してください。"
+    },
+    "social": {
+      "title": "ソーシャルリンク",
+      "hint": "有効にすると公開プロフィールに表示されます。空欄は非表示になります。",
+      "placeholder": "ユーザー名"
+    },
+    "visibility": {
+      "title": "公開範囲",
+      "hint": "公開プロフィールで表示する内容を制御します。",
+      "publicProfile": "公開プロフィール",
+      "publicProfileSubPrefix": "リンクを知っている人は次のアドレスでプロフィールを閲覧できます: ",
+      "showEmail": "公開プロフィールにメールを表示",
+      "showEmailSub": "公開プロフィールを閲覧する人は業務用メールを見ることができます。",
+      "toggleShowEmail": "メールを表示"
+    },
+    "avatar": {
+      "upload": "アバターをアップロード",
+      "remove": "写真を削除",
+      "altYours": "あなたの",
+      "altProfile": "プロフィール"
+    },
+    "preview": {
+      "eyebrow": "公開プレビュー · 他の人に見える内容",
+      "unnamed": "名前なし",
+      "disabled": "公開プロフィールは現在無効です。上のプレビューは有効にした場合に他の人に見える内容です。"
+    }
+  },
+  "account": {
+    "title": "アカウント",
+    "subtitle": "メール、パスワード、エクスポート、アカウント削除。",
+    "email": {
+      "title": "メールアドレス",
+      "hint": "サインインおよびアカウント関連の通知に使用します。変更には両方のアドレスでの確認が必要です。",
+      "currentLabel": "現在のメール",
+      "label": "メールアドレス",
+      "verified": "· 確認済み",
+      "change": "メールを変更",
+      "newEmail": "新しいメール",
+      "newEmailPlaceholder": "you@company.com",
+      "send": "確認メールを送信",
+      "sending": "送信中…",
+      "willSendPrefix": "確認リンクを ",
+      "willSendMiddle": " に送信します。クリックするまでは ",
+      "willSendSuffix": " でサインインし続けます。",
+      "newAddressFallback": "新しいアドレス",
+      "sentTitle": "{{email}} に確認メールを送信しました",
+      "sentBodyPrefix": "30分以内にメール内のリンクをクリックして変更を完了してください。本人でない場合に取り消せるよう ",
+      "sentBodySuffix": " にも通知しました。",
+      "useDifferent": "別のメールを使用",
+      "ssoWarningSuffix": " はSSOが必要です。このアドレスに変更すると、IdP経由でサインインし、パスワードは無効になります。"
+    },
+    "password": {
+      "title": "パスワード",
+      "hint": "大文字小文字・数字・記号を含む12文字以上。変更時に他のセッションはサインアウトされます。",
+      "meta": "3か月前に最終変更。強力 · 14文字。",
+      "change": "パスワードを変更",
+      "current": "現在のパスワード",
+      "wrongCurrent": "パスワードが正しくありません。もう一度お試しください。",
+      "new": "新しいパスワード",
+      "newPlaceholder": "12文字以上",
+      "confirm": "新しいパスワードの確認",
+      "mismatch": "パスワードが一致しません",
+      "updating": "更新中…",
+      "updated": "更新しました",
+      "update": "パスワードを更新",
+      "show": "表示",
+      "hide": "非表示",
+      "demoHintPrefix": "デモ: 現在のパスワードは ",
+      "demoHintSuffix": " です。それ以外を入力すると誤り分岐が発生します。"
+    },
+    "export": {
+      "title": "データをエクスポート",
+      "hint": "GDPR対応のエクスポート。プロフィール、コメント、レビュー、使用したAIトークン、監査履歴を含みます。",
+      "label": "データエクスポート",
+      "requestedSub": "{{time}} に要求されました。平均準備時間は約10分で、準備ができ次第メールでお知らせします。",
+      "idleSub": "アカウントについて保有するすべてのデータを含むzipファイル(JSON + CSV)を生成します。",
+      "preparing": "エクスポートを準備中",
+      "request": "エクスポートを要求"
+    },
+    "danger": {
+      "reason": "このデモビルドでは利用できません — アカウント削除にはサインイン済みのバックエンドが必要です。",
+      "zone": "危険な操作",
+      "deleteLabel": "このアカウントを削除",
+      "deleteSub": "プロフィール、コメント、トークンを完全に削除します。すべての組織から除外されます。元に戻せません。",
+      "deleteButton": "アカウントを削除",
+      "modalTitle": "アカウントを削除しますか？",
+      "modalBodyPrefix": "この操作は ",
+      "modalBodySuffix": "、レビュー、コメント、AI使用履歴、個人アクセストークンを完全に削除します。3つの組織から除外されます。あなたの貢献は削除済みユーザーに帰属します。",
+      "confirmLabel": "確認するには「{{phrase}}」と入力してください",
+      "noMatch": "完全に一致していません。",
+      "reasonLabel": "退会理由 (任意)",
+      "reasonOptions": {
+        "none": "理由なし",
+        "duplicate": "別のアカウントがあります",
+        "notUsing": "もう使っていません",
+        "tooExpensive": "高すぎます",
+        "missingFeature": "必要な機能がありません",
+        "foundAlternative": "代替を見つけました",
+        "other": "その他"
+      },
+      "confirmDelete": "完全に削除"
+    }
+  },
+  "security": {
+    "title": "セキュリティ",
+    "subtitle": "2要素認証の方法、アクティブなセッション、サインイン履歴。",
+    "mfa": {
+      "title": "2要素認証",
+      "hint": "少なくとも1つの方法が必要です。デバイスを紛失してもロックされないようバックアップを追加してください。",
+      "addAuthenticator": "認証アプリ",
+      "addSecurityKey": "セキュリティキー",
+      "noneTitle": "2FAが未設定です — アカウントのリスクが高まります",
+      "noneSub": "少なくとも1つの方法を追加してください。認証アプリとバックアップ用のセキュリティキーの併用を推奨します。",
+      "primary": "プライマリ",
+      "kindTotp": "TOTP",
+      "kindWebauthn": "WebAuthn",
+      "kindSms": "SMS",
+      "addedUsed": "追加: {{added}} · 最終使用: {{lastUsed}}",
+      "makePrimary": "プライマリに設定",
+      "remove": "削除"
+    },
+    "recovery": {
+      "title": "リカバリーコード",
+      "hint": "すべての2FA方法にアクセスできなくなった場合に使う使い捨てコードです。安全な場所に保管してください。",
+      "available": "10個中10個のコードが利用可能",
+      "sub": "最終生成: 2026-02-12。各コードは12桁の英数字で、一度だけ使用できます。",
+      "view": "コードを表示 / 再生成",
+      "modalTitle": "リカバリーコードを保存",
+      "modalBody": "各コードは一度だけ使用できます。パスワードマネージャー、印刷物、暗号化されたメモなど、このアプリの外の安全な場所に保管してください。",
+      "copyAll": "すべてコピー",
+      "download": ".txtをダウンロード",
+      "print": "印刷",
+      "saved": "保存しました"
+    },
+    "addMfa": {
+      "titleTotp": "認証アプリを追加",
+      "titleWebauthn": "セキュリティキーを追加",
+      "totpScan": "1Password、Authy、Google Authenticator などでスキャンしてください。その後、生成された6桁のコードを入力してください。",
+      "codeAria": "6桁の認証コード",
+      "codePlaceholder": "6桁のコード",
+      "webauthnPrompt": "セキュリティキーにタッチするか、Touch ID / Windows Hello で登録してください。",
+      "label": "ラベル",
+      "labelPlaceholder": "例: 1Password",
+      "add": "方法を追加"
+    },
+    "trusted": {
+      "title": "信頼済みデバイス",
+      "hint": "有効にすると、2FAを完了したデバイスは30日間、以降のプロンプトをスキップできます。",
+      "label": "2FA後にこのデバイスを信頼",
+      "sub": "署名付きCookieがデバイスに保存されます。Cookieを削除するかサインアウトするとリセットされます。",
+      "toggle": "デバイスを信頼"
+    },
+    "sessions": {
+      "title": "アクティブなセッション",
+      "hint_one": "デバイス全体で {{count}} 件のセッション。心当たりのないものは取り消してください。",
+      "hint_other": "デバイス全体で {{count}} 件のセッション。心当たりのないものは取り消してください。",
+      "thisDevice": "このデバイス",
+      "revoke": "取り消し"
+    },
+    "history": {
+      "title": "サインイン履歴",
+      "hint": "アカウントの過去90日間の認証イベントです。失敗した試行や異常な場所が強調表示されます。"
+    },
+    "signOut": {
+      "reason": "このデモビルドでは利用できません — セッションの取り消しにはサインイン済みのバックエンドが必要です。",
+      "title": "すべてでサインアウト",
+      "hint": "このデバイス以外のすべてのデバイスのアクティブなセッションを終了します。",
+      "label": "他のすべてのデバイスからサインアウト",
+      "sub": "他のデバイスは再度サインインして2FAを完了する必要があります。侵害が疑われる場合に便利です。",
+      "confirm": "はい、すべてでサインアウト",
+      "trigger": "他のデバイスをサインアウト"
+    }
+  },
+  "connectedApps": {
+    "title": "連携アプリ",
+    "subtitle": "アカウントにリンクされたサインインプロバイダーとサードパーティ連携です。",
+    "providers": {
+      "title": "サインインプロバイダー",
+      "hint": "これらのいずれでもサインインできます。プライマリプロバイダーはログイン画面で最初に表示されます。"
+    },
+    "integrations": {
+      "title": "連携",
+      "hint": "あなたの代わりに動作するサードパーティツールです。1つを削除すると関連するすべての通知とアクションが停止します。"
+    },
+    "available": {
+      "title": "追加可能",
+      "hint": "別のアプリを連携します。スコープを承認するためにリダイレクトされ、パスワードは決して見られません。",
+      "connect": "連携"
+    },
+    "list": {
+      "empty": "まだ連携されていません。",
+      "primary": "プライマリ",
+      "connectedMeta": "{{account}} · 連携: {{connectedAt}} · {{lastUsed}}",
+      "makePrimary": "プライマリに設定",
+      "scopes_one": "{{count}} スコープ",
+      "scopes_other": "{{count}} スコープ",
+      "disconnect": "連携を解除",
+      "authorizedScopes": "承認済みスコープ",
+      "required": "必須",
+      "viewOn": "{{provider}} で表示",
+      "reauthorize": "新しいスコープを再承認"
+    },
+    "remove": {
+      "title": "{{provider}} の連携を解除しますか？",
+      "identityBody": "以降 {{provider}} でサインインできなくなります。先に別のサインイン方法があることを確認してください。",
+      "integrationBody": "すべての {{provider}} アクションと通知が停止します。キューにある項目はキャンセルされます。",
+      "confirm": "連携を解除"
+    }
+  },
+  "apiTokens": {
+    "title": "APIトークン",
+    "subtitle": "個人アクセストークン(PAT)はスクリプト、CLI、連携をあなたとして認証します。パスワードと同様に扱ってください。",
+    "newToken": "新しいトークン",
+    "active": {
+      "title": "アクティブなトークン",
+      "hint": "25個中 {{count}} 個使用中。90日間使用していないトークンは表示されます。"
+    },
+    "using": {
+      "title": "トークンの使い方",
+      "hint": "トークンをBearerヘッダーとして渡してください。すべてのリクエストを記録します — 詳細は監査ログを参照してください。"
+    },
+    "list": {
+      "empty": "まだトークンがありません。APIを使用するには作成してください。",
+      "expired": "期限切れ",
+      "unused": "未使用",
+      "created": "作成: {{date}}",
+      "expires": "· 有効期限: {{date}}",
+      "neverExpires": "· 有効期限なし",
+      "lastUsed": "· 最終使用: {{value}}",
+      "revoke": "取り消し"
+    },
+    "code": {
+      "docs": "APIドキュメント"
+    },
+    "create": {
+      "title": "新しい個人アクセストークン",
+      "name": "名前",
+      "namePlaceholder": "例: \"ci · gh-actions\"",
+      "nameHint": "将来の自分がこのトークンの用途を思い出せるようにしましょう。",
+      "expiration": "有効期限",
+      "never": "なし (非推奨)",
+      "days": "{{count}}日",
+      "scopes": "スコープ",
+      "destructive": "破壊的",
+      "dangerWarning_one": "破壊的スコープを {{count}} 個付与しようとしています。このトークンを持つ人は誰でもこれらの権限で操作できます。",
+      "dangerWarning_other": "破壊的スコープを {{count}} 個付与しようとしています。このトークンを持つ人は誰でもこれらの権限で操作できます。",
+      "generate": "トークンを生成"
+    },
+    "reveal": {
+      "title": "新しいトークンを保存",
+      "onlyOnce": "トークンを表示するのはこの一度だけです。",
+      "afterClose": " このダイアログを閉じると、プレフィックスのみが表示されます。",
+      "copied": "コピーしました",
+      "copy": "コピー",
+      "show": "表示",
+      "hide": "非表示",
+      "scopeCount_one": "{{count}} スコープ",
+      "scopeCount_other": "{{count}} スコープ",
+      "expiresNever": "なし",
+      "expires": "有効期限: {{value}}",
+      "saved": "保存しました"
+    },
+    "revoke": {
+      "title": "「{{name}}」を取り消しますか？",
+      "body": "このトークンを使用するスクリプト、CLI、連携はすべて直ちに失敗し始めます。取り消しを監査証跡に記録します。",
+      "confirm": "トークンを取り消し"
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "subtitle": "何をどこで通知するかを選択します。サイレント時間とダイジェストモードはすべてのチャネルに適用されます。",
+    "muted": "すべての通知をミュート中",
+    "muteEverything": "すべてミュート",
+    "muteBanner": "すべての通知が一時停止されています。重要なセキュリティ警告は引き続き通知されます。",
+    "channels": {
+      "title": "配信チャネル",
+      "hint": "各チャネルには独自の配信先があります。以下のマトリックスでどのイベントをどこに送るかを選択します。"
+    },
+    "matrix": {
+      "title": "マトリックス",
+      "hint": "各セルを切り替えて、どのイベントをどのチャネルに送るかを制御します。ラベルをクリックすると行をコピーします。",
+      "event": "イベント",
+      "enableAll": "このイベントのすべてのチャネルを有効化",
+      "disableAll": "このイベントのすべてのチャネルを無効化",
+      "cellLabel": "{{event}} → {{channel}}"
+    },
+    "cadence": {
+      "title": "配信頻度",
+      "hint": "通知をまとめてノイズを減らします。リアルタイムは各イベントが発生するたびに配信されます。",
+      "digest": "ダイジェストモード",
+      "digestSub": "メールとSlackに影響します。アプリ内通知は常にリアルタイムです。",
+      "realtime": "リアルタイム",
+      "realtimeSub": "各イベントを発生時に送信",
+      "hourly": "毎時ダイジェスト",
+      "hourlySub": "1時間に1回まとめて配信",
+      "daily": "毎日午前9時ダイジェスト",
+      "dailySub": "1日1通のメール",
+      "weekly": "毎週月曜ダイジェスト",
+      "weeklySub": "平日は静かに"
+    },
+    "quiet": {
+      "title": "サイレント時間",
+      "hint": "特定の時間帯に重要でないチャネルをミュートします。セキュリティ警告は常に通知されます。",
+      "enable": "サイレント時間を有効化",
+      "enableSub": "以下の時間帯にSlackとモバイルプッシュをミュートします。メールはダイジェスト用にキューされます。",
+      "toggle": "サイレント時間",
+      "from": "開始",
+      "to": "終了",
+      "timezone": "タイムゾーン",
+      "muteWindow": "ミュート時間帯: ",
+      "durationLabel": "静かな時間 {{hours}}時間 {{minutes}}分",
+      "dnd": "おやすみモード",
+      "dndSub": "今後4時間の一回限りのミュート。自動的にリセットされます。",
+      "dndToggle": "おやすみモード"
+    }
+  },
+  "appearance": {
+    "title": "外観",
+    "subtitle": "テーマ、密度、モーション、アクセント。ほとんどの変更は即座に適用され、保存前にプレビューできます。",
+    "theme": {
+      "title": "テーマ",
+      "hint": "ライト、ダーク、またはOSの設定に従う。",
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システム"
+    },
+    "accent": {
+      "title": "アクセントカラー",
+      "hint": "主要なCTA、現在の状態マーカー、ドットフィールドのメインカラーに使用されます。",
+      "cobalt": "コバルトインディゴ",
+      "violet": "バイオレット",
+      "amber": "アンバー",
+      "crimson": "クリムゾン",
+      "mint": "ミント"
+    },
+    "density": {
+      "title": "密度",
+      "hint": "レビューやファイルパネルなどの密なリストで各行に与えるスペースです。",
+      "compact": "コンパクト",
+      "comfortable": "標準",
+      "roomy": "ゆったり"
+    },
+    "text": {
+      "title": "テキスト",
+      "hint": "コード用のフォントサイズと等幅フォント。差分やインラインコードブロックに影響します。",
+      "fontScale": "フォントサイズ",
+      "fontScaleSub": "小 (12px) · 中 (13px、既定) · 大 (15px) 基準。",
+      "monoFont": "等幅フォント",
+      "monoFontSub": "コード、ファイルパス、IDに使用されます。",
+      "systemDefault": "システム既定",
+      "syntaxTheme": "シンタックステーマ",
+      "syntaxThemeSub": "差分ハンクとコードブロック内の配色。",
+      "dim": "ディム",
+      "midnight": "ミッドナイト",
+      "paper": "ペーパー"
+    },
+    "a11y": {
+      "title": "アクセシビリティ",
+      "hint": "邪魔になる視覚的ノイズを減らします。",
+      "reduceMotion": "モーションを減らす",
+      "reduceMotionSub": "必須でないアニメーション(パネル、パーティクル、トランジション)を無効化します。",
+      "highContrast": "高コントラスト",
+      "highContrastSub": "枠線のコントラストを高め、薄いテキストのバリエーションを削除します。"
+    },
+    "previewSection": {
+      "title": "プレビュー",
+      "hint": "現在の選択で一般的な行がどのように見えるかです。"
+    },
+    "livePreview": {
+      "prTitle": "PR #4821 · SSO専用本番の承認ルールを追加",
+      "approved": "承認済み",
+      "summary": "4ファイルをレビュー。3名のレビュアーが承認。承認の再実行後にマージ可能。",
+      "footer": "現在の選択でレンダリングされたプレビュー"
+    }
+  },
+  "preferences": {
+    "title": "環境設定",
+    "subtitle": "各ワークベンチの既定の動作方法です。あなたにのみ適用され — チームには別の設定があります。",
+    "startup": {
+      "title": "起動時",
+      "hint": "サインイン後にアプリを開いたときに表示される場所です。",
+      "startingWorkbench": "開始ワークベンチ",
+      "startingWorkbenchSub": "固定タブを選択するか、「最後に表示」で以前の場所を再開します。",
+      "lastVisited": "最後に表示",
+      "intelligence": "インテリジェンス",
+      "coding": "コーディング",
+      "agents": "エージェント",
+      "reviews": "レビュー",
+      "admission": "アドミッション",
+      "fixes": "フィックス"
+    },
+    "intelligence": {
+      "title": "インテリジェンス",
+      "hint": "ドットフィールド、マトリックスビュー、ユニバースモード。",
+      "defaultViz": "既定の可視化",
+      "dotField": "ドットフィールド",
+      "matrix": "マトリックス",
+      "universe": "ユニバース",
+      "autoOpenInspect": "クリックでインスペクトを自動的に開く",
+      "autoOpenInspectSub": "ドットをクリックすると右側のインスペクトパネルが自動的に開きます。",
+      "autoOpenInspectToggle": "インスペクトを自動的に開く",
+      "showScoreLabels": "ドットフィールドにスコアラベルを表示",
+      "showScoreLabelsSub": "各ドットの横にリスク + 信頼度の数値ラベルを表示します。",
+      "showScoreLabelsToggle": "スコアラベル",
+      "confidenceFloor": "信頼度の下限",
+      "confidenceFloorSub": "既定でこの信頼度未満のドットを非表示にします。",
+      "low": "低 (すべて表示)",
+      "medium": "中 (推奨)",
+      "high": "高 (確実なもののみ)"
+    },
+    "coding": {
+      "title": "コーディング",
+      "hint": "コーディングステージのエディタおよびAIの動作。",
+      "sideBySide": "左右並べて差分表示",
+      "sideBySideSub": "統合表示ではなく、旧/新を2列で表示します。",
+      "sideBySideToggle": "並べて表示",
+      "softWrap": "長い行を折り返す",
+      "softWrapSub": "エディタ幅より長い行を折り返します。",
+      "softWrapToggle": "折り返し",
+      "whitespace": "空白マーカーを表示",
+      "whitespaceSub": "スペースとタブを点/矢印で表示します。",
+      "whitespaceToggle": "空白を表示",
+      "autoSave": "下書きを自動保存",
+      "autoSaveSub": "下書きはブラウザに保存されます。オフにすると明示的な保存が必要です。",
+      "autoSaveToggle": "下書きを自動保存",
+      "inline": "インラインAI提案",
+      "inlineSub": "入力中のゴーストテキスト提案。",
+      "always": "常に表示",
+      "onHotkey": "ホットキーのみ · ⌘.",
+      "never": "しない"
+    },
+    "reviews": {
+      "title": "レビュー",
+      "hint": "PRレビューの動作。",
+      "defaultSort": "既定の並び順",
+      "defaultSortSub": "レビュータブを開いたときのPR一覧の並び順です。",
+      "reviewRequested": "レビュー依頼を優先",
+      "updated": "最近更新順",
+      "opened": "最近開いた順",
+      "risk": "リスクの高い順",
+      "ciBefore": "承認前にCI概要を表示",
+      "ciBeforeSub": "承認ボタンの上に合格/不合格バーを表示します。",
+      "ciBeforeToggle": "承認前にCI",
+      "resolveAll": "すべての会話の解決を必須にする",
+      "resolveAllSub": "未解決のスレッドがある場合、承認ボタンを無効化します。",
+      "resolveAllToggle": "すべて解決"
+    },
+    "agents": {
+      "title": "エージェント",
+      "hint": "既定のエージェントと実行時ポリシー。",
+      "defaultAgent": "既定のエージェント",
+      "fixPipeline": "フィックスパイプライン",
+      "reviewBot": "レビューボット",
+      "investigation": "調査",
+      "confirm": "起動前に確認",
+      "confirmSub": "エージェントが開始される前に概要モーダルを表示します。",
+      "confirmToggle": "起動を確認",
+      "maxParallel": "最大並列実行数",
+      "maxParallelSub": "同時実行するエージェントの数を制限します。",
+      "parallel3": "3 (既定)",
+      "parallel5": "5 (有料プランのみ)"
+    },
+    "admission": {
+      "title": "アドミッション",
+      "hint": "チェック失敗時のゲート動作。",
+      "showProof": "失敗時に証明義務を表示",
+      "showProofSub": "各チェックがテストした義務の詳細な内訳。",
+      "showProofToggle": "証明を表示",
+      "autoLink": "フィックス候補を自動リンク",
+      "autoLinkSub": "失敗した各義務の横にフィックス候補を提案します。",
+      "autoLinkToggle": "フィックスを自動リンク"
+    },
+    "reset": {
+      "title": "既定値にリセット",
+      "hint": "このページのすべての設定を工場出荷時の既定値に復元します。",
+      "label": "すべての環境設定をリセット",
+      "sub": "他の人の設定、パスワード、トークンは影響を受けません。",
+      "button": "既定値にリセット"
+    }
+  },
+  "keyboard": {
+    "title": "キーボード",
+    "subtitle": "ショートカットをカスタマイズします。検索で素早く見つけられ — 新しい組み合わせを記録すると競合を検出します。",
+    "export": "エクスポート",
+    "import": "インポート",
+    "resetAll": "すべてリセット",
+    "searchPlaceholder": "コマンド、グループ、キー入力で検索…",
+    "clear": "クリア",
+    "conflicts_one": "{{count}} 件の競合を検出",
+    "conflicts_other": "{{count}} 件の競合を検出",
+    "conflictBody": "2つのコマンドが同じ組み合わせを共有する場合、最後に定義されたものだけが実行されます。影響: {{list}}。",
+    "noMatch": "「{{query}}」に一致するショートカットがありません。",
+    "row": {
+      "recordNew": "新規記録",
+      "reset": "リセット"
+    },
+    "record": {
+      "title": "「{{label}}」のショートカットを記録",
+      "bodyPrefix": "使用するキーを押してください。⇧ 単独などの修飾キーのみの組み合わせは記録されません。保存せずにキャンセルするには ",
+      "bodySuffix": " を2回押してください。",
+      "listening": "待機中…",
+      "defaultLabel": "既定値:",
+      "use": "このショートカットを使用"
+    }
+  },
+  "ai": {
+    "title": "AI",
+    "subtitle": "各ワークベンチのモデルを選び、あなたの代わりに何を自動実行するかを決め、コストを制限します。",
+    "models": {
+      "title": "モデル選択",
+      "hint": "各ワークベンチは異なるモデルを使用できます。ノイズの多い領域には高速・低コストで、重要な場所にはより深い推論で。"
+    },
+    "tier": {
+      "fast": "高速",
+      "balanced": "バランス",
+      "best": "最高"
+    },
+    "behavior": {
+      "title": "動作",
+      "hint": "AIがどれだけ積極的に提案し、あなたの代わりに作業を完了するかです。",
+      "inline": "インライン提案",
+      "inlineSub": "入力中にエディタにゴーストテキスト。",
+      "inlineToggle": "インライン提案",
+      "verbosity": "提案の詳細度",
+      "verbositySub": "簡潔なパッチ対、段落レベルの説明。",
+      "brief": "簡潔",
+      "briefSub": "最小限のパッチ、説明なし",
+      "normal": "標準",
+      "normalSub": "既定",
+      "verbose": "詳細",
+      "verboseSub": "すべての変更を説明",
+      "autoCommit": "コミットメッセージを自動作成",
+      "autoCommitSub": "差分から Conventional Commits の見出しを生成します。",
+      "autoCommitToggle": "自動コミットメッセージ",
+      "autoSummary": "PRを自動要約",
+      "autoSummarySub": "レビューの各PR説明に3項目の要約を追加します。",
+      "autoSummaryToggle": "自動PR要約",
+      "autoEvidence": "証拠を自動リンク",
+      "autoEvidenceSub": "関連するログ / メトリクス / 過去のPRを調査に自動的に添付します。",
+      "autoEvidenceToggle": "自動証拠",
+      "contextDepth": "コンテキストの深さ",
+      "contextDepthSub": "各呼び出しでAIが読み取れるコードベースの範囲です。",
+      "file": "単一ファイル",
+      "fileSub": "最も安価で狭い",
+      "module": "含まれるモジュール",
+      "moduleSub": "バランス",
+      "workspace": "ワークスペース全体",
+      "workspaceSub": "最も正確"
+    },
+    "privacy": {
+      "title": "プライバシーと学習",
+      "hint": "コードがモデルの学習に使用されるかどうかを制御します。",
+      "optOut": "モデル学習をオプトアウト",
+      "optOutSub": "あなたのプロンプトとコードは上流モデルの学習に決して使用されません。",
+      "optOutToggle": "学習をオプトアウト",
+      "redact": "送信前に秘密情報を伏せる",
+      "redactSub": "プロンプト内のAPIキー / トークンを検出し、プレースホルダーに置き換えます。",
+      "redactToggle": "秘密情報を伏せる"
+    },
+    "spend": {
+      "title": "支出制御",
+      "hint": "暴走するループが月間トークンを使い果たさないようAI使用を制限します。組織管理者が上書きできます。",
+      "dailyCap": "1日のコスト上限",
+      "dailyCapSubPrefix": "1日にこの金額を超えるAI呼び出しをアカウントで停止します。 ",
+      "today": "本日: ${{amount}}",
+      "perDay": "/ 日",
+      "noCap": "上限なし",
+      "meterToday": "本日 ${{cap}} 中 ${{spent}}",
+      "meterAlert": "警告しきい値(上限の {{pct}}%)を超えました。受信トレイ通知を送信しました。",
+      "alertWhen": "警告するタイミング",
+      "alertWhenSub": "1日の支出が上限のこの割合を超えると受信トレイで通知します。",
+      "alert50": "上限の50%",
+      "alert75": "上限の75%",
+      "alert90": "上限の90%",
+      "alert100": "100% (上限到達)",
+      "fallback": "上限に近づいたら高速モデルに切り替え",
+      "fallbackSub": "上限の {{pct}}% で、以降の呼び出しは領域設定に関係なく Haiku/GPT-mini を使用します。",
+      "fallbackToggle": "高速に切り替え"
+    }
+  },
+  "inbox": {
+    "title": "受信トレイ",
+    "subtitle": "メンション、レビュー依頼、ゲート失敗、エージェント更新 — すべて1つのストリームに。",
+    "selected": "{{count}} 件選択中",
+    "markRead": "既読にする",
+    "archive": "アーカイブ",
+    "clearSelection": "選択を解除",
+    "markAllRead": "すべて既読にする",
+    "searchPlaceholder": "受信トレイを検索…",
+    "buckets": {
+      "today": "今日",
+      "yesterday": "昨日",
+      "earlier": "それ以前"
+    },
+    "filters": {
+      "unread": "未読",
+      "mentions": "メンション",
+      "reviews": "レビュー",
+      "starred": "スター付き",
+      "all": "すべて",
+      "archived": "アーカイブ済み"
+    },
+    "item": {
+      "unread": "未読",
+      "star": "スター",
+      "unstar": "スターを外す"
+    },
+    "types": {
+      "mention": "メンション",
+      "review": "レビュー",
+      "admission": "アドミッション",
+      "fix": "フィックス",
+      "agent": "エージェント",
+      "security": "セキュリティ"
+    },
+    "detail": {
+      "snooze": "スヌーズ",
+      "archive": "アーカイブ",
+      "openIn": "{{where}} で開く",
+      "from": "送信者",
+      "in": "場所",
+      "diffContext": "差分コンテキスト",
+      "quickReply": "クイック返信",
+      "replyPlaceholder": "返信またはコマンドを入力 (Cmd+Enter で送信)…",
+      "sendReply": "返信を送信"
+    },
+    "empty": {
+      "noMatches": "「{{query}}」に一致する項目なし",
+      "listClear": "{{filter}} のリストは空です",
+      "tryDifferent": "別のキーワードを試すか、フィルターを変更してください。",
+      "nothingWaiting": "対応待ちの項目はありません。ひと休みしましょう。",
+      "detailTitle": "読む項目を選択してください",
+      "detailBodyPrefix": "左側の項目をクリックするとここで開きます。",
+      "detailBodyMiddle": " / ",
+      "detailBodySuffix": " キーで移動できます。"
+    }
+  }
+}

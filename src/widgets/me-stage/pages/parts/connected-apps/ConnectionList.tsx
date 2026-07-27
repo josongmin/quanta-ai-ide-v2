@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   Check, X, ExternalLink, ChevronDown, ChevronUp,
   AlertTriangle,
@@ -17,6 +18,7 @@ export function ConnectionList({
   onMakePrimary: ((id: string) => void) | null;
   onRemove: (c: Connection) => void;
 }) {
+  const { t } = useTranslation('me');
   if (items.length === 0) {
     return (
       <div
@@ -27,7 +29,7 @@ export function ConnectionList({
           color: 'var(--fg-subtle)',
         }}
       >
-        Nothing connected yet.
+        {t('connectedApps.list.empty')}
       </div>
     );
   }
@@ -60,6 +62,7 @@ function ConnectionRow({
   onMakePrimary: (() => void) | null;
   onRemove: () => void;
 }) {
+  const { t } = useTranslation('me');
   const Icon = conn.icon;
   return (
     <div
@@ -88,16 +91,16 @@ function ConnectionRow({
                 className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
                 style={{ color: 'var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)', border: '1px solid var(--fg-accent)' }}
               >
-                Primary
+                {t('connectedApps.list.primary')}
               </span>
             )}
           </div>
           <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-            {conn.account} · Connected {conn.connectedAt} · {conn.lastUsed}
+            {t('connectedApps.list.connectedMeta', { account: conn.account, connectedAt: conn.connectedAt, lastUsed: conn.lastUsed })}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          {onMakePrimary && !conn.primary && <Button onClick={onMakePrimary}>Make primary</Button>}
+          {onMakePrimary && !conn.primary && <Button onClick={onMakePrimary}>{t('connectedApps.list.makePrimary')}</Button>}
           <button
             type="button"
             onClick={onToggle}
@@ -108,12 +111,12 @@ function ConnectionRow({
               border: '1px solid var(--border-default)',
             }}
           >
-            {conn.scopes.length} scope{conn.scopes.length === 1 ? '' : 's'}
+            {t('connectedApps.list.scopes', { count: conn.scopes.length })}
             {expanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
           </button>
           <Button variant="ghost" onClick={onRemove}>
             <X className="w-3 h-3" />
-            Disconnect
+            {t('connectedApps.list.disconnect')}
           </Button>
         </div>
       </div>
@@ -141,7 +144,7 @@ function ConnectionRow({
             className="text-2xs uppercase tracking-eyebrow font-semibold pt-2.5 pb-1.5"
             style={{ color: 'var(--fg-subtle)' }}
           >
-            Authorized scopes
+            {t('connectedApps.list.authorizedScopes')}
           </div>
           <ul className="grid grid-cols-1 gap-1">
             {conn.scopes.map((s) => (
@@ -154,7 +157,7 @@ function ConnectionRow({
                     className="text-2xs uppercase tracking-eyebrow font-semibold ml-auto"
                     style={{ color: 'var(--fg-subtle)' }}
                   >
-                    Required
+                    {t('connectedApps.list.required')}
                   </span>
                 )}
               </li>
@@ -168,22 +171,22 @@ function ConnectionRow({
               type="button"
               disabled
               aria-disabled
-              title="Not available in this demo build."
+              title={t('common.demoReasonShort')}
               className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-not-allowed"
               style={{ color: 'var(--fg-subtle)', font: 'inherit', opacity: 0.6 }}
             >
-              View on {conn.provider}
+              {t('connectedApps.list.viewOn', { provider: conn.provider })}
               <ExternalLink className="w-2.5 h-2.5" />
             </button>
             <button
               type="button"
               disabled
               aria-disabled
-              title="Not available in this demo build."
+              title={t('common.demoReasonShort')}
               className="inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-not-allowed"
               style={{ color: 'var(--fg-subtle)', font: 'inherit', opacity: 0.6 }}
             >
-              Re-authorize for new scopes
+              {t('connectedApps.list.reauthorize')}
             </button>
           </div>
         </div>

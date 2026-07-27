@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Checkbox } from '@shared/ui/forms';
 import { CHANNELS } from './types';
 import type { Channel, EventId, EventMeta, Settings } from './types';
@@ -14,6 +15,7 @@ export function Matrix({
   onCell: (event: EventId, channel: Channel, value: boolean) => void;
   onRowAll: (event: EventId, value: boolean) => void;
 }) {
+  const { t } = useTranslation('me');
   return (
     <div
       className="rounded-md overflow-hidden"
@@ -28,7 +30,7 @@ export function Matrix({
           borderBottom: '1px solid var(--border-muted)',
         }}
       >
-        <span>Event</span>
+        <span>{t('notifications.matrix.event')}</span>
         {CHANNELS.map((c) => {
           const Icon = c.icon;
           return (
@@ -70,7 +72,7 @@ export function Matrix({
                   type="button"
                   onClick={() => { onRowAll(e.id, !allOn); }}
                   className="flex flex-col gap-0.5 text-left transition-colors"
-                  title={allOn ? 'Disable all channels for this event' : 'Enable all channels for this event'}
+                  title={allOn ? t('notifications.matrix.disableAll') : t('notifications.matrix.enableAll')}
                 >
                   <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
                     {e.label}
@@ -84,7 +86,7 @@ export function Matrix({
                     <Checkbox
                       checked={row[c.id]}
                       onChange={(v) => { onCell(e.id, c.id, v); }}
-                      label={`${e.label} → ${c.label}`}
+                      label={t('notifications.matrix.cellLabel', { event: e.label, channel: c.label })}
                     />
                   </div>
                 ))}

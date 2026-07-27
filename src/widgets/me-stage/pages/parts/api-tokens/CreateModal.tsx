@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AlertTriangle } from 'lucide-react';
 import { Field, Button, Checkbox } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
@@ -7,6 +8,7 @@ import { SCOPE_GROUPS, ALL_SCOPES, type ScopeId, type Token } from './types';
 export function CreateModal({
   onClose, onCreate,
 }: { onClose: () => void; onCreate: (t: Token) => void }) {
+  const { t } = useTranslation('me');
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onClose);
   const [name, setName] = useState('');
@@ -59,21 +61,21 @@ export function CreateModal({
         }}
       >
         <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-          New personal access token
+          {t('apiTokens.create.title')}
         </h3>
 
         <Field
-          label="Name"
+          label={t('apiTokens.create.name')}
           value={name}
           onChange={(e) => { setName(e.target.value); }}
-          placeholder='e.g. "ci · gh-actions"'
+          placeholder={t('apiTokens.create.namePlaceholder')}
           autoFocus
-          hint="Help your future self remember what this token is for."
+          hint={t('apiTokens.create.nameHint')}
         />
 
         <fieldset className="flex flex-col gap-1.5">
           <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
-            Expiration
+            {t('apiTokens.create.expiration')}
           </legend>
           <div className="flex flex-wrap gap-1.5">
             {(['30', '60', '90', '365', 'never'] as const).map((d) => {
@@ -90,7 +92,7 @@ export function CreateModal({
                     border: `1px solid ${active ? 'var(--fg-accent)' : 'var(--border-muted)'}`,
                   }}
                 >
-                  {d === 'never' ? 'Never (not recommended)' : `${d} days`}
+                  {d === 'never' ? t('apiTokens.create.never') : t('apiTokens.create.days', { count: Number(d) })}
                 </button>
               );
             })}
@@ -99,7 +101,7 @@ export function CreateModal({
 
         <fieldset className="flex flex-col gap-2">
           <legend className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-            Scopes
+            {t('apiTokens.create.scopes')}
           </legend>
           <div className="flex flex-col gap-3">
             {SCOPE_GROUPS.map((g) => (
@@ -136,7 +138,7 @@ export function CreateModal({
                               color: 'var(--intent-warn-fg)',
                             }}
                           >
-                            destructive
+                            {t('apiTokens.create.destructive')}
                           </span>
                         )}
                       </div>
@@ -161,16 +163,15 @@ export function CreateModal({
           >
             <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
             <span style={{ color: 'var(--fg-strong)' }}>
-              You&apos;re about to grant {dangerScopes.length} destructive scope{dangerScopes.length === 1 ? '' : 's'}.
-              Anyone holding this token can act with these permissions.
+              {t('apiTokens.create.dangerWarning', { count: dangerScopes.length })}
             </span>
           </div>
         )}
 
         <div className="flex items-center justify-end gap-2 pt-1">
-          <Button variant="ghost" size="md" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" size="md" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="primary" size="md" onClick={create} disabled={!valid}>
-            Generate token
+            {t('apiTokens.create.generate')}
           </Button>
         </div>
       </div>

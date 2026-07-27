@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   Inbox, AtSign, GitPullRequest, Bell, Archive, Star,
 } from 'lucide-react';
@@ -10,13 +11,14 @@ export function FilterBar({
   onChange: (v: Filter) => void;
   counts: Record<Filter, number>;
 }) {
+  const { t } = useTranslation('me');
   const tabs: { id: Filter; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { id: 'unread',   label: 'Unread',    icon: Bell },
-    { id: 'mentions', label: 'Mentions',  icon: AtSign },
-    { id: 'reviews',  label: 'Reviews',   icon: GitPullRequest },
-    { id: 'starred',  label: 'Starred',   icon: Star },
-    { id: 'all',      label: 'All',       icon: Inbox },
-    { id: 'archived', label: 'Archived',  icon: Archive },
+    { id: 'unread',   label: t('inbox.filters.unread'),   icon: Bell },
+    { id: 'mentions', label: t('inbox.filters.mentions'), icon: AtSign },
+    { id: 'reviews',  label: t('inbox.filters.reviews'),  icon: GitPullRequest },
+    { id: 'starred',  label: t('inbox.filters.starred'),  icon: Star },
+    { id: 'all',      label: t('inbox.filters.all'),      icon: Inbox },
+    { id: 'archived', label: t('inbox.filters.archived'), icon: Archive },
   ];
   return (
     <div className="flex flex-col gap-0.5 p-2"

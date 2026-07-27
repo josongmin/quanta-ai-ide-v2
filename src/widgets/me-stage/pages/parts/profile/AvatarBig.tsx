@@ -1,4 +1,5 @@
 import { useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Camera, X } from 'lucide-react';
 import type { ProfileData } from './types';
 
@@ -7,6 +8,7 @@ import type { ProfileData } from './types';
 // scaled for settings).
 
 export function AvatarBig({ data, setDraft }: { data: ProfileData; setDraft: (v: ProfileData) => void }) {
+  const { t } = useTranslation('me');
   const inputRef = useRef<HTMLInputElement>(null);
   const initials = useMemo(() => {
     const parts = data.name.trim().split(/\s+/).filter(Boolean);
@@ -38,10 +40,10 @@ export function AvatarBig({ data, setDraft }: { data: ProfileData; setDraft: (v:
           background: data.avatarUrl ? 'transparent' : 'linear-gradient(135deg, var(--fg-accent), var(--fg-link))',
           color: 'var(--bg-canvas)',
         }}
-        aria-label="Upload avatar"
+        aria-label={t('profile.avatar.upload')}
       >
         {data.avatarUrl
-          ? <img src={data.avatarUrl} alt={`${data.name || 'Your'} avatar`} className="w-full h-full object-cover" />
+          ? <img src={data.avatarUrl} alt={`${data.name || t('profile.avatar.altYours')} avatar`} className="w-full h-full object-cover" />
           : initials}
         <span
           className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity rounded-full"
@@ -56,7 +58,7 @@ export function AvatarBig({ data, setDraft }: { data: ProfileData; setDraft: (v:
           onClick={remove}
           className="absolute -top-1 -right-1 w-5 h-5 rounded-full inline-flex items-center justify-center"
           style={{ background: 'var(--intent-danger-fg)', color: 'var(--bg-canvas)' }}
-          aria-label="Remove photo"
+          aria-label={t('profile.avatar.remove')}
         >
           <X className="w-3 h-3" />
         </button>

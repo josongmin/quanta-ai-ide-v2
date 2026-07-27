@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShieldCheck } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
@@ -11,6 +12,7 @@ export function AddMfaModal({
   onClose: () => void;
   onAdded: (m: MfaMethod) => void;
 }) {
+  const { t } = useTranslation('me');
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onClose);
   const [label, setLabel] = useState(kind === 'totp' ? '1Password' : 'YubiKey');
@@ -32,7 +34,7 @@ export function AddMfaModal({
         }}
       >
         <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-          Add {kind === 'totp' ? 'authenticator app' : 'security key'}
+          {kind === 'totp' ? t('security.addMfa.titleTotp') : t('security.addMfa.titleWebauthn')}
         </h3>
 
         {kind === 'totp' ? (
@@ -44,12 +46,11 @@ export function AddMfaModal({
               <QrPlaceholder />
             </div>
             <p className="text-sm leading-snug text-center" style={{ color: 'var(--fg-muted)' }}>
-              Scan with 1Password, Authy, Google Authenticator, or similar.
-              Then enter the 6-digit code it generates.
+              {t('security.addMfa.totpScan')}
             </p>
             <input
-              aria-label="6-digit authentication code"
-              placeholder="6-digit code"
+              aria-label={t('security.addMfa.codeAria')}
+              placeholder={t('security.addMfa.codePlaceholder')}
               maxLength={6}
               inputMode="numeric"
               className="h-10 px-3 rounded-md text-[15px] font-mono tabular-nums tracking-wider text-center outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg-accent)]"
@@ -73,19 +74,19 @@ export function AddMfaModal({
               <ShieldCheck className="w-6 h-6" style={{ color: 'var(--fg-accent)' }} />
             </div>
             <p className="text-sm leading-snug text-center" style={{ color: 'var(--fg-muted)' }}>
-              Touch your security key or use Touch ID / Windows Hello to register.
+              {t('security.addMfa.webauthnPrompt')}
             </p>
           </div>
         )}
 
         <label className="flex flex-col gap-1.5">
           <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-            Label
+            {t('security.addMfa.label')}
           </span>
           <input
             value={label}
             onChange={(e) => { setLabel(e.target.value); }}
-            placeholder="e.g. 1Password"
+            placeholder={t('security.addMfa.labelPlaceholder')}
             className="h-9 px-3 rounded-md text-base outline-none"
             style={{
               background: 'var(--bg-surface-muted)',
@@ -96,7 +97,7 @@ export function AddMfaModal({
         </label>
 
         <div className="flex items-center justify-end gap-2 pt-1">
-          <Button variant="ghost" size="md" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" size="md" onClick={onClose}>{t('common.cancel')}</Button>
           <Button
             variant="primary"
             size="md"
@@ -112,7 +113,7 @@ export function AddMfaModal({
               onAdded(newMethod);
             }}
           >
-            Add method
+            {t('security.addMfa.add')}
           </Button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
 import { ShieldCheck, Copy, Check } from 'lucide-react';
 import { Section, Row, Field, Button } from '@shared/ui/forms';
@@ -13,27 +14,28 @@ import {
 // scan the QR / save backup codes → verify a code to activate. Disable: confirm
 // password. useSession's twoFactorEnabled reactively reflects the result.
 export function TwoFactorSection() {
+  const { t } = useTranslation('me');
   const { user } = useSession();
   const enabled = Boolean(user?.twoFactorEnabled);
   const [flow, setFlow] = useState<null | 'enable' | 'disable' | 'regenerate'>(null);
 
   return (
-    <Section title="Two-factor authentication" hint="Require a one-time code from an authenticator app at sign-in.">
+    <Section title={t('real.security.twoFactor.title')} hint={t('real.security.twoFactor.hint')}>
       <Row
-        label="Authenticator app (TOTP)"
+        label={t('real.security.twoFactor.label')}
         sub={enabled
-          ? 'Enabled — a 6-digit code is required when you sign in.'
-          : 'Protect your account with a time-based one-time code.'}
+          ? t('real.security.twoFactor.enabledSub')
+          : t('real.security.twoFactor.disabledSub')}
       >
         {enabled ? (
           <div className="flex items-center gap-2">
-            <Badge variant="success" size="sm">Enabled</Badge>
-            <Button onClick={() => { setFlow('regenerate'); }}>Regenerate backup codes</Button>
-            <Button variant="danger" onClick={() => { setFlow('disable'); }}>Disable</Button>
+            <Badge variant="success" size="sm">{t('real.security.twoFactor.enabled')}</Badge>
+            <Button onClick={() => { setFlow('regenerate'); }}>{t('real.security.twoFactor.regenerate')}</Button>
+            <Button variant="danger" onClick={() => { setFlow('disable'); }}>{t('real.security.twoFactor.disable')}</Button>
           </div>
         ) : (
           <Button variant="primary" leading={<ShieldCheck className="w-3.5 h-3.5" />} onClick={() => { setFlow('enable'); }}>
-            Enable 2FA
+            {t('real.security.twoFactor.enable')}
           </Button>
         )}
       </Row>
@@ -46,6 +48,7 @@ export function TwoFactorSection() {
 }
 
 function EnableModal({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('me');
   const [step, setStep] = useState<'password' | 'enroll'>('password');
   const [password, setPassword] = useState('');
   const [enrollment, setEnrollment] = useState<TotpEnrollment | null>(null);
@@ -61,7 +64,7 @@ function EnableModal({ onClose }: { onClose: () => void }) {
     const res = await enableTwoFactor({ password });
     setBusy(false);
     if (!res.ok) { setError(res.error); return; }
-    if (!res.data.totpURI) { setError('Enrollment failed — please try again.'); return; }
+    if (!res.data.totpURI) { setError(t('real.security.twoFactor.enrollFailed')); return; }
     setEnrollment(res.data);
     setStep('enroll');
   }
@@ -82,20 +85,20 @@ function EnableModal({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       size="md"
       icon={<ShieldCheck className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
-      title="Enable two-factor authentication"
+      title={t('real.security.twoFactor.enableTitle')}
       footer={
         step === 'password' ? (
           <>
-            <Button variant="ghost" onClick={onClose}>Cancel</Button>
+            <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
             <Button variant="primary" size="md" disabled={!password || busy} onClick={() => { void begin(); }}>
-              {busy ? 'Checking…' : 'Continue'}
+              {busy ? t('real.security.twoFactor.checking') : t('real.security.twoFactor.continue')}
             </Button>
           </>
         ) : (
           <>
-            <Button variant="ghost" onClick={onClose}>Cancel</Button>
+            <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
             <Button variant="primary" size="md" disabled={code.trim().length < 6 || busy} onClick={() => { void confirm(); }}>
-              {busy ? 'Verifying…' : 'Verify & enable'}
+              {busy ? t('real.security.twoFactor.verifying') : t('real.security.twoFactor.verifyEnable')}
             </Button>
           </>
         )
@@ -106,10 +109,10 @@ function EnableModal({ onClose }: { onClose: () => void }) {
       {step === 'password' ? (
         <div className="flex flex-col gap-2">
           <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-            Confirm your password to begin setting up two-factor authentication.
+            {t('real.security.twoFactor.confirmPassword')}
           </p>
           <Field
-            label="Password"
+            label={t('real.security.twoFactor.password')}
             type="password"
             autoComplete="current-password"
             value={password}
@@ -124,8 +127,8 @@ function EnableModal({ onClose }: { onClose: () => void }) {
               <QRCodeSVG value={enrollment.totpURI} size={132} />
             </div>
             <div className="flex flex-col gap-1.5 text-sm" style={{ color: 'var(--fg-muted)' }}>
-              <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>Scan with your authenticator</span>
-              <span>1Password, Authy, Google Authenticator, etc. Then enter the 6-digit code below to activate.</span>
+              <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>{t('real.security.twoFactor.scanTitle')}</span>
+              <span>{t('real.security.twoFactor.scanBody')}</span>
             </div>
           </div>
 
@@ -133,13 +136,13 @@ function EnableModal({ onClose }: { onClose: () => void }) {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
-                  Backup codes — save these
+                  {t('real.security.twoFactor.backupSave')}
                 </span>
                 <Button
                   leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                   onClick={() => { copy(enrollment.backupCodes.join('\n')); }}
                 >
-                  {copied ? 'Copied' : 'Copy all'}
+                  {copied ? t('real.security.twoFactor.copied') : t('real.security.twoFactor.copyAll')}
                 </Button>
               </div>
               <div
@@ -149,17 +152,17 @@ function EnableModal({ onClose }: { onClose: () => void }) {
                 {enrollment.backupCodes.map((c) => <span key={c}>{c}</span>)}
               </div>
               <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-                Each code works once if you lose your authenticator. Store them somewhere safe.
+                {t('real.security.twoFactor.backupNote')}
               </span>
             </div>
           )}
 
           <Field
-            label="6-digit code"
+            label={t('real.security.twoFactor.code')}
             inputMode="numeric"
             value={code}
             onChange={(e) => { setCode(e.target.value.replace(/\D/g, '').slice(0, 6)); }}
-            placeholder="123456"
+            placeholder={t('real.security.twoFactor.codePlaceholder')}
             autoFocus
           />
         </div>
@@ -169,6 +172,7 @@ function EnableModal({ onClose }: { onClose: () => void }) {
 }
 
 function RegenerateModal({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('me');
   const [password, setPassword] = useState('');
   const [codes, setCodes] = useState<string[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -191,15 +195,15 @@ function RegenerateModal({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       size="sm"
       icon={<ShieldCheck className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
-      title="Regenerate backup codes"
+      title={t('real.security.twoFactor.regenerateTitle')}
       footer={
         codes ? (
-          <Button variant="primary" size="md" onClick={onClose}>Done</Button>
+          <Button variant="primary" size="md" onClick={onClose}>{t('real.security.twoFactor.done')}</Button>
         ) : (
           <>
-            <Button variant="ghost" onClick={onClose}>Cancel</Button>
+            <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
             <Button variant="primary" size="md" disabled={!password || busy} onClick={() => { void submit(); }}>
-              {busy ? 'Generating…' : 'Regenerate'}
+              {busy ? t('real.security.twoFactor.generating') : t('real.security.twoFactor.regenerateAction')}
             </Button>
           </>
         )
@@ -209,12 +213,12 @@ function RegenerateModal({ onClose }: { onClose: () => void }) {
       {codes ? (
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>New codes — the old set no longer works.</span>
+            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{t('real.security.twoFactor.newCodes')}</span>
             <Button
               leading={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
               onClick={() => { copy(codes.join('\n')); }}
             >
-              {copied ? 'Copied' : 'Copy all'}
+              {copied ? t('real.security.twoFactor.copied') : t('real.security.twoFactor.copyAll')}
             </Button>
           </div>
           <div
@@ -227,10 +231,10 @@ function RegenerateModal({ onClose }: { onClose: () => void }) {
       ) : (
         <>
           <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-            This invalidates your existing backup codes and issues a fresh set. Confirm your password.
+            {t('real.security.twoFactor.regenerateBody')}
           </p>
           <Field
-            label="Password"
+            label={t('real.security.twoFactor.password')}
             type="password"
             autoComplete="current-password"
             value={password}
@@ -244,6 +248,7 @@ function RegenerateModal({ onClose }: { onClose: () => void }) {
 }
 
 function DisableModal({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('me');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -264,22 +269,22 @@ function DisableModal({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       size="sm"
       icon={<ShieldCheck className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />}
-      title="Disable two-factor"
+      title={t('real.security.twoFactor.disableTitle')}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="danger" size="md" disabled={!password || busy} onClick={() => { void submit(); }}>
-            {busy ? 'Disabling…' : 'Disable 2FA'}
+            {busy ? t('real.security.twoFactor.disabling') : t('real.security.twoFactor.disableAction')}
           </Button>
         </>
       }
     >
       {error && <InlineError message={error} onRetry={() => { setError(null); }} />}
       <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-        Removing two-factor lowers your account security. Confirm your password to continue.
+        {t('real.security.twoFactor.disableBody')}
       </p>
       <Field
-        label="Password"
+        label={t('real.security.twoFactor.password')}
         type="password"
         autoComplete="current-password"
         value={password}

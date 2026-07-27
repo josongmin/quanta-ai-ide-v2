@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Activity } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -6,6 +7,7 @@ import { AlertTriangle, Activity } from 'lucide-react';
 export function SpendMeter({
   pct, cap, spent, alertAt,
 }: { pct: number; cap: number; spent: number; alertAt: number }) {
+  const { t } = useTranslation('me');
   const fill =
     pct >= 100 ? 'var(--intent-danger-fg)'
     : pct >= alertAt ? 'var(--intent-warn-fg)'
@@ -24,7 +26,7 @@ export function SpendMeter({
         <div className="flex items-center gap-1.5">
           <Activity className="w-3 h-3" style={{ color: 'var(--fg-muted)' }} />
           <span style={{ color: 'var(--fg-default)' }}>
-            ${spent.toFixed(2)} of ${cap.toFixed(2)} today
+            {t('ai.spend.meterToday', { spent: spent.toFixed(2), cap: cap.toFixed(2) })}
           </span>
         </div>
         <span className="font-mono tabular-nums" style={{ color: fill }}>
@@ -52,7 +54,7 @@ export function SpendMeter({
       {triggered && (
         <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--intent-warn-fg)' }}>
           <AlertTriangle className="w-2.5 h-2.5" />
-          Crossed your alert threshold ({alertAt}% of cap). Inbox notification sent.
+          {t('ai.spend.meterAlert', { pct: alertAt })}
         </div>
       )}
     </div>

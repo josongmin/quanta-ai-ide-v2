@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Section, Button } from '@shared/ui/forms';
@@ -10,6 +11,7 @@ import { CodeSamples } from './parts/api-tokens/CodeSamples';
 import { RevokeModal } from './parts/api-tokens/RevokeModal';
 
 export default function ApiTokensPage() {
+  const { t } = useTranslation('me');
   const [tokens, setTokens] = useState<Token[]>(INITIAL_TOKENS);
   const [creating, setCreating] = useState(false);
   const [revealed, setRevealed] = useState<Token | null>(null);
@@ -17,27 +19,27 @@ export default function ApiTokensPage() {
 
   return (
     <MeShell
-      title="API tokens"
-      subtitle="Personal access tokens (PATs) authenticate scripts, CLIs, and integrations as you. Treat them like passwords."
+      title={t('apiTokens.title')}
+      subtitle={t('apiTokens.subtitle')}
       topRight={
         <Button variant="primary" size="md" leading={<Plus className="w-3.5 h-3.5" />} onClick={() => { setCreating(true); }}>
-          New token
+          {t('apiTokens.newToken')}
         </Button>
       }
     >
       <Section
-        title="Active tokens"
-        hint={`${tokens.length} of 25 tokens used. Tokens you haven't used in 90 days are flagged.`}
+        title={t('apiTokens.active.title')}
+        hint={t('apiTokens.active.hint', { count: tokens.length })}
       >
         <TokenList
           tokens={tokens}
-          onRemove={(t) => { setRemoving(t); }}
+          onRemove={(tok) => { setRemoving(tok); }}
         />
       </Section>
 
       <Section
-        title="Using your tokens"
-        hint="Pass the token as a Bearer header. We log every request — see Audit log for details."
+        title={t('apiTokens.using.title')}
+        hint={t('apiTokens.using.hint')}
       >
         <CodeSamples />
       </Section>
@@ -45,10 +47,10 @@ export default function ApiTokensPage() {
       {creating && (
         <CreateModal
           onClose={() => { setCreating(false); }}
-          onCreate={(t) => {
-            setTokens((all) => [t, ...all]);
+          onCreate={(tok) => {
+            setTokens((all) => [tok, ...all]);
             setCreating(false);
-            setRevealed(t);
+            setRevealed(tok);
           }}
         />
       )}
@@ -58,7 +60,7 @@ export default function ApiTokensPage() {
           token={removing}
           onClose={() => { setRemoving(null); }}
           onConfirm={() => {
-            setTokens((all) => all.filter((t) => t.id !== removing.id));
+            setTokens((all) => all.filter((tok) => tok.id !== removing.id));
             setRemoving(null);
           }}
         />

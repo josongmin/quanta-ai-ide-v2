@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import type { Shortcut } from './types';
@@ -13,6 +14,7 @@ export function RecordModal({
   onClose: () => void;
   onSave: (key: string) => void;
 }) {
+  const { t } = useTranslation('me');
   const [recorded, setRecorded] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -48,11 +50,10 @@ export function RecordModal({
         }}
       >
         <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-          Record shortcut for &quot;{shortcut.label}&quot;
+          {t('keyboard.record.title', { label: shortcut.label })}
         </h3>
         <p className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
-          Press the keys you want to use. Modifier-only combos like ⇧ alone won&apos;t be captured.
-          Press <span className="font-mono">Esc</span> twice to cancel without saving.
+          {t('keyboard.record.bodyPrefix')}<span className="font-mono">Esc</span>{t('keyboard.record.bodySuffix')}
         </p>
 
         <div
@@ -63,17 +64,17 @@ export function RecordModal({
             color: recorded ? 'var(--fg-accent)' : 'var(--fg-subtle)',
           }}
         >
-          {recorded ?? 'Listening…'}
+          {recorded ?? t('keyboard.record.listening')}
         </div>
 
         <div className="flex items-center justify-between gap-2">
           <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-            Default: <span className="font-mono">{shortcut.defaultKey}</span>
+            {t('keyboard.record.defaultLabel')} <span className="font-mono">{shortcut.defaultKey}</span>
           </span>
           <div className="flex items-center gap-1.5">
             <Button variant="ghost" size="md" onClick={onClose}>
               <X className="w-3 h-3" />
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               variant="primary"
@@ -81,7 +82,7 @@ export function RecordModal({
               disabled={!recorded}
               onClick={() => { if (recorded) onSave(recorded); }}
             >
-              Use this shortcut
+              {t('keyboard.record.use')}
             </Button>
           </div>
         </div>

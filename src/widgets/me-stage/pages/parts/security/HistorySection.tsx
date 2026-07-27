@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   ShieldCheck, RefreshCw, AlertCircle, Check, X,
 } from 'lucide-react';
@@ -5,10 +6,11 @@ import { Section } from '@shared/ui/forms';
 import { HISTORY, type LogEvent } from './types';
 
 export function HistorySection() {
+  const { t } = useTranslation('me');
   return (
     <Section
-      title="Sign-in history"
-      hint="The last 90 days of authentication events on your account. Failed attempts and unusual locations are highlighted."
+      title={t('security.history.title')}
+      hint={t('security.history.hint')}
     >
       <div className="flex flex-col">
         {HISTORY.map((h, i) => <HistoryRow key={h.id} event={h} top={i === 0} />)}

@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { Key, Trash2 } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { ALL_SCOPES, type ScopeId, type Token } from './types';
 
 export function TokenList({ tokens, onRemove }: { tokens: Token[]; onRemove: (t: Token) => void }) {
+  const { t } = useTranslation('me');
   if (tokens.length === 0) {
     return (
       <div
@@ -14,7 +16,7 @@ export function TokenList({ tokens, onRemove }: { tokens: Token[]; onRemove: (t:
       >
         <Key className="w-5 h-5" style={{ color: 'var(--fg-subtle)' }} />
         <span className="text-base" style={{ color: 'var(--fg-muted)' }}>
-          No tokens yet. Create one to use the API.
+          {t('apiTokens.list.empty')}
         </span>
       </div>
     );
@@ -23,14 +25,15 @@ export function TokenList({ tokens, onRemove }: { tokens: Token[]; onRemove: (t:
     <div className="flex flex-col rounded-md overflow-hidden"
       style={{ border: '1px solid var(--border-muted)' }}
     >
-      {tokens.map((t, i) => (
-        <TokenRow key={t.id} token={t} top={i === 0} onRemove={() => { onRemove(t); }} />
+      {tokens.map((tok, i) => (
+        <TokenRow key={tok.id} token={tok} top={i === 0} onRemove={() => { onRemove(tok); }} />
       ))}
     </div>
   );
 }
 
 function TokenRow({ token, top, onRemove }: { token: Token; top: boolean; onRemove: () => void }) {
+  const { t } = useTranslation('me');
   const stale = token.lastUsedAt === 'Never';
   const expired = token.expiresAt && new Date(token.expiresAt) < new Date('2026-05-10');
   return (
@@ -68,16 +71,16 @@ function TokenRow({ token, top, onRemove }: { token: Token; top: boolean; onRemo
                 border: '1px solid var(--intent-warn-fg)',
               }}
             >
-              {expired ? 'Expired' : 'Unused'}
+              {expired ? t('apiTokens.list.expired') : t('apiTokens.list.unused')}
             </span>
           )}
         </div>
 
         <div className="flex items-center gap-2.5 text-xs mt-0.5" style={{ color: 'var(--fg-subtle)' }}>
-          <span>Created {token.createdAt}</span>
-          {token.expiresAt && <span>· Expires {token.expiresAt}</span>}
-          {!token.expiresAt && <span style={{ color: 'var(--intent-warn-fg)' }}>· Never expires</span>}
-          <span>· Last used {token.lastUsedAt}</span>
+          <span>{t('apiTokens.list.created', { date: token.createdAt })}</span>
+          {token.expiresAt && <span>{t('apiTokens.list.expires', { date: token.expiresAt })}</span>}
+          {!token.expiresAt && <span style={{ color: 'var(--intent-warn-fg)' }}>{t('apiTokens.list.neverExpires')}</span>}
+          <span>{t('apiTokens.list.lastUsed', { value: token.lastUsedAt })}</span>
         </div>
 
         <ScopeChips scopes={token.scopes} />
@@ -85,7 +88,7 @@ function TokenRow({ token, top, onRemove }: { token: Token; top: boolean; onRemo
 
       <Button variant="ghost" onClick={onRemove}>
         <Trash2 className="w-3 h-3" />
-        Revoke
+        {t('apiTokens.list.revoke')}
       </Button>
     </div>
   );

@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import { Section, Row, Field, Button } from '@shared/ui/forms';
 import { PasswordStrengthPanel, evaluatePassword } from '@features/password-strength';
 
 export function PasswordSection() {
+  const { t } = useTranslation('me');
   const [editing, setEditing] = useState(false);
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
@@ -37,16 +39,16 @@ export function PasswordSection() {
 
   return (
     <Section
-      title="Password"
-      hint="At least 12 characters with mixed case, a number, and a symbol. We'll sign out other sessions when you change it."
+      title={t('account.password.title')}
+      hint={t('account.password.hint')}
     >
       <Row
-        label="Password"
-        sub={<span>Last changed 3 months ago. Strong · 14 characters.</span>}
+        label={t('account.password.title')}
+        sub={<span>{t('account.password.meta')}</span>}
       >
         {!editing && (
           <Button onClick={() => { setEditing(true); }}>
-            Change password
+            {t('account.password.change')}
           </Button>
         )}
       </Row>
@@ -60,12 +62,12 @@ export function PasswordSection() {
           }}
         >
           <Field
-            label="Current password"
+            label={t('account.password.current')}
             type={showCurrent ? 'text' : 'password'}
             autoComplete="current-password"
             value={current}
             onChange={(e) => { setCurrent(e.target.value); }}
-            error={phase === 'wrong-current' ? 'That password is incorrect. Try again.' : undefined}
+            error={phase === 'wrong-current' ? t('account.password.wrongCurrent') : undefined}
             placeholder="••••••••"
             autoFocus
             trailing={
@@ -74,7 +76,7 @@ export function PasswordSection() {
                 onClick={() => { setShowCurrent((v) => !v); }}
                 className="p-1 rounded-md"
                 style={{ color: 'var(--fg-muted)' }}
-                aria-label={showCurrent ? 'Hide' : 'Show'}
+                aria-label={showCurrent ? t('account.password.hide') : t('account.password.show')}
               >
                 {showCurrent ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               </button>
@@ -82,19 +84,19 @@ export function PasswordSection() {
           />
           <div className="flex flex-col gap-2.5">
             <Field
-              label="New password"
+              label={t('account.password.new')}
               type={showNext ? 'text' : 'password'}
               autoComplete="new-password"
               value={next}
               onChange={(e) => { setNext(e.target.value); }}
-              placeholder="At least 12 characters"
+              placeholder={t('account.password.newPlaceholder')}
               trailing={
                 <button
                   type="button"
                   onClick={() => { setShowNext((v) => !v); }}
                   className="p-1 rounded-md"
                   style={{ color: 'var(--fg-muted)' }}
-                  aria-label={showNext ? 'Hide' : 'Show'}
+                  aria-label={showNext ? t('account.password.hide') : t('account.password.show')}
                 >
                   {showNext ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 </button>
@@ -103,12 +105,12 @@ export function PasswordSection() {
             {next.length > 0 && <PasswordStrengthPanel report={report} />}
           </div>
           <Field
-            label="Confirm new password"
+            label={t('account.password.confirm')}
             type={showNext ? 'text' : 'password'}
             autoComplete="new-password"
             value={confirm}
             onChange={(e) => { setConfirm(e.target.value); }}
-            error={mismatch ? 'Passwords do not match' : undefined}
+            error={mismatch ? t('account.password.mismatch') : undefined}
             trailing={
               confirm.length > 0 && !mismatch && (
                 <Check className="w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />
@@ -124,7 +126,7 @@ export function PasswordSection() {
             >
               {phase === 'submitting' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               {phase === 'saved'      && <Check className="w-3.5 h-3.5" />}
-              {phase === 'submitting' ? 'Updating…' : phase === 'saved' ? 'Updated' : 'Update password'}
+              {phase === 'submitting' ? t('account.password.updating') : phase === 'saved' ? t('account.password.updated') : t('account.password.update')}
             </Button>
             <Button
               variant="ghost"
@@ -132,12 +134,11 @@ export function PasswordSection() {
               onClick={() => { setEditing(false); setCurrent(''); setNext(''); setConfirm(''); setPhase('idle'); }}
               disabled={phase === 'submitting'}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
           </div>
           <p className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-            Demo: current password is <span className="font-mono">sefield-demo</span>.
-            Anything else triggers the wrong-current branch.
+            {t('account.password.demoHintPrefix')}<span className="font-mono">sefield-demo</span>{t('account.password.demoHintSuffix')}
           </p>
         </div>
       )}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Type } from 'lucide-react';
 import type { Appearance, FontScale } from './types';
 
@@ -42,11 +43,12 @@ export function FontScaleToggle({ value, onChange }: { value: FontScale; onChang
 export function MonoFontPicker({
   value, onChange,
 }: { value: Appearance['monoFont']; onChange: (v: Appearance['monoFont']) => void }) {
+  const { t } = useTranslation('me');
   const opts: { id: Appearance['monoFont']; label: string; sample: string }[] = [
-    { id: 'jetbrains', label: 'JetBrains Mono',  sample: 'function() { ... }' },
-    { id: 'sf-mono',   label: 'SF Mono',         sample: 'function() { ... }' },
-    { id: 'fira',      label: 'Fira Code',       sample: 'function() { ... }' },
-    { id: 'system',    label: 'System default',  sample: 'function() { ... }' },
+    { id: 'jetbrains', label: 'JetBrains Mono',            sample: 'function() { ... }' },
+    { id: 'sf-mono',   label: 'SF Mono',                   sample: 'function() { ... }' },
+    { id: 'fira',      label: 'Fira Code',                 sample: 'function() { ... }' },
+    { id: 'system',    label: t('appearance.text.systemDefault'), sample: 'function() { ... }' },
   ];
   return (
     <select
@@ -68,10 +70,11 @@ export function MonoFontPicker({
 export function SyntaxPicker({
   value, onChange,
 }: { value: Appearance['syntaxTheme']; onChange: (v: Appearance['syntaxTheme']) => void }) {
+  const { t } = useTranslation('me');
   const opts: { id: Appearance['syntaxTheme']; label: string }[] = [
-    { id: 'dim',       label: 'Dim'        },
-    { id: 'midnight',  label: 'Midnight'   },
-    { id: 'paper',     label: 'Paper'      },
+    { id: 'dim',       label: t('appearance.text.dim')      },
+    { id: 'midnight',  label: t('appearance.text.midnight') },
+    { id: 'paper',     label: t('appearance.text.paper')    },
     { id: 'solarized', label: 'Solarized'  },
   ];
   return (

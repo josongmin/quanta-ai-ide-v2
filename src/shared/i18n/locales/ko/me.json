@@ -1,1 +1,888 @@
-{}
+{
+  "shell": {
+    "breadcrumbRoot": "개인",
+    "breadcrumbAria": "탐색 경로",
+    "fallbackName": "나",
+    "nav": {
+      "identity": "신원",
+      "access": "액세스 및 연동",
+      "experience": "환경",
+      "streams": "스트림",
+      "profile": "프로필",
+      "account": "계정",
+      "security": "보안",
+      "connectedApps": "연결된 앱",
+      "apiTokens": "API 토큰",
+      "notifications": "알림",
+      "appearance": "화면",
+      "preferences": "환경설정",
+      "keyboard": "키보드",
+      "ai": "AI",
+      "inbox": "받은함"
+    }
+  },
+  "comingSoon": {
+    "connectedApps": "연결된 앱",
+    "notifications": "알림",
+    "ai": "AI",
+    "availableSoon": "곧 제공됩니다",
+    "subtitle": "{{title}} 기능은 아직 계정에 연결되지 않았습니다. 추후 릴리스에서 제공될 예정입니다."
+  },
+  "real": {
+    "profile": {
+      "title": "프로필",
+      "subtitle": "멘션과 리뷰에서 동료들에게 보이는 모습입니다.",
+      "identity": "신원",
+      "identityHint": "표시 이름은 제품 전반에 나타납니다.",
+      "fullName": "이름",
+      "namePlaceholder": "이름"
+    },
+    "account": {
+      "title": "계정",
+      "subtitle": "이메일, 비밀번호, 계정 삭제.",
+      "email": {
+        "title": "이메일 주소",
+        "hint": "로그인에 사용됩니다. 변경하려면 새 주소에서 확인이 필요합니다.",
+        "label": "이메일 주소",
+        "change": "이메일 변경",
+        "sentTitle": "{{email}}로 인증 이메일을 보냈습니다",
+        "sentBody": "이메일의 링크를 클릭하면 변경이 완료됩니다. 그때까지는 기존 주소로 계속 로그인됩니다.",
+        "new": "새 이메일",
+        "newPlaceholder": "you@company.com",
+        "sending": "전송 중…",
+        "send": "인증 이메일 보내기"
+      },
+      "password": {
+        "title": "비밀번호",
+        "hint": "대소문자, 숫자, 기호를 포함해 최소 12자. 변경 시 다른 세션은 로그아웃됩니다.",
+        "sub": "로그인 비밀번호를 변경합니다.",
+        "change": "비밀번호 변경",
+        "current": "현재 비밀번호",
+        "new": "새 비밀번호",
+        "newPlaceholder": "최소 12자",
+        "confirm": "새 비밀번호 확인",
+        "mismatch": "비밀번호가 일치하지 않습니다",
+        "show": "표시",
+        "hide": "숨기기",
+        "updating": "업데이트 중…",
+        "updated": "업데이트됨",
+        "update": "비밀번호 업데이트"
+      },
+      "danger": {
+        "zone": "위험 구역",
+        "deleteLabel": "이 계정 삭제",
+        "deleteSub": "프로필과 토큰을 영구적으로 삭제하고 모든 조직에서 제외됩니다. 되돌릴 수 없습니다.",
+        "deleteButton": "계정 삭제",
+        "emailedPrefix": "확인 링크를 ",
+        "emailedSuffix": "(으)로 보냈습니다. 해당 이메일에서 확인하면 계정이 삭제됩니다.",
+        "confirmLabel": "확인하려면 \"{{phrase}}\"을(를) 입력하세요",
+        "noMatch": "정확히 일치하지 않습니다.",
+        "sending": "전송 중…",
+        "emailLink": "삭제 링크 이메일로 받기"
+      }
+    },
+    "security": {
+      "title": "보안",
+      "subtitle": "2단계 인증, 활성 세션, 로그인.",
+      "unknownDevice": "알 수 없는 기기",
+      "sessions": {
+        "title": "활성 세션",
+        "hint": "현재 계정에 로그인된 기기입니다.",
+        "colDevice": "기기",
+        "colIp": "IP",
+        "colSignedIn": "로그인 시각",
+        "emptyTitle": "활성 세션 없음",
+        "emptySubtitle": "세션이 여기에 표시됩니다.",
+        "thisDevice": "이 기기",
+        "revoke": "해지"
+      },
+      "signOut": {
+        "title": "모든 곳에서 로그아웃",
+        "hint": "이 기기를 제외한 모든 세션을 종료합니다.",
+        "label": "다른 세션",
+        "sub_one": "다른 세션 {{count}}개가 로그인되어 있습니다.",
+        "sub_other": "다른 세션 {{count}}개가 로그인되어 있습니다.",
+        "button": "다른 세션 로그아웃",
+        "confirmTitle": "다른 세션을 로그아웃할까요?",
+        "confirmLabel": "다른 세션 로그아웃",
+        "confirmDescription": "다른 모든 로그인된 기기가 즉시 로그아웃됩니다. 이 기기는 로그인 상태로 유지됩니다."
+      },
+      "twoFactor": {
+        "title": "2단계 인증",
+        "hint": "로그인 시 인증 앱의 일회용 코드를 요구합니다.",
+        "label": "인증 앱 (TOTP)",
+        "enabledSub": "사용 중 — 로그인 시 6자리 코드가 필요합니다.",
+        "disabledSub": "시간 기반 일회용 코드로 계정을 보호하세요.",
+        "enabled": "사용 중",
+        "regenerate": "백업 코드 재생성",
+        "disable": "사용 안 함",
+        "enable": "2FA 사용",
+        "enableTitle": "2단계 인증 사용",
+        "enrollFailed": "등록에 실패했습니다. 다시 시도해 주세요.",
+        "checking": "확인 중…",
+        "continue": "계속",
+        "verifying": "확인 중…",
+        "verifyEnable": "확인 후 사용",
+        "confirmPassword": "2단계 인증 설정을 시작하려면 비밀번호를 확인하세요.",
+        "password": "비밀번호",
+        "scanTitle": "인증 앱으로 스캔",
+        "scanBody": "1Password, Authy, Google Authenticator 등. 그런 다음 아래에 6자리 코드를 입력해 활성화하세요.",
+        "backupSave": "백업 코드 — 저장하세요",
+        "copied": "복사됨",
+        "copyAll": "모두 복사",
+        "backupNote": "인증 앱을 잃어버렸을 때 각 코드는 한 번만 사용할 수 있습니다. 안전한 곳에 보관하세요.",
+        "code": "6자리 코드",
+        "codePlaceholder": "123456",
+        "regenerateTitle": "백업 코드 재생성",
+        "done": "완료",
+        "generating": "생성 중…",
+        "regenerateAction": "재생성",
+        "newCodes": "새 코드 — 이전 코드는 더 이상 작동하지 않습니다.",
+        "regenerateBody": "기존 백업 코드가 무효화되고 새 세트가 발급됩니다. 비밀번호를 확인하세요.",
+        "disableTitle": "2단계 인증 해제",
+        "disabling": "해제 중…",
+        "disableAction": "2FA 해제",
+        "disableBody": "2단계 인증을 제거하면 계정 보안이 약해집니다. 계속하려면 비밀번호를 확인하세요."
+      }
+    },
+    "tokens": {
+      "title": "API 토큰",
+      "subtitle": "API와 CLI용 개인 액세스 토큰. 비밀번호처럼 다루세요.",
+      "newToken": "새 토큰",
+      "colToken": "토큰",
+      "colPrefix": "접두사",
+      "colCreated": "생성일",
+      "colExpires": "만료일",
+      "fallbackName": "토큰",
+      "emptyTitle": "아직 토큰이 없습니다",
+      "emptySubtitle": "API 또는 CLI를 사용하려면 토큰을 만드세요.",
+      "revokeToken": "토큰 해지",
+      "createdTitle": "토큰 \"{{name}}\" 생성됨",
+      "revokeConfirmTitle": "\"{{name}}\"을(를) 해지할까요?",
+      "revoke": "해지",
+      "revokeDescription": "이 토큰을 사용하는 모든 클라이언트가 즉시 액세스를 잃습니다. 되돌릴 수 없습니다.",
+      "createTitle": "새 API 토큰",
+      "generating": "생성 중…",
+      "generate": "토큰 생성",
+      "name": "이름",
+      "namePlaceholder": "CI 파이프라인",
+      "expiration": "만료",
+      "expiry": {
+        "days30": "30일",
+        "days60": "60일",
+        "days90": "90일",
+        "year1": "1년",
+        "none": "만료 없음"
+      }
+    },
+    "inbox": {
+      "title": "받은함",
+      "subtitle": "계정 및 조직 활동. 계정 관련 보안 알림과 관리 중인 조직의 변경 사항입니다.",
+      "markAllRead": "모두 읽음 처리",
+      "all": "전체",
+      "unread": "읽지 않음",
+      "unreadCount": "읽지 않음 · {{count}}",
+      "emptyTitle": "알림 없음",
+      "emptyUnread": "읽지 않은 항목이 없습니다.",
+      "emptyAll": "계정 및 조직 활동이 여기에 표시됩니다.",
+      "unreadPrefix": "읽지 않음: ",
+      "byActor": "{{actor}}님",
+      "targetByActor": "{{target}} · {{actor}}님",
+      "loading": "불러오는 중…",
+      "loadMore": "더 보기",
+      "relTime": {
+        "justNow": "방금 전",
+        "minutes": "{{count}}분 전",
+        "hours": "{{count}}시간 전",
+        "days": "{{count}}일 전"
+      },
+      "actions": {
+        "orgMemberInvited": "멤버 초대됨",
+        "orgMemberRemoved": "멤버 제거됨",
+        "orgMemberRoleChanged": "멤버 역할 변경됨",
+        "orgInvitationCanceled": "초대 취소됨",
+        "orgUpdated": "조직 업데이트됨",
+        "orgDeleted": "조직 삭제됨",
+        "orgTeamCreated": "팀 생성됨",
+        "orgTeamDeleted": "팀 삭제됨",
+        "security2faEnabled": "2단계 인증 사용됨",
+        "security2faDisabled": "2단계 인증 해제됨",
+        "securityPasswordChanged": "비밀번호 변경됨",
+        "securitySessionRevoked": "세션 해지됨",
+        "apikeyCreated": "API 키 생성됨",
+        "apikeyRevoked": "API 키 해지됨",
+        "billingSubscriptionUpdated": "구독 업데이트됨",
+        "billingPaymentFailed": "결제 실패"
+      }
+    }
+  },
+  "common": {
+    "cancel": "취소",
+    "done": "완료",
+    "demoReasonShort": "이 데모 빌드에서는 사용할 수 없습니다."
+  },
+  "profile": {
+    "title": "프로필",
+    "subtitle": "멘션, 리뷰, 닷 필드에서 동료들에게 보이는 모습입니다.",
+    "hidePreview": "미리보기 숨기기",
+    "showPreview": "공개 프로필 미리보기",
+    "photo": {
+      "title": "사진",
+      "hint": "정사각형 이미지가 가장 좋습니다. PNG, JPG, GIF, WebP, 최대 2MB.",
+      "custom": "사용자 사진",
+      "generated": "생성된 아바타",
+      "customSub": "멘션과 멤버 목록에서 원형으로 잘립니다.",
+      "generatedSub": "이니셜은 이름에서 자동 생성됩니다. 사진을 업로드해 대체하세요."
+    },
+    "identity": {
+      "title": "신원",
+      "hint": "이름과 핸들은 제품 전반에 함께 표시됩니다.",
+      "fullName": "이름",
+      "pronouns": "대명사",
+      "handle": "핸들",
+      "jobTitle": "직함",
+      "location": "위치"
+    },
+    "bio": {
+      "title": "소개",
+      "hint": "최대 280자. 마크다운을 지원합니다.",
+      "label": "짧은 소개",
+      "placeholder": "당신, 역할, 하는 일에 대해 한두 줄로 소개해 주세요."
+    },
+    "social": {
+      "title": "소셜 링크",
+      "hint": "활성화하면 공개 프로필에 표시됩니다. 빈 항목은 숨겨집니다.",
+      "placeholder": "사용자명"
+    },
+    "visibility": {
+      "title": "공개 범위",
+      "hint": "공개 프로필에 노출되는 정보를 제어합니다.",
+      "publicProfile": "공개 프로필",
+      "publicProfileSubPrefix": "링크가 있는 누구나 다음 주소에서 프로필을 볼 수 있습니다: ",
+      "showEmail": "공개 프로필에 이메일 표시",
+      "showEmailSub": "공개 프로필을 보는 누구나 업무 이메일을 볼 수 있습니다.",
+      "toggleShowEmail": "이메일 표시"
+    },
+    "avatar": {
+      "upload": "아바타 업로드",
+      "remove": "사진 제거",
+      "altYours": "내",
+      "altProfile": "프로필"
+    },
+    "preview": {
+      "eyebrow": "공개 미리보기 · 다른 사람에게 보이는 모습",
+      "unnamed": "이름 없음",
+      "disabled": "공개 프로필이 현재 비활성화되어 있습니다. 위 미리보기는 활성화 시 다른 사람에게 보이는 모습입니다."
+    }
+  },
+  "account": {
+    "title": "계정",
+    "subtitle": "이메일, 비밀번호, 내보내기, 계정 삭제.",
+    "email": {
+      "title": "이메일 주소",
+      "hint": "로그인 및 계정 관련 알림에 사용됩니다. 변경하려면 두 주소 모두에서 확인이 필요합니다.",
+      "currentLabel": "현재 이메일",
+      "label": "이메일 주소",
+      "verified": "· 인증됨",
+      "change": "이메일 변경",
+      "newEmail": "새 이메일",
+      "newEmailPlaceholder": "you@company.com",
+      "send": "인증 이메일 보내기",
+      "sending": "전송 중…",
+      "willSendPrefix": "확인 링크를 ",
+      "willSendMiddle": "(으)로 보냅니다. 클릭하기 전까지는 ",
+      "willSendSuffix": "(으)로 계속 로그인됩니다.",
+      "newAddressFallback": "새 주소",
+      "sentTitle": "{{email}}로 인증 이메일을 보냈습니다",
+      "sentBodyPrefix": "30분 이내에 이메일의 링크를 클릭해 변경을 완료하세요. 본인이 아닌 경우 취소할 수 있도록 ",
+      "sentBodySuffix": "에도 알림을 보냈습니다.",
+      "useDifferent": "다른 이메일 사용",
+      "ssoWarningSuffix": "은(는) SSO가 필요합니다. 이 주소로 변경하면 IdP를 통해 로그인하며 비밀번호는 비활성화됩니다."
+    },
+    "password": {
+      "title": "비밀번호",
+      "hint": "대소문자, 숫자, 기호를 포함해 최소 12자. 변경 시 다른 세션은 로그아웃됩니다.",
+      "meta": "3개월 전에 마지막 변경. 강력 · 14자.",
+      "change": "비밀번호 변경",
+      "current": "현재 비밀번호",
+      "wrongCurrent": "비밀번호가 올바르지 않습니다. 다시 시도하세요.",
+      "new": "새 비밀번호",
+      "newPlaceholder": "최소 12자",
+      "confirm": "새 비밀번호 확인",
+      "mismatch": "비밀번호가 일치하지 않습니다",
+      "updating": "업데이트 중…",
+      "updated": "업데이트됨",
+      "update": "비밀번호 업데이트",
+      "show": "표시",
+      "hide": "숨기기",
+      "demoHintPrefix": "데모: 현재 비밀번호는 ",
+      "demoHintSuffix": "입니다. 그 외의 값은 오류 분기를 발생시킵니다."
+    },
+    "export": {
+      "title": "데이터 내보내기",
+      "hint": "GDPR 호환 내보내기. 프로필, 댓글, 리뷰, 사용한 AI 토큰, 감사 기록을 포함합니다.",
+      "label": "데이터 내보내기",
+      "requestedSub": "{{time}}에 요청됨. 평균 준비 시간은 약 10분이며, 준비되면 이메일로 알려드립니다.",
+      "idleSub": "계정에 대해 보관 중인 모든 데이터를 담은 zip 파일(JSON + CSV)을 생성합니다.",
+      "preparing": "내보내기 준비 중",
+      "request": "내보내기 요청"
+    },
+    "danger": {
+      "reason": "이 데모 빌드에서는 사용할 수 없습니다 — 계정 삭제에는 로그인된 백엔드가 필요합니다.",
+      "zone": "위험 구역",
+      "deleteLabel": "이 계정 삭제",
+      "deleteSub": "프로필, 댓글, 토큰을 영구적으로 삭제합니다. 모든 조직에서 제외됩니다. 되돌릴 수 없습니다.",
+      "deleteButton": "계정 삭제",
+      "modalTitle": "계정을 삭제할까요?",
+      "modalBodyPrefix": "이 작업은 ",
+      "modalBodySuffix": ", 리뷰, 댓글, AI 사용 기록, 개인 액세스 토큰을 영구적으로 삭제합니다. 3개 조직에서 제외됩니다. 기여 내역은 삭제된 사용자로 귀속됩니다.",
+      "confirmLabel": "확인하려면 \"{{phrase}}\"을(를) 입력하세요",
+      "noMatch": "정확히 일치하지 않습니다.",
+      "reasonLabel": "떠나는 이유 (선택)",
+      "reasonOptions": {
+        "none": "이유 없음",
+        "duplicate": "다른 계정이 있습니다",
+        "notUsing": "더 이상 사용하지 않습니다",
+        "tooExpensive": "너무 비쌉니다",
+        "missingFeature": "필요한 기능이 없습니다",
+        "foundAlternative": "대안을 찾았습니다",
+        "other": "기타"
+      },
+      "confirmDelete": "영구 삭제"
+    }
+  },
+  "security": {
+    "title": "보안",
+    "subtitle": "2단계 인증 방법, 활성 세션, 로그인 기록.",
+    "mfa": {
+      "title": "2단계 인증",
+      "hint": "최소 하나의 방법이 필요합니다. 기기를 분실해도 잠기지 않도록 백업을 추가하세요.",
+      "addAuthenticator": "인증 앱",
+      "addSecurityKey": "보안 키",
+      "noneTitle": "2FA가 설정되지 않음 — 계정이 더 높은 위험에 노출됩니다",
+      "noneSub": "최소 하나의 방법을 추가하세요. 인증 앱과 백업용 보안 키를 함께 사용하는 것을 권장합니다.",
+      "primary": "기본",
+      "kindTotp": "TOTP",
+      "kindWebauthn": "WebAuthn",
+      "kindSms": "SMS",
+      "addedUsed": "추가: {{added}} · 마지막 사용: {{lastUsed}}",
+      "makePrimary": "기본으로 설정",
+      "remove": "제거"
+    },
+    "recovery": {
+      "title": "복구 코드",
+      "hint": "모든 2FA 방법에 접근할 수 없을 때 사용하는 일회용 코드입니다. 안전한 곳에 보관하세요.",
+      "available": "10개 중 10개 코드 사용 가능",
+      "sub": "마지막 생성: 2026-02-12. 각 코드는 12자의 영숫자이며 한 번만 사용할 수 있습니다.",
+      "view": "코드 보기 / 재생성",
+      "modalTitle": "복구 코드 저장",
+      "modalBody": "각 코드는 한 번만 사용할 수 있습니다. 비밀번호 관리자, 인쇄본, 암호화된 메모 등 이 앱 외부의 안전한 곳에 보관하세요.",
+      "copyAll": "모두 복사",
+      "download": ".txt 다운로드",
+      "print": "인쇄",
+      "saved": "저장했습니다"
+    },
+    "addMfa": {
+      "titleTotp": "인증 앱 추가",
+      "titleWebauthn": "보안 키 추가",
+      "totpScan": "1Password, Authy, Google Authenticator 등으로 스캔하세요. 그런 다음 생성된 6자리 코드를 입력하세요.",
+      "codeAria": "6자리 인증 코드",
+      "codePlaceholder": "6자리 코드",
+      "webauthnPrompt": "보안 키를 터치하거나 Touch ID / Windows Hello로 등록하세요.",
+      "label": "라벨",
+      "labelPlaceholder": "예: 1Password",
+      "add": "방법 추가"
+    },
+    "trusted": {
+      "title": "신뢰할 수 있는 기기",
+      "hint": "활성화하면 2FA를 완료한 기기는 30일간 이후 프롬프트를 건너뛸 수 있습니다.",
+      "label": "2FA 후 이 기기 신뢰",
+      "sub": "서명된 쿠키가 기기에 유지됩니다. 쿠키를 제거하거나 로그아웃하면 초기화됩니다.",
+      "toggle": "기기 신뢰"
+    },
+    "sessions": {
+      "title": "활성 세션",
+      "hint_one": "여러 기기에 걸친 세션 {{count}}개. 인식하지 못하는 세션은 해지하세요.",
+      "hint_other": "여러 기기에 걸친 세션 {{count}}개. 인식하지 못하는 세션은 해지하세요.",
+      "thisDevice": "이 기기",
+      "revoke": "해지"
+    },
+    "history": {
+      "title": "로그인 기록",
+      "hint": "최근 90일간 계정의 인증 이벤트입니다. 실패한 시도와 비정상적인 위치가 강조됩니다."
+    },
+    "signOut": {
+      "reason": "이 데모 빌드에서는 사용할 수 없습니다 — 세션 해지에는 로그인된 백엔드가 필요합니다.",
+      "title": "모든 곳에서 로그아웃",
+      "hint": "이 기기를 제외한 모든 기기의 활성 세션을 종료합니다.",
+      "label": "다른 모든 기기에서 로그아웃",
+      "sub": "다른 기기는 다시 로그인하고 2FA를 완료해야 합니다. 침해가 의심될 때 유용합니다.",
+      "confirm": "예, 모든 곳에서 로그아웃",
+      "trigger": "다른 기기 로그아웃"
+    }
+  },
+  "connectedApps": {
+    "title": "연결된 앱",
+    "subtitle": "계정에 연결된 로그인 공급자와 서드파티 연동입니다.",
+    "providers": {
+      "title": "로그인 공급자",
+      "hint": "이 중 아무거나로 로그인할 수 있습니다. 기본 공급자는 로그인 화면에 먼저 표시됩니다."
+    },
+    "integrations": {
+      "title": "연동",
+      "hint": "당신을 대신해 작동하는 서드파티 도구입니다. 하나를 제거하면 관련된 모든 알림과 작업이 중지됩니다."
+    },
+    "available": {
+      "title": "추가 가능",
+      "hint": "다른 앱을 연결하세요. 범위를 승인하도록 리디렉션되며, 비밀번호는 절대 볼 수 없습니다.",
+      "connect": "연결"
+    },
+    "list": {
+      "empty": "아직 연결된 항목이 없습니다.",
+      "primary": "기본",
+      "connectedMeta": "{{account}} · 연결: {{connectedAt}} · {{lastUsed}}",
+      "makePrimary": "기본으로 설정",
+      "scopes_one": "범위 {{count}}개",
+      "scopes_other": "범위 {{count}}개",
+      "disconnect": "연결 해제",
+      "authorizedScopes": "승인된 범위",
+      "required": "필수",
+      "viewOn": "{{provider}}에서 보기",
+      "reauthorize": "새 범위 재승인"
+    },
+    "remove": {
+      "title": "{{provider}} 연결을 해제할까요?",
+      "identityBody": "이후 {{provider}}(으)로 로그인할 수 없습니다. 먼저 다른 로그인 방법이 있는지 확인하세요.",
+      "integrationBody": "모든 {{provider}} 작업과 알림이 중지됩니다. 대기 중인 항목은 취소됩니다.",
+      "confirm": "연결 해제"
+    }
+  },
+  "apiTokens": {
+    "title": "API 토큰",
+    "subtitle": "개인 액세스 토큰(PAT)은 스크립트, CLI, 연동을 당신으로 인증합니다. 비밀번호처럼 다루세요.",
+    "newToken": "새 토큰",
+    "active": {
+      "title": "활성 토큰",
+      "hint": "25개 중 {{count}}개 사용 중. 90일간 사용하지 않은 토큰은 표시됩니다."
+    },
+    "using": {
+      "title": "토큰 사용하기",
+      "hint": "토큰을 Bearer 헤더로 전달하세요. 모든 요청을 기록합니다 — 자세한 내용은 감사 로그를 참조하세요."
+    },
+    "list": {
+      "empty": "아직 토큰이 없습니다. API를 사용하려면 하나 만드세요.",
+      "expired": "만료됨",
+      "unused": "미사용",
+      "created": "생성: {{date}}",
+      "expires": "· 만료: {{date}}",
+      "neverExpires": "· 만료 없음",
+      "lastUsed": "· 마지막 사용: {{value}}",
+      "revoke": "해지"
+    },
+    "code": {
+      "docs": "API 문서"
+    },
+    "create": {
+      "title": "새 개인 액세스 토큰",
+      "name": "이름",
+      "namePlaceholder": "예: \"ci · gh-actions\"",
+      "nameHint": "미래의 당신이 이 토큰의 용도를 기억할 수 있도록 하세요.",
+      "expiration": "만료",
+      "never": "없음 (권장하지 않음)",
+      "days": "{{count}}일",
+      "scopes": "범위",
+      "destructive": "파괴적",
+      "dangerWarning_one": "파괴적 범위 {{count}}개를 부여하려고 합니다. 이 토큰을 가진 누구나 이 권한으로 작업할 수 있습니다.",
+      "dangerWarning_other": "파괴적 범위 {{count}}개를 부여하려고 합니다. 이 토큰을 가진 누구나 이 권한으로 작업할 수 있습니다.",
+      "generate": "토큰 생성"
+    },
+    "reveal": {
+      "title": "새 토큰 저장",
+      "onlyOnce": "이 토큰을 보여드리는 것은 이번 한 번뿐입니다.",
+      "afterClose": " 이 대화상자를 닫으면 접두사만 표시됩니다.",
+      "copied": "복사됨",
+      "copy": "복사",
+      "show": "표시",
+      "hide": "숨기기",
+      "scopeCount_one": "범위 {{count}}개",
+      "scopeCount_other": "범위 {{count}}개",
+      "expiresNever": "없음",
+      "expires": "만료: {{value}}",
+      "saved": "저장했습니다"
+    },
+    "revoke": {
+      "title": "\"{{name}}\"을(를) 해지할까요?",
+      "body": "이 토큰을 사용하는 모든 스크립트, CLI, 연동이 즉시 실패하기 시작합니다. 감사 로그에 해지를 기록합니다.",
+      "confirm": "토큰 해지"
+    }
+  },
+  "notifications": {
+    "title": "알림",
+    "subtitle": "무엇을 어디에서 알림받을지 선택하세요. 방해 금지 시간과 다이제스트 모드는 모든 채널에 적용됩니다.",
+    "muted": "모든 알림 음소거됨",
+    "muteEverything": "모두 음소거",
+    "muteBanner": "모든 알림이 일시 중지되었습니다. 중요한 보안 경고는 계속 전달됩니다.",
+    "channels": {
+      "title": "전달 채널",
+      "hint": "각 채널에는 고유한 전달 대상이 있습니다. 아래 매트릭스에서 어떤 이벤트를 어디로 보낼지 선택합니다."
+    },
+    "matrix": {
+      "title": "매트릭스",
+      "hint": "각 셀을 전환해 어떤 이벤트를 어떤 채널로 보낼지 제어합니다. 라벨을 클릭하면 행을 복사합니다.",
+      "event": "이벤트",
+      "enableAll": "이 이벤트의 모든 채널 사용",
+      "disableAll": "이 이벤트의 모든 채널 해제",
+      "cellLabel": "{{event}} → {{channel}}"
+    },
+    "cadence": {
+      "title": "전달 주기",
+      "hint": "알림을 묶어 소음을 줄입니다. 실시간은 각 이벤트가 발생할 때마다 전달됩니다.",
+      "digest": "다이제스트 모드",
+      "digestSub": "이메일과 Slack에 적용됩니다. 앱 내 알림은 항상 실시간입니다.",
+      "realtime": "실시간",
+      "realtimeSub": "각 이벤트를 발생 즉시 전송",
+      "hourly": "시간별 다이제스트",
+      "hourlySub": "한 시간에 한 번 묶어서 전달",
+      "daily": "매일 오전 9시 다이제스트",
+      "dailySub": "하루에 한 통의 이메일",
+      "weekly": "매주 월요일 다이제스트",
+      "weeklySub": "주중에는 조용히"
+    },
+    "quiet": {
+      "title": "방해 금지 시간",
+      "hint": "특정 시간대에 중요하지 않은 채널을 음소거합니다. 보안 경고는 항상 전달됩니다.",
+      "enable": "방해 금지 시간 사용",
+      "enableSub": "아래 시간 사이에 Slack과 모바일 푸시를 음소거합니다. 이메일은 다이제스트로 대기합니다.",
+      "toggle": "방해 금지 시간",
+      "from": "시작",
+      "to": "종료",
+      "timezone": "시간대",
+      "muteWindow": "음소거 시간대: ",
+      "durationLabel": "조용한 시간 {{hours}}시간 {{minutes}}분",
+      "dnd": "방해 금지",
+      "dndSub": "다음 4시간 동안 일회성 음소거. 자동으로 초기화됩니다.",
+      "dndToggle": "방해 금지"
+    }
+  },
+  "appearance": {
+    "title": "화면",
+    "subtitle": "테마, 밀도, 모션, 강조색. 대부분의 변경은 즉시 적용되어 저장 전에 미리 볼 수 있습니다.",
+    "theme": {
+      "title": "테마",
+      "hint": "밝게, 어둡게, 또는 운영체제 설정 따르기.",
+      "light": "밝게",
+      "dark": "어둡게",
+      "system": "시스템"
+    },
+    "accent": {
+      "title": "강조색",
+      "hint": "기본 CTA, 현재 상태 표시, 닷 필드 대표 색상에 사용됩니다.",
+      "cobalt": "코발트 인디고",
+      "violet": "바이올렛",
+      "amber": "앰버",
+      "crimson": "크림슨",
+      "mint": "민트"
+    },
+    "density": {
+      "title": "밀도",
+      "hint": "리뷰나 파일 패널 같은 조밀한 목록에서 각 행에 부여할 공간입니다.",
+      "compact": "좁게",
+      "comfortable": "보통",
+      "roomy": "넓게"
+    },
+    "text": {
+      "title": "텍스트",
+      "hint": "코드용 글꼴 크기와 고정폭 글꼴. 디프와 인라인 코드 블록에 영향을 줍니다.",
+      "fontScale": "글꼴 크기",
+      "fontScaleSub": "작게 (12px) · 보통 (13px, 기본) · 크게 (15px) 기준.",
+      "monoFont": "고정폭 글꼴",
+      "monoFontSub": "코드, 파일 경로, ID에 사용됩니다.",
+      "systemDefault": "시스템 기본값",
+      "syntaxTheme": "구문 테마",
+      "syntaxThemeSub": "디프 청크와 코드 블록 내부의 색 구성.",
+      "dim": "딤",
+      "midnight": "미드나잇",
+      "paper": "페이퍼"
+    },
+    "a11y": {
+      "title": "접근성",
+      "hint": "방해가 되는 시각적 소음을 줄입니다.",
+      "reduceMotion": "모션 줄이기",
+      "reduceMotionSub": "필수적이지 않은 애니메이션(패널, 파티클, 전환)을 비활성화합니다.",
+      "highContrast": "고대비",
+      "highContrastSub": "테두리 대비를 높이고 흐린 텍스트 변형을 제거합니다."
+    },
+    "previewSection": {
+      "title": "미리보기",
+      "hint": "현재 선택으로 일반적인 행이 어떻게 보이는지입니다."
+    },
+    "livePreview": {
+      "prTitle": "PR #4821 · SSO 전용 프로덕션 승인 규칙 추가",
+      "approved": "승인됨",
+      "summary": "4개 파일 검토됨. 리뷰어 3명 승인. 승인 재실행 후 병합 준비 완료.",
+      "footer": "현재 선택으로 렌더링된 미리보기"
+    }
+  },
+  "preferences": {
+    "title": "환경설정",
+    "subtitle": "각 워크벤치의 기본 동작 방식입니다. 당신에게만 적용되며 — 팀에는 별도의 설정이 있습니다.",
+    "startup": {
+      "title": "시작 시",
+      "hint": "로그인 후 앱을 열 때 도착하는 위치입니다.",
+      "startingWorkbench": "시작 워크벤치",
+      "startingWorkbenchSub": "고정 탭을 선택하거나 '마지막 방문'으로 이전 위치를 이어가세요.",
+      "lastVisited": "마지막 방문",
+      "intelligence": "인텔리전스",
+      "coding": "코딩",
+      "agents": "에이전트",
+      "reviews": "리뷰",
+      "admission": "어드미션",
+      "fixes": "픽스"
+    },
+    "intelligence": {
+      "title": "인텔리전스",
+      "hint": "닷 필드, 매트릭스 뷰, 유니버스 모드.",
+      "defaultViz": "기본 시각화",
+      "dotField": "닷 필드",
+      "matrix": "매트릭스",
+      "universe": "유니버스",
+      "autoOpenInspect": "클릭 시 인스펙트 자동 열기",
+      "autoOpenInspectSub": "닷을 클릭하면 오른쪽 인스펙트 패널이 자동으로 열립니다.",
+      "autoOpenInspectToggle": "인스펙트 자동 열기",
+      "showScoreLabels": "닷 필드에 점수 라벨 표시",
+      "showScoreLabelsSub": "각 닷 옆에 위험 + 신뢰도 숫자 라벨을 표시합니다.",
+      "showScoreLabelsToggle": "점수 라벨",
+      "confidenceFloor": "신뢰도 하한",
+      "confidenceFloorSub": "기본적으로 이 신뢰도 미만의 닷을 숨깁니다.",
+      "low": "낮음 (모두 표시)",
+      "medium": "중간 (권장)",
+      "high": "높음 (확실한 것만)"
+    },
+    "coding": {
+      "title": "코딩",
+      "hint": "코딩 단계의 에디터 및 AI 동작.",
+      "sideBySide": "나란히 보는 디프",
+      "sideBySideSub": "통합 대신 이전/이후를 두 열로 표시합니다.",
+      "sideBySideToggle": "나란히 보기",
+      "softWrap": "긴 줄 자동 줄바꿈",
+      "softWrapSub": "에디터 너비보다 긴 줄을 줄바꿈합니다.",
+      "softWrapToggle": "자동 줄바꿈",
+      "whitespace": "공백 마커 표시",
+      "whitespaceSub": "공백과 탭을 점/화살표로 렌더링합니다.",
+      "whitespaceToggle": "공백 표시",
+      "autoSave": "초안 자동 저장",
+      "autoSaveSub": "초안이 브라우저에 유지됩니다. 끄면 명시적 저장이 필요합니다.",
+      "autoSaveToggle": "초안 자동 저장",
+      "inline": "인라인 AI 제안",
+      "inlineSub": "입력하는 동안 고스트 텍스트 제안.",
+      "always": "항상 표시",
+      "onHotkey": "단축키로만 · ⌘.",
+      "never": "안 함"
+    },
+    "reviews": {
+      "title": "리뷰",
+      "hint": "PR 리뷰 동작.",
+      "defaultSort": "기본 정렬",
+      "defaultSortSub": "리뷰 탭을 열 때 PR 목록이 정렬되는 방식입니다.",
+      "reviewRequested": "리뷰 요청 우선",
+      "updated": "최근 업데이트순",
+      "opened": "최근 열린순",
+      "risk": "위험 높은 순",
+      "ciBefore": "승인 전 CI 요약 표시",
+      "ciBeforeSub": "승인 버튼 위에 통과/실패 막대를 표시합니다.",
+      "ciBeforeToggle": "승인 전 CI",
+      "resolveAll": "모든 대화 해결 필수",
+      "resolveAllSub": "열린 스레드가 있으면 승인 버튼을 비활성화합니다.",
+      "resolveAllToggle": "모두 해결"
+    },
+    "agents": {
+      "title": "에이전트",
+      "hint": "기본 에이전트 및 런타임 정책.",
+      "defaultAgent": "기본 에이전트",
+      "fixPipeline": "픽스 파이프라인",
+      "reviewBot": "리뷰 봇",
+      "investigation": "조사",
+      "confirm": "실행 전 확인",
+      "confirmSub": "에이전트가 시작되기 전에 요약 모달을 표시합니다.",
+      "confirmToggle": "실행 확인",
+      "maxParallel": "최대 병렬 실행",
+      "maxParallelSub": "동시 에이전트 실행 수를 제한합니다.",
+      "parallel3": "3 (기본)",
+      "parallel5": "5 (유료 플랜 전용)"
+    },
+    "admission": {
+      "title": "어드미션",
+      "hint": "검사 실패 시 게이트 동작.",
+      "showProof": "실패 시 증명 의무 표시",
+      "showProofSub": "각 검사가 테스트한 의무의 확장된 분석.",
+      "showProofToggle": "증명 표시",
+      "autoLink": "픽스 후보 자동 연결",
+      "autoLinkSub": "실패한 각 의무 옆에 픽스 후보를 제안합니다.",
+      "autoLinkToggle": "픽스 자동 연결"
+    },
+    "reset": {
+      "title": "기본값으로 초기화",
+      "hint": "이 페이지의 모든 설정을 공장 기본값으로 복원합니다.",
+      "label": "모든 환경설정 초기화",
+      "sub": "다른 사람의 설정, 비밀번호, 토큰은 영향을 받지 않습니다.",
+      "button": "기본값으로 초기화"
+    }
+  },
+  "keyboard": {
+    "title": "키보드",
+    "subtitle": "단축키를 사용자화하세요. 검색으로 빠르게 찾을 수 있으며 — 새 조합을 기록하면 충돌을 감지합니다.",
+    "export": "내보내기",
+    "import": "가져오기",
+    "resetAll": "모두 초기화",
+    "searchPlaceholder": "명령, 그룹, 키 입력으로 검색…",
+    "clear": "지우기",
+    "conflicts_one": "충돌 {{count}}개 감지됨",
+    "conflicts_other": "충돌 {{count}}개 감지됨",
+    "conflictBody": "두 명령이 같은 조합을 공유하면 마지막으로 정의된 것만 실행됩니다. 영향받음: {{list}}.",
+    "noMatch": "\"{{query}}\"와(과) 일치하는 단축키가 없습니다.",
+    "row": {
+      "recordNew": "새로 기록",
+      "reset": "초기화"
+    },
+    "record": {
+      "title": "\"{{label}}\"의 단축키 기록",
+      "bodyPrefix": "사용할 키를 누르세요. ⇧ 단독처럼 수정자만 있는 조합은 기록되지 않습니다. 저장하지 않고 취소하려면 ",
+      "bodySuffix": "을(를) 두 번 누르세요.",
+      "listening": "듣는 중…",
+      "defaultLabel": "기본값:",
+      "use": "이 단축키 사용"
+    }
+  },
+  "ai": {
+    "title": "AI",
+    "subtitle": "각 워크벤치의 모델을 선택하고, 당신을 대신해 무엇이 자동 실행될지 결정하고, 비용을 제한하세요.",
+    "models": {
+      "title": "모델 선택",
+      "hint": "각 워크벤치는 다른 모델을 사용할 수 있습니다. 소음이 많은 영역에는 더 빠르고 저렴하게, 중요한 곳에는 더 깊은 추론으로."
+    },
+    "tier": {
+      "fast": "빠름",
+      "balanced": "균형",
+      "best": "최고"
+    },
+    "behavior": {
+      "title": "동작",
+      "hint": "AI가 얼마나 적극적으로 제안하고 당신을 대신해 작업을 완료할지입니다.",
+      "inline": "인라인 제안",
+      "inlineSub": "입력하는 동안 에디터에 고스트 텍스트.",
+      "inlineToggle": "인라인 제안",
+      "verbosity": "제안 상세도",
+      "verbositySub": "간결한 패치 대 문단 길이의 설명.",
+      "brief": "간결",
+      "briefSub": "최소 패치, 설명 없음",
+      "normal": "보통",
+      "normalSub": "기본값",
+      "verbose": "상세",
+      "verboseSub": "모든 변경을 설명",
+      "autoCommit": "커밋 메시지 자동 작성",
+      "autoCommitSub": "디프에서 Conventional Commits 헤드라인을 생성합니다.",
+      "autoCommitToggle": "자동 커밋 메시지",
+      "autoSummary": "PR 자동 요약",
+      "autoSummarySub": "리뷰의 각 PR 설명에 3줄 요약을 추가합니다.",
+      "autoSummaryToggle": "자동 PR 요약",
+      "autoEvidence": "증거 자동 연결",
+      "autoEvidenceSub": "관련 로그 / 메트릭 / 과거 PR을 조사에 자동으로 첨부합니다.",
+      "autoEvidenceToggle": "자동 증거",
+      "contextDepth": "컨텍스트 깊이",
+      "contextDepthSub": "각 호출에서 AI가 읽을 수 있는 코드베이스의 범위입니다.",
+      "file": "단일 파일",
+      "fileSub": "가장 저렴하고 좁음",
+      "module": "포함 모듈",
+      "moduleSub": "균형",
+      "workspace": "전체 워크스페이스",
+      "workspaceSub": "가장 정확함"
+    },
+    "privacy": {
+      "title": "개인정보 및 학습",
+      "hint": "코드가 모델 학습에 사용되는지 여부를 제어합니다.",
+      "optOut": "모델 학습 거부",
+      "optOutSub": "당신의 프롬프트와 코드는 상위 모델 학습에 절대 사용되지 않습니다.",
+      "optOutToggle": "학습 거부",
+      "redact": "전송 전 비밀 삭제",
+      "redactSub": "프롬프트에서 API 키 / 토큰을 감지해 자리 표시자로 대체합니다.",
+      "redactToggle": "비밀 삭제"
+    },
+    "spend": {
+      "title": "지출 제어",
+      "hint": "폭주하는 루프가 월간 토큰을 소진하지 않도록 AI 사용을 제한합니다. 조직 관리자가 재정의할 수 있습니다.",
+      "dailyCap": "일일 비용 상한",
+      "dailyCapSubPrefix": "하루에 이 금액을 초과하는 AI 호출을 계정에서 차단합니다. ",
+      "today": "오늘: ${{amount}}",
+      "perDay": "/ 일",
+      "noCap": "상한 없음",
+      "meterToday": "오늘 ${{cap}} 중 ${{spent}}",
+      "meterAlert": "경고 임계값(상한의 {{pct}}%)을 초과했습니다. 받은함 알림을 보냈습니다.",
+      "alertWhen": "경고 시점",
+      "alertWhenSub": "일일 지출이 상한의 이 비율을 넘으면 받은함으로 알립니다.",
+      "alert50": "상한의 50%",
+      "alert75": "상한의 75%",
+      "alert90": "상한의 90%",
+      "alert100": "100% (상한 도달)",
+      "fallback": "상한 근접 시 빠른 모델로 전환",
+      "fallbackSub": "상한의 {{pct}}%에서 이후 호출은 영역 설정과 관계없이 Haiku/GPT-mini를 사용합니다.",
+      "fallbackToggle": "빠른 모델로 전환"
+    }
+  },
+  "inbox": {
+    "title": "받은함",
+    "subtitle": "멘션, 리뷰 요청, 게이트 실패, 에이전트 업데이트 — 모두 하나의 스트림에.",
+    "selected": "{{count}}개 선택됨",
+    "markRead": "읽음 처리",
+    "archive": "보관",
+    "clearSelection": "선택 해제",
+    "markAllRead": "모두 읽음 처리",
+    "searchPlaceholder": "받은함 검색…",
+    "buckets": {
+      "today": "오늘",
+      "yesterday": "어제",
+      "earlier": "이전"
+    },
+    "filters": {
+      "unread": "읽지 않음",
+      "mentions": "멘션",
+      "reviews": "리뷰",
+      "starred": "별표",
+      "all": "전체",
+      "archived": "보관됨"
+    },
+    "item": {
+      "unread": "읽지 않음",
+      "star": "별표",
+      "unstar": "별표 해제"
+    },
+    "types": {
+      "mention": "멘션",
+      "review": "리뷰",
+      "admission": "어드미션",
+      "fix": "픽스",
+      "agent": "에이전트",
+      "security": "보안"
+    },
+    "detail": {
+      "snooze": "다시 알림",
+      "archive": "보관",
+      "openIn": "{{where}}에서 열기",
+      "from": "보낸 사람",
+      "in": "위치",
+      "diffContext": "디프 컨텍스트",
+      "quickReply": "빠른 답장",
+      "replyPlaceholder": "답장이나 명령을 입력하세요 (Cmd+Enter로 전송)…",
+      "sendReply": "답장 보내기"
+    },
+    "empty": {
+      "noMatches": "\"{{query}}\"에 대한 일치 항목 없음",
+      "listClear": "{{filter}} 목록이 비어 있습니다",
+      "tryDifferent": "다른 키워드를 시도하거나 필터를 변경하세요.",
+      "nothingWaiting": "대기 중인 항목이 없습니다. 잠시 쉬어가세요.",
+      "detailTitle": "읽을 항목을 선택하세요",
+      "detailBodyPrefix": "왼쪽의 항목을 클릭하면 여기에서 열립니다. ",
+      "detailBodyMiddle": " / ",
+      "detailBodySuffix": " 키로 이동하세요."
+    }
+  }
+}

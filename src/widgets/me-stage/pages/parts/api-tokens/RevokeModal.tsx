@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
@@ -7,6 +8,7 @@ import type { Token } from './types';
 export function RevokeModal({
   token, onClose, onConfirm,
 }: { token: Token; onClose: () => void; onConfirm: () => void }) {
+  const { t } = useTranslation('me');
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onClose);
   return (
@@ -35,18 +37,17 @@ export function RevokeModal({
           </div>
           <div className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-              Revoke &quot;{token.name}&quot;?
+              {t('apiTokens.revoke.title', { name: token.name })}
             </h3>
             <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
-              Any script, CLI, or integration using this token will start failing immediately.
-              We&apos;ll log the revocation in your audit trail.
+              {t('apiTokens.revoke.body')}
             </p>
           </div>
         </div>
         <div className="flex items-center justify-end gap-2 pt-1">
-          <Button variant="ghost" size="md" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" size="md" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="danger" size="md" onClick={onConfirm}>
-            Revoke token
+            {t('apiTokens.revoke.confirm')}
           </Button>
         </div>
       </div>

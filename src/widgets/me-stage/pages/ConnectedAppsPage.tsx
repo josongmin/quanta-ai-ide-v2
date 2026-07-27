@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MeShell } from '../parts/MeShell';
 import { Section } from '@shared/ui/forms';
 import { INITIAL_CONNECTIONS, AVAILABLE_INTEGRATIONS } from './parts/connected-apps/types';
@@ -8,6 +9,7 @@ import { AvailableRow } from './parts/connected-apps/AvailableRow';
 import { RemoveModal } from './parts/connected-apps/RemoveModal';
 
 export default function ConnectedAppsPage() {
+  const { t } = useTranslation('me');
   const [connections, setConnections] = useState<Connection[]>(INITIAL_CONNECTIONS);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [confirmRemove, setConfirmRemove] = useState<Connection | null>(null);
@@ -17,12 +19,12 @@ export default function ConnectedAppsPage() {
 
   return (
     <MeShell
-      title="Connected apps"
-      subtitle="Sign-in providers and third-party integrations linked to your account."
+      title={t('connectedApps.title')}
+      subtitle={t('connectedApps.subtitle')}
     >
       <Section
-        title="Sign-in providers"
-        hint="Use any of these to sign in. Your primary provider is what we'll surface first on the login screen."
+        title={t('connectedApps.providers.title')}
+        hint={t('connectedApps.providers.hint')}
       >
         <ConnectionList
           items={identity}
@@ -34,8 +36,8 @@ export default function ConnectedAppsPage() {
       </Section>
 
       <Section
-        title="Integrations"
-        hint="Third-party tools that act on your behalf. Removing one stops all related notifications and actions."
+        title={t('connectedApps.integrations.title')}
+        hint={t('connectedApps.integrations.hint')}
       >
         <ConnectionList
           items={integrations}
@@ -47,8 +49,8 @@ export default function ConnectedAppsPage() {
       </Section>
 
       <Section
-        title="Available to add"
-        hint="Connect another app. You'll be redirected to authorize the scopes — we never see your password."
+        title={t('connectedApps.available.title')}
+        hint={t('connectedApps.available.hint')}
       >
         <div className="grid grid-cols-1 gap-1.5">
           {AVAILABLE_INTEGRATIONS.map((it) => (

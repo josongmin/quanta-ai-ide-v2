@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Archive, Check, X } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Section, Button } from '@shared/ui/forms';
@@ -10,6 +11,7 @@ import { Detail } from './parts/inbox/Detail';
 import { EmptyHint, DetailEmpty } from './parts/inbox/EmptyStates';
 
 export default function InboxPage() {
+  const { t } = useTranslation('me');
   const [items, setItems] = useState<Item[]>(INITIAL);
   const [filter, setFilter] = useState<Filter>('unread');
   const [q, setQ] = useState('');
@@ -80,24 +82,24 @@ export default function InboxPage() {
 
   return (
     <MeShell
-      title="Inbox"
-      subtitle="Mentions, review requests, gate failures, and agent updates — all in one stream."
+      title={t('inbox.title')}
+      subtitle={t('inbox.subtitle')}
       topRight={
         <div className="flex items-center gap-1.5">
           {bulkSel.size > 0 ? (
             <>
               <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-                {bulkSel.size} selected
+                {t('inbox.selected', { count: bulkSel.size })}
               </span>
-              <Button leading={<Check className="w-3 h-3" />} onClick={bulkMarkRead}>Mark read</Button>
-              <Button leading={<Archive className="w-3 h-3" />} onClick={bulkArchive}>Archive</Button>
-              <Button variant="ghost" onClick={() => { setBulkSel(new Set()); }}>
+              <Button leading={<Check className="w-3 h-3" />} onClick={bulkMarkRead}>{t('inbox.markRead')}</Button>
+              <Button leading={<Archive className="w-3 h-3" />} onClick={bulkArchive}>{t('inbox.archive')}</Button>
+              <Button variant="ghost" onClick={() => { setBulkSel(new Set()); }} aria-label={t('inbox.clearSelection')}>
                 <X className="w-3 h-3" />
               </Button>
             </>
           ) : (
             <Button onClick={() => { setItems((all) => all.map((i) => ({ ...i, status: i.status === 'unread' ? 'read' : i.status }))); }}>
-              Mark all as read
+              {t('inbox.markAllRead')}
             </Button>
           )}
         </div>
@@ -130,7 +132,7 @@ export default function InboxPage() {
                       borderBottom: '1px solid var(--border-muted)',
                     }}
                   >
-                    {group}
+                    {group === 'Today' ? t('inbox.buckets.today') : group === 'Yesterday' ? t('inbox.buckets.yesterday') : t('inbox.buckets.earlier')}
                   </div>
                   {list.map((it) => (
                     <ListItem

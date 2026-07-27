@@ -1,9 +1,20 @@
-import { describe, it, expect } from 'vitest';
+import { beforeAll, describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from '@shared/theme';
 import { UIRuntimeProvider } from '@shared/ui';
+// `@shared/i18n/config` runs i18n.init() for its side effects (the global
+// react-i18next instance). Registering the English `me` bundle synchronously so
+// t('…') resolves real copy in the assertions below — with useSuspense:false an
+// unloaded namespace would otherwise echo the raw key back.
+import i18n from '@shared/i18n/config';
+import enMe from '@shared/i18n/locales/en/me.json';
 import { DangerSection } from '../pages/parts/account/DangerSection';
 import { SignOutEverywhere } from '../pages/parts/security/SignOutEverywhere';
+
+beforeAll(async () => {
+  i18n.addResourceBundle('en', 'me', enMe, true, true);
+  await i18n.changeLanguage('en');
+});
 
 // HONESTY pass regression tests. These demo-only panels previously FAKED
 // success on consequential security actions: the account-delete primary ran a

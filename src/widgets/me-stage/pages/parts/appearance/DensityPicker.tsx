@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
 import type { Density } from './types';
 
@@ -5,10 +6,11 @@ import type { Density } from './types';
 // Density picker — visual rows
 
 export function DensityPicker({ value, onChange }: { value: Density; onChange: (v: Density) => void }) {
+  const { t } = useTranslation('me');
   const opts: { id: Density; label: string; rows: number; gap: string }[] = [
-    { id: 'compact',     label: 'Compact',     rows: 6, gap: '4px' },
-    { id: 'comfortable', label: 'Comfortable', rows: 4, gap: '8px' },
-    { id: 'roomy',       label: 'Roomy',       rows: 3, gap: '12px' },
+    { id: 'compact',     label: t('appearance.density.compact'),     rows: 6, gap: '4px' },
+    { id: 'comfortable', label: t('appearance.density.comfortable'), rows: 4, gap: '8px' },
+    { id: 'roomy',       label: t('appearance.density.roomy'),       rows: 3, gap: '12px' },
   ];
   return (
     <div className="grid grid-cols-3 gap-2">

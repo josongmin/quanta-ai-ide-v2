@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MeShell } from '../parts/MeShell';
 import { Section, Field, SaveBar } from '@shared/ui/forms';
 import { InlineError } from '@shared/ui';
@@ -9,6 +10,7 @@ import { useSession, updateProfile } from '@entities/session';
 // visibility fields aren't backend-modelled, so they're dropped rather than
 // faked; they'd return as better-auth additionalFields in a later pass.
 export function ProfileReal() {
+  const { t } = useTranslation('me');
   const { user } = useSession();
   const [name, setName] = useState('');
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
@@ -35,18 +37,18 @@ export function ProfileReal() {
   }
 
   return (
-    <MeShell title="Profile" subtitle="How you appear to teammates in mentions and reviews.">
+    <MeShell title={t('real.profile.title')} subtitle={t('real.profile.subtitle')}>
       {error && (
         <div className="mb-3">
           <InlineError message={error} onRetry={() => { setError(null); }} />
         </div>
       )}
-      <Section title="Identity" hint="Your display name appears throughout the product.">
+      <Section title={t('real.profile.identity')} hint={t('real.profile.identityHint')}>
         <Field
-          label="Full name"
+          label={t('real.profile.fullName')}
           value={name}
           onChange={(e) => { setName(e.target.value); }}
-          placeholder="Your name"
+          placeholder={t('real.profile.namePlaceholder')}
         />
       </Section>
       <SaveBar

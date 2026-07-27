@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Globe, Eye } from 'lucide-react';
 import { GithubIcon, TwitterIcon, LinkedinIcon } from '@shared/ui/brand-icons';
 import type { ProfileData } from './types';
@@ -6,6 +7,7 @@ import type { ProfileData } from './types';
 // Public preview — what other people see
 
 export function PublicPreview({ data }: { data: ProfileData }) {
+  const { t } = useTranslation('me');
   const initials = data.name.split(/\s+/).filter(Boolean).map((s) => s[0]).slice(0, 2).join('').toUpperCase() || 'SK';
   return (
     <div
@@ -20,7 +22,7 @@ export function PublicPreview({ data }: { data: ProfileData }) {
         style={{ color: 'var(--fg-accent)' }}
       >
         <Eye className="w-3 h-3" />
-        Public preview · how others see you
+        {t('profile.preview.eyebrow')}
       </div>
       <div
         className="flex items-start gap-4 p-5 rounded-md"
@@ -34,13 +36,13 @@ export function PublicPreview({ data }: { data: ProfileData }) {
           }}
         >
           {data.avatarUrl
-            ? <img src={data.avatarUrl} alt={`${data.name || 'Profile'} avatar`} className="w-full h-full object-cover" />
+            ? <img src={data.avatarUrl} alt={`${data.name || t('profile.avatar.altProfile')} avatar`} className="w-full h-full object-cover" />
             : initials}
         </div>
         <div className="flex flex-col gap-1 min-w-0 flex-1">
           <div className="flex items-baseline gap-2">
             <span className="text-xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-              {data.name || 'Unnamed'}
+              {data.name || t('profile.preview.unnamed')}
             </span>
             {data.pronouns && (
               <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
@@ -86,7 +88,7 @@ export function PublicPreview({ data }: { data: ProfileData }) {
             color: 'var(--fg-strong)',
           }}
         >
-          Public profile is currently disabled. The preview above is what people would see if you turn it on.
+          {t('profile.preview.disabled')}
         </div>
       )}
     </div>

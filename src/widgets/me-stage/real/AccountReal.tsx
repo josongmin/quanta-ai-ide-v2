@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Mail, Loader2, Check, Eye, EyeOff, AlertTriangle, Trash2 } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Section, Row, Field, Button, Divider } from '@shared/ui/forms';
@@ -12,10 +13,11 @@ import {
 // change password (revokes other sessions), request deletion (confirmation
 // email). The mock's data-export section is dropped — no backend endpoint yet.
 export function AccountReal() {
+  const { t } = useTranslation('me');
   const { user } = useSession();
   const email = user?.email ?? '';
   return (
-    <MeShell title="Account" subtitle="Email, password, and account deletion.">
+    <MeShell title={t('real.account.title')} subtitle={t('real.account.subtitle')}>
       <EmailSectionReal currentEmail={email} />
       <PasswordSectionReal />
       <DangerSectionReal currentEmail={email} />
@@ -24,6 +26,7 @@ export function AccountReal() {
 }
 
 function EmailSectionReal({ currentEmail }: { currentEmail: string }) {
+  const { t } = useTranslation('me');
   const [editing, setEditing] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [phase, setPhase] = useState<'idle' | 'sending' | 'sent'>('idle');
@@ -42,14 +45,14 @@ function EmailSectionReal({ currentEmail }: { currentEmail: string }) {
 
   return (
     <Section
-      title="Email address"
-      hint="Used for sign-in. Changing requires confirmation from the new address."
+      title={t('real.account.email.title')}
+      hint={t('real.account.email.hint')}
     >
       <Row
-        label="Email address"
+        label={t('real.account.email.label')}
         sub={<span className="font-mono">{currentEmail || '—'}</span>}
       >
-        {!editing && <Button onClick={() => { setEditing(true); }}>Change email</Button>}
+        {!editing && <Button onClick={() => { setEditing(true); }}>{t('real.account.email.change')}</Button>}
       </Row>
 
       {editing && (
@@ -63,32 +66,32 @@ function EmailSectionReal({ currentEmail }: { currentEmail: string }) {
               <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
               <div className="flex flex-col gap-1.5 text-sm leading-snug">
                 <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-                  Verification email sent to {newEmail}
+                  {t('real.account.email.sentTitle', { email: newEmail })}
                 </span>
-                <span>Click the link in that email to complete the change. Until then you keep signing in with your current address.</span>
+                <span>{t('real.account.email.sentBody')}</span>
                 <div className="mt-1">
-                  <Button onClick={() => { setEditing(false); setNewEmail(''); setPhase('idle'); }}>Done</Button>
+                  <Button onClick={() => { setEditing(false); setNewEmail(''); setPhase('idle'); }}>{t('common.done')}</Button>
                 </div>
               </div>
             </div>
           ) : (
             <>
               <Field
-                label="New email"
+                label={t('real.account.email.new')}
                 type="email"
                 autoComplete="email"
                 value={newEmail}
                 onChange={(e) => { setNewEmail(e.target.value); }}
-                placeholder="you@company.com"
+                placeholder={t('real.account.email.newPlaceholder')}
                 autoFocus
               />
               <div className="flex items-center gap-2">
                 <Button variant="primary" size="md" disabled={!valid || phase === 'sending'} onClick={() => { void submit(); }}>
                   {phase === 'sending' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  {phase === 'sending' ? 'Sending…' : 'Send verification email'}
+                  {phase === 'sending' ? t('real.account.email.sending') : t('real.account.email.send')}
                 </Button>
                 <Button variant="ghost" size="md" onClick={() => { setEditing(false); setNewEmail(''); setError(null); }}>
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
               </div>
             </>
@@ -100,6 +103,7 @@ function EmailSectionReal({ currentEmail }: { currentEmail: string }) {
 }
 
 function PasswordSectionReal() {
+  const { t } = useTranslation('me');
   const [editing, setEditing] = useState(false);
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
@@ -131,11 +135,11 @@ function PasswordSectionReal() {
 
   return (
     <Section
-      title="Password"
-      hint="At least 12 characters with mixed case, a number, and a symbol. Other sessions are signed out on change."
+      title={t('real.account.password.title')}
+      hint={t('real.account.password.hint')}
     >
-      <Row label="Password" sub={<span>Change your sign-in password.</span>}>
-        {!editing && <Button onClick={() => { setEditing(true); }}>Change password</Button>}
+      <Row label={t('real.account.password.title')} sub={<span>{t('real.account.password.sub')}</span>}>
+        {!editing && <Button onClick={() => { setEditing(true); }}>{t('real.account.password.change')}</Button>}
       </Row>
 
       {editing && (
@@ -145,7 +149,7 @@ function PasswordSectionReal() {
         >
           {error && <InlineError message={error} onRetry={() => { setError(null); }} />}
           <Field
-            label="Current password"
+            label={t('real.account.password.current')}
             type="password"
             autoComplete="current-password"
             value={current}
@@ -155,19 +159,19 @@ function PasswordSectionReal() {
           />
           <div className="flex flex-col gap-2.5">
             <Field
-              label="New password"
+              label={t('real.account.password.new')}
               type={showNext ? 'text' : 'password'}
               autoComplete="new-password"
               value={next}
               onChange={(e) => { setNext(e.target.value); }}
-              placeholder="At least 12 characters"
+              placeholder={t('real.account.password.newPlaceholder')}
               trailing={
                 <button
                   type="button"
                   onClick={() => { setShowNext((v) => !v); }}
                   className="p-1 rounded-md"
                   style={{ color: 'var(--fg-muted)' }}
-                  aria-label={showNext ? 'Hide' : 'Show'}
+                  aria-label={showNext ? t('real.account.password.hide') : t('real.account.password.show')}
                 >
                   {showNext ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 </button>
@@ -176,12 +180,12 @@ function PasswordSectionReal() {
             {next.length > 0 && <PasswordStrengthPanel report={report} />}
           </div>
           <Field
-            label="Confirm new password"
+            label={t('real.account.password.confirm')}
             type={showNext ? 'text' : 'password'}
             autoComplete="new-password"
             value={confirm}
             onChange={(e) => { setConfirm(e.target.value); }}
-            error={mismatch ? 'Passwords do not match' : undefined}
+            error={mismatch ? t('real.account.password.mismatch') : undefined}
             trailing={confirm.length > 0 && !mismatch
               ? <Check className="w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />
               : undefined}
@@ -190,9 +194,9 @@ function PasswordSectionReal() {
             <Button variant="primary" size="md" onClick={() => { void submit(); }} disabled={!ready || phase !== 'idle'}>
               {phase === 'submitting' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               {phase === 'saved' && <Check className="w-3.5 h-3.5" />}
-              {phase === 'submitting' ? 'Updating…' : phase === 'saved' ? 'Updated' : 'Update password'}
+              {phase === 'submitting' ? t('real.account.password.updating') : phase === 'saved' ? t('real.account.password.updated') : t('real.account.password.update')}
             </Button>
-            <Button variant="ghost" size="md" onClick={reset} disabled={phase === 'submitting'}>Cancel</Button>
+            <Button variant="ghost" size="md" onClick={reset} disabled={phase === 'submitting'}>{t('common.cancel')}</Button>
           </div>
         </div>
       )}
@@ -201,6 +205,7 @@ function PasswordSectionReal() {
 }
 
 function DangerSectionReal({ currentEmail }: { currentEmail: string }) {
+  const { t } = useTranslation('me');
   const [open, setOpen] = useState(false);
   const [confirmText, setConfirmText] = useState('');
   const [phase, setPhase] = useState<'idle' | 'submitting' | 'sent'>('idle');
@@ -224,17 +229,17 @@ function DangerSectionReal({ currentEmail }: { currentEmail: string }) {
       <div className="mt-6 rounded-md overflow-hidden" style={{ border: '1px solid var(--intent-danger-fg)' }}>
         <div className="px-4 py-3 flex items-center gap-2" style={{ background: 'var(--intent-danger-bg)' }}>
           <AlertTriangle className="w-3.5 h-3.5" style={{ color: 'var(--intent-danger-fg)' }} />
-          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>Danger zone</span>
+          <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>{t('real.account.danger.zone')}</span>
         </div>
         <div className="px-4 py-4 flex flex-col gap-3">
           <Row
-            label="Delete this account"
-            sub="Permanently removes your profile and tokens, and removes you from all organizations. This cannot be undone."
+            label={t('real.account.danger.deleteLabel')}
+            sub={t('real.account.danger.deleteSub')}
             danger
           >
             {!open && (
               <Button variant="danger" onClick={() => { setOpen(true); }} leading={<Trash2 className="w-3 h-3" />}>
-                Delete account
+                {t('real.account.danger.deleteButton')}
               </Button>
             )}
           </Row>
@@ -249,26 +254,25 @@ function DangerSectionReal({ currentEmail }: { currentEmail: string }) {
                 <div className="flex items-start gap-3 text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
                   <Mail className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
                   <span>
-                    We&apos;ve emailed <span className="font-mono">{currentEmail}</span> a confirmation link.
-                    Your account is deleted once you confirm from that email.
+                    {t('real.account.danger.emailedPrefix')}<span className="font-mono">{currentEmail}</span>{t('real.account.danger.emailedSuffix')}
                   </span>
                 </div>
               ) : (
                 <>
                   <Field
-                    label={`Type "${required}" to confirm`}
+                    label={t('real.account.danger.confirmLabel', { phrase: required })}
                     value={confirmText}
                     onChange={(e) => { setConfirmText(e.target.value); }}
                     placeholder={required}
                     autoFocus
-                    error={confirmText.length > 0 && !matched ? "Doesn't match exactly." : undefined}
+                    error={confirmText.length > 0 && !matched ? t('real.account.danger.noMatch') : undefined}
                   />
                   <div className="flex items-center gap-2">
                     <Button variant="danger" size="md" disabled={!matched || phase === 'submitting'} onClick={() => { void submit(); }}>
                       {phase === 'submitting' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
-                      {phase === 'submitting' ? 'Sending…' : 'Email me a deletion link'}
+                      {phase === 'submitting' ? t('real.account.danger.sending') : t('real.account.danger.emailLink')}
                     </Button>
-                    <Button variant="ghost" size="md" onClick={() => { setOpen(false); setConfirmText(''); setError(null); }}>Cancel</Button>
+                    <Button variant="ghost" size="md" onClick={() => { setOpen(false); setConfirmText(''); setError(null); }}>{t('common.cancel')}</Button>
                   </div>
                 </>
               )}

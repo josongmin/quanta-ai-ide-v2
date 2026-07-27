@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Check, Star } from 'lucide-react';
 import { ITEM_ICONS, tintFor, type Item } from './types';
 
@@ -11,6 +12,7 @@ export function ListItem({
   onToggleBulk: () => void;
   onStar: () => void;
 }) {
+  const { t } = useTranslation('me');
   const Icon = ITEM_ICONS[item.type];
   return (
     <button
@@ -51,7 +53,7 @@ export function ListItem({
             <span
               className="w-1.5 h-1.5 rounded-full shrink-0"
               style={{ background: 'var(--fg-accent)' }}
-              aria-label="Unread"
+              aria-label={t('inbox.item.unread')}
             />
           )}
           <span
@@ -78,7 +80,7 @@ export function ListItem({
         onClick={(e) => { e.stopPropagation(); onStar(); }}
         className="p-1 rounded transition-colors shrink-0"
         style={{ color: item.starred ? 'var(--intent-warn-fg)' : 'var(--fg-subtle)' }}
-        aria-label={item.starred ? 'Unstar' : 'Star'}
+        aria-label={item.starred ? t('inbox.item.unstar') : t('inbox.item.star')}
       >
         <Star className="w-3 h-3" fill={item.starred ? 'currentColor' : 'none'} />
       </button>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   Smartphone, ShieldCheck, KeyRound, Plus, Trash2, ShieldAlert,
 } from 'lucide-react';
@@ -12,17 +13,18 @@ export function MfaSection({
   onRemove: (id: string) => void;
   onAdd: (kind: MfaKind) => void;
 }) {
+  const { t } = useTranslation('me');
   return (
     <Section
-      title="Two-factor authentication"
-      hint="At least one method is required. Add a backup so a lost device doesn't lock you out."
+      title={t('security.mfa.title')}
+      hint={t('security.mfa.hint')}
       right={
         <div className="flex items-center gap-1.5">
           <Button leading={<Plus className="w-3 h-3" />} onClick={() => { onAdd('totp'); }}>
-            Authenticator
+            {t('security.mfa.addAuthenticator')}
           </Button>
           <Button leading={<Plus className="w-3 h-3" />} onClick={() => { onAdd('webauthn'); }}>
-            Security key
+            {t('security.mfa.addSecurityKey')}
           </Button>
         </div>
       }
@@ -38,10 +40,10 @@ export function MfaSection({
           <ShieldAlert className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-danger-fg)' }} />
           <div className="flex flex-col gap-0.5 text-sm">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              No 2FA configured — your account is at higher risk
+              {t('security.mfa.noneTitle')}
             </span>
             <span style={{ color: 'var(--fg-muted)' }}>
-              Add at least one method. We recommend an authenticator app + a security key as backup.
+              {t('security.mfa.noneSub')}
             </span>
           </div>
         </div>
@@ -75,7 +77,9 @@ function MethodRow({
   onRemove: () => void;
   canRemove: boolean;
 }) {
+  const { t } = useTranslation('me');
   const Icon = method.kind === 'totp' ? Smartphone : method.kind === 'webauthn' ? ShieldCheck : KeyRound;
+  const kindLabel = method.kind === 'totp' ? t('security.mfa.kindTotp') : method.kind === 'webauthn' ? t('security.mfa.kindWebauthn') : t('security.mfa.kindSms');
   return (
     <div
       className="flex items-center gap-3 px-3 py-2.5"
@@ -103,23 +107,23 @@ function MethodRow({
               className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
               style={{ color: 'var(--fg-accent)', border: '1px solid var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
             >
-              Primary
+              {t('security.mfa.primary')}
             </span>
           )}
           <span
             className="text-2xs uppercase tracking-eyebrow font-semibold"
             style={{ color: 'var(--fg-subtle)' }}
           >
-            {method.kind === 'totp' ? 'TOTP' : method.kind === 'webauthn' ? 'WebAuthn' : 'SMS'}
+            {kindLabel}
           </span>
         </div>
         <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-          Added {method.added} · Last used {method.lastUsed}
+          {t('security.mfa.addedUsed', { added: method.added, lastUsed: method.lastUsed })}
         </span>
       </div>
       <div className="flex items-center gap-1.5">
-        {!method.primary && <Button onClick={onMakePrimary}>Make primary</Button>}
-        <Button variant="ghost" onClick={onRemove} disabled={!canRemove}>
+        {!method.primary && <Button onClick={onMakePrimary}>{t('security.mfa.makePrimary')}</Button>}
+        <Button variant="ghost" onClick={onRemove} disabled={!canRemove} aria-label={t('security.mfa.remove')}>
           <Trash2 className="w-3 h-3" />
         </Button>
       </div>

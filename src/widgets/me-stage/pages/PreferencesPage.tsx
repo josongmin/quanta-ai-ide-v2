@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Brain, Code2, GitPullRequest, ShieldCheck, Bot } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Section, Row, Toggle, Select, Divider, SaveBar } from '@shared/ui/forms';
@@ -66,197 +67,198 @@ const INITIAL: Preferences = {
 };
 
 export default function PreferencesPage() {
+  const { t } = useTranslation('me');
   const { draft, setDraft, dirty, savingState, save, discard } = useDirtyState(INITIAL);
 
   return (
     <MeShell
-      title="Preferences"
-      subtitle="How each workbench behaves by default. These apply only to you — your team has their own."
+      title={t('preferences.title')}
+      subtitle={t('preferences.subtitle')}
     >
-      <Section title="On startup" hint="Where the app lands when you open it after sign-in.">
-        <Row label="Starting workbench" sub="Pick a fixed tab, or 'Last visited' to resume where you were.">
+      <Section title={t('preferences.startup.title')} hint={t('preferences.startup.hint')}>
+        <Row label={t('preferences.startup.startingWorkbench')} sub={t('preferences.startup.startingWorkbenchSub')}>
           <Select
             value={draft.startTab}
             onChange={(v) => { setDraft({ ...draft, startTab: v }); }}
             options={[
-              { id: 'last-visited',  label: 'Last visited' },
-              { id: 'intelligence',  label: 'Intelligence' },
-              { id: 'coding',        label: 'Coding' },
-              { id: 'agents',        label: 'Agents' },
-              { id: 'reviews',       label: 'Reviews' },
-              { id: 'admission',     label: 'Admission' },
-              { id: 'fixes',         label: 'Fixes' },
+              { id: 'last-visited',  label: t('preferences.startup.lastVisited') },
+              { id: 'intelligence',  label: t('preferences.startup.intelligence') },
+              { id: 'coding',        label: t('preferences.startup.coding') },
+              { id: 'agents',        label: t('preferences.startup.agents') },
+              { id: 'reviews',       label: t('preferences.startup.reviews') },
+              { id: 'admission',     label: t('preferences.startup.admission') },
+              { id: 'fixes',         label: t('preferences.startup.fixes') },
             ]}
           />
         </Row>
       </Section>
 
       <WorkbenchSection
-        title="Intelligence"
+        title={t('preferences.intelligence.title')}
         icon={Brain}
-        hint="Dot field, matrix view, and universe mode."
+        hint={t('preferences.intelligence.hint')}
       >
-        <Row label="Default visualization">
+        <Row label={t('preferences.intelligence.defaultViz')}>
           <Select
             value={draft.intelligence.defaultViz}
             onChange={(v) => { setDraft({ ...draft, intelligence: { ...draft.intelligence, defaultViz: v } }); }}
             options={[
-              { id: 'dot-field', label: 'Dot field' },
-              { id: 'matrix',    label: 'Matrix' },
-              { id: 'universe',  label: 'Universe' },
+              { id: 'dot-field', label: t('preferences.intelligence.dotField') },
+              { id: 'matrix',    label: t('preferences.intelligence.matrix') },
+              { id: 'universe',  label: t('preferences.intelligence.universe') },
             ]}
           />
         </Row>
-        <Row label="Auto-open Inspect on click" sub="Clicking a dot opens the right-hand Inspect panel automatically.">
+        <Row label={t('preferences.intelligence.autoOpenInspect')} sub={t('preferences.intelligence.autoOpenInspectSub')}>
           <Toggle
             checked={draft.intelligence.autoOpenInspect}
             onChange={(v) => { setDraft({ ...draft, intelligence: { ...draft.intelligence, autoOpenInspect: v } }); }}
-            label="Auto-open Inspect"
+            label={t('preferences.intelligence.autoOpenInspectToggle')}
           />
         </Row>
-        <Row label="Show score labels in dot field" sub="Numeric labels next to each dot for risk + confidence.">
+        <Row label={t('preferences.intelligence.showScoreLabels')} sub={t('preferences.intelligence.showScoreLabelsSub')}>
           <Toggle
             checked={draft.intelligence.showScoreLabels}
             onChange={(v) => { setDraft({ ...draft, intelligence: { ...draft.intelligence, showScoreLabels: v } }); }}
-            label="Score labels"
+            label={t('preferences.intelligence.showScoreLabelsToggle')}
           />
         </Row>
-        <Row label="Confidence floor" sub="Hide dots below this confidence level by default.">
+        <Row label={t('preferences.intelligence.confidenceFloor')} sub={t('preferences.intelligence.confidenceFloorSub')}>
           <Select
             value={draft.intelligence.confidenceFloor}
             onChange={(v) => { setDraft({ ...draft, intelligence: { ...draft.intelligence, confidenceFloor: v } }); }}
             options={[
-              { id: 'low',    label: 'Low (show everything)' },
-              { id: 'medium', label: 'Medium (recommended)'  },
-              { id: 'high',   label: 'High (only confident)' },
+              { id: 'low',    label: t('preferences.intelligence.low') },
+              { id: 'medium', label: t('preferences.intelligence.medium') },
+              { id: 'high',   label: t('preferences.intelligence.high') },
             ]}
           />
         </Row>
       </WorkbenchSection>
 
-      <WorkbenchSection title="Coding" icon={Code2} hint="Editor and AI behavior in the coding stage.">
-        <Row label="Side-by-side diffs" sub="Show old/new in two columns instead of unified.">
+      <WorkbenchSection title={t('preferences.coding.title')} icon={Code2} hint={t('preferences.coding.hint')}>
+        <Row label={t('preferences.coding.sideBySide')} sub={t('preferences.coding.sideBySideSub')}>
           <Toggle
             checked={draft.coding.sideBySideDiff}
             onChange={(v) => { setDraft({ ...draft, coding: { ...draft.coding, sideBySideDiff: v } }); }}
-            label="Side-by-side"
+            label={t('preferences.coding.sideBySideToggle')}
           />
         </Row>
-        <Row label="Soft wrap long lines" sub="Wrap lines longer than the editor width.">
+        <Row label={t('preferences.coding.softWrap')} sub={t('preferences.coding.softWrapSub')}>
           <Toggle
             checked={draft.coding.softWrap}
             onChange={(v) => { setDraft({ ...draft, coding: { ...draft.coding, softWrap: v } }); }}
-            label="Soft wrap"
+            label={t('preferences.coding.softWrapToggle')}
           />
         </Row>
-        <Row label="Show whitespace markers" sub="Render dots/arrows for spaces and tabs.">
+        <Row label={t('preferences.coding.whitespace')} sub={t('preferences.coding.whitespaceSub')}>
           <Toggle
             checked={draft.coding.showWhitespace}
             onChange={(v) => { setDraft({ ...draft, coding: { ...draft.coding, showWhitespace: v } }); }}
-            label="Show whitespace"
+            label={t('preferences.coding.whitespaceToggle')}
           />
         </Row>
-        <Row label="Auto-save drafts" sub="Drafts persist in the browser; turning this off requires explicit save.">
+        <Row label={t('preferences.coding.autoSave')} sub={t('preferences.coding.autoSaveSub')}>
           <Toggle
             checked={draft.coding.autoSaveDrafts}
             onChange={(v) => { setDraft({ ...draft, coding: { ...draft.coding, autoSaveDrafts: v } }); }}
-            label="Auto-save drafts"
+            label={t('preferences.coding.autoSaveToggle')}
           />
         </Row>
-        <Row label="Inline AI suggestions" sub="Ghost text suggestions while typing.">
+        <Row label={t('preferences.coding.inline')} sub={t('preferences.coding.inlineSub')}>
           <Select
             value={draft.coding.inlineSuggestions}
             onChange={(v) => { setDraft({ ...draft, coding: { ...draft.coding, inlineSuggestions: v } }); }}
             options={[
-              { id: 'always',    label: 'Always show'              },
-              { id: 'on-hotkey', label: 'Only on hotkey · ⌘.'      },
-              { id: 'never',     label: 'Never'                    },
+              { id: 'always',    label: t('preferences.coding.always') },
+              { id: 'on-hotkey', label: t('preferences.coding.onHotkey') },
+              { id: 'never',     label: t('preferences.coding.never') },
             ]}
           />
         </Row>
       </WorkbenchSection>
 
-      <WorkbenchSection title="Reviews" icon={GitPullRequest} hint="PR review behaviors.">
-        <Row label="Default sort" sub="How the PR list is ordered when you open the Reviews tab.">
+      <WorkbenchSection title={t('preferences.reviews.title')} icon={GitPullRequest} hint={t('preferences.reviews.hint')}>
+        <Row label={t('preferences.reviews.defaultSort')} sub={t('preferences.reviews.defaultSortSub')}>
           <Select
             value={draft.reviews.defaultSort}
             onChange={(v) => { setDraft({ ...draft, reviews: { ...draft.reviews, defaultSort: v } }); }}
             options={[
-              { id: 'review-requested', label: 'Review requested first' },
-              { id: 'updated',          label: 'Recently updated'        },
-              { id: 'opened',           label: 'Recently opened'         },
-              { id: 'risk',             label: 'Highest risk first'      },
+              { id: 'review-requested', label: t('preferences.reviews.reviewRequested') },
+              { id: 'updated',          label: t('preferences.reviews.updated') },
+              { id: 'opened',           label: t('preferences.reviews.opened') },
+              { id: 'risk',             label: t('preferences.reviews.risk') },
             ]}
           />
         </Row>
-        <Row label="Show CI summary before approve" sub="Display the pass/fail bar above the approve button.">
+        <Row label={t('preferences.reviews.ciBefore')} sub={t('preferences.reviews.ciBeforeSub')}>
           <Toggle
             checked={draft.reviews.showCiBeforeApprove}
             onChange={(v) => { setDraft({ ...draft, reviews: { ...draft.reviews, showCiBeforeApprove: v } }); }}
-            label="CI before approve"
+            label={t('preferences.reviews.ciBeforeToggle')}
           />
         </Row>
-        <Row label="Require all conversations resolved" sub="Disables approve button if open threads exist.">
+        <Row label={t('preferences.reviews.resolveAll')} sub={t('preferences.reviews.resolveAllSub')}>
           <Toggle
             checked={draft.reviews.requireResolveAll}
             onChange={(v) => { setDraft({ ...draft, reviews: { ...draft.reviews, requireResolveAll: v } }); }}
-            label="Resolve all"
+            label={t('preferences.reviews.resolveAllToggle')}
           />
         </Row>
       </WorkbenchSection>
 
-      <WorkbenchSection title="Agents" icon={Bot} hint="Default agent and run-time policies.">
-        <Row label="Default agent">
+      <WorkbenchSection title={t('preferences.agents.title')} icon={Bot} hint={t('preferences.agents.hint')}>
+        <Row label={t('preferences.agents.defaultAgent')}>
           <Select
             value={draft.agents.defaultAgent}
             onChange={(v) => { setDraft({ ...draft, agents: { ...draft.agents, defaultAgent: v } }); }}
             options={[
-              { id: 'fix-pipeline',  label: 'Fix pipeline'  },
-              { id: 'review-bot',    label: 'Review bot'    },
-              { id: 'investigation', label: 'Investigation' },
+              { id: 'fix-pipeline',  label: t('preferences.agents.fixPipeline') },
+              { id: 'review-bot',    label: t('preferences.agents.reviewBot') },
+              { id: 'investigation', label: t('preferences.agents.investigation') },
             ]}
           />
         </Row>
-        <Row label="Confirm before launching" sub="Show a summary modal before any agent starts.">
+        <Row label={t('preferences.agents.confirm')} sub={t('preferences.agents.confirmSub')}>
           <Toggle
             checked={draft.agents.requireConfirm}
             onChange={(v) => { setDraft({ ...draft, agents: { ...draft.agents, requireConfirm: v } }); }}
-            label="Confirm launch"
+            label={t('preferences.agents.confirmToggle')}
           />
         </Row>
-        <Row label="Max parallel runs" sub="Throttles your concurrent agent runs.">
+        <Row label={t('preferences.agents.maxParallel')} sub={t('preferences.agents.maxParallelSub')}>
           <Select
             value={String(draft.agents.parallelLimit) as '1' | '2' | '3' | '5'}
             onChange={(v) => { setDraft({ ...draft, agents: { ...draft.agents, parallelLimit: Number(v) as 1 | 2 | 3 | 5 } }); }}
             options={[
               { id: '1', label: '1' },
               { id: '2', label: '2' },
-              { id: '3', label: '3 (default)' },
-              { id: '5', label: '5 (paid plans only)' },
+              { id: '3', label: t('preferences.agents.parallel3') },
+              { id: '5', label: t('preferences.agents.parallel5') },
             ]}
           />
         </Row>
       </WorkbenchSection>
 
-      <WorkbenchSection title="Admission" icon={ShieldCheck} hint="Gate behavior when a check fails.">
-        <Row label="Show proof obligations on fail" sub="Expanded breakdown of which obligation each check tested.">
+      <WorkbenchSection title={t('preferences.admission.title')} icon={ShieldCheck} hint={t('preferences.admission.hint')}>
+        <Row label={t('preferences.admission.showProof')} sub={t('preferences.admission.showProofSub')}>
           <Toggle
             checked={draft.admission.showProofOnFail}
             onChange={(v) => { setDraft({ ...draft, admission: { ...draft.admission, showProofOnFail: v } }); }}
-            label="Show proof"
+            label={t('preferences.admission.showProofToggle')}
           />
         </Row>
-        <Row label="Auto-link to fix candidate" sub="Suggest a fix candidate alongside each failed obligation.">
+        <Row label={t('preferences.admission.autoLink')} sub={t('preferences.admission.autoLinkSub')}>
           <Toggle
             checked={draft.admission.autoLink}
             onChange={(v) => { setDraft({ ...draft, admission: { ...draft.admission, autoLink: v } }); }}
-            label="Auto-link fix"
+            label={t('preferences.admission.autoLinkToggle')}
           />
         </Row>
       </WorkbenchSection>
 
-      <Section title="Reset to defaults" hint="Restore every setting on this page to its factory default.">
-        <Row label="Reset all preferences" sub="Other people's settings, your password, and your tokens are not affected.">
+      <Section title={t('preferences.reset.title')} hint={t('preferences.reset.hint')}>
+        <Row label={t('preferences.reset.label')} sub={t('preferences.reset.sub')}>
           <button
             type="button"
             onClick={() => { setDraft(INITIAL); }}
@@ -267,7 +269,7 @@ export default function PreferencesPage() {
               border: '1px dashed var(--border-default)',
             }}
           >
-            Reset to defaults
+            {t('preferences.reset.button')}
           </button>
         </Row>
       </Section>

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MeShell } from '../parts/MeShell';
 import { Section, Row, Toggle, Select, Divider, SaveBar } from '@shared/ui/forms';
 import { useDirtyState } from '../lib/useDirtyState';
@@ -8,6 +9,7 @@ import { CostInput } from './parts/ai/CostInput';
 import { SpendMeter } from './parts/ai/SpendMeter';
 
 export default function AiPage() {
+  const { t } = useTranslation('me');
   const { draft, setDraft, dirty, savingState, save, discard } = useDirtyState(INITIAL);
 
   // Estimate today's spend from a fake usage history. Drives the warning banner.
@@ -16,12 +18,12 @@ export default function AiPage() {
 
   return (
     <MeShell
-      title="AI"
-      subtitle="Pick the model behind each workbench, decide what auto-runs on your behalf, and bound the cost."
+      title={t('ai.title')}
+      subtitle={t('ai.subtitle')}
     >
       <Section
-        title="Model selection"
-        hint="Each workbench can use a different model. Faster + cheaper for noisy surfaces; deeper reasoning where it matters."
+        title={t('ai.models.title')}
+        hint={t('ai.models.hint')}
       >
         <div className="grid grid-cols-1 gap-2">
           {(Object.keys(SURFACE_META) as Surface[]).map((s) => (
@@ -35,81 +37,81 @@ export default function AiPage() {
         </div>
       </Section>
 
-      <Section title="Behavior" hint="How aggressively the AI offers suggestions and finishes things on your behalf.">
-        <Row label="Inline suggestions" sub="Ghost text in the editor as you type.">
+      <Section title={t('ai.behavior.title')} hint={t('ai.behavior.hint')}>
+        <Row label={t('ai.behavior.inline')} sub={t('ai.behavior.inlineSub')}>
           <Toggle
             checked={draft.inlineSuggestions}
             onChange={(v) => { setDraft({ ...draft, inlineSuggestions: v }); }}
-            label="Inline suggestions"
+            label={t('ai.behavior.inlineToggle')}
           />
         </Row>
-        <Row label="Suggestion verbosity" sub="Concise patches vs. paragraph-length explanations.">
+        <Row label={t('ai.behavior.verbosity')} sub={t('ai.behavior.verbositySub')}>
           <Select
             value={draft.suggestionVerbosity}
             onChange={(v) => { setDraft({ ...draft, suggestionVerbosity: v }); }}
             options={[
-              { id: 'brief',   label: 'Brief',   sub: 'Minimal patches, no prose'  },
-              { id: 'normal',  label: 'Normal',  sub: 'Default'                    },
-              { id: 'verbose', label: 'Verbose', sub: 'Explains every change'      },
+              { id: 'brief',   label: t('ai.behavior.brief'),   sub: t('ai.behavior.briefSub')  },
+              { id: 'normal',  label: t('ai.behavior.normal'),  sub: t('ai.behavior.normalSub')  },
+              { id: 'verbose', label: t('ai.behavior.verbose'), sub: t('ai.behavior.verboseSub')  },
             ]}
           />
         </Row>
-        <Row label="Auto-write commit messages" sub="Generate Conventional Commits headlines from the diff.">
+        <Row label={t('ai.behavior.autoCommit')} sub={t('ai.behavior.autoCommitSub')}>
           <Toggle
             checked={draft.autoCommitMessages}
             onChange={(v) => { setDraft({ ...draft, autoCommitMessages: v }); }}
-            label="Auto commit messages"
+            label={t('ai.behavior.autoCommitToggle')}
           />
         </Row>
-        <Row label="Auto-summarize PRs" sub="Adds a 3-bullet summary to each PR description in Reviews.">
+        <Row label={t('ai.behavior.autoSummary')} sub={t('ai.behavior.autoSummarySub')}>
           <Toggle
             checked={draft.autoReviewSummaries}
             onChange={(v) => { setDraft({ ...draft, autoReviewSummaries: v }); }}
-            label="Auto PR summaries"
+            label={t('ai.behavior.autoSummaryToggle')}
           />
         </Row>
-        <Row label="Auto-link evidence" sub="Attach related logs / metrics / past PRs to investigations automatically.">
+        <Row label={t('ai.behavior.autoEvidence')} sub={t('ai.behavior.autoEvidenceSub')}>
           <Toggle
             checked={draft.autoEvidenceLinks}
             onChange={(v) => { setDraft({ ...draft, autoEvidenceLinks: v }); }}
-            label="Auto evidence"
+            label={t('ai.behavior.autoEvidenceToggle')}
           />
         </Row>
-        <Row label="Context depth" sub="How much of the codebase the AI is allowed to read for each call.">
+        <Row label={t('ai.behavior.contextDepth')} sub={t('ai.behavior.contextDepthSub')}>
           <Select
             value={draft.contextDepth}
             onChange={(v) => { setDraft({ ...draft, contextDepth: v }); }}
             options={[
-              { id: 'file',      label: 'Single file',          sub: 'Cheapest, narrowest' },
-              { id: 'module',    label: 'Containing module',    sub: 'Balanced'            },
-              { id: 'workspace', label: 'Whole workspace',      sub: 'Most accurate'       },
+              { id: 'file',      label: t('ai.behavior.file'),      sub: t('ai.behavior.fileSub') },
+              { id: 'module',    label: t('ai.behavior.module'),    sub: t('ai.behavior.moduleSub') },
+              { id: 'workspace', label: t('ai.behavior.workspace'), sub: t('ai.behavior.workspaceSub') },
             ]}
           />
         </Row>
       </Section>
 
-      <Section title="Privacy & training" hint="Control whether your code helps train models.">
-        <Row label="Opt out of model training" sub="Your prompts and code are never used to train upstream models.">
+      <Section title={t('ai.privacy.title')} hint={t('ai.privacy.hint')}>
+        <Row label={t('ai.privacy.optOut')} sub={t('ai.privacy.optOutSub')}>
           <Toggle
             checked={draft.trainingOptOut}
             onChange={(v) => { setDraft({ ...draft, trainingOptOut: v }); }}
-            label="Opt out of training"
+            label={t('ai.privacy.optOutToggle')}
           />
         </Row>
-        <Row label="Redact secrets before sending" sub="Detects API keys / tokens in prompts and replaces them with placeholders.">
+        <Row label={t('ai.privacy.redact')} sub={t('ai.privacy.redactSub')}>
           <Toggle
             checked={draft.redactSecrets}
             onChange={(v) => { setDraft({ ...draft, redactSecrets: v }); }}
-            label="Redact secrets"
+            label={t('ai.privacy.redactToggle')}
           />
         </Row>
       </Section>
 
       <Section
-        title="Spend control"
-        hint="Caps your AI usage so a runaway loop doesn't burn through your monthly tokens. Org admins can override."
+        title={t('ai.spend.title')}
+        hint={t('ai.spend.hint')}
       >
-        <Row label="Daily cost cap" sub={<>Stops your account from making AI calls past this dollar amount per day. <span style={{ color: 'var(--fg-subtle)' }}>Today: ${todaySpend.toFixed(2)}</span></>}>
+        <Row label={t('ai.spend.dailyCap')} sub={<>{t('ai.spend.dailyCapSubPrefix')}<span style={{ color: 'var(--fg-subtle)' }}>{t('ai.spend.today', { amount: todaySpend.toFixed(2) })}</span></>}>
           <CostInput value={draft.costCapPerDay} onChange={(v) => { setDraft({ ...draft, costCapPerDay: v }); }} />
         </Row>
 
@@ -117,23 +119,23 @@ export default function AiPage() {
           <SpendMeter pct={spendPct} cap={draft.costCapPerDay} spent={todaySpend} alertAt={draft.spikeAlertAt} />
         )}
 
-        <Row label="Alert when at" sub="Pings you in the inbox when daily spend crosses this percentage of the cap.">
+        <Row label={t('ai.spend.alertWhen')} sub={t('ai.spend.alertWhenSub')}>
           <Select
             value={String(draft.spikeAlertAt) as '50' | '75' | '90' | '100'}
             onChange={(v) => { setDraft({ ...draft, spikeAlertAt: Number(v) }); }}
             options={[
-              { id: '50',  label: '50% of cap' },
-              { id: '75',  label: '75% of cap' },
-              { id: '90',  label: '90% of cap' },
-              { id: '100', label: '100% (cap hit)' },
+              { id: '50',  label: t('ai.spend.alert50') },
+              { id: '75',  label: t('ai.spend.alert75') },
+              { id: '90',  label: t('ai.spend.alert90') },
+              { id: '100', label: t('ai.spend.alert100') },
             ]}
           />
         </Row>
-        <Row label="Fall back to fast model when near cap" sub={<>At {draft.spikeAlertAt}% of cap, future calls use Haiku/GPT-mini regardless of surface preference.</>}>
+        <Row label={t('ai.spend.fallback')} sub={<>{t('ai.spend.fallbackSub', { pct: draft.spikeAlertAt })}</>}>
           <Toggle
             checked={draft.fallbackToFastModel}
             onChange={(v) => { setDraft({ ...draft, fallbackToFastModel: v }); }}
-            label="Fallback to fast"
+            label={t('ai.spend.fallbackToggle')}
           />
         </Row>
       </Section>

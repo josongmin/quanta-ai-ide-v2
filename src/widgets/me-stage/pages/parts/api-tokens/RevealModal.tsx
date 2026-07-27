@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Key, Copy, Check, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
@@ -6,6 +7,7 @@ import { useCopyToClipboard } from '@shared/lib';
 import type { Token } from './types';
 
 export function RevealModal({ token, onClose }: { token: Token; onClose: () => void }) {
+  const { t } = useTranslation('me');
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onClose);
   const fullToken = useMemo(() => {
@@ -50,11 +52,10 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
           </div>
           <div className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-              Save your new token
+              {t('apiTokens.reveal.title')}
             </h3>
             <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
-              <span className="font-semibold">This is the only time we&apos;ll show it.</span>{' '}
-              Once you close this dialog, only the prefix is visible.
+              <span className="font-semibold">{t('apiTokens.reveal.onlyOnce')}</span>{t('apiTokens.reveal.afterClose')}
             </p>
           </div>
         </div>
@@ -76,7 +77,7 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
             style={{ color: 'var(--fg-muted)' }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-            aria-label={shown ? 'Hide' : 'Show'}
+            aria-label={shown ? t('apiTokens.reveal.hide') : t('apiTokens.reveal.show')}
           >
             {shown ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
           </button>
@@ -91,17 +92,17 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
             }}
           >
             {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-            {copied ? 'Copied' : 'Copy'}
+            {copied ? t('apiTokens.reveal.copied') : t('apiTokens.reveal.copy')}
           </button>
         </div>
 
         <div className="flex flex-col gap-1 text-sm" style={{ color: 'var(--fg-muted)' }}>
-          <div><span style={{ color: 'var(--fg-strong)' }}>{token.name}</span> · {token.scopes.length} scope{token.scopes.length === 1 ? '' : 's'}</div>
-          <div>Expires {token.expiresAt ?? 'never'}</div>
+          <div><span style={{ color: 'var(--fg-strong)' }}>{token.name}</span> · {t('apiTokens.reveal.scopeCount', { count: token.scopes.length })}</div>
+          <div>{t('apiTokens.reveal.expires', { value: token.expiresAt ?? t('apiTokens.reveal.expiresNever') })}</div>
         </div>
 
         <div className="flex items-center justify-end gap-2 pt-1">
-          <Button variant="primary" size="md" onClick={onClose}>I&apos;ve saved it</Button>
+          <Button variant="primary" size="md" onClick={onClose}>{t('apiTokens.reveal.saved')}</Button>
         </div>
       </div>
     </div>

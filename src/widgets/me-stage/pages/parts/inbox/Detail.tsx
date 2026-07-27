@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Clock, Check, ExternalLink, X, Archive } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { ITEM_ICONS, tintFor, type Item } from './types';
@@ -5,6 +6,7 @@ import { ITEM_ICONS, tintFor, type Item } from './types';
 export function Detail({
   item, onArchive, onSnooze,
 }: { item: Item; onArchive: () => void; onSnooze: () => void }) {
+  const { t } = useTranslation('me');
   const Icon = ITEM_ICONS[item.type];
   return (
     <div className="flex flex-col h-full">
@@ -16,7 +18,7 @@ export function Detail({
           <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: tintFor(item.type) }} />
           <span className="text-xs uppercase tracking-eyebrow font-semibold"
             style={{ color: 'var(--fg-muted)' }}>
-            {item.type}
+            {t(`inbox.types.${item.type}`)}
           </span>
           {item.meta?.map((m, i) => (
             <span
@@ -46,10 +48,10 @@ export function Detail({
           ))}
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          <Button leading={<Clock className="w-3 h-3" />} onClick={onSnooze}>Snooze</Button>
-          <Button leading={<Archive className="w-3 h-3" />} onClick={onArchive}>Archive</Button>
+          <Button leading={<Clock className="w-3 h-3" />} onClick={onSnooze}>{t('inbox.detail.snooze')}</Button>
+          <Button leading={<Archive className="w-3 h-3" />} onClick={onArchive}>{t('inbox.detail.archive')}</Button>
           <Button variant="primary" leading={<ExternalLink className="w-3 h-3" />}>
-            <span className="whitespace-nowrap">Open in {item.where}</span>
+            <span className="whitespace-nowrap">{t('inbox.detail.openIn', { where: item.where })}</span>
           </Button>
         </div>
       </div>
@@ -59,9 +61,9 @@ export function Detail({
           {item.title}
         </h2>
         <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--fg-subtle)' }}>
-          <span>From <span style={{ color: 'var(--fg-default)' }}>{item.who}</span></span>
+          <span>{t('inbox.detail.from')} <span style={{ color: 'var(--fg-default)' }}>{item.who}</span></span>
           <span>·</span>
-          <span>In <span style={{ color: 'var(--fg-default)' }}>{item.where}</span></span>
+          <span>{t('inbox.detail.in')} <span style={{ color: 'var(--fg-default)' }}>{item.where}</span></span>
           <span>·</span>
           <span className="font-mono">{item.at}</span>
         </div>
@@ -81,10 +83,10 @@ export function Detail({
 
         <div className="flex flex-col gap-1.5 mt-2">
           <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>
-            Quick reply
+            {t('inbox.detail.quickReply')}
           </span>
           <textarea
-            placeholder="Type a reply or command (Cmd+Enter to send)…"
+            placeholder={t('inbox.detail.replyPlaceholder')}
             rows={3}
             className="rounded-md p-2.5 text-base outline-none resize-none"
             style={{
@@ -95,7 +97,7 @@ export function Detail({
             }}
           />
           <div className="flex items-center justify-end">
-            <Button variant="primary" size="md">Send reply</Button>
+            <Button variant="primary" size="md">{t('inbox.detail.sendReply')}</Button>
           </div>
         </div>
       </div>
@@ -104,6 +106,7 @@ export function Detail({
 }
 
 function ContextSnippet({ item }: { item: Item }) {
+  const { t } = useTranslation('me');
   if (item.type === 'review' || item.type === 'fix') {
     return (
       <div
@@ -118,7 +121,7 @@ function ContextSnippet({ item }: { item: Item }) {
             borderBottom: '1px solid var(--border-muted)',
           }}
         >
-          Diff context
+          {t('inbox.detail.diffContext')}
         </div>
         <pre
           className="p-2.5 text-sm font-mono"

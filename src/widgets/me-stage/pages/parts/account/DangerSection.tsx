@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Trash2 } from 'lucide-react';
 import { Row, Field, Button, Divider } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
@@ -8,9 +9,10 @@ import { useDialogA11y } from '@shared/ui';
 // which renders instead whenever env.useRealAuth is on. In this standalone
 // demo there is no backend, so the primary action is honestly DISABLED with
 // an accessible reason rather than faking a successful deletion.
-const DEMO_REASON = 'Not available in this demo build — account deletion needs a signed-in backend.';
 
 export function DangerSection() {
+  const { t } = useTranslation('me');
+  const demoReason = t('account.danger.reason');
   const [open, setOpen] = useState(false);
   const [confirmText, setConfirmText] = useState('');
   const [reason, setReason] = useState('');
@@ -36,18 +38,18 @@ export function DangerSection() {
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-3.5 h-3.5" style={{ color: 'var(--intent-danger-fg)' }} />
             <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Danger zone
+              {t('account.danger.zone')}
             </span>
           </div>
         </div>
         <div className="px-4 py-4 flex flex-col gap-2">
           <Row
-            label="Delete this account"
-            sub="Permanently removes your profile, comments, and tokens. You'll be removed from all organizations. This action cannot be undone."
+            label={t('account.danger.deleteLabel')}
+            sub={t('account.danger.deleteSub')}
             danger
           >
             <Button variant="danger" onClick={() => { setOpen(true); }} leading={<Trash2 className="w-3 h-3" />}>
-              Delete account
+              {t('account.danger.deleteButton')}
             </Button>
           </Row>
         </div>
@@ -79,28 +81,26 @@ export function DangerSection() {
               </div>
               <div className="flex flex-col gap-1">
                 <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-                  Delete your account?
+                  {t('account.danger.modalTitle')}
                 </h3>
                 <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
-                  This permanently deletes <span className="font-mono">sora@acme.com</span>,
-                  your reviews, comments, AI usage history, and personal access tokens. You&apos;ll be removed from
-                  3 organizations. Your contributions remain attributed to a deleted user.
+                  {t('account.danger.modalBodyPrefix')}<span className="font-mono">sora@acme.com</span>{t('account.danger.modalBodySuffix')}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-col gap-2.5">
               <Field
-                label={`Type "${required}" to confirm`}
+                label={t('account.danger.confirmLabel', { phrase: required })}
                 value={confirmText}
                 onChange={(e) => { setConfirmText(e.target.value); }}
                 placeholder={required}
                 autoFocus
-                error={confirmText.length > 0 && !matched ? 'Doesn\'t match exactly.' : undefined}
+                error={confirmText.length > 0 && !matched ? t('account.danger.noMatch') : undefined}
               />
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-                  Reason for leaving (optional)
+                  {t('account.danger.reasonLabel')}
                 </span>
                 <select
                   value={reason}
@@ -112,33 +112,33 @@ export function DangerSection() {
                     color: 'var(--fg-strong)',
                   }}
                 >
-                  <option value="">No reason</option>
-                  <option value="duplicate">I have another account</option>
-                  <option value="not-using">I&apos;m not using it anymore</option>
-                  <option value="too-expensive">Too expensive</option>
-                  <option value="missing-feature">Missing a feature I need</option>
-                  <option value="found-alternative">Found an alternative</option>
-                  <option value="other">Other</option>
+                  <option value="">{t('account.danger.reasonOptions.none')}</option>
+                  <option value="duplicate">{t('account.danger.reasonOptions.duplicate')}</option>
+                  <option value="not-using">{t('account.danger.reasonOptions.notUsing')}</option>
+                  <option value="too-expensive">{t('account.danger.reasonOptions.tooExpensive')}</option>
+                  <option value="missing-feature">{t('account.danger.reasonOptions.missingFeature')}</option>
+                  <option value="found-alternative">{t('account.danger.reasonOptions.foundAlternative')}</option>
+                  <option value="other">{t('account.danger.reasonOptions.other')}</option>
                 </select>
               </label>
             </div>
 
             <p className="text-sm leading-snug -mt-1" style={{ color: 'var(--fg-subtle)' }}>
-              {DEMO_REASON}
+              {demoReason}
             </p>
 
             <div className="flex items-center justify-end gap-2 pt-1">
               <Button variant="ghost" size="md" onClick={close}>
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button
                 variant="danger"
                 size="md"
                 disabled
-                title={DEMO_REASON}
+                title={demoReason}
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                Permanently delete
+                {t('account.danger.confirmDelete')}
               </Button>
             </div>
           </div>

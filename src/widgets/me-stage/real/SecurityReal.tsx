@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Monitor, LogOut, ShieldCheck } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Section, Row, Button, Divider } from '@shared/ui/forms';
@@ -12,8 +13,8 @@ import { TwoFactorSection } from './TwoFactorSection';
 // Real security surface: two-factor enrollment (TwoFactorSection) + active
 // sessions (list + revoke + sign-out-everywhere) over better-auth.
 
-function deviceLabel(ua: string | null): string {
-  if (!ua) return 'Unknown device';
+function deviceLabel(ua: string | null, unknownLabel: string): string {
+  if (!ua) return unknownLabel;
   const browser = /edg/i.test(ua) ? 'Edge'
     : /chrome/i.test(ua) ? 'Chrome'
     : /firefox/i.test(ua) ? 'Firefox'
@@ -34,6 +35,7 @@ function whenLabel(iso: string): string {
 const EMPTY_SESSIONS: ActiveSession[] = [];
 
 export function SecurityReal() {
+  const { t } = useTranslation('me');
   const { sessionId } = useSession();
   const [sessions, setSessions] = useState<ActiveSession[]>(EMPTY_SESSIONS);
   const [loading, setLoading] = useState(true);
@@ -80,10 +82,10 @@ export function SecurityReal() {
   const otherCount = sessions.filter((s) => s.id !== sessionId).length;
 
   return (
-    <MeShell title="Security" subtitle="Two-factor, active sessions, and sign-in.">
+    <MeShell title={t('real.security.title')} subtitle={t('real.security.subtitle')}>
       <TwoFactorSection />
 
-      <Section title="Active sessions" hint="Devices currently signed in to your account.">
+      <Section title={t('real.security.sessions.title')} hint={t('real.security.sessions.hint')}>
         {actionError && (
           <div className="mb-3"><InlineError message={actionError} onRetry={() => { setActionError(null); }} /></div>
         )}
@@ -96,10 +98,10 @@ export function SecurityReal() {
         ) : (
           <DataTable<ActiveSession>
             columns="1fr 150px 160px 44px"
-            headers={[{ header: 'Device' }, { header: 'IP' }, { header: 'Signed in' }, { header: '' }]}
+            headers={[{ header: t('real.security.sessions.colDevice') }, { header: t('real.security.sessions.colIp') }, { header: t('real.security.sessions.colSignedIn') }, { header: '' }]}
             rows={sessions}
             rowKey={(s) => s.token}
-            empty={<EmptyState title="No active sessions" subtitle="Sessions will appear here." />}
+            empty={<EmptyState title={t('real.security.sessions.emptyTitle')} subtitle={t('real.security.sessions.emptySubtitle')} />}
             renderRow={(s) => {
               // Current-session detection by stable session id, never the token
               // (revoke still uses the token). Guards against revoking your own
@@ -110,8 +112,8 @@ export function SecurityReal() {
                   <div className="flex items-center gap-2.5 min-w-0">
                     <Monitor className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
                     <span className="text-base truncate flex items-center gap-1.5" style={{ color: 'var(--fg-strong)' }}>
-                      {deviceLabel(s.userAgent)}
-                      {isCurrent && <Badge variant="success" size="sm">This device</Badge>}
+                      {deviceLabel(s.userAgent, t('real.security.unknownDevice'))}
+                      {isCurrent && <Badge variant="success" size="sm">{t('real.security.sessions.thisDevice')}</Badge>}
                     </span>
                   </div>
                   <span className="font-mono text-sm" style={{ color: 'var(--fg-muted)' }}>{s.ipAddress ?? '—'}</span>
@@ -121,7 +123,7 @@ export function SecurityReal() {
                   ) : (
                     <button
                       type="button"
-                      title="Revoke"
+                      title={t('real.security.sessions.revoke')}
                       disabled={busyToken === s.token}
                       onClick={() => { void revokeOne(s.token); }}
                       className="w-7 h-7 rounded-md inline-flex items-center justify-center transition-colors"
@@ -141,15 +143,15 @@ export function SecurityReal() {
 
       <Divider />
 
-      <Section title="Sign out everywhere" hint="Ends every other session but this one.">
-        <Row label="Other sessions" sub={`${otherCount.toString()} other ${otherCount === 1 ? 'session' : 'sessions'} signed in.`}>
+      <Section title={t('real.security.signOut.title')} hint={t('real.security.signOut.hint')}>
+        <Row label={t('real.security.signOut.label')} sub={t('real.security.signOut.sub', { count: otherCount })}>
           <Button
             variant="danger"
             leading={<ShieldCheck className="w-3 h-3" />}
             disabled={otherCount === 0}
             onClick={() => { setConfirmAll(true); }}
           >
-            Sign out other sessions
+            {t('real.security.signOut.button')}
           </Button>
         </Row>
       </Section>
@@ -159,9 +161,9 @@ export function SecurityReal() {
           open
           onCancel={() => { setConfirmAll(false); }}
           onConfirm={() => { void revokeOthers(); }}
-          title="Sign out other sessions?"
-          confirmLabel="Sign out others"
-          description="Every other signed-in device will be signed out immediately. This device stays signed in."
+          title={t('real.security.signOut.confirmTitle')}
+          confirmLabel={t('real.security.signOut.confirmLabel')}
+          description={t('real.security.signOut.confirmDescription')}
         />
       )}
     </MeShell>

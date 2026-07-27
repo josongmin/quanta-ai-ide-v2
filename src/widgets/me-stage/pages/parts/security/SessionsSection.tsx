@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Monitor, Globe, MapPin, X } from 'lucide-react';
 import { Section, Button } from '@shared/ui/forms';
 import { SESSIONS, type Session } from './types';
 
 export function SessionsSection() {
+  const { t } = useTranslation('me');
   const [sessions, setSessions] = useState(SESSIONS);
   const revoke = (id: string) => {
     setSessions((s) => s.filter((x) => x.id !== id));
@@ -11,8 +13,8 @@ export function SessionsSection() {
 
   return (
     <Section
-      title="Active sessions"
-      hint={`${sessions.length} sessions across your devices. Revoke any you don't recognize.`}
+      title={t('security.sessions.title')}
+      hint={t('security.sessions.hint', { count: sessions.length })}
     >
       <div
         className="flex flex-col rounded-md overflow-hidden"
@@ -34,6 +36,7 @@ export function SessionsSection() {
 function SessionRow({
   session, top, onRevoke,
 }: { session: Session; top: boolean; onRevoke: (() => void) | null }) {
+  const { t } = useTranslation('me');
   return (
     <div
       className="flex items-start gap-3 px-3 py-3"
@@ -61,7 +64,7 @@ function SessionRow({
               className="text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
               style={{ color: 'var(--fg-accent)', border: '1px solid var(--fg-accent)', background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
             >
-              This device
+              {t('security.sessions.thisDevice')}
             </span>
           )}
         </div>
@@ -76,7 +79,7 @@ function SessionRow({
       </div>
       {onRevoke && (
         <Button variant="ghost" onClick={onRevoke}>
-          <X className="w-3 h-3" /> Revoke
+          <X className="w-3 h-3" /> {t('security.sessions.revoke')}
         </Button>
       )}
     </div>

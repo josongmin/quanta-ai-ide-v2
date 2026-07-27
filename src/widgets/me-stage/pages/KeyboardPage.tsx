@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, RotateCcw, AlertTriangle, Download, Upload } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Section, Button } from '@shared/ui/forms';
@@ -7,6 +8,7 @@ import { ShortcutRow } from './parts/keyboard/ShortcutRow';
 import { RecordModal } from './parts/keyboard/RecordModal';
 
 export default function KeyboardPage() {
+  const { t } = useTranslation('me');
   const [shortcuts, setShortcuts] = useState(DEFAULTS);
   const [q, setQ] = useState('');
   const [editing, setEditing] = useState<Shortcut | null>(null);
@@ -45,17 +47,17 @@ export default function KeyboardPage() {
 
   return (
     <MeShell
-      title="Keyboard"
-      subtitle="Customize shortcuts. Use the search to find one fast — when you record a new combo we'll detect conflicts."
+      title={t('keyboard.title')}
+      subtitle={t('keyboard.subtitle')}
       topRight={
         <div className="flex items-center gap-1.5">
           <Button leading={<Download className="w-3 h-3" />} onClick={() => { downloadJson(shortcuts); }}>
-            Export
+            {t('keyboard.export')}
           </Button>
-          <Button leading={<Upload className="w-3 h-3" />}>Import</Button>
+          <Button leading={<Upload className="w-3 h-3" />}>{t('keyboard.import')}</Button>
           {dirty && (
             <Button leading={<RotateCcw className="w-3 h-3" />} onClick={resetAll}>
-              Reset all
+              {t('keyboard.resetAll')}
             </Button>
           )}
         </div>
@@ -72,7 +74,7 @@ export default function KeyboardPage() {
         <input
           value={q}
           onChange={(e) => { setQ(e.target.value); }}
-          placeholder="Search by command, group, or keystroke…"
+          placeholder={t('keyboard.searchPlaceholder')}
           className="flex-1 bg-transparent outline-none text-base"
           style={{ color: 'var(--fg-strong)' }}
         />
@@ -80,7 +82,7 @@ export default function KeyboardPage() {
           <button type="button" onClick={() => { setQ(''); }}
             className="text-xs uppercase tracking-eyebrow font-medium px-1.5 py-0.5 rounded"
             style={{ color: 'var(--fg-subtle)', background: 'var(--bg-active)' }}>
-            Clear
+            {t('keyboard.clear')}
           </button>
         )}
       </div>
@@ -96,11 +98,10 @@ export default function KeyboardPage() {
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
           <div className="flex flex-col gap-1 text-sm">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              {conflicts.length} conflict{conflicts.length === 1 ? '' : 's'} detected
+              {t('keyboard.conflicts', { count: conflicts.length })}
             </span>
             <span style={{ color: 'var(--fg-muted)' }}>
-              When two commands share the same combo, only the last-defined one fires.
-              Affected: {conflicts.map((c) => c.label).join(', ')}.
+              {t('keyboard.conflictBody', { list: conflicts.map((c) => c.label).join(', ') })}
             </span>
           </div>
         </div>
@@ -128,7 +129,7 @@ export default function KeyboardPage() {
 
       {groups.length === 0 && (
         <div className="text-center py-12 text-base" style={{ color: 'var(--fg-subtle)' }}>
-          No shortcuts match &quot;{q}&quot;.
+          {t('keyboard.noMatch', { query: q })}
         </div>
       )}
 

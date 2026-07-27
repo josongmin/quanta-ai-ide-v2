@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Keyboard, RotateCcw } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import type { Shortcut } from './types';
@@ -12,6 +13,7 @@ export function ShortcutRow({
   onEdit: () => void;
   onReset: () => void;
 }) {
+  const { t } = useTranslation('me');
   const customized = shortcut.current !== shortcut.defaultKey;
   return (
     <div
@@ -34,8 +36,8 @@ export function ShortcutRow({
       </div>
       <KeyChip combo={shortcut.current} conflict={conflict} customized={customized} />
       <div className="flex items-center gap-1.5">
-        <Button onClick={onEdit}>Record new</Button>
-        <Button variant="ghost" onClick={onReset} disabled={!customized}>
+        <Button onClick={onEdit}>{t('keyboard.row.recordNew')}</Button>
+        <Button variant="ghost" onClick={onReset} disabled={!customized} aria-label={t('keyboard.row.reset')}>
           <RotateCcw className="w-3 h-3" />
         </Button>
       </div>

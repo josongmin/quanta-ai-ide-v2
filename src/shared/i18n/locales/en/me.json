@@ -1,1 +1,888 @@
-{}
+{
+  "shell": {
+    "breadcrumbRoot": "Personal",
+    "breadcrumbAria": "Breadcrumb",
+    "fallbackName": "You",
+    "nav": {
+      "identity": "Identity",
+      "access": "Access & integrations",
+      "experience": "Experience",
+      "streams": "Streams",
+      "profile": "Profile",
+      "account": "Account",
+      "security": "Security",
+      "connectedApps": "Connected apps",
+      "apiTokens": "API tokens",
+      "notifications": "Notifications",
+      "appearance": "Appearance",
+      "preferences": "Preferences",
+      "keyboard": "Keyboard",
+      "ai": "AI",
+      "inbox": "Inbox"
+    }
+  },
+  "comingSoon": {
+    "connectedApps": "Connected apps",
+    "notifications": "Notifications",
+    "ai": "AI",
+    "availableSoon": "Available soon",
+    "subtitle": "{{title}} isn't connected to your account yet — it's coming in a later release."
+  },
+  "real": {
+    "profile": {
+      "title": "Profile",
+      "subtitle": "How you appear to teammates in mentions and reviews.",
+      "identity": "Identity",
+      "identityHint": "Your display name appears throughout the product.",
+      "fullName": "Full name",
+      "namePlaceholder": "Your name"
+    },
+    "account": {
+      "title": "Account",
+      "subtitle": "Email, password, and account deletion.",
+      "email": {
+        "title": "Email address",
+        "hint": "Used for sign-in. Changing requires confirmation from the new address.",
+        "label": "Email address",
+        "change": "Change email",
+        "sentTitle": "Verification email sent to {{email}}",
+        "sentBody": "Click the link in that email to complete the change. Until then you keep signing in with your current address.",
+        "new": "New email",
+        "newPlaceholder": "you@company.com",
+        "sending": "Sending…",
+        "send": "Send verification email"
+      },
+      "password": {
+        "title": "Password",
+        "hint": "At least 12 characters with mixed case, a number, and a symbol. Other sessions are signed out on change.",
+        "sub": "Change your sign-in password.",
+        "change": "Change password",
+        "current": "Current password",
+        "new": "New password",
+        "newPlaceholder": "At least 12 characters",
+        "confirm": "Confirm new password",
+        "mismatch": "Passwords do not match",
+        "show": "Show",
+        "hide": "Hide",
+        "updating": "Updating…",
+        "updated": "Updated",
+        "update": "Update password"
+      },
+      "danger": {
+        "zone": "Danger zone",
+        "deleteLabel": "Delete this account",
+        "deleteSub": "Permanently removes your profile and tokens, and removes you from all organizations. This cannot be undone.",
+        "deleteButton": "Delete account",
+        "emailedPrefix": "We've emailed ",
+        "emailedSuffix": " a confirmation link. Your account is deleted once you confirm from that email.",
+        "confirmLabel": "Type \"{{phrase}}\" to confirm",
+        "noMatch": "Doesn't match exactly.",
+        "sending": "Sending…",
+        "emailLink": "Email me a deletion link"
+      }
+    },
+    "security": {
+      "title": "Security",
+      "subtitle": "Two-factor, active sessions, and sign-in.",
+      "unknownDevice": "Unknown device",
+      "sessions": {
+        "title": "Active sessions",
+        "hint": "Devices currently signed in to your account.",
+        "colDevice": "Device",
+        "colIp": "IP",
+        "colSignedIn": "Signed in",
+        "emptyTitle": "No active sessions",
+        "emptySubtitle": "Sessions will appear here.",
+        "thisDevice": "This device",
+        "revoke": "Revoke"
+      },
+      "signOut": {
+        "title": "Sign out everywhere",
+        "hint": "Ends every other session but this one.",
+        "label": "Other sessions",
+        "sub_one": "{{count}} other session signed in.",
+        "sub_other": "{{count}} other sessions signed in.",
+        "button": "Sign out other sessions",
+        "confirmTitle": "Sign out other sessions?",
+        "confirmLabel": "Sign out others",
+        "confirmDescription": "Every other signed-in device will be signed out immediately. This device stays signed in."
+      },
+      "twoFactor": {
+        "title": "Two-factor authentication",
+        "hint": "Require a one-time code from an authenticator app at sign-in.",
+        "label": "Authenticator app (TOTP)",
+        "enabledSub": "Enabled — a 6-digit code is required when you sign in.",
+        "disabledSub": "Protect your account with a time-based one-time code.",
+        "enabled": "Enabled",
+        "regenerate": "Regenerate backup codes",
+        "disable": "Disable",
+        "enable": "Enable 2FA",
+        "enableTitle": "Enable two-factor authentication",
+        "enrollFailed": "Enrollment failed — please try again.",
+        "checking": "Checking…",
+        "continue": "Continue",
+        "verifying": "Verifying…",
+        "verifyEnable": "Verify & enable",
+        "confirmPassword": "Confirm your password to begin setting up two-factor authentication.",
+        "password": "Password",
+        "scanTitle": "Scan with your authenticator",
+        "scanBody": "1Password, Authy, Google Authenticator, etc. Then enter the 6-digit code below to activate.",
+        "backupSave": "Backup codes — save these",
+        "copied": "Copied",
+        "copyAll": "Copy all",
+        "backupNote": "Each code works once if you lose your authenticator. Store them somewhere safe.",
+        "code": "6-digit code",
+        "codePlaceholder": "123456",
+        "regenerateTitle": "Regenerate backup codes",
+        "done": "Done",
+        "generating": "Generating…",
+        "regenerateAction": "Regenerate",
+        "newCodes": "New codes — the old set no longer works.",
+        "regenerateBody": "This invalidates your existing backup codes and issues a fresh set. Confirm your password.",
+        "disableTitle": "Disable two-factor",
+        "disabling": "Disabling…",
+        "disableAction": "Disable 2FA",
+        "disableBody": "Removing two-factor lowers your account security. Confirm your password to continue."
+      }
+    },
+    "tokens": {
+      "title": "API tokens",
+      "subtitle": "Personal access tokens for the API and CLI. Treat them like passwords.",
+      "newToken": "New token",
+      "colToken": "Token",
+      "colPrefix": "Prefix",
+      "colCreated": "Created",
+      "colExpires": "Expires",
+      "fallbackName": "token",
+      "emptyTitle": "No tokens yet",
+      "emptySubtitle": "Create a token to use the API or CLI.",
+      "revokeToken": "Revoke token",
+      "createdTitle": "Token \"{{name}}\" created",
+      "revokeConfirmTitle": "Revoke \"{{name}}\"?",
+      "revoke": "Revoke",
+      "revokeDescription": "Any client using this token will immediately lose access. This can't be undone.",
+      "createTitle": "New API token",
+      "generating": "Generating…",
+      "generate": "Generate token",
+      "name": "Name",
+      "namePlaceholder": "CI pipeline",
+      "expiration": "Expiration",
+      "expiry": {
+        "days30": "30 days",
+        "days60": "60 days",
+        "days90": "90 days",
+        "year1": "1 year",
+        "none": "No expiry"
+      }
+    },
+    "inbox": {
+      "title": "Inbox",
+      "subtitle": "Account and organization activity. Security alerts about your account, plus changes across orgs you administer.",
+      "markAllRead": "Mark all read",
+      "all": "All",
+      "unread": "Unread",
+      "unreadCount": "Unread · {{count}}",
+      "emptyTitle": "No notifications",
+      "emptyUnread": "Nothing unread.",
+      "emptyAll": "Account and org activity will show up here.",
+      "unreadPrefix": "Unread: ",
+      "byActor": "by {{actor}}",
+      "targetByActor": "{{target}} · by {{actor}}",
+      "loading": "Loading…",
+      "loadMore": "Load more",
+      "relTime": {
+        "justNow": "just now",
+        "minutes": "{{count}}m ago",
+        "hours": "{{count}}h ago",
+        "days": "{{count}}d ago"
+      },
+      "actions": {
+        "orgMemberInvited": "Member invited",
+        "orgMemberRemoved": "Member removed",
+        "orgMemberRoleChanged": "Member role changed",
+        "orgInvitationCanceled": "Invitation canceled",
+        "orgUpdated": "Organization updated",
+        "orgDeleted": "Organization deleted",
+        "orgTeamCreated": "Team created",
+        "orgTeamDeleted": "Team deleted",
+        "security2faEnabled": "Two-factor enabled",
+        "security2faDisabled": "Two-factor disabled",
+        "securityPasswordChanged": "Password changed",
+        "securitySessionRevoked": "Session revoked",
+        "apikeyCreated": "API key created",
+        "apikeyRevoked": "API key revoked",
+        "billingSubscriptionUpdated": "Subscription updated",
+        "billingPaymentFailed": "Payment failed"
+      }
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "done": "Done",
+    "demoReasonShort": "Not available in this demo build."
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "How you appear to teammates in mentions, reviews, and the dot field.",
+    "hidePreview": "Hide preview",
+    "showPreview": "Preview public profile",
+    "photo": {
+      "title": "Photo",
+      "hint": "A square image works best. PNG, JPG, GIF, or WebP up to 2 MB.",
+      "custom": "Custom photo",
+      "generated": "Generated avatar",
+      "customSub": "Will be cropped to a circle in mentions and member lists.",
+      "generatedSub": "Initials are derived from your name. Upload a photo to override."
+    },
+    "identity": {
+      "title": "Identity",
+      "hint": "Your name and handle appear together throughout the product.",
+      "fullName": "Full name",
+      "pronouns": "Pronouns",
+      "handle": "Handle",
+      "jobTitle": "Job title",
+      "location": "Location"
+    },
+    "bio": {
+      "title": "Bio",
+      "hint": "Up to 280 characters. Markdown supported.",
+      "label": "Short bio",
+      "placeholder": "A line or two about you, your role, and what you work on."
+    },
+    "social": {
+      "title": "Social links",
+      "hint": "Shown on your public profile if enabled. Empty fields are hidden.",
+      "placeholder": "username"
+    },
+    "visibility": {
+      "title": "Visibility",
+      "hint": "Control what your public-facing profile exposes.",
+      "publicProfile": "Public profile",
+      "publicProfileSubPrefix": "Anyone with the link can view your profile at ",
+      "showEmail": "Show email on public profile",
+      "showEmailSub": "Anyone viewing your public profile can see your work email.",
+      "toggleShowEmail": "Show email"
+    },
+    "avatar": {
+      "upload": "Upload avatar",
+      "remove": "Remove photo",
+      "altYours": "Your",
+      "altProfile": "Profile"
+    },
+    "preview": {
+      "eyebrow": "Public preview · how others see you",
+      "unnamed": "Unnamed",
+      "disabled": "Public profile is currently disabled. The preview above is what people would see if you turn it on."
+    }
+  },
+  "account": {
+    "title": "Account",
+    "subtitle": "Email, password, exports, and account deletion.",
+    "email": {
+      "title": "Email address",
+      "hint": "Used for sign-in and account-related notifications. Changing requires confirmation from both addresses.",
+      "currentLabel": "Current email",
+      "label": "Email address",
+      "verified": "· Verified",
+      "change": "Change email",
+      "newEmail": "New email",
+      "newEmailPlaceholder": "you@company.com",
+      "send": "Send verification email",
+      "sending": "Sending…",
+      "willSendPrefix": "We'll send a confirmation link to ",
+      "willSendMiddle": ". Until you click it, you'll keep signing in with ",
+      "willSendSuffix": ".",
+      "newAddressFallback": "the new address",
+      "sentTitle": "Verification email sent to {{email}}",
+      "sentBodyPrefix": "Click the link in that email within 30 minutes to complete the change. We've also notified ",
+      "sentBodySuffix": " so you can revoke if it wasn't you.",
+      "useDifferent": "Use a different email",
+      "ssoWarningSuffix": " requires SSO. After you change to this address, you'll sign in via the IdP and password will be disabled."
+    },
+    "password": {
+      "title": "Password",
+      "hint": "At least 12 characters with mixed case, a number, and a symbol. We'll sign out other sessions when you change it.",
+      "meta": "Last changed 3 months ago. Strong · 14 characters.",
+      "change": "Change password",
+      "current": "Current password",
+      "wrongCurrent": "That password is incorrect. Try again.",
+      "new": "New password",
+      "newPlaceholder": "At least 12 characters",
+      "confirm": "Confirm new password",
+      "mismatch": "Passwords do not match",
+      "updating": "Updating…",
+      "updated": "Updated",
+      "update": "Update password",
+      "show": "Show",
+      "hide": "Hide",
+      "demoHintPrefix": "Demo: current password is ",
+      "demoHintSuffix": ". Anything else triggers the wrong-current branch."
+    },
+    "export": {
+      "title": "Export your data",
+      "hint": "GDPR-compatible export. Includes profile, comments, reviews, AI tokens used, and audit history.",
+      "label": "Data export",
+      "requestedSub": "Requested at {{time}}. Average prep time is ~10 minutes; we'll email you when it's ready.",
+      "idleSub": "Generates a zip file (JSON + CSV) with everything we have on file for your account.",
+      "preparing": "Preparing export",
+      "request": "Request export"
+    },
+    "danger": {
+      "reason": "Not available in this demo build — account deletion needs a signed-in backend.",
+      "zone": "Danger zone",
+      "deleteLabel": "Delete this account",
+      "deleteSub": "Permanently removes your profile, comments, and tokens. You'll be removed from all organizations. This action cannot be undone.",
+      "deleteButton": "Delete account",
+      "modalTitle": "Delete your account?",
+      "modalBodyPrefix": "This permanently deletes ",
+      "modalBodySuffix": ", your reviews, comments, AI usage history, and personal access tokens. You'll be removed from 3 organizations. Your contributions remain attributed to a deleted user.",
+      "confirmLabel": "Type \"{{phrase}}\" to confirm",
+      "noMatch": "Doesn't match exactly.",
+      "reasonLabel": "Reason for leaving (optional)",
+      "reasonOptions": {
+        "none": "No reason",
+        "duplicate": "I have another account",
+        "notUsing": "I'm not using it anymore",
+        "tooExpensive": "Too expensive",
+        "missingFeature": "Missing a feature I need",
+        "foundAlternative": "Found an alternative",
+        "other": "Other"
+      },
+      "confirmDelete": "Permanently delete"
+    }
+  },
+  "security": {
+    "title": "Security",
+    "subtitle": "Two-factor methods, active sessions, and your sign-in history.",
+    "mfa": {
+      "title": "Two-factor authentication",
+      "hint": "At least one method is required. Add a backup so a lost device doesn't lock you out.",
+      "addAuthenticator": "Authenticator",
+      "addSecurityKey": "Security key",
+      "noneTitle": "No 2FA configured — your account is at higher risk",
+      "noneSub": "Add at least one method. We recommend an authenticator app + a security key as backup.",
+      "primary": "Primary",
+      "kindTotp": "TOTP",
+      "kindWebauthn": "WebAuthn",
+      "kindSms": "SMS",
+      "addedUsed": "Added {{added}} · Last used {{lastUsed}}",
+      "makePrimary": "Make primary",
+      "remove": "Remove"
+    },
+    "recovery": {
+      "title": "Recovery codes",
+      "hint": "Single-use codes that work if you lose access to all your 2FA methods. Store them somewhere safe.",
+      "available": "10 of 10 codes available",
+      "sub": "Last generated 2026-02-12. Each code is 12 alphanumeric characters and can be used once.",
+      "view": "View / regenerate codes",
+      "modalTitle": "Save your recovery codes",
+      "modalBody": "Each code can only be used once. Keep them somewhere outside this app — a password manager, printed copy, or encrypted note.",
+      "copyAll": "Copy all",
+      "download": "Download .txt",
+      "print": "Print",
+      "saved": "I've saved them"
+    },
+    "addMfa": {
+      "titleTotp": "Add authenticator app",
+      "titleWebauthn": "Add security key",
+      "totpScan": "Scan with 1Password, Authy, Google Authenticator, or similar. Then enter the 6-digit code it generates.",
+      "codeAria": "6-digit authentication code",
+      "codePlaceholder": "6-digit code",
+      "webauthnPrompt": "Touch your security key or use Touch ID / Windows Hello to register.",
+      "label": "Label",
+      "labelPlaceholder": "e.g. 1Password",
+      "add": "Add method"
+    },
+    "trusted": {
+      "title": "Trusted devices",
+      "hint": "When enabled, devices that have completed 2FA can skip future prompts for 30 days.",
+      "label": "Trust this device after 2FA",
+      "sub": "A signed cookie stays on the device. Removing the cookie or signing out resets it.",
+      "toggle": "Trust device"
+    },
+    "sessions": {
+      "title": "Active sessions",
+      "hint_one": "{{count}} session across your devices. Revoke any you don't recognize.",
+      "hint_other": "{{count}} sessions across your devices. Revoke any you don't recognize.",
+      "thisDevice": "This device",
+      "revoke": "Revoke"
+    },
+    "history": {
+      "title": "Sign-in history",
+      "hint": "The last 90 days of authentication events on your account. Failed attempts and unusual locations are highlighted."
+    },
+    "signOut": {
+      "reason": "Not available in this demo build — revoking sessions needs a signed-in backend.",
+      "title": "Sign out everywhere",
+      "hint": "Ends all active sessions across all devices except this one.",
+      "label": "Sign out of all other devices",
+      "sub": "Other devices will need to sign in and complete 2FA again. Useful if you suspect a compromise.",
+      "confirm": "Yes, sign out everywhere",
+      "trigger": "Sign out other devices"
+    }
+  },
+  "connectedApps": {
+    "title": "Connected apps",
+    "subtitle": "Sign-in providers and third-party integrations linked to your account.",
+    "providers": {
+      "title": "Sign-in providers",
+      "hint": "Use any of these to sign in. Your primary provider is what we'll surface first on the login screen."
+    },
+    "integrations": {
+      "title": "Integrations",
+      "hint": "Third-party tools that act on your behalf. Removing one stops all related notifications and actions."
+    },
+    "available": {
+      "title": "Available to add",
+      "hint": "Connect another app. You'll be redirected to authorize the scopes — we never see your password.",
+      "connect": "Connect"
+    },
+    "list": {
+      "empty": "Nothing connected yet.",
+      "primary": "Primary",
+      "connectedMeta": "{{account}} · Connected {{connectedAt}} · {{lastUsed}}",
+      "makePrimary": "Make primary",
+      "scopes_one": "{{count}} scope",
+      "scopes_other": "{{count}} scopes",
+      "disconnect": "Disconnect",
+      "authorizedScopes": "Authorized scopes",
+      "required": "Required",
+      "viewOn": "View on {{provider}}",
+      "reauthorize": "Re-authorize for new scopes"
+    },
+    "remove": {
+      "title": "Disconnect {{provider}}?",
+      "identityBody": "You won't be able to sign in with {{provider}} after this. Make sure you have another sign-in method first.",
+      "integrationBody": "Stops all {{provider}} actions and notifications. Anything queued will be canceled.",
+      "confirm": "Disconnect"
+    }
+  },
+  "apiTokens": {
+    "title": "API tokens",
+    "subtitle": "Personal access tokens (PATs) authenticate scripts, CLIs, and integrations as you. Treat them like passwords.",
+    "newToken": "New token",
+    "active": {
+      "title": "Active tokens",
+      "hint": "{{count}} of 25 tokens used. Tokens you haven't used in 90 days are flagged."
+    },
+    "using": {
+      "title": "Using your tokens",
+      "hint": "Pass the token as a Bearer header. We log every request — see Audit log for details."
+    },
+    "list": {
+      "empty": "No tokens yet. Create one to use the API.",
+      "expired": "Expired",
+      "unused": "Unused",
+      "created": "Created {{date}}",
+      "expires": "· Expires {{date}}",
+      "neverExpires": "· Never expires",
+      "lastUsed": "· Last used {{value}}",
+      "revoke": "Revoke"
+    },
+    "code": {
+      "docs": "API docs"
+    },
+    "create": {
+      "title": "New personal access token",
+      "name": "Name",
+      "namePlaceholder": "e.g. \"ci · gh-actions\"",
+      "nameHint": "Help your future self remember what this token is for.",
+      "expiration": "Expiration",
+      "never": "Never (not recommended)",
+      "days": "{{count}} days",
+      "scopes": "Scopes",
+      "destructive": "destructive",
+      "dangerWarning_one": "You're about to grant {{count}} destructive scope. Anyone holding this token can act with these permissions.",
+      "dangerWarning_other": "You're about to grant {{count}} destructive scopes. Anyone holding this token can act with these permissions.",
+      "generate": "Generate token"
+    },
+    "reveal": {
+      "title": "Save your new token",
+      "onlyOnce": "This is the only time we'll show it.",
+      "afterClose": " Once you close this dialog, only the prefix is visible.",
+      "copied": "Copied",
+      "copy": "Copy",
+      "show": "Show",
+      "hide": "Hide",
+      "scopeCount_one": "{{count}} scope",
+      "scopeCount_other": "{{count}} scopes",
+      "expiresNever": "never",
+      "expires": "Expires {{value}}",
+      "saved": "I've saved it"
+    },
+    "revoke": {
+      "title": "Revoke \"{{name}}\"?",
+      "body": "Any script, CLI, or integration using this token will start failing immediately. We'll log the revocation in your audit trail.",
+      "confirm": "Revoke token"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Choose what you get notified about and where. Quiet hours and digest mode apply across all channels.",
+    "muted": "All notifications muted",
+    "muteEverything": "Mute everything",
+    "muteBanner": "All notifications are paused. Critical security alerts will still come through.",
+    "channels": {
+      "title": "Delivery channels",
+      "hint": "Each channel has its own delivery destination. The matrix below picks which events go where."
+    },
+    "matrix": {
+      "title": "Matrix",
+      "hint": "Toggle each cell to control which events go to which channels. Click a label to copy a row.",
+      "event": "Event",
+      "enableAll": "Enable all channels for this event",
+      "disableAll": "Disable all channels for this event",
+      "cellLabel": "{{event}} → {{channel}}"
+    },
+    "cadence": {
+      "title": "Delivery cadence",
+      "hint": "Bundle notifications to reduce noise. Real-time means each event fires as it happens.",
+      "digest": "Digest mode",
+      "digestSub": "Affects email and Slack. In-app is always real-time.",
+      "realtime": "Real-time",
+      "realtimeSub": "Send each event as it happens",
+      "hourly": "Hourly digest",
+      "hourlySub": "Bundle into a once-an-hour roundup",
+      "daily": "Daily digest at 9 AM",
+      "dailySub": "One email per day",
+      "weekly": "Weekly digest, Mondays",
+      "weeklySub": "Quiet during the week"
+    },
+    "quiet": {
+      "title": "Quiet hours",
+      "hint": "Mute non-critical channels during specific hours. Security alerts always come through.",
+      "enable": "Enable quiet hours",
+      "enableSub": "Mutes Slack and mobile push between the times below. Email is queued for the digest.",
+      "toggle": "Quiet hours",
+      "from": "From",
+      "to": "To",
+      "timezone": "Time zone",
+      "muteWindow": "Mute window: ",
+      "durationLabel": "{{hours}}h {{minutes}}m of quiet time",
+      "dnd": "Do not disturb",
+      "dndSub": "One-shot mute for the next 4 hours. Resets automatically.",
+      "dndToggle": "Do not disturb"
+    }
+  },
+  "appearance": {
+    "title": "Appearance",
+    "subtitle": "Theme, density, motion, and accent. Most changes apply instantly so you can preview before saving.",
+    "theme": {
+      "title": "Theme",
+      "hint": "Light, dark, or follow your operating system.",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "accent": {
+      "title": "Accent color",
+      "hint": "Used on primary CTAs, current-state markers, and the dot field hero color.",
+      "cobalt": "Cobalt indigo",
+      "violet": "Violet",
+      "amber": "Amber",
+      "crimson": "Crimson",
+      "mint": "Mint"
+    },
+    "density": {
+      "title": "Density",
+      "hint": "How much space to give each row in dense lists like reviews and the file panel.",
+      "compact": "Compact",
+      "comfortable": "Comfortable",
+      "roomy": "Roomy"
+    },
+    "text": {
+      "title": "Text",
+      "hint": "Font scale and monospace family for code. Affects diffs and inline code blocks.",
+      "fontScale": "Font scale",
+      "fontScaleSub": "Small (12px) · Medium (13px, default) · Large (15px) base.",
+      "monoFont": "Monospace font",
+      "monoFontSub": "Used in code, file paths, IDs.",
+      "systemDefault": "System default",
+      "syntaxTheme": "Syntax theme",
+      "syntaxThemeSub": "Color scheme inside diff hunks and code blocks.",
+      "dim": "Dim",
+      "midnight": "Midnight",
+      "paper": "Paper"
+    },
+    "a11y": {
+      "title": "Accessibility",
+      "hint": "Reduce visual noise where it gets in the way.",
+      "reduceMotion": "Reduce motion",
+      "reduceMotionSub": "Disables non-essential animations (panels, particles, transitions).",
+      "highContrast": "High contrast",
+      "highContrastSub": "Increases border contrast and removes muted text variants."
+    },
+    "previewSection": {
+      "title": "Preview",
+      "hint": "What a typical row looks like with your current selections."
+    },
+    "livePreview": {
+      "prTitle": "PR #4821 · Add admission rule for SSO-only prod",
+      "approved": "Approved",
+      "summary": "Reviewed 4 files. 3 reviewers approved. Ready to merge once admission re-runs.",
+      "footer": "Preview rendered with your current selections"
+    }
+  },
+  "preferences": {
+    "title": "Preferences",
+    "subtitle": "How each workbench behaves by default. These apply only to you — your team has their own.",
+    "startup": {
+      "title": "On startup",
+      "hint": "Where the app lands when you open it after sign-in.",
+      "startingWorkbench": "Starting workbench",
+      "startingWorkbenchSub": "Pick a fixed tab, or 'Last visited' to resume where you were.",
+      "lastVisited": "Last visited",
+      "intelligence": "Intelligence",
+      "coding": "Coding",
+      "agents": "Agents",
+      "reviews": "Reviews",
+      "admission": "Admission",
+      "fixes": "Fixes"
+    },
+    "intelligence": {
+      "title": "Intelligence",
+      "hint": "Dot field, matrix view, and universe mode.",
+      "defaultViz": "Default visualization",
+      "dotField": "Dot field",
+      "matrix": "Matrix",
+      "universe": "Universe",
+      "autoOpenInspect": "Auto-open Inspect on click",
+      "autoOpenInspectSub": "Clicking a dot opens the right-hand Inspect panel automatically.",
+      "autoOpenInspectToggle": "Auto-open Inspect",
+      "showScoreLabels": "Show score labels in dot field",
+      "showScoreLabelsSub": "Numeric labels next to each dot for risk + confidence.",
+      "showScoreLabelsToggle": "Score labels",
+      "confidenceFloor": "Confidence floor",
+      "confidenceFloorSub": "Hide dots below this confidence level by default.",
+      "low": "Low (show everything)",
+      "medium": "Medium (recommended)",
+      "high": "High (only confident)"
+    },
+    "coding": {
+      "title": "Coding",
+      "hint": "Editor and AI behavior in the coding stage.",
+      "sideBySide": "Side-by-side diffs",
+      "sideBySideSub": "Show old/new in two columns instead of unified.",
+      "sideBySideToggle": "Side-by-side",
+      "softWrap": "Soft wrap long lines",
+      "softWrapSub": "Wrap lines longer than the editor width.",
+      "softWrapToggle": "Soft wrap",
+      "whitespace": "Show whitespace markers",
+      "whitespaceSub": "Render dots/arrows for spaces and tabs.",
+      "whitespaceToggle": "Show whitespace",
+      "autoSave": "Auto-save drafts",
+      "autoSaveSub": "Drafts persist in the browser; turning this off requires explicit save.",
+      "autoSaveToggle": "Auto-save drafts",
+      "inline": "Inline AI suggestions",
+      "inlineSub": "Ghost text suggestions while typing.",
+      "always": "Always show",
+      "onHotkey": "Only on hotkey · ⌘.",
+      "never": "Never"
+    },
+    "reviews": {
+      "title": "Reviews",
+      "hint": "PR review behaviors.",
+      "defaultSort": "Default sort",
+      "defaultSortSub": "How the PR list is ordered when you open the Reviews tab.",
+      "reviewRequested": "Review requested first",
+      "updated": "Recently updated",
+      "opened": "Recently opened",
+      "risk": "Highest risk first",
+      "ciBefore": "Show CI summary before approve",
+      "ciBeforeSub": "Display the pass/fail bar above the approve button.",
+      "ciBeforeToggle": "CI before approve",
+      "resolveAll": "Require all conversations resolved",
+      "resolveAllSub": "Disables approve button if open threads exist.",
+      "resolveAllToggle": "Resolve all"
+    },
+    "agents": {
+      "title": "Agents",
+      "hint": "Default agent and run-time policies.",
+      "defaultAgent": "Default agent",
+      "fixPipeline": "Fix pipeline",
+      "reviewBot": "Review bot",
+      "investigation": "Investigation",
+      "confirm": "Confirm before launching",
+      "confirmSub": "Show a summary modal before any agent starts.",
+      "confirmToggle": "Confirm launch",
+      "maxParallel": "Max parallel runs",
+      "maxParallelSub": "Throttles your concurrent agent runs.",
+      "parallel3": "3 (default)",
+      "parallel5": "5 (paid plans only)"
+    },
+    "admission": {
+      "title": "Admission",
+      "hint": "Gate behavior when a check fails.",
+      "showProof": "Show proof obligations on fail",
+      "showProofSub": "Expanded breakdown of which obligation each check tested.",
+      "showProofToggle": "Show proof",
+      "autoLink": "Auto-link to fix candidate",
+      "autoLinkSub": "Suggest a fix candidate alongside each failed obligation.",
+      "autoLinkToggle": "Auto-link fix"
+    },
+    "reset": {
+      "title": "Reset to defaults",
+      "hint": "Restore every setting on this page to its factory default.",
+      "label": "Reset all preferences",
+      "sub": "Other people's settings, your password, and your tokens are not affected.",
+      "button": "Reset to defaults"
+    }
+  },
+  "keyboard": {
+    "title": "Keyboard",
+    "subtitle": "Customize shortcuts. Use the search to find one fast — when you record a new combo we'll detect conflicts.",
+    "export": "Export",
+    "import": "Import",
+    "resetAll": "Reset all",
+    "searchPlaceholder": "Search by command, group, or keystroke…",
+    "clear": "Clear",
+    "conflicts_one": "{{count}} conflict detected",
+    "conflicts_other": "{{count}} conflicts detected",
+    "conflictBody": "When two commands share the same combo, only the last-defined one fires. Affected: {{list}}.",
+    "noMatch": "No shortcuts match \"{{query}}\".",
+    "row": {
+      "recordNew": "Record new",
+      "reset": "Reset"
+    },
+    "record": {
+      "title": "Record shortcut for \"{{label}}\"",
+      "bodyPrefix": "Press the keys you want to use. Modifier-only combos like ⇧ alone won't be captured. Press ",
+      "bodySuffix": " twice to cancel without saving.",
+      "listening": "Listening…",
+      "defaultLabel": "Default:",
+      "use": "Use this shortcut"
+    }
+  },
+  "ai": {
+    "title": "AI",
+    "subtitle": "Pick the model behind each workbench, decide what auto-runs on your behalf, and bound the cost.",
+    "models": {
+      "title": "Model selection",
+      "hint": "Each workbench can use a different model. Faster + cheaper for noisy surfaces; deeper reasoning where it matters."
+    },
+    "tier": {
+      "fast": "fast",
+      "balanced": "balanced",
+      "best": "best"
+    },
+    "behavior": {
+      "title": "Behavior",
+      "hint": "How aggressively the AI offers suggestions and finishes things on your behalf.",
+      "inline": "Inline suggestions",
+      "inlineSub": "Ghost text in the editor as you type.",
+      "inlineToggle": "Inline suggestions",
+      "verbosity": "Suggestion verbosity",
+      "verbositySub": "Concise patches vs. paragraph-length explanations.",
+      "brief": "Brief",
+      "briefSub": "Minimal patches, no prose",
+      "normal": "Normal",
+      "normalSub": "Default",
+      "verbose": "Verbose",
+      "verboseSub": "Explains every change",
+      "autoCommit": "Auto-write commit messages",
+      "autoCommitSub": "Generate Conventional Commits headlines from the diff.",
+      "autoCommitToggle": "Auto commit messages",
+      "autoSummary": "Auto-summarize PRs",
+      "autoSummarySub": "Adds a 3-bullet summary to each PR description in Reviews.",
+      "autoSummaryToggle": "Auto PR summaries",
+      "autoEvidence": "Auto-link evidence",
+      "autoEvidenceSub": "Attach related logs / metrics / past PRs to investigations automatically.",
+      "autoEvidenceToggle": "Auto evidence",
+      "contextDepth": "Context depth",
+      "contextDepthSub": "How much of the codebase the AI is allowed to read for each call.",
+      "file": "Single file",
+      "fileSub": "Cheapest, narrowest",
+      "module": "Containing module",
+      "moduleSub": "Balanced",
+      "workspace": "Whole workspace",
+      "workspaceSub": "Most accurate"
+    },
+    "privacy": {
+      "title": "Privacy & training",
+      "hint": "Control whether your code helps train models.",
+      "optOut": "Opt out of model training",
+      "optOutSub": "Your prompts and code are never used to train upstream models.",
+      "optOutToggle": "Opt out of training",
+      "redact": "Redact secrets before sending",
+      "redactSub": "Detects API keys / tokens in prompts and replaces them with placeholders.",
+      "redactToggle": "Redact secrets"
+    },
+    "spend": {
+      "title": "Spend control",
+      "hint": "Caps your AI usage so a runaway loop doesn't burn through your monthly tokens. Org admins can override.",
+      "dailyCap": "Daily cost cap",
+      "dailyCapSubPrefix": "Stops your account from making AI calls past this dollar amount per day. ",
+      "today": "Today: ${{amount}}",
+      "perDay": "/ day",
+      "noCap": "No cap set",
+      "meterToday": "${{spent}} of ${{cap}} today",
+      "meterAlert": "Crossed your alert threshold ({{pct}}% of cap). Inbox notification sent.",
+      "alertWhen": "Alert when at",
+      "alertWhenSub": "Pings you in the inbox when daily spend crosses this percentage of the cap.",
+      "alert50": "50% of cap",
+      "alert75": "75% of cap",
+      "alert90": "90% of cap",
+      "alert100": "100% (cap hit)",
+      "fallback": "Fall back to fast model when near cap",
+      "fallbackSub": "At {{pct}}% of cap, future calls use Haiku/GPT-mini regardless of surface preference.",
+      "fallbackToggle": "Fallback to fast"
+    }
+  },
+  "inbox": {
+    "title": "Inbox",
+    "subtitle": "Mentions, review requests, gate failures, and agent updates — all in one stream.",
+    "selected": "{{count}} selected",
+    "markRead": "Mark read",
+    "archive": "Archive",
+    "clearSelection": "Clear selection",
+    "markAllRead": "Mark all as read",
+    "searchPlaceholder": "Search inbox…",
+    "buckets": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "earlier": "Earlier"
+    },
+    "filters": {
+      "unread": "Unread",
+      "mentions": "Mentions",
+      "reviews": "Reviews",
+      "starred": "Starred",
+      "all": "All",
+      "archived": "Archived"
+    },
+    "item": {
+      "unread": "Unread",
+      "star": "Star",
+      "unstar": "Unstar"
+    },
+    "types": {
+      "mention": "mention",
+      "review": "review",
+      "admission": "admission",
+      "fix": "fix",
+      "agent": "agent",
+      "security": "security"
+    },
+    "detail": {
+      "snooze": "Snooze",
+      "archive": "Archive",
+      "openIn": "Open in {{where}}",
+      "from": "From",
+      "in": "In",
+      "diffContext": "Diff context",
+      "quickReply": "Quick reply",
+      "replyPlaceholder": "Type a reply or command (Cmd+Enter to send)…",
+      "sendReply": "Send reply"
+    },
+    "empty": {
+      "noMatches": "No matches for \"{{query}}\"",
+      "listClear": "Your {{filter}} list is clear",
+      "tryDifferent": "Try a different keyword or change the filter.",
+      "nothingWaiting": "Nothing waiting on you. Take a break.",
+      "detailTitle": "Pick something to read",
+      "detailBodyPrefix": "Click any item on the left to open it here. Use ",
+      "detailBodyMiddle": " / ",
+      "detailBodySuffix": " to navigate."
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Moon } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -28,6 +29,7 @@ export function TimeField({ label, value, onChange }: { label: string; value: st
 // Clock preview — visualises the muted span
 
 export function ClockPreview({ from, to }: { from: string; to: string }) {
+  const { t } = useTranslation('me');
   const fromMin = toMinutes(from);
   const toMin = toMinutes(to);
   // Wraps midnight: e.g. 22:00 → 08:00. Treat as two arcs if so.
@@ -56,12 +58,12 @@ export function ClockPreview({ from, to }: { from: string; to: string }) {
       </svg>
       <div className="flex flex-col text-sm" style={{ color: 'var(--fg-muted)' }}>
         <span>
-          Mute window: <span className="font-mono tabular-nums" style={{ color: 'var(--fg-default)' }}>
+          {t('notifications.quiet.muteWindow')}<span className="font-mono tabular-nums" style={{ color: 'var(--fg-default)' }}>
             {from} → {to}
           </span>
         </span>
         <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-          {durationLabel(fromMin, toMin)}
+          {durationLabel(fromMin, toMin, t)}
         </span>
       </div>
     </div>
@@ -72,11 +74,11 @@ function toMinutes(t: string) {
   const [h, m] = t.split(':').map(Number);
   return (h ?? 0) * 60 + (m ?? 0);
 }
-function durationLabel(from: number, to: number) {
+function durationLabel(from: number, to: number, t: (key: string, opts?: Record<string, unknown>) => string) {
   const total = from < to ? to - from : 24 * 60 - from + to;
   const h = Math.floor(total / 60);
   const m = total % 60;
-  return `${h}h ${m}m of quiet time`;
+  return t('notifications.quiet.durationLabel', { hours: h, minutes: m });
 }
 function describeArc(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
   // SVG arc helper — handles arcs starting from "12 o'clock" (top).

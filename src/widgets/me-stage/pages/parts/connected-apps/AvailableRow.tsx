@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import type { AVAILABLE_INTEGRATIONS } from './types';
@@ -6,6 +7,7 @@ import type { AVAILABLE_INTEGRATIONS } from './types';
 // Available integrations
 
 export function AvailableRow({ item }: { item: typeof AVAILABLE_INTEGRATIONS[number] }) {
+  const { t } = useTranslation('me');
   const Icon = item.icon;
   return (
     <div
@@ -30,7 +32,7 @@ export function AvailableRow({ item }: { item: typeof AVAILABLE_INTEGRATIONS[num
         </span>
       </div>
       <Button leading={<Plus className="w-3 h-3" />}>
-        Connect
+        {t('connectedApps.available.connect')}
       </Button>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
 import { useDialogA11y } from '@shared/ui';
@@ -10,6 +11,7 @@ import type { Connection } from './types';
 export function RemoveModal({
   connection, onClose, onConfirm,
 }: { connection: Connection; onClose: () => void; onConfirm: () => void }) {
+  const { t } = useTranslation('me');
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialogA11y(dialogRef, true, onClose);
   return (
@@ -38,19 +40,19 @@ export function RemoveModal({
           </div>
           <div className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-              Disconnect {connection.provider}?
+              {t('connectedApps.remove.title', { provider: connection.provider })}
             </h3>
             <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
               {connection.category === 'identity'
-                ? `You won't be able to sign in with ${connection.provider} after this. Make sure you have another sign-in method first.`
-                : `Stops all ${connection.provider} actions and notifications. Anything queued will be canceled.`}
+                ? t('connectedApps.remove.identityBody', { provider: connection.provider })
+                : t('connectedApps.remove.integrationBody', { provider: connection.provider })}
             </p>
           </div>
         </div>
         <div className="flex items-center justify-end gap-2 pt-1">
-          <Button variant="ghost" size="md" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" size="md" onClick={onClose}>{t('common.cancel')}</Button>
           <Button variant="danger" size="md" onClick={onConfirm}>
-            Disconnect
+            {t('connectedApps.remove.confirm')}
           </Button>
         </div>
       </div>

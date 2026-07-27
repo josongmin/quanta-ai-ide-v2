@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Volume2, VolumeX } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Section, Row, Toggle, Select, Button, Divider, SaveBar } from '@shared/ui/forms';
@@ -11,6 +12,7 @@ import { Matrix } from './parts/notifications/Matrix';
 import { TimeField, ClockPreview } from './parts/notifications/QuietHours';
 
 export default function NotificationsPage() {
+  const { t } = useTranslation('me');
   const { draft, setDraft, dirty, savingState, save, discard } = useDirtyState(INITIAL);
 
   const groups = useMemo(() => {
@@ -42,29 +44,29 @@ export default function NotificationsPage() {
 
   return (
     <MeShell
-      title="Notifications"
-      subtitle="Choose what you get notified about and where. Quiet hours and digest mode apply across all channels."
+      title={t('notifications.title')}
+      subtitle={t('notifications.subtitle')}
       topRight={
         <Button
           leading={draft.globalMute ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
           onClick={() => { setDraft({ ...draft, globalMute: !draft.globalMute }); }}
         >
-          {draft.globalMute ? 'All notifications muted' : 'Mute everything'}
+          {draft.globalMute ? t('notifications.muted') : t('notifications.muteEverything')}
         </Button>
       }
     >
       {draft.globalMute && <MuteBanner />}
 
       <Section
-        title="Delivery channels"
-        hint="Each channel has its own delivery destination. The matrix below picks which events go where."
+        title={t('notifications.channels.title')}
+        hint={t('notifications.channels.hint')}
       >
         <ChannelCards />
       </Section>
 
       <Section
-        title="Matrix"
-        hint="Toggle each cell to control which events go to which channels. Click a label to copy a row."
+        title={t('notifications.matrix.title')}
+        hint={t('notifications.matrix.hint')}
       >
         <Matrix
           groups={groups}
@@ -76,35 +78,35 @@ export default function NotificationsPage() {
       </Section>
 
       <Section
-        title="Delivery cadence"
-        hint="Bundle notifications to reduce noise. Real-time means each event fires as it happens."
+        title={t('notifications.cadence.title')}
+        hint={t('notifications.cadence.hint')}
       >
-        <Row label="Digest mode" sub="Affects email and Slack. In-app is always real-time.">
+        <Row label={t('notifications.cadence.digest')} sub={t('notifications.cadence.digestSub')}>
           <Select
             value={draft.digest}
             onChange={(v) => { setDraft({ ...draft, digest: v }); }}
             options={[
-              { id: 'realtime',     label: 'Real-time',                   sub: 'Send each event as it happens' },
-              { id: 'hourly',       label: 'Hourly digest',               sub: 'Bundle into a once-an-hour roundup' },
-              { id: 'daily-9am',    label: 'Daily digest at 9 AM',        sub: 'One email per day' },
-              { id: 'weekly-monday',label: 'Weekly digest, Mondays',      sub: 'Quiet during the week' },
+              { id: 'realtime',     label: t('notifications.cadence.realtime'), sub: t('notifications.cadence.realtimeSub') },
+              { id: 'hourly',       label: t('notifications.cadence.hourly'),   sub: t('notifications.cadence.hourlySub') },
+              { id: 'daily-9am',    label: t('notifications.cadence.daily'),    sub: t('notifications.cadence.dailySub') },
+              { id: 'weekly-monday',label: t('notifications.cadence.weekly'),   sub: t('notifications.cadence.weeklySub') },
             ]}
           />
         </Row>
       </Section>
 
       <Section
-        title="Quiet hours"
-        hint="Mute non-critical channels during specific hours. Security alerts always come through."
+        title={t('notifications.quiet.title')}
+        hint={t('notifications.quiet.hint')}
       >
         <Row
-          label="Enable quiet hours"
-          sub={<span>Mutes Slack and mobile push between the times below. Email is queued for the digest.</span>}
+          label={t('notifications.quiet.enable')}
+          sub={<span>{t('notifications.quiet.enableSub')}</span>}
         >
           <Toggle
             checked={draft.quietHours.enabled}
             onChange={(v) => { setDraft({ ...draft, quietHours: { ...draft.quietHours, enabled: v } }); }}
-            label="Quiet hours"
+            label={t('notifications.quiet.toggle')}
           />
         </Row>
         {draft.quietHours.enabled && (
@@ -117,18 +119,18 @@ export default function NotificationsPage() {
           >
             <div className="grid grid-cols-3 gap-3">
               <TimeField
-                label="From"
+                label={t('notifications.quiet.from')}
                 value={draft.quietHours.from}
                 onChange={(v) => { setDraft({ ...draft, quietHours: { ...draft.quietHours, from: v } }); }}
               />
               <TimeField
-                label="To"
+                label={t('notifications.quiet.to')}
                 value={draft.quietHours.to}
                 onChange={(v) => { setDraft({ ...draft, quietHours: { ...draft.quietHours, to: v } }); }}
               />
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-                  Time zone
+                  {t('notifications.quiet.timezone')}
                 </span>
                 <select
                   value={draft.quietHours.timezone}
@@ -150,13 +152,13 @@ export default function NotificationsPage() {
           </div>
         )}
         <Row
-          label="Do not disturb"
-          sub="One-shot mute for the next 4 hours. Resets automatically."
+          label={t('notifications.quiet.dnd')}
+          sub={t('notifications.quiet.dndSub')}
         >
           <Toggle
             checked={draft.doNotDisturb}
             onChange={(v) => { setDraft({ ...draft, doNotDisturb: v }); }}
-            label="Do not disturb"
+            label={t('notifications.quiet.dndToggle')}
           />
         </Row>
       </Section>

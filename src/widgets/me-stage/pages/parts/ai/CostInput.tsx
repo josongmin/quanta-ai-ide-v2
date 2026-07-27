@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next';
+
 // ─────────────────────────────────────────────────────────────────────────
 // Cost input
 
 export function CostInput({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const { t } = useTranslation('me');
   return (
     <div className="flex items-center gap-1.5">
       <span className="text-base" style={{ color: 'var(--fg-muted)' }}>$</span>
@@ -19,13 +22,13 @@ export function CostInput({ value, onChange }: { value: number; onChange: (v: nu
           color: 'var(--fg-strong)',
         }}
       />
-      <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>/ day</span>
+      <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('ai.spend.perDay')}</span>
       {value === 0 && (
         <span
           className="text-xs uppercase tracking-eyebrow font-semibold ml-2"
           style={{ color: 'var(--intent-warn-fg)' }}
         >
-          No cap set
+          {t('ai.spend.noCap')}
         </span>
       )}
     </div>

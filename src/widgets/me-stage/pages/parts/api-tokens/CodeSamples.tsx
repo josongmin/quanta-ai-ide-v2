@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Terminal, ExternalLink } from 'lucide-react';
 
 export function CodeSamples() {
+  const { t } = useTranslation('me');
   const [tab, setTab] = useState<'curl' | 'js' | 'python'>('curl');
 
   const sample =
@@ -26,13 +28,13 @@ me = client.me()`;
         style={{ background: 'var(--bg-surface-muted)', borderBottom: '1px solid var(--border-muted)' }}
       >
         <Terminal className="w-3 h-3" style={{ color: 'var(--fg-muted)' }} />
-        {(['curl', 'js', 'python'] as const).map((t) => {
-          const active = tab === t;
+        {(['curl', 'js', 'python'] as const).map((id) => {
+          const active = tab === id;
           return (
             <button
-              key={t}
+              key={id}
               type="button"
-              onClick={() => { setTab(t); }}
+              onClick={() => { setTab(id); }}
               className="h-6 px-2 rounded text-xs font-medium font-mono"
               style={{
                 background: active ? 'var(--bg-canvas)' : 'transparent',
@@ -40,13 +42,13 @@ me = client.me()`;
                 boxShadow: active ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
               }}
             >
-              {t === 'js' ? 'TypeScript' : t === 'curl' ? 'cURL' : 'Python'}
+              {id === 'js' ? 'TypeScript' : id === 'curl' ? 'cURL' : 'Python'}
             </button>
           );
         })}
         <span className="flex-1" />
         <button type="button" className="text-xs inline-flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>
-          API docs <ExternalLink className="w-2.5 h-2.5" />
+          {t('apiTokens.code.docs')} <ExternalLink className="w-2.5 h-2.5" />
         </button>
       </div>
       <pre

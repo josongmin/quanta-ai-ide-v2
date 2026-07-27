@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Globe, Eye, EyeOff } from 'lucide-react';
 import { GithubIcon, TwitterIcon, LinkedinIcon } from '@shared/ui/brand-icons';
 import { MeShell } from '../parts/MeShell';
@@ -10,13 +11,14 @@ import { SocialField } from './parts/profile/SocialField';
 import { PublicPreview } from './parts/profile/PublicPreview';
 
 export default function ProfilePage() {
+  const { t } = useTranslation('me');
   const { draft, setDraft, dirty, savingState, save, discard } = useDirtyState(INITIAL);
   const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
     <MeShell
-      title="Profile"
-      subtitle="How you appear to teammates in mentions, reviews, and the dot field."
+      title={t('profile.title')}
+      subtitle={t('profile.subtitle')}
       topRight={
         <Button
           variant="secondary"
@@ -24,13 +26,13 @@ export default function ProfilePage() {
           leading={previewOpen ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
           onClick={() => { setPreviewOpen((v) => !v); }}
         >
-          {previewOpen ? 'Hide preview' : 'Preview public profile'}
+          {previewOpen ? t('profile.hidePreview') : t('profile.showPreview')}
         </Button>
       }
     >
       {previewOpen && <PublicPreview data={draft} />}
 
-      <Section title="Photo" hint="A square image works best. PNG, JPG, GIF, or WebP up to 2 MB.">
+      <Section title={t('profile.photo.title')} hint={t('profile.photo.hint')}>
         <div
           className="flex items-start justify-between gap-6 py-3"
           style={{ borderTop: '1px solid var(--border-muted)' }}
@@ -39,28 +41,28 @@ export default function ProfilePage() {
             <AvatarBig data={draft} setDraft={setDraft} />
             <div className="flex flex-col gap-1.5">
               <span className="text-base font-medium" style={{ color: 'var(--fg-strong)' }}>
-                {draft.avatarUrl ? 'Custom photo' : 'Generated avatar'}
+                {draft.avatarUrl ? t('profile.photo.custom') : t('profile.photo.generated')}
               </span>
               <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
                 {draft.avatarUrl
-                  ? 'Will be cropped to a circle in mentions and member lists.'
-                  : 'Initials are derived from your name. Upload a photo to override.'}
+                  ? t('profile.photo.customSub')
+                  : t('profile.photo.generatedSub')}
               </span>
             </div>
           </div>
         </div>
       </Section>
 
-      <Section title="Identity" hint="Your name and handle appear together throughout the product.">
+      <Section title={t('profile.identity.title')} hint={t('profile.identity.hint')}>
         <div className="grid grid-cols-2 gap-4">
           <Field
-            label="Full name"
+            label={t('profile.identity.fullName')}
             value={draft.name}
             onChange={(e) => { setDraft({ ...draft, name: e.target.value }); }}
             placeholder="Sora Kim"
           />
           <Field
-            label="Pronouns"
+            label={t('profile.identity.pronouns')}
             value={draft.pronouns}
             onChange={(e) => { setDraft({ ...draft, pronouns: e.target.value }); }}
             placeholder="she/her"
@@ -68,7 +70,7 @@ export default function ProfilePage() {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Field
-            label="Handle"
+            label={t('profile.identity.handle')}
             value={draft.handle}
             onChange={(e) => {
               setDraft({ ...draft, handle: e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 32) });
@@ -77,32 +79,32 @@ export default function ProfilePage() {
             placeholder="sora"
           />
           <Field
-            label="Job title"
+            label={t('profile.identity.jobTitle')}
             value={draft.jobTitle}
             onChange={(e) => { setDraft({ ...draft, jobTitle: e.target.value }); }}
             placeholder="Senior Software Engineer"
           />
         </div>
         <Field
-          label="Location"
+          label={t('profile.identity.location')}
           value={draft.location}
           onChange={(e) => { setDraft({ ...draft, location: e.target.value }); }}
           placeholder="Seoul, South Korea"
         />
       </Section>
 
-      <Section title="Bio" hint="Up to 280 characters. Markdown supported.">
+      <Section title={t('profile.bio.title')} hint={t('profile.bio.hint')}>
         <Textarea
-          label="Short bio"
+          label={t('profile.bio.label')}
           value={draft.bio}
           onChange={(bio) => { setDraft({ ...draft, bio }); }}
-          placeholder="A line or two about you, your role, and what you work on."
+          placeholder={t('profile.bio.placeholder')}
           maxLength={280}
           rows={3}
         />
       </Section>
 
-      <Section title="Social links" hint="Shown on your public profile if enabled. Empty fields are hidden.">
+      <Section title={t('profile.social.title')} hint={t('profile.social.hint')}>
         <SocialField
           icon={<GithubIcon className="w-3.5 h-3.5" />}
           prefix="github.com/"
@@ -129,12 +131,12 @@ export default function ProfilePage() {
         />
       </Section>
 
-      <Section title="Visibility" hint="Control what your public-facing profile exposes.">
+      <Section title={t('profile.visibility.title')} hint={t('profile.visibility.hint')}>
         <Row
-          label="Public profile"
+          label={t('profile.visibility.publicProfile')}
           sub={
             <>
-              Anyone with the link can view your profile at{' '}
+              {t('profile.visibility.publicProfileSubPrefix')}
               <span className="font-mono">se-field.app/u/{draft.handle || 'me'}</span>.
             </>
           }
@@ -142,18 +144,18 @@ export default function ProfilePage() {
           <Toggle
             checked={draft.publicProfile}
             onChange={(v) => { setDraft({ ...draft, publicProfile: v }); }}
-            label="Public profile"
+            label={t('profile.visibility.publicProfile')}
           />
         </Row>
         <Row
-          label="Show email on public profile"
-          sub="Anyone viewing your public profile can see your work email."
+          label={t('profile.visibility.showEmail')}
+          sub={t('profile.visibility.showEmailSub')}
         >
           <Toggle
             checked={draft.showEmail}
             onChange={(v) => { setDraft({ ...draft, showEmail: v }); }}
             disabled={!draft.publicProfile}
-            label="Show email"
+            label={t('profile.visibility.toggleShowEmail')}
           />
         </Row>
       </Section>

@@ -1,9 +1,12 @@
 // ─────────────────────────────────────────────────────────────────────────
 // Social field — icon + prefix + input
 
+import { useTranslation } from 'react-i18next';
+
 export function SocialField({
   icon, prefix, value, onChange,
 }: { icon: React.ReactNode; prefix: string; value: string; onChange: (v: string) => void }) {
+  const { t } = useTranslation('me');
   return (
     <div
       className="flex items-center h-9 rounded-md transition-colors"
@@ -21,7 +24,7 @@ export function SocialField({
       <input
         value={value}
         onChange={(e) => { onChange(e.target.value); }}
-        placeholder="username"
+        placeholder={t('profile.social.placeholder')}
         className="flex-1 bg-transparent outline-none px-3 text-base tabular-nums"
         style={{ color: 'var(--fg-strong)' }}
       />
