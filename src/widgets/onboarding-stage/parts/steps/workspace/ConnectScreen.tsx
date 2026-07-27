@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Check, Minus } from 'lucide-react';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { OAuthRedirectOverlay } from '@widgets/auth-stage';
@@ -9,12 +10,13 @@ import { GitLabMark, BitbucketMark } from './ProviderMarks';
 
 // Pre-connect: pick provider + redirect.
 export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
+  const { t } = useTranslation('onboarding');
   const [oauth, setOauth] = useState<null | 'github' | 'gitlab' | 'bitbucket' | 'google'>(null);
 
   const providers: { id: 'github' | 'gitlab' | 'bitbucket'; label: string; icon: React.ReactNode; perm: string }[] = [
-    { id: 'github',    label: 'GitHub',     icon: <GithubIcon className="w-4 h-4" />, perm: 'Read access · repos & members' },
-    { id: 'gitlab',    label: 'GitLab',     icon: <GitLabMark />,                  perm: 'Read access · projects & users' },
-    { id: 'bitbucket', label: 'Bitbucket',  icon: <BitbucketMark />,               perm: 'Read access · workspaces' },
+    { id: 'github',    label: 'GitHub',     icon: <GithubIcon className="w-4 h-4" />, perm: t('workspace.connect.githubPerm') },
+    { id: 'gitlab',    label: 'GitLab',     icon: <GitLabMark />,                  perm: t('workspace.connect.gitlabPerm') },
+    { id: 'bitbucket', label: 'Bitbucket',  icon: <BitbucketMark />,               perm: t('workspace.connect.bitbucketPerm') },
   ];
 
   return (
@@ -66,7 +68,7 @@ export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
         className="inline-flex items-center justify-center gap-1.5 h-10 rounded-md text-base font-semibold transition-colors"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
       >
-        Connect to {providerLabel(value.provider)}
+        {t('workspace.connect.connectTo', { provider: providerLabel(value.provider) })}
       </button>
 
       {oauth && (
@@ -85,12 +87,13 @@ export function ConnectScreen({ value, onChange }: WorkspaceStepProps) {
 }
 
 function PermissionsCard({ provider }: { provider: WizardData['workspace']['provider'] }) {
+  const { t } = useTranslation('onboarding');
   const items = [
-    { ok: true,  text: 'Read repository contents' },
-    { ok: true,  text: 'Read repository metadata (branches, commits)' },
-    { ok: true,  text: 'Read team & member list (for CODEOWNERS)' },
-    { ok: false, text: 'Write to your repos · we never do this' },
-    { ok: false, text: 'Trigger workflows · we never do this' },
+    { ok: true,  text: t('workspace.connect.perm.readContents') },
+    { ok: true,  text: t('workspace.connect.perm.readMetadata') },
+    { ok: true,  text: t('workspace.connect.perm.readTeam') },
+    { ok: false, text: t('workspace.connect.perm.noWrite') },
+    { ok: false, text: t('workspace.connect.perm.noWorkflows') },
   ];
   return (
     <div
@@ -101,7 +104,7 @@ function PermissionsCard({ provider }: { provider: WizardData['workspace']['prov
       }}
     >
       <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-        What se · field will request from {providerLabel(provider)}
+        {t('workspace.connect.willRequest', { provider: providerLabel(provider) })}
       </span>
       <ul className="grid grid-cols-1 gap-1">
         {items.map((it, i) => (

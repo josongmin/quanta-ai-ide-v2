@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Dot-field preview — tiny canvas-free animated SVG. Dots drift in toward
 // a center. Slow bloom suggests "real-time signal arrival".
 export function DotFieldPreview() {
+  const { t } = useTranslation('onboarding');
   const dots = useMemo(() => Array.from({ length: 36 }, (_, i) => {
     // Spread points around the canvas in a stable but varied pattern.
     const a = (i * 137.508) * (Math.PI / 180);
@@ -91,10 +93,10 @@ export function DotFieldPreview() {
         className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-2xs font-mono tabular-nums"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        <span>dot field · live preview</span>
+        <span>{t('done.dotFieldPreview')}</span>
         <span className="inline-flex items-center gap-1">
           <span className="w-1 h-1 rounded-full" style={{ background: 'var(--intent-success-vivid)' }} />
-          streaming
+          {t('done.streaming')}
         </span>
       </div>
     </div>

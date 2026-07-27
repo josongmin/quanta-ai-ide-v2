@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Download, Copy, Check } from 'lucide-react';
 import { AuthShell } from '../AuthShell';
 import { AuthButton as Button } from '@shared/ui/forms';
@@ -8,6 +9,7 @@ import { useCopyToClipboard } from '@shared/lib';
 // Backup code generation overlay
 
 export function BackupCodesGenerated({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('auth');
   const codes = useMemo(() => generateCodes(10), []);
   const text = codes.join('\n');
   const { copied, copy } = useCopyToClipboard(1600);
@@ -24,11 +26,11 @@ export function BackupCodesGenerated({ onClose }: { onClose: () => void }) {
 
   return (
     <AuthShell
-      title="Save your backup codes"
-      subtitle="If you lose access to your authenticator, these are the only way back in. Each code works once."
+      title={t('mfa.backupCodes.title')}
+      subtitle={t('mfa.backupCodes.subtitle')}
       footer={
         <span style={{ color: 'var(--intent-warn-fg)' }}>
-          We won&apos;t show these again. Save them now.
+          {t('mfa.backupCodes.footer')}
         </span>
       }
     >
@@ -52,15 +54,15 @@ export function BackupCodesGenerated({ onClose }: { onClose: () => void }) {
 
       <div className="grid grid-cols-2 gap-2">
         <Button variant="secondary" onClick={() => { copy(text); }} leading={copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}>
-          {copied ? 'Copied' : 'Copy all'}
+          {copied ? t('mfa.backupCodes.copied') : t('mfa.backupCodes.copyAll')}
         </Button>
         <Button variant="secondary" onClick={download} leading={<Download className="w-3.5 h-3.5" />}>
-          Download .txt
+          {t('mfa.backupCodes.downloadTxt')}
         </Button>
       </div>
 
       <Button onClick={onClose}>
-        I&apos;ve saved them — continue
+        {t('mfa.backupCodes.saved')}
       </Button>
     </AuthShell>
   );

@@ -20,9 +20,7 @@ export const LOG_LINES: { msg: string; kind: LogKind }[] = [
   { msg: '─ ongoing: blast-radius pass, hotspot ranking · runs in background ─',                 kind: 'note' },
 ];
 
-export function firstName(full: string) {
+export function firstName(full: string, fallback: string) {
   const t = full.trim().split(/\s+/)[0];
-  return t || 'there';
+  return t || fallback;
 }
-
-export function cap(s: string) { return s.charAt(0).toUpperCase() + s.slice(1); }

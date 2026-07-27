@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from '@shared/theme';
 import { useScrollRestoration } from '@shared/lib';
 import { Check } from 'lucide-react';
@@ -35,6 +36,7 @@ type Props = {
 export function OnboardingShell({
   steps, current, onPrev, actions, children, topRight,
 }: Props) {
+  const { t } = useTranslation('onboarding');
   const { isDark } = useTheme();
   const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
   const scrollerRef = useRef<HTMLElement>(null);
@@ -59,7 +61,14 @@ export function OnboardingShell({
         <BrandMark />
         <div className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
           {topRight ?? (
-            <span>Step <span style={{ color: 'var(--fg-default)' }}>{current + 1}</span> of {steps.length}</span>
+            <span>
+              <Trans
+                i18nKey="shell.stepOf"
+                t={t}
+                values={{ current: current + 1, total: steps.length }}
+                components={[<span key="0" style={{ color: 'var(--fg-default)' }} />]}
+              />
+            </span>
           )}
         </div>
       </header>
@@ -78,13 +87,11 @@ export function OnboardingShell({
                 className="text-4xl font-semibold tracking-tight leading-tight"
                 style={{ color: 'var(--fg-strong)' }}
               >
-                {steps[current].title}
+                {t(`steps.${steps[current].id}.title`)}
               </h1>
-              {steps[current].subtitle && (
-                <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
-                  {steps[current].subtitle}
-                </p>
-              )}
+              <p className="text-base leading-snug" style={{ color: 'var(--fg-muted)' }}>
+                {t(`steps.${steps[current].id}.subtitle`)}
+              </p>
             </header>
             {children}
           </StepBody>
@@ -110,7 +117,7 @@ export function OnboardingShell({
           }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
         >
-          ← Back
+          {t('shell.back')}
         </button>
         <div className="flex items-center gap-2">{actions}</div>
       </footer>
@@ -119,6 +126,7 @@ export function OnboardingShell({
 }
 
 function BrandMark() {
+  const { t } = useTranslation('onboarding');
   return (
     <div className="flex items-center gap-2">
       <div
@@ -137,7 +145,7 @@ function BrandMark() {
           background: 'var(--bg-surface-muted)',
         }}
       >
-        Onboarding
+        {t('shell.badge')}
       </span>
     </div>
   );
@@ -166,6 +174,7 @@ function ProgressBar({ ratio, fromRatio }: { ratio: number; fromRatio: number })
 }
 
 function Stepper({ steps, current }: { steps: OnboardingStep[]; current: number }) {
+  const { t } = useTranslation('onboarding');
   return (
     <ol className="flex items-center gap-3">
       {steps.map((s, i) => {
@@ -207,7 +216,7 @@ function Stepper({ steps, current }: { steps: OnboardingStep[]; current: number 
                     : 'var(--fg-subtle)',
               }}
             >
-              {s.label}
+              {t(`steps.${s.id}.label`)}
             </span>
             {i < steps.length - 1 && (
               <span

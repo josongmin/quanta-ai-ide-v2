@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 import { TIMEZONES, LOCALES } from '../../../lib/timezones';
 
@@ -5,14 +6,15 @@ import { TIMEZONES, LOCALES } from '../../../lib/timezones';
 export function TimezoneSelect({
   value, onChange, detected,
 }: { value: string; onChange: (v: string) => void; detected: string }) {
+  const { t } = useTranslation('onboarding');
   return (
     <label className="flex flex-col gap-1.5">
       <span className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}>
-        <span>Time zone</span>
+        <span>{t('profile.timezone')}</span>
         {value === detected && (
           <span className="lowercase tracking-normal" style={{ color: 'var(--fg-accent)' }}>
-            detected
+            {t('profile.detected')}
           </span>
         )}
       </span>
@@ -37,10 +39,11 @@ export function TimezoneSelect({
 }
 
 export function LocaleSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { t } = useTranslation('onboarding');
   return (
     <label className="flex flex-col gap-1.5">
       <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-        Language
+        {t('profile.language')}
       </span>
       <div className="relative">
         <Globe
@@ -69,6 +72,7 @@ export function LocaleSelect({ value, onChange }: { value: string; onChange: (v:
 }
 
 export function DetectionBanner({ detectedTz, detectedLoc }: { detectedTz: string; detectedLoc: string }) {
+  const { t } = useTranslation('onboarding');
   return (
     <div
       className="flex items-start gap-2 text-xs leading-snug px-2.5 py-2 rounded-md"
@@ -80,11 +84,15 @@ export function DetectionBanner({ detectedTz, detectedLoc }: { detectedTz: strin
     >
       <Globe className="w-3 h-3 mt-0.5 shrink-0" />
       <span>
-        Detected from your browser:{' '}
-        <span className="font-mono" style={{ color: 'var(--fg-default)' }}>{detectedTz}</span>
-        {' '}·{' '}
-        <span className="font-mono" style={{ color: 'var(--fg-default)' }}>{detectedLoc}</span>.
-        These are pre-filled but you can change them.
+        <Trans
+          i18nKey="profile.detectionBanner"
+          t={t}
+          values={{ tz: detectedTz, loc: detectedLoc }}
+          components={[
+            <span key="0" className="font-mono" style={{ color: 'var(--fg-default)' }} />,
+            <span key="1" className="font-mono" style={{ color: 'var(--fg-default)' }} />,
+          ]}
+        />
       </span>
     </div>
   );

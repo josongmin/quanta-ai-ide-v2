@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import { ShieldCheck } from 'lucide-react';
 
 export function KeyHint({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export function KeyHint({ children }: { children: React.ReactNode }) {
 }
 
 export function RoleHint() {
+  const { t } = useTranslation('onboarding');
   return (
     <div
       className="flex items-start gap-2 px-3 py-2 rounded-md text-sm leading-snug"
@@ -27,8 +29,11 @@ export function RoleHint() {
     >
       <ShieldCheck className="w-3 h-3 mt-0.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
       <span>
-        You can promote anyone to Admin from <span className="font-mono">Organization → Members</span> after they accept.
-        Roles affect billing for paid plans — only Members and Admins count toward seats.
+        <Trans
+          i18nKey="invite.roleHint"
+          t={t}
+          components={[<span key="0" className="font-mono" />]}
+        />
       </span>
     </div>
   );

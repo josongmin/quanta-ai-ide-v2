@@ -1,1 +1,291 @@
-{}
+{
+  "shell": {
+    "badge": "Onboarding",
+    "stepOf": "Step <0>{{current}}</0> of {{total}}",
+    "back": "← Back",
+    "signedInAs": "Signed in as <0>{{email}}</0>",
+    "you": "you",
+    "signOut": "Sign out",
+    "skip": "Skip",
+    "finishing": "Finishing…",
+    "finishSetup": "Finish setup",
+    "continue": "Continue",
+    "invitesFailed_one": "{{count}} invite couldn't be sent — resend from Members after upgrading. Press Finish to continue.",
+    "invitesFailed_other": "{{count}} invites couldn't be sent — resend from Members after upgrading. Press Finish to continue."
+  },
+  "steps": {
+    "profile": {
+      "label": "Profile",
+      "title": "Set up your profile",
+      "subtitle": "How others on your team will see you in reviews and mentions."
+    },
+    "org": {
+      "label": "Organization",
+      "title": "Create or join an organization",
+      "subtitle": "Workspaces, teams, and billing roll up here."
+    },
+    "workspace": {
+      "label": "Workspace",
+      "title": "Connect your first workspace",
+      "subtitle": "Pick the repo (or monorepo) you want se · field to start indexing."
+    },
+    "invite": {
+      "label": "Invite",
+      "title": "Invite teammates (optional)",
+      "subtitle": "They can sign in with the same SSO domain. You can do this later."
+    },
+    "plan": {
+      "label": "Plan",
+      "title": "Pick a plan to start with",
+      "subtitle": "You can change or cancel any time. Annual saves 17%."
+    }
+  },
+  "profile": {
+    "fullName": "Full name",
+    "namePlaceholder": "Sora Kim",
+    "handle": "Handle",
+    "handlePlaceholder": "sora",
+    "timezone": "Time zone",
+    "detected": "detected",
+    "language": "Language",
+    "avatarUpload": "Upload avatar",
+    "replacePhoto": "Replace photo",
+    "uploadPhoto": "Upload photo",
+    "remove": "Remove",
+    "avatarHint": "JPG · PNG · GIF · WebP. Max 2 MB. Drop a file on the circle.",
+    "avatarNotImage": "Avatar must be an image (PNG, JPG, GIF, WebP).",
+    "avatarTooLarge": "Image is over 2 MB. Compress and try again.",
+    "detectionBanner": "Detected from your browser: <0>{{tz}}</0> · <1>{{loc}}</1>. These are pre-filled but you can change them."
+  },
+  "org": {
+    "mode": {
+      "createTitle": "Create new",
+      "createSub": "I'm starting fresh.",
+      "joinTitle": "Join existing",
+      "joinSub": "I have an invite code."
+    },
+    "create": {
+      "logo": "Logo",
+      "uploadLogo": "Upload organization logo",
+      "logoAlt": "{{name}} logo",
+      "remove": "Remove",
+      "name": "Organization name",
+      "namePlaceholder": "ACME, Inc.",
+      "slug": "URL slug",
+      "slugPlaceholder": "acme",
+      "industry": "Industry",
+      "teamSize": "Team size"
+    },
+    "join": {
+      "code": "Invite code",
+      "codePlaceholder": "ACME-7HQF-TEAM",
+      "help": "Don't have a code? Ask an admin in your org. Codes look like <0>XXXXX-XXXX-XXXX</0> and are case-insensitive. <1>Demo: try <2>ACME-7HQF-TEAM</2>.</1>",
+      "recognizedTitle": "You'll join {{name}}",
+      "recognizedBody": "Plan: {{plan}} · {{members}} members · You'll be added as Member by default"
+    },
+    "industries": {
+      "software": "Software & SaaS",
+      "finance": "Finance & FinTech",
+      "healthcare": "Healthcare & BioTech",
+      "retail": "Retail & E-commerce",
+      "media": "Media & Gaming",
+      "gov-edu": "Government & Education",
+      "manufacturing": "Manufacturing & Logistics",
+      "other": "Other"
+    },
+    "sizes": {
+      "1-4Sub": "Just starting",
+      "5-19Sub": "Small team",
+      "20-99Sub": "Growing",
+      "100-499Sub": "Mid-size",
+      "500+Sub": "Enterprise"
+    }
+  },
+  "workspace": {
+    "connect": {
+      "githubPerm": "Read access · repos & members",
+      "gitlabPerm": "Read access · projects & users",
+      "bitbucketPerm": "Read access · workspaces",
+      "connectTo": "Connect to {{provider}}",
+      "willRequest": "What se · field will request from {{provider}}",
+      "perm": {
+        "readContents": "Read repository contents",
+        "readMetadata": "Read repository metadata (branches, commits)",
+        "readTeam": "Read team & member list (for CODEOWNERS)",
+        "noWrite": "Write to your repos · we never do this",
+        "noWorkflows": "Trigger workflows · we never do this"
+      }
+    },
+    "picker": {
+      "connectedAs": "Connected to <0>{{provider}}</0> as <1>{{account}}</1>",
+      "disconnect": "Disconnect",
+      "searchPlaceholder": "Search your repositories…",
+      "noMatch": "No repositories match \"{{query}}\".",
+      "monorepo": "monorepo",
+      "private": "private",
+      "public": "public",
+      "page": "Page <0>{{page}}</0> of {{total}}",
+      "prev": "Prev",
+      "next": "Next"
+    },
+    "config": {
+      "pickDifferent": "Pick a different repo",
+      "defaultBranch": "Default branch to track",
+      "default": "default",
+      "subPaths": "Sub-paths to index",
+      "selectNone": "Select none",
+      "selectAll": "Select all",
+      "subPathsHint": "Leave empty to index all sub-paths. Pick specific ones if you want to scope down for performance.",
+      "indexed": "Indexed",
+      "stagePct": "{{stage}} · {{pct}}%",
+      "backgroundNote": "You can continue setup — indexing keeps running in the background. We'll notify you when the dot field is ready.",
+      "stage": {
+        "clone": "Clone & verify",
+        "parse": "Parse source files",
+        "graph": "Build symbol graph",
+        "ready": "Warm up dot field"
+      }
+    }
+  },
+  "invite": {
+    "defaultRole": "Default role for new invitees",
+    "roleCountTotal": "{{count}}",
+    "roleCount": "· {{count}} {{role}}",
+    "emailPlaceholder": "name@company.com, another@company.com…",
+    "removeEmail": "Remove {{email}}",
+    "pressEnter": "Press <0>Enter</0> or <1>,</1> to add. Paste a list to add many at once.",
+    "importCsv": "Import CSV",
+    "clearAll": "Clear all",
+    "csvSkipped_one": "Skipped {{count}} line — invalid email format.",
+    "csvSkipped_other": "Skipped {{count}} lines — invalid email format.",
+    "csvReadError": "Could not read file.",
+    "shareLink": "Or share an invite link",
+    "linkMeta": "· expires in 7 days · max 50 uses",
+    "copied": "Copied",
+    "copy": "Copy",
+    "new": "New",
+    "generateLink": "Generate invite link",
+    "sending": "Sending invitations…",
+    "sendInvitations_one": "Send {{count}} invitation",
+    "sendInvitations_other": "Send {{count}} invitations",
+    "queued_one": "{{count}} invitation queued",
+    "queued_other": "{{count}} invitations queued",
+    "sentAt": "· sent at {{time}}",
+    "receiptBody": "Recipients will get an email within a minute. They can also use the invite link if they prefer.",
+    "roleHint": "You can promote anyone to Admin from <0>Organization → Members</0> after they accept. Roles affect billing for paid plans — only Members and Admins count toward seats.",
+    "roles": {
+      "adminLabel": "Admin",
+      "adminSub": "Manage org & billing",
+      "memberLabel": "Member",
+      "memberSub": "Default · code + reviews",
+      "reviewerLabel": "Reviewer",
+      "reviewerSub": "Read + comment on PRs",
+      "viewerLabel": "Viewer",
+      "viewerSub": "Read-only access"
+    }
+  },
+  "plan": {
+    "cycle": {
+      "annual": "Annual",
+      "monthly": "Monthly",
+      "discount": "−17%"
+    },
+    "recommended": "Recommended",
+    "custom": "Custom",
+    "perSeatMo": "/seat/mo",
+    "minSeats": " · Min {{count}} seats",
+    "trial": "{{days}}d trial",
+    "seats": "Seats",
+    "decreaseSeats": "Decrease seats",
+    "increaseSeats": "Increase seats",
+    "addons": "Add-ons",
+    "notAvailableOn": " · Not available on {{plan}}",
+    "addonPrice": "+${{price}}/seat/mo",
+    "plans": {
+      "freeName": "Free",
+      "freeHint": "Solo / exploring",
+      "teamName": "Team",
+      "teamHint": "For small teams",
+      "businessName": "Business",
+      "businessHint": "For organizations",
+      "enterpriseName": "Enterprise",
+      "enterpriseHint": "Regulated, self-host"
+    },
+    "highlights": {
+      "oneWorkspace": "1 workspace",
+      "upTo3Seats": "Up to 3 seats",
+      "communitySupport": "Community support",
+      "fiveWorkspaces": "5 workspaces",
+      "unlimitedSeats": "Unlimited seats",
+      "customAdmission": "Custom admission rules",
+      "unlimitedWorkspaces": "Unlimited workspaces",
+      "samlScim": "SAML / SCIM",
+      "priorityRouting": "Priority routing",
+      "vpcSelfHost": "VPC / self-host",
+      "customSla": "Custom SLA",
+      "dedicatedCsm": "Dedicated CSM"
+    },
+    "addonList": {
+      "ssoLabel": "SSO & SCIM",
+      "ssoSub": "SAML 2.0 + provisioning",
+      "auditProLabel": "Audit Pro",
+      "auditProSub": "1y retention + SIEM export",
+      "premiumLabel": "Premium support",
+      "premiumSub": "4h SLA, dedicated channel"
+    },
+    "summary": {
+      "enterpriseTitle": "Enterprise — let's talk",
+      "enterpriseBody": "We'll route you to a sales engineer for procurement, custom contracts, and self-host options. Free until your contract starts.",
+      "freeTitle": "Free forever",
+      "freeBody": "No payment needed. Upgrade any time from <0>Organization → Billing</0>.",
+      "annualSubscription": "Annual subscription",
+      "monthlySubscription": "Monthly subscription",
+      "trialInfo": "{{days}}-day free trial · charge starts on day {{chargeDay}}",
+      "baseLine": "{{plan}} · {{seats}} seats × ${{price}}/mo",
+      "addonLine": "+ {{addon}} · {{seats}} seats × ${{price}}/mo",
+      "monthly": "Monthly",
+      "monthlyValue": "${{amount}}/mo",
+      "billedAnnually": "Billed annually",
+      "billedAnnuallyValue": "${{amount}} now",
+      "savedVsMonthly": "Saved vs. monthly",
+      "savedValue": "−${{amount}}/yr",
+      "proRatedNote": "Pro-rated when you change plans or seat count. Taxes calculated at checkout."
+    }
+  },
+  "done": {
+    "allSet": "You're all set, {{name}}.",
+    "indexingBody": "We're indexing <0>{{repo}}</0> right now. You can jump in already — signals appear on the dot field as soon as the first parse pass finishes.",
+    "yourRepo": "your repo",
+    "there": "there",
+    "terminalTitle": "se-field · indexing",
+    "dotFieldPreview": "dot field · live preview",
+    "streaming": "streaming",
+    "whatToTry": "What to try first",
+    "actions": {
+      "codingTitle": "Edit with AI in Coding",
+      "codingHint": "Open any file and ask for a refactor with the AI agent.",
+      "reviewTitle": "Review a PR",
+      "reviewHintInvited_one": "{{count}} teammate invited — they'll show up in /reviews.",
+      "reviewHintInvited_other": "{{count}} teammates invited — they'll show up in /reviews.",
+      "reviewHintEmpty": "Connect a PR provider to start reviewing.",
+      "fixTitle": "Run a fix pipeline",
+      "fixHint": "Pick a fix candidate from the dot field, run it through gating."
+    },
+    "summary": {
+      "profile": "Profile",
+      "unnamed": "Unnamed",
+      "handle": "Handle",
+      "timezone": "Time zone",
+      "organization": "Organization",
+      "newOrg": "New org",
+      "workspace": "Workspace",
+      "branch": "Branch",
+      "invitees": "Invitees",
+      "plan": "Plan",
+      "seats": "Seats"
+    },
+    "ctaNotified": "Teammates were notified by email.",
+    "ctaInviteLater": "You can invite teammates any time from Organization → Members.",
+    "openDotField": "Open the dot field"
+  }
+}

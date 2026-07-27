@@ -1,22 +1,25 @@
 import type { Industry, CompanySize } from '../../wizard';
 
-export const INDUSTRIES: { id: Industry; label: string }[] = [
-  { id: 'software',      label: 'Software & SaaS' },
-  { id: 'finance',       label: 'Finance & FinTech' },
-  { id: 'healthcare',    label: 'Healthcare & BioTech' },
-  { id: 'retail',        label: 'Retail & E-commerce' },
-  { id: 'media',         label: 'Media & Gaming' },
-  { id: 'gov-edu',       label: 'Government & Education' },
-  { id: 'manufacturing', label: 'Manufacturing & Logistics' },
-  { id: 'other',         label: 'Other' },
+// Industry ids only — labels are resolved via t(`org.industries.${id}`).
+export const INDUSTRIES: { id: Industry }[] = [
+  { id: 'software' },
+  { id: 'finance' },
+  { id: 'healthcare' },
+  { id: 'retail' },
+  { id: 'media' },
+  { id: 'gov-edu' },
+  { id: 'manufacturing' },
+  { id: 'other' },
 ];
 
-export const SIZES: { id: CompanySize; label: string; sub: string }[] = [
-  { id: '1-4',     label: '1–4',     sub: 'Just starting' },
-  { id: '5-19',    label: '5–19',    sub: 'Small team' },
-  { id: '20-99',   label: '20–99',   sub: 'Growing' },
-  { id: '100-499', label: '100–499', sub: 'Mid-size' },
-  { id: '500+',    label: '500+',    sub: 'Enterprise' },
+// `label` is a numeric range (locale-agnostic); `sub` is resolved via
+// t(`org.sizes.${id}Sub`).
+export const SIZES: { id: CompanySize; label: string }[] = [
+  { id: '1-4',     label: '1–4' },
+  { id: '5-19',    label: '5–19' },
+  { id: '20-99',   label: '20–99' },
+  { id: '100-499', label: '100–499' },
+  { id: '500+',    label: '500+' },
 ];
 
 export type RecognizedOrgMeta = { name: string; plan: string; members: number };

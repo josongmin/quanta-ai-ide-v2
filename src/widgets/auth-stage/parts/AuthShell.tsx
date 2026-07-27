@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@shared/theme';
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
 // footer below the card. Same tokens as the rest of the app so themes stay
 // in sync, but with a tighter container — auth pages must read at a glance.
 export function AuthShell({ title, subtitle, footer, topRight, children }: Props) {
+  const { t } = useTranslation('auth');
   const { isDark } = useTheme();
   const pageBg = isDark ? 'var(--bg-canvas)' : 'var(--bg-surface)';
 
@@ -74,11 +76,11 @@ export function AuthShell({ title, subtitle, footer, topRight, children }: Props
         className="px-8 h-12 shrink-0 flex items-center justify-between text-xs uppercase tracking-eyebrow"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        <span>© ACME, Inc.</span>
+        <span>{t('shell.copyright')}</span>
         <div className="flex items-center gap-5">
-          <Link to={'/legal/terms' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>Terms</Link>
-          <Link to={'/legal/privacy' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>Privacy</Link>
-          <Link to={'/status' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>Status</Link>
+          <Link to={'/legal/terms' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>{t('shell.terms')}</Link>
+          <Link to={'/legal/privacy' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>{t('shell.privacy')}</Link>
+          <Link to={'/status' as never} className="hover:opacity-100" style={{ opacity: 0.85, color: 'inherit', letterSpacing: 'inherit' }}>{t('shell.status')}</Link>
         </div>
       </footer>
     </div>

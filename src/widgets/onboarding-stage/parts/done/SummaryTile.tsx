@@ -1,8 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import type { DoneProps } from './types';
-import { cap } from './data';
 
 // Summary tile.
 export function SummaryTile({ data }: DoneProps) {
+  const { t } = useTranslation('onboarding');
   return (
     <dl
       className="grid grid-cols-3 gap-x-6 gap-y-3 px-4 py-3 rounded-md text-sm"
@@ -11,15 +12,15 @@ export function SummaryTile({ data }: DoneProps) {
         border: '1px solid var(--border-muted)',
       }}
     >
-      <Row label="Profile"      value={data.profile.name || 'Unnamed'} />
-      <Row label="Handle"       value={`@${data.profile.handle || 'me'}`} mono />
-      <Row label="Time zone"    value={data.profile.timezone} mono />
-      <Row label="Organization" value={data.org.name || 'New org'} />
-      <Row label="Workspace"    value={data.workspace.repo || '—'} mono />
-      <Row label="Branch"       value={data.workspace.branch || 'main'} mono />
-      <Row label="Invitees"     value={String(data.invite.entries.length)} />
-      <Row label="Plan"         value={`${cap(data.plan.id)} · ${data.plan.cycle}`} />
-      <Row label="Seats"        value={String(data.plan.seats)} />
+      <Row label={t('done.summary.profile')}      value={data.profile.name || t('done.summary.unnamed')} />
+      <Row label={t('done.summary.handle')}       value={`@${data.profile.handle || 'me'}`} mono />
+      <Row label={t('done.summary.timezone')}     value={data.profile.timezone} mono />
+      <Row label={t('done.summary.organization')} value={data.org.name || t('done.summary.newOrg')} />
+      <Row label={t('done.summary.workspace')}    value={data.workspace.repo || '—'} mono />
+      <Row label={t('done.summary.branch')}       value={data.workspace.branch || 'main'} mono />
+      <Row label={t('done.summary.invitees')}     value={String(data.invite.entries.length)} />
+      <Row label={t('done.summary.plan')}         value={`${t(`plan.plans.${data.plan.id}Name`)} · ${data.plan.cycle}`} />
+      <Row label={t('done.summary.seats')}        value={String(data.plan.seats)} />
     </dl>
   );
 }

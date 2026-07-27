@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Check, Clock } from 'lucide-react';
 import type { Plan } from './data';
 
@@ -11,6 +12,7 @@ export function PlanCard({
   pageBg: string;
   onSelect: () => void;
 }) {
+  const { t } = useTranslation('onboarding');
   const price = cycle === 'annual' ? plan.annual : plan.monthly;
   return (
     <button
@@ -30,13 +32,13 @@ export function PlanCard({
           className="absolute top-3 right-3 text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
           style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
         >
-          Recommended
+          {t('plan.recommended')}
         </span>
       )}
 
       <div className="flex items-center gap-2">
         <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          {plan.name}
+          {t(`plan.plans.${plan.id}Name`)}
         </span>
         {selected && (
           <span
@@ -52,7 +54,7 @@ export function PlanCard({
             style={{ color: 'var(--fg-accent)' }}
           >
             <Clock className="w-2.5 h-2.5" />
-            {plan.trial}d trial
+            {t('plan.trial', { days: plan.trial })}
           </span>
         )}
       </div>
@@ -60,7 +62,7 @@ export function PlanCard({
       <div className="flex items-baseline gap-1 min-h-[32px]">
         {price == null ? (
           <span className="text-2xl font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
-            Custom
+            {t('plan.custom')}
           </span>
         ) : (
           <>
@@ -69,24 +71,24 @@ export function PlanCard({
               ${price}
             </span>
             <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-              /seat/mo
+              {t('plan.perSeatMo')}
             </span>
           </>
         )}
       </div>
 
       <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-        {plan.hint}
+        {t(`plan.plans.${plan.id}Hint`)}
         {plan.minSeats && plan.minSeats > 1 && (
-          <span> · Min {plan.minSeats} seats</span>
+          <span>{t('plan.minSeats', { count: plan.minSeats })}</span>
         )}
       </span>
 
       <ul className="flex flex-col gap-1.5 mt-1">
-        {plan.highlights.map((h) => (
+        {plan.highlightKeys.map((h) => (
           <li key={h} className="flex items-start gap-1.5 text-sm leading-snug" style={{ color: 'var(--fg-default)' }}>
             <Check className="w-3 h-3 shrink-0 mt-[2px]" style={{ color: 'var(--fg-muted)' }} />
-            <span>{h}</span>
+            <span>{t(`plan.highlights.${h}`)}</span>
           </li>
         ))}
       </ul>

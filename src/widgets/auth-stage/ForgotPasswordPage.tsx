@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   Mail, ShieldCheck, Clock, Building2, KeyRound, Info,
 } from 'lucide-react';
@@ -13,6 +14,7 @@ import { lookupIdP, PROVIDER_LABEL } from './lib/idpDirectory';
 const RESEND_COOLDOWN_MS = 60_000;
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [phase, setPhase] = useState<'form' | 'sending' | 'sent'>('form');
   const [now, setNow] = useState(() => Date.now());
@@ -68,9 +70,9 @@ export default function ForgotPasswordPage() {
   if (rate.lockedUntil) {
     return (
       <AuthShell
-        title="Too many reset requests"
-        subtitle="For security, we've paused reset requests from this device. Try again later or contact your admin."
-        footer={<><span>Need help?</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link></>}
+        title={t('forgot.throttled.title')}
+        subtitle={t('forgot.throttled.subtitle')}
+        footer={<><span>{t('common.needHelp')}</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('common.contactSupport')}</Link></>}
       >
         <div
           className="flex items-start gap-3 px-3 py-3 rounded-md"
@@ -82,10 +84,10 @@ export default function ForgotPasswordPage() {
           <Clock className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
           <div className="flex flex-col gap-0.5 text-sm leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Reset throttled · retry in {Math.floor(rate.cooldownSec / 60)} min
+              {t('forgot.throttled.bannerTitle', { min: Math.floor(rate.cooldownSec / 60) })}
             </span>
             <span style={{ color: 'var(--fg-muted)' }}>
-              We allow up to 5 reset requests per hour per device. This protects your account from spam attacks.
+              {t('forgot.throttled.bannerBody')}
             </span>
           </div>
         </div>
@@ -97,9 +99,9 @@ export default function ForgotPasswordPage() {
   if (idp?.enforced && phase === 'form' && email.includes('@')) {
     return (
       <AuthShell
-        title="Password reset is managed by your IdP"
-        subtitle={`${idp.org} uses ${PROVIDER_LABEL[idp.provider]} for sign-in, so passwords are managed there.`}
-        footer={<><span>Different account?</span><button type="button" onClick={() => { setEmail(''); }} style={{ color: 'var(--fg-link)' }}>Use another email</button></>}
+        title={t('forgot.idpManaged.title')}
+        subtitle={t('forgot.idpManaged.subtitle', { org: idp.org, provider: PROVIDER_LABEL[idp.provider] })}
+        footer={<><span>{t('forgot.idpManaged.differentAccount')}</span><button type="button" onClick={() => { setEmail(''); }} style={{ color: 'var(--fg-link)' }}>{t('forgot.idpManaged.useAnotherEmail')}</button></>}
       >
         <div
           className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
@@ -108,10 +110,10 @@ export default function ForgotPasswordPage() {
           <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
           <div className="flex flex-col gap-0.5 text-sm leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Reset your {idp.org} password
+              {t('forgot.idpManaged.bannerTitle', { org: idp.org })}
             </span>
             <span style={{ color: 'var(--fg-muted)' }}>
-              Use {PROVIDER_LABEL[idp.provider]} or your IT admin&apos;s self-service portal. After resetting, sign back in here with SSO.
+              {t('forgot.idpManaged.bannerBody', { provider: PROVIDER_LABEL[idp.provider] })}
             </span>
           </div>
         </div>
@@ -121,7 +123,7 @@ export default function ForgotPasswordPage() {
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <KeyRound className="w-3.5 h-3.5" />
-          Sign in with SSO
+          {t('common.signInWithSso')}
         </Link>
       </AuthShell>
     );
@@ -130,11 +132,11 @@ export default function ForgotPasswordPage() {
   if (phase === 'sent') {
     return (
       <AuthShell
-        title="Check your inbox"
-        subtitle={`If an account exists for ${email}, we've sent a password reset link. The link expires in 30 minutes.`}
+        title={t('forgot.sent.title')}
+        subtitle={t('forgot.sent.subtitle', { email })}
         footer={
-          <><span>Remembered your password?</span>
-          <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Sign in</Link></>
+          <><span>{t('forgot.sent.rememberedPassword')}</span>
+          <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>{t('forgot.sent.signIn')}</Link></>
         }
       >
         <SentPanel email={email} cooldownLeft={cooldownLeft} onResend={() => {
@@ -148,21 +150,21 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthShell
-      title="Reset your password"
-      subtitle="Enter the email associated with your account. If it exists, we'll send a link to reset your password."
+      title={t('forgot.title')}
+      subtitle={t('forgot.subtitle')}
       footer={
-        <><span>Remembered it?</span>
-        <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Back to sign in</Link></>
+        <><span>{t('forgot.rememberedIt')}</span>
+        <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>{t('forgot.backToSignIn')}</Link></>
       }
     >
       <form className="flex flex-col gap-4" onSubmit={submit}>
         <Field
-          label="Work email"
+          label={t('forgot.workEmail')}
           type="email"
           autoComplete="email"
           value={email}
           onChange={(e) => { setEmail(e.target.value); }}
-          placeholder="you@company.com"
+          placeholder={t('forgot.emailPlaceholder')}
           required
           autoFocus
         />
@@ -178,11 +180,11 @@ export default function ForgotPasswordPage() {
           >
             <Info className="w-3 h-3 mt-0.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
             <span>
-              {idp.org} uses {PROVIDER_LABEL[idp.provider]} —{' '}
+              {t('forgot.orgUsesSso', { org: idp.org, provider: PROVIDER_LABEL[idp.provider] })}
               <Link to={'/auth/sso' as never} style={{ color: 'var(--fg-link)' }}>
-                you may want to sign in with SSO
-              </Link>{' '}
-              instead of resetting.
+                {t('forgot.signInWithSsoLink')}
+              </Link>
+              {t('forgot.instead')}
             </span>
           </div>
         )}
@@ -192,7 +194,7 @@ export default function ForgotPasswordPage() {
           leading={<Mail className="w-3.5 h-3.5" />}
           disabled={phase === 'sending'}
         >
-          {phase === 'sending' ? 'Sending…' : 'Send reset link'}
+          {phase === 'sending' ? t('forgot.sending') : t('forgot.sendResetLink')}
         </Button>
 
         <PrivacyNote attempts={rate.attempts} />
@@ -204,6 +206,7 @@ export default function ForgotPasswordPage() {
 function SentPanel({
   email, cooldownLeft, onResend,
 }: { email: string; cooldownLeft: number; onResend: () => void }) {
+  const { t } = useTranslation('auth');
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -216,25 +219,31 @@ function SentPanel({
         <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-success-fg)' }} />
         <div className="flex flex-col gap-1 text-sm leading-snug">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-            Email request processed
+            {t('forgot.sent.requestProcessed')}
           </span>
           <span style={{ color: 'var(--fg-muted)' }}>
-            Subject: <span style={{ color: 'var(--fg-default)' }}>&quot;Reset your se · field password&quot;</span>{' '}
-            · From: <span className="font-mono">noreply@se-field.app</span>
+            <Trans
+              i18nKey="forgot.sent.subjectFrom"
+              t={t}
+              components={[
+                <span key="0" style={{ color: 'var(--fg-default)' }} />,
+                <span key="1" className="font-mono" />,
+              ]}
+            />
           </span>
         </div>
       </div>
 
       <div className="flex flex-col gap-1.5 text-sm">
         <span style={{ color: 'var(--fg-muted)' }}>
-          What to expect:
+          {t('forgot.sent.whatToExpect')}
         </span>
         <ul className="flex flex-col gap-1 pl-1">
           {[
-            { ok: true,  text: 'A link arrives within 1–2 minutes' },
-            { ok: true,  text: 'The link is valid for 30 minutes' },
-            { ok: true,  text: 'Single-use — clicking it again does nothing' },
-            { ok: false, text: "Didn't arrive? Check spam, then resend." },
+            { ok: true,  text: t('forgot.sent.line1') },
+            { ok: true,  text: t('forgot.sent.line2') },
+            { ok: true,  text: t('forgot.sent.line3') },
+            { ok: false, text: t('forgot.sent.line4') },
           ].map((line, i) => (
             <li key={i} className="flex items-start gap-1.5" style={{ color: 'var(--fg-default)' }}>
               <span
@@ -261,19 +270,23 @@ function SentPanel({
         }}
       >
         {cooldownLeft > 0 ? <Clock className="w-3 h-3" /> : <Mail className="w-3 h-3" />}
-        {cooldownLeft > 0 ? `Resend in ${cooldownLeft}s` : 'Resend email'}
+        {cooldownLeft > 0 ? t('forgot.sent.resendIn', { sec: cooldownLeft }) : t('forgot.sent.resendEmail')}
       </button>
 
       <p className="text-xs leading-snug" style={{ color: 'var(--fg-subtle)' }}>
-        For security, we always show this screen — even if no account exists for{' '}
-        <span className="font-mono">{email}</span>.
-        That way attackers can&apos;t use this form to discover registered emails.
+        <Trans
+          i18nKey="forgot.sent.securityNote"
+          t={t}
+          values={{ email }}
+          components={[<span key="0" className="font-mono" />]}
+        />
       </p>
     </div>
   );
 }
 
 function PrivacyNote({ attempts }: { attempts: number }) {
+  const { t } = useTranslation('auth');
   return (
     <div
       className="flex items-start gap-2 text-xs leading-snug"
@@ -281,9 +294,14 @@ function PrivacyNote({ attempts }: { attempts: number }) {
     >
       <Info className="w-3 h-3 mt-0.5 shrink-0" />
       <span>
-        We never reveal whether an email is registered. Up to 5 reset requests per hour, per device.
+        {t('forgot.privacyNote')}
         {attempts > 0 && (
-          <> You&apos;ve made <span style={{ color: 'var(--fg-default)' }}>{attempts}/5</span> this hour.</>
+          <Trans
+            i18nKey="forgot.attemptsMade"
+            t={t}
+            values={{ attempts }}
+            components={[<span key="0" style={{ color: 'var(--fg-default)' }} />]}
+          />
         )}
       </span>
     </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Fingerprint } from 'lucide-react';
 import { AuthButton as Button } from '@shared/ui/forms';
 import type { Phase } from './types';
@@ -5,6 +6,7 @@ import type { Phase } from './types';
 // WebAuthn — animated fingerprint pulse + state machine.
 
 export function WebAuthnPrompt({ phase, onActivate }: { phase: Phase; onActivate: () => void }) {
+  const { t } = useTranslation('auth');
   return (
     <div
       className="flex flex-col items-center gap-4 px-3 py-6 rounded-md"
@@ -30,18 +32,18 @@ export function WebAuthnPrompt({ phase, onActivate }: { phase: Phase; onActivate
       </div>
       <div className="flex flex-col items-center gap-1 text-center">
         <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          {phase === 'challenge'  && 'Touch your security key or authenticator'}
-          {phase === 'verifying'  && 'Verifying signature…'}
-          {phase === 'success'    && 'Authenticator confirmed'}
+          {phase === 'challenge'  && t('mfa.webauthn.touch')}
+          {phase === 'verifying'  && t('mfa.webauthn.verifying')}
+          {phase === 'success'    && t('mfa.webauthn.confirmed')}
         </span>
         <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-          Compatible: Touch ID · Windows Hello · YubiKey · Apple Passkey
+          {t('mfa.webauthn.compatible')}
         </span>
       </div>
       {phase === 'challenge' && (
         <Button onClick={onActivate} variant="secondary" full={false}>
           <Fingerprint className="w-3.5 h-3.5" />
-          Use authenticator
+          {t('mfa.webauthn.useAuthenticator')}
         </Button>
       )}
     </div>

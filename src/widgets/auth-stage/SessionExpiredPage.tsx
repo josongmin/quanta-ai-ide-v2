@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useSearch } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import {
   Clock, Code2, GitPullRequest, Wrench, Brain, Bot, ShieldCheck,
   ArrowRight, FileText, MessageSquare, GitBranch, AlertCircle,
@@ -8,30 +9,30 @@ import { AuthShell } from './parts/AuthShell';
 
 type LastRoute = '/intelligence' | '/coding' | '/agents' | '/reviews' | '/admission' | '/fixes';
 
+// Route → icon + i18n key stems (labels resolved at render via t()).
 const ROUTE_META: Record<LastRoute, {
-  label: string;
-  resumeCta: string;
+  key: string;
   icon: React.ComponentType<{ className?: string }>;
-  draftLabel: string;
 }> = {
-  '/intelligence': { label: 'Intelligence', resumeCta: 'Open dot field',     icon: Brain,           draftLabel: 'Filters & queries' },
-  '/coding':       { label: 'Coding',       resumeCta: 'Resume editing',     icon: Code2,           draftLabel: 'Unsaved drafts' },
-  '/agents':       { label: 'Agents',       resumeCta: 'Resume agent runs',  icon: Bot,             draftLabel: 'Active runs' },
-  '/reviews':      { label: 'Reviews',      resumeCta: 'Continue reviewing', icon: GitPullRequest,  draftLabel: 'Pending comments' },
-  '/admission':    { label: 'Admission',    resumeCta: 'Back to admission',  icon: ShieldCheck,     draftLabel: 'Rule edits' },
-  '/fixes':        { label: 'Fixes',        resumeCta: 'Resume fix pipeline',icon: Wrench,          draftLabel: 'Active fixes' },
+  '/intelligence': { key: 'intelligence', icon: Brain },
+  '/coding':       { key: 'coding',       icon: Code2 },
+  '/agents':       { key: 'agents',       icon: Bot },
+  '/reviews':      { key: 'reviews',      icon: GitPullRequest },
+  '/admission':    { key: 'admission',    icon: ShieldCheck },
+  '/fixes':        { key: 'fixes',        icon: Wrench },
 };
 
 type Reason = 'idle' | 'token-expired' | 'manual' | 'admin-revoked' | 'inactive-mfa';
-const REASON_LABEL: Record<Reason, { title: string; subtitle: string; tone: 'neutral' | 'warn' | 'danger' }> = {
-  'idle':           { title: 'Idle timeout',          subtitle: 'You were inactive for over 8 hours.',                         tone: 'neutral' },
-  'token-expired':  { title: 'Session token expired', subtitle: 'Your secure session expired naturally.',                      tone: 'neutral' },
-  'manual':         { title: 'Signed out',            subtitle: 'You signed out from another device.',                         tone: 'neutral' },
-  'admin-revoked':  { title: 'Revoked by admin',      subtitle: 'An administrator ended this session — usually due to a security review.', tone: 'warn' },
-  'inactive-mfa':   { title: 'Re-verification needed',subtitle: 'Your trusted device window expired. We need 2FA again.',     tone: 'warn' },
+const REASON_TONE: Record<Reason, { key: string; tone: 'neutral' | 'warn' | 'danger' }> = {
+  'idle':           { key: 'idle',          tone: 'neutral' },
+  'token-expired':  { key: 'tokenExpired',  tone: 'neutral' },
+  'manual':         { key: 'manual',        tone: 'neutral' },
+  'admin-revoked':  { key: 'adminRevoked',  tone: 'warn' },
+  'inactive-mfa':   { key: 'inactiveMfa',   tone: 'warn' },
 };
 
 export default function SessionExpiredPage() {
+  const { t } = useTranslation('auth');
   // Search params aren't registered on this route's schema, so the loose-mode
   // result is untyped ({}); narrow it in `select` to raw string fields, then
   // validate each against its known set before use.
@@ -43,10 +44,10 @@ export default function SessionExpiredPage() {
   const lastRoute: LastRoute =
     search.from && search.from in ROUTE_META ? (search.from as LastRoute) : '/coding';
   const reason: Reason =
-    search.reason && search.reason in REASON_LABEL ? (search.reason as Reason) : 'idle';
+    search.reason && search.reason in REASON_TONE ? (search.reason as Reason) : 'idle';
 
   const meta = ROUTE_META[lastRoute];
-  const reasonMeta = REASON_LABEL[reason];
+  const reasonMeta = REASON_TONE[reason];
 
   // Demo: drafts list depends on which route we came from. Each is "non-destructive
   // restoration" — these are stored locally, not sent until you resume.
@@ -54,17 +55,17 @@ export default function SessionExpiredPage() {
 
   return (
     <AuthShell
-      title="Your session has ended"
-      subtitle="For your security, we sign you out after a period of inactivity. Sign in again to continue where you left off."
+      title={t('sessionExpired.title')}
+      subtitle={t('sessionExpired.subtitle')}
       topRight={<DemoStatePicker />}
-      footer={<><span>Not you?</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Report this session</Link></>}
+      footer={<><span>{t('sessionExpired.notYou')}</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('sessionExpired.reportSession')}</Link></>}
     >
       <div className="flex flex-col gap-4">
         <ReasonBanner reason={reason} meta={reasonMeta} />
 
         {drafts.length > 0 && <DraftsCard route={lastRoute} drafts={drafts} />}
 
-        <ResumeButton route={lastRoute} icon={meta.icon} resumeCta={meta.resumeCta} />
+        <ResumeButton route={lastRoute} icon={meta.icon} resumeCta={t(`sessionExpired.route.${meta.key}Resume`)} />
 
         <div
           className="grid grid-cols-2 gap-x-6 gap-y-2 px-3 py-3 rounded-md text-sm"
@@ -73,12 +74,12 @@ export default function SessionExpiredPage() {
             border: '1px solid var(--border-muted)',
           }}
         >
-          <Meta label="Account"     value="sora@acme.com" />
-          <Meta label="Workspace"   value="acme-monorepo" />
-          <Meta label="Last route"  value={lastRoute} mono />
-          <Meta label="Last active" value="2h 14m ago" />
-          <Meta label="IP"          value="203.0.113.42" mono />
-          <Meta label="Browser"     value="Chrome 125 · macOS" />
+          <Meta label={t('sessionExpired.meta.account')}     value="sora@acme.com" />
+          <Meta label={t('sessionExpired.meta.workspace')}   value="acme-monorepo" />
+          <Meta label={t('sessionExpired.meta.lastRoute')}  value={lastRoute} mono />
+          <Meta label={t('sessionExpired.meta.lastActive')} value={t('sessionExpired.meta.lastActiveValue')} />
+          <Meta label={t('sessionExpired.meta.ip')}          value="203.0.113.42" mono />
+          <Meta label={t('sessionExpired.meta.browser')}     value={t('sessionExpired.meta.browserValue')} />
         </div>
 
         <SecurityActions />
@@ -88,7 +89,7 @@ export default function SessionExpiredPage() {
           className="text-center text-sm underline-offset-2 hover:underline"
           style={{ color: 'var(--fg-muted)' }}
         >
-          Sign in as a different user
+          {t('sessionExpired.signInDifferentUser')}
         </Link>
       </div>
     </AuthShell>
@@ -97,8 +98,9 @@ export default function SessionExpiredPage() {
 
 function ReasonBanner({ reason, meta }: {
   reason: Reason;
-  meta: typeof REASON_LABEL[Reason];
+  meta: typeof REASON_TONE[Reason];
 }) {
+  const { t } = useTranslation('auth');
   const Icon = reason === 'admin-revoked' ? AlertCircle : reason === 'inactive-mfa' ? ShieldCheck : Clock;
   const bg =
     meta.tone === 'warn' ? 'var(--intent-warn-bg)'
@@ -120,9 +122,9 @@ function ReasonBanner({ reason, meta }: {
       <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: fg }} />
       <div className="flex flex-col gap-0.5 text-sm leading-snug">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          {meta.title}
+          {t(`sessionExpired.reason.${meta.key}Title`)}
         </span>
-        <span style={{ color: 'var(--fg-muted)' }}>{meta.subtitle}</span>
+        <span style={{ color: 'var(--fg-muted)' }}>{t(`sessionExpired.reason.${meta.key}Subtitle`)}</span>
       </div>
     </div>
   );
@@ -131,6 +133,7 @@ function ReasonBanner({ reason, meta }: {
 function DraftsCard({
   route, drafts,
 }: { route: LastRoute; drafts: typeof MOCK_DRAFTS[LastRoute] }) {
+  const { t } = useTranslation('auth');
   const [showing, setShowing] = useState(false);
   return (
     <div
@@ -156,17 +159,17 @@ function DraftsCard({
         </span>
         <div className="flex flex-col flex-1 min-w-0 text-left">
           <span className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>
-            {drafts.length} draft{drafts.length === 1 ? '' : 's'} preserved
+            {t('sessionExpired.draftsPreserved', { count: drafts.length })}
           </span>
           <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-            {ROUTE_META[route].draftLabel} · stored locally on this device
+            {t('sessionExpired.storedLocally', { label: t(`sessionExpired.route.${ROUTE_META[route].key}Draft`) })}
           </span>
         </div>
         <span
           className="text-xs uppercase tracking-eyebrow font-semibold"
           style={{ color: 'var(--fg-accent)' }}
         >
-          {showing ? 'Hide' : 'Show'}
+          {showing ? t('sessionExpired.hide') : t('sessionExpired.show')}
         </span>
       </button>
 
@@ -187,7 +190,7 @@ function DraftsCard({
                   {d.preview}
                 </span>
                 <span className="text-xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
-                  saved {d.savedMin}m ago · {d.bytes} bytes
+                  {t('sessionExpired.savedAgo', { min: d.savedMin, bytes: d.bytes })}
                 </span>
               </div>
             </li>
@@ -215,6 +218,7 @@ function ResumeButton({
   icon: React.ComponentType<{ className?: string }>;
   resumeCta: string;
 }) {
+  const { t } = useTranslation('auth');
   return (
     <Link
       to={'/auth/login' as never}
@@ -223,17 +227,18 @@ function ResumeButton({
       style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
     >
       <Icon className="w-3.5 h-3.5" />
-      Sign in &amp; {resumeCta.toLowerCase()}
+      {t('sessionExpired.signInAndResume', { action: resumeCta.toLowerCase() })}
       <ArrowRight className="w-3.5 h-3.5" />
     </Link>
   );
 }
 
 function SecurityActions() {
+  const { t } = useTranslation('auth');
   const items = [
-    { label: 'Review active sessions', href: '#' },
-    { label: 'Reset password',          href: '#' },
-    { label: 'Manage 2FA methods',      href: '#' },
+    { label: t('sessionExpired.reviewSessions'), href: '#' },
+    { label: t('sessionExpired.resetPassword'),  href: '#' },
+    { label: t('sessionExpired.manage2fa'),      href: '#' },
   ];
   return (
     <div
@@ -241,7 +246,7 @@ function SecurityActions() {
       style={{ color: 'var(--fg-subtle)' }}
     >
       <ShieldCheck className="w-3 h-3" style={{ color: 'var(--fg-subtle)' }} />
-      <span>Security:</span>
+      <span>{t('sessionExpired.security')}</span>
       {items.map((it, i) => (
         <span key={it.label}>
           <a href={it.href} style={{ color: 'var(--fg-link)' }}>{it.label}</a>
@@ -271,10 +276,11 @@ function Meta({ label, value, mono = false }: { label: string; value: string; mo
 function DemoStatePicker() {
   // Demo helper: link to variants of this page so reviewers can see how the
   // banner / drafts / cta change with the route the user came from.
+  const { t } = useTranslation('auth');
   const routes: LastRoute[] = ['/coding', '/reviews', '/agents'];
   return (
     <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--fg-subtle)' }}>
-      Demo from:{' '}
+      {t('sessionExpired.demoFrom')}{' '}
       {routes.map((r, i) => (
         <span key={r}>
           <a

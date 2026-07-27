@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { SegmentedToggle } from '../../primitives/SegmentedToggle';
 
 const CYCLES = ['monthly', 'annual'] as const;
@@ -5,6 +6,7 @@ const CYCLES = ['monthly', 'annual'] as const;
 export function CycleToggle({
   cycle, onChange,
 }: { cycle: 'monthly' | 'annual'; onChange: (c: 'monthly' | 'annual') => void }) {
+  const { t } = useTranslation('onboarding');
   return (
     <SegmentedToggle
       options={CYCLES}
@@ -15,15 +17,15 @@ export function CycleToggle({
       renderLabel={(c) => (
         c === 'annual' ? (
           <span className="flex items-center gap-1.5">
-            Annual
+            {t('plan.cycle.annual')}
             <span
               className="text-2xs uppercase tracking-eyebrow font-semibold px-1 py-0.5 rounded"
               style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
             >
-              −17%
+              {t('plan.cycle.discount')}
             </span>
           </span>
-        ) : 'Monthly'
+        ) : t('plan.cycle.monthly')
       )}
     />
   );

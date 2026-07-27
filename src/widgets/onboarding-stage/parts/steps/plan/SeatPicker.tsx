@@ -1,15 +1,17 @@
+import { useTranslation } from 'react-i18next';
 import { Minus, Plus } from 'lucide-react';
 
 // Seat picker — slider + step buttons.
 export function SeatPicker({
   value, minSeats, onChange,
 }: { value: number; minSeats: number; onChange: (v: number) => void }) {
+  const { t } = useTranslation('onboarding');
   const max = 100;
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Seats
+          {t('plan.seats')}
         </span>
         <div className="flex items-center gap-2 text-sm">
           <button
@@ -21,7 +23,7 @@ export function SeatPicker({
               color: 'var(--fg-default)',
               border: '1px solid var(--border-default)',
             }}
-            aria-label="Decrease seats"
+            aria-label={t('plan.decreaseSeats')}
           >
             <Minus className="w-3 h-3" />
           </button>
@@ -50,7 +52,7 @@ export function SeatPicker({
               color: 'var(--fg-default)',
               border: '1px solid var(--border-default)',
             }}
-            aria-label="Increase seats"
+            aria-label={t('plan.increaseSeats')}
           >
             <Plus className="w-3 h-3" />
           </button>
@@ -68,7 +70,7 @@ export function SeatPicker({
           accentColor: 'var(--fg-accent)',
           width: '100%',
         }}
-        aria-label="Seats"
+        aria-label={t('plan.seats')}
       />
 
       <div className="flex justify-between text-2xs tabular-nums" style={{ color: 'var(--fg-subtle)' }}>

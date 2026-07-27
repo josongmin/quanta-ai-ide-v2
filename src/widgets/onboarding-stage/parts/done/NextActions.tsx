@@ -1,36 +1,38 @@
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, Code2, GitPullRequest, Bot } from 'lucide-react';
 import { ACCENT_TINT } from '../primitives/shared';
 import type { DoneProps } from './types';
 
 // Next actions — concrete things to try in the dot field.
 export function NextActions({ data }: DoneProps) {
+  const { t } = useTranslation('onboarding');
   const items = [
     {
       icon: Code2,
-      title: 'Edit with AI in Coding',
-      hint: 'Open any file and ask for a refactor with the AI agent.',
+      title: t('done.actions.codingTitle'),
+      hint: t('done.actions.codingHint'),
       to: '/coding',
     },
     {
       icon: GitPullRequest,
-      title: 'Review a PR',
+      title: t('done.actions.reviewTitle'),
       hint: data.invite.entries.length > 0
-        ? `${data.invite.entries.length} teammate${data.invite.entries.length === 1 ? '' : 's'} invited — they'll show up in /reviews.`
-        : 'Connect a PR provider to start reviewing.',
+        ? t('done.actions.reviewHintInvited', { count: data.invite.entries.length })
+        : t('done.actions.reviewHintEmpty'),
       to: '/reviews',
     },
     {
       icon: Bot,
-      title: 'Run a fix pipeline',
-      hint: 'Pick a fix candidate from the dot field, run it through gating.',
+      title: t('done.actions.fixTitle'),
+      hint: t('done.actions.fixHint'),
       to: '/fixes',
     },
   ];
   return (
     <div className="flex flex-col gap-2">
       <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-        What to try first
+        {t('done.whatToTry')}
       </span>
       <ul className="grid grid-cols-2 gap-2">
         {items.map((it) => (

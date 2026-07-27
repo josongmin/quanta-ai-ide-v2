@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Check, Loader2, X } from 'lucide-react';
 import type { useAvailability } from '../../../lib/availability';
 
@@ -9,13 +10,14 @@ export function HandleField({
   onChange: (v: string) => void;
   check: ReturnType<typeof useAvailability>;
 }) {
+  const { t } = useTranslation('onboarding');
   return (
     <label className="flex flex-col gap-1.5">
       <span
         className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        <span>Handle</span>
+        <span>{t('profile.handle')}</span>
         <span style={{ color: messageColor(check.state) }}>
           {check.message}
         </span>
@@ -35,7 +37,7 @@ export function HandleField({
         <input
           value={value}
           onChange={(e) => { onChange(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 32)); }}
-          placeholder="sora"
+          placeholder={t('profile.handlePlaceholder')}
           required
           className="flex-1 bg-transparent outline-none px-1 text-base tabular-nums"
           style={{ color: 'var(--fg-strong)' }}

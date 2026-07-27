@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   Eye, EyeOff, Mail, KeyRound, Lock, AlertCircle, Sparkles, Check,
 } from 'lucide-react';
@@ -24,6 +25,7 @@ const MAGIC_LINK_EMAIL_HINT = 'magic';   // any email containing this string fal
 type Mode = 'password' | 'magic-link';
 
 export default function SignInPage() {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [showPw, setShowPw] = useState(false);
@@ -78,7 +80,7 @@ export default function SignInPage() {
     }
 
     if (mode === 'magic-link' || email.toLowerCase().includes(MAGIC_LINK_EMAIL_HINT)) {
-      setSuccessMessage(`Magic sign-in link sent to ${email}. Check your inbox to continue.`);
+      setSuccessMessage(t('signIn.magicLinkSent', { email }));
       setLastUsedMethod('magic-link');
       return;
     }
@@ -86,21 +88,21 @@ export default function SignInPage() {
     if (pw === DEMO_PASSWORD) {
       rate.recordSuccess();
       setLastUsedMethod('password');
-      setSuccessMessage('Signed in. Redirecting…');
+      setSuccessMessage(t('signIn.signedInRedirecting'));
       setError(null);
     } else {
       rate.recordFail();
       const left = Math.max(0, rate.remaining - 1);
       setError(left === 0
-        ? 'Too many incorrect attempts — locked out for 60s.'
-        : `Wrong password. ${left} attempt${left === 1 ? '' : 's'} left before lockout.`);
+        ? t('signIn.lockedOut')
+        : t('signIn.wrongPassword', { count: left }));
     }
   };
 
   const oauthFinish = (m: AuthMethod) => {
     setLastUsedMethod(m);
     setOauth(null);
-    setSuccessMessage('Signed in. Redirecting…');
+    setSuccessMessage(t('signIn.signedInRedirecting'));
   };
 
   // Real OAuth — better-auth redirects the browser to the provider; control only
@@ -122,30 +124,30 @@ export default function SignInPage() {
   // No SSO for the domain → hint to use the password path instead.
   const startSso = () => {
     const em = email.trim();
-    if (!em.includes('@')) { setError('Enter your work email to continue with SSO.'); return; }
+    if (!em.includes('@')) { setError(t('signIn.ssoEnterEmail')); return; }
     setError(null);
     void (async () => {
       const r = await resolveSso(em);
       if (r.sso && r.authorizationUrl) { window.location.href = r.authorizationUrl; }
-      else { setError('No SSO is configured for this domain — use your password instead.'); }
+      else { setError(t('signIn.ssoNotConfigured')); }
     })();
   };
 
   return (
     <>
       <AuthShell
-        title="Sign in to your account"
-        subtitle="Welcome back. Use your work email or a connected provider."
+        title={t('signIn.title')}
+        subtitle={t('signIn.subtitle')}
         topRight={lastUsed ? <LastUsedHint method={lastUsed} /> : undefined}
         footer={
           <>
-            <span>New to se · field?</span>
+            <span>{t('signIn.newToBrand')}</span>
             <Link
               to={'/auth/signup' as never}
               search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined}
               style={{ color: 'var(--fg-link)' }}
             >
-              Create an account
+              {t('signIn.createAccount')}
             </Link>
           </>
         }
@@ -156,26 +158,26 @@ export default function SignInPage() {
         <form className="flex flex-col gap-4" onSubmit={submitPassword}>
           <Field
             ref={inputRef}
-            label="Work email"
+            label={t('signIn.workEmail')}
             type="email"
             autoComplete="email"
             value={email}
             onChange={(e) => { setEmail(e.target.value); setError(null); }}
-            placeholder="you@company.com"
+            placeholder={t('signIn.emailPlaceholder')}
             required
             disabled={Boolean(rate.lockedUntil)}
           />
 
           {mode === 'password' && !ssoEnforced && (
             <Field
-              label="Password"
+              label={t('signIn.password')}
               type={showPw ? 'text' : 'password'}
               autoComplete="current-password"
               value={pw}
               onChange={(e) => { setPw(e.target.value); setError(null); }}
-              hint="Forgot password"
+              hint={t('signIn.forgotPassword')}
               hintTo="/auth/forgot"
-              placeholder="••••••••"
+              placeholder={t('signIn.passwordPlaceholder')}
               required
               disabled={Boolean(rate.lockedUntil)}
               error={error ?? undefined}
@@ -185,7 +187,7 @@ export default function SignInPage() {
                   onClick={() => { setShowPw((v) => !v); }}
                   className="p-1 rounded-md transition-colors"
                   style={{ color: 'var(--fg-muted)' }}
-                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                  aria-label={showPw ? t('common.hidePassword') : t('common.showPassword')}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
@@ -200,16 +202,16 @@ export default function SignInPage() {
               onClick={() => { setOauth('sso'); }}
               leading={<KeyRound className="w-3.5 h-3.5" />}
             >
-              Continue with {PROVIDER_LABEL[idp.provider]}
+              {t('signIn.continueWith', { provider: PROVIDER_LABEL[idp.provider] })}
             </Button>
           ) : (
             <Button type="submit" disabled={Boolean(rate.lockedUntil)}>
               {mode === 'magic-link' ? (
                 <span className="flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5" />
-                  Email me a sign-in link
+                  {t('signIn.emailSignInLink')}
                 </span>
-              ) : 'Sign in'}
+              ) : t('common.signIn')}
             </Button>
           )}
 
@@ -221,8 +223,8 @@ export default function SignInPage() {
               style={{ color: 'var(--fg-link)' }}
             >
               {mode === 'password'
-                ? 'Or get a one-time sign-in link →'
-                : '← Use password instead'}
+                ? t('signIn.getOneTimeLink')
+                : t('signIn.usePasswordInstead')}
             </button>
           )}
 
@@ -237,19 +239,19 @@ export default function SignInPage() {
             <HRule />
             <div className="flex flex-col gap-2">
               <OauthButton
-                label="Continue with GitHub"
+                label={t('signIn.continueWithGithub')}
                 leading={<GithubIcon className="w-3.5 h-3.5" />}
                 highlight={lastUsed === 'oauth-github'}
                 onClick={() => { startOauth('github'); }}
               />
               <OauthButton
-                label="Continue with Google"
+                label={t('signIn.continueWithGoogle')}
                 leading={<Mail className="w-3.5 h-3.5" />}
                 highlight={lastUsed === 'oauth-google'}
                 onClick={() => { startOauth('google'); }}
               />
               <OauthButton
-                label="Continue with SSO"
+                label={t('signIn.continueWithSso')}
                 leading={<KeyRound className="w-3.5 h-3.5" />}
                 highlight={false}
                 onClick={startSso}
@@ -266,19 +268,19 @@ export default function SignInPage() {
 
             <div className="flex flex-col gap-2">
               <OauthButton
-                label="Continue with GitHub"
+                label={t('signIn.continueWithGithub')}
                 leading={<GithubIcon className="w-3.5 h-3.5" />}
                 highlight={lastUsed === 'oauth-github'}
                 onClick={() => { setOauth('github'); }}
               />
               <OauthButton
-                label="Continue with GitLab"
+                label={t('signIn.continueWithGitlab')}
                 leading={<GitLabMark />}
                 highlight={lastUsed === 'oauth-gitlab'}
                 onClick={() => { setOauth('gitlab'); }}
               />
               <OauthButton
-                label="Continue with Google"
+                label={t('signIn.continueWithGoogle')}
                 leading={<Mail className="w-3.5 h-3.5" />}
                 highlight={lastUsed === 'oauth-google'}
                 onClick={() => { setOauth('google'); }}
@@ -295,7 +297,7 @@ export default function SignInPage() {
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface-muted)'; }}
               >
                 <KeyRound className="w-3.5 h-3.5" />
-                Continue with SSO
+                {t('signIn.continueWithSso')}
                 {lastUsed === 'sso' && <LastBadge />}
               </Link>
             </div>
@@ -359,28 +361,38 @@ function GitLabMark() {
 }
 
 function LastBadge() {
+  const { t } = useTranslation('auth');
   return (
     <span
       className="ml-auto text-2xs font-bold uppercase tracking-eyebrow px-1.5 py-0.5 rounded"
       style={{ background: 'var(--fg-accent)', color: 'var(--bg-canvas)' }}
     >
-      Last used
+      {t('signIn.lastUsed')}
     </span>
   );
 }
 
 function LastUsedHint({ method }: { method: AuthMethod }) {
+  const { t } = useTranslation('auth');
   const label =
-    method === 'password'      ? 'password'
-    : method === 'oauth-github' ? 'GitHub'
-    : method === 'oauth-gitlab' ? 'GitLab'
-    : method === 'oauth-google' ? 'Google'
-    : method === 'sso'          ? 'SSO'
-    : 'magic link';
-  return <span>Last signed in with <span style={{ color: 'var(--fg-default)' }}>{label}</span></span>;
+    method === 'password'      ? t('signIn.method.password')
+    : method === 'oauth-github' ? t('signIn.method.github')
+    : method === 'oauth-gitlab' ? t('signIn.method.gitlab')
+    : method === 'oauth-google' ? t('signIn.method.google')
+    : method === 'sso'          ? t('signIn.method.sso')
+    : t('signIn.method.magicLink');
+  return (
+    <Trans
+      i18nKey="signIn.lastSignedInWith"
+      t={t}
+      values={{ method: label }}
+      components={[<span key="0" style={{ color: 'var(--fg-default)' }} />]}
+    />
+  );
 }
 
 function LockoutBanner({ cooldownSec }: { cooldownSec: number }) {
+  const { t } = useTranslation('auth');
   return (
     <div
       className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
@@ -393,16 +405,16 @@ function LockoutBanner({ cooldownSec }: { cooldownSec: number }) {
       <Lock className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-danger-fg)' }} />
       <div className="flex flex-col gap-1 text-sm leading-snug flex-1">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          Account temporarily locked
+          {t('signIn.lockout.title')}
         </span>
         <span style={{ color: 'var(--fg-muted)' }}>
-          Too many incorrect password attempts. You can try again in{' '}
+          {t('signIn.lockout.body')}
           <span className="font-mono tabular-nums" style={{ color: 'var(--intent-danger-fg)' }}>
             {String(Math.floor(cooldownSec / 60)).padStart(2, '0')}
             :
             {String(cooldownSec % 60).padStart(2, '0')}
           </span>
-          , or use SSO / a magic link instead.
+          {t('signIn.lockout.bodyRest')}
         </span>
       </div>
     </div>
@@ -410,6 +422,7 @@ function LockoutBanner({ cooldownSec }: { cooldownSec: number }) {
 }
 
 function SsoEnforcedBanner({ orgName, provider }: { orgName: string; provider: IdPProvider }) {
+  const { t } = useTranslation('auth');
   return (
     <div
       className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
@@ -418,11 +431,15 @@ function SsoEnforcedBanner({ orgName, provider }: { orgName: string; provider: I
       <KeyRound className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
       <div className="flex flex-col gap-0.5 text-sm leading-snug flex-1">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          {orgName} requires SSO
+          {t('signIn.ssoEnforced.title', { org: orgName })}
         </span>
         <span style={{ color: 'var(--fg-muted)' }}>
-          Password sign-in is disabled for your organization.
-          You&apos;ll be redirected to <span style={{ color: 'var(--fg-default)' }}>{PROVIDER_LABEL[provider]}</span>.
+          <Trans
+            i18nKey="signIn.ssoEnforced.body"
+            t={t}
+            values={{ provider: PROVIDER_LABEL[provider] }}
+            components={[<span key="0" style={{ color: 'var(--fg-default)' }} />]}
+          />
         </span>
       </div>
     </div>
@@ -443,6 +460,7 @@ function SuccessNote({ message }: { message: string }) {
 }
 
 function DemoCredHint() {
+  const { t } = useTranslation('auth');
   return (
     <div
       className="text-xs flex items-start gap-2 px-3 py-2 rounded-md"
@@ -454,11 +472,16 @@ function DemoCredHint() {
     >
       <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" />
       <span>
-        <span className="font-semibold" style={{ color: 'var(--fg-muted)' }}>Demo:</span>{' '}
-        password is <span className="font-mono" style={{ color: 'var(--fg-default)' }}>sefield-demo</span>.
-        Try <span className="font-mono">user@acme.com</span> to see SSO enforcement,
-        or any email containing <span className="font-mono">magic</span> for the magic-link branch.
-        Three wrong passwords trigger lockout.
+        <span className="font-semibold" style={{ color: 'var(--fg-muted)' }}>{t('signIn.demo.label')}</span>{' '}
+        <Trans
+          i18nKey="signIn.demo.body"
+          t={t}
+          components={[
+            <span key="0" className="font-mono" style={{ color: 'var(--fg-default)' }} />,
+            <span key="1" className="font-mono" />,
+            <span key="2" className="font-mono" />,
+          ]}
+        />
       </span>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { Check, Loader2 } from 'lucide-react';
 import { verifyTotp, verifyBackupCode } from '@entities/session';
 import { AuthShell } from './parts/AuthShell';
@@ -10,6 +11,7 @@ import { TotpInput, BackupInput, TrustDevice, type Phase } from './parts/mfa';
 // TOTP + backup code only — passkey/security-key isn't backend-backed, so unlike
 // the mock this offers just the two methods better-auth's twoFactor supports.
 export default function MfaChallengeReal() {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const dest = useMemo(() => {
     const r = new URLSearchParams(window.location.search).get('redirect');
@@ -59,12 +61,12 @@ export default function MfaChallengeReal() {
 
   return (
     <AuthShell
-      title="Two-factor verification"
-      subtitle="One more step. Enter the code from your authenticator."
+      title={t('mfa.title')}
+      subtitle={t('mfa.subtitleReal')}
       footer={
         <>
-          <span>Lost access to all methods?</span>
-          <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link>
+          <span>{t('mfa.lostAccess')}</span>
+          <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('mfa.contactSupport')}</Link>
         </>
       }
     >
@@ -99,7 +101,7 @@ export default function MfaChallengeReal() {
         >
           {phase === 'verifying' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
           {phase === 'success' && <Check className="w-3.5 h-3.5" />}
-          {phase === 'verifying' ? 'Verifying…' : phase === 'success' ? 'Verified · redirecting' : 'Verify and continue'}
+          {phase === 'verifying' ? t('mfa.verifying') : phase === 'success' ? t('mfa.verifiedRedirecting') : t('mfa.verifyAndContinue')}
         </Button>
 
         <button
@@ -108,12 +110,12 @@ export default function MfaChallengeReal() {
           style={{ color: 'var(--fg-link)', font: 'inherit' }}
           onClick={() => { setMethod((m) => (m === 'totp' ? 'backup' : 'totp')); setPhase('challenge'); setError(null); }}
         >
-          {method === 'totp' ? 'Use a backup code instead' : 'Use your authenticator app'}
+          {method === 'totp' ? t('mfa.useBackupCode') : t('mfa.useAuthenticatorApp')}
         </button>
       </div>
 
       <div className="text-center text-sm pt-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
-        <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>← Back to sign in</Link>
+        <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>{t('common.backToSignIn')}</Link>
       </div>
     </AuthShell>
   );

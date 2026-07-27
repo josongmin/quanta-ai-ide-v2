@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Camera, AlertTriangle, X, Upload } from 'lucide-react';
 import type { WizardData } from '../../wizard';
 
@@ -9,6 +10,7 @@ type Props = {
 
 // Avatar — drag/drop + click-to-upload, crop-circle preview, remove.
 export function AvatarBlock({ value, onChange }: Props) {
+  const { t } = useTranslation('onboarding');
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,11 +20,11 @@ export function AvatarBlock({ value, onChange }: Props) {
   const accept = (file: File) => {
     setError(null);
     if (!file.type.startsWith('image/')) {
-      setError('Avatar must be an image (PNG, JPG, GIF, WebP).');
+      setError(t('profile.avatarNotImage'));
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      setError('Image is over 2 MB. Compress and try again.');
+      setError(t('profile.avatarTooLarge'));
       return;
     }
     if (value.avatarUrl) URL.revokeObjectURL(value.avatarUrl);
@@ -60,7 +62,7 @@ export function AvatarBlock({ value, onChange }: Props) {
             outlineOffset: '2px',
             font: 'inherit',
           }}
-          aria-label="Upload avatar"
+          aria-label={t('profile.avatarUpload')}
         >
           {value.avatarUrl ? (
             <img src={value.avatarUrl} alt={`${value.name || 'Your'} avatar`} className="w-full h-full object-cover" />
@@ -100,7 +102,7 @@ export function AvatarBlock({ value, onChange }: Props) {
               onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--bg-surface-muted)'; }}
             >
               <Upload className="w-3 h-3" />
-              {value.avatarUrl ? 'Replace photo' : 'Upload photo'}
+              {value.avatarUrl ? t('profile.replacePhoto') : t('profile.uploadPhoto')}
             </button>
             {value.avatarUrl && (
               <button
@@ -112,12 +114,12 @@ export function AvatarBlock({ value, onChange }: Props) {
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
               >
                 <X className="w-3 h-3" />
-                Remove
+                {t('profile.remove')}
               </button>
             )}
           </div>
           <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-            JPG · PNG · GIF · WebP. Max 2 MB. Drop a file on the circle.
+            {t('profile.avatarHint')}
           </span>
         </div>
       </div>

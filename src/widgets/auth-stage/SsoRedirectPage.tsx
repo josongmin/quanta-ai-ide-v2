@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   ShieldCheck, ShieldX, ArrowRight, Search, Lock, Loader2, Building2,
   Copy, ExternalLink,
@@ -12,6 +13,7 @@ import { lookupIdP, PROVIDER_LABEL, type IdPRecord } from './lib/idpDirectory';
 type Phase = 'enter' | 'searching' | 'found' | 'not-found';
 
 export default function SsoRedirectPage() {
+  const { t } = useTranslation('auth');
   const [domain, setDomain] = useState('');
   const [phase, setPhase] = useState<Phase>('enter');
   const [idp, setIdp] = useState<IdPRecord | null>(null);
@@ -40,13 +42,13 @@ export default function SsoRedirectPage() {
   return (
     <>
       <AuthShell
-        title="Single sign-on"
-        subtitle="We'll route you to your organization's identity provider."
-        topRight={<span><Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Use email instead</Link></span>}
+        title={t('sso.title')}
+        subtitle={t('sso.subtitle')}
+        topRight={<span><Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>{t('sso.useEmailInstead')}</Link></span>}
         footer={
           <>
-            <span>Don&apos;t have SSO configured?</span>
-            <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Talk to your admin</Link>
+            <span>{t('sso.noSsoConfigured')}</span>
+            <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('sso.talkToAdmin')}</Link>
           </>
         }
       >
@@ -58,11 +60,11 @@ export default function SsoRedirectPage() {
           }}
         >
           <Field
-            label="Organization domain or work email"
+            label={t('sso.domainLabel')}
             type="text"
             value={domain}
             onChange={(e) => { setDomain(e.target.value); }}
-            placeholder="acme.com  or  alice@acme.com"
+            placeholder={t('sso.domainPlaceholder')}
             autoFocus
             trailing={
               phase === 'searching' && (
@@ -78,7 +80,7 @@ export default function SsoRedirectPage() {
             disabled={!idp}
             leading={<ArrowRight className="w-3.5 h-3.5" />}
           >
-            {idp ? `Continue to ${PROVIDER_LABEL[idp.provider]}` : 'Continue with SSO'}
+            {idp ? t('sso.continueTo', { provider: PROVIDER_LABEL[idp.provider] }) : t('sso.continueWithSso')}
           </Button>
         </form>
 
@@ -103,6 +105,7 @@ function clean(input: string) {
 }
 
 function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | null; domain: string }) {
+  const { t } = useTranslation('auth');
   if (phase === 'enter') {
     return (
       <div
@@ -114,7 +117,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
       >
         <Search className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
         <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
-          We&apos;ll discover your identity provider once you start typing your domain.
+          {t('sso.enterHint')}
         </span>
       </div>
     );
@@ -132,10 +135,15 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
         <Loader2 className="w-4 h-4 mt-0.5 shrink-0 animate-spin" style={{ color: 'var(--fg-muted)' }} />
         <div className="flex flex-col gap-0.5 text-sm leading-snug">
           <span style={{ color: 'var(--fg-strong)' }}>
-            Looking up <span className="font-mono">{domain}</span>…
+            <Trans
+              i18nKey="sso.lookingUp"
+              t={t}
+              values={{ domain }}
+              components={[<span key="0" className="font-mono" />]}
+            />
           </span>
           <span style={{ color: 'var(--fg-subtle)' }}>
-            Querying SAML / OIDC discovery endpoints.
+            {t('sso.queryingEndpoints')}
           </span>
         </div>
       </div>
@@ -160,8 +168,8 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
               {idp.org} · {PROVIDER_LABEL[idp.provider]}
             </span>
             <span style={{ color: 'var(--fg-muted)' }}>
-              Protocol: {idp.protocol}
-              {idp.enforced && ' · Password sign-in disabled for this domain'}
+              {t('sso.protocol', { protocol: idp.protocol })}
+              {idp.enforced && t('sso.passwordDisabled')}
             </span>
           </div>
         </div>
@@ -178,7 +186,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
               onClick={() => { void navigator.clipboard?.writeText(metadataUrl); }}
               className="p-0.5 rounded transition-colors"
               style={{ color: 'var(--fg-subtle)' }}
-              aria-label="Copy metadata URL"
+              aria-label={t('sso.copyMetadataUrl')}
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
             >
@@ -203,10 +211,15 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
         <ShieldX className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
         <div className="flex flex-col gap-0.5 text-sm leading-snug">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-            <span className="font-mono">{domain}</span> isn&apos;t configured for SSO yet
+            <Trans
+              i18nKey="sso.notConfigured"
+              t={t}
+              values={{ domain }}
+              components={[<span key="0" className="font-mono" />]}
+            />
           </span>
           <span style={{ color: 'var(--fg-muted)' }}>
-            Either it&apos;s a different domain, or your admin hasn&apos;t set up an identity provider.
+            {t('sso.notConfiguredBody')}
           </span>
         </div>
       </div>
@@ -220,14 +233,14 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
             border: '1px solid var(--border-default)',
           }}
         >
-          Use email & password
+          {t('sso.useEmailPassword')}
         </Link>
         <button
           type="button"
           className="inline-flex items-center gap-1 underline-offset-2 bg-transparent border-0 p-0 cursor-pointer"
           style={{ color: 'var(--fg-link)', font: 'inherit' }}
         >
-          Set up SSO for your org
+          {t('sso.setUpSso')}
           <ExternalLink className="w-2.5 h-2.5" />
         </button>
       </div>
@@ -236,6 +249,7 @@ function PhasePanel({ phase, idp, domain }: { phase: Phase; idp: IdPRecord | nul
 }
 
 function DemoDomainHints() {
+  const { t } = useTranslation('auth');
   const examples = [
     { domain: 'acme.com',         note: 'Okta · enforced' },
     { domain: 'globex.io',        note: 'Azure AD · enforced' },
@@ -252,7 +266,7 @@ function DemoDomainHints() {
       }}
     >
       <span className="font-semibold uppercase tracking-eyebrow" style={{ color: 'var(--fg-subtle)' }}>
-        Demo · try these domains
+        {t('sso.demoTitle')}
       </span>
       <div className="flex flex-wrap gap-1.5">
         {examples.map((e) => (

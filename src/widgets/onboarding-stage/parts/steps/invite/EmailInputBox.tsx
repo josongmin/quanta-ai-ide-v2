@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Mail, X, Check, ChevronDown } from 'lucide-react';
 import type { InviteEntry, InviteRole } from '../../wizard';
-import { ROLE_META, ROLES } from './data';
+import { ROLES } from './data';
 
 // Multi-line email input + chips with per-row role dropdown.
 export function EmailInputBox({
@@ -15,6 +16,7 @@ export function EmailInputBox({
   onRemove: (email: string) => void;
   onSetRole: (email: string, r: InviteRole) => void;
 }) {
+  const { t } = useTranslation('onboarding');
   return (
     <div className="flex flex-col gap-2">
       <div
@@ -49,7 +51,7 @@ export function EmailInputBox({
             }
           }}
           onBlur={() => { if (draft.trim()) onCommit(); }}
-          placeholder={entries.length === 0 ? 'name@company.com, another@company.com…' : ''}
+          placeholder={entries.length === 0 ? t('invite.emailPlaceholder') : ''}
           className="flex-1 min-w-[180px] bg-transparent outline-none text-base py-1 px-1"
           style={{ color: 'var(--fg-strong)' }}
         />
@@ -65,6 +67,7 @@ function EmailChip({
   onRemove: () => void;
   onSetRole: (r: InviteRole) => void;
 }) {
+  const { t } = useTranslation('onboarding');
   const [open, setOpen] = useState(false);
   return (
     <span
@@ -86,7 +89,7 @@ function EmailChip({
           color: 'var(--fg-muted)',
         }}
       >
-        {ROLE_META[entry.role].label}
+        {t(`invite.roles.${entry.role}Label`)}
         <ChevronDown className="w-2.5 h-2.5" />
       </button>
       <button
@@ -96,7 +99,7 @@ function EmailChip({
         style={{ color: 'var(--fg-subtle)' }}
         onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-active)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-        aria-label={`Remove ${entry.email}`}
+        aria-label={t('invite.removeEmail', { email: entry.email })}
       >
         <X className="w-2.5 h-2.5" />
       </button>
@@ -130,10 +133,10 @@ function EmailChip({
               >
                 <span className="flex flex-col">
                   <span className="text-sm font-medium" style={{ color: 'var(--fg-strong)' }}>
-                    {ROLE_META[r].label}
+                    {t(`invite.roles.${r}Label`)}
                   </span>
                   <span className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>
-                    {ROLE_META[r].sub}
+                    {t(`invite.roles.${r}Sub`)}
                   </span>
                 </span>
                 {active && <Check className="w-3 h-3" style={{ color: 'var(--fg-accent)' }} />}

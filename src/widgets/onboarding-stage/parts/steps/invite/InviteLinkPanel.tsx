@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Link2, Check, Copy, RotateCcw } from 'lucide-react';
 import { useCopyToClipboard } from '@shared/lib';
 import type { WizardData } from '../../wizard';
@@ -6,6 +7,7 @@ import type { WizardData } from '../../wizard';
 export function InviteLinkPanel({
   value, onGenerate,
 }: { value: WizardData['invite']; onGenerate: () => void }) {
+  const { t } = useTranslation('onboarding');
   const { copied, copy } = useCopyToClipboard(1500);
 
   const handleCopy = () => {
@@ -24,10 +26,10 @@ export function InviteLinkPanel({
       <div className="flex items-center gap-2">
         <Link2 className="w-3 h-3" style={{ color: 'var(--fg-muted)' }} />
         <span className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          Or share an invite link
+          {t('invite.shareLink')}
         </span>
         <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-          · expires in 7 days · max 50 uses
+          {t('invite.linkMeta')}
         </span>
       </div>
 
@@ -50,7 +52,7 @@ export function InviteLinkPanel({
             }}
           >
             {copied ? <Check className="w-3 h-3" style={{ color: 'var(--intent-success-fg)' }} /> : <Copy className="w-3 h-3" />}
-            {copied ? 'Copied' : 'Copy'}
+            {copied ? t('invite.copied') : t('invite.copy')}
           </button>
           <button
             type="button"
@@ -59,7 +61,7 @@ export function InviteLinkPanel({
             style={{ color: 'var(--fg-muted)' }}
           >
             <RotateCcw className="w-3 h-3" />
-            New
+            {t('invite.new')}
           </button>
         </div>
       ) : (
@@ -74,7 +76,7 @@ export function InviteLinkPanel({
           }}
         >
           <Link2 className="w-3 h-3" />
-          Generate invite link
+          {t('invite.generateLink')}
         </button>
       )}
     </div>

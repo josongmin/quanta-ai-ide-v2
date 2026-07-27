@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { Trans, useTranslation } from 'react-i18next';
 import { Check, Loader2 } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { AuthShell } from './parts/AuthShell';
@@ -19,6 +20,7 @@ export default function MfaChallengePage() {
 }
 
 function MfaChallengeMock() {
+  const { t } = useTranslation('auth');
   const [method, setMethod] = useState<Method>('totp');
   const [code, setCode] = useState<string[]>(['', '', '', '', '', '']);
   const [backupCode, setBackupCode] = useState('');
@@ -61,13 +63,20 @@ function MfaChallengeMock() {
 
   return (
     <AuthShell
-      title="Two-factor verification"
-      subtitle="One more step. We need to confirm it's really you."
-      topRight={<span>Signed in as <span style={{ color: 'var(--fg-default)' }}>sora@acme.com</span></span>}
+      title={t('mfa.title')}
+      subtitle={t('mfa.subtitleMock')}
+      topRight={
+        <Trans
+          i18nKey="mfa.signedInAs"
+          t={t}
+          values={{ email: 'sora@acme.com' }}
+          components={[<span key="0" style={{ color: 'var(--fg-default)' }} />]}
+        />
+      }
       footer={
         <>
-          <span>Lost access to all methods?</span>
-          <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact your admin</Link>
+          <span>{t('mfa.lostAccess')}</span>
+          <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('mfa.contactAdmin')}</Link>
         </>
       }
     >
@@ -109,9 +118,9 @@ function MfaChallengeMock() {
           >
             {phase === 'verifying' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
             {phase === 'success'   && <Check className="w-3.5 h-3.5" />}
-            {phase === 'verifying' ? 'Verifying…'
-              : phase === 'success' ? 'Verified · redirecting'
-              : 'Verify and continue'}
+            {phase === 'verifying' ? t('mfa.verifying')
+              : phase === 'success' ? t('mfa.verifiedRedirecting')
+              : t('mfa.verifyAndContinue')}
           </Button>
         )}
 
@@ -120,7 +129,7 @@ function MfaChallengeMock() {
 
       <div className="text-center text-sm pt-3" style={{ borderTop: '1px solid var(--border-muted)' }}>
         <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>
-          ← Back to sign in
+          {t('common.backToSignIn')}
         </Link>
       </div>
     </AuthShell>

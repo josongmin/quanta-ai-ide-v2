@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AuthField as Field } from '@shared/ui/forms';
 import { useAvailability } from '../../lib/availability';
 import { detectBrowserTimezone, detectBrowserLocale } from '../../lib/timezones';
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function StepProfile({ value, onChange }: Props) {
+  const { t } = useTranslation('onboarding');
   // Auto-fill timezone + locale from browser the first time the step mounts,
   // unless the user has already touched them.
   const detectedTz = useMemo(() => detectBrowserTimezone(), []);
@@ -45,10 +47,10 @@ export function StepProfile({ value, onChange }: Props) {
 
       <div className="grid grid-cols-2 gap-4">
         <Field
-          label="Full name"
+          label={t('profile.fullName')}
           value={value.name}
           onChange={(e) => { onChange({ ...value, name: e.target.value }); }}
-          placeholder="Sora Kim"
+          placeholder={t('profile.namePlaceholder')}
           autoFocus
           required
         />

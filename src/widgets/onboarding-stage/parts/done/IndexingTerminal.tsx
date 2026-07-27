@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Terminal } from 'lucide-react';
 import { LOG_LINES, type LogKind } from './data';
 
 // Indexing terminal — fake but believable streaming log.
 export function IndexingTerminal({ repo }: { repo: string }) {
+  const { t } = useTranslation('onboarding');
   const [lineIndex, setLineIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +41,7 @@ export function IndexingTerminal({ repo }: { repo: string }) {
         <span className="w-2 h-2 rounded-full" style={{ background: '#28c840' }} />
         <Terminal className="w-3 h-3 ml-2" style={{ color: 'rgba(255,255,255,0.6)' }} />
         <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>
-          se-field · indexing
+          {t('done.terminalTitle')}
         </span>
       </div>
 

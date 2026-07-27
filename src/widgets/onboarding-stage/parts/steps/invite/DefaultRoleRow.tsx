@@ -1,7 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { Users } from 'lucide-react';
 import type { InviteRole } from '../../wizard';
 import { SegmentedToggle } from '../../primitives/SegmentedToggle';
-import { ROLE_META, ROLES } from './data';
+import { ROLES } from './data';
 
 // Default role selector + per-role count strip.
 export function DefaultRoleRow({
@@ -12,18 +13,19 @@ export function DefaultRoleRow({
   stats: Record<InviteRole, number>;
   totalCount: number;
 }) {
+  const { t } = useTranslation('onboarding');
   return (
     <div className="flex items-end justify-between gap-4">
       <div className="flex flex-col gap-1.5">
         <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-          Default role for new invitees
+          {t('invite.defaultRole')}
         </span>
         <SegmentedToggle
           options={ROLES}
           value={defaultRole}
           onChange={onChange}
           segmentPadding="px-2.5"
-          renderLabel={(r) => ROLE_META[r].label}
+          renderLabel={(r) => t(`invite.roles.${r}Label`)}
         />
       </div>
 
@@ -36,7 +38,7 @@ export function DefaultRoleRow({
           <span style={{ color: 'var(--fg-default)' }}>{totalCount}</span>
           {ROLES.filter((r) => stats[r] > 0).map((r) => (
             <span key={r} style={{ color: 'var(--fg-subtle)' }}>
-              · {stats[r]} {ROLE_META[r].label.toLowerCase()}
+              {t('invite.roleCount', { count: stats[r], role: t(`invite.roles.${r}Label`).toLowerCase() })}
             </span>
           ))}
         </div>

@@ -1,1 +1,291 @@
-{}
+{
+  "shell": {
+    "badge": "온보딩",
+    "stepOf": "{{total}}단계 중 <0>{{current}}</0>단계",
+    "back": "← 뒤로",
+    "signedInAs": "로그인 계정: <0>{{email}}</0>",
+    "you": "회원님",
+    "signOut": "로그아웃",
+    "skip": "건너뛰기",
+    "finishing": "완료하는 중…",
+    "finishSetup": "설정 완료",
+    "continue": "계속",
+    "invitesFailed_one": "초대 {{count}}건을 보내지 못했습니다 — 업그레이드 후 멤버에서 다시 보내세요. 완료를 눌러 계속하세요.",
+    "invitesFailed_other": "초대 {{count}}건을 보내지 못했습니다 — 업그레이드 후 멤버에서 다시 보내세요. 완료를 눌러 계속하세요."
+  },
+  "steps": {
+    "profile": {
+      "label": "프로필",
+      "title": "프로필 설정",
+      "subtitle": "리뷰와 멘션에서 팀원에게 표시되는 방식입니다."
+    },
+    "org": {
+      "label": "조직",
+      "title": "조직 생성 또는 참여",
+      "subtitle": "워크스페이스, 팀, 결제가 여기에 통합됩니다."
+    },
+    "workspace": {
+      "label": "워크스페이스",
+      "title": "첫 워크스페이스 연결",
+      "subtitle": "se · field가 색인을 시작할 저장소(또는 모노레포)를 선택하세요."
+    },
+    "invite": {
+      "label": "초대",
+      "title": "팀원 초대 (선택)",
+      "subtitle": "동일한 SSO 도메인으로 로그인할 수 있습니다. 나중에 해도 됩니다."
+    },
+    "plan": {
+      "label": "요금제",
+      "title": "시작할 요금제 선택",
+      "subtitle": "언제든지 변경하거나 취소할 수 있습니다. 연간 결제 시 17% 절약."
+    }
+  },
+  "profile": {
+    "fullName": "이름",
+    "namePlaceholder": "홍길동",
+    "handle": "핸들",
+    "handlePlaceholder": "gildong",
+    "timezone": "시간대",
+    "detected": "자동 감지됨",
+    "language": "언어",
+    "avatarUpload": "아바타 업로드",
+    "replacePhoto": "사진 교체",
+    "uploadPhoto": "사진 업로드",
+    "remove": "제거",
+    "avatarHint": "JPG · PNG · GIF · WebP. 최대 2MB. 원 위에 파일을 드롭하세요.",
+    "avatarNotImage": "아바타는 이미지여야 합니다 (PNG, JPG, GIF, WebP).",
+    "avatarTooLarge": "이미지가 2MB를 초과합니다. 압축 후 다시 시도하세요.",
+    "detectionBanner": "브라우저에서 감지됨: <0>{{tz}}</0> · <1>{{loc}}</1>. 미리 입력되어 있지만 변경할 수 있습니다."
+  },
+  "org": {
+    "mode": {
+      "createTitle": "새로 만들기",
+      "createSub": "새로 시작합니다.",
+      "joinTitle": "기존에 참여",
+      "joinSub": "초대 코드가 있습니다."
+    },
+    "create": {
+      "logo": "로고",
+      "uploadLogo": "조직 로고 업로드",
+      "logoAlt": "{{name}} 로고",
+      "remove": "제거",
+      "name": "조직 이름",
+      "namePlaceholder": "ACME, Inc.",
+      "slug": "URL 슬러그",
+      "slugPlaceholder": "acme",
+      "industry": "업종",
+      "teamSize": "팀 규모"
+    },
+    "join": {
+      "code": "초대 코드",
+      "codePlaceholder": "ACME-7HQF-TEAM",
+      "help": "코드가 없나요? 조직 관리자에게 요청하세요. 코드는 <0>XXXXX-XXXX-XXXX</0> 형식이며 대소문자를 구분하지 않습니다. <1>데모: <2>ACME-7HQF-TEAM</2>을 시도하세요.</1>",
+      "recognizedTitle": "{{name}}에 참여합니다",
+      "recognizedBody": "요금제: {{plan}} · 멤버 {{members}}명 · 기본적으로 멤버로 추가됩니다"
+    },
+    "industries": {
+      "software": "소프트웨어 & SaaS",
+      "finance": "금융 & 핀테크",
+      "healthcare": "헬스케어 & 바이오테크",
+      "retail": "리테일 & 이커머스",
+      "media": "미디어 & 게임",
+      "gov-edu": "정부 & 교육",
+      "manufacturing": "제조 & 물류",
+      "other": "기타"
+    },
+    "sizes": {
+      "1-4Sub": "이제 시작",
+      "5-19Sub": "소규모 팀",
+      "20-99Sub": "성장 중",
+      "100-499Sub": "중견 규모",
+      "500+Sub": "엔터프라이즈"
+    }
+  },
+  "workspace": {
+    "connect": {
+      "githubPerm": "읽기 권한 · 저장소 & 멤버",
+      "gitlabPerm": "읽기 권한 · 프로젝트 & 사용자",
+      "bitbucketPerm": "읽기 권한 · 워크스페이스",
+      "connectTo": "{{provider}}에 연결",
+      "willRequest": "se · field가 {{provider}}에 요청할 권한",
+      "perm": {
+        "readContents": "저장소 콘텐츠 읽기",
+        "readMetadata": "저장소 메타데이터 읽기 (브랜치, 커밋)",
+        "readTeam": "팀 & 멤버 목록 읽기 (CODEOWNERS용)",
+        "noWrite": "저장소 쓰기 · 절대 하지 않습니다",
+        "noWorkflows": "워크플로 실행 · 절대 하지 않습니다"
+      }
+    },
+    "picker": {
+      "connectedAs": "<0>{{provider}}</0>에 <1>{{account}}</1>(으)로 연결됨",
+      "disconnect": "연결 해제",
+      "searchPlaceholder": "저장소 검색…",
+      "noMatch": "\"{{query}}\"과(와) 일치하는 저장소가 없습니다.",
+      "monorepo": "모노레포",
+      "private": "비공개",
+      "public": "공개",
+      "page": "{{total}}페이지 중 <0>{{page}}</0>페이지",
+      "prev": "이전",
+      "next": "다음"
+    },
+    "config": {
+      "pickDifferent": "다른 저장소 선택",
+      "defaultBranch": "추적할 기본 브랜치",
+      "default": "기본",
+      "subPaths": "색인할 하위 경로",
+      "selectNone": "모두 해제",
+      "selectAll": "모두 선택",
+      "subPathsHint": "비워두면 모든 하위 경로를 색인합니다. 성능을 위해 범위를 좁히려면 특정 경로를 선택하세요.",
+      "indexed": "색인 완료",
+      "stagePct": "{{stage}} · {{pct}}%",
+      "backgroundNote": "설정을 계속할 수 있습니다 — 색인은 백그라운드에서 계속 실행됩니다. 닷 필드가 준비되면 알려드립니다.",
+      "stage": {
+        "clone": "복제 & 검증",
+        "parse": "소스 파일 파싱",
+        "graph": "심볼 그래프 구축",
+        "ready": "닷 필드 준비"
+      }
+    }
+  },
+  "invite": {
+    "defaultRole": "새 초대자의 기본 역할",
+    "roleCountTotal": "{{count}}",
+    "roleCount": "· {{count}}명 {{role}}",
+    "emailPlaceholder": "name@company.com, another@company.com…",
+    "removeEmail": "{{email}} 제거",
+    "pressEnter": "<0>Enter</0> 또는 <1>,</1>를 눌러 추가하세요. 목록을 붙여넣어 한 번에 여러 명 추가할 수 있습니다.",
+    "importCsv": "CSV 가져오기",
+    "clearAll": "모두 지우기",
+    "csvSkipped_one": "{{count}}줄 건너뜀 — 잘못된 이메일 형식.",
+    "csvSkipped_other": "{{count}}줄 건너뜀 — 잘못된 이메일 형식.",
+    "csvReadError": "파일을 읽을 수 없습니다.",
+    "shareLink": "또는 초대 링크 공유",
+    "linkMeta": "· 7일 후 만료 · 최대 50회 사용",
+    "copied": "복사됨",
+    "copy": "복사",
+    "new": "새로 생성",
+    "generateLink": "초대 링크 생성",
+    "sending": "초대장 보내는 중…",
+    "sendInvitations_one": "초대장 {{count}}건 보내기",
+    "sendInvitations_other": "초대장 {{count}}건 보내기",
+    "queued_one": "초대장 {{count}}건 대기열 추가됨",
+    "queued_other": "초대장 {{count}}건 대기열 추가됨",
+    "sentAt": "· {{time}}에 발송됨",
+    "receiptBody": "수신자는 1분 이내에 이메일을 받습니다. 원하면 초대 링크를 사용할 수도 있습니다.",
+    "roleHint": "수락 후 <0>조직 → 멤버</0>에서 누구나 관리자로 승격할 수 있습니다. 유료 요금제에서 역할은 결제에 영향을 줍니다 — 멤버와 관리자만 좌석에 포함됩니다.",
+    "roles": {
+      "adminLabel": "관리자",
+      "adminSub": "조직 & 결제 관리",
+      "memberLabel": "멤버",
+      "memberSub": "기본 · 코드 + 리뷰",
+      "reviewerLabel": "리뷰어",
+      "reviewerSub": "PR 읽기 + 댓글",
+      "viewerLabel": "뷰어",
+      "viewerSub": "읽기 전용 접근"
+    }
+  },
+  "plan": {
+    "cycle": {
+      "annual": "연간",
+      "monthly": "월간",
+      "discount": "−17%"
+    },
+    "recommended": "추천",
+    "custom": "맞춤형",
+    "perSeatMo": "/좌석/월",
+    "minSeats": " · 최소 {{count}}좌석",
+    "trial": "{{days}}일 체험",
+    "seats": "좌석",
+    "decreaseSeats": "좌석 줄이기",
+    "increaseSeats": "좌석 늘리기",
+    "addons": "부가 기능",
+    "notAvailableOn": " · {{plan}}에서는 사용 불가",
+    "addonPrice": "+${{price}}/좌석/월",
+    "plans": {
+      "freeName": "무료",
+      "freeHint": "개인 / 탐색용",
+      "teamName": "팀",
+      "teamHint": "소규모 팀용",
+      "businessName": "비즈니스",
+      "businessHint": "조직용",
+      "enterpriseName": "엔터프라이즈",
+      "enterpriseHint": "규제 대응, 자체 호스팅"
+    },
+    "highlights": {
+      "oneWorkspace": "워크스페이스 1개",
+      "upTo3Seats": "최대 3좌석",
+      "communitySupport": "커뮤니티 지원",
+      "fiveWorkspaces": "워크스페이스 5개",
+      "unlimitedSeats": "무제한 좌석",
+      "customAdmission": "맞춤 어드미션 규칙",
+      "unlimitedWorkspaces": "무제한 워크스페이스",
+      "samlScim": "SAML / SCIM",
+      "priorityRouting": "우선 라우팅",
+      "vpcSelfHost": "VPC / 자체 호스팅",
+      "customSla": "맞춤 SLA",
+      "dedicatedCsm": "전담 CSM"
+    },
+    "addonList": {
+      "ssoLabel": "SSO & SCIM",
+      "ssoSub": "SAML 2.0 + 프로비저닝",
+      "auditProLabel": "Audit Pro",
+      "auditProSub": "1년 보관 + SIEM 내보내기",
+      "premiumLabel": "프리미엄 지원",
+      "premiumSub": "4시간 SLA, 전담 채널"
+    },
+    "summary": {
+      "enterpriseTitle": "엔터프라이즈 — 문의하세요",
+      "enterpriseBody": "조달, 맞춤 계약, 자체 호스팅 옵션을 위해 세일즈 엔지니어에게 연결해 드립니다. 계약 시작 전까지 무료입니다.",
+      "freeTitle": "영구 무료",
+      "freeBody": "결제가 필요 없습니다. <0>조직 → 결제</0>에서 언제든지 업그레이드하세요.",
+      "annualSubscription": "연간 구독",
+      "monthlySubscription": "월간 구독",
+      "trialInfo": "{{days}}일 무료 체험 · {{chargeDay}}일째부터 청구 시작",
+      "baseLine": "{{plan}} · {{seats}}좌석 × ${{price}}/월",
+      "addonLine": "+ {{addon}} · {{seats}}좌석 × ${{price}}/월",
+      "monthly": "월간",
+      "monthlyValue": "${{amount}}/월",
+      "billedAnnually": "연간 청구",
+      "billedAnnuallyValue": "지금 ${{amount}}",
+      "savedVsMonthly": "월간 대비 절약",
+      "savedValue": "−${{amount}}/년",
+      "proRatedNote": "요금제나 좌석 수 변경 시 일할 계산됩니다. 세금은 결제 시 계산됩니다."
+    }
+  },
+  "done": {
+    "allSet": "모두 준비됐습니다, {{name}}님.",
+    "indexingBody": "지금 <0>{{repo}}</0>을(를) 색인하는 중입니다. 이미 시작할 수 있습니다 — 첫 파싱이 끝나는 즉시 신호가 닷 필드에 나타납니다.",
+    "yourRepo": "저장소",
+    "there": "회원님",
+    "terminalTitle": "se-field · 색인",
+    "dotFieldPreview": "닷 필드 · 실시간 미리보기",
+    "streaming": "스트리밍",
+    "whatToTry": "먼저 시도해볼 것",
+    "actions": {
+      "codingTitle": "코딩에서 AI로 편집",
+      "codingHint": "파일을 열고 AI 에이전트에게 리팩터링을 요청하세요.",
+      "reviewTitle": "PR 리뷰",
+      "reviewHintInvited_one": "팀원 {{count}}명 초대됨 — /reviews에 표시됩니다.",
+      "reviewHintInvited_other": "팀원 {{count}}명 초대됨 — /reviews에 표시됩니다.",
+      "reviewHintEmpty": "PR 제공업체를 연결하여 리뷰를 시작하세요.",
+      "fixTitle": "수정 파이프라인 실행",
+      "fixHint": "닷 필드에서 수정 후보를 골라 게이팅을 거쳐 실행하세요."
+    },
+    "summary": {
+      "profile": "프로필",
+      "unnamed": "이름 없음",
+      "handle": "핸들",
+      "timezone": "시간대",
+      "organization": "조직",
+      "newOrg": "새 조직",
+      "workspace": "워크스페이스",
+      "branch": "브랜치",
+      "invitees": "초대자",
+      "plan": "요금제",
+      "seats": "좌석"
+    },
+    "ctaNotified": "팀원에게 이메일로 알림을 보냈습니다.",
+    "ctaInviteLater": "조직 → 멤버에서 언제든지 팀원을 초대할 수 있습니다.",
+    "openDotField": "닷 필드 열기"
+  }
+}

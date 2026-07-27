@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import { Check, Loader2, AlertTriangle, Sparkles } from 'lucide-react';
 import { useAvailability } from '../../../lib/availability';
 import { AccentBanner } from '../../primitives/AccentBanner';
@@ -6,6 +7,7 @@ import { recognizedOrgFor } from './data';
 
 // Join org branch.
 export function JoinOrg({ value, onChange }: OrgStepProps) {
+  const { t } = useTranslation('onboarding');
   const codeCheck = useAvailability(value.inviteCode, 'invite-code');
 
   return (
@@ -19,24 +21,29 @@ export function JoinOrg({ value, onChange }: OrgStepProps) {
       {codeCheck.state === 'available' && <RecognizedOrg code={value.inviteCode} />}
 
       <p className="text-sm leading-snug" style={{ color: 'var(--fg-subtle)' }}>
-        Don&apos;t have a code? Ask an admin in your org. Codes look like{' '}
-        <span className="font-mono">XXXXX-XXXX-XXXX</span> and are case-insensitive.{' '}
-        <span style={{ color: 'var(--fg-default)' }}>
-          Demo: try <span className="font-mono">ACME-7HQF-TEAM</span>.
-        </span>
+        <Trans
+          i18nKey="org.join.help"
+          t={t}
+          components={[
+            <span key="0" className="font-mono" />,
+            <span key="1" style={{ color: 'var(--fg-default)' }} />,
+            <span key="2" className="font-mono" />,
+          ]}
+        />
       </p>
     </div>
   );
 }
 
 function RecognizedOrg({ code }: { code: string }) {
+  const { t } = useTranslation('onboarding');
   const meta = recognizedOrgFor(code);
   return (
     <AccentBanner
       icon={Sparkles}
       stagger
-      title={<>You&apos;ll join {meta.name}</>}
-      body={<>Plan: {meta.plan} · {meta.members} members · You&apos;ll be added as Member by default</>}
+      title={t('org.join.recognizedTitle', { name: meta.name })}
+      body={t('org.join.recognizedBody', { plan: meta.plan, members: meta.members })}
     />
   );
 }
@@ -49,13 +56,14 @@ function InviteCodeField({
   onChange: (v: string) => void;
   check: ReturnType<typeof useAvailability>;
 }) {
+  const { t } = useTranslation('onboarding');
   return (
     <label className="flex flex-col gap-1.5">
       <span
         className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        <span>Invite code</span>
+        <span>{t('org.join.code')}</span>
         <span
           style={{
             color: check.state === 'available' ? 'var(--intent-success-fg)'
@@ -80,7 +88,7 @@ function InviteCodeField({
         <input
           value={value}
           onChange={(e) => { onChange(e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 32)); }}
-          placeholder="ACME-7HQF-TEAM"
+          placeholder={t('org.join.codePlaceholder')}
           required
           autoFocus
           className="flex-1 bg-transparent outline-none px-3 text-[15px] font-mono tabular-nums tracking-wider"

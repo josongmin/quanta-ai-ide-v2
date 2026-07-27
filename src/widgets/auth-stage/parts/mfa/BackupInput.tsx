@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 // Backup code — formatted xxxx-xxxx-xxxx with auto dashes.
 
 export function BackupInput({
   value, onChange, error,
 }: { value: string; onChange: (v: string) => void; error: boolean }) {
+  const { t } = useTranslation('auth');
   // Strip non-alphanum, lowercase, slice to 12, then re-insert dashes.
   const handle = (raw: string) => {
     const clean = raw.replace(/[^a-z0-9]/gi, '').toLowerCase().slice(0, 12);
@@ -19,13 +22,13 @@ export function BackupInput({
         className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        Backup code
+        {t('mfa.backup.label')}
       </span>
       <input
         type="text"
         autoComplete="one-time-code"
         autoFocus
-        placeholder="xxxx-xxxx-xxxx"
+        placeholder={t('mfa.backup.placeholder')}
         value={value}
         onChange={(e) => { handle(e.target.value); }}
         className="h-10 px-3 rounded-md text-[15px] font-mono tabular-nums tracking-wider outline-none transition-colors"
@@ -36,7 +39,7 @@ export function BackupInput({
         }}
       />
       <p className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-        Each backup code can only be used once. Find them in your authenticator settings.
+        {t('mfa.backup.hint')}
       </p>
     </div>
   );

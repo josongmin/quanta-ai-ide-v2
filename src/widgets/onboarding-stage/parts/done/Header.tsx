@@ -1,9 +1,11 @@
+import { Trans, useTranslation } from 'react-i18next';
 import type { DoneProps } from './types';
 import { firstName } from './data';
 
 // Header — animated check + welcome message.
 export function Header({ data }: DoneProps) {
-  const first = firstName(data.profile.name);
+  const { t } = useTranslation('onboarding');
+  const first = firstName(data.profile.name, t('done.there'));
   return (
     <header className="flex flex-col items-center gap-4 text-center">
       <SuccessGlyph />
@@ -12,11 +14,15 @@ export function Header({ data }: DoneProps) {
           className="text-4xl font-semibold tracking-tight leading-tight"
           style={{ color: 'var(--fg-strong)' }}
         >
-          You&apos;re all set, {first}.
+          {t('done.allSet', { name: first })}
         </h1>
         <p className="text-base leading-snug max-w-[440px]" style={{ color: 'var(--fg-muted)' }}>
-          We&apos;re indexing <span className="font-mono">{data.workspace.repo || 'your repo'}</span> right now.
-          You can jump in already — signals appear on the dot field as soon as the first parse pass finishes.
+          <Trans
+            i18nKey="done.indexingBody"
+            t={t}
+            values={{ repo: data.workspace.repo || t('done.yourRepo') }}
+            components={[<span key="0" className="font-mono" />]}
+          />
         </p>
       </div>
     </header>

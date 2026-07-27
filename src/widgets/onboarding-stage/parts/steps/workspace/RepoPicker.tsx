@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Search, Lock, Globe, Check, FolderTree, Star } from 'lucide-react';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { REPOS, PAGE_SIZE, type Repo } from '../../../lib/repos';
@@ -10,6 +11,7 @@ import { RepoConfig } from './RepoConfig';
 
 // Post-connect: pick repo, then branch, then monorepo paths.
 export function RepoPicker({ value, onChange }: WorkspaceStepProps) {
+  const { t } = useTranslation('onboarding');
   const [q, setQ] = useState('');
   const [page, setPage] = useState(0);
 
@@ -62,7 +64,7 @@ export function RepoPicker({ value, onChange }: WorkspaceStepProps) {
         <input
           value={q}
           onChange={(e) => { setQ(e.target.value); }}
-          placeholder="Search your repositories…"
+          placeholder={t('workspace.picker.searchPlaceholder')}
           className="flex-1 bg-transparent outline-none text-base"
           style={{ color: 'var(--fg-strong)' }}
           autoFocus
@@ -85,7 +87,7 @@ export function RepoPicker({ value, onChange }: WorkspaceStepProps) {
         ))}
         {pageRepos.length === 0 && (
           <div className="text-center py-10 text-sm" style={{ color: 'var(--fg-subtle)' }}>
-            No repositories match &quot;{q}&quot;.
+            {t('workspace.picker.noMatch', { query: q })}
           </div>
         )}
       </div>
@@ -104,6 +106,7 @@ function ConnectedAccountStrip({
   provider: WizardData['workspace']['provider'];
   onDisconnect: () => void;
 }) {
+  const { t } = useTranslation('onboarding');
   return (
     <div
       className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm"
@@ -114,8 +117,15 @@ function ConnectedAccountStrip({
     >
       <Check className="w-3.5 h-3.5" style={{ color: 'var(--fg-accent)' }} />
       <span style={{ color: 'var(--fg-default)' }}>
-        Connected to <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>{providerLabel(provider)}</span>
-        {' '}as <span className="font-mono">{account}</span>
+        <Trans
+          i18nKey="workspace.picker.connectedAs"
+          t={t}
+          values={{ provider: providerLabel(provider), account }}
+          components={[
+            <span key="0" className="font-semibold" style={{ color: 'var(--fg-strong)' }} />,
+            <span key="1" className="font-mono" />,
+          ]}
+        />
       </span>
       <span className="flex-1" />
       <button
@@ -124,7 +134,7 @@ function ConnectedAccountStrip({
         className="text-xs"
         style={{ color: 'var(--fg-link)' }}
       >
-        Disconnect
+        {t('workspace.picker.disconnect')}
       </button>
     </div>
   );
@@ -133,6 +143,7 @@ function ConnectedAccountStrip({
 function RepoRow({
   repo, top, onSelect,
 }: { repo: Repo; top: boolean; onSelect: () => void }) {
+  const { t } = useTranslation('onboarding');
   return (
     <button
       type="button"
@@ -161,7 +172,7 @@ function RepoRow({
               }}
             >
               <FolderTree className="w-2.5 h-2.5" />
-              monorepo
+              {t('workspace.picker.monorepo')}
             </span>
           )}
         </div>
@@ -187,10 +198,16 @@ function RepoRow({
 function Pagination({
   page, totalPages, onChange,
 }: { page: number; totalPages: number; onChange: (p: number) => void }) {
+  const { t } = useTranslation('onboarding');
   return (
     <div className="flex items-center justify-between text-sm">
       <span style={{ color: 'var(--fg-subtle)' }}>
-        Page <span className="tabular-nums" style={{ color: 'var(--fg-default)' }}>{page + 1}</span> of {totalPages}
+        <Trans
+          i18nKey="workspace.picker.page"
+          t={t}
+          values={{ page: page + 1, total: totalPages }}
+          components={[<span key="0" className="tabular-nums" style={{ color: 'var(--fg-default)' }} />]}
+        />
       </span>
       <div className="flex items-center gap-1">
         <button
@@ -205,7 +222,7 @@ function Pagination({
             opacity: page === 0 ? 0.5 : 1,
           }}
         >
-          Prev
+          {t('workspace.picker.prev')}
         </button>
         <button
           type="button"
@@ -219,7 +236,7 @@ function Pagination({
             opacity: page === totalPages - 1 ? 0.5 : 1,
           }}
         >
-          Next
+          {t('workspace.picker.next')}
         </button>
       </div>
     </div>
@@ -227,6 +244,7 @@ function Pagination({
 }
 
 function Vis({ kind }: { kind: 'private' | 'public' }) {
+  const { t } = useTranslation('onboarding');
   return (
     <span
       className="inline-flex items-center gap-1 text-2xs uppercase tracking-eyebrow font-semibold px-1.5 py-0.5 rounded"
@@ -237,7 +255,7 @@ function Vis({ kind }: { kind: 'private' | 'public' }) {
       }}
     >
       {kind === 'private' ? <Lock className="w-2.5 h-2.5" /> : <Globe className="w-2.5 h-2.5" />}
-      {kind}
+      {kind === 'private' ? t('workspace.picker.private') : t('workspace.picker.public')}
     </span>
   );
 }

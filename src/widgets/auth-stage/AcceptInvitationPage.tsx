@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { Check, AlertCircle, Loader2, UserPlus } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { acceptInvitation } from '@entities/org';
@@ -13,6 +14,7 @@ type Phase = 'accepting' | 'success' | 'error';
 // login (remembering this URL) and back. Accepts via better-auth, which adds the
 // user to the org and bumps its entitlement epoch.
 export default function AcceptInvitationPage() {
+  const { t } = useTranslation('auth');
   // Invitation id from the path (/accept-invitation/<id>). Read once, like the
   // verify-email page reads its ?token.
   const id = useMemo(() => {
@@ -21,7 +23,7 @@ export default function AcceptInvitationPage() {
   }, []);
   const [phase, setPhase] = useState<Phase>(id || !env.useRealAuth ? 'accepting' : 'error');
   const [error, setError] = useState<string | null>(
-    id || !env.useRealAuth ? null : 'This invitation link is missing its token.',
+    id || !env.useRealAuth ? null : t('acceptInvitation.missingToken'),
   );
 
   useEffect(() => {
@@ -41,11 +43,11 @@ export default function AcceptInvitationPage() {
   }, [id]);
 
   return (
-    <AuthShell title="Join the organization" subtitle="Accepting your invitation to collaborate.">
+    <AuthShell title={t('acceptInvitation.title')} subtitle={t('acceptInvitation.subtitle')}>
       {phase === 'accepting' && (
         <div className="flex items-center gap-2 text-base" style={{ color: 'var(--fg-muted)' }}>
           <Loader2 className="w-4 h-4 animate-spin" />
-          Accepting your invitation…
+          {t('acceptInvitation.accepting')}
         </div>
       )}
 
@@ -59,11 +61,11 @@ export default function AcceptInvitationPage() {
               <Check className="w-4 h-4" style={{ color: 'var(--intent-success-fg)' }} />
             </div>
             <p className="text-base leading-snug" style={{ color: 'var(--fg-default)' }}>
-              You&apos;re in. Your access to the organization is active.
+              {t('acceptInvitation.success')}
             </p>
           </div>
           <Link to="/intelligence" className="contents">
-            <Button leading={<UserPlus className="w-3.5 h-3.5" />}>Go to the workspace</Button>
+            <Button leading={<UserPlus className="w-3.5 h-3.5" />}>{t('acceptInvitation.goToWorkspace')}</Button>
           </Link>
         </div>
       )}
@@ -78,11 +80,11 @@ export default function AcceptInvitationPage() {
               <AlertCircle className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />
             </div>
             <p className="text-base leading-snug" style={{ color: 'var(--fg-default)' }}>
-              {error ?? "This invitation can't be accepted."} It may have expired, been revoked, or already been used.
+              {error ?? t('acceptInvitation.errorFallback')}{t('acceptInvitation.errorSuffix')}
             </p>
           </div>
           <Link to="/intelligence" className="contents">
-            <Button>Continue to the app</Button>
+            <Button>{t('acceptInvitation.continueToApp')}</Button>
           </Link>
         </div>
       )}

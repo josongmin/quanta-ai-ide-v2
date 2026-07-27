@@ -1,1 +1,291 @@
-{}
+{
+  "shell": {
+    "badge": "引导设置",
+    "stepOf": "第 <0>{{current}}</0> 步，共 {{total}} 步",
+    "back": "← 返回",
+    "signedInAs": "登录身份：<0>{{email}}</0>",
+    "you": "您",
+    "signOut": "退出登录",
+    "skip": "跳过",
+    "finishing": "正在完成…",
+    "finishSetup": "完成设置",
+    "continue": "继续",
+    "invitesFailed_one": "有 {{count}} 个邀请未能发送 — 升级后请在成员页面重新发送。按“完成”继续。",
+    "invitesFailed_other": "有 {{count}} 个邀请未能发送 — 升级后请在成员页面重新发送。按“完成”继续。"
+  },
+  "steps": {
+    "profile": {
+      "label": "个人资料",
+      "title": "设置您的个人资料",
+      "subtitle": "团队成员在评审和提及中看到您的方式。"
+    },
+    "org": {
+      "label": "组织",
+      "title": "创建或加入组织",
+      "subtitle": "工作区、团队和计费都汇总在此。"
+    },
+    "workspace": {
+      "label": "工作区",
+      "title": "连接您的第一个工作区",
+      "subtitle": "选择您希望 se · field 开始索引的仓库（或 monorepo）。"
+    },
+    "invite": {
+      "label": "邀请",
+      "title": "邀请团队成员（可选）",
+      "subtitle": "他们可以使用相同的 SSO 域名登录。您也可以稍后再做。"
+    },
+    "plan": {
+      "label": "套餐",
+      "title": "选择开始使用的套餐",
+      "subtitle": "您可随时更改或取消。年付可节省 17%。"
+    }
+  },
+  "profile": {
+    "fullName": "全名",
+    "namePlaceholder": "张三",
+    "handle": "用户名",
+    "handlePlaceholder": "zhangsan",
+    "timezone": "时区",
+    "detected": "已自动检测",
+    "language": "语言",
+    "avatarUpload": "上传头像",
+    "replacePhoto": "更换照片",
+    "uploadPhoto": "上传照片",
+    "remove": "移除",
+    "avatarHint": "JPG · PNG · GIF · WebP。最大 2MB。将文件拖到圆圈上。",
+    "avatarNotImage": "头像必须是图片（PNG、JPG、GIF、WebP）。",
+    "avatarTooLarge": "图片超过 2MB。请压缩后重试。",
+    "detectionBanner": "从您的浏览器检测到：<0>{{tz}}</0> · <1>{{loc}}</1>。已预填，但您可以更改。"
+  },
+  "org": {
+    "mode": {
+      "createTitle": "新建",
+      "createSub": "我从零开始。",
+      "joinTitle": "加入现有",
+      "joinSub": "我有邀请码。"
+    },
+    "create": {
+      "logo": "徽标",
+      "uploadLogo": "上传组织徽标",
+      "logoAlt": "{{name}} 徽标",
+      "remove": "移除",
+      "name": "组织名称",
+      "namePlaceholder": "ACME, Inc.",
+      "slug": "URL 别名",
+      "slugPlaceholder": "acme",
+      "industry": "行业",
+      "teamSize": "团队规模"
+    },
+    "join": {
+      "code": "邀请码",
+      "codePlaceholder": "ACME-7HQF-TEAM",
+      "help": "没有邀请码？请向您组织的管理员索取。邀请码格式为 <0>XXXXX-XXXX-XXXX</0>，不区分大小写。<1>演示：试试 <2>ACME-7HQF-TEAM</2>。</1>",
+      "recognizedTitle": "您将加入 {{name}}",
+      "recognizedBody": "套餐：{{plan}} · {{members}} 名成员 · 默认将您添加为成员"
+    },
+    "industries": {
+      "software": "软件与 SaaS",
+      "finance": "金融与金融科技",
+      "healthcare": "医疗与生物技术",
+      "retail": "零售与电商",
+      "media": "媒体与游戏",
+      "gov-edu": "政府与教育",
+      "manufacturing": "制造与物流",
+      "other": "其他"
+    },
+    "sizes": {
+      "1-4Sub": "刚刚起步",
+      "5-19Sub": "小型团队",
+      "20-99Sub": "成长中",
+      "100-499Sub": "中型规模",
+      "500+Sub": "企业级"
+    }
+  },
+  "workspace": {
+    "connect": {
+      "githubPerm": "读取权限 · 仓库与成员",
+      "gitlabPerm": "读取权限 · 项目与用户",
+      "bitbucketPerm": "读取权限 · 工作区",
+      "connectTo": "连接到 {{provider}}",
+      "willRequest": "se · field 将向 {{provider}} 请求的权限",
+      "perm": {
+        "readContents": "读取仓库内容",
+        "readMetadata": "读取仓库元数据（分支、提交）",
+        "readTeam": "读取团队与成员列表（用于 CODEOWNERS）",
+        "noWrite": "写入您的仓库 · 我们绝不会这样做",
+        "noWorkflows": "触发工作流 · 我们绝不会这样做"
+      }
+    },
+    "picker": {
+      "connectedAs": "已连接到 <0>{{provider}}</0>，身份为 <1>{{account}}</1>",
+      "disconnect": "断开连接",
+      "searchPlaceholder": "搜索您的仓库…",
+      "noMatch": "没有与“{{query}}”匹配的仓库。",
+      "monorepo": "monorepo",
+      "private": "私有",
+      "public": "公开",
+      "page": "第 <0>{{page}}</0> 页，共 {{total}} 页",
+      "prev": "上一页",
+      "next": "下一页"
+    },
+    "config": {
+      "pickDifferent": "选择其他仓库",
+      "defaultBranch": "要跟踪的默认分支",
+      "default": "默认",
+      "subPaths": "要索引的子路径",
+      "selectNone": "全部取消",
+      "selectAll": "全选",
+      "subPathsHint": "留空则索引所有子路径。如需为性能缩小范围，请选择特定路径。",
+      "indexed": "已索引",
+      "stagePct": "{{stage}} · {{pct}}%",
+      "backgroundNote": "您可以继续设置 — 索引将在后台持续运行。点阵图准备就绪后我们会通知您。",
+      "stage": {
+        "clone": "克隆与校验",
+        "parse": "解析源文件",
+        "graph": "构建符号图",
+        "ready": "预热点阵图"
+      }
+    }
+  },
+  "invite": {
+    "defaultRole": "新受邀者的默认角色",
+    "roleCountTotal": "{{count}}",
+    "roleCount": "· {{count}} 名{{role}}",
+    "emailPlaceholder": "name@company.com, another@company.com…",
+    "removeEmail": "移除 {{email}}",
+    "pressEnter": "按 <0>Enter</0> 或 <1>,</1> 添加。粘贴列表可一次添加多个。",
+    "importCsv": "导入 CSV",
+    "clearAll": "全部清除",
+    "csvSkipped_one": "已跳过 {{count}} 行 — 邮箱格式无效。",
+    "csvSkipped_other": "已跳过 {{count}} 行 — 邮箱格式无效。",
+    "csvReadError": "无法读取文件。",
+    "shareLink": "或分享邀请链接",
+    "linkMeta": "· 7 天后过期 · 最多使用 50 次",
+    "copied": "已复制",
+    "copy": "复制",
+    "new": "新建",
+    "generateLink": "生成邀请链接",
+    "sending": "正在发送邀请…",
+    "sendInvitations_one": "发送 {{count}} 个邀请",
+    "sendInvitations_other": "发送 {{count}} 个邀请",
+    "queued_one": "已将 {{count}} 个邀请加入队列",
+    "queued_other": "已将 {{count}} 个邀请加入队列",
+    "sentAt": "· 于 {{time}} 发送",
+    "receiptBody": "收件人将在一分钟内收到邮件。如愿意，他们也可以使用邀请链接。",
+    "roleHint": "在他们接受后，您可从 <0>组织 → 成员</0> 将任何人提升为管理员。在付费套餐中，角色会影响计费 — 只有成员和管理员计入席位。",
+    "roles": {
+      "adminLabel": "管理员",
+      "adminSub": "管理组织与计费",
+      "memberLabel": "成员",
+      "memberSub": "默认 · 代码 + 评审",
+      "reviewerLabel": "评审者",
+      "reviewerSub": "读取 + 评论 PR",
+      "viewerLabel": "查看者",
+      "viewerSub": "只读访问"
+    }
+  },
+  "plan": {
+    "cycle": {
+      "annual": "年付",
+      "monthly": "月付",
+      "discount": "−17%"
+    },
+    "recommended": "推荐",
+    "custom": "定制",
+    "perSeatMo": "/席位/月",
+    "minSeats": " · 最少 {{count}} 席位",
+    "trial": "{{days}} 天试用",
+    "seats": "席位",
+    "decreaseSeats": "减少席位",
+    "increaseSeats": "增加席位",
+    "addons": "附加功能",
+    "notAvailableOn": " · {{plan}} 不可用",
+    "addonPrice": "+${{price}}/席位/月",
+    "plans": {
+      "freeName": "免费",
+      "freeHint": "个人 / 探索",
+      "teamName": "团队",
+      "teamHint": "适合小型团队",
+      "businessName": "商业",
+      "businessHint": "适合组织",
+      "enterpriseName": "企业",
+      "enterpriseHint": "合规、自托管"
+    },
+    "highlights": {
+      "oneWorkspace": "1 个工作区",
+      "upTo3Seats": "最多 3 个席位",
+      "communitySupport": "社区支持",
+      "fiveWorkspaces": "5 个工作区",
+      "unlimitedSeats": "无限席位",
+      "customAdmission": "自定义准入规则",
+      "unlimitedWorkspaces": "无限工作区",
+      "samlScim": "SAML / SCIM",
+      "priorityRouting": "优先路由",
+      "vpcSelfHost": "VPC / 自托管",
+      "customSla": "定制 SLA",
+      "dedicatedCsm": "专属 CSM"
+    },
+    "addonList": {
+      "ssoLabel": "SSO & SCIM",
+      "ssoSub": "SAML 2.0 + 自动配置",
+      "auditProLabel": "Audit Pro",
+      "auditProSub": "1 年保留 + SIEM 导出",
+      "premiumLabel": "高级支持",
+      "premiumSub": "4 小时 SLA，专属渠道"
+    },
+    "summary": {
+      "enterpriseTitle": "企业版 — 联系我们",
+      "enterpriseBody": "我们将为您对接销售工程师，处理采购、定制合同和自托管选项。合同开始前免费。",
+      "freeTitle": "永久免费",
+      "freeBody": "无需付款。可随时从 <0>组织 → 计费</0> 升级。",
+      "annualSubscription": "年度订阅",
+      "monthlySubscription": "月度订阅",
+      "trialInfo": "{{days}} 天免费试用 · 第 {{chargeDay}} 天开始计费",
+      "baseLine": "{{plan}} · {{seats}} 席位 × ${{price}}/月",
+      "addonLine": "+ {{addon}} · {{seats}} 席位 × ${{price}}/月",
+      "monthly": "月费",
+      "monthlyValue": "${{amount}}/月",
+      "billedAnnually": "按年计费",
+      "billedAnnuallyValue": "现在支付 ${{amount}}",
+      "savedVsMonthly": "相比月付节省",
+      "savedValue": "−${{amount}}/年",
+      "proRatedNote": "更改套餐或席位数量时按比例计算。税费在结账时计算。"
+    }
+  },
+  "done": {
+    "allSet": "一切就绪，{{name}}。",
+    "indexingBody": "我们正在索引 <0>{{repo}}</0>。您已经可以开始使用 — 首次解析完成后，信号会立即出现在点阵图上。",
+    "yourRepo": "您的仓库",
+    "there": "您",
+    "terminalTitle": "se-field · 索引中",
+    "dotFieldPreview": "点阵图 · 实时预览",
+    "streaming": "正在流式传输",
+    "whatToTry": "先试试这些",
+    "actions": {
+      "codingTitle": "在编码中使用 AI 编辑",
+      "codingHint": "打开任意文件，让 AI 代理进行重构。",
+      "reviewTitle": "评审 PR",
+      "reviewHintInvited_one": "已邀请 {{count}} 名团队成员 — 他们会出现在 /reviews 中。",
+      "reviewHintInvited_other": "已邀请 {{count}} 名团队成员 — 他们会出现在 /reviews 中。",
+      "reviewHintEmpty": "连接 PR 提供商以开始评审。",
+      "fixTitle": "运行修复流水线",
+      "fixHint": "从点阵图中选择修复候选，让它通过准入检查后运行。"
+    },
+    "summary": {
+      "profile": "个人资料",
+      "unnamed": "未命名",
+      "handle": "用户名",
+      "timezone": "时区",
+      "organization": "组织",
+      "newOrg": "新组织",
+      "workspace": "工作区",
+      "branch": "分支",
+      "invitees": "受邀者",
+      "plan": "套餐",
+      "seats": "席位"
+    },
+    "ctaNotified": "已通过邮件通知团队成员。",
+    "ctaInviteLater": "您可随时从组织 → 成员邀请团队成员。",
+    "openDotField": "打开点阵图"
+  }
+}

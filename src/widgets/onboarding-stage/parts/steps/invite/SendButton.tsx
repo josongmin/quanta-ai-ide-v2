@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Send, Check } from 'lucide-react';
 import { formatTime } from '@shared/i18n';
 import type { InviteEntry } from '../../wizard';
@@ -7,6 +8,7 @@ import { ACCENT_TINT } from '../../primitives/shared';
 export function SendButton({
   count, progress, onSend,
 }: { count: number; progress: number | null; onSend: () => void }) {
+  const { t } = useTranslation('onboarding');
   if (progress != null) {
     const pct = (progress / count) * 100;
     return (
@@ -19,7 +21,7 @@ export function SendButton({
       >
         <div className="flex items-center justify-between text-sm">
           <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-            Sending invitations…
+            {t('invite.sending')}
           </span>
           <span className="font-mono tabular-nums" style={{ color: 'var(--fg-accent)' }}>
             {progress}/{count}
@@ -48,12 +50,13 @@ export function SendButton({
       style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
     >
       <Send className="w-3.5 h-3.5" />
-      Send {count} invitation{count === 1 ? '' : 's'}
+      {t('invite.sendInvitations', { count })}
     </button>
   );
 }
 
 export function SentReceipt({ entries }: { entries: InviteEntry[] }) {
+  const { t } = useTranslation('onboarding');
   return (
     <div
       className="flex flex-col gap-1.5 px-3 py-2.5 rounded-md onb-stagger"
@@ -65,14 +68,14 @@ export function SentReceipt({ entries }: { entries: InviteEntry[] }) {
       <div className="flex items-center gap-2 text-sm">
         <Check className="w-3.5 h-3.5" style={{ color: 'var(--intent-success-fg)' }} />
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          {entries.length} invitation{entries.length === 1 ? '' : 's'} queued
+          {t('invite.queued', { count: entries.length })}
         </span>
         <span style={{ color: 'var(--fg-muted)' }}>
-          · sent at {formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })}
+          {t('invite.sentAt', { time: formatTime(new Date(), { hour: '2-digit', minute: '2-digit' }) })}
         </span>
       </div>
       <span className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-        Recipients will get an email within a minute. They can also use the invite link if they prefer.
+        {t('invite.receiptBody')}
       </span>
     </div>
   );

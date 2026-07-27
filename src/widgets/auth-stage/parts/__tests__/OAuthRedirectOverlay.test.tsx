@@ -1,7 +1,21 @@
+import type * as ReactI18next from 'react-i18next';
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from '@shared/theme';
 import { UIRuntimeProvider } from '@shared/ui/runtime/UIRuntimeProvider';
+
+// Echo i18n keys, but interpolate {{provider}} so the provider-label assertion
+// still verifies the correct provider name flows through (guards the historical
+// bitbucket→GitLab mislabel bug).
+vi.mock('react-i18next', async (importOriginal) => ({
+  ...(await importOriginal<typeof ReactI18next>()),
+  useTranslation: () => ({
+    t: (key: string, opts?: Record<string, unknown>) =>
+      opts && 'provider' in opts ? `${key}:${String(opts['provider'])}` : key,
+  }),
+  Trans: ({ i18nKey }: { i18nKey: string }) => <>{i18nKey}</>,
+}));
+
 import { OAuthRedirectOverlay } from '../OAuthRedirectOverlay';
 
 // jsdom has no layout engine, so `offsetParent` is always null and the
@@ -53,7 +67,7 @@ describe('OAuthRedirectOverlay — dialog contract', () => {
 
   it('renders the correct label for the bitbucket provider (not mislabeled as GitLab)', () => {
     renderOverlay({ provider: 'bitbucket' });
-    expect(screen.getByText(/Redirecting to Bitbucket/i)).toBeInTheDocument();
-    expect(screen.queryByText(/GitLab/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/oauthOverlay\.provider\.bitbucket/)).toBeInTheDocument();
+    expect(screen.queryByText(/oauthOverlay\.provider\.gitlab/)).not.toBeInTheDocument();
   });
 });

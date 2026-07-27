@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import {
   Eye, EyeOff, Check, Clock, ShieldCheck, AlertCircle, KeyRound,
 } from 'lucide-react';
@@ -17,6 +18,7 @@ type Phase = 'form' | 'submitting' | 'success' | 'token-invalid';
 const TOKEN_TTL_SEC = 28 * 60;
 
 export default function ResetPasswordPage() {
+  const { t } = useTranslation('auth');
   const [pw, setPw] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPw, setShowPw] = useState(false);
@@ -50,9 +52,9 @@ export default function ResetPasswordPage() {
   if (phase === 'token-invalid') {
     return (
       <AuthShell
-        title="This link expired"
-        subtitle="Reset links are valid for 30 minutes. Request a fresh one to continue."
-        footer={<><span>Need help?</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link></>}
+        title={t('reset.expired.title')}
+        subtitle={t('reset.expired.subtitle')}
+        footer={<><span>{t('common.needHelp')}</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('common.contactSupport')}</Link></>}
       >
         <div
           className="flex items-start gap-3 px-3 py-3 rounded-md"
@@ -63,7 +65,7 @@ export default function ResetPasswordPage() {
         >
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
           <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
-            For your security, password reset links can only be used once and expire quickly.
+            {t('reset.expired.body')}
           </span>
         </div>
         <Link
@@ -71,7 +73,7 @@ export default function ResetPasswordPage() {
           className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
-          Request a new reset link
+          {t('reset.expired.requestNew')}
         </Link>
       </AuthShell>
     );
@@ -102,23 +104,23 @@ export default function ResetPasswordPage() {
 
   return (
     <AuthShell
-      title="Choose a new password"
-      subtitle="Pick something you haven't used here before. We'll sign out other sessions for security."
+      title={t('reset.title')}
+      subtitle={t('reset.subtitle')}
       topRight={<TokenStatus remainingSec={remainingSec} />}
       footer={
-        <><span>Wrong account?</span>
-        <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Back to sign in</Link></>
+        <><span>{t('reset.wrongAccount')}</span>
+        <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>{t('reset.backToSignIn')}</Link></>
       }
     >
       <form className="flex flex-col gap-4" onSubmit={submit}>
         <div className="flex flex-col gap-2.5">
           <Field
-            label="New password"
+            label={t('reset.newPassword')}
             type={showPw ? 'text' : 'password'}
             autoComplete="new-password"
             value={pw}
             onChange={(e) => { setPw(e.target.value); }}
-            placeholder="At least 12 characters"
+            placeholder={t('reset.passwordPlaceholder')}
             required
             autoFocus
             trailing={
@@ -127,7 +129,7 @@ export default function ResetPasswordPage() {
                 onClick={() => { setShowPw((v) => !v); }}
                 className="p-1 rounded-md"
                 style={{ color: 'var(--fg-muted)' }}
-                aria-label={showPw ? 'Hide password' : 'Show password'}
+                aria-label={showPw ? t('common.hidePassword') : t('common.showPassword')}
               >
                 {showPw ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               </button>
@@ -137,12 +139,12 @@ export default function ResetPasswordPage() {
         </div>
 
         <Field
-          label="Confirm password"
+          label={t('reset.confirmPassword')}
           type={showPw ? 'text' : 'password'}
           autoComplete="new-password"
           value={confirm}
           onChange={(e) => { setConfirm(e.target.value); }}
-          error={mismatch ? 'Passwords do not match' : undefined}
+          error={mismatch ? t('reset.passwordsDoNotMatch') : undefined}
           required
           trailing={
             confirm.length > 0 && !mismatch && (
@@ -161,7 +163,7 @@ export default function ResetPasswordPage() {
         )}
 
         <Button type="submit" disabled={!ready || phase === 'submitting'}>
-          {phase === 'submitting' ? 'Updating…' : 'Update password and sign in'}
+          {phase === 'submitting' ? t('reset.updating') : t('reset.updateAndSignIn')}
         </Button>
       </form>
     </AuthShell>
@@ -169,13 +171,14 @@ export default function ResetPasswordPage() {
 }
 
 function TokenStatus({ remainingSec }: { remainingSec: number }) {
+  const { t } = useTranslation('auth');
   const min = Math.floor(remainingSec / 60);
   const sec = remainingSec % 60;
   const low = remainingSec < 60;
   return (
     <span className="inline-flex items-center gap-1">
       <Clock className="w-3 h-3" style={{ color: low ? 'var(--intent-danger-fg)' : 'var(--fg-subtle)' }} />
-      Token expires in{' '}
+      {t('reset.tokenExpiresIn')}
       <span
         className="font-mono tabular-nums"
         style={{ color: low ? 'var(--intent-danger-fg)' : 'var(--fg-default)' }}
@@ -187,6 +190,7 @@ function TokenStatus({ remainingSec }: { remainingSec: number }) {
 }
 
 function SignOutNotice() {
+  const { t } = useTranslation('auth');
   return (
     <div
       className="flex items-start gap-2 text-sm px-2.5 py-2 rounded-md"
@@ -197,13 +201,14 @@ function SignOutNotice() {
     >
       <ShieldCheck className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: 'var(--fg-muted)' }} />
       <span style={{ color: 'var(--fg-muted)' }}>
-        For your security, we&apos;ll sign you out everywhere else and require 2FA again on this browser.
+        {t('reset.signOutNotice')}
       </span>
     </div>
   );
 }
 
 function ResetSuccess() {
+  const { t } = useTranslation('auth');
   // Auto-redirect timer — visible 5s countdown so the user knows what'll happen.
   const [secLeft, setSecLeft] = useState(5);
   useEffect(() => {
@@ -214,9 +219,9 @@ function ResetSuccess() {
 
   return (
     <AuthShell
-      title="Password updated"
-      subtitle="You're all set. We've signed out other sessions and reset your trusted devices."
-      footer={<span>Need to make changes? Visit <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>account security</button>.</span>}
+      title={t('reset.success.title')}
+      subtitle={t('reset.success.subtitle')}
+      footer={<span>{t('reset.success.footer')}<button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>{t('reset.success.accountSecurity')}</button>{t('reset.success.footerRest')}</span>}
     >
       <div className="flex flex-col items-center gap-5 py-2">
         <div
@@ -233,10 +238,10 @@ function ResetSuccess() {
             border: '1px solid var(--border-muted)',
           }}
         >
-          <Row label="Updated"        value={formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })} />
-          <Row label="Sessions ended" value="3 sessions" />
-          <Row label="2FA reset"      value="Required next sign-in" />
-          <Row label="Notification"   value="Sent to your email" />
+          <Row label={t('reset.success.updated')}        value={formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })} />
+          <Row label={t('reset.success.sessionsEnded')} value={t('reset.success.sessionsEndedValue')} />
+          <Row label={t('reset.success.twoFaReset')}      value={t('reset.success.twoFaResetValue')} />
+          <Row label={t('reset.success.notification')}   value={t('reset.success.notificationValue')} />
         </dl>
 
         <Link
@@ -244,12 +249,12 @@ function ResetSuccess() {
           className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
-          Sign in now {secLeft > 0 && <span className="opacity-60">· auto in {secLeft}s</span>}
+          {t('reset.success.signInNow')} {secLeft > 0 && <span className="opacity-60">{t('reset.success.autoIn', { sec: secLeft })}</span>}
         </Link>
 
         {secLeft === 0 && (
           <p className="text-xs onb-stagger" style={{ color: 'var(--fg-subtle)' }}>
-            Auto-redirect canceled. Click the button above to continue.
+            {t('reset.success.autoRedirectCanceled')}
           </p>
         )}
       </div>

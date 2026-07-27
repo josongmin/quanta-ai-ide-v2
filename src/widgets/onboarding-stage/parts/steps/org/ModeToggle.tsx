@@ -1,11 +1,13 @@
+import { useTranslation } from 'react-i18next';
 import { Building2, KeyRound } from 'lucide-react';
 
 export function ModeToggle({
   mode, onChange,
 }: { mode: 'create' | 'join'; onChange: (m: 'create' | 'join') => void }) {
+  const { t } = useTranslation('onboarding');
   const opts: { id: 'create' | 'join'; title: string; sub: string; icon: React.ReactNode }[] = [
-    { id: 'create', title: 'Create new',     sub: "I'm starting fresh.",        icon: <Building2 className="w-4 h-4" /> },
-    { id: 'join',   title: 'Join existing',  sub: 'I have an invite code.',     icon: <KeyRound  className="w-4 h-4" /> },
+    { id: 'create', title: t('org.mode.createTitle'), sub: t('org.mode.createSub'), icon: <Building2 className="w-4 h-4" /> },
+    { id: 'join',   title: t('org.mode.joinTitle'),   sub: t('org.mode.joinSub'),   icon: <KeyRound  className="w-4 h-4" /> },
   ];
   return (
     <div className="grid grid-cols-2 gap-px rounded-md overflow-hidden"

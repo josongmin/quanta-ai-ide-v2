@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Upload, RotateCcw } from 'lucide-react';
 import type { InviteRole, WizardData } from '../wizard';
 import { ROLES, isEmail } from './invite/data';
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export function StepInvite({ value, onChange }: Props) {
+  const { t } = useTranslation('onboarding');
   const [draft, setDraft] = useState('');
   const [defaultRole, setDefaultRole] = useState<InviteRole>('member');
   const [csvError, setCsvError] = useState<string | null>(null);
@@ -70,9 +72,9 @@ export function StepInvite({ value, onChange }: Props) {
         next.push({ email, role: r });
       }
       onChange({ ...value, entries: next });
-      if (skipped > 0) setCsvError(`Skipped ${skipped} line(s) — invalid email format.`);
+      if (skipped > 0) setCsvError(t('invite.csvSkipped', { count: skipped }));
     };
-    reader.onerror = () => { setCsvError('Could not read file.'); };
+    reader.onerror = () => { setCsvError(t('invite.csvReadError')); };
     reader.readAsText(file);
   };
 
@@ -111,7 +113,11 @@ export function StepInvite({ value, onChange }: Props) {
 
       <div className="flex items-center justify-between text-sm">
         <span style={{ color: 'var(--fg-subtle)' }}>
-          Press <KeyHint>Enter</KeyHint> or <KeyHint>,</KeyHint> to add. Paste a list to add many at once.
+          <Trans
+            i18nKey="invite.pressEnter"
+            t={t}
+            components={[<KeyHint key="0">Enter</KeyHint>, <KeyHint key="1">,</KeyHint>]}
+          />
         </span>
         <div className="flex items-center gap-3">
           <button
@@ -121,7 +127,7 @@ export function StepInvite({ value, onChange }: Props) {
             style={{ color: 'var(--fg-link)' }}
           >
             <Upload className="w-3 h-3" />
-            Import CSV
+            {t('invite.importCsv')}
           </button>
           <input
             ref={csvRef}
@@ -142,7 +148,7 @@ export function StepInvite({ value, onChange }: Props) {
               style={{ color: 'var(--fg-muted)' }}
             >
               <RotateCcw className="w-3 h-3" />
-              Clear all
+              {t('invite.clearAll')}
             </button>
           )}
         </div>

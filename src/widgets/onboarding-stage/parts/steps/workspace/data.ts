@@ -13,11 +13,12 @@ export function providerLabel(p: WizardData['workspace']['provider']) {
 }
 
 // Multi-stage indexing simulation. Each stage owns a slice of the 0–100 range.
-export type IndexStage = { id: 'clone' | 'parse' | 'graph' | 'ready'; label: string; weight: number };
+// Labels are resolved via t(`workspace.config.stage.${id}`).
+export type IndexStage = { id: 'clone' | 'parse' | 'graph' | 'ready'; weight: number };
 
 export const STAGES: IndexStage[] = [
-  { id: 'clone', label: 'Clone & verify',      weight: 25 },
-  { id: 'parse', label: 'Parse source files',  weight: 35 },
-  { id: 'graph', label: 'Build symbol graph',  weight: 30 },
-  { id: 'ready', label: 'Warm up dot field',   weight: 10 },
+  { id: 'clone', weight: 25 },
+  { id: 'parse', weight: 35 },
+  { id: 'graph', weight: 30 },
+  { id: 'ready', weight: 10 },
 ];

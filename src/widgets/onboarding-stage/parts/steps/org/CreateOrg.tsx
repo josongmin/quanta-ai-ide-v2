@@ -1,4 +1,5 @@
 import { useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Check, Loader2, X, Upload } from 'lucide-react';
 import { AuthField as Field } from '@shared/ui/forms';
 import { useAvailability } from '../../../lib/availability';
@@ -10,6 +11,7 @@ import type { Industry, CompanySize } from '../../wizard';
 export function CreateOrg({
   value, onChange, onSlugTouch,
 }: OrgStepProps & { onSlugTouch: () => void }) {
+  const { t } = useTranslation('onboarding');
   const slugCheck = useAvailability(value.slug, 'slug');
 
   return (
@@ -18,7 +20,7 @@ export function CreateOrg({
         <LogoUpload value={value} onChange={onChange} />
         <div className="flex flex-col gap-3 pt-1">
           <Field
-            label="Organization name"
+            label={t('org.create.name')}
             value={value.name}
             onChange={(e) => { onChange({ ...value, name: e.target.value }); }}
             placeholder="ACME, Inc."
@@ -49,6 +51,7 @@ export function CreateOrg({
 
 // Logo upload — circle, drag/drop, fallback initials.
 function LogoUpload({ value, onChange }: OrgStepProps) {
+  const { t } = useTranslation('onboarding');
   const inputRef = useRef<HTMLInputElement>(null);
   const initials = useMemo(() => {
     const parts = value.name.trim().split(/\s+/).filter(Boolean);
@@ -72,7 +75,7 @@ function LogoUpload({ value, onChange }: OrgStepProps) {
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>
-        Logo
+        {t('org.create.logo')}
       </span>
       <button
         type="button"
@@ -85,10 +88,10 @@ function LogoUpload({ value, onChange }: OrgStepProps) {
           color: 'var(--bg-canvas)',
           border: '1px solid var(--border-default)',
         }}
-        aria-label="Upload organization logo"
+        aria-label={t('org.create.uploadLogo')}
       >
         {value.logoUrl
-          ? <img src={value.logoUrl} alt={`${value.name || 'Organization'} logo`} className="w-full h-full object-cover" />
+          ? <img src={value.logoUrl} alt={t('org.create.logoAlt', { name: value.name || 'Organization' })} className="w-full h-full object-cover" />
           : <span className="onb-stagger" key={initials}>{initials}</span>}
         <span
           className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
@@ -105,7 +108,7 @@ function LogoUpload({ value, onChange }: OrgStepProps) {
           style={{ color: 'var(--fg-muted)' }}
         >
           <X className="w-2.5 h-2.5" />
-          Remove
+          {t('org.create.remove')}
         </button>
       )}
       <input
@@ -127,13 +130,14 @@ function SlugField({
   onChange: (v: string) => void;
   check: ReturnType<typeof useAvailability>;
 }) {
+  const { t } = useTranslation('onboarding');
   return (
     <label className="flex flex-col gap-1.5">
       <span
         className="text-xs uppercase tracking-eyebrow font-medium flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        <span>URL slug</span>
+        <span>{t('org.create.slug')}</span>
         <span
           style={{
             color: check.state === 'available' ? 'var(--intent-success-fg)'
@@ -158,7 +162,7 @@ function SlugField({
         <input
           value={value}
           onChange={(e) => { onChange(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 32)); }}
-          placeholder="acme"
+          placeholder={t('org.create.slugPlaceholder')}
           required
           className="flex-1 bg-transparent outline-none px-3 text-base tabular-nums"
           style={{ color: 'var(--fg-strong)' }}
@@ -206,13 +210,14 @@ function UrlPreview({ slug, state }: { slug: string; state: ReturnType<typeof us
 function IndustryGrid({
   value, onChange,
 }: { value: Industry | ''; onChange: (v: Industry) => void }) {
+  const { t } = useTranslation('onboarding');
   return (
     <fieldset className="flex flex-col gap-2">
       <legend
         className="text-xs uppercase tracking-eyebrow font-medium pb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        Industry
+        {t('org.create.industry')}
       </legend>
       <div className="grid grid-cols-4 gap-1.5">
         {INDUSTRIES.map((ind) => {
@@ -235,7 +240,7 @@ function IndustryGrid({
                 if (!active) e.currentTarget.style.background = 'var(--bg-surface-muted)';
               }}
             >
-              {ind.label}
+              {t(`org.industries.${ind.id}`)}
             </button>
           );
         })}
@@ -247,13 +252,14 @@ function IndustryGrid({
 function SizeRow({
   value, onChange,
 }: { value: CompanySize | ''; onChange: (v: CompanySize) => void }) {
+  const { t } = useTranslation('onboarding');
   return (
     <fieldset className="flex flex-col gap-2">
       <legend
         className="text-xs uppercase tracking-eyebrow font-medium pb-1"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        Team size
+        {t('org.create.teamSize')}
       </legend>
       <div className="grid grid-cols-5 gap-1.5">
         {SIZES.map((s) => {
@@ -282,7 +288,7 @@ function SizeRow({
                 {s.label}
               </span>
               <span className="text-2xs" style={{ color: 'var(--fg-subtle)' }}>
-                {s.sub}
+                {t(`org.sizes.${s.id}Sub`)}
               </span>
             </button>
           );

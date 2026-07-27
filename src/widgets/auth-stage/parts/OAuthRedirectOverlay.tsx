@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Loader2, Mail, KeyRound } from 'lucide-react';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import { useTheme } from '@shared/theme';
@@ -29,6 +30,8 @@ function prefersReducedMotion(): boolean {
 // the shared useDialogA11y contract). The auto-advance timers are cleared on
 // unmount. Respects prefers-reduced-motion (skips the moving-dot animation).
 export function OAuthRedirectOverlay({ provider, onCancel, onComplete }: Props) {
+  const { t } = useTranslation('auth');
+  const providerLabel = t(`oauthOverlay.provider.${provider}`);
   const { isDark } = useTheme();
   const [phase, setPhase] = useState<'redirecting' | 'on-provider' | 'returning'>('redirecting');
   const reduceMotion = prefersReducedMotion();
@@ -84,14 +87,14 @@ export function OAuthRedirectOverlay({ provider, onCancel, onComplete }: Props) 
             className="text-[15px] font-semibold tracking-tight"
             style={{ color: 'var(--fg-strong)' }}
           >
-            {phase === 'redirecting'  && `Redirecting to ${PROVIDER_LABEL[provider]}…`}
-            {phase === 'on-provider'  && `Waiting for ${PROVIDER_LABEL[provider]}`}
-            {phase === 'returning'    && 'Almost there…'}
+            {phase === 'redirecting'  && t('oauthOverlay.redirecting', { provider: providerLabel })}
+            {phase === 'on-provider'  && t('oauthOverlay.waitingFor', { provider: providerLabel })}
+            {phase === 'returning'    && t('oauthOverlay.almostThere')}
           </h2>
           <p id={descId} className="text-base max-w-[320px]" style={{ color: 'var(--fg-muted)' }}>
-            {phase === 'redirecting'  && 'Opening their secure sign-in page in this window.'}
-            {phase === 'on-provider'  && `Approve the request on ${PROVIDER_LABEL[provider]} to come back here.`}
-            {phase === 'returning'    && 'Validating the response and signing you in.'}
+            {phase === 'redirecting'  && t('oauthOverlay.redirectingBody')}
+            {phase === 'on-provider'  && t('oauthOverlay.onProviderBody', { provider: providerLabel })}
+            {phase === 'returning'    && t('oauthOverlay.returningBody')}
           </p>
         </div>
 
@@ -113,20 +116,12 @@ export function OAuthRedirectOverlay({ provider, onCancel, onComplete }: Props) 
           className="text-sm font-medium underline-offset-2 hover:underline"
           style={{ color: 'var(--fg-muted)' }}
         >
-          Cancel and use a different method
+          {t('oauthOverlay.cancel')}
         </button>
       </div>
     </div>
   );
 }
-
-const PROVIDER_LABEL: Record<Provider, string> = {
-  github: 'GitHub',
-  gitlab: 'GitLab',
-  bitbucket: 'Bitbucket',
-  google: 'Google',
-  sso:    'your identity provider',
-};
 
 // Two-letter mono fallback for providers without a dedicated glyph.
 const PROVIDER_MONO: Partial<Record<Provider, string>> = {

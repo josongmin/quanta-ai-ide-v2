@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   Smartphone, KeyRound, ShieldCheck,
   Check, AlertTriangle, RefreshCw,
@@ -10,10 +11,11 @@ import type { Method } from './types';
 export function MethodTabs({
   current, onChange,
 }: { current: Method; onChange: (m: Method) => void }) {
+  const { t } = useTranslation('auth');
   const tabs: { id: Method; label: string; icon: React.ReactNode; sub: string }[] = [
-    { id: 'totp',     label: 'Authenticator', icon: <Smartphone className="w-3.5 h-3.5" />, sub: '6-digit code' },
-    { id: 'webauthn', label: 'Security key',  icon: <ShieldCheck className="w-3.5 h-3.5" />, sub: 'Touch ID, key' },
-    { id: 'backup',   label: 'Backup code',   icon: <KeyRound className="w-3.5 h-3.5" />, sub: 'One-time only' },
+    { id: 'totp',     label: t('mfa.tabs.authenticator'), icon: <Smartphone className="w-3.5 h-3.5" />, sub: t('mfa.tabs.authenticatorSub') },
+    { id: 'webauthn', label: t('mfa.tabs.securityKey'),  icon: <ShieldCheck className="w-3.5 h-3.5" />, sub: t('mfa.tabs.securityKeySub') },
+    { id: 'backup',   label: t('mfa.tabs.backupCode'),   icon: <KeyRound className="w-3.5 h-3.5" />, sub: t('mfa.tabs.backupCodeSub') },
   ];
   return (
     <div className="grid grid-cols-3 gap-1 p-0.5 rounded-md"
@@ -49,6 +51,7 @@ export function MethodTabs({
 // Trust this device + low-backup banner + fallback hint
 
 export function TrustDevice({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+  const { t } = useTranslation('auth');
   return (
     <label className="flex items-start gap-2 cursor-pointer">
       <span
@@ -69,9 +72,9 @@ export function TrustDevice({ checked, onChange }: { checked: boolean; onChange:
         )}
       </span>
       <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
-        Trust this device for 30 days.{' '}
+        {t('mfa.trustDevice')}{' '}
         <span style={{ color: 'var(--fg-subtle)' }}>
-          We&apos;ll skip 2FA on this browser. Don&apos;t enable on shared computers.
+          {t('mfa.trustDeviceNote')}
         </span>
       </span>
     </label>
@@ -79,6 +82,7 @@ export function TrustDevice({ checked, onChange }: { checked: boolean; onChange:
 }
 
 export function LowBackupBanner({ onRegenerate }: { onRegenerate: () => void }) {
+  const { t } = useTranslation('auth');
   return (
     <div
       className="flex items-start gap-3 px-3 py-3 rounded-md onb-stagger"
@@ -91,10 +95,10 @@ export function LowBackupBanner({ onRegenerate }: { onRegenerate: () => void }) 
       <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--intent-warn-fg)' }} />
       <div className="flex flex-col gap-1.5 flex-1 text-sm">
         <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-          Code accepted — 2 backup codes remaining
+          {t('mfa.lowBackup.title')}
         </span>
         <span style={{ color: 'var(--fg-muted)' }}>
-          You&apos;re running low. Generate a fresh set now and store them somewhere safe.
+          {t('mfa.lowBackup.body')}
         </span>
         <button
           type="button"
@@ -107,7 +111,7 @@ export function LowBackupBanner({ onRegenerate }: { onRegenerate: () => void }) 
           }}
         >
           <RefreshCw className="w-3 h-3" />
-          Generate new backup codes
+          {t('mfa.lowBackup.regenerate')}
         </button>
       </div>
     </div>
@@ -115,16 +119,17 @@ export function LowBackupBanner({ onRegenerate }: { onRegenerate: () => void }) 
 }
 
 export function FallbackHint({ method, onSwitch }: { method: Method; onSwitch: (m: Method) => void }) {
+  const { t } = useTranslation('auth');
   const others: { id: Method; label: string }[] =
-    method === 'totp'     ? [{ id: 'webauthn', label: 'security key' }, { id: 'backup', label: 'backup code' }]
-    : method === 'webauthn' ? [{ id: 'totp', label: 'authenticator app' }, { id: 'backup', label: 'backup code' }]
-    : [{ id: 'totp', label: 'authenticator app' }, { id: 'webauthn', label: 'security key' }];
+    method === 'totp'     ? [{ id: 'webauthn', label: t('mfa.fallback.securityKeyMethod') }, { id: 'backup', label: t('mfa.fallback.backupCode') }]
+    : method === 'webauthn' ? [{ id: 'totp', label: t('mfa.fallback.authenticatorApp') }, { id: 'backup', label: t('mfa.fallback.backupCode') }]
+    : [{ id: 'totp', label: t('mfa.fallback.authenticatorApp') }, { id: 'webauthn', label: t('mfa.fallback.securityKeyMethod') }];
+
+  const item = method === 'totp' ? t('mfa.fallback.phone') : method === 'webauthn' ? t('mfa.fallback.securityKey') : t('mfa.fallback.backupCodes');
 
   return (
     <div className="text-sm flex items-center gap-1 flex-wrap" style={{ color: 'var(--fg-subtle)' }}>
-      <span>Don&apos;t have your{' '}
-        {method === 'totp' ? 'phone' : method === 'webauthn' ? 'security key' : 'backup codes'}?
-      </span>
+      <span>{t('mfa.fallback.dontHave', { item })}</span>
       {others.map((o, i) => (
         <span key={o.id}>
           <button
@@ -132,7 +137,7 @@ export function FallbackHint({ method, onSwitch }: { method: Method; onSwitch: (
             onClick={() => { onSwitch(o.id); }}
             style={{ color: 'var(--fg-link)' }}
           >
-            Use {o.label}
+            {t('mfa.fallback.use', { method: o.label })}
           </button>
           {i < others.length - 1 && <span style={{ color: 'var(--border-default)' }}> · </span>}
         </span>

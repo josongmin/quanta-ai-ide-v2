@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GitBranch, Check, Loader2, ArrowLeft, Plus, AlertCircle } from 'lucide-react';
 import { GithubIcon } from '@shared/ui/brand-icons';
 import type { Repo } from '../../../lib/repos';
@@ -15,6 +16,7 @@ export function RepoConfig({
   onChange: WorkspaceStepProps['onChange'];
   onBack: () => void;
 }) {
+  const { t } = useTranslation('onboarding');
   const [pct, setPct] = useState(0);
 
   // Run the multi-stage indexing simulation any time the selection changes.
@@ -45,7 +47,7 @@ export function RepoConfig({
         style={{ color: 'var(--fg-muted)' }}
       >
         <ArrowLeft className="w-3 h-3" />
-        Pick a different repo
+        {t('workspace.config.pickDifferent')}
       </button>
 
       <div
@@ -92,10 +94,11 @@ export function RepoConfig({
 function BranchPicker({
   repo, value, onChange,
 }: { repo: Repo; value: string; onChange: (v: string) => void }) {
+  const { t } = useTranslation('onboarding');
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
-        Default branch to track
+        {t('workspace.config.defaultBranch')}
       </legend>
       <div className="flex flex-wrap gap-1.5">
         {repo.branches.map((b) => {
@@ -120,7 +123,7 @@ function BranchPicker({
                   className="text-2xs uppercase tracking-eyebrow font-semibold"
                   style={{ color: 'var(--fg-subtle)' }}
                 >
-                  default
+                  {t('workspace.config.default')}
                 </span>
               )}
             </button>
@@ -137,6 +140,7 @@ function MonorepoPaths({
   const all = repo.paths ?? [];
   const allSelected = selected.length === 0 || selected.length === all.length;
 
+  const { t } = useTranslation('onboarding');
   const toggle = (p: string) => {
     if (selected.includes(p)) onChange(selected.filter((s) => s !== p));
     else onChange([...selected, p]);
@@ -146,14 +150,14 @@ function MonorepoPaths({
     <fieldset className="flex flex-col gap-2">
       <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1 flex items-center justify-between"
         style={{ color: 'var(--fg-subtle)' }}>
-        <span>Sub-paths to index</span>
+        <span>{t('workspace.config.subPaths')}</span>
         <button
           type="button"
           onClick={() => { onChange(allSelected ? [] : all); }}
           className="lowercase tracking-normal"
           style={{ color: 'var(--fg-link)' }}
         >
-          {allSelected ? 'Select none' : 'Select all'}
+          {allSelected ? t('workspace.config.selectNone') : t('workspace.config.selectAll')}
         </button>
       </legend>
       <div
@@ -186,13 +190,14 @@ function MonorepoPaths({
         })}
       </div>
       <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-        Leave empty to index all sub-paths. Pick specific ones if you want to scope down for performance.
+        {t('workspace.config.subPathsHint')}
       </span>
     </fieldset>
   );
 }
 
 function IndexingProgress({ pct, repo, branch }: { pct: number; repo: string; branch: string }) {
+  const { t } = useTranslation('onboarding');
   // Each stage owns a slice of the 0–100 range; computed cumulative so we can
   // tell which stage is "currently running" and which are "done".
   const stages = useMemo(() => {
@@ -225,7 +230,7 @@ function IndexingProgress({ pct, repo, branch }: { pct: number; repo: string; br
           <span style={{ color: 'var(--fg-subtle)' }}>· {branch}</span>
         </div>
         <span className="font-mono tabular-nums" style={{ color: done ? 'var(--fg-accent)' : 'var(--fg-muted)' }}>
-          {done ? 'Indexed' : `${active.label} · ${Math.floor(pct)}%`}
+          {done ? t('workspace.config.indexed') : t('workspace.config.stagePct', { stage: t(`workspace.config.stage.${active.id}`), pct: Math.floor(pct) })}
         </span>
       </div>
 
@@ -268,7 +273,7 @@ function IndexingProgress({ pct, repo, branch }: { pct: number; repo: string; br
                 color: isDone ? 'var(--fg-accent)' : isActive ? 'var(--fg-strong)' : 'var(--fg-subtle)',
                 fontWeight: isActive ? 600 : 400,
               }}>
-                {s.label}
+                {t(`workspace.config.stage.${s.id}`)}
               </span>
             </li>
           );
@@ -278,7 +283,7 @@ function IndexingProgress({ pct, repo, branch }: { pct: number; repo: string; br
       {!done && (
         <div className="flex items-start gap-2 text-xs" style={{ color: 'var(--fg-subtle)' }}>
           <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" />
-          <span>You can continue setup — indexing keeps running in the background. We&apos;ll notify you when the dot field is ready.</span>
+          <span>{t('workspace.config.backgroundNote')}</span>
         </div>
       )}
     </div>

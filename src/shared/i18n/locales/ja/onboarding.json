@@ -1,1 +1,291 @@
-{}
+{
+  "shell": {
+    "badge": "オンボーディング",
+    "stepOf": "{{total}} ステップ中 <0>{{current}}</0>",
+    "back": "← 戻る",
+    "signedInAs": "ログイン中: <0>{{email}}</0>",
+    "you": "あなた",
+    "signOut": "ログアウト",
+    "skip": "スキップ",
+    "finishing": "完了中…",
+    "finishSetup": "セットアップを完了",
+    "continue": "続行",
+    "invitesFailed_one": "招待 {{count}} 件を送信できませんでした — アップグレード後にメンバーから再送信してください。完了を押して続行してください。",
+    "invitesFailed_other": "招待 {{count}} 件を送信できませんでした — アップグレード後にメンバーから再送信してください。完了を押して続行してください。"
+  },
+  "steps": {
+    "profile": {
+      "label": "プロフィール",
+      "title": "プロフィールを設定",
+      "subtitle": "レビューやメンションでチームメンバーに表示される内容です。"
+    },
+    "org": {
+      "label": "組織",
+      "title": "組織を作成または参加",
+      "subtitle": "ワークスペース、チーム、請求がここにまとめられます。"
+    },
+    "workspace": {
+      "label": "ワークスペース",
+      "title": "最初のワークスペースを接続",
+      "subtitle": "se · field にインデックス化させたいリポジトリ（またはモノレポ）を選択してください。"
+    },
+    "invite": {
+      "label": "招待",
+      "title": "チームメンバーを招待（任意）",
+      "subtitle": "同じSSOドメインでログインできます。後で行うこともできます。"
+    },
+    "plan": {
+      "label": "プラン",
+      "title": "開始するプランを選択",
+      "subtitle": "いつでも変更またはキャンセルできます。年額で17%お得。"
+    }
+  },
+  "profile": {
+    "fullName": "氏名",
+    "namePlaceholder": "山田 太郎",
+    "handle": "ハンドル",
+    "handlePlaceholder": "taro",
+    "timezone": "タイムゾーン",
+    "detected": "自動検出",
+    "language": "言語",
+    "avatarUpload": "アバターをアップロード",
+    "replacePhoto": "写真を変更",
+    "uploadPhoto": "写真をアップロード",
+    "remove": "削除",
+    "avatarHint": "JPG · PNG · GIF · WebP。最大2MB。円の上にファイルをドロップしてください。",
+    "avatarNotImage": "アバターは画像である必要があります（PNG、JPG、GIF、WebP）。",
+    "avatarTooLarge": "画像が2MBを超えています。圧縮して再試行してください。",
+    "detectionBanner": "ブラウザから検出: <0>{{tz}}</0> · <1>{{loc}}</1>。事前入力されていますが変更できます。"
+  },
+  "org": {
+    "mode": {
+      "createTitle": "新規作成",
+      "createSub": "新しく始めます。",
+      "joinTitle": "既存に参加",
+      "joinSub": "招待コードがあります。"
+    },
+    "create": {
+      "logo": "ロゴ",
+      "uploadLogo": "組織ロゴをアップロード",
+      "logoAlt": "{{name}} のロゴ",
+      "remove": "削除",
+      "name": "組織名",
+      "namePlaceholder": "ACME, Inc.",
+      "slug": "URLスラッグ",
+      "slugPlaceholder": "acme",
+      "industry": "業種",
+      "teamSize": "チーム規模"
+    },
+    "join": {
+      "code": "招待コード",
+      "codePlaceholder": "ACME-7HQF-TEAM",
+      "help": "コードがありませんか？組織の管理者に尋ねてください。コードは <0>XXXXX-XXXX-XXXX</0> の形式で大文字小文字を区別しません。<1>デモ: <2>ACME-7HQF-TEAM</2> をお試しください。</1>",
+      "recognizedTitle": "{{name}} に参加します",
+      "recognizedBody": "プラン: {{plan}} · メンバー{{members}}名 · デフォルトでメンバーとして追加されます"
+    },
+    "industries": {
+      "software": "ソフトウェア & SaaS",
+      "finance": "金融 & フィンテック",
+      "healthcare": "ヘルスケア & バイオテック",
+      "retail": "小売 & Eコマース",
+      "media": "メディア & ゲーム",
+      "gov-edu": "政府 & 教育",
+      "manufacturing": "製造 & 物流",
+      "other": "その他"
+    },
+    "sizes": {
+      "1-4Sub": "始めたばかり",
+      "5-19Sub": "小規模チーム",
+      "20-99Sub": "成長中",
+      "100-499Sub": "中規模",
+      "500+Sub": "エンタープライズ"
+    }
+  },
+  "workspace": {
+    "connect": {
+      "githubPerm": "読み取り権限 · リポジトリ & メンバー",
+      "gitlabPerm": "読み取り権限 · プロジェクト & ユーザー",
+      "bitbucketPerm": "読み取り権限 · ワークスペース",
+      "connectTo": "{{provider}} に接続",
+      "willRequest": "se · field が {{provider}} に要求する内容",
+      "perm": {
+        "readContents": "リポジトリの内容を読み取る",
+        "readMetadata": "リポジトリのメタデータを読み取る（ブランチ、コミット）",
+        "readTeam": "チーム & メンバー一覧を読み取る（CODEOWNERS用）",
+        "noWrite": "リポジトリへの書き込み · 決して行いません",
+        "noWorkflows": "ワークフローのトリガー · 決して行いません"
+      }
+    },
+    "picker": {
+      "connectedAs": "<0>{{provider}}</0> に <1>{{account}}</1> として接続済み",
+      "disconnect": "切断",
+      "searchPlaceholder": "リポジトリを検索…",
+      "noMatch": "「{{query}}」に一致するリポジトリはありません。",
+      "monorepo": "モノレポ",
+      "private": "非公開",
+      "public": "公開",
+      "page": "{{total}} ページ中 <0>{{page}}</0> ページ",
+      "prev": "前へ",
+      "next": "次へ"
+    },
+    "config": {
+      "pickDifferent": "別のリポジトリを選択",
+      "defaultBranch": "追跡するデフォルトブランチ",
+      "default": "デフォルト",
+      "subPaths": "インデックス化するサブパス",
+      "selectNone": "すべて解除",
+      "selectAll": "すべて選択",
+      "subPathsHint": "空のままにするとすべてのサブパスをインデックス化します。パフォーマンスのため範囲を絞るには特定のものを選択してください。",
+      "indexed": "インデックス済み",
+      "stagePct": "{{stage}} · {{pct}}%",
+      "backgroundNote": "セットアップを続行できます — インデックス化はバックグラウンドで実行され続けます。ドットフィールドの準備ができたらお知らせします。",
+      "stage": {
+        "clone": "クローン & 検証",
+        "parse": "ソースファイルの解析",
+        "graph": "シンボルグラフの構築",
+        "ready": "ドットフィールドの準備"
+      }
+    }
+  },
+  "invite": {
+    "defaultRole": "新しい招待者のデフォルトロール",
+    "roleCountTotal": "{{count}}",
+    "roleCount": "· {{count}}名 {{role}}",
+    "emailPlaceholder": "name@company.com, another@company.com…",
+    "removeEmail": "{{email}} を削除",
+    "pressEnter": "<0>Enter</0> または <1>,</1> を押して追加します。リストを貼り付けて一度に複数追加できます。",
+    "importCsv": "CSVをインポート",
+    "clearAll": "すべてクリア",
+    "csvSkipped_one": "{{count}} 行スキップ — 無効なメール形式。",
+    "csvSkipped_other": "{{count}} 行スキップ — 無効なメール形式。",
+    "csvReadError": "ファイルを読み取れませんでした。",
+    "shareLink": "または招待リンクを共有",
+    "linkMeta": "· 7日後に期限切れ · 最大50回使用",
+    "copied": "コピーしました",
+    "copy": "コピー",
+    "new": "新規",
+    "generateLink": "招待リンクを生成",
+    "sending": "招待を送信中…",
+    "sendInvitations_one": "招待 {{count}} 件を送信",
+    "sendInvitations_other": "招待 {{count}} 件を送信",
+    "queued_one": "招待 {{count}} 件をキューに追加",
+    "queued_other": "招待 {{count}} 件をキューに追加",
+    "sentAt": "· {{time}} に送信",
+    "receiptBody": "受信者は1分以内にメールを受け取ります。希望すれば招待リンクを使用することもできます。",
+    "roleHint": "承諾後、<0>組織 → メンバー</0> から誰でも管理者に昇格できます。有料プランではロールが請求に影響します — メンバーと管理者のみが席数にカウントされます。",
+    "roles": {
+      "adminLabel": "管理者",
+      "adminSub": "組織 & 請求の管理",
+      "memberLabel": "メンバー",
+      "memberSub": "デフォルト · コード + レビュー",
+      "reviewerLabel": "レビュアー",
+      "reviewerSub": "PRの読み取り + コメント",
+      "viewerLabel": "ビューア",
+      "viewerSub": "読み取り専用アクセス"
+    }
+  },
+  "plan": {
+    "cycle": {
+      "annual": "年額",
+      "monthly": "月額",
+      "discount": "−17%"
+    },
+    "recommended": "おすすめ",
+    "custom": "カスタム",
+    "perSeatMo": "/席/月",
+    "minSeats": " · 最小 {{count}} 席",
+    "trial": "{{days}}日間トライアル",
+    "seats": "席数",
+    "decreaseSeats": "席数を減らす",
+    "increaseSeats": "席数を増やす",
+    "addons": "アドオン",
+    "notAvailableOn": " · {{plan}} では利用不可",
+    "addonPrice": "+${{price}}/席/月",
+    "plans": {
+      "freeName": "無料",
+      "freeHint": "個人 / お試し",
+      "teamName": "チーム",
+      "teamHint": "小規模チーム向け",
+      "businessName": "ビジネス",
+      "businessHint": "組織向け",
+      "enterpriseName": "エンタープライズ",
+      "enterpriseHint": "規制対応、セルフホスト"
+    },
+    "highlights": {
+      "oneWorkspace": "ワークスペース 1個",
+      "upTo3Seats": "最大 3 席",
+      "communitySupport": "コミュニティサポート",
+      "fiveWorkspaces": "ワークスペース 5個",
+      "unlimitedSeats": "無制限の席数",
+      "customAdmission": "カスタムアドミッションルール",
+      "unlimitedWorkspaces": "無制限のワークスペース",
+      "samlScim": "SAML / SCIM",
+      "priorityRouting": "優先ルーティング",
+      "vpcSelfHost": "VPC / セルフホスト",
+      "customSla": "カスタムSLA",
+      "dedicatedCsm": "専任CSM"
+    },
+    "addonList": {
+      "ssoLabel": "SSO & SCIM",
+      "ssoSub": "SAML 2.0 + プロビジョニング",
+      "auditProLabel": "Audit Pro",
+      "auditProSub": "1年保持 + SIEMエクスポート",
+      "premiumLabel": "プレミアムサポート",
+      "premiumSub": "4時間SLA、専用チャンネル"
+    },
+    "summary": {
+      "enterpriseTitle": "エンタープライズ — ご相談ください",
+      "enterpriseBody": "調達、カスタム契約、セルフホストオプションについてセールスエンジニアにおつなぎします。契約開始まで無料です。",
+      "freeTitle": "永久無料",
+      "freeBody": "支払いは不要です。<0>組織 → 請求</0> からいつでもアップグレードできます。",
+      "annualSubscription": "年額サブスクリプション",
+      "monthlySubscription": "月額サブスクリプション",
+      "trialInfo": "{{days}}日間無料トライアル · {{chargeDay}}日目から課金開始",
+      "baseLine": "{{plan}} · {{seats}}席 × ${{price}}/月",
+      "addonLine": "+ {{addon}} · {{seats}}席 × ${{price}}/月",
+      "monthly": "月額",
+      "monthlyValue": "${{amount}}/月",
+      "billedAnnually": "年額請求",
+      "billedAnnuallyValue": "今すぐ ${{amount}}",
+      "savedVsMonthly": "月額比の節約",
+      "savedValue": "−${{amount}}/年",
+      "proRatedNote": "プランや席数を変更すると日割り計算されます。税金は決済時に計算されます。"
+    }
+  },
+  "done": {
+    "allSet": "準備が整いました、{{name}} さん。",
+    "indexingBody": "現在 <0>{{repo}}</0> をインデックス化しています。すでに始められます — 最初の解析が終わり次第、シグナルがドットフィールドに表示されます。",
+    "yourRepo": "リポジトリ",
+    "there": "あなた",
+    "terminalTitle": "se-field · インデックス化",
+    "dotFieldPreview": "ドットフィールド · ライブプレビュー",
+    "streaming": "ストリーミング中",
+    "whatToTry": "まず試すこと",
+    "actions": {
+      "codingTitle": "コーディングでAI編集",
+      "codingHint": "ファイルを開いてAIエージェントにリファクタリングを依頼してください。",
+      "reviewTitle": "PRをレビュー",
+      "reviewHintInvited_one": "チームメンバー {{count}} 名を招待 — /reviews に表示されます。",
+      "reviewHintInvited_other": "チームメンバー {{count}} 名を招待 — /reviews に表示されます。",
+      "reviewHintEmpty": "PRプロバイダーを接続してレビューを開始してください。",
+      "fixTitle": "修正パイプラインを実行",
+      "fixHint": "ドットフィールドから修正候補を選び、ゲーティングを通して実行してください。"
+    },
+    "summary": {
+      "profile": "プロフィール",
+      "unnamed": "名前なし",
+      "handle": "ハンドル",
+      "timezone": "タイムゾーン",
+      "organization": "組織",
+      "newOrg": "新しい組織",
+      "workspace": "ワークスペース",
+      "branch": "ブランチ",
+      "invitees": "招待者",
+      "plan": "プラン",
+      "seats": "席数"
+    },
+    "ctaNotified": "チームメンバーにメールで通知しました。",
+    "ctaInviteLater": "組織 → メンバーからいつでもチームメンバーを招待できます。",
+    "openDotField": "ドットフィールドを開く"
+  }
+}

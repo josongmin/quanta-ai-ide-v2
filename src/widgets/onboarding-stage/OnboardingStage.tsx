@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { Trans, useTranslation } from 'react-i18next';
 import { ArrowRight, Sparkles, Loader2 } from 'lucide-react';
 import { env } from '@shared/config/env';
 import { useSession, updateProfile } from '@entities/session';
@@ -19,6 +20,7 @@ import { DonePage } from './parts/DonePage';
 // data lives in component state (in-memory demo) — wiring it to a
 // persistence layer is a one-line replacement of `setData`.
 export default function OnboardingStage() {
+  const { t } = useTranslation('onboarding');
   // Search params aren't registered on this route's schema, so the loose-mode
   // result is untyped ({}); narrow it in `select` to the fields we read.
   const search = useSearch({
@@ -103,7 +105,7 @@ export default function OnboardingStage() {
       if (failed.length > 0 && !invitesReportedRef.current) {
         invitesReportedRef.current = true;
         setFinishError(
-          `${failed.length.toString()} invite${failed.length === 1 ? '' : 's'} couldn't be sent — resend from Members after upgrading. Press Finish to continue.`,
+          t('shell.invitesFailed', { count: failed.length }),
         );
         setFinishing(false);
         return;
@@ -155,9 +157,14 @@ export default function OnboardingStage() {
       onPrev={current > 0 ? prev : undefined}
       topRight={
         <span>
-          Signed in as <span style={{ color: 'var(--fg-default)' }}>{env.useRealAuth ? (user?.email ?? 'you') : 'sora@acme.com'}</span>
+          <Trans
+            i18nKey="shell.signedInAs"
+            t={t}
+            values={{ email: env.useRealAuth ? (user?.email ?? t('shell.you')) : 'sora@acme.com' }}
+            components={[<span key="0" style={{ color: 'var(--fg-default)' }} />]}
+          />
           <span className="mx-2" style={{ color: 'var(--border-muted)' }}>·</span>
-          <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>Sign out</Link>
+          <Link to={'/auth/login' as never} style={{ color: 'var(--fg-link)' }}>{t('shell.signOut')}</Link>
         </span>
       }
       actions={
@@ -175,7 +182,7 @@ export default function OnboardingStage() {
               onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
             >
-              Skip
+              {t('shell.skip')}
             </button>
           )}
           <button
@@ -193,18 +200,18 @@ export default function OnboardingStage() {
             {isLast ? (
               finishing ? (
                 <>
-                  Finishing…
+                  {t('shell.finishing')}
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 </>
               ) : (
                 <>
-                  Finish setup
+                  {t('shell.finishSetup')}
                   <Sparkles className="w-3.5 h-3.5" />
                 </>
               )
             ) : (
               <>
-                Continue
+                {t('shell.continue')}
                 <ArrowRight className="w-3.5 h-3.5" />
               </>
             )}

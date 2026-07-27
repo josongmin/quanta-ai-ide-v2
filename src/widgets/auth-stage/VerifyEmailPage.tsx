@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { Trans, useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import {
   Mail, Check, AlertCircle, Loader2, ShieldAlert, Clock, RotateCw,
 } from 'lucide-react';
@@ -12,6 +14,7 @@ import { formatTime, formatDate } from '@shared/i18n';
 type Phase = 'verifying' | 'success' | 'expired' | 'reused' | 'wasnt-me';
 
 export default function VerifyEmailPage() {
+  const { t } = useTranslation('auth');
   const [phase, setPhase] = useState<Phase>('verifying');
   // Verification token from the email link (?token=). Read once from the URL.
   const token = useMemo(
@@ -49,15 +52,15 @@ export default function VerifyEmailPage() {
 
   return (
     <AuthShell
-      title={titleFor(phase)}
-      subtitle={subtitleFor(phase)}
+      title={titleFor(phase, t)}
+      subtitle={subtitleFor(phase, t)}
       topRight={
         env.useRealAuth ? undefined : <DemoStateToggle phase={phase} onChange={setPhase} />
       }
       footer={
         phase === 'wasnt-me'
-          ? <span>We&apos;ve revoked the token. <Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link> if you need help.</span>
-          : <><span>Need help?</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>Contact support</Link></>
+          ? <span>{t('verifyEmail.revoked')}<Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('verifyEmail.contactSupport')}</Link>{t('verifyEmail.revokedRest')}</span>
+          : <><span>{t('verifyEmail.needHelp')}</span><Link to={'/support' as never} style={{ color: 'var(--fg-link)' }}>{t('verifyEmail.contactSupport')}</Link></>
       }
     >
       <div className="flex flex-col items-center gap-5 py-2">
@@ -79,7 +82,7 @@ export default function VerifyEmailPage() {
               }}
               disabled={cooldownLeft > 0}
             >
-              {cooldownLeft > 0 ? `Resend in ${cooldownLeft}s` : 'Resend verification link'}
+              {cooldownLeft > 0 ? t('verifyEmail.resendIn', { sec: cooldownLeft }) : t('verifyEmail.resendLink')}
             </Button>
             <button
               type="button"
@@ -87,7 +90,7 @@ export default function VerifyEmailPage() {
               className="text-sm underline-offset-2 hover:underline self-center"
               style={{ color: 'var(--fg-muted)' }}
             >
-              I didn&apos;t request this verification
+              {t('verifyEmail.didntRequest')}
             </button>
           </div>
         )}
@@ -98,22 +101,22 @@ export default function VerifyEmailPage() {
   );
 }
 
-function titleFor(p: Phase) {
+function titleFor(p: Phase, t: TFunction<'auth'>) {
   switch (p) {
-    case 'verifying': return 'Verifying your email…';
-    case 'success':   return 'Email verified';
-    case 'expired':   return 'This link expired';
-    case 'reused':    return 'This link was already used';
-    case 'wasnt-me':  return 'Token revoked';
+    case 'verifying': return t('verifyEmail.title.verifying');
+    case 'success':   return t('verifyEmail.title.success');
+    case 'expired':   return t('verifyEmail.title.expired');
+    case 'reused':    return t('verifyEmail.title.reused');
+    case 'wasnt-me':  return t('verifyEmail.title.wasntMe');
   }
 }
-function subtitleFor(p: Phase) {
+function subtitleFor(p: Phase, t: TFunction<'auth'>) {
   switch (p) {
-    case 'verifying': return 'This usually takes a couple of seconds.';
-    case 'success':   return 'You can now access your workspace and invite teammates.';
-    case 'expired':   return 'Verification links are valid for 24 hours. Request a fresh one to continue.';
-    case 'reused':    return 'This link has been used to verify another session. Each link only works once.';
-    case 'wasnt-me':  return 'Thanks for letting us know. We have invalidated the verification request.';
+    case 'verifying': return t('verifyEmail.subtitle.verifying');
+    case 'success':   return t('verifyEmail.subtitle.success');
+    case 'expired':   return t('verifyEmail.subtitle.expired');
+    case 'reused':    return t('verifyEmail.subtitle.reused');
+    case 'wasnt-me':  return t('verifyEmail.subtitle.wasntMe');
   }
 }
 
@@ -180,6 +183,7 @@ function TokenChip() {
 }
 
 function SuccessActions() {
+  const { t } = useTranslation('auth');
   return (
     <div className="w-full flex flex-col gap-3">
       <Link
@@ -187,7 +191,7 @@ function SuccessActions() {
         className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-md text-base font-semibold w-full"
         style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
       >
-        Continue setup →
+        {t('verifyEmail.continueSetup')}
       </Link>
       <div
         className="grid grid-cols-2 gap-3 text-sm px-3 py-2.5 rounded-md"
@@ -196,16 +200,17 @@ function SuccessActions() {
           border: '1px solid var(--border-muted)',
         }}
       >
-        <Meta label="Email"   value="sora@acme.com" />
-        <Meta label="Verified at" value={formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })} />
-        <Meta label="IP"      value="203.0.113.42" mono />
-        <Meta label="Browser" value="Chrome 125 · macOS" />
+        <Meta label={t('verifyEmail.meta.email')}   value="sora@acme.com" />
+        <Meta label={t('verifyEmail.meta.verifiedAt')} value={formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })} />
+        <Meta label={t('verifyEmail.meta.ip')}      value="203.0.113.42" mono />
+        <Meta label={t('verifyEmail.meta.browser')} value={t('verifyEmail.meta.browserValue')} />
       </div>
     </div>
   );
 }
 
 function ExpiryRow({ expiresAt, remainingSec }: { expiresAt: number; remainingSec: number }) {
+  const { t } = useTranslation('auth');
   const totalSec = 24 * 60 * 60;
   const pct = (remainingSec / totalSec) * 100;
   return (
@@ -217,10 +222,10 @@ function ExpiryRow({ expiresAt, remainingSec }: { expiresAt: number; remainingSe
       }}
     >
       <div className="flex items-baseline justify-between text-sm">
-        <span style={{ color: 'var(--fg-muted)' }}>Token validity</span>
+        <span style={{ color: 'var(--fg-muted)' }}>{t('verifyEmail.tokenValidity')}</span>
         <span className="font-mono tabular-nums" style={{ color: 'var(--fg-default)' }}>
-          expires <span title={new Date(expiresAt).toISOString()}>
-            {formatRelative(remainingSec)}
+          {t('verifyEmail.expires')} <span title={new Date(expiresAt).toISOString()}>
+            {formatRelative(remainingSec, t)}
           </span>
         </span>
       </div>
@@ -240,13 +245,13 @@ function ExpiryRow({ expiresAt, remainingSec }: { expiresAt: number; remainingSe
   );
 }
 
-function formatRelative(sec: number) {
-  if (sec <= 0) return 'now';
+function formatRelative(sec: number, t: TFunction<'auth'>) {
+  if (sec <= 0) return t('verifyEmail.relativeNow');
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec % 3600) / 60);
-  if (h >= 1) return `in ${h}h ${m}m`;
-  if (m >= 1) return `in ${m}m`;
-  return `in ${sec}s`;
+  if (h >= 1) return t('verifyEmail.relativeHm', { h, m });
+  if (m >= 1) return t('verifyEmail.relativeM', { m });
+  return t('verifyEmail.relativeS', { s: sec });
 }
 
 function Meta({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
@@ -263,6 +268,7 @@ function Meta({ label, value, mono = false }: { label: string; value: string; mo
 }
 
 function WasntMePanel() {
+  const { t } = useTranslation('auth');
   return (
     <div className="w-full flex flex-col gap-3">
       <div
@@ -273,11 +279,15 @@ function WasntMePanel() {
         }}
       >
         <span className="font-semibold block mb-1" style={{ color: 'var(--fg-strong)' }}>
-          Token has been revoked.
+          {t('verifyEmail.wasntMe.title')}
         </span>
         <span style={{ color: 'var(--fg-muted)' }}>
-          We logged this incident at <span className="font-mono">{formatDate(new Date(), { dateStyle: 'medium', timeStyle: 'short' })}</span>.
-          If your password may have been compromised, change it now.
+          <Trans
+            i18nKey="verifyEmail.wasntMe.loggedAt"
+            t={t}
+            values={{ time: formatDate(new Date(), { dateStyle: 'medium', timeStyle: 'short' }) }}
+            components={[<span key="0" className="font-mono" />]}
+          />
         </span>
       </div>
       <div className="grid grid-cols-2 gap-2">
@@ -289,7 +299,7 @@ function WasntMePanel() {
             color: 'var(--bg-canvas)',
           }}
         >
-          Change password
+          {t('verifyEmail.wasntMe.changePassword')}
         </Link>
         <button
           type="button"
@@ -300,7 +310,7 @@ function WasntMePanel() {
             border: '1px solid var(--border-default)',
           }}
         >
-          Contact security team
+          {t('verifyEmail.wasntMe.contactSecurity')}
         </button>
       </div>
     </div>
@@ -310,17 +320,18 @@ function WasntMePanel() {
 function DemoStateToggle({
   phase, onChange,
 }: { phase: Phase; onChange: (p: Phase) => void }) {
+  const { t } = useTranslation('auth');
   const states: { id: Phase; label: string }[] = [
-    { id: 'verifying', label: 'Verifying' },
-    { id: 'success',   label: 'Success' },
-    { id: 'expired',   label: 'Expired' },
-    { id: 'reused',    label: 'Reused' },
-    { id: 'wasnt-me',  label: "Wasn't me" },
+    { id: 'verifying', label: t('verifyEmail.demo.verifying') },
+    { id: 'success',   label: t('verifyEmail.demo.success') },
+    { id: 'expired',   label: t('verifyEmail.demo.expired') },
+    { id: 'reused',    label: t('verifyEmail.demo.reused') },
+    { id: 'wasnt-me',  label: t('verifyEmail.demo.wasntMe') },
   ];
   return (
     <div className="inline-flex items-center gap-1 text-xs">
       <RotateCw className="w-2.5 h-2.5" style={{ color: 'var(--fg-subtle)' }} />
-      <span style={{ color: 'var(--fg-subtle)' }}>Demo:</span>
+      <span style={{ color: 'var(--fg-subtle)' }}>{t('verifyEmail.demo.label')}</span>
       {states.map((s, i) => (
         <span key={s.id}>
           <button

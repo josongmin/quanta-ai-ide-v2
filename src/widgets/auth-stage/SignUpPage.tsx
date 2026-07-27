@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   Eye, EyeOff, Mail, KeyRound, ArrowRight, Building2, AlertCircle,
 } from 'lucide-react';
@@ -16,6 +17,7 @@ import { formatTime } from '@shared/i18n';
 type Step = 'form' | 'submitting' | 'sent';
 
 export default function SignUpPage() {
+  const { t } = useTranslation('auth');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
@@ -38,7 +40,7 @@ export default function SignUpPage() {
   const idp = useMemo(() => (email.includes('@') ? lookupIdP(email) : null), [email]);
 
   const emailError = touchedEmail && email.length > 0 && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-    ? 'Use a complete email like name@company.com'
+    ? t('signUp.emailInvalid')
     : undefined;
 
   // Client-side gate is the advisory minimum bar (meetsPolicy). The backend is
@@ -94,18 +96,18 @@ export default function SignUpPage() {
   if (idp?.enforced && touchedEmail) {
     return (
       <AuthShell
-        title={`${idp.org} uses SSO`}
-        subtitle="Your organization manages accounts through their identity provider, so there's no separate signup."
-        topRight={<Link to={'/auth/login' as never} search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined} style={{ color: 'var(--fg-link)' }}>Sign in</Link>}
+        title={t('signUp.ssoOrg.title', { org: idp.org })}
+        subtitle={t('signUp.ssoOrg.subtitle')}
+        topRight={<Link to={'/auth/login' as never} search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined} style={{ color: 'var(--fg-link)' }}>{t('signUp.signIn')}</Link>}
         footer={
           <>
-            <span>Different organization?</span>
+            <span>{t('signUp.ssoOrg.differentOrg')}</span>
             <button
               type="button"
               onClick={() => { setEmail(''); setTouchedEmail(false); }}
               style={{ color: 'var(--fg-link)' }}
             >
-              Use another email
+              {t('signUp.ssoOrg.useAnotherEmail')}
             </button>
           </>
         }
@@ -117,11 +119,15 @@ export default function SignUpPage() {
           <Building2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--fg-accent)' }} />
           <div className="flex flex-col gap-0.5 text-base leading-snug">
             <span className="font-semibold" style={{ color: 'var(--fg-strong)' }}>
-              Identity provider: {PROVIDER_LABEL[idp.provider]}
+              {t('signUp.ssoOrg.identityProvider', { provider: PROVIDER_LABEL[idp.provider] })}
             </span>
             <span style={{ color: 'var(--fg-muted)' }}>
-              Sign in with your <span className="font-mono">{idp.domain}</span> credentials —
-              we&apos;ll create your se · field account on the way.
+              <Trans
+                i18nKey="signUp.ssoOrg.signInWith"
+                t={t}
+                values={{ domain: idp.domain }}
+                components={[<span key="0" className="font-mono" />]}
+              />
             </span>
           </div>
         </div>
@@ -132,7 +138,7 @@ export default function SignUpPage() {
           style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
         >
           <KeyRound className="w-3.5 h-3.5" />
-          Continue with SSO
+          {t('signUp.ssoOrg.continueWithSso')}
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </AuthShell>
@@ -142,13 +148,13 @@ export default function SignUpPage() {
   if (step === 'sent') {
     return (
       <AuthShell
-        title="Check your inbox"
-        subtitle={`We sent a verification link to ${email}. Click it to finish setting up your account.`}
+        title={t('signUp.sent.title')}
+        subtitle={t('signUp.sent.subtitle', { email })}
         footer={
           <>
-            <span>Didn&apos;t get it?</span>
+            <span>{t('signUp.sent.didntGetIt')}</span>
             <button type="button" onClick={() => { setStep('form'); }} style={{ color: 'var(--fg-link)' }}>
-              Resend or use a different email
+              {t('signUp.sent.resend')}
             </button>
           </>
         }
@@ -170,7 +176,7 @@ export default function SignUpPage() {
               border: '1px solid var(--border-muted)',
             }}
           >
-            sent · {formatTime(new Date(), { hour: '2-digit', minute: '2-digit' })}
+            {t('signUp.sent.sentAt', { time: formatTime(new Date(), { hour: '2-digit', minute: '2-digit' }) })}
           </div>
         </div>
       </AuthShell>
@@ -180,35 +186,35 @@ export default function SignUpPage() {
   return (
     <>
       <AuthShell
-        title="Create your account"
-        subtitle="Start with a free workspace. You can invite teammates next."
+        title={t('signUp.title')}
+        subtitle={t('signUp.subtitle')}
         topRight={
-          <span>Already have an account?{' '}
-            <Link to={'/auth/login' as never} search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined} style={{ color: 'var(--fg-link)' }}>Sign in</Link>
+          <span>{t('signUp.alreadyHaveAccount')}
+            <Link to={'/auth/login' as never} search={rawRedirect ? ({ redirect: rawRedirect } as never) : undefined} style={{ color: 'var(--fg-link)' }}>{t('signUp.signIn')}</Link>
           </span>
         }
         footer={
-          <span>Free for individuals · Team plan starts at $20/seat/mo</span>
+          <span>{t('signUp.footer')}</span>
         }
       >
         <form className="flex flex-col gap-4" onSubmit={submit}>
           <Field
-            label="Full name"
+            label={t('signUp.fullName')}
             type="text"
             autoComplete="name"
             value={name}
             onChange={(e) => { setName(e.target.value); }}
-            placeholder="Sora Kim"
+            placeholder={t('signUp.namePlaceholder')}
             required
           />
           <Field
-            label="Work email"
+            label={t('signUp.workEmail')}
             type="email"
             autoComplete="email"
             value={email}
             onChange={(e) => { setEmail(e.target.value); }}
             onBlur={() => { setTouchedEmail(true); }}
-            placeholder="you@company.com"
+            placeholder={t('signUp.emailPlaceholder')}
             error={emailError}
             required
           />
@@ -225,9 +231,9 @@ export default function SignUpPage() {
             >
               <Building2 className="w-3 h-3 mt-0.5 shrink-0" style={{ color: 'var(--fg-subtle)' }} />
               <span>
-                {idp.org} also uses {PROVIDER_LABEL[idp.provider]} —{' '}
+                {t('signUp.orgUsesSso', { org: idp.org, provider: PROVIDER_LABEL[idp.provider] })}
                 <Link to={'/auth/sso' as never} style={{ color: 'var(--fg-link)' }}>
-                  use SSO instead?
+                  {t('signUp.useSsoInstead')}
                 </Link>
               </span>
             </div>
@@ -235,12 +241,12 @@ export default function SignUpPage() {
 
           <div className="flex flex-col gap-2.5">
             <Field
-              label="Password"
+              label={t('signUp.password')}
               type={showPw ? 'text' : 'password'}
               autoComplete="new-password"
               value={pw}
               onChange={(e) => { setPw(e.target.value); }}
-              placeholder="At least 12 characters"
+              placeholder={t('signUp.passwordPlaceholder')}
               required
               trailing={
                 <button
@@ -248,7 +254,7 @@ export default function SignUpPage() {
                   onClick={() => { setShowPw((v) => !v); }}
                   className="p-1 rounded-md"
                   style={{ color: 'var(--fg-muted)' }}
-                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                  aria-label={showPw ? t('common.hidePassword') : t('common.showPassword')}
                 >
                   {showPw ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 </button>
@@ -267,7 +273,7 @@ export default function SignUpPage() {
           )}
 
           <Button type="submit" disabled={!canSubmit || step === 'submitting'}>
-            {step === 'submitting' ? 'Creating account…' : 'Create account'}
+            {step === 'submitting' ? t('signUp.creatingAccount') : t('signUp.createAccount')}
           </Button>
         </form>
 
@@ -278,10 +284,10 @@ export default function SignUpPage() {
             <HRule />
             <div className="flex flex-col gap-2">
               <Button variant="secondary" leading={<GithubIcon className="w-3.5 h-3.5" />} onClick={() => { startOauth('github'); }}>
-                Continue with GitHub
+                {t('signUp.continueWithGithub')}
               </Button>
               <Button variant="secondary" leading={<Mail className="w-3.5 h-3.5" />} onClick={() => { startOauth('google'); }}>
-                Continue with Google
+                {t('signUp.continueWithGoogle')}
               </Button>
             </div>
           </>
@@ -294,13 +300,13 @@ export default function SignUpPage() {
 
             <div className="flex flex-col gap-2">
               <Button variant="secondary" leading={<GithubIcon className="w-3.5 h-3.5" />} onClick={() => { setOauth('github'); }}>
-                Continue with GitHub
+                {t('signUp.continueWithGithub')}
               </Button>
               <Button variant="secondary" leading={<GitLabMark />} onClick={() => { setOauth('gitlab'); }}>
-                Continue with GitLab
+                {t('signUp.continueWithGitlab')}
               </Button>
               <Button variant="secondary" leading={<Mail className="w-3.5 h-3.5" />} onClick={() => { setOauth('google'); }}>
-                Continue with Google
+                {t('signUp.continueWithGoogle')}
               </Button>
             </div>
           </>
@@ -332,6 +338,7 @@ function GitLabMark() {
 function TermsCheck({
   checked, onChange,
 }: { checked: boolean; onChange: (v: boolean) => void }) {
+  const { t } = useTranslation('auth');
   return (
     <label className="flex items-start gap-2 cursor-pointer">
       <span
@@ -362,11 +369,11 @@ function TermsCheck({
         )}
       </span>
       <span className="text-sm leading-snug" style={{ color: 'var(--fg-muted)' }}>
-        I agree to the{' '}
-        <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Terms of Service</button>
-        {' '}and{' '}
-        <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>Privacy Policy</button>.
-        {' '}I understand this app indexes my code and my AI usage may be billed.
+        {t('signUp.terms.agree')}
+        <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>{t('signUp.terms.termsOfService')}</button>
+        {t('signUp.terms.and')}
+        <button type="button" className="bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--fg-link)', font: 'inherit' }}>{t('signUp.terms.privacyPolicy')}</button>
+        {t('signUp.terms.rest')}
       </span>
     </label>
   );

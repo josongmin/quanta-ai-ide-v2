@@ -1,7 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
 import type { WizardData } from '../../wizard';
 import { ACCENT_TINT } from '../../primitives/shared';
-import { ADDONS, labelFor } from './data';
+import { ADDONS } from './data';
 
 export function AddOns({
   plan, addons, onChange,
@@ -10,10 +11,11 @@ export function AddOns({
   addons: WizardData['plan']['addons'];
   onChange: (v: WizardData['plan']['addons']) => void;
 }) {
+  const { t } = useTranslation('onboarding');
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="text-xs uppercase tracking-eyebrow font-medium pb-1" style={{ color: 'var(--fg-subtle)' }}>
-        Add-ons
+        {t('plan.addons')}
       </legend>
       <div className="flex flex-col gap-1.5">
         {ADDONS.map((a) => {
@@ -44,15 +46,15 @@ export function AddOns({
               </span>
               <div className="flex flex-col flex-1 min-w-0">
                 <span className="text-base font-semibold" style={{ color: 'var(--fg-strong)' }}>
-                  {a.label}
+                  {t(`plan.addonList.${a.id}Label`)}
                 </span>
                 <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-                  {a.sub}
-                  {!available && ` · Not available on ${labelFor(plan)}`}
+                  {t(`plan.addonList.${a.id}Sub`)}
+                  {!available && t('plan.notAvailableOn', { plan: t(`plan.plans.${plan}Name`) })}
                 </span>
               </div>
               <span className="text-sm font-mono tabular-nums shrink-0" style={{ color: 'var(--fg-default)' }}>
-                +${a.monthlyPerSeat}/seat/mo
+                {t('plan.addonPrice', { price: a.monthlyPerSeat })}
               </span>
             </button>
           );

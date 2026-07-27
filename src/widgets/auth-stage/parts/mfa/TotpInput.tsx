@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import type { Phase } from './types';
 import { DEMO_TOTP } from './types';
 
@@ -7,6 +8,7 @@ import { DEMO_TOTP } from './types';
 export function TotpInput({
   value, onChange, phase, demo = false,
 }: { value: string[]; onChange: (v: string[]) => void; phase: Phase; demo?: boolean }) {
+  const { t } = useTranslation('auth');
   const refs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => { refs.current[0]?.focus(); }, []);
@@ -47,7 +49,7 @@ export function TotpInput({
         className="text-xs uppercase tracking-eyebrow font-medium"
         style={{ color: 'var(--fg-subtle)' }}
       >
-        Enter the 6-digit code from your app
+        {t('mfa.totp.label')}
       </span>
       <div
         className="flex gap-2"
@@ -82,8 +84,12 @@ export function TotpInput({
       </div>
       {demo && (
         <span className="text-xs" style={{ color: 'var(--fg-subtle)' }}>
-          Demo: code is <span className="font-mono" style={{ color: 'var(--fg-default)' }}>{DEMO_TOTP}</span>.
-          Try anything else to see the wrong-code state.
+          <Trans
+            i18nKey="mfa.totp.demo"
+            t={t}
+            values={{ code: DEMO_TOTP }}
+            components={[<span key="0" className="font-mono" style={{ color: 'var(--fg-default)' }} />]}
+          />
         </span>
       )}
     </div>
