@@ -27,6 +27,48 @@ const layerFilter = args
   .find((a) => a.startsWith('--layer='))
   ?.split('=')[1];
 const asJson = args.includes('--json');
+// --check turns the report into a GATE: any same-layer cross-slice edge not on
+// the ALLOWLIST below fails the process (exit 1). Existing edges are
+// grandfathered; the gate only blocks NEW cross-slice coupling from forming
+// (the fix-pipeline sprawl this repo just collapsed started exactly this way).
+const checkMode = args.includes('--check');
+
+// Approved same-layer cross-slice edges (from -> [to...]). Keep this tight: a
+// new entry here is a deliberate decision to couple two sibling slices rather
+// than compose one layer up or extract to a lower layer. Regenerate the raw
+// list with `pnpm audit:cross-slice --json`.
+const ALLOWLIST = {
+  features: {
+    'admission-rules': ['pr-preview'],
+    'ai-activity': ['workspace-tabs'],
+    'apply-overlay': ['inspect-boundaries'],
+    'chat-agent': ['apply-overlay', 'inspect-target'],
+    'filter-files': ['tweak-prefs'],
+    'inspect-target': ['apply-overlay', 'ownership-routing'],
+    'investigation': ['inspect-target'],
+    'pr-preview': ['apply-overlay'],
+  },
+  widgets: {
+    'intelligence-stage': ['stage'],
+    'onboarding-stage': ['auth-stage'],
+    'org-stage': ['_shared'],
+    'ws-stage': ['_shared'],
+  },
+  entities: {
+    'admission': ['facet', 'repo'],
+    'billing': ['plan'],
+    'facet': ['repo'],
+    'filter-state': ['facet', 'repo'],
+    'hotspot': ['repo'],
+    'metric': ['hotspot', 'repo'],
+    'pr': ['repo'],
+    'viz-mode': ['metric', 'repo'],
+  },
+};
+
+function isAllowed(layer, from, to) {
+  return (ALLOWLIST[layer]?.[from] ?? []).includes(to);
+}
 
 /** List immediate slice directories under src/<layer>/. */
 function listSlices(layer) {
@@ -169,6 +211,45 @@ for (const layer of layers) {
 
 if (asJson) {
   console.log(JSON.stringify(all, null, 2));
+} else if (checkMode) {
+  // Gate mode: every detected edge must be on the ALLOWLIST.
+  const violations = [];
+  const usedAllow = new Set();
+  for (const layer of layers) {
+    for (const r of all[layer]) {
+      if (isAllowed(layer, r.from, r.to)) usedAllow.add(`${layer}:${r.from}->${r.to}`);
+      else violations.push(r);
+    }
+  }
+  // Stale allowlist entries (approved but no longer present) — warn so the
+  // allowlist doesn't rot into a graveyard of edges that no longer exist.
+  const stale = [];
+  for (const layer of layers) {
+    for (const [from, tos] of Object.entries(ALLOWLIST[layer] ?? {})) {
+      for (const to of tos) {
+        if (!usedAllow.has(`${layer}:${from}->${to}`)) stale.push(`${layer}: ${from} -> ${to}`);
+      }
+    }
+  }
+  if (violations.length) {
+    console.error('\n✖ Disallowed same-layer cross-slice imports (not on the allowlist):\n');
+    for (const v of violations) {
+      console.error(`  [${v.layer}] ${v.from} -> ${v.to}  (${v.count} import${v.count === 1 ? '' : 's'})`);
+      for (const ex of v.examples) console.error(`      ${ex}`);
+    }
+    console.error(
+      '\nEach is new sibling-slice coupling. Compose the dependency one layer up,\n' +
+      'extract the shared concept to a lower layer, or — if the coupling is\n' +
+      'genuinely intended — add it to ALLOWLIST in scripts/audit-cross-slice.mjs.\n',
+    );
+    process.exit(1);
+  }
+  if (stale.length) {
+    console.warn('⚠ Stale ALLOWLIST entries (no longer present — remove them):');
+    for (const s of stale) console.warn(`  ${s}`);
+    console.warn('');
+  }
+  console.log(`✔ cross-slice gate: no disallowed same-layer coupling across ${layers.join(', ')}.`);
 } else {
   let total = 0;
   for (const layer of layers) {

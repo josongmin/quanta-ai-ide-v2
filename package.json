@@ -32,6 +32,7 @@
     "test:ui-infra-audit": "node --test scripts/ui-infra-audit.test.mjs",
     "test:workbench": "vitest run src/shared/workbench",
     "audit:cross-slice": "node scripts/audit-cross-slice.mjs",
+    "audit:cross-slice:check": "node scripts/audit-cross-slice.mjs --check",
     "catalog:validate": "PYTHONPATH=tools/feature-catalog/src python -m feature_catalog validate --root tools/feature-catalog/catalog",
     "catalog:audit": "PYTHONPATH=tools/feature-catalog/src python -m feature_catalog audit --root tools/feature-catalog/catalog",
     "catalog:render": "PYTHONPATH=tools/feature-catalog/src python -m feature_catalog render --root tools/feature-catalog/catalog --format md",
