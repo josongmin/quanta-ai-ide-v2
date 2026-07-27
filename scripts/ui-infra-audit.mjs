@@ -23,6 +23,7 @@
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASELINE_VERSION = 1;
@@ -68,6 +69,61 @@ function importSpecifiers(source) {
   for (const m of source.matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g)) specs.push(m[1]);
   return specs;
 }
+
+// ── AST-backed surface-admission rules (WBT-A5R) ──
+// The structural surface rules parse the real TypeScript AST instead of scanning
+// text, so they see *semantic* positions only: comments, `core.${kind}` template
+// expressions, and command-id strings in unrelated syntax are naturally excluded
+// (they are not the node kinds we look at), and evasion via aliasing/multiline/
+// mixed Promise.all cannot slip past a regex that never ran. Parsed once per file.
+const astCache = new Map();
+function parseAst(path, source) {
+  let sf = astCache.get(source);
+  if (sf === undefined) {
+    sf = ts.createSourceFile(path, source, ts.ScriptTarget.Latest, /*setParentNodes*/ true, ts.ScriptKind.TSX);
+    astCache.set(source, sf);
+  }
+  return sf;
+}
+function walkAst(node, visit) {
+  visit(node);
+  node.forEachChild((child) => { walkAst(child, visit); });
+}
+// String-literal argument of every dynamic `import(...)` expression.
+function astDynamicImportTargets(path, source) {
+  const targets = [];
+  walkAst(parseAst(path, source), (node) => {
+    if (
+      ts.isCallExpression(node) &&
+      node.expression.kind === ts.SyntaxKind.ImportKeyword &&
+      node.arguments.length === 1 &&
+      ts.isStringLiteralLike(node.arguments[0])
+    ) {
+      targets.push(node.arguments[0].text);
+    }
+  });
+  return targets;
+}
+// Every plain string-literal's text (NOT template expressions — a `core.${x}`
+// template is not a hardcoded id — and NOT comments, which are not nodes).
+function astStringLiterals(path, source) {
+  const out = [];
+  walkAst(parseAst(path, source), (node) => {
+    if (ts.isStringLiteral(node)) out.push(node.text);
+    else if (ts.isNoSubstitutionTemplateLiteral(node)) out.push(node.text);
+  });
+  return out;
+}
+
+// A built-in surface's view must live in a widgets/ or features/ slice — never
+// the app/ layer (that was the Intelligence asymmetry WBT-06R closed).
+function isSurfaceRootSpecifier(spec) {
+  return spec.startsWith('@widgets/') || spec.startsWith('@features/');
+}
+// A canonical surface id literal (`core.<surface>`). Object keys in the ONE
+// activator map and the metadata SoT are the sanctioned registration points and
+// live outside the scanned dirs; anywhere else this is a hardcoded id.
+const SURFACE_ID_LITERAL = /^core\.[a-z][a-z0-9-]*$/;
 
 const BANNED_WORKBENCH_IMPORT =
   /^(?:react|react-dom|zustand|@tanstack\/react-router|@tauri-apps\/.+)$/;
@@ -167,6 +223,28 @@ const RULES = [
     ignore: (path) => isTest(path),
     detect: (path, source) =>
       countMatches(source, /\bProvider\s*\?\s*:\s*(?:React\.)?ComponentType\b/g),
+  },
+
+  // ── AST admission rules (WBT-A5R): strict-zero, not baseline-exemptable ──
+  // These lock the convergence 06R + A4R achieved. Being AST-backed, they cannot
+  // be evaded by aliasing, multiline formatting, or mixed Promise.all, and they
+  // never false-fire on comments/template ids/command strings.
+  {
+    // A built-in surface activator must resolve its view from widgets/ or
+    // features/ — never the app/ layer (the Intelligence asymmetry 06R removed).
+    id: 'surfaceRootLocation',
+    ignore: (path) => isTest(path) || !path.endsWith('/app/workbench/builtinSurfaces.ts'),
+    detect: (path, source) =>
+      astDynamicImportTargets(path, source).filter((t) => !isSurfaceRootSpecifier(t)).length,
+  },
+  {
+    // No hardcoded `core.<surface>` id literal in feature/route code — surface
+    // identity flows from the metadata SoT + the one activator map (both outside
+    // these dirs). A4R removed the last of these; this keeps them from returning.
+    id: 'noHardcodedSurfaceId',
+    ignore: (path) => isTest(path) || !/\/(?:features|app\/router)\//.test(path),
+    detect: (path, source) =>
+      astStringLiterals(path, source).filter((s) => SURFACE_ID_LITERAL.test(s)).length,
   },
 ];
 

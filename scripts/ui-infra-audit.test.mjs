@@ -29,6 +29,8 @@ const CASES = [
   ['invalid-deep-import', 'deepImport'],
   ['invalid-central-switch', 'centralSurfaceSwitch'],
   ['invalid-arbitrary-provider', 'arbitraryProvider'],
+  ['invalid-surface-root-location', 'surfaceRootLocation'],
+  ['invalid-hardcoded-surface-id', 'noHardcodedSurfaceId'],
 ];
 
 function runAuditOnCopy(fixtureName) {
