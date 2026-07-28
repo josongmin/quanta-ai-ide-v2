@@ -1157,6 +1157,15 @@
     "keyFallback": "密钥"
   },
   "usage": {
+    "real": {
+      "subtitle": "本计费周期的用量与套餐上限。",
+      "percentUsed": "已用 {{pct}}%",
+      "unlimited": "无限制",
+      "untracked": "套餐未计量",
+      "aiTokens": { "label": "AI 令牌", "unit": "令牌" },
+      "scans": { "label": "扫描", "unit": "次" },
+      "storage": { "label": "存储", "unit": "MB" }
+    },
     "title": "用量",
     "subtitle": "您的组织在过去 30 天内的消耗情况。费用对应您当前的套餐；在计费中切换。",
     "range": {

@@ -1157,6 +1157,15 @@
     "keyFallback": "key"
   },
   "usage": {
+    "real": {
+      "subtitle": "Usage this billing period against your plan limits.",
+      "percentUsed": "{{pct}}% used",
+      "unlimited": "Unlimited",
+      "untracked": "Not metered on your plan",
+      "aiTokens": { "label": "AI tokens", "unit": "tokens" },
+      "scans": { "label": "Scans", "unit": "scans" },
+      "storage": { "label": "Storage", "unit": "MB" }
+    },
     "title": "Usage",
     "subtitle": "What your org has consumed in the past 30 days. Costs map to your current plan; switch in billing.",
     "range": {

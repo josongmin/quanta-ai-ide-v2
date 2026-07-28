@@ -1157,6 +1157,15 @@
     "keyFallback": "키"
   },
   "usage": {
+    "real": {
+      "subtitle": "이번 청구 기간의 사용량과 플랜 한도.",
+      "percentUsed": "{{pct}}% 사용",
+      "unlimited": "무제한",
+      "untracked": "플랜에서 미계측",
+      "aiTokens": { "label": "AI 토큰", "unit": "토큰" },
+      "scans": { "label": "스캔", "unit": "회" },
+      "storage": { "label": "스토리지", "unit": "MB" }
+    },
     "title": "사용량",
     "subtitle": "지난 30일간 조직이 소비한 내역입니다. 비용은 현재 요금제에 매핑됩니다. 결제에서 전환하세요.",
     "range": {

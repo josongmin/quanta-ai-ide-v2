@@ -11,6 +11,7 @@ import { WebhooksReal } from './pages/parts/webhooks/WebhooksReal';
 import { ScimReal } from './pages/parts/scim/ScimReal';
 import { SsoReal } from './pages/parts/sso/SsoReal';
 import { RetentionReal } from './pages/parts/retention/RetentionReal';
+import { UsageReal } from './pages/parts/usage/UsageReal';
 
 import RolesMock from './pages/RolesPage';
 import UsageMock from './pages/UsagePage';
@@ -31,7 +32,7 @@ export function RolesPage() {
   return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.roles" subtitleKey="comingSoon.subtitles.roles" /> : <RolesMock />;
 }
 export function UsagePage() {
-  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.usage" subtitleKey="comingSoon.subtitles.usage" /> : <UsageMock />;
+  return env.useRealAuth ? <UsageReal /> : <UsageMock />;
 }
 export function ServiceAccountsPage() {
   return env.useRealAuth ? <ServiceAccountsReal /> : <ServiceAccountsMock />;

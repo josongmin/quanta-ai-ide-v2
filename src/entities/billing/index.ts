@@ -1,5 +1,11 @@
 // Public surface for the billing entity — billing-stage imports from here only.
 export { useBillingStatus } from './model/useBilling';
+export {
+  useUsageSummary,
+  type UsageSummary,
+  type UsageMetricSummary,
+  type UsageMetricId,
+} from './model/usage';
 export { startCheckout, openPortal, type UrlResult } from './model/actions';
 export {
   type BillingStatus,

@@ -1157,6 +1157,15 @@
     "keyFallback": "キー"
   },
   "usage": {
+    "real": {
+      "subtitle": "今回の請求期間の使用量とプラン上限。",
+      "percentUsed": "{{pct}}% 使用",
+      "unlimited": "無制限",
+      "untracked": "プランでは未計測",
+      "aiTokens": { "label": "AIトークン", "unit": "トークン" },
+      "scans": { "label": "スキャン", "unit": "回" },
+      "storage": { "label": "ストレージ", "unit": "MB" }
+    },
     "title": "使用状況",
     "subtitle": "過去 30 日間に組織が消費した内容です。コストは現在のプランにマッピングされます。請求で切り替えてください。",
     "range": {
