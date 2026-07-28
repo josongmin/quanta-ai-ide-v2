@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { LogOut, Settings } from 'lucide-react';
+import { useClickOutside } from '@shared/lib';
 import { useSession, signOut } from '@entities/session';
 
 // Real-auth user affordance in the GNB: avatar button → dropdown with the
@@ -13,18 +14,15 @@ export function UserMenu() {
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
 
+  // Click-outside via the shared primitive; Escape stays local (an inline GNB
+  // dropdown is not a workbench-scoped shortcut nor a modal layer, so neither
+  // useShortcut nor the layer system fits — see the keyboard triage).
+  useClickOutside(ref, open, () => { setOpen(false); });
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
-    document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('keydown', onKey);
-    };
+    return () => { document.removeEventListener('keydown', onKey); };
   }, [open]);
 
   const label = user?.name ?? user?.email ?? '';
