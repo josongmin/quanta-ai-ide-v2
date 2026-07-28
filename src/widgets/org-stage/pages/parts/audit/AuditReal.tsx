@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { useParams } from '@tanstack/react-router';
@@ -8,6 +8,7 @@ import { Button } from '@shared/ui/forms';
 import { EmptyState, InlineError, SkeletonText } from '@shared/ui';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
+import { useAsyncResource } from '@shared/lib';
 import { useOrg } from '@entities/org';
 
 // Real audit trail over `GET /v1/audit/:orgId` (action/actor/date filters +
@@ -74,17 +75,15 @@ export function AuditReal() {
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
 
-  const [entries, setEntries] = useState<AuditEntryDTO[]>([]);
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  // Fetch error (first page) is owned by the hook; pagination (loadMore) errors
+  // are local. Show either under the same `loadError` name so the JSX is unchanged.
+  const [actionError, setActionError] = useState<string | null>(null);
   const [q, setQ] = useState('');
   const [action, setAction] = useState('');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
 
   const query = useCallback((next: string | null): string => {
     const p = new URLSearchParams({ limit: String(PAGE) });
@@ -98,22 +97,42 @@ export function AuditReal() {
   }, [orgId, action, from, to]);
 
   // First page — refetch whenever the org or a server-side filter changes.
-  useEffect(() => {
-    let active = true;
-    /* eslint-disable react-hooks/set-state-in-effect -- reset before the filtered fetch */
-    if (!orgId) { setEntries([]); setLoading(true); return () => { active = false; }; }
-    setLoading(true);
-    setLoadError(null);
-    /* eslint-enable react-hooks/set-state-in-effect */
-    void accountsApi.get<AuditResponse>(query(null)).then((res) => {
-      if (!active) return;
-      if (res.ok) {
-        setEntries(Array.isArray(res.data.entries) ? res.data.entries : []);
-        setCursor(res.data.nextCursor ?? null);
-      } else setLoadError(apiErrorMessage(res.error, t('audit.errorContext')));
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [orgId, query, nonce, t]);
+  const {
+    data: firstPage, isPending: fetchPending, error: fetchError, refetch,
+  } = useAsyncResource<AuditResponse>(
+    async () => {
+      // No org yet (its detail is still resolving) → skip the fetch; `loading`
+      // below keeps the skeleton up until an orgId lands (matches the old effect,
+      // which early-returned with loading=true and no request).
+      if (!orgId) return { ok: true, data: {} };
+      const res = await accountsApi.get<AuditResponse>(query(null));
+      return res.ok
+        ? { ok: true, data: res.data }
+        : { ok: false, error: apiErrorMessage(res.error, t('audit.errorContext')) };
+    },
+    [orgId, query, t],
+  );
+  // No org yet (its detail is still resolving) → keep the skeleton, empty list.
+  const loading = fetchPending || !orgId;
+  const loadError = fetchError ?? actionError;
+
+  // Appended pages beyond the first live locally; the first page + its cursor come
+  // from the hook. The appended state is keyed to the first-page identity so a new
+  // first page (org/filter change or refetch) discards the old appended rows —
+  // reset during render (React's "adjust state on prop change" pattern), never via
+  // a setState-in-effect.
+  const firstEntries = useMemo(
+    () => (orgId && Array.isArray(firstPage?.entries) ? firstPage.entries : []),
+    [orgId, firstPage],
+  );
+  const firstCursor = orgId ? (firstPage?.nextCursor ?? null) : null;
+  const [pages, setPages] = useState<{ key: AuditResponse | null; more: AuditEntryDTO[]; cursor: string | null | undefined }>(
+    { key: null, more: [], cursor: undefined },
+  );
+  if (pages.key !== firstPage) setPages({ key: firstPage, more: [], cursor: undefined });
+
+  const entries = useMemo(() => [...firstEntries, ...pages.more], [firstEntries, pages.more]);
+  const cursor = pages.cursor !== undefined ? pages.cursor : firstCursor;
 
   async function loadMore() {
     if (!cursor || loadingMore) return;
@@ -126,9 +145,9 @@ export function AuditReal() {
     if (q0 !== query) { setLoadingMore(false); return; }
     setLoadingMore(false);
     if (res.ok) {
-      setEntries((prev) => [...prev, ...(Array.isArray(res.data.entries) ? res.data.entries : [])]);
-      setCursor(res.data.nextCursor ?? null);
-    } else setLoadError(apiErrorMessage(res.error, t('audit.errorContext')));
+      const newEntries = Array.isArray(res.data.entries) ? res.data.entries : [];
+      setPages((prev) => ({ key: firstPage, more: [...prev.more, ...newEntries], cursor: res.data.nextCursor ?? null }));
+    } else setActionError(apiErrorMessage(res.error, t('audit.errorContext')));
   }
 
   const filtered = useMemo(() => {
@@ -192,7 +211,7 @@ export function AuditReal() {
       {orgError ? (
         <InlineError message={orgError} onRetry={refetchOrg} />
       ) : loadError ? (
-        <InlineError message={loadError} onRetry={() => { setNonce((n) => n + 1); }} />
+        <InlineError message={loadError} onRetry={() => { setActionError(null); refetch(); }} />
       ) : loading ? (
         <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
           <SkeletonText lines={6} />

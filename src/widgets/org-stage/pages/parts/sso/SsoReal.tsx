@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { KeyRound, Trash2, ShieldCheck, ShieldAlert, RefreshCw, Copy, Check } from 'lucide-react';
@@ -9,6 +10,11 @@ import {
   useOrg, getSsoConnection, registerSso, updateSso, verifySso, deleteSso,
   type SsoConnection,
 } from '@entities/org';
+
+// A promise that never settles — used to hold the resource in its pending
+// (skeleton) state while the org id is still resolving, matching the old
+// effect's `if (!orgId) return;` early-out.
+const NEVER: Promise<never> = new Promise<never>(() => undefined);
 
 // Real org SSO (OIDC) connection over accounts /v1/sso/:orgId. Honest to the
 // backend: register/update/delete the OIDC connection (domain, issuer, authorize
@@ -21,10 +27,20 @@ export function SsoReal() {
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
 
+  // Fetch is owned by the hook; `conn` is a local copy seeded from the fetch and
+  // then mutated in place by verify/delete. Fetch error comes from the hook;
+  // mutation errors (save/verify/delete) are local — show either.
+  const { data: fetchedConn, isPending: loading, error: fetchError, refetch } =
+    useAsyncResource<SsoConnection | null>(
+      // Skip the fetch until the org resolves (old effect early-returned on !orgId,
+      // leaving the skeleton up); a never-resolving promise keeps isPending true.
+      () => (orgId ? getSsoConnection(orgId) : NEVER),
+      [orgId],
+      orgId,
+    );
   const [conn, setConn] = useState<SsoConnection | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? actionError;
   const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -42,23 +58,21 @@ export function SsoReal() {
   const [clientId, setClientId] = useState('');
   const [clientSecret, setClientSecret] = useState('');
 
+  // Seed the local `conn` copy + the editable form fields from each fetch/refetch
+  // result. `conn` is then owned locally (verify/delete mutate it in place); the
+  // form fields prime the inputs from the stored connection.
   useEffect(() => {
-    if (!orgId) return;
-    let active = true;
-    void getSsoConnection(orgId).then((res) => {
-      if (!active) return;
-      if (!res.ok) { setError(res.error); return; }
-      setConn(res.data); setError(null);
-      if (res.data) {
-        setDomain(res.data.domain); setIssuer(res.data.issuer);
-        setAuthEndpoint(res.data.authorizationEndpoint); setClientId(res.data.clientId);
-        setTokenEndpoint(res.data.tokenEndpoint); setJwksEndpoint(res.data.jwksEndpoint);
-      }
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [orgId, nonce]);
+    if (fetchedConn === null && loading) return; // still loading — don't clobber
+    /* eslint-disable react-hooks/set-state-in-effect -- syncing editable form state from the fetched resource */
+    setConn(fetchedConn);
+    if (fetchedConn) {
+      setDomain(fetchedConn.domain); setIssuer(fetchedConn.issuer);
+      setAuthEndpoint(fetchedConn.authorizationEndpoint); setClientId(fetchedConn.clientId);
+      setTokenEndpoint(fetchedConn.tokenEndpoint); setJwksEndpoint(fetchedConn.jwksEndpoint);
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [fetchedConn, loading]);
 
-  const refetch = () => { setNonce((n) => n + 1); };
   const configured = conn !== null;
   const httpsOk = (v: string) => /^https:\/\/.+/.test(v.trim());
   const valid = /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain.trim())
@@ -67,7 +81,7 @@ export function SsoReal() {
 
   async function save() {
     if (busy || !valid) return;
-    setBusy(true); setError(null);
+    setBusy(true); setActionError(null);
     const input = {
       domain: domain.trim(), issuer: issuer.trim(),
       authorizationEndpoint: authEndpoint.trim(),
@@ -79,16 +93,16 @@ export function SsoReal() {
       : await registerSso(orgId, { ...input, clientSecret: clientSecret.trim() });
     if (!mountedRef.current) return;
     setBusy(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     setClientSecret(''); refetch();
   }
   async function doVerify() {
     if (verifying || !orgId) return;
-    setVerifying(true); setVerifyMsg(null); setError(null);
+    setVerifying(true); setVerifyMsg(null); setActionError(null);
     const res = await verifySso(orgId);
     if (!mountedRef.current) return;
     setVerifying(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     if (res.data.verified) { setConn(res.data.record); setVerifyMsg(null); }
     else { setVerifyMsg(t('sso.dnsNotFound')); }
   }
@@ -101,11 +115,11 @@ export function SsoReal() {
     });
   }
   async function doDelete() {
-    setBusy(true); setError(null);
+    setBusy(true); setActionError(null);
     const res = await deleteSso(orgId);
     if (!mountedRef.current) return;
     setBusy(false); setConfirmDelete(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     setConn(null); setDomain(''); setIssuer(''); setAuthEndpoint(''); setTokenEndpoint(''); setJwksEndpoint(''); setClientId(''); setClientSecret('');
     refetch();
   }
@@ -124,7 +138,7 @@ export function SsoReal() {
         ) : undefined
       }
     >
-      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>}
+      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>}
 
       {orgError ? (
         <InlineError message={orgError} onRetry={refetchOrg} />

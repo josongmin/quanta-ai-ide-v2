@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 import { Monitor, LogOut, ShieldCheck } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
@@ -37,30 +38,11 @@ const EMPTY_SESSIONS: ActiveSession[] = [];
 export function SecurityReal() {
   const { t } = useTranslation('me');
   const { sessionId } = useSession();
-  const [sessions, setSessions] = useState<ActiveSession[]>(EMPTY_SESSIONS);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  const { data, isPending: loading, error, refetch } = useAsyncResource<ActiveSession[]>(listSessions, []);
+  const sessions = data ?? EMPTY_SESSIONS;
   const [busyToken, setBusyToken] = useState<string | null>(null);
   const [confirmAll, setConfirmAll] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
-  const loadedOnce = useRef(false);
-
-  useEffect(() => {
-    let active = true;
-    /* eslint-disable react-hooks/set-state-in-effect -- skeleton reset before the nonce fetch */
-    if (!loadedOnce.current) setLoading(true);
-    setError(null);
-    /* eslint-enable react-hooks/set-state-in-effect */
-    void listSessions().then((res) => {
-      if (!active) return;
-      if (res.ok) setSessions(res.data);
-      else setError(res.error);
-    }).finally(() => { if (active) { setLoading(false); loadedOnce.current = true; } });
-    return () => { active = false; };
-  }, [nonce]);
-
-  const refetch = () => { setNonce((n) => n + 1); };
 
   async function revokeOne(token: string) {
     setBusyToken(token);

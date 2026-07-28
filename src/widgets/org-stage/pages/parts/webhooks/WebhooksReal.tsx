@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { useParams } from '@tanstack/react-router';
 import { Webhook, Plus, Trash2, Pause, Play, RotateCcw } from 'lucide-react';
+import { useAsyncResource } from '@shared/lib';
 import { OrgShell } from '../../../parts/OrgShell';
 import { Button, Field } from '@shared/ui/forms';
 import {
@@ -47,11 +48,34 @@ export function WebhooksReal() {
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
 
-  const [endpoints, setEndpoints] = useState<WebhookEndpointRecord[]>(NO_EP);
-  const [deliveries, setDeliveries] = useState<WebhookDeliveryRecord[]>(NO_DEL);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  // endpoints + deliveries in one keyed resource. endpoints 오류가 우선(전체 실패);
+  // deliveries만 실패하면 endpoints는 보여주되 그 오류를 별도로 노출(조용히 빈
+  // 목록으로 오인시키지 않는다).
+  const { data, isPending: loading, error: fetchError, refetch } = useAsyncResource<{
+    endpoints: WebhookEndpointRecord[];
+    deliveries: WebhookDeliveryRecord[];
+    deliveriesError: string | null;
+  }>(async () => {
+    if (!orgId) return { ok: true, data: { endpoints: NO_EP, deliveries: NO_DEL, deliveriesError: null } };
+    const [eps, dels] = await Promise.all([listWebhooks(orgId), listDeliveries(orgId)]);
+    if (!eps.ok) return { ok: false, error: eps.error };
+    return {
+      ok: true,
+      data: {
+        endpoints: eps.data,
+        deliveries: dels.ok ? dels.data : NO_DEL,
+        deliveriesError: dels.ok ? null : dels.error,
+      },
+    };
+  }, [orgId], orgId);
+  const endpoints = data?.endpoints ?? NO_EP;
+  const deliveries = data?.deliveries ?? NO_DEL;
+
+  // Fetch error is owned by the hook; the deliveries-only error and mutation
+  // (toggle/delete/replay) errors are local. Show whichever is set.
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? data?.deliveriesError ?? actionError;
+
   const [createOpen, setCreateOpen] = useState(false);
   const [revealed, setRevealed] = useState<WebhookEndpointCreated | null>(null);
   const [saved, setSaved] = useState(false);
@@ -59,30 +83,14 @@ export function WebhooksReal() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const replayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (!orgId) return;
-    let active = true;
-    void Promise.all([listWebhooks(orgId), listDeliveries(orgId)]).then(([eps, dels]) => {
-      if (!active) return;
-      // endpoints 오류가 우선. deliveries만 실패하면 그 오류를 노출(조용히 빈
-      // 목록으로 오인시키지 않는다).
-      if (!eps.ok) { setError(eps.error); return; }
-      setEndpoints(eps.data);
-      if (dels.ok) { setDeliveries(dels.data); setError(null); } else setError(dels.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [orgId, nonce]);
-
   // 언마운트 시 replay 후 예약된 refetch 타이머 정리(setState-after-unmount 방지).
   useEffect(() => () => { if (replayTimer.current) clearTimeout(replayTimer.current); }, []);
-
-  const refetch = () => { setNonce((n) => n + 1); };
 
   async function toggle(e: WebhookEndpointRecord) {
     if (busyId) return; // 어떤 변경이든 진행중이면 새 변경 차단(단일 실행)
     setBusyId(e.id);
     const res = await updateWebhook(orgId, e.id, { enabled: !e.enabled });
-    if (!res.ok) { setError(res.error); setBusyId(null); return; }
+    if (!res.ok) { setActionError(res.error); setBusyId(null); return; }
     refetch();
     setBusyId(null);
   }
@@ -90,7 +98,7 @@ export function WebhooksReal() {
     setBusyId(e.id);
     const res = await deleteWebhook(orgId, e.id);
     setConfirmDelete(null);
-    if (!res.ok) { setError(res.error); setBusyId(null); return; }
+    if (!res.ok) { setActionError(res.error); setBusyId(null); return; }
     refetch();
     setBusyId(null);
   }
@@ -99,7 +107,7 @@ export function WebhooksReal() {
     setBusyId(d.id);
     const res = await replayDelivery(orgId, d.id);
     setBusyId(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     if (replayTimer.current) clearTimeout(replayTimer.current);
     replayTimer.current = setTimeout(refetch, 500); // give the async delivery a beat
   }
@@ -116,7 +124,7 @@ export function WebhooksReal() {
         </Button>
       }
     >
-      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>}
+      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>}
 
       {orgError ? (
         <InlineError message={orgError} onRetry={refetchOrg} />

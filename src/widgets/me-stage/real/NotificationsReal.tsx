@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Volume2, VolumeX } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
 import { Button, Divider, SaveBar } from '@shared/ui/forms';
 import { InlineError, SkeletonText } from '@shared/ui';
-import { shallowEqual } from '@shared/lib';
+import { shallowEqual, useAsyncResource } from '@shared/lib';
 import { getNotificationPrefs, saveNotificationPrefs, type NotificationPrefs } from '@entities/session';
 import { EVENTS, type Settings } from '../pages/parts/notifications/types';
 import { MuteBanner } from '../pages/parts/notifications/MuteBanner';
@@ -25,22 +25,33 @@ function toSettings(p: NotificationPrefs): Settings {
 
 export function NotificationsReal() {
   const { t } = useTranslation('me');
+  // Fetch is owned by the hook; the fetched prefs seed the editable committed/draft
+  // pair below. Save is a MUTATION that produces a new committed value locally (not a
+  // refetch), so committed/draft stay local state.
+  const { data: loaded, isPending: loading, error: fetchError, refetch } = useAsyncResource<Settings>(
+    async () => {
+      const res = await getNotificationPrefs();
+      return res.ok ? { ok: true, data: toSettings(res.data) } : { ok: false, error: res.error };
+    },
+    [],
+  );
   const [committed, setCommitted] = useState<Settings | null>(null);
   const [draft, setDraft] = useState<Settings | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [savingState, setSavingState] = useState<SaveState>('idle');
-  const [nonce, setNonce] = useState(0);
+  // Fetch error is owned by the hook; mutation (save) errors are local. Show either.
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? actionError;
 
-  useEffect(() => {
-    let active = true;
-    void getNotificationPrefs().then((res) => {
-      if (!active) return;
-      if (res.ok) { const s = toSettings(res.data); setCommitted(s); setDraft(s); setError(null); }
-      else setError(res.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [nonce]);
+  // Seed the editable committed/draft pair from each successful (re)load. Done
+  // during render (adjusting state on prop/derived change, not in an effect) so
+  // the new prefs paint in the same commit as the load — a save produces its own
+  // committed value locally, so this only fires on a fresh fetch identity.
+  const [seeded, setSeeded] = useState<Settings | null>(null);
+  if (loaded && loaded !== seeded) {
+    setSeeded(loaded);
+    setCommitted(loaded);
+    setDraft(loaded);
+  }
 
   const dirty = committed != null && draft != null && !shallowEqual(committed, draft);
 
@@ -48,7 +59,8 @@ export function NotificationsReal() {
     if (!draft) return;
     setSavingState('saving');
     const res = await saveNotificationPrefs(draft);
-    if (!res.ok) { setSavingState('idle'); setError(res.error); return; }
+    if (!res.ok) { setSavingState('idle'); setActionError(res.error); return; }
+    setActionError(null);
     const s = toSettings(res.data);
     setCommitted(s);
     setDraft(s);
@@ -72,7 +84,7 @@ export function NotificationsReal() {
       }
     >
       {error && (
-        <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); setNonce((n) => n + 1); }} /></div>
+        <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>
       )}
       {loading || !draft ? (
         <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>

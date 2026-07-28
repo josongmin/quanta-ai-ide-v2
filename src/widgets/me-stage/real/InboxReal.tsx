@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { CheckCheck, Shield, CreditCard, Users, KeyRound, Building2 } from 'lucide-react';
@@ -61,37 +62,42 @@ function relTime(iso: string, t: TFunction): string {
 
 const NONE: NotificationRecord[] = [];
 
+type InboxPage = { notifications: NotificationRecord[]; nextCursor: string | null; unreadCount: number };
+
 export function InboxReal() {
   const { t } = useTranslation('me');
+  const [unreadOnly, setUnreadOnly] = useState(false);
+  // The first-page fetch is owned by the hook (stale-guard + skeleton). Its
+  // result seeds the locally-mutable feed state below (loadMore appends, markOne
+  // toggles read optimistically), so we mirror data → items/cursor/unread.
+  const { data, isPending: loading, error: fetchError, refetch } = useAsyncResource<InboxPage>(
+    async () => {
+      const res = await listNotifications({ unreadOnly });
+      return res.ok ? { ok: true, data: res.data } : { ok: false, error: res.error };
+    },
+    [unreadOnly],
+  );
   const [items, setItems] = useState<NotificationRecord[]>(NONE);
   const [cursor, setCursor] = useState<string | null>(null);
   const [unread, setUnread] = useState(0);
-  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (!data) return;
+    /* eslint-disable react-hooks/set-state-in-effect -- seed locally-mutable feed state from the hook's fetched page */
+    setItems(data.notifications);
+    setCursor(data.nextCursor);
+    setUnread(data.unreadCount);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [data]);
+
   const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [unreadOnly, setUnreadOnly] = useState(false);
-  const [nonce, setNonce] = useState(0);
+  // Fetch error is owned by the hook; mutation (load-more / mark-read) errors are local. Show either.
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? actionError;
   const [busy, setBusy] = useState(false);
   // await 이후 setState가 언마운트/동시요청에 안전하도록.
   const mountedRef = useRef(true);
   const inFlightRef = useRef<Set<string>>(new Set());
   useEffect(() => () => { mountedRef.current = false; }, []);
-
-  useEffect(() => {
-    let active = true;
-    void listNotifications({ unreadOnly }).then((res) => {
-      if (!active) return;
-      if (res.ok) {
-        setItems(res.data.notifications);
-        setCursor(res.data.nextCursor);
-        setUnread(res.data.unreadCount);
-        setError(null);
-      } else setError(res.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [unreadOnly, nonce]);
-
-  const refetch = useCallback(() => { setNonce((n) => n + 1); }, []);
 
   async function loadMore() {
     if (!cursor || loadingMore) return;
@@ -99,7 +105,7 @@ export function InboxReal() {
     const res = await listNotifications({ cursor, unreadOnly });
     if (!mountedRef.current) return;
     setLoadingMore(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     setItems((prev) => [...prev, ...res.data.notifications]);
     setCursor(res.data.nextCursor);
     setUnread(res.data.unreadCount);
@@ -118,7 +124,7 @@ export function InboxReal() {
     if (!res.ok) {
       setItems((prev) => prev.map((x) => (x.id === n.id ? { ...x, read: false } : x)));
       setUnread((u) => u + 1);
-      setError(res.error);
+      setActionError(res.error);
     }
   }
 
@@ -128,7 +134,7 @@ export function InboxReal() {
     const res = await markAllNotificationsRead();
     if (!mountedRef.current) return;
     setBusy(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     refetch();
   }
 
@@ -170,7 +176,7 @@ export function InboxReal() {
         })}
       </div>
 
-      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>}
+      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>}
 
       {loading ? (
         <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}><SkeletonText lines={6} /></div>

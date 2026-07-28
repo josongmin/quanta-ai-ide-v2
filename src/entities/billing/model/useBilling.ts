@@ -2,7 +2,7 @@
 // `GET /v1/billing/:orgId` (cookie-authed, requires billing.read). Minimal
 // fetch-hook mirroring entities/org's useOrg.
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
 import type { BillingStatus } from './types';
@@ -14,33 +14,22 @@ type BillingState = {
   refetch: () => void;
 };
 
+// The skeleton-vs-keep-stale + active-guard semantics live in the shared
+// useAsyncResource now; `orgId` is the resetKey so a new org blanks the skeleton
+// on first load while a refetch keeps the last-known status in place.
 export function useBillingStatus(orgId: string): BillingState {
-  const [status, setStatus] = useState<BillingStatus | null>(null);
-  const [isPending, setPending] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
-  // Skeleton on first load per org; a refetch keeps the last-known status.
-  const loadedOrg = useRef<string | null>(null);
-
-  const refetch = useCallback(() => { setNonce((n) => n + 1); }, []);
-
-  useEffect(() => {
-    if (!orgId) return;
-    let active = true;
-    /* eslint-disable react-hooks/set-state-in-effect -- skeleton reset before the orgId/nonce fetch */
-    if (loadedOrg.current !== orgId) {
-      setPending(true);
-      setStatus(null);
-    }
-    setError(null);
-    /* eslint-enable react-hooks/set-state-in-effect */
-    void accountsApi.get<BillingStatus>(`/v1/billing/${orgId}`).then((res) => {
-      if (!active) return;
-      if (res.ok) setStatus(res.data);
-      else setError(apiErrorMessage(res.error, 'billing'));
-    }).finally(() => { if (active) { setPending(false); loadedOrg.current = orgId; } });
-    return () => { active = false; };
-  }, [orgId, nonce]);
-
-  return { status, isPending, error, refetch };
+  const { data, isPending, error, refetch } = useAsyncResource<BillingStatus>(
+    async () => {
+      // No org yet (parent still resolving detail) — hold the skeleton, no
+      // request and no error, matching the old `if (!orgId) return;` guard.
+      if (!orgId) return new Promise<never>(() => { /* never resolves */ });
+      const res = await accountsApi.get<BillingStatus>(`/v1/billing/${orgId}`);
+      return res.ok
+        ? { ok: true, data: res.data }
+        : { ok: false, error: apiErrorMessage(res.error, 'billing') };
+    },
+    [orgId],
+    orgId,
+  );
+  return { status: data, isPending, error, refetch };
 }

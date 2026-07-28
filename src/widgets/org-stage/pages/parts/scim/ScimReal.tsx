@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { KeyRound, RefreshCw, Power, Copy, Check } from 'lucide-react';
@@ -20,10 +21,17 @@ export function ScimReal() {
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
 
-  const [config, setConfig] = useState<ScimConfig | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  // Fetch is owned by the hook (read-only fetch error); the mutation handlers
+  // below manage their own error. Skip the fetch until orgId resolves (data
+  // stays null → skeleton) instead of surfacing an error.
+  const { data: config, isPending: fetchPending, error: fetchError, refetch } =
+    useAsyncResource<ScimConfig | null>(
+      async () => (orgId ? getScimConfig(orgId) : { ok: true, data: null }),
+      [orgId],
+    );
+  const loading = fetchPending || !orgId;
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? actionError;
   const [busy, setBusy] = useState(false);
   const [revealed, setRevealed] = useState<ScimTokenResponse | null>(null);
   const [saved, setSaved] = useState(false);
@@ -32,42 +40,30 @@ export function ScimReal() {
   const mountedRef = useRef(true);
   useEffect(() => () => { mountedRef.current = false; }, []);
 
-  useEffect(() => {
-    if (!orgId) return;
-    let active = true;
-    void getScimConfig(orgId).then((res) => {
-      if (!active) return;
-      if (res.ok) { setConfig(res.data); setError(null); } else setError(res.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [orgId, nonce]);
-
-  const refetch = () => { setNonce((n) => n + 1); };
-
   async function doEnable() {
     if (busy) return;
-    setBusy(true); setError(null);
+    setBusy(true); setActionError(null);
     const res = await enableScim(orgId);
     if (!mountedRef.current) return;
     setBusy(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     setSaved(false); setRevealed(res.data); refetch();
   }
   async function doRotate() {
     if (busy) return;
-    setBusy(true); setError(null);
+    setBusy(true); setActionError(null);
     const res = await rotateScimToken(orgId);
     if (!mountedRef.current) return;
     setBusy(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     setSaved(false); setRevealed(res.data);
   }
   async function doDisable() {
-    setBusy(true); setError(null);
+    setBusy(true); setActionError(null);
     const res = await disableScim(orgId);
     if (!mountedRef.current) return;
     setBusy(false); setConfirmDisable(false);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     refetch();
   }
   function copyUrl() {
@@ -101,7 +97,7 @@ export function ScimReal() {
         ) : undefined
       }
     >
-      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>}
+      {error && <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>}
 
       {orgError ? (
         <InlineError message={orgError} onRetry={refetchOrg} />

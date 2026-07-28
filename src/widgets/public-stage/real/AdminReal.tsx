@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { UserCog, Ban, ShieldCheck, LogIn, CreditCard, Building2, Users } from 'lucide-react';
 import { AdminShell } from '../parts/AdminShell';
 import { Button, Field } from '@shared/ui/forms';
@@ -10,6 +11,7 @@ import {
   listUsers, banUser, unbanUser, impersonateUser,
   listOrgs, overridePlan,
   type AdminUser, type AdminOrg, type AdminPlan,
+  type AdminUserPage, type AdminOrgPage,
 } from '@entities/admin';
 
 // Real platform super-admin backoffice over accounts /v1/admin/*. Honest to the
@@ -31,56 +33,64 @@ export function AdminReal() {
   const mountedRef = useRef(true);
   useEffect(() => () => { mountedRef.current = false; }, []);
 
-  const [users, setUsers] = useState<AdminUser[]>(NO_USERS);
-  const [orgs, setOrgs] = useState<AdminOrg[]>(NO_ORGS);
+  const [search, setSearch] = useState('');
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  // Fetch errors are owned by the hooks; mutation (ban/unban/impersonate/plan/loadMore)
+  // errors are local. Show either.
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  // 유저는 검색어에 반응. orgs와 분리해 검색 타이핑이 org 페이지네이션을 리셋하지 않게.
+  const usersRes = useAsyncResource<AdminUserPage>(() => listUsers({ search }), [search]);
+  // orgs는 검색과 무관 — 명시 refetch에만 반응.
+  const orgsRes = useAsyncResource<AdminOrgPage>(() => listOrgs(), []);
+
+  // The hooks fetch the FIRST page; Load-more appends further pages locally.
+  // Reset the appended pages (and re-seed the cursor) when a fresh first page
+  // lands — done during render (adjust-state-on-input), keyed by page identity,
+  // so no setState-in-effect. Visible list = first page ++ appended pages.
+  const [more, setMore] = useState<{ users: AdminUser[]; orgs: AdminOrg[] }>({ users: NO_USERS, orgs: NO_ORGS });
   const [userCursor, setUserCursor] = useState<string | null>(null);
   const [orgCursor, setOrgCursor] = useState<string | null>(null);
-  const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
-  const [busyId, setBusyId] = useState<string | null>(null);
+  const [seenUsers, setSeenUsers] = useState<AdminUserPage | null>(null);
+  const [seenOrgs, setSeenOrgs] = useState<AdminOrgPage | null>(null);
+  if (usersRes.data && usersRes.data !== seenUsers) {
+    setSeenUsers(usersRes.data);
+    setMore((m) => ({ ...m, users: NO_USERS }));
+    setUserCursor(usersRes.data.nextCursor);
+  }
+  if (orgsRes.data && orgsRes.data !== seenOrgs) {
+    setSeenOrgs(orgsRes.data);
+    setMore((m) => ({ ...m, orgs: NO_ORGS }));
+    setOrgCursor(orgsRes.data.nextCursor);
+  }
+  const users = usersRes.data ? [...usersRes.data.users, ...more.users] : NO_USERS;
+  const orgs = orgsRes.data ? [...orgsRes.data.orgs, ...more.orgs] : NO_ORGS;
+
+  // loading = users first-load skeleton (matches the old single `loading` gate,
+  // which was flipped by the users effect only).
+  const loading = usersRes.isPending;
+  const error = usersRes.error ?? orgsRes.error ?? actionError;
+  const refetch = () => { setActionError(null); usersRes.refetch(); orgsRes.refetch(); };
 
   // moderation modals
   const [banFor, setBanFor] = useState<AdminUser | null>(null);
   const [impersonateFor, setImpersonateFor] = useState<AdminUser | null>(null);
   const [planFor, setPlanFor] = useState<AdminOrg | null>(null);
 
-  // 유저는 검색어에 반응. orgs와 분리해 검색 타이핑이 org 페이지네이션을 리셋하지 않게.
-  useEffect(() => {
-    let active = true;
-    void listUsers({ search }).then((u) => {
-      if (!active) return;
-      if (u.ok) { setUsers(u.data.users); setUserCursor(u.data.nextCursor); setError(null); } else setError(u.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [search, nonce]);
-
-  // orgs는 검색과 무관 — nonce(명시 refetch)에만 반응.
-  useEffect(() => {
-    let active = true;
-    void listOrgs().then((o) => {
-      if (!active) return;
-      if (o.ok) { setOrgs(o.data.orgs); setOrgCursor(o.data.nextCursor); } else setError(o.error);
-    });
-    return () => { active = false; };
-  }, [nonce]);
-
-  const refetch = () => { setNonce((n) => n + 1); };
-
   async function loadMoreUsers() {
     if (!userCursor) return;
     const res = await listUsers({ search, cursor: userCursor });
     if (!mountedRef.current) return;
-    if (!res.ok) { setError(res.error); return; }
-    setUsers((p) => [...p, ...res.data.users]); setUserCursor(res.data.nextCursor);
+    if (!res.ok) { setActionError(res.error); return; }
+    setMore((m) => ({ ...m, users: [...m.users, ...res.data.users] })); setUserCursor(res.data.nextCursor);
   }
   async function loadMoreOrgs() {
     if (!orgCursor) return;
     const res = await listOrgs({ cursor: orgCursor });
     if (!mountedRef.current) return;
-    if (!res.ok) { setError(res.error); return; }
-    setOrgs((p) => [...p, ...res.data.orgs]); setOrgCursor(res.data.nextCursor);
+    if (!res.ok) { setActionError(res.error); return; }
+    setMore((m) => ({ ...m, orgs: [...m.orgs, ...res.data.orgs] })); setOrgCursor(res.data.nextCursor);
   }
 
   async function doUnban(u: AdminUser) {
@@ -89,7 +99,7 @@ export function AdminReal() {
     const res = await unbanUser(u.id);
     if (!mountedRef.current) return;
     setBusyId(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     refetch();
   }
   async function doBan(reason: string) {
@@ -98,7 +108,7 @@ export function AdminReal() {
     const res = await banUser(banFor.id, reason.trim() || null);
     if (!mountedRef.current) return;
     setBusyId(null); setBanFor(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     refetch();
   }
   async function doImpersonate() {
@@ -107,7 +117,7 @@ export function AdminReal() {
     const res = await impersonateUser(impersonateFor.id);
     if (!mountedRef.current) return;
     setBusyId(null); setImpersonateFor(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     // 세션 쿠키가 대상 유저로 스왑됨 → 그 유저 뷰로 진입.
     window.location.href = '/intelligence';
   }
@@ -117,7 +127,7 @@ export function AdminReal() {
     const res = await overridePlan(planFor.id, plan, reason.trim() || null);
     if (!mountedRef.current) return;
     setBusyId(null); setPlanFor(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
     refetch();
   }
 
@@ -129,7 +139,7 @@ export function AdminReal() {
           <p className="text-sm mt-1" style={{ color: 'var(--fg-muted)' }}>Platform operator tools — every action is audited. Impersonation is visible to the target org.</p>
         </header>
 
-        {error && <InlineError message={error} onRetry={() => { setError(null); refetch(); }} />}
+        {error && <InlineError message={error} onRetry={() => { refetch(); }} />}
 
         {loading ? (
           <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}><SkeletonText lines={8} /></div>
