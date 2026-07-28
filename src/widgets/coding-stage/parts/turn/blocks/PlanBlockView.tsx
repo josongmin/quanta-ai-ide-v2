@@ -1,7 +1,6 @@
 import { memo, useState } from 'react';
 import { Check, Sparkles, Zap } from 'lucide-react';
-import { useTranslation } from '@shared/i18n';
-import { formatNumber } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
 import type { PlanBlock } from '../../types';
 
 function PlanBlockViewImpl({ block }: { block: PlanBlock }) {

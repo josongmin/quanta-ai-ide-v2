@@ -14,9 +14,9 @@
 import { memo, useMemo } from 'react';
 import { Activity, Boxes, LayoutGrid, Network, ShieldAlert, Users } from 'lucide-react';
 import type { RepoData } from '@entities/repo';
-import { type Tone, formatNumber } from '@shared/lib';
+import { type Tone } from '@shared/lib';
 import { computeRepoStats } from '@entities/metric';
-import { useTranslation } from '@shared/i18n';
+import { useTranslation, formatNumber } from '@shared/i18n';
 import { OwnershipPanel } from '@features/ownership-routing';
 import { TabPanel, type TabDef } from './parts/TabPanel';
 import { OverviewTab } from './workspace-body/OverviewTab';

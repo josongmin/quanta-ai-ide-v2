@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
+import { formatNumber } from '@shared/i18n';
 import {
   GitBranch, GitPullRequest, FileCode, Sparkles, ArrowRight,
   CheckCircle2, ListTodo, Cpu, Coins, Zap, Activity,
 } from 'lucide-react';
-import { formatNumber } from '@shared/lib';
 import type { Task, PlanBlock, AgentTurn } from '../types';
 import { useCodingStage } from '../../model/CodingStageContext';
 

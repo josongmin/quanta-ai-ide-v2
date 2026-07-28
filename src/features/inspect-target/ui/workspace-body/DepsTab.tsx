@@ -1,9 +1,8 @@
 // ─── Tab: Deps ────────────────────────────────────────────────────────
 
 import { memo } from 'react';
-import { formatNumber } from '@shared/lib';
 import { Stat } from '@shared/ui';
-import { useTranslation } from '@shared/i18n';
+import { useTranslation, formatNumber } from '@shared/i18n';
 import { BarRow } from '../BarRow';
 import { SubCard } from '../parts/TabPanel';
 import type { RepoStats } from './shared';

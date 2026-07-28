@@ -4,9 +4,9 @@
 
 import { memo } from 'react';
 import type { FolderRecord } from '@entities/repo';
-import { languageHue, pct, formatNumber } from '@shared/lib';
+import { languageHue, pct } from '@shared/lib';
 import { Score, StackedRatioBar, Stat } from '@shared/ui';
-import { useTranslation } from '@shared/i18n';
+import { useTranslation, formatNumber } from '@shared/i18n';
 import { ConfidenceMeter } from '../ConfidenceMeter';
 import { SubCard } from '../parts/TabPanel';
 import type { FolderStats } from './shared';

@@ -1,7 +1,6 @@
 import { Sparkles, Box, Network } from 'lucide-react';
 import type { FileRecord } from '@entities/repo';
-import { useTranslation } from '@shared/i18n';
-import { formatNumber } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
 
 // AI-context box — the "what an agent can actually safely reason about
 // here" view. Three sub-facts:

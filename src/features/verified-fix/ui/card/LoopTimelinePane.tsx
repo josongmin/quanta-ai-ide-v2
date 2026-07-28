@@ -1,5 +1,5 @@
 import type { FixCase } from '../../model/types';
-import { formatNumber } from '@shared/lib';
+import { formatNumber } from '@shared/i18n';
 import { ACCENT, mix } from './tokens';
 import { PaneHeader } from './shared';
 

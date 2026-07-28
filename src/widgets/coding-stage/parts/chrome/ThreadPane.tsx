@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef } from 'react';
+import { formatNumber } from '@shared/i18n';
 import {
   Activity, CheckCircle2, Coins, GitBranch, GitPullRequest, MoreHorizontal, Sparkles,
 } from 'lucide-react';
-import { formatNumber } from '@shared/lib';
 import { Composer, type ComposerModelId } from '../Composer';
 import { LiveSnapshotCard } from '../timeline/LiveSnapshotCard';
 import { TimelineScrubber } from '../timeline/TimelineScrubber';

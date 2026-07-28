@@ -12,9 +12,9 @@
 import { memo, useMemo } from 'react';
 import { Activity, Folder, LayoutGrid, Network, ShieldAlert } from 'lucide-react';
 import type { RepoData } from '@entities/repo';
-import { type Tone, formatNumber } from '@shared/lib';
+import { type Tone } from '@shared/lib';
 import { computeFolderStats } from '@entities/metric';
-import { useTranslation } from '@shared/i18n';
+import { useTranslation, formatNumber } from '@shared/i18n';
 import { TabPanel, type TabDef } from './parts/TabPanel';
 import { OverviewTab } from './folder-body/OverviewTab';
 import { ActivityTab } from './folder-body/ActivityTab';

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import type { RepoData } from '@entities/repo';
-import { useTranslation } from '@shared/i18n';
-import { formatNumber } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
 
 // Top coupling list — replaces the chord diagram, which proved unreadable
 // at panel scale. Same underlying question ("who imports whom across

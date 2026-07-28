@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import type { RepoData, FileRecord, FolderRecord } from '@entities/repo';
-import { C, formatNumber } from '@shared/lib';
-import { useTranslation } from '@shared/i18n';
+import { C } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
 
 // Hierarchical Edge Bundling à la Holten 2006.
 //

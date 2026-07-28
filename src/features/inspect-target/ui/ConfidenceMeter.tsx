@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { useTranslation } from '@shared/i18n';
-import { C, formatNumber } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
+import { C } from '@shared/lib';
 
 // Feature-local viz (relocated from shared/ui): only inspect-target consumes it
 // (workspace-body/OverviewTab + FolderBody), so it lives with its callers.

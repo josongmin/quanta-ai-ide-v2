@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import type { RepoData, Layer } from '@entities/repo';
-import { useTranslation } from '@shared/i18n';
-import { formatNumber } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
 
 // Layer compliance checklist. Two rounds of "Sankey-style" attempts kept
 // hiding the only question that actually matters here: *which layer is

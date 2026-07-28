@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import type { RepoData } from '@entities/repo';
-import { useTranslation } from '@shared/i18n';
-import { formatNumber } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
 
 // Squarified treemap (Bruls/Huijsmans/van Wijk 2000). Same algorithm
 // WinDirStat, Disk Inventory X, and GitHub's code-volume widget use:

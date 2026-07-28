@@ -3,7 +3,7 @@
 // and the Tauri runtime adapters.
 export { C, type Tone } from './color';
 export { pageBackground } from './blueprint-surface';
-export { round1, pct, languageHue, formatNumber } from './format';
+export { round1, pct, languageHue } from './format';
 export { makeRng } from './rng';
 export { useShortcut, type Shortcut } from './useShortcut';
 export { useClickOutside } from './useClickOutside';

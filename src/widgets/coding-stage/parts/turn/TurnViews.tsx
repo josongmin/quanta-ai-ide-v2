@@ -1,6 +1,6 @@
 import { type MouseEvent } from 'react';
+import { formatNumber } from '@shared/i18n';
 import { Cpu, GitFork, RotateCcw, Sparkles, Target, Zap } from 'lucide-react';
-import { formatNumber } from '@shared/lib';
 import { BlockView } from './Blocks';
 import { TpsLiveMeter } from './TpsLiveMeter';
 import { LatencyBar } from './LatencyBar';

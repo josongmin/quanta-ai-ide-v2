@@ -3,8 +3,7 @@ import {
   Search, Wrench, Eye, FlaskConical, Package, Check, Ban,
   ChevronDown, ChevronRight, type LucideIcon,
 } from 'lucide-react';
-import { useTranslation } from '@shared/i18n';
-import { formatNumber } from '@shared/lib';
+import { useTranslation, formatNumber } from '@shared/i18n';
 import type { FixCase, LoopStage } from '../../model/types';
 import { useVfx } from './tokens';
 
