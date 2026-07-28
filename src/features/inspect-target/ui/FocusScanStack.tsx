@@ -5,6 +5,7 @@ import { ResizeHandle } from '@shared/ui';
 // Layout constants live in the shared SoT (features may import @shared freely —
 // no boundary violation; the earlier local copy was avoidable duplication).
 import { INTELLIGENCE_LAYOUT } from '@shared/lib/panelLayout';
+import { isEditableTarget } from '@shared/lib';
 import { useStack, stackKey } from '../model/StackContext';
 import FocusScanPanel from './focus-scan/FocusScanPanel';
 import InspectPanel from './InspectPanel';
@@ -41,8 +42,7 @@ export default function FocusScanStack({
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      const t = e.target as HTMLElement | null;
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (isEditableTarget(e.target)) return; // shared guard — also covers <select>
       if (items.length === 0) return;
       if (e.altKey && e.key === 'ArrowLeft') {
         e.preventDefault();

@@ -28,6 +28,7 @@ export type ApiResult<T> =
 export function apiErrorMessage(e: ApiError, resource = 'this'): string {
   if (e.kind === 'unauthorized') return 'Your session expired. Please sign in again.';
   if (e.kind === 'http' && e.status === 403) return `You don't have permission to view ${resource}.`;
+  if (e.kind === 'http' && e.status === 429) return 'Too many requests. Please wait and try again.';
   if (e.kind === 'not-wired') return 'Not available in demo mode.';
   return e.message || 'Something went wrong.';
 }

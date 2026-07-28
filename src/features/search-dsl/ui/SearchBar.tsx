@@ -4,7 +4,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useFilterStore } from '@entities/filter-state';
 import { useTranslation } from '@shared/i18n';
 import { GlassCard } from '@shared/ui';
-import { useShortcut } from '@shared/lib';
+import { useShortcut, isEditableTarget } from '@shared/lib';
 import type { SearchMode } from '@entities/repo';
 
 const SAMPLES: { i18nKey: string; q: string }[] = [
@@ -60,8 +60,7 @@ export default function SearchBar({
   // "/" focuses the input (Sourcegraph-style global hotkey)
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      const t = e.target as HTMLElement | null;
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (isEditableTarget(e.target)) return; // shared guard — also covers <select>
       if (e.key === '/') {
         e.preventDefault();
         inputRef.current?.focus();
