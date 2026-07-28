@@ -3,15 +3,16 @@ import {
 } from 'react';
 import { safeLocalSet } from '@shared/lib';
 import { useTheme } from '@shared/theme';
-import { applyTokens, type SemanticTokens, type Theme } from '@shared/tokens';
+import {
+  applyTokens, applySemanticTheme, applyGlassTints, applyGlobalTokens,
+  type SemanticTokens, type Theme, type GlobalTokenSections, type Tokens,
+} from '@shared/tokens';
 import { createDefaults, load, STORAGE_KEY } from './tokenStorage';
-import { applyGlassTints, applyGlobalTokens, applySemanticTheme } from './applyTokens';
-import type { GlobalTokenSections, Tokens } from './tokens-types';
 
-// Token shapes moved to ./tokens-types (leaf) to break the value↔type cycle
-// with applyTokens/tokenStorage. Re-exported here so existing consumers that
-// import them from the context module keep working.
-export type { GlobalTokenSections, Tokens } from './tokens-types';
+// The token engine + editable-token shapes now live in @shared/tokens (moved out
+// of this feature). Re-exported here so existing consumers that import them from
+// the context module keep working.
+export type { GlobalTokenSections, Tokens } from '@shared/tokens';
 
 type Ctx = {
   tokens: Tokens;

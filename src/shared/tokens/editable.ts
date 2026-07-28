@@ -1,7 +1,7 @@
-// Leaf token types. Extracted from TokensContext so value modules (applyTokens,
-// tokenStorage) can import these without an import cycle back through the
-// context module (which imports THEM at value level). Imports nothing local.
-import type { SemanticTokens } from '@shared/tokens';
+// The EDITABLE token set — the shape the live token editor (chat-agent's
+// TokensPanel) mutates and the preset emitters below consume. `Tokens` wraps the
+// per-theme semantic tokens plus the global chrome sections.
+import type { SemanticTokens } from './semantic';
 
 export type GlobalTokenSections = {
   glass: {

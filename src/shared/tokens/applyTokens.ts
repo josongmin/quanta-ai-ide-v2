@@ -14,8 +14,9 @@ import {
   easing,
   zIndex,
 } from './primitives';
-import { semantic, type Theme } from './semantic';
+import { semantic, type Theme, type SemanticTokens } from './semantic';
 import { glass, card, chip, panel, header, tab, dropdown, pill } from './components';
+import type { GlobalTokenSections, Tokens } from './editable';
 
 // Exported so the token↔tailwind sync test can assert every `var(--x)` the
 // tailwind config references actually resolves to a token emitted here.
@@ -189,4 +190,104 @@ export function applyTokens(theme: Theme): void {
 
   root.style.setProperty('--tab-indicator-h', tab.indicatorHeight);
   root.style.setProperty('--dropdown-width', dropdown.width);
+}
+
+// ── Preset-aware emitters (was features/chat-agent/model/applyTokens) ────────
+// The live token editor (TokensProvider) drives these with the user-edited token
+// set. They emit the SAME :root vars as applyTokens above, reusing the ONE
+// semanticToCssVar map (the editor copy used to be a byte-identical duplicate).
+// Moved here so the app-wide theming primitive lives in the design-system layer,
+// not inside a leaf feature.
+
+export function applySemanticTheme(theme: Theme, tokens: SemanticTokens): void {
+  const root = document.documentElement;
+  for (const [key, value] of Object.entries(tokens) as [keyof SemanticTokens, string][]) {
+    root.style.setProperty(semanticToCssVar[key], value);
+  }
+  root.dataset['theme'] = theme;
+  root.style.background = tokens.bgCanvas;
+  root.style.backgroundColor = tokens.bgCanvas;
+  root.style.colorScheme = theme;
+
+  if (document.body) {
+    document.body.style.background = tokens.bgCanvas;
+    document.body.style.backgroundColor = tokens.bgCanvas;
+    document.body.style.colorScheme = theme;
+  }
+  const appRoot = document.getElementById('root');
+  if (appRoot) {
+    appRoot.style.background = tokens.bgCanvas;
+    appRoot.style.backgroundColor = tokens.bgCanvas;
+  }
+}
+
+// Glass tint is pinned to the chrome token (memory rule): panels take their fill
+// from --bg-overlay, so --glass-tint-* only fed a subtle border — kept neutral.
+export function applyGlassTints(allSemantic: { dark: SemanticTokens; light: SemanticTokens }): void {
+  const root = document.documentElement;
+  void allSemantic;
+  root.style.removeProperty('--glass-tint-dark');
+  root.style.removeProperty('--glass-tint-light');
+}
+
+export function applyGlobalTokens(
+  tokens: GlobalTokenSections,
+  semanticTokens: Tokens['semantic'],
+  activeTheme: Theme,
+): void {
+  const root = document.documentElement;
+  root.style.setProperty('--glass-blur', tokens.glass.blur);
+  root.style.setProperty('--glass-alpha-dark', String(tokens.glass.fillAlphaDark));
+  root.style.setProperty('--glass-alpha-light', String(tokens.glass.fillAlphaLight));
+  root.style.setProperty('--glass-fill-alpha-dark', String(tokens.glass.fillAlphaDark));
+  root.style.setProperty('--glass-fill-alpha-light', String(tokens.glass.fillAlphaLight));
+  root.style.setProperty('--glass-border-dark', String(tokens.glass.borderDark));
+  root.style.setProperty('--glass-border-light', String(tokens.glass.borderLight));
+  root.style.setProperty('--glass-border-width', `${tokens.glass.borderWidth}px`);
+  root.style.setProperty('--glass-shadow', tokens.glass.shadow);
+  root.style.setProperty('--radius', tokens.glass.radius);
+
+  root.style.setProperty('--card-padding', tokens.card.padding);
+  root.style.setProperty('--card-padding-compact', tokens.card.paddingCompact);
+  root.style.setProperty('--card-radius', tokens.card.radius);
+  root.style.setProperty('--card-radius-inner', tokens.card.radiusInner);
+  root.style.setProperty('--card-gap', tokens.card.gap);
+
+  root.style.setProperty('--chip-padding', tokens.chip.padding);
+  root.style.setProperty('--chip-padding-compact', tokens.chip.paddingCompact);
+  root.style.setProperty('--chip-radius', tokens.chip.radius);
+  root.style.setProperty('--chip-radius-pill', tokens.chip.radiusPill);
+
+  root.style.setProperty('--pill-padding', `${tokens.pill.paddingY} ${tokens.pill.paddingX}`);
+  root.style.setProperty('--pill-padding-compact', `${tokens.pill.paddingCompactY} ${tokens.pill.paddingCompactX}`);
+  root.style.setProperty('--pill-radius', tokens.pill.radius);
+  root.style.setProperty('--pill-gap', tokens.pill.gap);
+
+  root.style.setProperty('--panel-width', tokens.panel.width);
+  root.style.setProperty('--panel-inset', tokens.panel.inset);
+  root.style.setProperty('--panel-max-height', tokens.panel.maxHeight);
+
+  root.style.setProperty('--header-height', tokens.header.height);
+  root.style.setProperty('--header-padding-x', tokens.header.paddingX);
+
+  root.style.setProperty('--tab-indicator-h', tokens.tab.indicatorHeight);
+  root.style.setProperty('--tab-padding-x', tokens.tab.paddingX);
+  root.style.setProperty('--tab-padding-y', tokens.tab.paddingY);
+
+  root.style.setProperty('--dropdown-width', tokens.dropdown.width);
+  root.style.setProperty('--dropdown-offset', tokens.dropdown.offset);
+  root.style.setProperty('--dropdown-radius', tokens.dropdown.radius);
+  root.style.setProperty('--dropdown-padding', tokens.dropdown.padding);
+
+  root.style.setProperty('--tooltip-padding-x', tokens.tooltip.paddingX);
+  root.style.setProperty('--tooltip-padding-y', tokens.tooltip.paddingY);
+  root.style.setProperty('--tooltip-radius', tokens.tooltip.radius);
+  root.style.setProperty('--tooltip-font-size', tokens.tooltip.fontSize);
+
+  root.style.setProperty('--focus-ring', tokens.focus.ring);
+  root.style.setProperty('--focus-outline', tokens.focus.outline);
+
+  root.style.setProperty('--accent', semanticTokens[activeTheme].fgAccent);
+  root.style.setProperty('--bg-dark', semanticTokens.dark.bgSurface);
+  root.style.setProperty('--bg-light', semanticTokens.light.bgSurface);
 }

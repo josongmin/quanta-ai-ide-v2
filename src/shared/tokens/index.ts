@@ -5,4 +5,8 @@
 export * as primitives from './primitives';
 export { semantic, type SemanticTokens, type Theme } from './semantic';
 export * as components from './components';
-export { applyTokens } from './applyTokens';
+// Boot emitter (applyTokens) + the preset-aware emitters the live token editor
+// drives (applySemanticTheme/applyGlobalTokens/applyGlassTints) — all in the
+// design-system layer now, not inside a feature.
+export { applyTokens, applySemanticTheme, applyGlassTints, applyGlobalTokens } from './applyTokens';
+export type { Tokens, GlobalTokenSections } from './editable';

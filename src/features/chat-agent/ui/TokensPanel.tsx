@@ -5,7 +5,7 @@ import { useTranslation } from '@shared/i18n';
 import { useTheme } from '@shared/theme';
 import { type SemanticTokens } from '@shared/tokens';
 import { useTokens } from '../model/TokensContext';
-import type { GlobalTokenSections, Tokens } from '../model/tokens-types';
+import type { GlobalTokenSections, Tokens } from '@shared/tokens';
 import { DARK_PRESETS, LIGHT_PRESETS, type ThemePreset } from '../model/theme-presets';
 import { ThemePresetGrid } from './tokens-panel/PresetGrid';
 import { SectionTitle, ThemeTokenMatrix } from './tokens-panel/TokenMatrix';
