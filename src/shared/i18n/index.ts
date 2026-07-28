@@ -4,4 +4,4 @@
 export { useTranslation } from 'react-i18next';
 export { SUPPORTED_LOCALES, type Locale } from './config';
 export { HtmlLangSync } from './HtmlLangSync';
-export { currentLocale, formatNumber, formatDate, formatTime, formatTimestamp } from './format';
+export { currentLocale, formatNumber, formatDate, formatTime, formatTimestamp, formatDateShort } from './format';

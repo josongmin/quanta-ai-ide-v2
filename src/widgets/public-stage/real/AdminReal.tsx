@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAsyncResource } from '@shared/lib';
+import { formatDateShort } from '@shared/i18n';
 import { UserCog, Ban, ShieldCheck, LogIn, CreditCard, Building2, Users } from 'lucide-react';
 import { AdminShell } from '../parts/AdminShell';
 import { Button, Field } from '@shared/ui/forms';
@@ -23,10 +24,6 @@ const PLANS: AdminPlan[] = ['free', 'team', 'business', 'enterprise'];
 const NO_USERS: AdminUser[] = [];
 const NO_ORGS: AdminOrg[] = [];
 
-function shortDate(iso: string): string {
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-}
 const planVariant = (p: string): BadgeVariant => (p === 'business' || p === 'enterprise' ? 'success' : 'neutral');
 
 export function AdminReal() {
@@ -174,7 +171,7 @@ export function AdminReal() {
                     </span>
                     {u.role === 'admin' ? <Badge variant="info" size="sm">Admin</Badge> : <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>Member</span>}
                     <Badge variant={u.banned ? 'danger' : 'success'} size="sm">{u.banned ? 'Banned' : 'Active'}</Badge>
-                    <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(u.createdAt)}</span>
+                    <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{formatDateShort(u.createdAt)}</span>
                     <RowMenu
                       items={[
                         { label: 'Impersonate', icon: LogIn, disabled: busyId !== null || u.role === 'admin', onClick: () => { setImpersonateFor(u); } },
@@ -205,7 +202,7 @@ export function AdminReal() {
                     <span className="text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{o.name}</span>
                     <span className="text-sm truncate font-mono" style={{ color: 'var(--fg-muted)' }}>{o.slug}</span>
                     <Badge variant={planVariant(o.plan)} size="sm">{o.plan}</Badge>
-                    <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(o.createdAt)}</span>
+                    <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{formatDateShort(o.createdAt)}</span>
                     <RowMenu items={[{ label: 'Override plan', icon: CreditCard, disabled: busyId !== null, onClick: () => { setPlanFor(o); } }]} />
                   </>
                 )}

@@ -4,7 +4,7 @@ import {
   createJSONStorage,
   type StateStorage,
 } from 'zustand/middleware';
-import { STORAGE_KEYS, systemRuntimeEnv } from '@shared/lib';
+import { STORAGE_KEYS, systemRuntimeEnv, clamp } from '@shared/lib';
 import {
   FIRST_LAUNCH_SURFACE_IDS,
   SURFACE_IDS_ORDERED,
@@ -279,7 +279,7 @@ export const useWorkspaceTabsStore = create<WorkspaceTabsStore>()(
           set((s) => {
             const fromIndex = s.tabs.findIndex((t) => t.id === id);
             if (fromIndex === -1 || fromIndex === toIndex) return s;
-            const clamped = Math.max(0, Math.min(toIndex, s.tabs.length - 1));
+            const clamped = clamp(toIndex, 0, s.tabs.length - 1);
             const next = [...s.tabs];
             const [moved] = next.splice(fromIndex, 1);
             next.splice(clamped, 0, moved);

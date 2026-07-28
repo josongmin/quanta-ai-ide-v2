@@ -1,26 +1,20 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { useRouterState } from '@tanstack/react-router';
 import { STORAGE_KEY_PREFIX } from './storageKeys';
+import { safeSessionGet, safeSessionSet } from './safeStorage';
 
 const STORAGE_PREFIX = STORAGE_KEY_PREFIX.scroll;
 
 function readKey(scope: string, routeKey: string): number | null {
-  try {
-    const raw = sessionStorage.getItem(`${STORAGE_PREFIX}${scope}:${routeKey}`);
-    if (raw == null) return null;
-    const n = Number(raw);
-    return Number.isFinite(n) ? n : null;
-  } catch {
-    return null;
-  }
+  const raw = safeSessionGet(`${STORAGE_PREFIX}${scope}:${routeKey}`);
+  if (raw == null) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : null;
 }
 
 function writeKey(scope: string, routeKey: string, top: number) {
-  try {
-    sessionStorage.setItem(`${STORAGE_PREFIX}${scope}:${routeKey}`, String(top));
-  } catch {
-    // Quota / disabled storage — silently drop.
-  }
+  // Quota / disabled storage is swallowed by safeSessionSet.
+  safeSessionSet(`${STORAGE_PREFIX}${scope}:${routeKey}`, String(top));
 }
 
 type Options = {

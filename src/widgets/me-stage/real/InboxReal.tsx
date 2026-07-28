@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAsyncResource } from '@shared/lib';
+import { formatDateShort } from '@shared/i18n';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { CheckCheck, Shield, CreditCard, Users, KeyRound, Building2 } from 'lucide-react';
@@ -57,7 +58,7 @@ function relTime(iso: string, t: TFunction): string {
   if (h < 24) return t('real.inbox.relTime.hours', { count: h });
   const d = Math.round(h / 24);
   if (d < 30) return t('real.inbox.relTime.days', { count: d });
-  return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  return formatDateShort(iso);
 }
 
 const NONE: NotificationRecord[] = [];

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { safeLocalGet, safeLocalSet } from './safeStorage';
 import { STORAGE_KEYS } from './storageKeys';
+import { clamp } from './clamp';
 
 export type PanelWidthConfig = {
   storageKey: string;
@@ -33,7 +34,7 @@ export const INTELLIGENCE_LAYOUT = {
 } as const;
 
 function clampWidth(width: number, config: PanelWidthConfig): number {
-  return Math.min(config.max, Math.max(config.min, width));
+  return clamp(width, config.min, config.max);
 }
 
 function readStoredWidth(config: PanelWidthConfig): number {

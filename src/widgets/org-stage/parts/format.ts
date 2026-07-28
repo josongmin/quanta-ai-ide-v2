@@ -4,6 +4,7 @@
 
 import type { TFunction } from 'i18next';
 import type { OrgRole } from '@entities/org';
+import { formatDateShort } from '@shared/i18n';
 
 /** Localized role label. `t` is the `org` namespace translator. */
 export function roleLabel(t: TFunction<'org'>, role: OrgRole): string {
@@ -20,14 +21,11 @@ export function initials(name: string, email: string): string {
   return src.slice(0, 2).toUpperCase();
 }
 
-/** ISO → short local date, or an em dash when absent/invalid. */
-export function shortDate(iso: string | null | undefined): string {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime())
-    ? '—'
-    : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-}
+/** ISO → short app-locale date, or an em dash when absent/invalid. Thin re-export
+ *  of the shared i18n formatter, kept under the org-stage presentational API so
+ *  MembersReal / ServiceAccountsReal / WebhooksReal / TeamsReal call sites are
+ *  unchanged. */
+export const shortDate = formatDateShort;
 
 /** Human "expires in N days" from an ISO expiry (past → "expired"). */
 export function expiresLabel(t: TFunction<'org'>, iso: string): string {

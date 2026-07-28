@@ -1,5 +1,6 @@
 import { Scale } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
+import { clamp } from '@shared/lib';
 import { cohensD } from './statsKit';
 import { useV2 } from './tokens';
 import { V2Card, SectionTitle } from './primitives';
@@ -42,7 +43,7 @@ export function EffectSizeBar({
                                 t('effect.band.large',      { defaultValue: 'Large' });
 
   // Map d to bar position. We render a centered bar [-2, +2] with bands.
-  const clamped = Math.max(-2, Math.min(2, displayD));
+  const clamped = clamp(displayD, -2, 2);
   const pct = ((clamped + 2) / 4) * 100;
 
   const accentColor = win ? v.ok : '#d98a85';

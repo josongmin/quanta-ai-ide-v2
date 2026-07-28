@@ -46,3 +46,15 @@ export function formatTime(d: Date | number, opts?: Intl.DateTimeFormatOptions):
 export function formatTimestamp(d: Date | number, opts?: Intl.DateTimeFormatOptions): string {
   return dateFmt({ month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', ...opts }).format(d);
 }
+
+// ISO string (or null/invalid) → locale-aware short date ("Mar 5, 2026"), em dash
+// when absent. Consolidates the byte-identical `shortDate` helper re-derived in
+// AdminReal / ApiTokensReal / org-stage/format / InboxReal — those used
+// `toLocaleDateString(undefined, …)` (BROWSER locale), so ja/ko/zh users saw this
+// date in a different locale than the rest of the app; routing through formatDate
+// makes it app-locale-consistent.
+export function formatDateShort(iso: string | number | Date | null | undefined): string {
+  if (iso == null) return '—';
+  const d = iso instanceof Date ? iso : new Date(iso);
+  return Number.isNaN(d.getTime()) ? '—' : formatDate(d, { year: 'numeric', month: 'short', day: 'numeric' });
+}

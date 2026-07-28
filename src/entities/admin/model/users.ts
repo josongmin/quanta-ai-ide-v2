@@ -2,7 +2,7 @@
 // (cookie-authed, requireSuperAdmin server-side). Reuses the {ok,data}|{ok,error}
 // idiom. NOTE: shapes mirror @p0/contracts admin; replace with codegen when wired.
 import { accountsApi } from '@shared/auth';
-import { apiErrorMessage } from '@shared/api';
+import { apiErrorMessage, type ApiError } from '@shared/api';
 
 export type AdminUser = {
   id: string;
@@ -30,9 +30,9 @@ export async function listUsers(opts: { search?: string; cursor?: string | null 
 }
 
 // 400 = moderation 거부(자기 자신/다른 admin) → 친절한 메시지.
-function moderationError(res: { error: { kind: string; status?: number } }, fallback: string): string {
+function moderationError(res: { error: ApiError }, fallback: string): string {
   if (res.error.kind === 'http' && res.error.status === 400) return "You can't do this to yourself or another admin.";
-  return apiErrorMessage(res.error as Parameters<typeof apiErrorMessage>[0], fallback);
+  return apiErrorMessage(res.error, fallback);
 }
 
 export async function banUser(id: string, reason: string | null): Promise<ActionResult> {

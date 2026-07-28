@@ -5,7 +5,7 @@
 //
 // NOTE: shapes mirror @p0/contracts sso; replace with codegen when wired.
 import { accountsApi } from '@shared/auth';
-import { apiErrorMessage } from '@shared/api';
+import { apiErrorMessage, type ApiError } from '@shared/api';
 
 export type SsoConnection = {
   orgId: string;
@@ -43,11 +43,11 @@ const DOMAIN_MSG = 'That domain is already claimed by another organization.';
 
 const PUBLIC_MSG = "Public email providers (gmail, outlook, …) can't be used for SSO — use your company domain.";
 
-function connError(res: { error: { kind: string; status?: number } }, fallback: string): string {
+function connError(res: { error: ApiError }, fallback: string): string {
   if (res.error.kind === 'http' && res.error.status === 403) return PLAN_MSG;
   if (res.error.kind === 'http' && res.error.status === 409) return DOMAIN_MSG;
   if (res.error.kind === 'http' && res.error.status === 400) return PUBLIC_MSG;
-  return apiErrorMessage(res.error as Parameters<typeof apiErrorMessage>[0], fallback);
+  return apiErrorMessage(res.error, fallback);
 }
 
 export async function getSsoConnection(orgId: string): Promise<Result<SsoConnection | null>> {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import { useTranslation } from '@shared/i18n';
-import { safeLocalGet, safeLocalSet, safeLocalRemove, STORAGE_KEYS } from '@shared/lib';
+import { safeLocalGet, safeLocalSet, safeLocalRemove, STORAGE_KEYS, clamp } from '@shared/lib';
 import { GlassCard } from '@shared/ui';
 import { useRunSuggestion, type SuggestionKey } from '../model/suggestions';
 import { useQuantaChat } from '../model/useQuantaChat';
@@ -63,7 +63,7 @@ export default function ChatAgent({
   function clampHeight(h: number): number {
     if (typeof window === 'undefined') return Math.max(HEIGHT_MIN, h);
     const max = Math.floor(window.innerHeight * HEIGHT_MAX_VH);
-    return Math.min(max, Math.max(HEIGHT_MIN, h));
+    return clamp(h, HEIGHT_MIN, max);
   }
 
   function onResizeStart(e: React.PointerEvent<HTMLDivElement>) {

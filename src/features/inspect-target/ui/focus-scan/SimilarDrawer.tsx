@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useFilterRepo } from '@entities/filter-state';
 import { findSimilar, type FileRecord, type SimilarHit } from '@entities/repo';
 import { useTranslation } from '@shared/i18n';
+import { clamp01 } from '@shared/lib';
 import { useStack } from '../../model/StackContext';
 import { Empty } from './shared';
 
@@ -57,7 +58,7 @@ export function SimilarDrawer({ file, onClose }: { file: FileRecord; onClose: ()
           {hits.map((hit) => {
             const f = repo.files[hit.id];
             if (!f) return null;
-            const pct = Math.max(0, Math.min(1, hit.score));
+            const pct = clamp01(hit.score);
             return (
               <button
                 key={hit.id}

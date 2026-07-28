@@ -10,6 +10,8 @@
 // check, server-side policy, rate limiting). Never treat `meetsClientPolicy`
 // or a high `score` here as proof a password is safe.
 
+import { clamp } from '@shared/lib';
+
 export type PasswordRule = {
   id: 'length' | 'mixed' | 'digit' | 'symbol' | 'no-name';
   label: string;
@@ -87,7 +89,7 @@ export function evaluatePassword(pw: string, name = ''): PasswordReport {
   const classes = characterClasses(pw);
 
   // Base score = how many rules are satisfied, clamped to 1..4.
-  let score = Math.max(1, Math.min(4, passed)) as 0 | 1 | 2 | 3 | 4;
+  let score = clamp(passed, 1, 4) as 0 | 1 | 2 | 3 | 4;
 
   // Length can ADD a little credit, but only when the password already mixes
   // character classes. A single-class string ("aaaa…") never earns length

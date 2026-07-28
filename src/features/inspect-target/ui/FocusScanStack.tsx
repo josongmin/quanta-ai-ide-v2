@@ -4,7 +4,7 @@ import { ResizeHandle } from '@shared/ui';
 // Layout constants live in the shared SoT (features may import @shared freely —
 // no boundary violation; the earlier local copy was avoidable duplication).
 import { INTELLIGENCE_LAYOUT } from '@shared/lib/panelLayout';
-import { useShortcut } from '@shared/lib';
+import { useShortcut, clamp } from '@shared/lib';
 import { useStack, stackKey } from '../model/StackContext';
 import FocusScanPanel from './focus-scan/FocusScanPanel';
 import InspectPanel from './InspectPanel';
@@ -66,7 +66,7 @@ export default function FocusScanStack({
     const CHROME = 34;
     const PER_CHAR = 6.4;
     const raw = Math.round(name.length * PER_CHAR + CHROME);
-    return Math.max(TAB_MIN_LENGTH, Math.min(TAB_MAX_LENGTH, raw));
+    return clamp(raw, TAB_MIN_LENGTH, TAB_MAX_LENGTH);
   }
 
   // Rail's right edge = card's left edge. Active tab will reach +1px into

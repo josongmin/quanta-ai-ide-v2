@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAsyncResource } from '@shared/lib';
+import { formatDateShort } from '@shared/i18n';
 import { useTranslation } from 'react-i18next';
 import { Key, Plus, Trash2 } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
@@ -22,12 +23,6 @@ const EXPIRY: { labelKey: string; days: number | null }[] = [
   { labelKey: 'real.tokens.expiry.year1', days: 365 },
   { labelKey: 'real.tokens.expiry.none', days: null },
 ];
-
-function shortDate(iso: string | null): string {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-}
 
 const EMPTY: ApiKeyRecord[] = [];
 
@@ -86,8 +81,8 @@ export function ApiTokensReal() {
                 <span className="text-base truncate" style={{ color: 'var(--fg-strong)' }}>{rec.name ?? t('real.tokens.fallbackName')}</span>
               </div>
               <span className="font-mono text-sm" style={{ color: 'var(--fg-muted)' }}>{rec.start ?? rec.prefix ?? '—'}…</span>
-              <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(rec.createdAt)}</span>
-              <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{shortDate(rec.expiresAt)}</span>
+              <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{formatDateShort(rec.createdAt)}</span>
+              <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{formatDateShort(rec.expiresAt)}</span>
               <RowMenu
                 items={[{ label: t('real.tokens.revokeToken'), icon: Trash2, danger: true, disabled: busyId === rec.id, onClick: () => { setConfirmRevoke(rec); } }]}
               />
