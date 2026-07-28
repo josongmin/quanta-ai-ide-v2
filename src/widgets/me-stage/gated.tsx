@@ -1,11 +1,7 @@
-// Mock↔real switch for me-stage pages. Profile/Account/Security are wired to
-// better-auth; the rest (connected apps / API tokens / notifications / AI /
-// inbox) need backends that land in Phase 2-3, so real mode shows MeComingSoon
-// instead of the demo's fabricated data. Appearance/Preferences/Keyboard are
-// client-only and exported straight from ./pages (no gate needed).
-import { useTranslation } from 'react-i18next';
+// Mock↔real switch for me-stage pages. Every me page is now backend-wired: real mode renders
+// its Real component, demo (mock auth) renders the seeded mock. Appearance/Preferences/Keyboard
+// are client-only and exported straight from ./pages (no gate needed).
 import { env } from '@shared/config/env';
-import { MeComingSoon } from './real/MeComingSoon';
 import { ProfileReal } from './real/ProfileReal';
 import { AccountReal } from './real/AccountReal';
 import { SecurityReal } from './real/SecurityReal';
@@ -13,6 +9,7 @@ import { ApiTokensReal } from './real/ApiTokensReal';
 import { InboxReal } from './real/InboxReal';
 import { ConnectedAppsReal } from './real/ConnectedAppsReal';
 import { AiReal } from './real/AiReal';
+import { NotificationsReal } from './real/NotificationsReal';
 
 import ProfileMock from './pages/ProfilePage';
 import AccountMock from './pages/AccountPage';
@@ -39,8 +36,7 @@ export function ApiTokensPage() {
   return env.useRealAuth ? <ApiTokensReal /> : <ApiTokensMock />;
 }
 export function NotificationsPage() {
-  const { t } = useTranslation('me');
-  return env.useRealAuth ? <MeComingSoon title={t('comingSoon.notifications')} /> : <NotificationsMock />;
+  return env.useRealAuth ? <NotificationsReal /> : <NotificationsMock />;
 }
 export function AiPage() {
   return env.useRealAuth ? <AiReal /> : <AiMock />;

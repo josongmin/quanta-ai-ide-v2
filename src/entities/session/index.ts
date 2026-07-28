@@ -54,3 +54,9 @@ export {
   type AiPrefs,
   type AiSurface,
 } from './model/aiPrefs';
+export {
+  getNotificationPrefs,
+  saveNotificationPrefs,
+  type NotificationPrefs,
+  type NotifChannels,
+} from './model/notificationPrefs';
