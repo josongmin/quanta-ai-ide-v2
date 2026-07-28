@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useAsyncResource } from '@shared/lib';
+import { useAsyncResource, useAppendedPages } from '@shared/lib';
 import { formatDateShort } from '@shared/i18n';
 import { UserCog, Ban, ShieldCheck, LogIn, CreditCard, Building2, Users } from 'lucide-react';
 import { AdminShell } from '../parts/AdminShell';
@@ -21,8 +21,6 @@ import {
 // backed here.) House rules: no edge stripes, no grey selected-fills, intent
 // tokens, named font-size classes.
 const PLANS: AdminPlan[] = ['free', 'team', 'business', 'enterprise'];
-const NO_USERS: AdminUser[] = [];
-const NO_ORGS: AdminOrg[] = [];
 
 const planVariant = (p: string): BadgeVariant => (p === 'business' || p === 'enterprise' ? 'success' : 'neutral');
 
@@ -42,53 +40,38 @@ export function AdminReal() {
   // orgs는 검색과 무관 — 명시 refetch에만 반응.
   const orgsRes = useAsyncResource<AdminOrgPage>(() => listOrgs(), []);
 
-  // The hooks fetch the FIRST page; Load-more appends further pages locally.
-  // Reset the appended pages (and re-seed the cursor) when a fresh first page
-  // lands — done during render (adjust-state-on-input), keyed by page identity,
-  // so no setState-in-effect. Visible list = first page ++ appended pages.
-  const [more, setMore] = useState<{ users: AdminUser[]; orgs: AdminOrg[] }>({ users: NO_USERS, orgs: NO_ORGS });
-  const [userCursor, setUserCursor] = useState<string | null>(null);
-  const [orgCursor, setOrgCursor] = useState<string | null>(null);
-  const [seenUsers, setSeenUsers] = useState<AdminUserPage | null>(null);
-  const [seenOrgs, setSeenOrgs] = useState<AdminOrgPage | null>(null);
-  if (usersRes.data && usersRes.data !== seenUsers) {
-    setSeenUsers(usersRes.data);
-    setMore((m) => ({ ...m, users: NO_USERS }));
-    setUserCursor(usersRes.data.nextCursor);
-  }
-  if (orgsRes.data && orgsRes.data !== seenOrgs) {
-    setSeenOrgs(orgsRes.data);
-    setMore((m) => ({ ...m, orgs: NO_ORGS }));
-    setOrgCursor(orgsRes.data.nextCursor);
-  }
-  const users = usersRes.data ? [...usersRes.data.users, ...more.users] : NO_USERS;
-  const orgs = orgsRes.data ? [...orgsRes.data.orgs, ...more.orgs] : NO_ORGS;
+  // First page (+ cursor) from each hook; further pages are appended and reset on
+  // a fresh first page via the shared useAppendedPages (identity-keyed reset +
+  // stale-guard). Users and orgs paginate independently so searching users does
+  // not reset org pagination.
+  const usersPage = useAppendedPages<AdminUserPage, AdminUser>(
+    usersRes.data,
+    (p) => ({ items: p.users, cursor: p.nextCursor }),
+    async (c) => {
+      const res = await listUsers({ search, cursor: c });
+      return res.ok ? { ok: true, data: { items: res.data.users, cursor: res.data.nextCursor } } : { ok: false, error: res.error };
+    },
+  );
+  const orgsPage = useAppendedPages<AdminOrgPage, AdminOrg>(
+    orgsRes.data,
+    (p) => ({ items: p.orgs, cursor: p.nextCursor }),
+    async (c) => {
+      const res = await listOrgs({ cursor: c });
+      return res.ok ? { ok: true, data: { items: res.data.orgs, cursor: res.data.nextCursor } } : { ok: false, error: res.error };
+    },
+  );
+  const users = usersPage.items;
+  const orgs = orgsPage.items;
 
-  // loading = users first-load skeleton (matches the old single `loading` gate,
-  // which was flipped by the users effect only).
+  // loading = users first-load skeleton (matches the old single `loading` gate).
   const loading = usersRes.isPending;
-  const error = usersRes.error ?? orgsRes.error ?? actionError;
+  const error = usersRes.error ?? orgsRes.error ?? usersPage.error ?? orgsPage.error ?? actionError;
   const refetch = () => { setActionError(null); usersRes.refetch(); orgsRes.refetch(); };
 
   // moderation modals
   const [banFor, setBanFor] = useState<AdminUser | null>(null);
   const [impersonateFor, setImpersonateFor] = useState<AdminUser | null>(null);
   const [planFor, setPlanFor] = useState<AdminOrg | null>(null);
-
-  async function loadMoreUsers() {
-    if (!userCursor) return;
-    const res = await listUsers({ search, cursor: userCursor });
-    if (!mountedRef.current) return;
-    if (!res.ok) { setActionError(res.error); return; }
-    setMore((m) => ({ ...m, users: [...m.users, ...res.data.users] })); setUserCursor(res.data.nextCursor);
-  }
-  async function loadMoreOrgs() {
-    if (!orgCursor) return;
-    const res = await listOrgs({ cursor: orgCursor });
-    if (!mountedRef.current) return;
-    if (!res.ok) { setActionError(res.error); return; }
-    setMore((m) => ({ ...m, orgs: [...m.orgs, ...res.data.orgs] })); setOrgCursor(res.data.nextCursor);
-  }
 
   async function doUnban(u: AdminUser) {
     if (busyId) return;
@@ -183,7 +166,7 @@ export function AdminReal() {
                   </>
                 )}
               />
-              {userCursor && <div className="flex justify-center"><Button variant="ghost" size="md" onClick={() => { void loadMoreUsers(); }}>Load more</Button></div>}
+              {usersPage.cursor && <div className="flex justify-center"><Button variant="ghost" size="md" disabled={usersPage.loadingMore} onClick={usersPage.loadMore}>Load more</Button></div>}
             </section>
 
             {/* Orgs */}
@@ -207,7 +190,7 @@ export function AdminReal() {
                   </>
                 )}
               />
-              {orgCursor && <div className="flex justify-center"><Button variant="ghost" size="md" onClick={() => { void loadMoreOrgs(); }}>Load more</Button></div>}
+              {orgsPage.cursor && <div className="flex justify-center"><Button variant="ghost" size="md" disabled={orgsPage.loadingMore} onClick={orgsPage.loadMore}>Load more</Button></div>}
             </section>
           </>
         )}

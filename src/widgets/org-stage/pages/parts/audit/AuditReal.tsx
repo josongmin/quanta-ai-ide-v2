@@ -8,7 +8,7 @@ import { Button } from '@shared/ui/forms';
 import { EmptyState, InlineError, SkeletonText } from '@shared/ui';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
-import { useAsyncResource } from '@shared/lib';
+import { useAsyncResource, useAppendedPages } from '@shared/lib';
 import { useOrg } from '@entities/org';
 
 // Real audit trail over `GET /v1/audit/:orgId` (action/actor/date filters +
@@ -75,10 +75,6 @@ export function AuditReal() {
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
 
-  const [loadingMore, setLoadingMore] = useState(false);
-  // Fetch error (first page) is owned by the hook; pagination (loadMore) errors
-  // are local. Show either under the same `loadError` name so the JSX is unchanged.
-  const [actionError, setActionError] = useState<string | null>(null);
   const [q, setQ] = useState('');
   const [action, setAction] = useState('');
   const [from, setFrom] = useState('');
@@ -114,41 +110,23 @@ export function AuditReal() {
   );
   // No org yet (its detail is still resolving) → keep the skeleton, empty list.
   const loading = fetchPending || !orgId;
-  const loadError = fetchError ?? actionError;
 
-  // Appended pages beyond the first live locally; the first page + its cursor come
-  // from the hook. The appended state is keyed to the first-page identity so a new
-  // first page (org/filter change or refetch) discards the old appended rows —
-  // reset during render (React's "adjust state on prop change" pattern), never via
-  // a setState-in-effect.
-  const firstEntries = useMemo(
-    () => (orgId && Array.isArray(firstPage?.entries) ? firstPage.entries : []),
-    [orgId, firstPage],
+  // First page (+ cursor) come from the hook above; further pages are appended
+  // locally and discarded when a new first page lands (org/filter change or
+  // refetch). The shared hook owns the append + identity-keyed reset + the
+  // stale-guard that drops an in-flight page whose filter changed mid-load.
+  // Gate on orgId so a stale prior-org page never shows before its detail lands.
+  const { items: entries, cursor, loadingMore, error: moreError, loadMore } = useAppendedPages<AuditResponse, AuditEntryDTO>(
+    orgId ? firstPage : null,
+    (p) => ({ items: Array.isArray(p.entries) ? p.entries : [], cursor: p.nextCursor ?? null }),
+    async (c) => {
+      const res = await accountsApi.get<AuditResponse>(query(c));
+      return res.ok
+        ? { ok: true, data: { items: Array.isArray(res.data.entries) ? res.data.entries : [], cursor: res.data.nextCursor ?? null } }
+        : { ok: false, error: apiErrorMessage(res.error, t('audit.errorContext')) };
+    },
   );
-  const firstCursor = orgId ? (firstPage?.nextCursor ?? null) : null;
-  const [pages, setPages] = useState<{ key: AuditResponse | null; more: AuditEntryDTO[]; cursor: string | null | undefined }>(
-    { key: null, more: [], cursor: undefined },
-  );
-  if (pages.key !== firstPage) setPages({ key: firstPage, more: [], cursor: undefined });
-
-  const entries = useMemo(() => [...firstEntries, ...pages.more], [firstEntries, pages.more]);
-  const cursor = pages.cursor !== undefined ? pages.cursor : firstCursor;
-
-  async function loadMore() {
-    if (!cursor || loadingMore) return;
-    // Snapshot the filter identity — if a filter changes mid-load, the first-page
-    // effect resets the list; bail so we don't append this page's (now-stale)
-    // rows onto the new filter's list or clobber the cursor.
-    const q0 = query;
-    setLoadingMore(true);
-    const res = await accountsApi.get<AuditResponse>(q0(cursor));
-    if (q0 !== query) { setLoadingMore(false); return; }
-    setLoadingMore(false);
-    if (res.ok) {
-      const newEntries = Array.isArray(res.data.entries) ? res.data.entries : [];
-      setPages((prev) => ({ key: firstPage, more: [...prev.more, ...newEntries], cursor: res.data.nextCursor ?? null }));
-    } else setActionError(apiErrorMessage(res.error, t('audit.errorContext')));
-  }
+  const loadError = fetchError ?? moreError;
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -211,7 +189,7 @@ export function AuditReal() {
       {orgError ? (
         <InlineError message={orgError} onRetry={refetchOrg} />
       ) : loadError ? (
-        <InlineError message={loadError} onRetry={() => { setActionError(null); refetch(); }} />
+        <InlineError message={loadError} onRetry={() => { refetch(); }} />
       ) : loading ? (
         <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
           <SkeletonText lines={6} />
@@ -282,7 +260,7 @@ export function AuditReal() {
             {t('audit.eventsCount', { count: filtered.length })}{cursor ? t('audit.moreAvailable') : ''}.
           </span>
           {cursor && (
-            <Button onClick={() => { void loadMore(); }} disabled={loadingMore}>
+            <Button onClick={loadMore} disabled={loadingMore}>
               {loadingMore ? t('audit.loading') : t('audit.loadMore')}
             </Button>
           )}

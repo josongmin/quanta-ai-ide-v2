@@ -23,6 +23,7 @@ export { useCopyToClipboard } from './useCopyToClipboard';
 export { useRovingMenuFocus } from './useRovingMenuFocus';
 export { isEditableTarget } from './isEditableTarget';
 export { useAsyncResource, type AsyncResource, type AsyncResult } from './useAsyncResource';
+export { useAppendedPages, type PageSlice } from './useAppendedPages';
 export { shallowEqual } from './shallowEqual';
 export { systemRuntimeEnv, type RuntimeEnv } from './runtimeEnv';
 export { useScrollRestoration } from './useScrollRestoration';
