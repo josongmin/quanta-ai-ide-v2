@@ -141,42 +141,30 @@ export type FolderRecord = {
 
 export type Range = [number, number];
 
+// SINGLE source of truth for the filterable numeric metric keys. The RangeKey
+// type is DERIVED from this tuple, and filter-state's RANGE_KEYS + facet's
+// RangeKey both re-export it — so the key universe lives in exactly one place
+// (previously it was hand-listed in 4 spots and drifted: e.g. `halstead` was in
+// the ranges type/build but not in RANGE_KEYS). Lives in the base `repo` entity
+// so facet/filter-state depend DOWN onto it (no cross-entity coupling upward).
+export const RANGE_KEYS = [
+  'complexity', 'cyclomatic', 'cognitive', 'maintainability', 'maxNesting',
+  'fnCount', 'largestFnLoc', 'loc', 'fanIn', 'fanOut', 'churn',
+  'daysSinceTouched', 'authors', 'recentPRs',
+  'anyCount', 'tsIgnoreCount', 'unsafeAssertions',
+  'lineCoverage', 'branchCoverage', 'mutationScore',
+  'eslintErrors', 'eslintWarnings', 'todoCount', 'consoleCount',
+  'sastFindings', 'bundleKB', 'jsdocCoverage',
+  'editSafety', 'blastRadius',
+] as const;
+export type RangeKey = typeof RANGE_KEYS[number];
+
 export type RepoData = {
   files: FileRecord[];
   folders: FolderRecord[];
   foldersByPath: Map<string, FolderRecord>;
-  ranges: {
-    complexity: Range;
-    cyclomatic: Range;
-    cognitive: Range;
-    halstead: Range;
-    maintainability: Range;
-    maxNesting: Range;
-    fnCount: Range;
-    largestFnLoc: Range;
-    loc: Range;
-    fanIn: Range;
-    fanOut: Range;
-    churn: Range;
-    daysSinceTouched: Range;
-    authors: Range;
-    recentPRs: Range;
-    anyCount: Range;
-    tsIgnoreCount: Range;
-    unsafeAssertions: Range;
-    lineCoverage: Range;
-    branchCoverage: Range;
-    mutationScore: Range;
-    eslintErrors: Range;
-    eslintWarnings: Range;
-    todoCount: Range;
-    consoleCount: Range;
-    sastFindings: Range;
-    bundleKB: Range;
-    jsdocCoverage: Range;
-    editSafety: Range;
-    blastRadius: Range;
-  };
+  // Every filterable metric + `halstead` (computed for display, not filtered).
+  ranges: Record<RangeKey, Range> & { halstead: Range };
   owners: string[];
 };
 

@@ -1,18 +1,11 @@
-import type {
-  Confidence, FileRecord, FilterState, Range, RepoData,
+import {
+  RANGE_KEYS,
+  type Confidence, type FileRecord, type FilterState, type Range, type RangeKey, type RepoData,
 } from '@entities/repo';
-import type { RangeKey } from '@entities/facet';
 
-export const RANGE_KEYS: RangeKey[] = [
-  'complexity', 'cyclomatic', 'cognitive', 'maintainability', 'maxNesting',
-  'fnCount', 'largestFnLoc', 'loc', 'fanIn', 'fanOut', 'churn',
-  'daysSinceTouched', 'authors', 'recentPRs',
-  'anyCount', 'tsIgnoreCount', 'unsafeAssertions',
-  'lineCoverage', 'branchCoverage', 'mutationScore',
-  'eslintErrors', 'eslintWarnings', 'todoCount', 'consoleCount',
-  'sastFindings', 'bundleKB', 'jsdocCoverage',
-  'editSafety', 'blastRadius',
-];
+// Re-exported for back-compat: callers historically imported RANGE_KEYS from
+// filter-state. The SoT is now the RANGE_KEYS tuple in @entities/repo.
+export { RANGE_KEYS };
 
 export function defaultState(repo: RepoData): FilterState {
   const ranges = repo.ranges;
@@ -32,35 +25,8 @@ export function defaultState(repo: RepoData): FilterState {
     isDeprecated: null,
     publicApiOnly: false,
 
-    complexity: dup(ranges.complexity),
-    cyclomatic: dup(ranges.cyclomatic),
-    cognitive: dup(ranges.cognitive),
-    maintainability: dup(ranges.maintainability),
-    maxNesting: dup(ranges.maxNesting),
-    fnCount: dup(ranges.fnCount),
-    largestFnLoc: dup(ranges.largestFnLoc),
-    loc: dup(ranges.loc),
-    fanIn: dup(ranges.fanIn),
-    fanOut: dup(ranges.fanOut),
-    churn: dup(ranges.churn),
-    daysSinceTouched: dup(ranges.daysSinceTouched),
-    authors: dup(ranges.authors),
-    recentPRs: dup(ranges.recentPRs),
-    anyCount: dup(ranges.anyCount),
-    tsIgnoreCount: dup(ranges.tsIgnoreCount),
-    unsafeAssertions: dup(ranges.unsafeAssertions),
-    lineCoverage: dup(ranges.lineCoverage),
-    branchCoverage: dup(ranges.branchCoverage),
-    mutationScore: dup(ranges.mutationScore),
-    eslintErrors: dup(ranges.eslintErrors),
-    eslintWarnings: dup(ranges.eslintWarnings),
-    todoCount: dup(ranges.todoCount),
-    consoleCount: dup(ranges.consoleCount),
-    sastFindings: dup(ranges.sastFindings),
-    bundleKB: dup(ranges.bundleKB),
-    jsdocCoverage: dup(ranges.jsdocCoverage),
-    editSafety: dup(ranges.editSafety),
-    blastRadius: dup(ranges.blastRadius),
+    // One entry per filterable metric, derived from the RANGE_KEYS SoT.
+    ...(Object.fromEntries(RANGE_KEYS.map((k) => [k, dup(ranges[k])])) as Record<RangeKey, Range>),
 
     confidences: new Set(),
     unknownOnly: false,

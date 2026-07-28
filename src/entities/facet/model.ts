@@ -20,19 +20,11 @@ export type FacetEntry = {
 };
 
 // ─── Filter state key unions ──────────────────────────────────────────
-// These index into the FilterState in entities/repo. They're declared
-// here (not in the filter feature) because both facets and the filter
-// feature need to talk about *which range/bool a facet targets* without
-// either side depending on the other.
-export type RangeKey =
-  | 'complexity' | 'cyclomatic' | 'cognitive' | 'maintainability' | 'maxNesting'
-  | 'fnCount' | 'largestFnLoc' | 'loc' | 'fanIn' | 'fanOut' | 'churn'
-  | 'daysSinceTouched' | 'authors' | 'recentPRs'
-  | 'anyCount' | 'tsIgnoreCount' | 'unsafeAssertions'
-  | 'lineCoverage' | 'branchCoverage' | 'mutationScore'
-  | 'eslintErrors' | 'eslintWarnings' | 'todoCount' | 'consoleCount'
-  | 'sastFindings' | 'bundleKB' | 'jsdocCoverage'
-  | 'editSafety' | 'blastRadius';
+// RangeKey is the numeric-metric key universe — its SoT is the RANGE_KEYS tuple
+// in the base `repo` entity (derived type), re-exported here so facet/filter
+// code can name "which range a facet targets" without re-listing the keys.
+export type { RangeKey } from '@entities/repo';
+import type { RangeKey } from '@entities/repo';
 
 export type BoolKey =
   | 'cyclicOnly' | 'deadOnly' | 'layerViolationOnly'

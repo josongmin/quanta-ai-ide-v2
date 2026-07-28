@@ -9,13 +9,14 @@ export type {
   FileRecord,
   FolderRecord,
   Range,
+  RangeKey,
   RepoData,
   SortKey,
   PresetKey,
   SearchMode,
   FilterState,
 } from './model';
-export { STATUS_CSS } from './model';
+export { STATUS_CSS, RANGE_KEYS } from './model';
 export { buildRepo, CELL_SIZE, GRID_COUNT } from './lib/build';
 export { buildRepoData, toRepoDataDTO, type RepoDataDTO } from './lib/repoDto';
 export { fetchRepoData } from './lib/loadRepo';
