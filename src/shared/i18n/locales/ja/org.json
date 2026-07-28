@@ -1205,6 +1205,17 @@
     }
   },
   "domains": {
+    "real": {
+      "emptyTitle": "ドメインなし",
+      "emptySubtitle": "ドメインを追加し、DNS TXT で所有を証明してください。",
+      "addTitle": "ドメイン追加",
+      "adding": "追加中…",
+      "domainLabel": "ドメイン",
+      "checking": "確認中…",
+      "remove": "削除",
+      "removeTitle": "{{domain}} を削除？",
+      "removeBody": "検証済みドメインを org から削除します。後で再追加・再検証できます。"
+    },
     "title": "ドメイン",
     "subtitle": "自動参加、SSO 適用、本人確認済みの招待のためにメールドメインを取得します。",
     "add": "ドメインを追加",

@@ -12,6 +12,7 @@ import { ScimReal } from './pages/parts/scim/ScimReal';
 import { SsoReal } from './pages/parts/sso/SsoReal';
 import { RetentionReal } from './pages/parts/retention/RetentionReal';
 import { UsageReal } from './pages/parts/usage/UsageReal';
+import { DomainsReal } from './pages/parts/domains/DomainsReal';
 
 import RolesMock from './pages/RolesPage';
 import UsageMock from './pages/UsagePage';
@@ -38,7 +39,7 @@ export function ServiceAccountsPage() {
   return env.useRealAuth ? <ServiceAccountsReal /> : <ServiceAccountsMock />;
 }
 export function DomainsPage() {
-  return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.domains" /> : <DomainsMock />;
+  return env.useRealAuth ? <DomainsReal /> : <DomainsMock />;
 }
 export function SecurityPage() {
   return env.useRealAuth ? <OrgComingSoon titleKey="comingSoon.titles.security" /> : <SecurityMock />;

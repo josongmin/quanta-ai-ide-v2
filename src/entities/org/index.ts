@@ -53,6 +53,14 @@ export {
   type ScimTokenResponse,
 } from './model/scim';
 export {
+  listDomains,
+  addDomain,
+  verifyDomain,
+  removeDomain,
+  domainTxtRecord,
+  type OrgDomainRecord,
+} from './model/domains';
+export {
   getSsoConnection,
   resolveSso,
   registerSso,

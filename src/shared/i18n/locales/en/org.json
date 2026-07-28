@@ -1205,6 +1205,17 @@
     }
   },
   "domains": {
+    "real": {
+      "emptyTitle": "No domains yet",
+      "emptySubtitle": "Add a domain and verify ownership via DNS TXT.",
+      "addTitle": "Add domain",
+      "adding": "Adding…",
+      "domainLabel": "Domain",
+      "checking": "Checking…",
+      "remove": "Remove",
+      "removeTitle": "Remove {{domain}}?",
+      "removeBody": "This removes the verified domain from your org. You can re-add and re-verify later."
+    },
     "title": "Domains",
     "subtitle": "Claim email domains for auto-join, SSO enforcement, and identity-verified invites.",
     "add": "Add domain",

@@ -1205,6 +1205,17 @@
     }
   },
   "domains": {
+    "real": {
+      "emptyTitle": "暂无域名",
+      "emptySubtitle": "添加域名并通过 DNS TXT 验证所有权。",
+      "addTitle": "添加域名",
+      "adding": "添加中…",
+      "domainLabel": "域名",
+      "checking": "检查中…",
+      "remove": "移除",
+      "removeTitle": "移除 {{domain}}？",
+      "removeBody": "将从组织移除已验证域名。稍后可重新添加并验证。"
+    },
     "title": "域名",
     "subtitle": "认领邮箱域名以用于自动加入、SSO 强制执行和身份验证的邀请。",
     "add": "添加域名",
