@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from '@shared/i18n';
 import { useDialogA11y } from '@shared/ui';
-import { safeLocalGet, safeLocalSet, STORAGE_KEYS, STORAGE_KEY_PREFIX } from '@shared/lib';
+import { safeLocalGet, safeLocalSet, STORAGE_KEYS, STORAGE_KEY_PREFIX, useShortcut } from '@shared/lib';
 import { TaskRail } from './parts/chrome/TaskRail';
 import { type ComposerModelId } from './parts/Composer';
 import { CommandPalette, type PaletteAction } from './parts/palette/CommandPalette';
@@ -271,18 +271,10 @@ export default function CodingStage() {
     startNewTask(id);
   }, [projects.length, startNewTask, setProjects]);
 
-  // ⌘N → new task in current project
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      const meta = e.metaKey || e.ctrlKey;
-      if (meta && e.key.toLowerCase() === 'n') {
-        e.preventDefault();
-        startNewTask();
-      }
-    }
-    window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); };
-  }, [startNewTask]);
+  // ⌘/Ctrl+N → new task in current project. Routed through the shared keybinding
+  // authority; ignoreInputs:false so it still fires while a text field is focused
+  // (preserves the former raw-listener behavior).
+  useShortcut({ key: 'n', ctrl: true, ignoreInputs: false }, () => { startNewTask(); });
 
   // Stable handler wrappers — referenced by JSX props so heavy children
   // (TaskRail / ThreadPane / ContextRail / CommandPalette) don't see a

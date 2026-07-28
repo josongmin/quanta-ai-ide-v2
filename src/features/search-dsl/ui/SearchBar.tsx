@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Search, X, Code2, Regex, CaseSensitive, ChevronDown, History, SlidersHorizontal } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useFilterStore } from '@entities/filter-state';
 import { useTranslation } from '@shared/i18n';
 import { GlassCard } from '@shared/ui';
-import { useShortcut, isEditableTarget } from '@shared/lib';
+import { useShortcut } from '@shared/lib';
 import type { SearchMode } from '@entities/repo';
 
 const SAMPLES: { i18nKey: string; q: string }[] = [
@@ -57,18 +57,11 @@ export default function SearchBar({
   const hasError = Boolean(searchError) && search.length > 0;
   const placeholder = t(`placeholder.${searchMode}`);
 
-  // "/" focuses the input (Sourcegraph-style global hotkey)
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (isEditableTarget(e.target)) return; // shared guard — also covers <select>
-      if (e.key === '/') {
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
-    }
-    window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); };
-  }, []);
+  // "/" focuses the input (Sourcegraph-style hotkey). Routed through the shared
+  // keybinding authority so it is scope-aware and suppressed under a modal;
+  // ignoreInputs so it doesn't hijack "/" while a field is focused. Focus-only
+  // (no select) to preserve the former raw-listener behavior.
+  useShortcut({ key: '/', ignoreInputs: true }, () => { inputRef.current?.focus(); });
 
   // Cmd/Ctrl+K — focus the input. `ignoreInputs: false` so the shortcut
   // still works when focus is already in another input (e.g. settings).

@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
 import { useFilterRepo } from '@entities/filter-state';
 import { useTranslation } from '@shared/i18n';
 import { ResizeHandle } from '@shared/ui';
 // Layout constants live in the shared SoT (features may import @shared freely —
 // no boundary violation; the earlier local copy was avoidable duplication).
 import { INTELLIGENCE_LAYOUT } from '@shared/lib/panelLayout';
-import { isEditableTarget } from '@shared/lib';
+import { useShortcut } from '@shared/lib';
 import { useStack, stackKey } from '../model/StackContext';
 import FocusScanPanel from './focus-scan/FocusScanPanel';
 import InspectPanel from './InspectPanel';
@@ -40,23 +39,17 @@ export default function FocusScanStack({
   })();
   const active = items[idx];
 
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (isEditableTarget(e.target)) return; // shared guard — also covers <select>
-      if (items.length === 0) return;
-      if (e.altKey && e.key === 'ArrowLeft') {
-        e.preventDefault();
-        const prev = items[(idx - 1 + items.length) % items.length];
-        activate(stackKey(prev));
-      } else if (e.altKey && e.key === 'ArrowRight') {
-        e.preventDefault();
-        const next = items[(idx + 1) % items.length];
-        activate(stackKey(next));
-      }
-    }
-    window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); };
-  }, [items, idx, activate]);
+  // Alt+←/→ cycles the inspect stack. Routed through the shared keybinding
+  // authority so it is scope-aware (fires only while the intelligence surface is
+  // active) and suppressed under a modal; ignoreInputs covers the editable guard.
+  useShortcut({ key: 'ArrowLeft', alt: true, ignoreInputs: true }, () => {
+    if (items.length === 0) return;
+    activate(stackKey(items[(idx - 1 + items.length) % items.length]));
+  });
+  useShortcut({ key: 'ArrowRight', alt: true, ignoreInputs: true }, () => {
+    if (items.length === 0) return;
+    activate(stackKey(items[(idx + 1) % items.length]));
+  });
 
   if (!active) return null;
 

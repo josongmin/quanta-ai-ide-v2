@@ -31,10 +31,11 @@
 // view while the reviewer scrolls the diff body.
 // ─────────────────────────────────────────────────────────────────────────
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import type { FileDiff } from '@entities/pr';
 import { useTheme } from '@shared/theme';
+import { useShortcut } from '@shared/lib';
 
 type Props = {
   /** The currently active file in the FilesScene. Null → no chip rendered. */
@@ -112,25 +113,14 @@ export default function HunkNavigator({ file }: Props) {
     setCursor(Math.max(0, hunks.length - 1));
   }, [hunks.length, setCursor]);
 
-  // Keyboard listener — mirrors the global hook's typing-target guard.
-  useEffect(() => {
-    if (!file || hunks.length === 0) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      const t = e.target;
-      if (t instanceof HTMLElement) {
-        const tag = t.tagName;
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-        if (t.isContentEditable) return;
-      }
-      if (e.key === '}') { e.preventDefault(); goNext(); }
-      else if (e.key === '{') { e.preventDefault(); goPrev(); }
-      else if (e.key === '0') { e.preventDefault(); goFirst(); }
-      else if (e.key === '$') { e.preventDefault(); goLast(); }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); };
-  }, [file, hunks.length, goNext, goPrev, goFirst, goLast]);
+  // Hunk-nav keys (no ctrl/meta/alt). Routed through the shared keybinding
+  // authority: scope-aware, suppressed under a modal, and ignoreInputs covers the
+  // former INPUT/TEXTAREA/SELECT/contenteditable guard. The clamping cursor setters
+  // are no-ops when there is no file/hunks, so no explicit mount guard is needed.
+  useShortcut({ key: '}', ctrl: false, alt: false, ignoreInputs: true }, goNext);
+  useShortcut({ key: '{', ctrl: false, alt: false, ignoreInputs: true }, goPrev);
+  useShortcut({ key: '0', ctrl: false, alt: false, ignoreInputs: true }, goFirst);
+  useShortcut({ key: '$', ctrl: false, alt: false, ignoreInputs: true }, goLast);
 
   if (!file || hunks.length === 0) return null;
   const safeIdx = Math.min(cursor, hunks.length - 1);
