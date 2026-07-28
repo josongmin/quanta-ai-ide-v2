@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { useParams } from '@tanstack/react-router';
@@ -35,35 +36,28 @@ export function ServiceAccountsReal() {
   const { detail, error: orgError, refetch: refetchOrg } = useOrg(org);
   const orgId = detail?.org.id ?? '';
 
-  const [accounts, setAccounts] = useState<ServiceAccountRecord[]>(EMPTY);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  const { data, isPending: loading, error: fetchError, refetch } = useAsyncResource<ServiceAccountRecord[]>(
+    async () => (orgId ? listServiceAccounts(orgId) : { ok: true, data: EMPTY }),
+    [orgId],
+    orgId,
+  );
+  const accounts = data ?? EMPTY;
+  // Fetch error is owned by the hook; mutation (revoke) errors are local. Show either.
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? actionError;
   const [createOpen, setCreateOpen] = useState(false);
   const [revealed, setRevealed] = useState<ServiceAccountCreated | null>(null);
   const [saved, setSaved] = useState(false);
   const [confirmRevoke, setConfirmRevoke] = useState<ServiceAccountRecord | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!orgId) return;
-    let active = true;
-    void listServiceAccounts(orgId).then((res) => {
-      if (!active) return;
-      if (res.ok) { setAccounts(res.data); setError(null); }
-      else setError(res.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [orgId, nonce]);
-
-  const refetch = () => { setNonce((n) => n + 1); };
-
   async function doRevoke(a: ServiceAccountRecord) {
     setBusyId(a.id);
     const res = await revokeServiceAccount(orgId, a.id);
     setBusyId(null);
     setConfirmRevoke(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
+    setActionError(null);
     refetch();
   }
 
@@ -80,7 +74,7 @@ export function ServiceAccountsReal() {
       }
     >
       {error && (
-        <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>
+        <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>
       )}
 
       {orgError ? (

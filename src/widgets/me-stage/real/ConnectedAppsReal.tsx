@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 import { Mail } from 'lucide-react';
 import type { ComponentType } from 'react';
@@ -22,31 +23,21 @@ const EMPTY: LinkedAccount[] = [];
 
 export function ConnectedAppsReal() {
   const { t } = useTranslation('me');
-  const [accounts, setAccounts] = useState<LinkedAccount[]>(EMPTY);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  const { data, isPending: loading, error: fetchError, refetch } = useAsyncResource<LinkedAccount[]>(listLinkedAccounts, []);
+  const accounts = data ?? EMPTY;
+  // Fetch error is owned by the hook; mutation (unlink) errors are local. Show either.
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? actionError;
   const [confirmRemove, setConfirmRemove] = useState<LinkedAccount | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
-
-  useEffect(() => {
-    let active = true;
-    void listLinkedAccounts().then((res) => {
-      if (!active) return;
-      if (res.ok) { setAccounts(res.data); setError(null); }
-      else setError(res.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [nonce]);
-
-  const refetch = () => { setNonce((n) => n + 1); };
 
   async function doRemove(acc: LinkedAccount) {
     setBusyId(acc.id);
     const res = await unlinkAccount({ providerId: acc.providerId, accountId: acc.accountId });
     setBusyId(null);
     setConfirmRemove(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
+    setActionError(null);
     refetch();
   }
 
@@ -57,7 +48,7 @@ export function ConnectedAppsReal() {
   return (
     <MeShell title={t('connectedApps.title')} subtitle={t('connectedApps.subtitle')}>
       {error && (
-        <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>
+        <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>
       )}
       <Section title={t('connectedApps.providers.title')} hint={t('connectedApps.providers.hint')}>
         {loading ? (

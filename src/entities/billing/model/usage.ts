@@ -2,7 +2,7 @@
 // billing.read). Mirrors the accounts `usageSummary` contract (packages/contracts/usage.ts).
 // used/limit are null for unlimited metrics (storage_mb / enterprise) — not metered.
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
 
@@ -27,31 +27,17 @@ type UsageState = {
 };
 
 export function useUsageSummary(orgId: string): UsageState {
-  const [summary, setSummary] = useState<UsageSummary | null>(null);
-  const [isPending, setPending] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
-  const loadedOrg = useRef<string | null>(null);
+  const { data, isPending, error, refetch } = useAsyncResource<UsageSummary>(
+    async () => {
+      if (!orgId) return { ok: true, data: { period: '', metrics: [] } };
+      const res = await accountsApi.get<UsageSummary>(`/v1/usage/${orgId}`);
+      return res.ok
+        ? { ok: true, data: res.data }
+        : { ok: false, error: apiErrorMessage(res.error, 'usage') };
+    },
+    [orgId],
+    orgId,
+  );
 
-  const refetch = useCallback(() => { setNonce((n) => n + 1); }, []);
-
-  useEffect(() => {
-    if (!orgId) return;
-    let active = true;
-    /* eslint-disable react-hooks/set-state-in-effect -- skeleton reset before the orgId/nonce fetch */
-    if (loadedOrg.current !== orgId) {
-      setPending(true);
-      setSummary(null);
-    }
-    setError(null);
-    /* eslint-enable react-hooks/set-state-in-effect */
-    void accountsApi.get<UsageSummary>(`/v1/usage/${orgId}`).then((res) => {
-      if (!active) return;
-      if (res.ok) setSummary(res.data);
-      else setError(apiErrorMessage(res.error, 'usage'));
-    }).finally(() => { if (active) { setPending(false); loadedOrg.current = orgId; } });
-    return () => { active = false; };
-  }, [orgId, nonce]);
-
-  return { summary, isPending, error, refetch };
+  return { summary: data, isPending, error, refetch };
 }
