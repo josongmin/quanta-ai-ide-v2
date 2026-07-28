@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAsyncResource } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 import { Key, Plus, Trash2 } from 'lucide-react';
 import { MeShell } from '../parts/MeShell';
@@ -32,34 +33,24 @@ const EMPTY: ApiKeyRecord[] = [];
 
 export function ApiTokensReal() {
   const { t } = useTranslation('me');
-  const [tokens, setTokens] = useState<ApiKeyRecord[]>(EMPTY);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  const { data, isPending: loading, error: fetchError, refetch } = useAsyncResource<ApiKeyRecord[]>(listPersonalTokens, []);
+  const tokens = data ?? EMPTY;
+  // Fetch error is owned by the hook; mutation (revoke) errors are local. Show either.
+  const [actionError, setActionError] = useState<string | null>(null);
+  const error = fetchError ?? actionError;
   const [createOpen, setCreateOpen] = useState(false);
   const [revealed, setRevealed] = useState<ApiKeyCreated | null>(null);
   const [saved, setSaved] = useState(false);
   const [confirmRevoke, setConfirmRevoke] = useState<ApiKeyRecord | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
-  useEffect(() => {
-    let active = true;
-    void listPersonalTokens().then((res) => {
-      if (!active) return;
-      if (res.ok) { setTokens(res.data); setError(null); }
-      else setError(res.error);
-    }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [nonce]);
-
-  const refetch = () => { setNonce((n) => n + 1); };
-
   async function doRevoke(rec: ApiKeyRecord) {
     setBusyId(rec.id);
     const res = await revokePersonalToken(rec.id);
     setBusyId(null);
     setConfirmRevoke(null);
-    if (!res.ok) { setError(res.error); return; }
+    if (!res.ok) { setActionError(res.error); return; }
+    setActionError(null);
     refetch();
   }
 
@@ -74,7 +65,7 @@ export function ApiTokensReal() {
       }
     >
       {error && (
-        <div className="mb-3"><InlineError message={error} onRetry={() => { setError(null); refetch(); }} /></div>
+        <div className="mb-3"><InlineError message={error} onRetry={() => { setActionError(null); refetch(); }} /></div>
       )}
 
       {loading ? (
