@@ -12,6 +12,7 @@ import { SecurityReal } from './real/SecurityReal';
 import { ApiTokensReal } from './real/ApiTokensReal';
 import { InboxReal } from './real/InboxReal';
 import { ConnectedAppsReal } from './real/ConnectedAppsReal';
+import { AiReal } from './real/AiReal';
 
 import ProfileMock from './pages/ProfilePage';
 import AccountMock from './pages/AccountPage';
@@ -42,8 +43,7 @@ export function NotificationsPage() {
   return env.useRealAuth ? <MeComingSoon title={t('comingSoon.notifications')} /> : <NotificationsMock />;
 }
 export function AiPage() {
-  const { t } = useTranslation('me');
-  return env.useRealAuth ? <MeComingSoon title={t('comingSoon.ai')} /> : <AiMock />;
+  return env.useRealAuth ? <AiReal /> : <AiMock />;
 }
 export function InboxPage() {
   return env.useRealAuth ? <InboxReal /> : <InboxMock />;

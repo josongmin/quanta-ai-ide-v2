@@ -48,3 +48,9 @@ export {
   unlinkAccount,
   type LinkedAccount,
 } from './model/connectedAccounts';
+export {
+  getAiPrefs,
+  saveAiPrefs,
+  type AiPrefs,
+  type AiSurface,
+} from './model/aiPrefs';
