@@ -1,8 +1,7 @@
-import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RefreshCw } from 'lucide-react';
 import { Section, Row, Button } from '@shared/ui/forms';
-import { useDialogA11y } from '@shared/ui';
+import { MeModal } from '../../../parts/MeModal';
 import { useGeneratedCodes, downloadCodes } from './types';
 
 export function RecoverySection({ onShow }: { onShow: () => void }) {
@@ -26,27 +25,10 @@ export function RecoverySection({ onShow }: { onShow: () => void }) {
 
 export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation('me');
-  const dialogRef = useRef<HTMLDivElement>(null);
-  useDialogA11y(dialogRef, true, onClose);
   const codes = useGeneratedCodes(10);
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 popover-backdrop-in"
-      style={{ background: 'var(--bg-scrim)' }}
-    >
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        tabIndex={-1}
-        className="w-full max-w-[480px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
-        style={{
-          background: 'var(--bg-elevated)',
-          border: '1px solid var(--border-default)',
-          boxShadow: 'var(--shadow-lg)',
-        }}
-      >
-        <div className="flex flex-col gap-1.5">
+    <MeModal onClose={onClose} widthClass="max-w-[480px]">
+      <div className="flex flex-col gap-1.5">
           <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
             {t('security.recovery.modalTitle')}
           </h3>
@@ -83,7 +65,6 @@ export function RecoveryCodesModal({ onClose }: { onClose: () => void }) {
         <div className="flex items-center justify-end gap-2 pt-1">
           <Button variant="primary" size="md" onClick={onClose}>{t('security.recovery.saved')}</Button>
         </div>
-      </div>
-    </div>
+    </MeModal>
   );
 }

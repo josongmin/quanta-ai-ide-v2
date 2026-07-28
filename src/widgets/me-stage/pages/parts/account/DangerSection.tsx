@@ -1,8 +1,8 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Trash2 } from 'lucide-react';
 import { Row, Field, Button, Divider } from '@shared/ui/forms';
-import { useDialogA11y } from '@shared/ui';
+import { MeModal } from '../../../parts/MeModal';
 
 // Demo-only account panel. Real account deletion is wired in
 // me-stage/real/AccountReal.tsx (requestAccountDeletion over better-auth),
@@ -20,9 +20,7 @@ export function DangerSection() {
   const required = 'delete sora@acme.com';
   const matched = confirmText.trim().toLowerCase() === required;
 
-  const dialogRef = useRef<HTMLDivElement>(null);
   const close = useCallback(() => { setOpen(false); setConfirmText(''); }, []);
-  useDialogA11y(dialogRef, open, close);
 
   return (
     <>
@@ -56,23 +54,8 @@ export function DangerSection() {
       </div>
 
       {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-6 popover-backdrop-in"
-          style={{ background: 'var(--bg-scrim)' }}
-        >
-          <div
-            ref={dialogRef}
-            role="dialog"
-            aria-modal="true"
-            tabIndex={-1}
-            className="w-full max-w-[440px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
-            style={{
-              background: 'var(--bg-elevated)',
-              border: '1px solid var(--intent-danger-fg)',
-              boxShadow: 'var(--shadow-lg)',
-            }}
-          >
-            <div className="flex items-start gap-3">
+        <MeModal onClose={close} widthClass="max-w-[440px]" borderColor="var(--intent-danger-fg)">
+          <div className="flex items-start gap-3">
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
                 style={{ background: 'var(--intent-danger-bg)' }}
@@ -141,8 +124,7 @@ export function DangerSection() {
                 {t('account.danger.confirmDelete')}
               </Button>
             </div>
-          </div>
-        </div>
+        </MeModal>
       )}
     </>
   );

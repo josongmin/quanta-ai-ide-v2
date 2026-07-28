@@ -1,8 +1,7 @@
-import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
-import { useDialogA11y } from '@shared/ui';
+import { MeModal } from '../../../parts/MeModal';
 import type { Connection } from './types';
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -12,26 +11,9 @@ export function RemoveModal({
   connection, onClose, onConfirm,
 }: { connection: Connection; onClose: () => void; onConfirm: () => void }) {
   const { t } = useTranslation('me');
-  const dialogRef = useRef<HTMLDivElement>(null);
-  useDialogA11y(dialogRef, true, onClose);
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 popover-backdrop-in"
-      style={{ background: 'var(--bg-scrim)' }}
-    >
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        tabIndex={-1}
-        className="w-full max-w-[420px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
-        style={{
-          background: 'var(--bg-elevated)',
-          border: '1px solid var(--border-default)',
-          boxShadow: 'var(--shadow-lg)',
-        }}
-      >
-        <div className="flex items-start gap-3">
+    <MeModal onClose={onClose} widthClass="max-w-[420px]">
+      <div className="flex items-start gap-3">
           <div
             className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
             style={{ background: 'var(--intent-danger-bg)' }}
@@ -55,7 +37,6 @@ export function RemoveModal({
             {t('connectedApps.remove.confirm')}
           </Button>
         </div>
-      </div>
-    </div>
+    </MeModal>
   );
 }

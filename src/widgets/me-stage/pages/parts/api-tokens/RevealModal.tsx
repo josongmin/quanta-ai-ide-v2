@@ -1,15 +1,13 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Key, Copy, Check, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@shared/ui/forms';
-import { useDialogA11y } from '@shared/ui';
 import { useCopyToClipboard } from '@shared/lib';
+import { MeModal } from '../../../parts/MeModal';
 import type { Token } from './types';
 
 export function RevealModal({ token, onClose }: { token: Token; onClose: () => void }) {
   const { t } = useTranslation('me');
-  const dialogRef = useRef<HTMLDivElement>(null);
-  useDialogA11y(dialogRef, true, onClose);
   const fullToken = useMemo(() => {
     // Demo: deterministic-ish full token. Real systems hash + only show on creation.
     const seedRef = { s: 0 };
@@ -27,23 +25,8 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
   const { copied, copy } = useCopyToClipboard(1500);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 popover-backdrop-in"
-      style={{ background: 'var(--bg-scrim)' }}
-    >
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        tabIndex={-1}
-        className="w-full max-w-[520px] rounded-md p-5 popover-panel-in flex flex-col gap-4 outline-none"
-        style={{
-          background: 'var(--bg-elevated)',
-          border: '1px solid var(--fg-accent)',
-          boxShadow: 'var(--shadow-lg)',
-        }}
-      >
-        <div className="flex items-start gap-3">
+    <MeModal onClose={onClose} widthClass="max-w-[520px]" borderColor="var(--fg-accent)">
+      <div className="flex items-start gap-3">
           <div
             className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
             style={{ background: 'color-mix(in srgb, var(--fg-accent) 14%, transparent)' }}
@@ -104,7 +87,6 @@ export function RevealModal({ token, onClose }: { token: Token; onClose: () => v
         <div className="flex items-center justify-end gap-2 pt-1">
           <Button variant="primary" size="md" onClick={onClose}>{t('apiTokens.reveal.saved')}</Button>
         </div>
-      </div>
-    </div>
+    </MeModal>
   );
 }

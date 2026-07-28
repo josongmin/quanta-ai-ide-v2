@@ -1,16 +1,14 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle } from 'lucide-react';
 import { Field, Button, Checkbox } from '@shared/ui/forms';
-import { useDialogA11y } from '@shared/ui';
+import { MeModal } from '../../../parts/MeModal';
 import { SCOPE_GROUPS, ALL_SCOPES, type ScopeId, type Token } from './types';
 
 export function CreateModal({
   onClose, onCreate,
 }: { onClose: () => void; onCreate: (t: Token) => void }) {
   const { t } = useTranslation('me');
-  const dialogRef = useRef<HTMLDivElement>(null);
-  useDialogA11y(dialogRef, true, onClose);
   const [name, setName] = useState('');
   const [expiresIn, setExpiresIn] = useState<'30' | '60' | '90' | '365' | 'never'>('90');
   const [scopes, setScopes] = useState<Set<ScopeId>>(new Set(['read:repo']));
@@ -44,23 +42,8 @@ export function CreateModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 popover-backdrop-in"
-      style={{ background: 'var(--bg-scrim)' }}
-    >
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        tabIndex={-1}
-        className="w-full max-w-[520px] max-h-[90vh] rounded-md p-5 popover-panel-in flex flex-col gap-4 overflow-y-auto outline-none"
-        style={{
-          background: 'var(--bg-elevated)',
-          border: '1px solid var(--border-default)',
-          boxShadow: 'var(--shadow-lg)',
-        }}
-      >
-        <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+    <MeModal onClose={onClose} widthClass="max-w-[520px]" scroll>
+      <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           {t('apiTokens.create.title')}
         </h3>
 
@@ -174,7 +157,6 @@ export function CreateModal({
             {t('apiTokens.create.generate')}
           </Button>
         </div>
-      </div>
-    </div>
+    </MeModal>
   );
 }
