@@ -116,7 +116,7 @@ export function AuditReal() {
   // refetch). The shared hook owns the append + identity-keyed reset + the
   // stale-guard that drops an in-flight page whose filter changed mid-load.
   // Gate on orgId so a stale prior-org page never shows before its detail lands.
-  const { items: entries, cursor, loadingMore, error: moreError, loadMore } = useAppendedPages<AuditResponse, AuditEntryDTO>(
+  const { items: entries, cursor, loadingMore, error: moreError, loadMore, clearError } = useAppendedPages<AuditResponse, AuditEntryDTO>(
     orgId ? firstPage : null,
     (p) => ({ items: Array.isArray(p.entries) ? p.entries : [], cursor: p.nextCursor ?? null }),
     async (c) => {
@@ -189,7 +189,7 @@ export function AuditReal() {
       {orgError ? (
         <InlineError message={orgError} onRetry={refetchOrg} />
       ) : loadError ? (
-        <InlineError message={loadError} onRetry={() => { refetch(); }} />
+        <InlineError message={loadError} onRetry={() => { clearError(); refetch(); }} />
       ) : loading ? (
         <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
           <SkeletonText lines={6} />

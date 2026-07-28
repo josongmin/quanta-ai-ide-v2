@@ -98,4 +98,27 @@ describe('useAppendedPages', () => {
     await waitFor(() => { expect(result.current.error).toBe('boom'); });
     expect(ids(result.current.items)).toEqual([1]);
   });
+
+  it('clears a prior error when a later loadMore succeeds', async () => {
+    const fetchMore = vi.fn<(cursor: string) => Promise<AsyncResult<PageSlice<Row>>>>()
+      .mockResolvedValueOnce({ ok: false, error: 'boom' })
+      .mockResolvedValueOnce(ok([3], null));
+    const first = page([1], 'c1');
+    const { result } = renderHook(() => useAppendedPages<Page, Row>(first, select, fetchMore));
+    act(() => { result.current.loadMore(); });
+    await waitFor(() => { expect(result.current.error).toBe('boom'); });
+    act(() => { result.current.loadMore(); });
+    await waitFor(() => { expect(ids(result.current.items)).toEqual([1, 3]); });
+    expect(result.current.error).toBeNull();
+  });
+
+  it('clearError() dismisses a stale load-more error (Retry affordance)', async () => {
+    const fetchMore = vi.fn((): Promise<AsyncResult<PageSlice<Row>>> => Promise.resolve({ ok: false, error: 'boom' }));
+    const first = page([1], 'c1');
+    const { result } = renderHook(() => useAppendedPages<Page, Row>(first, select, fetchMore));
+    act(() => { result.current.loadMore(); });
+    await waitFor(() => { expect(result.current.error).toBe('boom'); });
+    act(() => { result.current.clearError(); });
+    expect(result.current.error).toBeNull();
+  });
 });

@@ -34,7 +34,7 @@ export function useAppendedPages<T, Item>(
   firstPage: T | null,
   select: (page: T) => PageSlice<Item>,
   fetchMore: (cursor: string) => Promise<AsyncResult<PageSlice<Item>>>,
-): { items: Item[]; cursor: string | null; loadingMore: boolean; error: string | null; loadMore: () => void } {
+): { items: Item[]; cursor: string | null; loadingMore: boolean; error: string | null; loadMore: () => void; clearError: () => void } {
   const first = useMemo<PageSlice<Item>>(
     () => (firstPage ? select(firstPage) : { items: [], cursor: null }),
     // Re-derive only when the first-page object identity changes; `select` is a
@@ -66,23 +66,36 @@ export function useAppendedPages<T, Item>(
   // Latest first-page identity, read inside the async loadMore to detect a
   // filter/refetch that landed mid-flight. Written in an effect (not render).
   const firstRef = useRef(firstPage);
-  useEffect(() => { firstRef.current = firstPage; });
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    firstRef.current = firstPage;
+  });
+  useEffect(() => () => { mountedRef.current = false; }, []);
+
+  // Clear a stale "load more failed" banner — used by a Retry affordance that
+  // reloads the first page, restoring the immediate clear the hand-rolled
+  // versions did (`setActionError(null); refetch()`).
+  const clearError = useCallback(() => {
+    setPages((prev) => (prev.error == null ? prev : { ...prev, error: null }));
+  }, []);
 
   const loadMore = useCallback(() => {
     if (loadingMore || !cursor) return;
     const snapshot = firstRef.current;
     setLoadingMore(true);
     void fetchMore(cursor).then((res) => {
+      // Unmounted mid-flight → drop (no setState on a dead component).
+      if (!mountedRef.current) return;
       // Filter/refetch changed the first page while this was in flight → drop it.
       if (firstRef.current !== snapshot) { setLoadingMore(false); return; }
       setLoadingMore(false);
       setPages((prev) =>
         res.ok
-          ? { ...prev, more: [...prev.more, ...res.data.items], cursor: res.data.cursor }
+          ? { ...prev, more: [...prev.more, ...res.data.items], cursor: res.data.cursor, error: null }
           : { ...prev, error: res.error },
       );
     });
   }, [loadingMore, cursor, fetchMore]);
 
-  return { items, cursor, loadingMore, error: pages.error, loadMore };
+  return { items, cursor, loadingMore, error: pages.error, loadMore, clearError };
 }

@@ -66,7 +66,13 @@ export function AdminReal() {
   // loading = users first-load skeleton (matches the old single `loading` gate).
   const loading = usersRes.isPending;
   const error = usersRes.error ?? orgsRes.error ?? usersPage.error ?? orgsPage.error ?? actionError;
-  const refetch = () => { setActionError(null); usersRes.refetch(); orgsRes.refetch(); };
+  const refetch = () => {
+    setActionError(null);
+    usersPage.clearError();
+    orgsPage.clearError();
+    usersRes.refetch();
+    orgsRes.refetch();
+  };
 
   // moderation modals
   const [banFor, setBanFor] = useState<AdminUser | null>(null);
