@@ -12,6 +12,17 @@
 > 아래 §2(프로세스), §3(스코프 인스턴스화), §5(뷰 계약 3종 분리), §6(snapshot identity),
 > §7(when parser)에서 **교정**되었으므로 그 부분은 폐기한다.
 
+> ⚠ **커널 수렴 (구현 중 교정, `2b9e097` @ 2026-07-27)** — 이 RFC가 `core/` 신규
+> owner 로 기술하는 **다중 서비스 커널**(`ContributionRegistry`·`CommandService`·
+> `ContextKeyService`·`IntentBus`·`WorkspaceSession`·`ContextStore`·`SurfaceService`·
+> `LayoutStore`)은 WBT-02/03 에서 구현됐다가 dead parallel authority 로 판정돼 **삭제**됐고
+> scope+keybindings 로 수렴했다. 따라서 **§3.3, §6, §9 배치도, M0 서술, WB-201..215
+> 마일스톤 행**은 이제 *역사적 설계 스펙*으로 읽는다. 현재 HEAD `b597404` 실체 —
+> `core/` 는 `ScopeNode.ts` 뿐, command 축=`react/KeybindingService.ts`, surface open
+> 축=`app/router/surfaceRuntime.ts`+`workspaceSurfaceRoute.tsx`+`app/workbench/surfaceCatalog.ts`.
+> 단일 delta 권위: [`execution/tickets/CONVERGENCE.md`](execution/tickets/CONVERGENCE.md).
+> 실행 상태 권위: [`execution/tickets/00-ticket-status-board.md`](execution/tickets/00-ticket-status-board.md).
+
 ---
 
 ## 0. 결론 한 줄
@@ -1373,6 +1384,13 @@ src/shared/workbench/core/
   WorkspaceSession.ts
   index.ts
 ```
+
+> ⚠ **수렴 반영 (`2b9e097`, 2026-07-27)** — 이 다중 서비스 커널은 구현 후 dead
+> parallel authority 로 판정돼 삭제되고 scope+keybindings 로 수렴했다. 현재 HEAD 에서
+> `core/` 에 남은 것은 `ScopeNode.ts` 뿐이며, command 축은 `react/KeybindingService.ts`,
+> surface open 축은 `app/router/surfaceRuntime.ts`+`workspaceSurfaceRoute.tsx`+`app/workbench/surfaceCatalog.ts`
+> 가 소유한다. 아래 설계는 역사적 스펙으로 읽는다. 현재 실체:
+> `execution/tickets/CONVERGENCE.md`.
 
 구현 순서는 `ScopeNode → ContributionRegistry → CommandService/ContextKeyService → ContextStore → LayoutStore`다.
 각 객체는 `dispose()`가 idempotent여야 하고 scope parent는 생성 후 불변이다. `ContextStore`는 payload owner가

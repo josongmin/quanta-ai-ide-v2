@@ -1,6 +1,6 @@
 # WBT-05 — Surface catalog, generic route, tab migration
 
-- status: `BLOCKED_BY_WBT-04`
+- status: `IN_PROGRESS` (catalog+route+migration+alias done, 컴포넌트 switch 제거 완료 `centralSurfaceSwitch:0`; running-app 검증 남음. 권위: [00-ticket-status-board.md](00-ticket-status-board.md))
 - covers: `WB-401..406`
 - goal: closed `TabKind`/central registry/manual route를 manifest-driven surface runtime으로 교체한다.
 - hard dependency: WBT-04 receipt

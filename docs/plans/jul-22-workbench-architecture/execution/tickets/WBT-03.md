@@ -1,6 +1,14 @@
 # WBT-03 — Workspace, context, layout kernel
 
-- status: `DONE` (main; see WBT-03-RECEIPT.md)
+> ⚠ **수렴 반영 (`2b9e097`)** — 이 티켓의 write set(`core/{WorkspaceSession,
+> ContextStore,SurfaceService,LayoutStore}.ts`)은 landed(@`e930178`) 후 삭제됐다.
+> 아래 설계는 역사적 스펙으로 보존한다. 현재 HEAD 실제 owner: workspace/context
+> identity → `contract/{context,scope}.ts` + app store, **context 기반 surface open
+> → `src/app/router/surfaceRuntime.ts` + `workspaceSurfaceRoute.tsx` + `app/workbench/surfaceCatalog.ts`**,
+> layout → app-level store. 유지된 커널 primitive 는 `core/ScopeNode.ts` 뿐.
+> 근거: [`CONVERGENCE.md`](CONVERGENCE.md).
+
+- status: `DONE→SUPERSEDED` (landed @`e930178`, superseded @`2b9e097`; see WBT-03-RECEIPT.md + CONVERGENCE.md)
 - covers: `WB-211..215`
 - goal: workspace snapshot identity, bounded context handoff, surface-open admission, layout persistence를 canonical kernel로 고정한다.
 - hard dependency: WBT-02 receipt

@@ -1,9 +1,18 @@
 # WBT-03 completion report — Workspace, context, layout kernel
 
+> ⚠ **SUPERSEDED BY CONVERGENCE (`2b9e097`, 2026-07-27).** 이 receipt가 목록한
+> `core/{WorkspaceSession,ContextStore,SurfaceService,LayoutStore}.ts` 와 그 테스트는
+> 커널 수렴에서 **삭제**됐다. 현재 HEAD `b597404` 에 존재하지 않는다. context 기반
+> surface open 의 canonical owner 는 `core/SurfaceService.ts` 가 아니라
+> `src/app/router/surfaceRuntime.ts`(`SURFACE_RUNTIME`) + `workspaceSurfaceRoute.tsx`
+> + `src/app/workbench/surfaceCatalog.ts` + zustand tab store 다. 아래 89 test 수치는
+> **착수 HEAD `e930178` 기준 역사적 증거**다. 단일 delta 근거:
+> [`CONVERGENCE.md`](CONVERGENCE.md). 상태 권위: [`00-ticket-status-board.md`](00-ticket-status-board.md).
+
 - ticket: `WBT-03` (WB-211..215)
-- package: WBT-03
+- package: WBT-03 — landed @ `e930178`, **superseded @ `2b9e097`**
 - branch: `main`
-- HEAD: branch tip (see `git log`)
+- HEAD (landed): `e930178`
 - implementation owner: Jo (assisted)
 
 ## Scope

@@ -1,9 +1,17 @@
 # WBT-02 completion report — Scope, registry, command kernel
 
+> ⚠ **SUPERSEDED BY CONVERGENCE (`2b9e097`, 2026-07-27).** 이 receipt가 목록한
+> `core/{ContributionRegistry,CommandService,ContextKeyService,IntentBus}.ts`
+> 와 그 테스트는 커널 수렴에서 **삭제**됐다. 현재 HEAD `b597404` 에는 존재하지
+> 않는다. command 축의 canonical owner 는 `src/shared/workbench/react/KeybindingService.ts`,
+> 유지된 커널 primitive 는 `core/ScopeNode.ts` 뿐이다. 아래 28/68 test 수치는
+> **착수 HEAD `fe37c7f` 기준 역사적 증거**이며 현재 HEAD 파일 존재 증거가 아니다.
+> 단일 delta 근거: [`CONVERGENCE.md`](CONVERGENCE.md). 상태 권위: [`00-ticket-status-board.md`](00-ticket-status-board.md).
+
 - ticket: `WBT-02` (WB-201..205)
-- package: WBT-02
+- package: WBT-02 — landed @ `fe37c7f`, **superseded @ `2b9e097`**
 - branch: `main`
-- HEAD: branch tip (see `git log`)
+- HEAD (landed): `fe37c7f`
 - implementation owner: Jo (assisted)
 
 ## Scope

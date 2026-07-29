@@ -1,6 +1,6 @@
 # WBT-04 — React host and UI runtime convergence
 
-- status: `BLOCKED_BY_WBT-03`
+- status: `IN_PROGRESS` (WB-301+WB-304 landed=react host/`WorkbenchRoot`; WB-302/303/305 running-app 검증 필요. 권위: [00-ticket-status-board.md](00-ticket-status-board.md). 수렴 후 command 축=`react/KeybindingService` — [CONVERGENCE.md](CONVERGENCE.md))
 - covers: `WB-301..305`
 - goal: Workbench kernel을 React에 projection하고 기존 UI runtime의 command/scope 권위를 단일화한다.
 - hard dependency: WBT-03 receipt

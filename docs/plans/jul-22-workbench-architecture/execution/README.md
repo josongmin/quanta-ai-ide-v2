@@ -13,6 +13,7 @@
 | 작업자는 어디서 시작하는가 | `tickets/WORKER_START_HERE.md` |
 | 현재/목표 owner seam은 어디인가 | `tickets/SOURCE_TRUTH_MAP.md` |
 | 어떤 legacy adapter를 언제 지우는가 | `tickets/LEGACY_REMOVAL_LEDGER.md` |
+| 커널이 왜/어떻게 수렴했나 (WBT-02/03 → scope+keybindings) | `tickets/CONVERGENCE.md` |
 | 개별 작업의 범위와 DoD는 무엇인가 | `tickets/WBT-00.md` … `tickets/WBT-09.md` |
 
 ## ID 체계
@@ -44,7 +45,8 @@
 
 ## 현재 기준점
 
-- snapshot date: `2026-07-25`
-- inspected HEAD: `dc551ce8450374d8007dfb379835d23817ca4467`
+- snapshot date: `2026-07-28` (직전 기준점 `2026-07-25`)
+- inspected HEAD: `b597404` (직전 `dc551ce8450374d8007dfb379835d23817ca4467`)
+- 커널 수렴 `2b9e097` 반영: WBT-02/03의 다중 서비스 커널은 삭제되고 scope+keybindings로 접혔다. `tickets/CONVERGENCE.md` 참조.
 - 상태는 worktree 변화에 따라 drift할 수 있으므로 작업 시작 시 status board를 다시 검증한다.
 - 현재 worktree에는 관련 owner 파일의 미커밋 변경이 있다. worker는 덮어쓰지 말고 자기 변경과 기존 diff를 분리한다.

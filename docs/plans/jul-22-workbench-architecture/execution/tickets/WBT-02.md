@@ -1,6 +1,12 @@
 # WBT-02 — Scope, registry, command kernel
 
-- status: `DONE` (main; see WBT-02-RECEIPT.md)
+> ⚠ **수렴 반영 (`2b9e097`)** — 이 티켓의 write set 중 `core/{ContributionRegistry,
+> CommandService,ContextKeyService,IntentBus}.ts` 는 landed(@`fe37c7f`) 후 삭제됐다
+> (runtime 미wiring dead parallel authority). 아래 설계는 역사적 스펙으로 보존한다.
+> 현재 HEAD 유지 primitive 는 `core/ScopeNode.ts`, command 축 owner 는
+> `src/shared/workbench/react/KeybindingService.ts`. 근거: [`CONVERGENCE.md`](CONVERGENCE.md).
+
+- status: `DONE→SUPERSEDED` (landed @`fe37c7f`, superseded @`2b9e097`; see WBT-02-RECEIPT.md + CONVERGENCE.md)
 - covers: `WB-201..205`
 - goal: 하나의 immutable scope tree와 atomic contribution/command authority를 구현한다.
 - hard dependency: WBT-01 receipt
