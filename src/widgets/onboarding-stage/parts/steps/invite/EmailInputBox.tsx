@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mail, X, Check, ChevronDown } from 'lucide-react';
+import { useRovingMenuFocus } from '@shared/lib';
 import type { InviteEntry, InviteRole } from '../../wizard';
 import { ROLES } from './data';
 
@@ -20,15 +21,11 @@ export function EmailInputBox({
   return (
     <div className="flex flex-col gap-2">
       <div
-        role="button"
-        tabIndex={0}
         className="flex flex-wrap items-center gap-1.5 px-2 py-2 min-h-[44px] rounded-md transition-colors"
         style={{
           background: 'var(--bg-surface-muted)',
           border: '1px solid var(--border-default)',
         }}
-        onClick={() => { inputRef.current?.focus(); }}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.focus(); } }}
       >
         {entries.map((e) => (
           <EmailChip
@@ -69,6 +66,8 @@ function EmailChip({
 }) {
   const { t } = useTranslation('onboarding');
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const { onKeyDown: onRove } = useRovingMenuFocus(menuRef, { focusOnMount: true });
   return (
     <span
       className="relative inline-flex items-center gap-1 h-6 pl-2 pr-1 rounded text-sm tabular-nums onb-stagger"
@@ -106,6 +105,7 @@ function EmailChip({
 
       {open && (
         <div
+          ref={menuRef}
           role="menu"
           className="absolute z-10 top-full mt-1 right-0 flex flex-col py-1 rounded-md popover-anchor-in"
           style={{
@@ -113,6 +113,10 @@ function EmailChip({
             border: '1px solid var(--border-default)',
             boxShadow: 'var(--shadow-md)',
             minWidth: 180,
+          }}
+          onKeyDown={(e) => {
+            if (onRove(e)) return;
+            if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
           }}
           onMouseLeave={() => { setOpen(false); }}
         >
@@ -122,6 +126,7 @@ function EmailChip({
               <button
                 key={r}
                 type="button"
+                role="menuitem"
                 onClick={(e) => { e.stopPropagation(); onSetRole(r); setOpen(false); }}
                 className="flex items-center justify-between gap-3 px-2.5 h-7 transition-colors text-left"
                 style={{

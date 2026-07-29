@@ -2,7 +2,7 @@
 // Folder-scoped coupling: inbound vs outbound direction, top dependency
 // folders in each direction, and the per-layer breakdown of this subtree.
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { EmptyHint, Stat } from '@shared/ui';
 import { useTranslation } from '@shared/i18n';
 import { BarRow } from '../BarRow';
@@ -21,6 +21,10 @@ export const DepsTab = memo(function DepsTab({
   // of the codebase? > 1 means it consumes more than it provides (leaf-ish);
   // < 1 means it's a hub that everyone imports from.
   const totalEdges = stats.inboundEdges + stats.outboundEdges;
+  const sortedLayers = useMemo(
+    () => Object.entries(stats.byLayer).sort((a, b) => b[1] - a[1]),
+    [stats.byLayer],
+  );
   return (
     <div className="space-y-4">
       <SubCard title={t('section.coupling')}>
@@ -86,11 +90,9 @@ export const DepsTab = memo(function DepsTab({
       {Object.keys(stats.byLayer).length > 0 && (
         <SubCard title={t('section.layers')}>
           <div className="space-y-1">
-            {Object.entries(stats.byLayer)
-              .sort((a, b) => b[1] - a[1])
-              .map(([layer, n]) => (
-                <BarRow key={layer} label={layer} value={n} max={layerMax} isDark={isDark} />
-              ))}
+            {sortedLayers.map(([layer, n]) => (
+              <BarRow key={layer} label={layer} value={n} max={layerMax} isDark={isDark} />
+            ))}
           </div>
         </SubCard>
       )}

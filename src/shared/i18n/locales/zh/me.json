@@ -852,6 +852,7 @@
     },
     "item": {
       "unread": "未读",
+      "select": "选择",
       "star": "加星标",
       "unstar": "取消星标"
     },

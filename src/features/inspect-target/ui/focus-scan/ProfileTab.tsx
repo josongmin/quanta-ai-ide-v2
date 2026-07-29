@@ -145,6 +145,7 @@ function RefactorBlock({ file }: { file: FileRecord }) {
     >
       <button
         type="button"
+        aria-expanded={open}
         onClick={() => { setOpen((v) => !v); }}
         className="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-left"
       >

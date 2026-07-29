@@ -28,7 +28,9 @@ export function ListItem({
     >
       {/* Bulk select checkbox — hidden until row hover or selected */}
       <span
-        role="button"
+        role="checkbox"
+        aria-checked={bulkOn}
+        aria-label={t('inbox.item.select')}
         tabIndex={0}
         onClick={(e) => { e.stopPropagation(); onToggleBulk(); }}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onToggleBulk(); } }}

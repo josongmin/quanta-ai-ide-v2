@@ -164,6 +164,7 @@ export default function PoliciesPage() {
                 <button
                   type="button"
                   onClick={() => { toggleCollapse(cid); }}
+                  aria-expanded={open}
                   className="w-full flex items-center gap-2 px-3 h-8 text-left"
                 >
                   {open ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} /> : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--fg-muted)' }} />}

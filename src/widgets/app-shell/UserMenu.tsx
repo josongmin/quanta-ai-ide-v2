@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { LogOut, Settings } from 'lucide-react';
-import { useClickOutside } from '@shared/lib';
+import { useClickOutside, useRovingMenuFocus } from '@shared/lib';
 import { useSession, signOut } from '@entities/session';
 
 // Real-auth user affordance in the GNB: avatar button → dropdown with the
@@ -13,6 +13,8 @@ export function UserMenu() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const { onKeyDown: onRove } = useRovingMenuFocus(menuRef);
 
   // Click-outside via the shared primitive; Escape stays local (an inline GNB
   // dropdown is not a workbench-scoped shortcut nor a modal layer, so neither
@@ -56,7 +58,9 @@ export function UserMenu() {
 
       {open && (
         <div
+          ref={menuRef}
           role="menu"
+          onKeyDown={(e) => { if (onRove(e)) return; if (e.key === 'Escape') setOpen(false); }}
           className="absolute right-0 mt-2 w-56 rounded-lg py-1 z-50 flex flex-col"
           style={{
             background: 'var(--bg-surface)',

@@ -98,6 +98,8 @@ function ModelChip({
       <button
         type="button"
         onClick={() => { setOpen((v) => !v); }}
+        aria-expanded={open}
+        aria-haspopup="menu"
         title={t('composer.model')}
         className="flex items-center gap-1 px-1.5 py-1 rounded-md text-2xs font-mono transition-colors hover-surface"
         style={{

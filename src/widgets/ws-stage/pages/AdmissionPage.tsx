@@ -128,6 +128,7 @@ export default function AdmissionPage() {
               >
                 <button
                   type="button"
+                  aria-expanded={open}
                   onClick={() => { toggleCollapse(c.id); }}
                   className="w-full flex items-center gap-2 px-3 h-9 text-left"
                   style={{ background: 'var(--bg-surface-muted)' }}

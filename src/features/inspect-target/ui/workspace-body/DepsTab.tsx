@@ -1,6 +1,6 @@
 // ─── Tab: Deps ────────────────────────────────────────────────────────
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { Stat } from '@shared/ui';
 import { useTranslation, formatNumber } from '@shared/i18n';
 import { BarRow } from '../BarRow';
@@ -10,6 +10,10 @@ import type { RepoStats } from './shared';
 export const DepsTab = memo(function DepsTab({ stats, isDark }: { stats: RepoStats; isDark: boolean }) {
   const { t } = useTranslation('inspect');
   const layerMax = Math.max(1, ...Object.values(stats.byLayer));
+  const sortedLayers = useMemo(
+    () => Object.entries(stats.byLayer).sort((a, b) => b[1] - a[1]),
+    [stats.byLayer],
+  );
   return (
     <div className="space-y-4">
       <SubCard title={t('section.topology')}>
@@ -35,11 +39,9 @@ export const DepsTab = memo(function DepsTab({ stats, isDark }: { stats: RepoSta
 
       <SubCard title={t('section.layers')}>
         <div className="space-y-1">
-          {Object.entries(stats.byLayer)
-            .sort((a, b) => b[1] - a[1])
-            .map(([layer, n]) => (
-              <BarRow key={layer} label={layer} value={n} max={layerMax} isDark={isDark} />
-            ))}
+          {sortedLayers.map(([layer, n]) => (
+            <BarRow key={layer} label={layer} value={n} max={layerMax} isDark={isDark} />
+          ))}
         </div>
       </SubCard>
     </div>

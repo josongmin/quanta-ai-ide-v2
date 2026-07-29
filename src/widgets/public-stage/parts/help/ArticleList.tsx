@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { BookOpen } from 'lucide-react';
 import { formatNumber } from '@shared/i18n';
 import { CATEGORIES } from './data';
@@ -6,6 +7,7 @@ import type { Article } from './types';
 export function ArticleList({
   eyebrow, articles, showCategory,
 }: { eyebrow: React.ReactNode; articles: Article[]; showCategory?: boolean }) {
+  const categoryMap = useMemo(() => new Map(CATEGORIES.map((c) => [c.id, c])), []);
   return (
     <div
       className="rounded-xl overflow-hidden"
@@ -24,7 +26,7 @@ export function ArticleList({
       <ol>
         {articles.map((a, i) => {
           // Every CategoryId has a CATEGORIES entry; fallback satisfies the type.
-          const cat = CATEGORIES.find((c) => c.id === a.category) ?? CATEGORIES[0];
+          const cat = categoryMap.get(a.category) ?? CATEGORIES[0];
           return (
             <li key={a.id}>
               <button

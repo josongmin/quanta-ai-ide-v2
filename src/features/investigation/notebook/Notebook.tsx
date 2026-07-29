@@ -99,6 +99,7 @@ export function Notebook({
             <input
               type="text"
               value={text}
+              aria-label={t('notebook.ask')}
               onChange={(e) => { setText(e.target.value); }}
               placeholder={
                 disabled

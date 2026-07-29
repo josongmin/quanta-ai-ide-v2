@@ -24,6 +24,7 @@ export function SubscribeForm() {
           value={email}
           onChange={(e) => { setEmail(e.target.value); setSubscribed(false); }}
           required
+          aria-label="Email"
           placeholder="you@company.com"
           className="flex-1 bg-transparent outline-none text-base pr-3"
           style={{ color: 'var(--fg-strong)' }}

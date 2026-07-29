@@ -121,6 +121,7 @@ export function LoopTape({ fixCase }: { fixCase: FixCase }) {
         <div className="mt-2.5">
           <button
             type="button"
+            aria-expanded={expanded}
             onClick={() => { setExpanded((v) => !v); }}
             className="flex items-start gap-1.5 w-full text-left transition-colors"
           >

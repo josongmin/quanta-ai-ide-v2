@@ -175,7 +175,7 @@ function DomainCard({
             <span />
             <span className="text-xs uppercase tracking-eyebrow font-semibold" style={{ color: 'var(--fg-subtle)' }}>{t('domains.verify.value')}</span>
             <code className="font-mono text-sm px-2.5 py-1.5 rounded truncate" style={{ background: 'var(--bg-canvas)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}>{txt}</code>
-            <button type="button" onClick={() => { copy(txt); }} className="inline-flex items-center justify-center w-8 h-8 rounded-md" style={{ color: 'var(--fg-muted)', background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}>
+            <button type="button" onClick={() => { copy(txt); }} aria-label={copied ? t('common.copied') : t('common.copy')} className="inline-flex items-center justify-center w-8 h-8 rounded-md" style={{ color: 'var(--fg-muted)', background: 'var(--bg-canvas)', border: '1px solid var(--border-default)' }}>
               {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
             </button>
           </div>

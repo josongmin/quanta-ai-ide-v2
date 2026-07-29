@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Search } from 'lucide-react';
 import { CATEGORIES } from './data';
 import type { Article } from './types';
@@ -5,6 +6,7 @@ import type { Article } from './types';
 export function SearchBox({
   q, onChange, matches,
 }: { q: string; onChange: (v: string) => void; matches: Article[] }) {
+  const categoryMap = useMemo(() => new Map(CATEGORIES.map((c) => [c.id, c])), []);
   return (
     <>
       {/* Search box */}
@@ -53,7 +55,7 @@ export function SearchBox({
               </div>
             ) : matches.map((a, i) => {
               // Every CategoryId has a CATEGORIES entry; fallback satisfies the type.
-              const cat = CATEGORIES.find((c) => c.id === a.category) ?? CATEGORIES[0];
+              const cat = categoryMap.get(a.category) ?? CATEGORIES[0];
               const Icon = cat.icon;
               return (
                 <button

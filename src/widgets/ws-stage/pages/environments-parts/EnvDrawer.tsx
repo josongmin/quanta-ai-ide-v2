@@ -66,6 +66,7 @@ export function EnvDrawer({
               {t('environments.drawer.regionLabel')}
             </span>
             <select
+              aria-label={t('environments.drawer.regionLabel')}
               value={env.region}
               onChange={(e) => { onChange({ region: e.target.value as Region }); }}
               className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
@@ -114,6 +115,7 @@ export function EnvDrawer({
               {t('environments.drawer.promotesFrom')}
             </span>
             <select
+              aria-label={t('environments.drawer.promotesFrom')}
               value={env.promotesFrom}
               onChange={(e) => { onChange({ promotesFrom: e.target.value }); }}
               className="h-9 rounded-md px-2.5 text-base outline-none cursor-pointer"
