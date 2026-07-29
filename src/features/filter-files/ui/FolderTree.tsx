@@ -94,6 +94,8 @@ function Row({
           onClick={(e) => { e.stopPropagation(); if (hasChildren) toggle(path); }}
           className="w-3.5 h-3.5 flex items-center justify-center"
           tabIndex={hasChildren ? 0 : -1}
+          aria-label={hasChildren ? path : undefined}
+          aria-expanded={hasChildren ? isOpen : undefined}
         >
           {hasChildren
             ? <ChevronRight className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-90' : ''} text-[var(--fg-default)]`} />

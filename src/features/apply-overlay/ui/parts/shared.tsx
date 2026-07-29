@@ -103,6 +103,7 @@ export function Slider({
       </div>
       <input
         type="range" min={0} max={1} step={0.01}
+        aria-label={label}
         value={value}
         onChange={(e) => { onChange(+e.target.value); }}
         className="w-full"

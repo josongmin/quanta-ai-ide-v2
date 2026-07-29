@@ -133,6 +133,7 @@ export default function ReviewPage() {
           sub={t('review.maxReviewers.sub', { count: form.maxReviewersPerPR })}
         >
           <Slider
+            label={t('review.maxReviewers.label')}
             value={form.maxReviewersPerPR}
             min={1}
             max={8}
@@ -354,12 +355,13 @@ function RadioGroup<T extends string>({
 }
 
 function Slider({
-  value, min, max, onChange,
-}: { value: number; min: number; max: number; onChange: (v: number) => void }) {
+  value, min, max, onChange, label,
+}: { value: number; min: number; max: number; onChange: (v: number) => void; label?: string }) {
   return (
     <div className="flex items-center gap-2.5" style={{ minWidth: 200 }}>
       <input
         type="range"
+        aria-label={label}
         min={min}
         max={max}
         value={value}

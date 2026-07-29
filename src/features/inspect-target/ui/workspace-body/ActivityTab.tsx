@@ -14,6 +14,9 @@ export const ActivityTab = memo(function ActivityTab({ stats, isDark }: { stats:
   const { t } = useTranslation('inspect');
   const activePct = pct(stats.activeRecent, stats.files);
   const stalePct = pct(stats.staleFiles, stats.files);
+  // Hoisted out of the row .map — was recomputed per row (O(n²)); a number
+  // compares by value so the BarRow memo also holds across re-renders.
+  const maxOwner = Math.max(1, ...stats.topOwners.map((x) => x.n));
   return (
     <div className="space-y-4">
       <SubCard title={t('section.pulse')}>
@@ -65,7 +68,7 @@ export const ActivityTab = memo(function ActivityTab({ stats, isDark }: { stats:
               key={o.owner}
               label={o.owner}
               value={o.n}
-              max={Math.max(1, ...stats.topOwners.map((x) => x.n))}
+              max={maxOwner}
               isDark={isDark}
               mono
             />

@@ -125,7 +125,7 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
           </Section>
 
           <Section title={t('aiActivity.cap', { defaultValue: 'Limits' })}>
-            <div className="flex items-center justify-between text-sm">
+            <label className="flex items-center justify-between text-sm">
               <span style={{ color: 'var(--fg-muted)' }}>
                 {t('aiActivity.maxConcurrent', { defaultValue: 'Max concurrent' })}
               </span>
@@ -142,7 +142,7 @@ export function ActivityControlPanel({ open, onClose }: { open: boolean; onClose
               >
                 {[3, 5, 10].map((n) => <option key={n} value={n}>{n}</option>)}
               </select>
-            </div>
+            </label>
           </Section>
 
           <div

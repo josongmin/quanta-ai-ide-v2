@@ -34,6 +34,7 @@ export default function SortFacet() {
   return (
     <div className="space-y-2.5">
       <select
+        aria-label={t('section.sortAndHighlight')}
         value={state.sort}
         onChange={(e) => {
           const v = e.target.value;

@@ -63,6 +63,7 @@ export default function MetricRangeSlider({
         />
         <input
           id={id} type="range"
+          aria-label={label}
           min={lo} max={hi} step={step}
           value={value[0]}
           onChange={(e) => { onChange([Math.min(+e.target.value, value[1]), value[1]]); }}
@@ -71,6 +72,7 @@ export default function MetricRangeSlider({
         />
         <input
           type="range"
+          aria-label={label}
           min={lo} max={hi} step={step}
           value={value[1]}
           onChange={(e) => { onChange([value[0], Math.max(+e.target.value, value[0])]); }}
