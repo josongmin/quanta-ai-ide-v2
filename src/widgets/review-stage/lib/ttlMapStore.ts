@@ -51,7 +51,10 @@ export function pruneTtlRecord<T>(
   const out: Record<string, T> = {};
   for (const [k, v] of Object.entries((raw ?? {}) as Record<string, unknown>)) {
     if (!isValid(v)) continue;
-    if (new Date(timestampOf(v)).getTime() < cutoff) continue;
+    const ts = new Date(timestampOf(v)).getTime();
+    // A malformed timestamp (NaN) is treated as expired, not kept forever
+    // (`NaN < cutoff` is false, which would leak the entry indefinitely).
+    if (Number.isNaN(ts) || ts < cutoff) continue;
     out[k] = v;
   }
   return out;

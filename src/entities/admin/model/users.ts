@@ -36,18 +36,18 @@ function moderationError(res: { error: ApiError }, fallback: string): string {
 }
 
 export async function banUser(id: string, reason: string | null): Promise<ActionResult> {
-  const res = await accountsApi.post(`/v1/admin/users/${id}/ban`, { reason });
+  const res = await accountsApi.post(`/v1/admin/users/${encodeURIComponent(id)}/ban`, { reason });
   return res.ok ? { ok: true } : { ok: false, error: moderationError(res, 'ban') };
 }
 
 export async function unbanUser(id: string): Promise<ActionResult> {
-  const res = await accountsApi.post(`/v1/admin/users/${id}/unban`);
+  const res = await accountsApi.post(`/v1/admin/users/${encodeURIComponent(id)}/unban`);
   if (res.ok) return { ok: true };
   if (res.error.kind === 'http' && res.error.status === 404) return { ok: true }; // already gone
   return { ok: false, error: apiErrorMessage(res.error, 'unban') };
 }
 
 export async function impersonateUser(id: string): Promise<ActionResult> {
-  const res = await accountsApi.post(`/v1/admin/users/${id}/impersonate`);
+  const res = await accountsApi.post(`/v1/admin/users/${encodeURIComponent(id)}/impersonate`);
   return res.ok ? { ok: true } : { ok: false, error: moderationError(res, 'impersonate') };
 }

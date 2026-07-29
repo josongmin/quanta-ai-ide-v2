@@ -41,8 +41,10 @@ export default function CycleGraph({ repo, isDark, size = 280 }: Props) {
     const drawIds = new Set(draw.map((f) => f.id));
     const drawEdges = edges.filter((e) => drawIds.has(e.from) && drawIds.has(e.to));
 
-    // Top 3 offending pairs (by fanIn of target)
+    // Top 3 offending pairs (by fanIn of target). Drop edges whose endpoints no
+    // longer resolve in repo.files (stale layout ref) before dereferencing metrics.
     const pairs = drawEdges
+      .filter((e) => repo.files[e.from] && repo.files[e.to])
       .map((e) => ({
         e,
         from: repo.files[e.from],

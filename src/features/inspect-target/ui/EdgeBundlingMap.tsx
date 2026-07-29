@@ -84,9 +84,11 @@ export default function EdgeBundlingMap({
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.quadraticCurveTo(ctrlX, ctrlY, b.x, b.y);
-      // Tone: vulnerable target → red, otherwise muted base.
+      // Tone: vulnerable target → red, otherwise muted base. Guard a stale edge
+      // ref (layout computed against a larger repo.files) — draw the edge, skip
+      // the vuln tint rather than crashing on `undefined.metrics`.
       const target = repo.files[e.to];
-      const isVuln = target.metrics.security || target.status === 'SECURITY_ALERT';
+      const isVuln = !!target && (target.metrics.security || target.status === 'SECURITY_ALERT');
       ctx.strokeStyle = isVuln
         ? (isDark ? 'rgba(217,138,133,0.55)' : 'rgba(168,58,63,0.55)')
         : (isDark ? 'rgba(180,200,220,0.10)' : 'rgba(40,60,80,0.10)');
@@ -96,6 +98,7 @@ export default function EdgeBundlingMap({
     // ── 3. leaves ──
     for (const leaf of layout.leaves) {
       const f = repo.files[leaf.fileId];
+      if (!f) continue; // stale layout ref (repo.files shrank) → skip the dot
       const dot = leaf.color(isDark, f);
       ctx.beginPath();
       ctx.arc(leaf.x, leaf.y, 1.4, 0, Math.PI * 2);

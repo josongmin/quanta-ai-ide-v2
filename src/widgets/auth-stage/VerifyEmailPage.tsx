@@ -41,8 +41,13 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     if (phase !== 'verifying') return;
     if (env.useRealAuth) {
-      void verifyEmail({ token }).then((r) => { setPhase(r.ok ? 'success' : 'expired'); });
-      return;
+      // Guard against a network REJECTION (not just an ok:false) leaving the
+      // spinner stuck forever, and against a resolve landing after unmount.
+      let active = true;
+      void verifyEmail({ token })
+        .then((r) => { if (active) setPhase(r.ok ? 'success' : 'expired'); })
+        .catch(() => { if (active) setPhase('expired'); });
+      return () => { active = false; };
     }
     const id = setTimeout(() => { setPhase('success'); }, 1400);
     return () => { clearTimeout(id); };

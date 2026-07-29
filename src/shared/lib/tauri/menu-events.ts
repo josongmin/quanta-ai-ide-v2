@@ -15,13 +15,15 @@ export const useMenuEvent = (id: MenuEventId, handler: () => void): void => {
     if (!isTauri()) return;
     let unlisten: UnlistenFn | undefined;
     let cancelled = false;
-    void listen(`menu://${id}`, () => { handler(); }).then((fn) => {
-      if (cancelled) {
-        fn();
-        return;
-      }
-      unlisten = fn;
-    });
+    void listen(`menu://${id}`, () => { handler(); })
+      .then((fn) => {
+        if (cancelled) {
+          fn();
+          return;
+        }
+        unlisten = fn;
+      })
+      .catch(() => { cancelled = true; }); // listen() failed → nothing to unlisten
     return () => {
       cancelled = true;
       unlisten?.();
