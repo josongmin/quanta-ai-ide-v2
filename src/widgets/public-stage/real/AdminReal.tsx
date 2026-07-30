@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAsyncResource, useAppendedPages } from '@shared/lib';
 import { formatDateShort } from '@shared/i18n';
 import { UserCog, Ban, ShieldCheck, LogIn, CreditCard, Building2, Users } from 'lucide-react';
@@ -25,6 +26,7 @@ const PLANS: AdminPlan[] = ['free', 'team', 'business', 'enterprise'];
 const planVariant = (p: string): BadgeVariant => (p === 'business' || p === 'enterprise' ? 'success' : 'neutral');
 
 export function AdminReal() {
+  const { t } = useTranslation('admin');
   const mountedRef = useRef(true);
   useEffect(() => () => { mountedRef.current = false; }, []);
 
@@ -121,8 +123,8 @@ export function AdminReal() {
     <AdminShell active="overview">
       <div className="px-6 py-6 flex flex-col gap-8 max-w-[1100px] mx-auto w-full">
         <header>
-          <h1 className="text-2xl font-semibold" style={{ color: 'var(--fg-strong)' }}>Super-admin</h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--fg-muted)' }}>Platform operator tools — every action is audited. Impersonation is visible to the target org.</p>
+          <h1 className="text-2xl font-semibold" style={{ color: 'var(--fg-strong)' }}>{t('title')}</h1>
+          <p className="text-sm mt-1" style={{ color: 'var(--fg-muted)' }}>{t('subtitle')}</p>
         </header>
 
         {error && <InlineError message={error} onRetry={() => { refetch(); }} />}
@@ -135,12 +137,12 @@ export function AdminReal() {
             <section id="users" className="flex flex-col gap-3">
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-base font-semibold inline-flex items-center gap-2" style={{ color: 'var(--fg-strong)' }}>
-                  <Users className="w-4 h-4" style={{ color: 'var(--fg-muted)' }} /> Users
+                  <Users className="w-4 h-4" style={{ color: 'var(--fg-muted)' }} /> {t('sections.users')}
                 </h2>
                 <input
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); }}
-                  placeholder="Search email or name…"
+                  placeholder={t('searchPlaceholder')}
                   aria-label="Search users by email or name"
                   className="w-64 h-9 rounded-md px-3 text-base outline-none"
                   style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
@@ -148,55 +150,55 @@ export function AdminReal() {
               </div>
               <DataTable<AdminUser>
                 columns="1fr 120px 110px 120px 44px"
-                headers={[{ header: 'User' }, { header: 'Role' }, { header: 'Status' }, { header: 'Joined' }, { header: '' }]}
+                headers={[{ header: t('cols.user') }, { header: t('cols.role') }, { header: t('cols.status') }, { header: t('cols.joined') }, { header: '' }]}
                 rows={users}
                 rowKey={(u) => u.id}
-                empty={<EmptyState title="No users" subtitle="No users match your search." />}
+                empty={<EmptyState title={t('empty.usersTitle')} subtitle={t('empty.usersSubtitle')} />}
                 renderRow={(u) => (
                   <>
                     <span className="flex flex-col min-w-0">
                       <span className="text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{u.name ?? '—'}</span>
                       <span className="text-2xs truncate font-mono" style={{ color: 'var(--fg-subtle)' }}>{u.email}</span>
                     </span>
-                    {u.role === 'admin' ? <Badge variant="info" size="sm">Admin</Badge> : <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>Member</span>}
-                    <Badge variant={u.banned ? 'danger' : 'success'} size="sm">{u.banned ? 'Banned' : 'Active'}</Badge>
+                    {u.role === 'admin' ? <Badge variant="info" size="sm">{t('badge.admin')}</Badge> : <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>{t('badge.member')}</span>}
+                    <Badge variant={u.banned ? 'danger' : 'success'} size="sm">{u.banned ? t('badge.banned') : t('badge.active')}</Badge>
                     <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{formatDateShort(u.createdAt)}</span>
                     <RowMenu
                       items={[
-                        { label: 'Impersonate', icon: LogIn, disabled: busyId !== null || u.role === 'admin', onClick: () => { setImpersonateFor(u); } },
+                        { label: t('actions.impersonate'), icon: LogIn, disabled: busyId !== null || u.role === 'admin', onClick: () => { setImpersonateFor(u); } },
                         u.banned
-                          ? { label: 'Unban', icon: ShieldCheck, disabled: busyId !== null, onClick: () => { void doUnban(u); } }
-                          : { label: 'Ban', icon: Ban, danger: true, disabled: busyId !== null || u.role === 'admin', onClick: () => { setBanFor(u); } },
+                          ? { label: t('actions.unban'), icon: ShieldCheck, disabled: busyId !== null, onClick: () => { void doUnban(u); } }
+                          : { label: t('actions.ban'), icon: Ban, danger: true, disabled: busyId !== null || u.role === 'admin', onClick: () => { setBanFor(u); } },
                       ]}
                     />
                   </>
                 )}
               />
-              {usersPage.cursor && <div className="flex justify-center"><Button variant="ghost" size="md" disabled={usersPage.loadingMore} onClick={usersPage.loadMore}>Load more</Button></div>}
+              {usersPage.cursor && <div className="flex justify-center"><Button variant="ghost" size="md" disabled={usersPage.loadingMore} onClick={usersPage.loadMore}>{t('actions.loadMore')}</Button></div>}
             </section>
 
             {/* Orgs */}
             <section id="orgs" className="flex flex-col gap-3">
               <h2 className="text-base font-semibold inline-flex items-center gap-2" style={{ color: 'var(--fg-strong)' }}>
-                <Building2 className="w-4 h-4" style={{ color: 'var(--fg-muted)' }} /> Organizations
+                <Building2 className="w-4 h-4" style={{ color: 'var(--fg-muted)' }} /> {t('sections.orgs')}
               </h2>
               <DataTable<AdminOrg>
                 columns="1fr 160px 120px 120px 44px"
-                headers={[{ header: 'Organization' }, { header: 'Slug' }, { header: 'Plan' }, { header: 'Created' }, { header: '' }]}
+                headers={[{ header: t('cols.organization') }, { header: t('cols.slug') }, { header: t('cols.plan') }, { header: t('cols.created') }, { header: '' }]}
                 rows={orgs}
                 rowKey={(o) => o.id}
-                empty={<EmptyState title="No organizations" subtitle="Nothing here yet." />}
+                empty={<EmptyState title={t('empty.orgsTitle')} subtitle={t('empty.orgsSubtitle')} />}
                 renderRow={(o) => (
                   <>
                     <span className="text-sm truncate" style={{ color: 'var(--fg-strong)' }}>{o.name}</span>
                     <span className="text-sm truncate font-mono" style={{ color: 'var(--fg-muted)' }}>{o.slug}</span>
                     <Badge variant={planVariant(o.plan)} size="sm">{o.plan}</Badge>
                     <span className="text-sm tabular-nums" style={{ color: 'var(--fg-muted)' }}>{formatDateShort(o.createdAt)}</span>
-                    <RowMenu items={[{ label: 'Override plan', icon: CreditCard, disabled: busyId !== null, onClick: () => { setPlanFor(o); } }]} />
+                    <RowMenu items={[{ label: t('actions.overridePlan'), icon: CreditCard, disabled: busyId !== null, onClick: () => { setPlanFor(o); } }]} />
                   </>
                 )}
               />
-              {orgsPage.cursor && <div className="flex justify-center"><Button variant="ghost" size="md" disabled={orgsPage.loadingMore} onClick={orgsPage.loadMore}>Load more</Button></div>}
+              {orgsPage.cursor && <div className="flex justify-center"><Button variant="ghost" size="md" disabled={orgsPage.loadingMore} onClick={orgsPage.loadMore}>{t('actions.loadMore')}</Button></div>}
             </section>
           </>
         )}
@@ -212,9 +214,9 @@ export function AdminReal() {
           icon={<UserCog className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
           onCancel={() => { setImpersonateFor(null); }}
           onConfirm={() => { void doImpersonate(); }}
-          title={`Impersonate ${impersonateFor.email}?`}
-          confirmLabel="Impersonate"
-          description="You'll act as this user until you stop. The action is audited and visible to their org."
+          title={t('impersonateDialog.title', { email: impersonateFor.email })}
+          confirmLabel={t('impersonateDialog.confirm')}
+          description={t('impersonateDialog.description')}
         />
       )}
     </AdminShell>
@@ -222,43 +224,45 @@ export function AdminReal() {
 }
 
 function BanModal({ user, busy, onClose, onConfirm }: { user: AdminUser; busy: boolean; onClose: () => void; onConfirm: (reason: string) => void }) {
+  const { t } = useTranslation('admin');
   const [reason, setReason] = useState('');
   return (
     <SettingsModal
       open onClose={onClose} size="sm"
       icon={<Ban className="w-4 h-4" style={{ color: 'var(--intent-danger-fg)' }} />}
-      title={`Ban ${user.email}?`}
+      title={t('ban.title', { name: user.email })}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button variant="danger" size="md" disabled={busy} onClick={() => { onConfirm(reason); }}>{busy ? 'Banning…' : 'Ban user'}</Button>
+          <Button variant="ghost" onClick={onClose}>{t('actions.cancel')}</Button>
+          <Button variant="danger" size="md" disabled={busy} onClick={() => { onConfirm(reason); }}>{busy ? t('ban.confirming') : t('ban.confirm')}</Button>
         </>
       }
     >
-      <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>Their sessions are revoked immediately. They can be unbanned later.</p>
-      <Field label="Reason (optional)" value={reason} onChange={(e) => { setReason(e.target.value.slice(0, 500)); }} placeholder="Spam / abuse / support request" autoFocus />
+      <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>{t('ban.body')}</p>
+      <Field label={t('ban.reasonLabel')} value={reason} onChange={(e) => { setReason(e.target.value.slice(0, 500)); }} placeholder={t('ban.reasonPlaceholder')} autoFocus />
     </SettingsModal>
   );
 }
 
 function PlanModal({ org, busy, onClose, onConfirm }: { org: AdminOrg; busy: boolean; onClose: () => void; onConfirm: (plan: AdminPlan, reason: string) => void }) {
+  const { t } = useTranslation('admin');
   const [plan, setPlan] = useState<AdminPlan>((PLANS.includes(org.plan as AdminPlan) ? org.plan : 'free') as AdminPlan);
   const [reason, setReason] = useState('');
   return (
     <SettingsModal
       open onClose={onClose} size="sm"
       icon={<CreditCard className="w-4 h-4" style={{ color: 'var(--fg-default)' }} />}
-      title={`Override plan — ${org.name}`}
+      title={t('plan.title', { name: org.name })}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button variant="primary" size="md" disabled={busy} onClick={() => { onConfirm(plan, reason); }}>{busy ? 'Applying…' : 'Apply override'}</Button>
+          <Button variant="ghost" onClick={onClose}>{t('actions.cancel')}</Button>
+          <Button variant="primary" size="md" disabled={busy} onClick={() => { onConfirm(plan, reason); }}>{busy ? t('plan.confirming') : t('plan.confirm')}</Button>
         </>
       }
     >
-      <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>Sets the plan directly (bypasses Stripe) and refreshes entitlements. The org owner is notified.</p>
+      <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>{t('plan.body')}</p>
       <label className="flex flex-col gap-1.5">
-        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>Plan</span>
+        <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>{t('plan.planLabel')}</span>
         <select
           value={plan}
           onChange={(e) => { setPlan(e.target.value as AdminPlan); }}
@@ -268,7 +272,7 @@ function PlanModal({ org, busy, onClose, onConfirm }: { org: AdminOrg; busy: boo
           {PLANS.map((p) => <option key={p} value={p}>{p}</option>)}
         </select>
       </label>
-      <Field label="Reason (optional)" value={reason} onChange={(e) => { setReason(e.target.value.slice(0, 500)); }} placeholder="Design partner / support credit" />
+      <Field label={t('plan.reasonLabel')} value={reason} onChange={(e) => { setReason(e.target.value.slice(0, 500)); }} placeholder={t('plan.reasonPlaceholder')} />
     </SettingsModal>
   );
 }

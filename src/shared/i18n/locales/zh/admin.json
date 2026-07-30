@@ -1,0 +1,78 @@
+{
+  "title": "超级管理员",
+  "subtitle": "平台运营工具 — 每项操作都会被审计。模拟登录对目标组织可见。",
+  "sections": {
+    "users": "用户",
+    "orgs": "组织"
+  },
+  "searchPlaceholder": "搜索邮箱或姓名…",
+  "cols": {
+    "user": "用户",
+    "role": "角色",
+    "status": "状态",
+    "joined": "加入时间",
+    "organization": "组织",
+    "slug": "标识串",
+    "plan": "套餐",
+    "created": "创建时间"
+  },
+  "empty": {
+    "usersTitle": "无用户",
+    "usersSubtitle": "没有匹配搜索的用户。",
+    "orgsTitle": "无组织",
+    "orgsSubtitle": "这里还什么都没有。"
+  },
+  "badge": {
+    "admin": "管理员",
+    "member": "成员",
+    "active": "有效",
+    "banned": "已封禁"
+  },
+  "actions": {
+    "impersonate": "模拟登录",
+    "unban": "解除封禁",
+    "ban": "封禁",
+    "overridePlan": "覆盖套餐",
+    "loadMore": "加载更多",
+    "cancel": "取消"
+  },
+  "ban": {
+    "title": "封禁 {{name}}？",
+    "body": "该用户的会话将立即被撤销。之后可以解除封禁。",
+    "reasonLabel": "原因（可选）",
+    "reasonPlaceholder": "垃圾信息 / 滥用 / 支持请求",
+    "confirm": "封禁用户",
+    "confirming": "封禁中…"
+  },
+  "impersonateDialog": {
+    "title": "模拟登录 {{email}}？",
+    "confirm": "模拟登录",
+    "description": "在你停止之前，你将以该用户身份操作。此操作会被审计并对其组织可见。"
+  },
+  "plan": {
+    "title": "覆盖套餐 — {{name}}",
+    "body": "直接设置套餐（绕过 Stripe）并刷新权益。将通知组织所有者。",
+    "planLabel": "套餐",
+    "reasonLabel": "原因（可选）",
+    "reasonPlaceholder": "设计合作伙伴 / 支持额度",
+    "confirm": "应用覆盖",
+    "confirming": "应用中…"
+  },
+  "shell": {
+    "adminMode": "管理员模式",
+    "actingAs": "当前身份",
+    "actorName": "Sora Kim",
+    "session": "8 分钟会话",
+    "exit": "退出",
+    "group": "管理员",
+    "nav": {
+      "overview": "概览",
+      "orgs": "组织",
+      "users": "用户",
+      "billing": "账单运营",
+      "jobs": "后台任务",
+      "data": "数据工具",
+      "flags": "功能开关"
+    }
+  }
+}

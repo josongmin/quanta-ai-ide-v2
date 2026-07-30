@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@shared/theme';
 import { StatusDot } from '@shared/ui';
 import { Building2, Users, CreditCard, Activity, Database, Settings, ArrowUpRight } from 'lucide-react';
@@ -10,13 +11,13 @@ type Props = {
 };
 
 const NAV = [
-  { id: 'overview' as const, label: 'Overview',         to: '/_admin',          icon: Activity   },
-  { id: 'orgs'     as const, label: 'Organizations',   to: '/_admin#orgs',     icon: Building2  },
-  { id: 'users'    as const, label: 'Users',           to: '/_admin#users',    icon: Users      },
-  { id: 'billing'  as const, label: 'Billing ops',     to: '/_admin#billing',  icon: CreditCard },
-  { id: 'jobs'     as const, label: 'Background jobs', to: '/_admin#jobs',     icon: Activity   },
-  { id: 'data'     as const, label: 'Data tools',      to: '/_admin#data',     icon: Database   },
-  { id: 'flags'    as const, label: 'Feature flags',   to: '/_admin#flags',    icon: Settings   },
+  { id: 'overview' as const, labelKey: 'shell.nav.overview', to: '/_admin',          icon: Activity   },
+  { id: 'orgs'     as const, labelKey: 'shell.nav.orgs',     to: '/_admin#orgs',     icon: Building2  },
+  { id: 'users'    as const, labelKey: 'shell.nav.users',    to: '/_admin#users',    icon: Users      },
+  { id: 'billing'  as const, labelKey: 'shell.nav.billing',  to: '/_admin#billing',  icon: CreditCard },
+  { id: 'jobs'     as const, labelKey: 'shell.nav.jobs',     to: '/_admin#jobs',     icon: Activity   },
+  { id: 'data'     as const, labelKey: 'shell.nav.data',     to: '/_admin#data',     icon: Database   },
+  { id: 'flags'    as const, labelKey: 'shell.nav.flags',    to: '/_admin#flags',    icon: Settings   },
 ];
 
 // Super-admin internal chrome. Distinct from AppShell so it never gets
@@ -24,6 +25,7 @@ const NAV = [
 // sidebar make the "you are operating on real data" affordance impossible
 // to miss.
 export function AdminShell({ active = 'overview', children }: Props) {
+  const { t } = useTranslation('admin');
   const { isDark } = useTheme();
   return (
     <div
@@ -44,18 +46,18 @@ export function AdminShell({ active = 'overview', children }: Props) {
       >
         <div className="flex items-center gap-2.5">
           <StatusDot intent="danger" size="xs" ping />
-          <span style={{ color: 'var(--fg-strong)' }}>Admin mode</span>
+          <span style={{ color: 'var(--fg-strong)' }}>{t('shell.adminMode')}</span>
           <span style={{ color: 'var(--border-strong)' }}>·</span>
-          <span>Acting as <span style={{ color: 'var(--fg-default)' }}>Sora Kim</span></span>
+          <span>{t('shell.actingAs')} <span style={{ color: 'var(--fg-default)' }}>{t('shell.actorName')}</span></span>
           <span style={{ color: 'var(--border-strong)' }}>·</span>
-          <span className="font-mono text-xs">8m session</span>
+          <span className="font-mono text-xs">{t('shell.session')}</span>
         </div>
         <Link
           to="/intelligence"
           className="inline-flex items-center gap-1 px-2 h-6 rounded-md transition-colors hover-surface"
           style={{ color: 'var(--fg-default)' }}
         >
-          Exit
+          {t('shell.exit')}
           <ArrowUpRight className="w-3 h-3" />
         </Link>
       </div>
@@ -71,9 +73,9 @@ export function AdminShell({ active = 'overview', children }: Props) {
               className="px-2 mb-2 text-2xs uppercase tracking-eyebrow font-semibold"
               style={{ color: 'var(--fg-subtle)' }}
             >
-              Admin
+              {t('shell.group')}
             </span>
-            {NAV.map(({ id, label, to, icon: Icon }) => {
+            {NAV.map(({ id, labelKey, to, icon: Icon }) => {
               const isActive = active === id;
               return (
                 <Link
@@ -88,7 +90,7 @@ export function AdminShell({ active = 'overview', children }: Props) {
                   onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
                 >
                   <Icon className="w-3.5 h-3.5 shrink-0" />
-                  <span className="truncate">{label}</span>
+                  <span className="truncate">{t(labelKey)}</span>
                 </Link>
               );
             })}

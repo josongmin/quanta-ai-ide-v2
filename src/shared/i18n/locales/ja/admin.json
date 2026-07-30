@@ -1,0 +1,78 @@
+{
+  "title": "スーパー管理者",
+  "subtitle": "プラットフォーム運用ツール — すべての操作は監査されます。なりすましは対象組織に表示されます。",
+  "sections": {
+    "users": "ユーザー",
+    "orgs": "組織"
+  },
+  "searchPlaceholder": "メールまたは名前を検索…",
+  "cols": {
+    "user": "ユーザー",
+    "role": "ロール",
+    "status": "ステータス",
+    "joined": "参加日",
+    "organization": "組織",
+    "slug": "スラッグ",
+    "plan": "プラン",
+    "created": "作成日"
+  },
+  "empty": {
+    "usersTitle": "ユーザーなし",
+    "usersSubtitle": "検索に一致するユーザーはいません。",
+    "orgsTitle": "組織なし",
+    "orgsSubtitle": "まだ何もありません。"
+  },
+  "badge": {
+    "admin": "管理者",
+    "member": "メンバー",
+    "active": "有効",
+    "banned": "禁止済み"
+  },
+  "actions": {
+    "impersonate": "なりすまし",
+    "unban": "禁止解除",
+    "ban": "禁止",
+    "overridePlan": "プランを上書き",
+    "loadMore": "さらに表示",
+    "cancel": "キャンセル"
+  },
+  "ban": {
+    "title": "{{name}} を禁止しますか？",
+    "body": "このユーザーのセッションは直ちに取り消されます。後で禁止を解除できます。",
+    "reasonLabel": "理由（任意）",
+    "reasonPlaceholder": "スパム / 不正利用 / サポート依頼",
+    "confirm": "ユーザーを禁止",
+    "confirming": "禁止しています…"
+  },
+  "impersonateDialog": {
+    "title": "{{email}} になりすましますか？",
+    "confirm": "なりすまし",
+    "description": "停止するまでこのユーザーとして操作します。この操作は監査され、対象の組織に表示されます。"
+  },
+  "plan": {
+    "title": "プランを上書き — {{name}}",
+    "body": "Stripe を経由せずにプランを直接設定し、権限を更新します。組織の所有者に通知されます。",
+    "planLabel": "プラン",
+    "reasonLabel": "理由（任意）",
+    "reasonPlaceholder": "デザインパートナー / サポートクレジット",
+    "confirm": "上書きを適用",
+    "confirming": "適用しています…"
+  },
+  "shell": {
+    "adminMode": "管理者モード",
+    "actingAs": "操作中",
+    "actorName": "Sora Kim",
+    "session": "8分セッション",
+    "exit": "終了",
+    "group": "管理者",
+    "nav": {
+      "overview": "概要",
+      "orgs": "組織",
+      "users": "ユーザー",
+      "billing": "請求オペレーション",
+      "jobs": "バックグラウンドジョブ",
+      "data": "データツール",
+      "flags": "機能フラグ"
+    }
+  }
+}

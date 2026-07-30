@@ -10,7 +10,7 @@ export type Locale = (typeof SUPPORTED_LOCALES)[number];
 export const NAMESPACES = [
   'common', 'app', 'filter', 'inspect', 'chat', 'prefs', 'mode', 'overlay', 'search', 'help', 'coding',
   'review', 'admission', 'diff', 'fix-pipeline', 'verified-fix', 'agents', 'investigation', 'ownership',
-  'org', 'me', 'onboarding', 'auth', 'billing', 'ws', 'surfaces',
+  'org', 'me', 'onboarding', 'auth', 'billing', 'ws', 'surfaces', 'admin',
 ] as const;
 
 const STORAGE_KEY = STORAGE_KEYS.i18nLang;

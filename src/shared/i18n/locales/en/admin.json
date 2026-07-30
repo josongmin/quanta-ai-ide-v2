@@ -1,0 +1,78 @@
+{
+  "title": "Super-admin",
+  "subtitle": "Platform operator tools — every action is audited. Impersonation is visible to the target org.",
+  "sections": {
+    "users": "Users",
+    "orgs": "Organizations"
+  },
+  "searchPlaceholder": "Search email or name…",
+  "cols": {
+    "user": "User",
+    "role": "Role",
+    "status": "Status",
+    "joined": "Joined",
+    "organization": "Organization",
+    "slug": "Slug",
+    "plan": "Plan",
+    "created": "Created"
+  },
+  "empty": {
+    "usersTitle": "No users",
+    "usersSubtitle": "No users match your search.",
+    "orgsTitle": "No organizations",
+    "orgsSubtitle": "Nothing here yet."
+  },
+  "badge": {
+    "admin": "Admin",
+    "member": "Member",
+    "active": "Active",
+    "banned": "Banned"
+  },
+  "actions": {
+    "impersonate": "Impersonate",
+    "unban": "Unban",
+    "ban": "Ban",
+    "overridePlan": "Override plan",
+    "loadMore": "Load more",
+    "cancel": "Cancel"
+  },
+  "ban": {
+    "title": "Ban {{name}}?",
+    "body": "Their sessions are revoked immediately. They can be unbanned later.",
+    "reasonLabel": "Reason (optional)",
+    "reasonPlaceholder": "Spam / abuse / support request",
+    "confirm": "Ban user",
+    "confirming": "Banning…"
+  },
+  "impersonateDialog": {
+    "title": "Impersonate {{email}}?",
+    "confirm": "Impersonate",
+    "description": "You'll act as this user until you stop. The action is audited and visible to their org."
+  },
+  "plan": {
+    "title": "Override plan — {{name}}",
+    "body": "Sets the plan directly (bypasses Stripe) and refreshes entitlements. The org owner is notified.",
+    "planLabel": "Plan",
+    "reasonLabel": "Reason (optional)",
+    "reasonPlaceholder": "Design partner / support credit",
+    "confirm": "Apply override",
+    "confirming": "Applying…"
+  },
+  "shell": {
+    "adminMode": "Admin mode",
+    "actingAs": "Acting as",
+    "actorName": "Sora Kim",
+    "session": "8m session",
+    "exit": "Exit",
+    "group": "Admin",
+    "nav": {
+      "overview": "Overview",
+      "orgs": "Organizations",
+      "users": "Users",
+      "billing": "Billing ops",
+      "jobs": "Background jobs",
+      "data": "Data tools",
+      "flags": "Feature flags"
+    }
+  }
+}
