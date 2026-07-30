@@ -27,6 +27,6 @@ export async function listOrgs(opts: { search?: string; cursor?: string | null }
 }
 
 export async function overridePlan(orgId: string, plan: AdminPlan, reason: string | null): Promise<ActionResult> {
-  const res = await accountsApi.patch(`/v1/admin/orgs/${orgId}/plan`, { plan, reason });
+  const res = await accountsApi.patch(`/v1/admin/orgs/${encodeURIComponent(orgId)}/plan`, { plan, reason });
   return res.ok ? { ok: true } : { ok: false, error: apiErrorMessage(res.error, 'plan override') };
 }

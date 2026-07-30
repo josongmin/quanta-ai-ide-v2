@@ -1,4 +1,5 @@
 {
+  "linkBlocked": "請求リンクが安全でないためブロックされました。もう一度お試しください。",
   "title": "請求",
   "breadcrumb": {
     "settings": "設定"

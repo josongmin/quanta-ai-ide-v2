@@ -38,7 +38,7 @@ export async function createPersonalToken(input: {
 }
 
 export async function revokePersonalToken(keyId: string): Promise<KeyActionResult> {
-  const res = await accountsApi.del(`/v1/tokens/${keyId}`);
+  const res = await accountsApi.del(`/v1/tokens/${encodeURIComponent(keyId)}`);
   if (res.ok) return { ok: true };
   // Already gone → idempotent success (avoids a cryptic "HTTP 404" on a
   // duplicate/concurrent revoke).

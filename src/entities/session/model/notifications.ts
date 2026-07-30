@@ -45,7 +45,7 @@ export async function listNotifications(
 }
 
 export async function markNotificationRead(id: string): Promise<ActionResult> {
-  const res = await accountsApi.patch(`/v1/notifications/${id}/read`);
+  const res = await accountsApi.patch(`/v1/notifications/${encodeURIComponent(id)}/read`);
   if (res.ok) return { ok: true };
   if (res.error.kind === 'http' && res.error.status === 404) return { ok: true }; // already gone/read
   return { ok: false, error: apiErrorMessage(res.error, 'notifications') };

@@ -1,4 +1,5 @@
 {
+  "linkBlocked": "This billing link looked unsafe and was blocked. Please try again.",
   "title": "Billing",
   "breadcrumb": {
     "settings": "Settings"

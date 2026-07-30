@@ -22,23 +22,23 @@ export function domainTxtRecord(token: string): string {
 }
 
 export async function listDomains(orgId: string): Promise<Result<OrgDomainRecord[]>> {
-  const res = await accountsApi.get<{ domains: OrgDomainRecord[] }>(`/v1/orgs/${orgId}/domains`);
+  const res = await accountsApi.get<{ domains: OrgDomainRecord[] }>(`/v1/orgs/${encodeURIComponent(orgId)}/domains`);
   return res.ok
     ? { ok: true, data: res.data.domains }
     : { ok: false, error: apiErrorMessage(res.error, 'domains') };
 }
 
 export async function addDomain(orgId: string, domain: string): Promise<Result<OrgDomainRecord>> {
-  const res = await accountsApi.post<OrgDomainRecord>(`/v1/orgs/${orgId}/domains`, { domain });
+  const res = await accountsApi.post<OrgDomainRecord>(`/v1/orgs/${encodeURIComponent(orgId)}/domains`, { domain });
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'domains') };
 }
 
 export async function verifyDomain(orgId: string, id: string): Promise<Result<OrgDomainRecord>> {
-  const res = await accountsApi.post<OrgDomainRecord>(`/v1/orgs/${orgId}/domains/${id}/verify`);
+  const res = await accountsApi.post<OrgDomainRecord>(`/v1/orgs/${encodeURIComponent(orgId)}/domains/${encodeURIComponent(id)}/verify`);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'domains') };
 }
 
 export async function removeDomain(orgId: string, id: string): Promise<ActionResult> {
-  const res = await accountsApi.del(`/v1/orgs/${orgId}/domains/${id}`);
+  const res = await accountsApi.del(`/v1/orgs/${encodeURIComponent(orgId)}/domains/${encodeURIComponent(id)}`);
   return res.ok ? { ok: true } : { ok: false, error: apiErrorMessage(res.error, 'domains') };
 }

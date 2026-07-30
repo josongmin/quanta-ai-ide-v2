@@ -51,17 +51,17 @@ function connError(res: { error: ApiError }, fallback: string): string {
 }
 
 export async function getSsoConnection(orgId: string): Promise<Result<SsoConnection | null>> {
-  const res = await accountsApi.get<SsoConnection | null>(`/v1/sso/${orgId}`);
+  const res = await accountsApi.get<SsoConnection | null>(`/v1/sso/${encodeURIComponent(orgId)}`);
   return res.ok ? { ok: true, data: res.data ?? null } : { ok: false, error: apiErrorMessage(res.error, 'SSO') };
 }
 
 export async function registerSso(orgId: string, input: SsoRegisterInput): Promise<Result<SsoConnection>> {
-  const res = await accountsApi.post<SsoConnection>(`/v1/sso/${orgId}`, input);
+  const res = await accountsApi.post<SsoConnection>(`/v1/sso/${encodeURIComponent(orgId)}`, input);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: connError(res, 'SSO') };
 }
 
 export async function updateSso(orgId: string, patch: SsoUpdateInput): Promise<Result<SsoConnection>> {
-  const res = await accountsApi.patch<SsoConnection>(`/v1/sso/${orgId}`, patch);
+  const res = await accountsApi.patch<SsoConnection>(`/v1/sso/${encodeURIComponent(orgId)}`, patch);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: connError(res, 'SSO') };
 }
 
@@ -78,12 +78,12 @@ export async function resolveSso(email: string): Promise<{ sso: boolean; authori
 // Trigger a DNS TXT ownership check. Idempotent: returns the latest record with
 // verified true/false. verified:false means "publish the TXT and retry".
 export async function verifySso(orgId: string): Promise<Result<SsoVerifyResult>> {
-  const res = await accountsApi.post<SsoVerifyResult>(`/v1/sso/${orgId}/verify`, {});
+  const res = await accountsApi.post<SsoVerifyResult>(`/v1/sso/${encodeURIComponent(orgId)}/verify`, {});
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'SSO') };
 }
 
 export async function deleteSso(orgId: string): Promise<ActionResult> {
-  const res = await accountsApi.del(`/v1/sso/${orgId}`);
+  const res = await accountsApi.del(`/v1/sso/${encodeURIComponent(orgId)}`);
   if (res.ok) return { ok: true };
   if (res.error.kind === 'http' && res.error.status === 404) return { ok: true }; // already gone
   return { ok: false, error: apiErrorMessage(res.error, 'SSO') };

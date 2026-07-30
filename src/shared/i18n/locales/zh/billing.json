@@ -1,4 +1,5 @@
 {
+  "linkBlocked": "该账单链接不安全，已被拦截。请重试。",
   "title": "账单",
   "breadcrumb": {
     "settings": "设置"

@@ -22,7 +22,7 @@ type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 type ActionResult = { ok: true } | { ok: false; error: string };
 
 export async function listServiceAccounts(orgId: string): Promise<Result<ServiceAccountRecord[]>> {
-  const res = await accountsApi.get<{ accounts: ServiceAccountRecord[] }>(`/v1/service-accounts/${orgId}`);
+  const res = await accountsApi.get<{ accounts: ServiceAccountRecord[] }>(`/v1/service-accounts/${encodeURIComponent(orgId)}`);
   return res.ok
     ? { ok: true, data: Array.isArray(res.data.accounts) ? res.data.accounts : [] }
     : { ok: false, error: apiErrorMessage(res.error, 'service accounts') };
@@ -32,7 +32,7 @@ export async function createServiceAccount(
   orgId: string,
   input: { name: string; expiresInDays?: number | null },
 ): Promise<Result<ServiceAccountCreated>> {
-  const res = await accountsApi.post<ServiceAccountCreated>(`/v1/service-accounts/${orgId}`, input);
+  const res = await accountsApi.post<ServiceAccountCreated>(`/v1/service-accounts/${encodeURIComponent(orgId)}`, input);
   return res.ok
     ? { ok: true, data: res.data }
     // 403 = plan gate; surface a helpful message.
@@ -42,7 +42,7 @@ export async function createServiceAccount(
 }
 
 export async function revokeServiceAccount(orgId: string, keyId: string): Promise<ActionResult> {
-  const res = await accountsApi.del(`/v1/service-accounts/${orgId}/${keyId}`);
+  const res = await accountsApi.del(`/v1/service-accounts/${encodeURIComponent(orgId)}/${encodeURIComponent(keyId)}`);
   if (res.ok) return { ok: true };
   if (res.error.kind === 'http' && res.error.status === 404) return { ok: true }; // already gone
   return { ok: false, error: apiErrorMessage(res.error, 'service accounts') };

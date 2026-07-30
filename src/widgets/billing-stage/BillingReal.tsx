@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { CreditCard } from 'lucide-react';
 import { useTheme } from '@shared/theme';
+import { safeHref } from '@shared/lib';
 import { ScrollPane, Badge, InlineError, SkeletonText, type BadgeVariant } from '@shared/ui';
 import { Button } from '@shared/ui/forms';
 import { useTabVisibility } from '@features/workspace-tabs';
@@ -45,7 +46,9 @@ export function BillingReal() {
     setActionError(null);
     const res = await startCheckout(orgId, { plan, cycle });
     if (!res.ok) { setBusy(false); setActionError(res.error); return; }
-    window.location.href = res.url;
+    const dest = safeHref(res.url);
+    if (!dest) { setBusy(false); setActionError(t('linkBlocked')); return; }
+    window.location.href = dest;
   }
 
   async function manage() {
@@ -53,7 +56,9 @@ export function BillingReal() {
     setActionError(null);
     const res = await openPortal(orgId);
     if (!res.ok) { setBusy(false); setActionError(res.error); return; }
-    window.location.href = res.url;
+    const dest = safeHref(res.url);
+    if (!dest) { setBusy(false); setActionError(t('linkBlocked')); return; }
+    window.location.href = dest;
   }
 
   function onSelectPlan(id: PlanId) {

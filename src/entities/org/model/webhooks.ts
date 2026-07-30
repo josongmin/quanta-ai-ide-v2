@@ -30,7 +30,7 @@ type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 type ActionResult = { ok: true } | { ok: false; error: string };
 
 export async function listWebhooks(orgId: string): Promise<Result<WebhookEndpointRecord[]>> {
-  const res = await accountsApi.get<{ endpoints: WebhookEndpointRecord[] }>(`/v1/webhooks/${orgId}`);
+  const res = await accountsApi.get<{ endpoints: WebhookEndpointRecord[] }>(`/v1/webhooks/${encodeURIComponent(orgId)}`);
   return res.ok
     ? { ok: true, data: Array.isArray(res.data.endpoints) ? res.data.endpoints : [] }
     : { ok: false, error: apiErrorMessage(res.error, 'webhooks') };
@@ -40,7 +40,7 @@ export async function createWebhook(
   orgId: string,
   input: { url: string; description?: string | null; events: string[] },
 ): Promise<Result<WebhookEndpointCreated>> {
-  const res = await accountsApi.post<WebhookEndpointCreated>(`/v1/webhooks/${orgId}`, input);
+  const res = await accountsApi.post<WebhookEndpointCreated>(`/v1/webhooks/${encodeURIComponent(orgId)}`, input);
   return res.ok
     ? { ok: true, data: res.data }
     : { ok: false, error: res.error.kind === 'http' && res.error.status === 403
@@ -53,25 +53,25 @@ export async function updateWebhook(
   id: string,
   patch: { enabled?: boolean; events?: string[]; description?: string | null },
 ): Promise<ActionResult> {
-  const res = await accountsApi.patch(`/v1/webhooks/${orgId}/${id}`, patch);
+  const res = await accountsApi.patch(`/v1/webhooks/${encodeURIComponent(orgId)}/${encodeURIComponent(id)}`, patch);
   return res.ok ? { ok: true } : { ok: false, error: apiErrorMessage(res.error, 'webhooks') };
 }
 
 export async function deleteWebhook(orgId: string, id: string): Promise<ActionResult> {
-  const res = await accountsApi.del(`/v1/webhooks/${orgId}/${id}`);
+  const res = await accountsApi.del(`/v1/webhooks/${encodeURIComponent(orgId)}/${encodeURIComponent(id)}`);
   if (res.ok) return { ok: true };
   if (res.error.kind === 'http' && res.error.status === 404) return { ok: true }; // already gone
   return { ok: false, error: apiErrorMessage(res.error, 'webhooks') };
 }
 
 export async function listDeliveries(orgId: string): Promise<Result<WebhookDeliveryRecord[]>> {
-  const res = await accountsApi.get<{ deliveries: WebhookDeliveryRecord[] }>(`/v1/webhooks/${orgId}/deliveries`);
+  const res = await accountsApi.get<{ deliveries: WebhookDeliveryRecord[] }>(`/v1/webhooks/${encodeURIComponent(orgId)}/deliveries`);
   return res.ok
     ? { ok: true, data: Array.isArray(res.data.deliveries) ? res.data.deliveries : [] }
     : { ok: false, error: apiErrorMessage(res.error, 'webhook deliveries') };
 }
 
 export async function replayDelivery(orgId: string, deliveryId: string): Promise<ActionResult> {
-  const res = await accountsApi.post(`/v1/webhooks/${orgId}/deliveries/${deliveryId}/replay`);
+  const res = await accountsApi.post(`/v1/webhooks/${encodeURIComponent(orgId)}/deliveries/${encodeURIComponent(deliveryId)}/replay`);
   return res.ok ? { ok: true } : { ok: false, error: apiErrorMessage(res.error, 'webhook deliveries') };
 }

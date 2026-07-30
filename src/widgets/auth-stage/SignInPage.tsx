@@ -5,6 +5,7 @@ import {
   Eye, EyeOff, Mail, KeyRound, Lock, AlertCircle, Sparkles, Check,
 } from 'lucide-react';
 import { env } from '@shared/config/env';
+import { safeHref } from '@shared/lib';
 import { signInWithPassword, signInWithProvider, type OAuthProvider } from '@entities/session';
 import { resolveSso } from '@entities/org';
 import { GithubIcon } from '@shared/ui/brand-icons';
@@ -128,7 +129,11 @@ export default function SignInPage() {
     setError(null);
     void (async () => {
       const r = await resolveSso(em);
-      if (r.sso && r.authorizationUrl) { window.location.href = r.authorizationUrl; }
+      // Guard the server-provided IdP URL against scheme injection before we
+      // hand the browser to it (a compromised/MITM'd backend could return a
+      // javascript: URL). safeHref allows only http(s).
+      const dest = r.sso && r.authorizationUrl ? safeHref(r.authorizationUrl) : undefined;
+      if (dest) { window.location.href = dest; }
       else { setError(t('signIn.ssoNotConfigured')); }
     })();
   };

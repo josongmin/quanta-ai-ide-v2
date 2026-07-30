@@ -23,7 +23,7 @@ export function useBillingStatus(orgId: string): BillingState {
       // No org yet (parent still resolving detail) — hold the skeleton, no
       // request and no error, matching the old `if (!orgId) return;` guard.
       if (!orgId) return new Promise<never>(() => { /* never resolves */ });
-      const res = await accountsApi.get<BillingStatus>(`/v1/billing/${orgId}`);
+      const res = await accountsApi.get<BillingStatus>(`/v1/billing/${encodeURIComponent(orgId)}`);
       return res.ok
         ? { ok: true, data: res.data }
         : { ok: false, error: apiErrorMessage(res.error, 'billing') };

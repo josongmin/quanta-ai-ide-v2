@@ -21,19 +21,19 @@ type ActionResult = { ok: true } | { ok: false; error: string };
 const PLAN_MSG = 'SCIM provisioning requires an Enterprise plan.';
 
 export async function getScimConfig(orgId: string): Promise<Result<ScimConfig>> {
-  const res = await accountsApi.get<ScimConfig>(`/v1/scim/${orgId}`);
+  const res = await accountsApi.get<ScimConfig>(`/v1/scim/${encodeURIComponent(orgId)}`);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'SCIM') };
 }
 
 export async function enableScim(orgId: string): Promise<Result<ScimTokenResponse>> {
-  const res = await accountsApi.post<ScimTokenResponse>(`/v1/scim/${orgId}/enable`);
+  const res = await accountsApi.post<ScimTokenResponse>(`/v1/scim/${encodeURIComponent(orgId)}/enable`);
   return res.ok
     ? { ok: true, data: res.data }
     : { ok: false, error: res.error.kind === 'http' && res.error.status === 403 ? PLAN_MSG : apiErrorMessage(res.error, 'SCIM') };
 }
 
 export async function rotateScimToken(orgId: string): Promise<Result<ScimTokenResponse>> {
-  const res = await accountsApi.post<ScimTokenResponse>(`/v1/scim/${orgId}/rotate`);
+  const res = await accountsApi.post<ScimTokenResponse>(`/v1/scim/${encodeURIComponent(orgId)}/rotate`);
   if (res.ok) return { ok: true, data: res.data };
   if (res.error.kind === 'http' && res.error.status === 403) return { ok: false, error: PLAN_MSG };
   if (res.error.kind === 'http' && res.error.status === 409) return { ok: false, error: 'Enable SCIM before rotating the token.' };
@@ -41,6 +41,6 @@ export async function rotateScimToken(orgId: string): Promise<Result<ScimTokenRe
 }
 
 export async function disableScim(orgId: string): Promise<ActionResult> {
-  const res = await accountsApi.post(`/v1/scim/${orgId}/disable`);
+  const res = await accountsApi.post(`/v1/scim/${encodeURIComponent(orgId)}/disable`);
   return res.ok ? { ok: true } : { ok: false, error: apiErrorMessage(res.error, 'SCIM') };
 }

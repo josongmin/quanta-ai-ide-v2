@@ -30,7 +30,7 @@ export function useUsageSummary(orgId: string): UsageState {
   const { data, isPending, error, refetch } = useAsyncResource<UsageSummary>(
     async () => {
       if (!orgId) return { ok: true, data: { period: '', metrics: [] } };
-      const res = await accountsApi.get<UsageSummary>(`/v1/usage/${orgId}`);
+      const res = await accountsApi.get<UsageSummary>(`/v1/usage/${encodeURIComponent(orgId)}`);
       return res.ok
         ? { ok: true, data: res.data }
         : { ok: false, error: apiErrorMessage(res.error, 'usage') };
