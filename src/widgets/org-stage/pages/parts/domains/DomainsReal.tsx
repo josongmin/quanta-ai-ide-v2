@@ -13,9 +13,14 @@ import {
 } from '@entities/org';
 
 // Real-mode org Domains over accounts /v1/orgs/:orgId/domains. Domain ownership only
-// (add / DNS-TXT verify / remove). The mock's member counts, primary flag, and
-// ssoRequired/autoJoin toggles are dropped — they have no backend enforcement yet
-// (a toggle that does nothing is worse than none). TXT value comes from the backend token.
+// (add / DNS-TXT verify / remove). The mock's member counts, primary flag, and ssoRequired
+// toggle are dropped — no backend enforcement (a toggle that does nothing is worse than none).
+// ★autoJoin: the backend now DOES enforce it (PATCH .../:id/auto-join, verified-only, seat-
+// checked), but actual auto-join stays dormant behind an ops master-switch
+// (DOMAIN_AUTO_JOIN_ENABLED, default off). Until that switch is on in the environment, a UI
+// toggle would flip a flag with no observable effect — same no-op-control anti-pattern — so
+// it's intentionally deferred here, not missing. Wire it when the switch ships. TXT value
+// comes from the backend token.
 const EMPTY: OrgDomainRecord[] = [];
 
 export function DomainsReal() {
