@@ -4,10 +4,8 @@
 
 import { z } from 'zod';
 
-import { accountsApi } from '@shared/auth';
+import { accountsApi, type ActionData } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
-
-type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 
 const AiSurfaceSchema = z.enum(['coding', 'review', 'fix']);
 
@@ -30,12 +28,12 @@ const AiPrefsSchema = z.object({
 
 export type AiPrefs = z.infer<typeof AiPrefsSchema>;
 
-export async function getAiPrefs(): Promise<Result<AiPrefs>> {
+export async function getAiPrefs(): Promise<ActionData<AiPrefs>> {
   const res = await accountsApi.get<AiPrefs>('/v1/me/ai-settings', AiPrefsSchema);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'AI settings') };
 }
 
-export async function saveAiPrefs(prefs: AiPrefs): Promise<Result<AiPrefs>> {
+export async function saveAiPrefs(prefs: AiPrefs): Promise<ActionData<AiPrefs>> {
   const res = await accountsApi.put<AiPrefs>('/v1/me/ai-settings', prefs, AiPrefsSchema);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'AI settings') };
 }

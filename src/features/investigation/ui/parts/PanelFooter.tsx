@@ -42,7 +42,7 @@ export function PanelFooter({
           style={{
             background: 'transparent',
             color: 'var(--fg-muted)',
-            cursor: 'pointer',
+            cursor: status === 'gathering' ? 'not-allowed' : 'pointer',
           }}
           aria-label={t('footer.regenerateAria')}
         >

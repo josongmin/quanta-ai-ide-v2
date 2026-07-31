@@ -72,7 +72,8 @@ export default function OnboardingStage() {
     setFinishing(true);
     setFinishError(null);
     if (data.profile.name.trim().length > 0) {
-      await updateProfile({ name: data.profile.name.trim() });
+      const profileRes = await updateProfile({ name: data.profile.name.trim() });
+      if (!profileRes.ok) { setFinishing(false); setFinishError(profileRes.error); return; }
     }
     if (data.org.mode === 'create') {
       // Create the org exactly once; reuse it on a retry / reload (no duplicate

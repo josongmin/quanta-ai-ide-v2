@@ -163,7 +163,7 @@ export function JobsProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<Ctx>(
     () => ({ jobs, enqueue, cancel, clearCompleted, open, setOpen }),
-    [jobs, enqueue, cancel, clearCompleted, open],
+    [jobs, enqueue, cancel, clearCompleted, open, setOpen],
   );
 
   return <JobsCtx.Provider value={value}>{children}</JobsCtx.Provider>;

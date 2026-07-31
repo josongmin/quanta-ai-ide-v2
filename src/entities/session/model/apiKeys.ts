@@ -6,7 +6,7 @@
 // NOTE: shapes mirror @p0/contracts api-keys; replace with codegen from
 // <accountsUrl>/openapi.json when wired into CI.
 import { z } from 'zod';
-import { accountsApi } from '@shared/auth';
+import { accountsApi, type ActionData, type ActionResult } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
 
 export const ApiKeyRecordSchema = z.object({
@@ -25,10 +25,7 @@ export type ApiKeyCreated = z.infer<typeof ApiKeyCreatedSchema>;
 
 const TokensListSchema = z.object({ tokens: z.array(ApiKeyRecordSchema).catch([]) });
 
-export type KeyResult<T> = { ok: true; data: T } | { ok: false; error: string };
-export type KeyActionResult = { ok: true } | { ok: false; error: string };
-
-export async function listPersonalTokens(): Promise<KeyResult<ApiKeyRecord[]>> {
+export async function listPersonalTokens(): Promise<ActionData<ApiKeyRecord[]>> {
   const res = await accountsApi.get<{ tokens: ApiKeyRecord[] }>('/v1/tokens', TokensListSchema);
   return res.ok
     ? { ok: true, data: Array.isArray(res.data.tokens) ? res.data.tokens : [] }
@@ -38,12 +35,12 @@ export async function listPersonalTokens(): Promise<KeyResult<ApiKeyRecord[]>> {
 export async function createPersonalToken(input: {
   name: string;
   expiresInDays?: number | null;
-}): Promise<KeyResult<ApiKeyCreated>> {
+}): Promise<ActionData<ApiKeyCreated>> {
   const res = await accountsApi.post<ApiKeyCreated>('/v1/tokens', input, ApiKeyCreatedSchema);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'tokens') };
 }
 
-export async function revokePersonalToken(keyId: string): Promise<KeyActionResult> {
+export async function revokePersonalToken(keyId: string): Promise<ActionResult> {
   const res = await accountsApi.del(`/v1/tokens/${encodeURIComponent(keyId)}`);
   if (res.ok) return { ok: true };
   // Already gone → idempotent success (avoids a cryptic "HTTP 404" on a

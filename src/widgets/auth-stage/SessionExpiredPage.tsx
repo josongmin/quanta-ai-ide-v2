@@ -222,7 +222,7 @@ function ResumeButton({
   return (
     <Link
       to={'/auth/login' as never}
-      search={{ next: route } as never}
+      search={{ redirect: route } as never}
       className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-md text-base font-semibold transition-opacity hover:opacity-90"
       style={{ background: 'var(--fg-strong)', color: 'var(--bg-canvas)' }}
     >

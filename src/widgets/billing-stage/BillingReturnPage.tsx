@@ -16,8 +16,8 @@ function BillingReturn({ kind }: { kind: 'success' | 'cancel' }) {
 
   // Give the slug hooks a beat to resolve, then route to billing (or the app).
   useEffect(() => {
-    const t = setTimeout(() => { setWaited(true); }, 600);
-    return () => { clearTimeout(t); };
+    const timerId = setTimeout(() => { setWaited(true); }, 600);
+    return () => { clearTimeout(timerId); };
   }, []);
 
   // Navigate exactly once: as soon as the slug resolves, or when the 600ms

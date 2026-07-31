@@ -280,6 +280,7 @@ export function InvestigationRunnerProvider({ children }: { children: ReactNode 
         if (err instanceof DOMException && err.name === 'AbortError') {
           return;
         }
+        console.error('[investigation] context gathering failed:', err);
         setStatus('error');
       });
   }, [cancelInternal, ensureNotebookForTarget, setActiveNotebook]);

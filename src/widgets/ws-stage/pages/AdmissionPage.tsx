@@ -208,10 +208,8 @@ function RuleRow({
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex items-center gap-1 h-5 px-1.5 rounded text-xs transition-colors"
+              className="inline-flex items-center gap-1 h-5 px-1.5 rounded text-xs transition-colors hover:bg-[var(--bg-hover)]"
               style={{ color: 'var(--fg-muted)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-hover)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
             >
               <RotateCcw className="w-2.5 h-2.5" />
               {t('admission.resetToOrgDefault')}

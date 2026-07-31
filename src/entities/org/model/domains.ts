@@ -53,7 +53,9 @@ export async function setDomainAutoJoin(orgId: string, id: string, autoJoin: boo
     { autoJoin },
     OrgDomainRecordSchema,
   );
-  return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'domains') };
+  if (res.ok) return { ok: true, data: res.data };
+  if (res.error.kind === 'http' && res.error.status === 422) return { ok: false, error: 'Auto-join can only be enabled for verified domains.' };
+  return { ok: false, error: apiErrorMessage(res.error, 'domains') };
 }
 
 export async function removeDomain(orgId: string, id: string): Promise<ActionResult> {

@@ -180,7 +180,14 @@ export default function FocusScanStack({
 
       <div key={activeKeyStr} className="h-full pointer-events-auto">
         {active.kind === 'file'
-          ? <FocusScanPanel file={repo.files[active.id]} isDark={isDark} embedded />
+          ? (() => {
+              // `active.id` is a dense index into repo.files. A stale stack entry
+              // (e.g. repo reloaded with fewer files) can leave it out of range,
+              // which would hand FocusScanPanel an undefined FileRecord. Guard the
+              // same way SimilarDrawer does (`if (!f) return null`).
+              const file = repo.files[active.id];
+              return file ? <FocusScanPanel file={file} isDark={isDark} embedded /> : null;
+            })()
           : <InspectPanel
               isDark={isDark}
               target={active.kind === 'workspace' ? { kind: 'workspace' } : { kind: 'folder', path: active.path }}

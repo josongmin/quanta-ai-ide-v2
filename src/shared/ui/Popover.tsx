@@ -171,6 +171,7 @@ export function Popover({
             ref={panelRef}
             role={role === 'menu' ? 'dialog' : role}
             aria-modal="true"
+            tabIndex={-1}
             style={{ width, maxHeight: 'calc(100vh - 32px)', overflow: 'auto' }}
           >
             {children}

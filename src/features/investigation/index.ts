@@ -1,5 +1,4 @@
 export {
-  InvestigationProvider,
   InvestigationNotebookProvider,
   InvestigationRunnerProvider,
   useInvestigation,

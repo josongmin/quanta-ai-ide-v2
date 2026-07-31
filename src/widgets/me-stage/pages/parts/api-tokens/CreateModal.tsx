@@ -42,8 +42,8 @@ export function CreateModal({
   };
 
   return (
-    <MeModal onClose={onClose} widthClass="max-w-[520px]" scroll>
-      <h3 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
+    <MeModal onClose={onClose} widthClass="max-w-[520px]" scroll ariaLabelledby="create-token-heading">
+      <h3 id="create-token-heading" className="text-lg font-semibold tracking-tight" style={{ color: 'var(--fg-strong)' }}>
           {t('apiTokens.create.title')}
         </h3>
 

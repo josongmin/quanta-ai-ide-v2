@@ -15,15 +15,23 @@ export function currentLocale(): string {
 const numberCache = new Map<string, Intl.NumberFormat>();
 const dateCache = new Map<string, Intl.DateTimeFormat>();
 
+// Stable cache key: Intl ignores option key order, but JSON.stringify does not,
+// so serialize with sorted keys — otherwise `{ year, month, day }` and
+// `{ month, day, year }` (same semantics) build two duplicate formatters.
+function stableKey(opts?: object): string {
+  if (!opts) return '';
+  return JSON.stringify(opts, Object.keys(opts).sort());
+}
+
 function numberFmt(opts?: Intl.NumberFormatOptions): Intl.NumberFormat {
-  const key = currentLocale() + ' ' + (opts ? JSON.stringify(opts) : '');
+  const key = currentLocale() + ' ' + stableKey(opts);
   let f = numberCache.get(key);
   if (!f) { f = new Intl.NumberFormat(currentLocale(), opts); numberCache.set(key, f); }
   return f;
 }
 
 function dateFmt(opts?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
-  const key = currentLocale() + ' ' + (opts ? JSON.stringify(opts) : '');
+  const key = currentLocale() + ' ' + stableKey(opts);
   let f = dateCache.get(key);
   if (!f) { f = new Intl.DateTimeFormat(currentLocale(), opts); dateCache.set(key, f); }
   return f;

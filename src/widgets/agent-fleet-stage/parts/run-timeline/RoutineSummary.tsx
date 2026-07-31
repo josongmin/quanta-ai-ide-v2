@@ -27,7 +27,7 @@ export function RoutineSummary({
       <div className={`mt-2 flex flex-wrap gap-1.5 text-xs font-mono ${muted}`}>
         <Pill text={t('rail.memoryItems', { n: routine.memoryItemCount })} />
         <Pill text={t('rail.metricSaved', { h: m.reviewHoursSaved.toFixed(1) })} />
-        <Pill text={`reviewer Δ ${m.reviewerTouches.toFixed(1)}`} />
+        <Pill text={`${t('metrics.reviewerTouches')} Δ ${m.reviewerTouches.toFixed(1)}`} />
       </div>
     </div>
   );

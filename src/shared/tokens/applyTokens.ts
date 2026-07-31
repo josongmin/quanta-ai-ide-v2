@@ -15,7 +15,7 @@ import {
   zIndex,
 } from './primitives';
 import { semantic, type Theme, type SemanticTokens } from './semantic';
-import { glass, card, chip, panel, header, tab, dropdown, pill } from './components';
+import { glass, card, chip, panel, header, tab, dropdown, pill, tooltip, focus } from './components';
 import type { GlobalTokenSections, Tokens } from './editable';
 
 // Exported so the token↔tailwind sync test can assert every `var(--x)` the
@@ -167,6 +167,11 @@ export function applyTokens(theme: Theme): void {
 
   // Component tokens — emitted once (theme-agnostic), but cheap to re-set.
   root.style.setProperty('--glass-blur', glass.blur);
+  // Emit the names consumers actually read (`--glass-alpha-*`, see GlassCard /
+  // index.css) alongside the legacy `--glass-fill-alpha-*`, matching the
+  // editor path (applyGlobalTokens) so the boot paint is consistent.
+  root.style.setProperty('--glass-alpha-dark', String(glass.fillAlphaDark));
+  root.style.setProperty('--glass-alpha-light', String(glass.fillAlphaLight));
   root.style.setProperty('--glass-fill-alpha-dark', String(glass.fillAlphaDark));
   root.style.setProperty('--glass-fill-alpha-light', String(glass.fillAlphaLight));
 
@@ -176,7 +181,9 @@ export function applyTokens(theme: Theme): void {
   root.style.setProperty('--card-gap', card.gap);
 
   root.style.setProperty('--chip-padding', chip.padding);
+  root.style.setProperty('--chip-padding-compact', chip.paddingCompact);
   root.style.setProperty('--chip-radius', chip.radius);
+  root.style.setProperty('--chip-radius-pill', chip.radiusPill);
 
   root.style.setProperty('--pill-padding', `${pill.paddingY} ${pill.paddingX}`);
   root.style.setProperty('--pill-padding-compact', `${pill.paddingCompactY} ${pill.paddingCompactX}`);
@@ -190,6 +197,14 @@ export function applyTokens(theme: Theme): void {
 
   root.style.setProperty('--tab-indicator-h', tab.indicatorHeight);
   root.style.setProperty('--dropdown-width', dropdown.width);
+
+  root.style.setProperty('--tooltip-padding-x', tooltip.paddingX);
+  root.style.setProperty('--tooltip-padding-y', tooltip.paddingY);
+  root.style.setProperty('--tooltip-radius', tooltip.radius);
+  root.style.setProperty('--tooltip-font-size', tooltip.fontSize);
+
+  root.style.setProperty('--focus-ring', focus.ring);
+  root.style.setProperty('--focus-outline', focus.outline);
 }
 
 // ── Preset-aware emitters (was features/chat-agent/model/applyTokens) ────────

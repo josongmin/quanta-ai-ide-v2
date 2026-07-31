@@ -1,6 +1,6 @@
-// Profile/Account/Security are backend-wired; the rest (connected-apps/api-
-// tokens/notifications/ai/inbox) show OrgComingSoon in real mode. All gated in
-// ./gated so the mock page files stay untouched.
+// All me-stage pages are backend-wired in real mode. Profile, Account, and
+// Security use better-auth; ConnectedApps, ApiTokens, Notifications, AI, and
+// Inbox pull from their respective backend endpoints. All gated in ./gated.
 export {
   ProfilePage, AccountPage, SecurityPage,
   ConnectedAppsPage, ApiTokensPage, NotificationsPage, AiPage, InboxPage,

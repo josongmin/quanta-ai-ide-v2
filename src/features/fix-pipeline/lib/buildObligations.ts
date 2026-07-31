@@ -5,6 +5,7 @@ import type {
   ProofObligation,
   ValidationResult,
 } from '@entities/fix-pipeline';
+import { TIER_THRESHOLDS } from './decideTier';
 
 // Builds the proof-obligation list for a candidate. Three categories are
 // rendered separately in UI; we generate them together because the inputs
@@ -40,7 +41,7 @@ export function buildObligations(
     category: 'static',
     label: 'blast radius bounded',
     rationale: '영향 모듈 수가 delivery gate 임계 안에 있는지.',
-    status: candidate.metrics.modulesAffected <= 5 ? 'pass' : 'fail',
+    status: candidate.metrics.modulesAffected <= TIER_THRESHOLDS.guarded.maxModules ? 'pass' : 'fail',
     detail: `영향 모듈 ${candidate.metrics.modulesAffected.toString()}개`,
   });
 
