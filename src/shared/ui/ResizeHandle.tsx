@@ -47,6 +47,10 @@ export function ResizeHandle({
 }: Props) {
   const [isResizing, setIsResizing] = useState(false);
   const dragRef = useRef<{ startX: number; startWidth: number } | null>(null);
+  // Owns the in-flight drag's window listeners so they are torn down both on
+  // pointerup AND if the handle unmounts mid-drag (otherwise they'd leak).
+  const dragAbortRef = useRef<AbortController | null>(null);
+  useEffect(() => () => { dragAbortRef.current?.abort(); }, []);
 
   const resolveMax = useCallback(
     () => max ?? Math.max(min, (typeof window !== 'undefined' ? window.innerWidth : min) - 96),
@@ -74,13 +78,15 @@ export function ResizeHandle({
       dragRef.current = null;
       setIsResizing(false);
       try { target.releasePointerCapture(ev.pointerId); } catch { /* already released */ }
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-      window.removeEventListener('pointercancel', onUp);
+      dragAbortRef.current?.abort();
+      dragAbortRef.current = null;
     };
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-    window.addEventListener('pointercancel', onUp);
+    dragAbortRef.current?.abort(); // defensive: end any prior drag before starting a new one
+    const ac = new AbortController();
+    dragAbortRef.current = ac;
+    window.addEventListener('pointermove', onMove, { signal: ac.signal });
+    window.addEventListener('pointerup', onUp, { signal: ac.signal });
+    window.addEventListener('pointercancel', onUp, { signal: ac.signal });
   }, [width, side, min, resolveMax, onChange]);
 
   const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {

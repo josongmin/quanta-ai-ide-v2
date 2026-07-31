@@ -178,7 +178,12 @@ export default function ChatAgent({
   }, []);
 
   useEffect(() => {
-    if (open) requestAnimationFrame(() => inputRef.current?.focus());
+    if (!open) return;
+    const raf = requestAnimationFrame(() => {
+      pendingRafsRef.current.delete(raf);
+      inputRef.current?.focus();
+    });
+    pendingRafsRef.current.add(raf);
   }, [open, activeId]);
 
   // Auto-scroll respects user intent. If the user scrolled up to read
@@ -209,10 +214,12 @@ export default function ChatAgent({
   useEffect(() => {
     setPinnedToBottom(true);
     setHasNewBelow(false);
-    requestAnimationFrame(() => {
+    const raf = requestAnimationFrame(() => {
+      pendingRafsRef.current.delete(raf);
       const el = scrollRef.current;
       if (el) el.scrollTop = el.scrollHeight;
     });
+    pendingRafsRef.current.add(raf);
   }, [activeId]);
 
   /* eslint-enable react-hooks/set-state-in-effect */
