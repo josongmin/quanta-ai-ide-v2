@@ -4,23 +4,22 @@ import { useParams } from '@tanstack/react-router';
 import { AtSign, Plus, Copy, Check, ShieldCheck, AlertTriangle, RefreshCw, Trash2 } from 'lucide-react';
 import { OrgShell } from '../../../parts/OrgShell';
 import { Button, Field } from '@shared/ui/forms';
-import { EmptyState, InlineError, SkeletonText, ConfirmDialog, SettingsModal } from '@shared/ui';
+import { EmptyState, InlineError, SkeletonText, ConfirmDialog, SettingsModal, Switch } from '@shared/ui';
 import { useCopyToClipboard } from '@shared/lib';
 import {
   useOrg,
-  listDomains, addDomain, verifyDomain, removeDomain, domainTxtRecord,
+  listDomains, addDomain, verifyDomain, removeDomain, setDomainAutoJoin, domainTxtRecord,
   type OrgDomainRecord,
 } from '@entities/org';
 
-// Real-mode org Domains over accounts /v1/orgs/:orgId/domains. Domain ownership only
-// (add / DNS-TXT verify / remove). The mock's member counts, primary flag, and ssoRequired
-// toggle are dropped — no backend enforcement (a toggle that does nothing is worse than none).
-// ★autoJoin: the backend now DOES enforce it (PATCH .../:id/auto-join, verified-only, seat-
-// checked), but actual auto-join stays dormant behind an ops master-switch
-// (DOMAIN_AUTO_JOIN_ENABLED, default off). Until that switch is on in the environment, a UI
-// toggle would flip a flag with no observable effect — same no-op-control anti-pattern — so
-// it's intentionally deferred here, not missing. Wire it when the switch ships. TXT value
-// comes from the backend token.
+// Real-mode org Domains over accounts /v1/orgs/:orgId/domains. Domain ownership
+// (add / DNS-TXT verify / remove) + auto-join toggle. The mock's member counts, primary
+// flag, and ssoRequired toggle are dropped — no backend enforcement (a toggle that does
+// nothing is worse than none). autoJoin is backed end-to-end: PATCH .../:id/auto-join,
+// verified-only (backend 422s otherwise → toggle only shown on verified domains), seat-
+// checked at signup. Actual signup-time auto-join is platform-gated (DOMAIN_AUTO_JOIN_ENABLED)
+// but the per-domain toggle is a real config knob that persists and takes effect once the
+// platform enables it. TXT value comes from the backend token.
 const EMPTY: OrgDomainRecord[] = [];
 
 export function DomainsReal() {
@@ -67,6 +66,15 @@ export function DomainsReal() {
     setError(null);
     refetch();
   }
+  async function doSetAutoJoin(d: OrgDomainRecord, next: boolean) {
+    setBusyId(d.id);
+    const res = await setDomainAutoJoin(orgId, d.id, next);
+    setBusyId(null);
+    if (!res.ok) { setError(res.error); return; }
+    setError(null);
+    // 서버가 돌려준 레코드로 로컬 갱신(전체 리페치 없이 즉시 반영).
+    setDomains((prev) => prev.map((x) => (x.id === res.data.id ? res.data : x)));
+  }
 
   return (
     <OrgShell
@@ -99,6 +107,7 @@ export function DomainsReal() {
               busy={busyId === d.id}
               onVerify={() => { void doVerify(d); }}
               onRemove={() => { setConfirmRemove(d); }}
+              onToggleAutoJoin={(next) => { void doSetAutoJoin(d, next); }}
             />
           ))}
         </div>
@@ -127,12 +136,13 @@ export function DomainsReal() {
 }
 
 function DomainCard({
-  domain, busy, onVerify, onRemove,
+  domain, busy, onVerify, onRemove, onToggleAutoJoin,
 }: {
   domain: OrgDomainRecord;
   busy: boolean;
   onVerify: () => void;
   onRemove: () => void;
+  onToggleAutoJoin: (next: boolean) => void;
 }) {
   const { t } = useTranslation('org');
   const { copied, copy } = useCopyToClipboard(1200);
@@ -170,6 +180,21 @@ function DomainCard({
           </button>
         </div>
       </div>
+
+      {domain.verified && (
+        <div className="mt-4 rounded-lg p-4 flex items-center justify-between gap-4" style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>{t('domains.autoJoin.label')}</p>
+            <p className="text-xs leading-snug mt-0.5" style={{ color: 'var(--fg-subtle)' }}>{t('domains.autoJoin.hint', { domain: domain.domain })}</p>
+          </div>
+          <Switch
+            checked={domain.autoJoin}
+            disabled={busy}
+            onChange={onToggleAutoJoin}
+            label={t('domains.autoJoin.label')}
+          />
+        </div>
+      )}
 
       {!domain.verified && (
         <div className="mt-4 rounded-lg p-4" style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}>

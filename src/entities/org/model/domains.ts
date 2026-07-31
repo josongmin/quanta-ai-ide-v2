@@ -13,6 +13,7 @@ const OrgDomainRecordSchema = z.object({
   id: z.string(),
   domain: z.string(),
   verified: z.boolean(),
+  autoJoin: z.boolean(),
   verificationToken: z.string(),
   createdAt: z.string().nullable(),
   verifiedAt: z.string().nullable(),
@@ -41,6 +42,17 @@ export async function addDomain(orgId: string, domain: string): Promise<Result<O
 
 export async function verifyDomain(orgId: string, id: string): Promise<Result<OrgDomainRecord>> {
   const res = await accountsApi.post<OrgDomainRecord>(`/v1/orgs/${encodeURIComponent(orgId)}/domains/${encodeURIComponent(id)}/verify`, undefined, OrgDomainRecordSchema);
+  return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'domains') };
+}
+
+// auto-join 토글 — verified 도메인만 켤 수 있다(백엔드가 verified-only 강제, 422 반환).
+// 실제 가입-시 auto-join은 플랫폼 ops 스위치(DOMAIN_AUTO_JOIN_ENABLED)로 게이트된다.
+export async function setDomainAutoJoin(orgId: string, id: string, autoJoin: boolean): Promise<Result<OrgDomainRecord>> {
+  const res = await accountsApi.patch<OrgDomainRecord>(
+    `/v1/orgs/${encodeURIComponent(orgId)}/domains/${encodeURIComponent(id)}/auto-join`,
+    { autoJoin },
+    OrgDomainRecordSchema,
+  );
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'domains') };
 }
 

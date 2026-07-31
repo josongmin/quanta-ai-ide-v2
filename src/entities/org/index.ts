@@ -57,6 +57,7 @@ export {
   addDomain,
   verifyDomain,
   removeDomain,
+  setDomainAutoJoin,
   domainTxtRecord,
   type OrgDomainRecord,
 } from './model/domains';
