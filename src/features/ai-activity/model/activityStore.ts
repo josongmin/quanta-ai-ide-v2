@@ -128,11 +128,14 @@ export const useActivityStore = create<Store>()(subscribeWithSelector((set, get)
   activities: [],
   prefs: loadPrefs(),
 
-  upsertActivity: (a) => { set((s) => ({
+  upsertActivity: (a) => { set((s) => {
     // Immutable: drop any prior entry for this chat, append, then keep only the
     // most-recent `maxConcurrent` (oldest fall off the front). No in-place mutation.
-    activities: [...s.activities.filter((x) => x.chatId !== a.chatId), a].slice(-s.prefs.maxConcurrent),
-  })); },
+    // Index-based slice (not `slice(-n)`) so maxConcurrent=0 correctly yields [] —
+    // `slice(-0)` is `slice(0)` and would keep the whole list.
+    const merged = [...s.activities.filter((x) => x.chatId !== a.chatId), a];
+    return { activities: merged.slice(Math.max(0, merged.length - s.prefs.maxConcurrent)) };
+  }); },
 
   removeActivity: (chatId) => { set((s) => ({
     activities: s.activities.filter((x) => x.chatId !== chatId),
