@@ -58,5 +58,7 @@ export async function setDomainAutoJoin(orgId: string, id: string, autoJoin: boo
 
 export async function removeDomain(orgId: string, id: string): Promise<ActionResult> {
   const res = await accountsApi.del(`/v1/orgs/${encodeURIComponent(orgId)}/domains/${encodeURIComponent(id)}`);
-  return res.ok ? { ok: true } : { ok: false, error: apiErrorMessage(res.error, 'domains') };
+  if (res.ok) return { ok: true };
+  if (res.error.kind === 'http' && res.error.status === 404) return { ok: true }; // already gone — deleting an absent domain is idempotent (matches unbanUser/deleteSso)
+  return { ok: false, error: apiErrorMessage(res.error, 'domains') };
 }
