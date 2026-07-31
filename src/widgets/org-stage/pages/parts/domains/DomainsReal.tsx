@@ -184,14 +184,14 @@ function DomainCard({
       {domain.verified && (
         <div className="mt-4 rounded-lg p-4 flex items-center justify-between gap-4" style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)' }}>
           <div className="min-w-0">
-            <p className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>{t('domains.autoJoin.label')}</p>
-            <p className="text-xs leading-snug mt-0.5" style={{ color: 'var(--fg-subtle)' }}>{t('domains.autoJoin.hint', { domain: domain.domain })}</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--fg-strong)' }}>{t('domains.autoJoin')}</p>
+            <p className="text-xs leading-snug mt-0.5" style={{ color: 'var(--fg-subtle)' }}>{t('domains.autoJoinSub')}</p>
           </div>
           <Switch
             checked={domain.autoJoin}
             disabled={busy}
             onChange={onToggleAutoJoin}
-            label={t('domains.autoJoin.label')}
+            label={t('domains.autoJoin')}
           />
         </div>
       )}
