@@ -159,6 +159,7 @@
     "csvSkipped_one": "{{count}}줄 건너뜀 — 잘못된 이메일 형식.",
     "csvSkipped_other": "{{count}}줄 건너뜀 — 잘못된 이메일 형식.",
     "csvReadError": "파일을 읽을 수 없습니다.",
+    "csvEmpty": "파일이 비어 있거나 유효한 이메일이 없습니다.",
     "shareLink": "또는 초대 링크 공유",
     "linkMeta": "· 7일 후 만료 · 최대 50회 사용",
     "copied": "복사됨",

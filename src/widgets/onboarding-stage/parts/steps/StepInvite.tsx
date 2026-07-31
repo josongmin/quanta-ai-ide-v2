@@ -60,6 +60,8 @@ export function StepInvite({ value, onChange }: Props) {
     reader.onload = () => {
       const text = typeof reader.result === 'string' ? reader.result : '';
       const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+      // An empty/blank file would otherwise add nothing with no feedback.
+      if (lines.length === 0) { setCsvError(t('invite.csvEmpty')); return; }
       const next = [...value.entries];
       let skipped = 0;
       for (const raw of lines) {

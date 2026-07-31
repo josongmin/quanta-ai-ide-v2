@@ -159,6 +159,7 @@
     "csvSkipped_one": "已跳过 {{count}} 行 — 邮箱格式无效。",
     "csvSkipped_other": "已跳过 {{count}} 行 — 邮箱格式无效。",
     "csvReadError": "无法读取文件。",
+    "csvEmpty": "文件为空或没有有效的电子邮件地址。",
     "shareLink": "或分享邀请链接",
     "linkMeta": "· 7 天后过期 · 最多使用 50 次",
     "copied": "已复制",

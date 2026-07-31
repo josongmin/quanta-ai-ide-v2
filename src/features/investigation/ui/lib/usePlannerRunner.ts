@@ -82,6 +82,8 @@ export function usePlannerRunner(opts: {
       })
       .catch((err: unknown) => {
         if (err instanceof DOMException && err.name === 'AbortError') return;
+        // Surface real failures for diagnosis instead of swallowing them silently.
+        console.error('[usePlannerRunner] planner run failed:', err);
         setPlannerRunning(false);
       });
   }, [activeTarget, bundle, questionType, plannerRunning]);

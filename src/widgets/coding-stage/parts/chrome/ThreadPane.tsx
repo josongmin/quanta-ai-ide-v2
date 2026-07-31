@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { formatNumber } from '@shared/i18n';
+import { safeHref } from '@shared/lib';
 import {
   Activity, CheckCircle2, Coins, GitBranch, GitPullRequest, MoreHorizontal, Sparkles,
 } from 'lucide-react';
@@ -174,7 +175,11 @@ export function ThreadPane({
             <span className={textFaint}>← {task.baseBranch}</span>
           </span>
           <span className={textFaint}>·</span>
-          <button type="button" className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]">
+          <button
+            type="button"
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-mono transition-colors text-[color:var(--fg-muted)] hover:text-[color:var(--fg-strong)] hover:bg-[color:var(--bg-hover)]"
+            onClick={() => { const u = safeHref(task.prState?.url); if (u) window.open(u, '_blank', 'noopener,noreferrer'); }}
+          >
             <GitPullRequest className="w-3 h-3" />
             {t('header.openPr')}
           </button>

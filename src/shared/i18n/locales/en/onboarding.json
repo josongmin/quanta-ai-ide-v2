@@ -159,6 +159,7 @@
     "csvSkipped_one": "Skipped {{count}} line — invalid email format.",
     "csvSkipped_other": "Skipped {{count}} lines — invalid email format.",
     "csvReadError": "Could not read file.",
+    "csvEmpty": "The file is empty or has no valid email addresses.",
     "shareLink": "Or share an invite link",
     "linkMeta": "· expires in 7 days · max 50 uses",
     "copied": "Copied",

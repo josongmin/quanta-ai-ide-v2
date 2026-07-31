@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { formatNumber } from '@shared/i18n';
+import { safeHref } from '@shared/lib';
 import {
   GitBranch, GitPullRequest, FileCode, Sparkles, ArrowRight,
   CheckCircle2, ListTodo, Cpu, Coins, Zap, Activity,
@@ -208,6 +209,7 @@ export function LiveSnapshotCard({ task, onContinue }: Props) {
             border: '1px solid color-mix(in srgb, var(--intent-success-vivid) 30%, transparent)',
           }}
           className="flex items-center gap-1 px-2 py-1 rounded-md text-sm font-semibold transition-colors"
+          onClick={() => { const u = safeHref(task.prState?.url); if (u) window.open(u, '_blank', 'noopener,noreferrer'); }}
         >
           <GitPullRequest className="w-2.5 h-2.5" />
           {t('snapshot.openPr')}

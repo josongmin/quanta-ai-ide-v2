@@ -421,7 +421,11 @@ export const useAdmissionStore = create<AdmissionStore>((set, get) => ({
   startRollout: (ruleId, durationDays) => { set((s) => {
     const rule = s.rules.find((r) => r.id === ruleId);
     if (!rule) return s;
-    const fromSeverity: RuleSeverity = rule.severity === 'block' ? 'warn' : 'warn';
+    // A rollout escalates a rule warn → block over durationDays: it starts SOFT
+    // ('warn', regardless of the rule's current severity) and toSeverity is 'block'.
+    // (Was `rule.severity === 'block' ? 'warn' : 'warn'` — a dead ternary; both
+    // branches are 'warn', so this is behavior-identical, just no longer confusing.)
+    const fromSeverity: RuleSeverity = 'warn';
     return {
       rollouts: [
         ...s.rollouts.filter((r) => r.ruleId !== ruleId),

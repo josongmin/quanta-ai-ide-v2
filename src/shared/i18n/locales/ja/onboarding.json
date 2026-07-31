@@ -159,6 +159,7 @@
     "csvSkipped_one": "{{count}} 行スキップ — 無効なメール形式。",
     "csvSkipped_other": "{{count}} 行スキップ — 無効なメール形式。",
     "csvReadError": "ファイルを読み取れませんでした。",
+    "csvEmpty": "ファイルが空か、有効なメールアドレスがありません。",
     "shareLink": "または招待リンクを共有",
     "linkMeta": "· 7日後に期限切れ · 最大50回使用",
     "copied": "コピーしました",
