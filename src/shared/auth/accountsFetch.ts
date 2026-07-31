@@ -12,12 +12,13 @@
 // don't exist, so every call short-circuits to `not-wired` and the caller falls
 // back to its in-app fixture.
 
+import type { ZodType } from 'zod';
 import { env } from '@shared/config/env';
 import type { ApiResult } from '@shared/api';
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
-async function request<T>(method: Method, path: string, body?: unknown): Promise<ApiResult<T>> {
+async function request<T>(method: Method, path: string, body?: unknown, schema?: ZodType<T>): Promise<ApiResult<T>> {
   if (!env.useRealAuth) {
     return {
       ok: false,
@@ -43,11 +44,19 @@ async function request<T>(method: Method, path: string, body?: unknown): Promise
     // Empty body (204 / no-content success) is not a parse error.
     const text = await res.text();
     if (text === '') return { ok: true, data: undefined as T };
+    let parsed: unknown;
     try {
-      return { ok: true, data: JSON.parse(text) as T };
+      parsed = JSON.parse(text);
     } catch {
       return { ok: false, error: { kind: 'parse', message: 'Invalid JSON response' } };
     }
+    // Runtime-validate the shape at the trust boundary when a schema is supplied.
+    if (schema) {
+      const result = schema.safeParse(parsed);
+      if (!result.success) return { ok: false, error: { kind: 'parse', message: 'Response failed schema validation' } };
+      return { ok: true, data: result.data };
+    }
+    return { ok: true, data: parsed as T };
   } catch (e) {
     return { ok: false, error: { kind: 'network', message: e instanceof Error ? e.message : String(e) } };
   }
@@ -56,9 +65,9 @@ async function request<T>(method: Method, path: string, body?: unknown): Promise
 /** Cookie-authed calls to accounts `/v1/*`. Mirrors `api` (shared/api) but for
  *  the session-cookie backend rather than the Bearer product API. */
 export const accountsApi = {
-  get: <T>(path: string): Promise<ApiResult<T>> => request<T>('GET', path),
-  post: <T>(path: string, body?: unknown): Promise<ApiResult<T>> => request<T>('POST', path, body),
-  patch: <T>(path: string, body?: unknown): Promise<ApiResult<T>> => request<T>('PATCH', path, body),
-  put: <T>(path: string, body?: unknown): Promise<ApiResult<T>> => request<T>('PUT', path, body),
-  del: <T>(path: string): Promise<ApiResult<T>> => request<T>('DELETE', path),
+  get: <T>(path: string, schema?: ZodType<T>): Promise<ApiResult<T>> => request<T>('GET', path, undefined, schema),
+  post: <T>(path: string, body?: unknown, schema?: ZodType<T>): Promise<ApiResult<T>> => request<T>('POST', path, body, schema),
+  patch: <T>(path: string, body?: unknown, schema?: ZodType<T>): Promise<ApiResult<T>> => request<T>('PATCH', path, body, schema),
+  put: <T>(path: string, body?: unknown, schema?: ZodType<T>): Promise<ApiResult<T>> => request<T>('PUT', path, body, schema),
+  del: <T>(path: string, schema?: ZodType<T>): Promise<ApiResult<T>> => request<T>('DELETE', path, undefined, schema),
 };

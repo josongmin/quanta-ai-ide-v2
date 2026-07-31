@@ -1,4 +1,5 @@
 import { afterEach, describe, it, expect, vi } from 'vitest';
+import { z } from 'zod';
 
 // The API client is the single network gateway. It must never throw (returns a
 // tagged ApiResult), must stay inert in mock mode, and must honor the auth /
@@ -83,5 +84,42 @@ describe('api client — real mode', () => {
     vi.stubGlobal('fetch', () => Promise.resolve(new Response('', { status: 200 })));
     const res2 = await api.get('/empty');
     expect(res2.ok).toBe(true);
+  });
+});
+
+describe('api client — runtime schema validation', () => {
+  const Schema = z.object({ id: z.string(), n: z.number() });
+
+  it('returns validated data when the response matches the schema', async () => {
+    const { api } = await loadClient('real');
+    vi.stubGlobal('fetch', () => Promise.resolve(new Response(JSON.stringify({ id: 'a', n: 1 }), { status: 200 })));
+    const res = await api.get('/thing', Schema);
+    expect(res.ok).toBe(true);
+    if (res.ok) expect(res.data).toEqual({ id: 'a', n: 1 });
+  });
+
+  it('returns a parse error when the response shape violates the schema', async () => {
+    const { api } = await loadClient('real');
+    // n is a string, not a number → schema rejects it at the trust boundary.
+    vi.stubGlobal('fetch', () => Promise.resolve(new Response(JSON.stringify({ id: 'a', n: 'nope' }), { status: 200 })));
+    const res = await api.get('/thing', Schema);
+    expect(res.ok).toBe(false);
+    if (!res.ok) expect(res.error.kind).toBe('parse');
+  });
+
+  it('strips unknown extra fields the server may add (zod object default)', async () => {
+    const { api } = await loadClient('real');
+    vi.stubGlobal('fetch', () => Promise.resolve(new Response(JSON.stringify({ id: 'a', n: 1, extra: 'x' }), { status: 200 })));
+    const res = await api.get('/thing', Schema);
+    expect(res.ok).toBe(true);
+    if (res.ok) expect(res.data).toEqual({ id: 'a', n: 1 });
+  });
+
+  it('without a schema, passes the parsed body through unchanged (back-compat)', async () => {
+    const { api } = await loadClient('real');
+    vi.stubGlobal('fetch', () => Promise.resolve(new Response(JSON.stringify({ whatever: true }), { status: 200 })));
+    const res = await api.get<{ whatever: boolean }>('/thing');
+    expect(res.ok).toBe(true);
+    if (res.ok) expect(res.data.whatever).toBe(true);
   });
 });
