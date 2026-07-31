@@ -76,7 +76,12 @@ export default function IntelligenceLayout() {
         />
       </div>
 
-      <SearchBar maxWidth={centerMaxWidth} />
+      {/* Each floating panel is isolated: a render crash in one logs + quietly
+          removes THAT panel (fallback null) instead of propagating to the surface
+          boundary and taking the whole Intelligence stage down. */}
+      <ErrorBoundary label="SearchBar" fallback={() => null}>
+        <SearchBar maxWidth={centerMaxWidth} />
+      </ErrorBoundary>
 
       <div
         className="absolute z-30 pointer-events-auto flex items-start gap-2 flex-wrap"
@@ -88,29 +93,41 @@ export default function IntelligenceLayout() {
       >
         <ModeSwitcher />
         <Suspense fallback={null}>
-          <OverlayPopover />
+          <ErrorBoundary label="OverlayPopover" fallback={() => null}>
+            <OverlayPopover />
+          </ErrorBoundary>
         </Suspense>
       </div>
 
       <Suspense fallback={null}>
-        <FocusScanStack
-          isDark={isDark}
-          width={rightPanelWidth}
-          minWidth={RIGHT_PANEL.min}
-          maxWidth={RIGHT_PANEL.max}
-          defaultWidth={RIGHT_PANEL.defaultWidth}
-          onWidthChange={setRightPanelWidth}
-        />
+        <ErrorBoundary label="FocusScanStack" fallback={() => null}>
+          <FocusScanStack
+            isDark={isDark}
+            width={rightPanelWidth}
+            minWidth={RIGHT_PANEL.min}
+            maxWidth={RIGHT_PANEL.max}
+            defaultWidth={RIGHT_PANEL.defaultWidth}
+            onWidthChange={setRightPanelWidth}
+          />
+        </ErrorBoundary>
       </Suspense>
 
       <Suspense fallback={null}>
-        <ChatAgent maxWidth={centerMaxWidth} />
+        <ErrorBoundary label="ChatAgent" fallback={() => null}>
+          <ChatAgent maxWidth={centerMaxWidth} />
+        </ErrorBoundary>
       </Suspense>
 
       <Suspense fallback={null}>
-        <InvestigateLauncher />
-        <InvestigatePanel />
-        <JobsTray />
+        <ErrorBoundary label="InvestigateLauncher" fallback={() => null}>
+          <InvestigateLauncher />
+        </ErrorBoundary>
+        <ErrorBoundary label="InvestigatePanel" fallback={() => null}>
+          <InvestigatePanel />
+        </ErrorBoundary>
+        <ErrorBoundary label="JobsTray" fallback={() => null}>
+          <JobsTray />
+        </ErrorBoundary>
       </Suspense>
     </div>
   );

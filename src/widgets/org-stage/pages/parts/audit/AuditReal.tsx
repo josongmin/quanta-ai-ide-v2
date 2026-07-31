@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { useParams } from '@tanstack/react-router';
@@ -18,16 +19,24 @@ import { useOrg } from '@entities/org';
 //
 // NOTE: DTO + action list mirror accounts' audit contract (@p0/contracts audit);
 // replace with codegen from `<accountsUrl>/openapi.json` when wired into CI.
-type AuditEntryDTO = {
-  id: string;
-  actor: string;
-  action: string;
-  target: string | null;
-  payload: unknown;
-  ip: string | null;
-  at: string;
-};
-type AuditResponse = { entries?: AuditEntryDTO[]; nextCursor?: string | null };
+// Runtime-validated at the trust boundary (like the entity models). Permissive
+// where the backend legitimately varies: payload is opaque, target/ip nullable,
+// entries defaults to [] (a null/absent list must not fail the whole response).
+const AuditEntryDTOSchema = z.object({
+  id: z.string(),
+  actor: z.string(),
+  action: z.string(),
+  target: z.string().nullable(),
+  payload: z.unknown(),
+  ip: z.string().nullable(),
+  at: z.string(),
+});
+const AuditResponseSchema = z.object({
+  entries: z.array(AuditEntryDTOSchema).catch([]).optional(),
+  nextCursor: z.string().nullable().optional(),
+});
+type AuditEntryDTO = z.infer<typeof AuditEntryDTOSchema>;
+type AuditResponse = z.infer<typeof AuditResponseSchema>;
 
 // Known actions (mirror of the accounts auditAction enum) for the filter.
 function auditActions(t: TFunction<'org'>): { value: string; label: string }[] {
@@ -101,7 +110,7 @@ export function AuditReal() {
       // below keeps the skeleton up until an orgId lands (matches the old effect,
       // which early-returned with loading=true and no request).
       if (!orgId) return { ok: true, data: {} };
-      const res = await accountsApi.get<AuditResponse>(query(null));
+      const res = await accountsApi.get<AuditResponse>(query(null), AuditResponseSchema);
       return res.ok
         ? { ok: true, data: res.data }
         : { ok: false, error: apiErrorMessage(res.error, t('audit.errorContext')) };
@@ -120,7 +129,7 @@ export function AuditReal() {
     orgId ? firstPage : null,
     (p) => ({ items: Array.isArray(p.entries) ? p.entries : [], cursor: p.nextCursor ?? null }),
     async (c) => {
-      const res = await accountsApi.get<AuditResponse>(query(c));
+      const res = await accountsApi.get<AuditResponse>(query(c), AuditResponseSchema);
       return res.ok
         ? { ok: true, data: { items: Array.isArray(res.data.entries) ? res.data.entries : [], cursor: res.data.nextCursor ?? null } }
         : { ok: false, error: apiErrorMessage(res.error, t('audit.errorContext')) };

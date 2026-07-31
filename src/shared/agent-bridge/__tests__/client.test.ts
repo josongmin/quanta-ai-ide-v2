@@ -72,3 +72,28 @@ describe('QuantaSessionClient — reconnect (H5)', () => {
     expect(c.phase).toBe('closed'); // budget exhausted → hard closed
   });
 });
+
+describe('QuantaSessionClient — subscriber isolation', () => {
+  const eventFrame = () =>
+    JSON.stringify({ kind: 'event', payload: { type: 'session.created', seq: 1, eventId: 'e1' } });
+
+  it('a throwing subscriber does not skip siblings or wedge delivery', () => {
+    const { c, ws } = connectAndHandshake();
+    const calls: string[] = [];
+    c.onAny(() => { calls.push('a'); throw new Error('boom'); });
+    c.onAny(() => { calls.push('b'); });
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => { /* swallow */ });
+
+    // First handler throws; the second must still run, and onmessage must not throw.
+    expect(() => { ws.onmessage?.({ data: eventFrame() }); }).not.toThrow();
+    expect(calls).toEqual(['a', 'b']);
+    expect(errSpy).toHaveBeenCalled();
+
+    // A subsequent event is still delivered (delivery not wedged by the throw).
+    calls.length = 0;
+    ws.onmessage?.({ data: eventFrame() });
+    expect(calls).toEqual(['a', 'b']);
+
+    errSpy.mockRestore();
+  });
+});

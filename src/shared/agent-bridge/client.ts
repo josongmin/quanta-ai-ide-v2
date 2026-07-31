@@ -90,7 +90,7 @@ export class QuantaSessionClient {
       this.#sendRaw(encodeConnectFrame(this.#sessionId ?? HANDSHAKE_DISCOVERY_SESSION_ID));
     };
     ws.onmessage = (ev: MessageEvent) => {
-      this.#handle(typeof ev.data === 'string' ? ev.data : null);
+      this.#safe(() => { this.#handle(typeof ev.data === 'string' ? ev.data : null); });
     };
     ws.onclose = () => {
       this.#ws = null;
@@ -220,14 +220,25 @@ export class QuantaSessionClient {
   #fanout(event: SessionEvent): void {
     const typed = this.#typed.get(event.type);
     if (typed !== undefined) {
-      for (const handler of [...typed]) handler(event);
+      for (const handler of [...typed]) this.#safe(() => { handler(event); });
     }
-    for (const handler of [...this.#any]) handler(event);
+    for (const handler of [...this.#any]) this.#safe(() => { handler(event); });
   }
 
   #setPhase(next: ConnectionPhase): void {
     if (this.#phase === next) return;
     this.#phase = next;
-    for (const handler of [...this.#phaseListeners]) handler(next);
+    for (const handler of [...this.#phaseListeners]) this.#safe(() => { handler(next); });
+  }
+
+  // Isolate each subscriber: a consumer handler that throws must not skip the
+  // remaining subscribers or bubble out of the socket's onmessage (which would
+  // wedge event delivery — the chat UI would hang on a spinner forever).
+  #safe(fn: () => void): void {
+    try {
+      fn();
+    } catch (e) {
+      console.error('[QuantaSessionClient] a subscriber threw; continuing:', e);
+    }
   }
 }
