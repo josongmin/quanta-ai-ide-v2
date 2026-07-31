@@ -4,26 +4,38 @@
 // Users whose email domain matches route to this org's IdP at login.
 //
 // NOTE: shapes mirror @p0/contracts sso; replace with codegen when wired.
+import { z } from 'zod';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage, type ApiError } from '@shared/api';
 
-export type SsoConnection = {
-  orgId: string;
-  domain: string;
-  issuer: string;
-  authorizationEndpoint: string;
-  tokenEndpoint: string;
-  jwksEndpoint: string;
-  clientId: string;
-  hasSecret: boolean;
-  enabled: boolean;
+export const SsoConnectionSchema = z.object({
+  orgId: z.string(),
+  domain: z.string(),
+  issuer: z.string(),
+  authorizationEndpoint: z.string(),
+  tokenEndpoint: z.string(),
+  jwksEndpoint: z.string(),
+  clientId: z.string(),
+  hasSecret: z.boolean(),
+  enabled: z.boolean(),
   // Domain ownership proof (DNS TXT). Logins route to the IdP only when verified.
-  verified: boolean;
+  verified: z.boolean(),
   // The TXT value the org must publish (not a secret) — shown to owners/admins.
-  verificationToken: string;
-  createdAt: string | null;
-};
-export type SsoVerifyResult = { verified: boolean; record: SsoConnection };
+  verificationToken: z.string(),
+  createdAt: z.string().nullable(),
+});
+export type SsoConnection = z.infer<typeof SsoConnectionSchema>;
+
+export const SsoVerifyResultSchema = z.object({
+  verified: z.boolean(),
+  record: SsoConnectionSchema,
+});
+export type SsoVerifyResult = z.infer<typeof SsoVerifyResultSchema>;
+
+const SsoResolveSchema = z.object({
+  sso: z.boolean(),
+  authorizationUrl: z.string().nullable(),
+});
 export type SsoRegisterInput = {
   domain: string;
   issuer: string;
@@ -51,17 +63,20 @@ function connError(res: { error: ApiError }, fallback: string): string {
 }
 
 export async function getSsoConnection(orgId: string): Promise<Result<SsoConnection | null>> {
-  const res = await accountsApi.get<SsoConnection | null>(`/v1/sso/${encodeURIComponent(orgId)}`);
+  const res = await accountsApi.get<SsoConnection | null>(
+    `/v1/sso/${encodeURIComponent(orgId)}`,
+    SsoConnectionSchema.nullable(),
+  );
   return res.ok ? { ok: true, data: res.data ?? null } : { ok: false, error: apiErrorMessage(res.error, 'SSO') };
 }
 
 export async function registerSso(orgId: string, input: SsoRegisterInput): Promise<Result<SsoConnection>> {
-  const res = await accountsApi.post<SsoConnection>(`/v1/sso/${encodeURIComponent(orgId)}`, input);
+  const res = await accountsApi.post<SsoConnection>(`/v1/sso/${encodeURIComponent(orgId)}`, input, SsoConnectionSchema);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: connError(res, 'SSO') };
 }
 
 export async function updateSso(orgId: string, patch: SsoUpdateInput): Promise<Result<SsoConnection>> {
-  const res = await accountsApi.patch<SsoConnection>(`/v1/sso/${encodeURIComponent(orgId)}`, patch);
+  const res = await accountsApi.patch<SsoConnection>(`/v1/sso/${encodeURIComponent(orgId)}`, patch, SsoConnectionSchema);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: connError(res, 'SSO') };
 }
 
@@ -71,6 +86,7 @@ export async function updateSso(orgId: string, patch: SsoUpdateInput): Promise<R
 export async function resolveSso(email: string): Promise<{ sso: boolean; authorizationUrl: string | null }> {
   const res = await accountsApi.get<{ sso: boolean; authorizationUrl: string | null }>(
     `/v1/sso/resolve?email=${encodeURIComponent(email)}`,
+    SsoResolveSchema,
   );
   return res.ok && res.data ? res.data : { sso: false, authorizationUrl: null };
 }
@@ -78,7 +94,11 @@ export async function resolveSso(email: string): Promise<{ sso: boolean; authori
 // Trigger a DNS TXT ownership check. Idempotent: returns the latest record with
 // verified true/false. verified:false means "publish the TXT and retry".
 export async function verifySso(orgId: string): Promise<Result<SsoVerifyResult>> {
-  const res = await accountsApi.post<SsoVerifyResult>(`/v1/sso/${encodeURIComponent(orgId)}/verify`, {});
+  const res = await accountsApi.post<SsoVerifyResult>(
+    `/v1/sso/${encodeURIComponent(orgId)}/verify`,
+    {},
+    SsoVerifyResultSchema,
+  );
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'SSO') };
 }
 

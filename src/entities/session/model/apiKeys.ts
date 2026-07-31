@@ -5,25 +5,31 @@
 //
 // NOTE: shapes mirror @p0/contracts api-keys; replace with codegen from
 // <accountsUrl>/openapi.json when wired into CI.
+import { z } from 'zod';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
 
-export type ApiKeyRecord = {
-  id: string;
-  name: string | null;
-  prefix: string | null;
-  start: string | null;
-  createdAt: string;
-  expiresAt: string | null;
-  lastRequest: string | null;
-};
-export type ApiKeyCreated = ApiKeyRecord & { key: string };
+export const ApiKeyRecordSchema = z.object({
+  id: z.string(),
+  name: z.string().nullable(),
+  prefix: z.string().nullable(),
+  start: z.string().nullable(),
+  createdAt: z.string(),
+  expiresAt: z.string().nullable(),
+  lastRequest: z.string().nullable(),
+});
+export type ApiKeyRecord = z.infer<typeof ApiKeyRecordSchema>;
+
+export const ApiKeyCreatedSchema = ApiKeyRecordSchema.extend({ key: z.string() });
+export type ApiKeyCreated = z.infer<typeof ApiKeyCreatedSchema>;
+
+const TokensListSchema = z.object({ tokens: z.array(ApiKeyRecordSchema) });
 
 export type KeyResult<T> = { ok: true; data: T } | { ok: false; error: string };
 export type KeyActionResult = { ok: true } | { ok: false; error: string };
 
 export async function listPersonalTokens(): Promise<KeyResult<ApiKeyRecord[]>> {
-  const res = await accountsApi.get<{ tokens: ApiKeyRecord[] }>('/v1/tokens');
+  const res = await accountsApi.get<{ tokens: ApiKeyRecord[] }>('/v1/tokens', TokensListSchema);
   return res.ok
     ? { ok: true, data: Array.isArray(res.data.tokens) ? res.data.tokens : [] }
     : { ok: false, error: apiErrorMessage(res.error, 'tokens') };
@@ -33,7 +39,7 @@ export async function createPersonalToken(input: {
   name: string;
   expiresInDays?: number | null;
 }): Promise<KeyResult<ApiKeyCreated>> {
-  const res = await accountsApi.post<ApiKeyCreated>('/v1/tokens', input);
+  const res = await accountsApi.post<ApiKeyCreated>('/v1/tokens', input, ApiKeyCreatedSchema);
   return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'tokens') };
 }
 

@@ -2,22 +2,27 @@
 // billing.read). Mirrors the accounts `usageSummary` contract (packages/contracts/usage.ts).
 // used/limit are null for unlimited metrics (storage_mb / enterprise) — not metered.
 
+import { z } from 'zod';
+
 import { useAsyncResource } from '@shared/lib';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
 
-export type UsageMetricId = 'ai_tokens' | 'scans' | 'storage_mb';
+const UsageMetricIdSchema = z.enum(['ai_tokens', 'scans', 'storage_mb']);
+export type UsageMetricId = z.infer<typeof UsageMetricIdSchema>;
 
-export type UsageMetricSummary = {
-  metric: UsageMetricId;
-  used: number | null;
-  limit: number | null;
-};
+const UsageMetricSummarySchema = z.object({
+  metric: UsageMetricIdSchema,
+  used: z.number().nullable(),
+  limit: z.number().nullable(),
+});
+export type UsageMetricSummary = z.infer<typeof UsageMetricSummarySchema>;
 
-export type UsageSummary = {
-  period: string;
-  metrics: UsageMetricSummary[];
-};
+const UsageSummarySchema = z.object({
+  period: z.string(),
+  metrics: z.array(UsageMetricSummarySchema),
+});
+export type UsageSummary = z.infer<typeof UsageSummarySchema>;
 
 type UsageState = {
   summary: UsageSummary | null;
@@ -30,7 +35,10 @@ export function useUsageSummary(orgId: string): UsageState {
   const { data, isPending, error, refetch } = useAsyncResource<UsageSummary>(
     async () => {
       if (!orgId) return { ok: true, data: { period: '', metrics: [] } };
-      const res = await accountsApi.get<UsageSummary>(`/v1/usage/${encodeURIComponent(orgId)}`);
+      const res = await accountsApi.get<UsageSummary>(
+        `/v1/usage/${encodeURIComponent(orgId)}`,
+        UsageSummarySchema,
+      );
       return res.ok
         ? { ok: true, data: res.data }
         : { ok: false, error: apiErrorMessage(res.error, 'usage') };

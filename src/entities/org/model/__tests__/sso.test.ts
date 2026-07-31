@@ -30,7 +30,8 @@ describe('verifySso', () => {
     api.post.mockResolvedValue({ ok: true, data: { verified: true, record: { ...REC, verified: true } } });
     const res = await verifySso('o1');
     expect(res).toEqual({ ok: true, data: { verified: true, record: { ...REC, verified: true } } });
-    expect(api.post).toHaveBeenCalledWith('/v1/sso/o1/verify', {});
+    // 3rd arg is the response zod schema (runtime validation at the trust boundary).
+    expect(api.post).toHaveBeenCalledWith('/v1/sso/o1/verify', {}, expect.anything());
   });
 });
 

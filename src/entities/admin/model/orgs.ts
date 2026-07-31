@@ -1,15 +1,23 @@
 // Platform super-admin: org directory + plan override over accounts /v1/admin/*.
+import { z } from 'zod';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
 
-export type AdminOrg = {
-  id: string;
-  name: string;
-  slug: string;
-  plan: string;
-  createdAt: string;
-};
-export type AdminOrgPage = { orgs: AdminOrg[]; nextCursor: string | null };
+export const AdminOrgSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+  plan: z.string(),
+  createdAt: z.string(),
+});
+export type AdminOrg = z.infer<typeof AdminOrgSchema>;
+
+export const AdminOrgPageSchema = z.object({
+  orgs: z.array(AdminOrgSchema),
+  nextCursor: z.string().nullable(),
+});
+export type AdminOrgPage = z.infer<typeof AdminOrgPageSchema>;
+
 export type AdminPlan = 'free' | 'team' | 'business' | 'enterprise';
 
 type Result<T> = { ok: true; data: T } | { ok: false; error: string };
@@ -20,7 +28,7 @@ export async function listOrgs(opts: { search?: string; cursor?: string | null }
   if (opts.search?.trim()) params.set('search', opts.search.trim());
   if (opts.cursor) params.set('cursor', opts.cursor);
   const qs = params.toString();
-  const res = await accountsApi.get<AdminOrgPage>(`/v1/admin/orgs${qs ? `?${qs}` : ''}`);
+  const res = await accountsApi.get<AdminOrgPage>(`/v1/admin/orgs${qs ? `?${qs}` : ''}`, AdminOrgPageSchema);
   return res.ok
     ? { ok: true, data: { orgs: Array.isArray(res.data.orgs) ? res.data.orgs : [], nextCursor: res.data.nextCursor ?? null } }
     : { ok: false, error: apiErrorMessage(res.error, 'organizations') };

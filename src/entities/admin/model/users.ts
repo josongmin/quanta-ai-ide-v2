@@ -1,19 +1,26 @@
 // Platform super-admin: user directory + moderation over accounts /v1/admin/*
 // (cookie-authed, requireSuperAdmin server-side). Reuses the {ok,data}|{ok,error}
 // idiom. NOTE: shapes mirror @p0/contracts admin; replace with codegen when wired.
+import { z } from 'zod';
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage, type ApiError } from '@shared/api';
 
-export type AdminUser = {
-  id: string;
-  email: string;
-  name: string | null;
-  role: string | null;
-  banned: boolean;
-  banReason: string | null;
-  createdAt: string;
-};
-export type AdminUserPage = { users: AdminUser[]; nextCursor: string | null };
+const AdminUserSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  name: z.string().nullable(),
+  role: z.string().nullable(),
+  banned: z.boolean(),
+  banReason: z.string().nullable(),
+  createdAt: z.string(),
+});
+export type AdminUser = z.infer<typeof AdminUserSchema>;
+
+const AdminUserPageSchema = z.object({
+  users: z.array(AdminUserSchema),
+  nextCursor: z.string().nullable(),
+});
+export type AdminUserPage = z.infer<typeof AdminUserPageSchema>;
 
 type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 type ActionResult = { ok: true } | { ok: false; error: string };
@@ -23,7 +30,7 @@ export async function listUsers(opts: { search?: string; cursor?: string | null 
   if (opts.search?.trim()) params.set('search', opts.search.trim());
   if (opts.cursor) params.set('cursor', opts.cursor);
   const qs = params.toString();
-  const res = await accountsApi.get<AdminUserPage>(`/v1/admin/users${qs ? `?${qs}` : ''}`);
+  const res = await accountsApi.get<AdminUserPage>(`/v1/admin/users${qs ? `?${qs}` : ''}`, AdminUserPageSchema);
   return res.ok
     ? { ok: true, data: { users: Array.isArray(res.data.users) ? res.data.users : [], nextCursor: res.data.nextCursor ?? null } }
     : { ok: false, error: apiErrorMessage(res.error, 'users') };

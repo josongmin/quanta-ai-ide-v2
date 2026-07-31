@@ -3,23 +3,28 @@
 // actions notify you, other org actions notify owners/admins.
 //
 // NOTE: shapes mirror @p0/contracts notifications; replace with codegen when wired.
+import { z } from 'zod';
+
 import { accountsApi } from '@shared/auth';
 import { apiErrorMessage } from '@shared/api';
 
-export type NotificationRecord = {
-  id: string;
-  orgId: string;
-  action: string;
-  actor: string;
-  target: string | null;
-  read: boolean;
-  createdAt: string;
-};
-export type NotificationPage = {
-  notifications: NotificationRecord[];
-  nextCursor: string | null;
-  unreadCount: number;
-};
+export const NotificationRecordSchema = z.object({
+  id: z.string(),
+  orgId: z.string(),
+  action: z.string(),
+  actor: z.string(),
+  target: z.string().nullable(),
+  read: z.boolean(),
+  createdAt: z.string(),
+});
+export type NotificationRecord = z.infer<typeof NotificationRecordSchema>;
+
+export const NotificationPageSchema = z.object({
+  notifications: z.array(NotificationRecordSchema),
+  nextCursor: z.string().nullable(),
+  unreadCount: z.number(),
+});
+export type NotificationPage = z.infer<typeof NotificationPageSchema>;
 
 type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 type ActionResult = { ok: true } | { ok: false; error: string };
@@ -31,7 +36,10 @@ export async function listNotifications(
   if (opts.cursor) params.set('cursor', opts.cursor);
   if (opts.unreadOnly) params.set('unread', 'true');
   const qs = params.toString();
-  const res = await accountsApi.get<NotificationPage>(`/v1/notifications${qs ? `?${qs}` : ''}`);
+  const res = await accountsApi.get<NotificationPage>(
+    `/v1/notifications${qs ? `?${qs}` : ''}`,
+    NotificationPageSchema,
+  );
   return res.ok
     ? {
         ok: true,
