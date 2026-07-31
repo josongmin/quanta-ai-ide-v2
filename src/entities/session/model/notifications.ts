@@ -15,14 +15,14 @@ export const NotificationRecordSchema = z.object({
   actor: z.string(),
   target: z.string().nullable(),
   read: z.boolean(),
-  createdAt: z.string(),
+  createdAt: z.string().nullable(),
 });
 export type NotificationRecord = z.infer<typeof NotificationRecordSchema>;
 
 export const NotificationPageSchema = z.object({
-  notifications: z.array(NotificationRecordSchema),
+  notifications: z.array(NotificationRecordSchema).catch([]),
   nextCursor: z.string().nullable(),
-  unreadCount: z.number(),
+  unreadCount: z.number().catch(0),
 });
 export type NotificationPage = z.infer<typeof NotificationPageSchema>;
 

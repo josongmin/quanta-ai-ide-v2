@@ -47,7 +47,8 @@ function iconFor(action: string) {
   return Building2;
 }
 
-function relTime(iso: string, t: TFunction): string {
+function relTime(iso: string | null, t: TFunction): string {
+  if (!iso) return '';
   const then = new Date(iso).getTime();
   if (Number.isNaN(then)) return '';
   const s = Math.max(0, Math.round((Date.now() - then) / 1000));

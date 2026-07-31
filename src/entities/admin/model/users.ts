@@ -12,12 +12,15 @@ const AdminUserSchema = z.object({
   role: z.string().nullable(),
   banned: z.boolean(),
   banReason: z.string().nullable(),
-  createdAt: z.string(),
+  createdAt: z.string().nullable(),
 });
 export type AdminUser = z.infer<typeof AdminUserSchema>;
 
 const AdminUserPageSchema = z.object({
-  users: z.array(AdminUserSchema),
+  // `.catch([])` keeps the type a non-null array while never rejecting a response
+  // whose list is null/absent (the caller already normalizes; validation must not
+  // be stricter than the old `as T` was here).
+  users: z.array(AdminUserSchema).catch([]),
   nextCursor: z.string().nullable(),
 });
 export type AdminUserPage = z.infer<typeof AdminUserPageSchema>;

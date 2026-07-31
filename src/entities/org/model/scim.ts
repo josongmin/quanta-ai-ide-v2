@@ -11,7 +11,7 @@ import { apiErrorMessage } from '@shared/api';
 export const ScimConfigSchema = z.object({
   orgId: z.string(),
   enabled: z.boolean(),
-  baseUrl: z.string(),
+  baseUrl: z.string().nullable(),
   createdAt: z.string().nullable(),
 });
 export type ScimConfig = z.infer<typeof ScimConfigSchema>;
@@ -26,9 +26,11 @@ type ActionResult = { ok: true } | { ok: false; error: string };
 
 const PLAN_MSG = 'SCIM provisioning requires an Enterprise plan.';
 
-export async function getScimConfig(orgId: string): Promise<Result<ScimConfig>> {
-  const res = await accountsApi.get<ScimConfig>(`/v1/scim/${encodeURIComponent(orgId)}`, ScimConfigSchema);
-  return res.ok ? { ok: true, data: res.data } : { ok: false, error: apiErrorMessage(res.error, 'SCIM') };
+export async function getScimConfig(orgId: string): Promise<Result<ScimConfig | null>> {
+  // The backend returns null when SCIM isn't configured yet (mirrors SSO), so the
+  // response schema is nullable and null maps to "not configured", not an error.
+  const res = await accountsApi.get<ScimConfig | null>(`/v1/scim/${encodeURIComponent(orgId)}`, ScimConfigSchema.nullable());
+  return res.ok ? { ok: true, data: res.data ?? null } : { ok: false, error: apiErrorMessage(res.error, 'SCIM') };
 }
 
 export async function enableScim(orgId: string): Promise<Result<ScimTokenResponse>> {

@@ -14,7 +14,7 @@ export const ApiKeyRecordSchema = z.object({
   name: z.string().nullable(),
   prefix: z.string().nullable(),
   start: z.string().nullable(),
-  createdAt: z.string(),
+  createdAt: z.string().nullable(),
   expiresAt: z.string().nullable(),
   lastRequest: z.string().nullable(),
 });
@@ -23,7 +23,7 @@ export type ApiKeyRecord = z.infer<typeof ApiKeyRecordSchema>;
 export const ApiKeyCreatedSchema = ApiKeyRecordSchema.extend({ key: z.string() });
 export type ApiKeyCreated = z.infer<typeof ApiKeyCreatedSchema>;
 
-const TokensListSchema = z.object({ tokens: z.array(ApiKeyRecordSchema) });
+const TokensListSchema = z.object({ tokens: z.array(ApiKeyRecordSchema).catch([]) });
 
 export type KeyResult<T> = { ok: true; data: T } | { ok: false; error: string };
 export type KeyActionResult = { ok: true } | { ok: false; error: string };

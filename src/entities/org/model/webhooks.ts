@@ -26,10 +26,13 @@ const WebhookDeliveryRecordSchema = z.object({
   id: z.string(),
   endpointId: z.string(),
   event: z.string(),
-  status: z.enum(['pending', 'sending', 'delivered', 'failed', 'exhausted']),
+  // Open string, not a closed enum: a new backend delivery status must degrade to
+  // a neutral badge (the UI maps known values, defaults the rest), not reject the
+  // whole record at the trust boundary.
+  status: z.string(),
   attempts: z.number(),
   responseStatus: z.number().nullable(),
-  createdAt: z.string(),
+  createdAt: z.string().nullable(),
   deliveredAt: z.string().nullable(),
 });
 export type WebhookDeliveryRecord = z.infer<typeof WebhookDeliveryRecordSchema>;

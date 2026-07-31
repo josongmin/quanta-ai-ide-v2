@@ -8,12 +8,12 @@ export const AdminOrgSchema = z.object({
   name: z.string(),
   slug: z.string(),
   plan: z.string(),
-  createdAt: z.string(),
+  createdAt: z.string().nullable(),
 });
 export type AdminOrg = z.infer<typeof AdminOrgSchema>;
 
 export const AdminOrgPageSchema = z.object({
-  orgs: z.array(AdminOrgSchema),
+  orgs: z.array(AdminOrgSchema).catch([]),
   nextCursor: z.string().nullable(),
 });
 export type AdminOrgPage = z.infer<typeof AdminOrgPageSchema>;

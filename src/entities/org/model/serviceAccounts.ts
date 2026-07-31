@@ -12,9 +12,9 @@ const ServiceAccountRecordSchema = z.object({
   name: z.string().nullable(),
   prefix: z.string().nullable(),
   start: z.string().nullable(),
-  createdAt: z.string(),
+  createdAt: z.string().nullable(),
   expiresAt: z.string().nullable(),
-  lastRequest: z.string().nullable(),
+  lastRequest: z.string().nullish(),
   createdBy: z.string(),
 });
 export type ServiceAccountRecord = z.infer<typeof ServiceAccountRecordSchema>;

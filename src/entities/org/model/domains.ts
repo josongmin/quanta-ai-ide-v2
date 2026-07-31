@@ -14,7 +14,7 @@ const OrgDomainRecordSchema = z.object({
   domain: z.string(),
   verified: z.boolean(),
   verificationToken: z.string(),
-  createdAt: z.string(),
+  createdAt: z.string().nullable(),
   verifiedAt: z.string().nullable(),
 });
 

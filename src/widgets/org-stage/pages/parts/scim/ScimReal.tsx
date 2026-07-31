@@ -67,7 +67,7 @@ export function ScimReal() {
     refetch();
   }
   function copyUrl() {
-    if (!config) return;
+    if (!config?.baseUrl) return;
     void navigator.clipboard.writeText(config.baseUrl).then(() => {
       if (!mountedRef.current) return;
       setCopied(true);
@@ -115,7 +115,7 @@ export function ScimReal() {
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs uppercase tracking-eyebrow font-medium" style={{ color: 'var(--fg-subtle)' }}>{t('scim.real.baseUrl')}</span>
                 <div className="flex items-center gap-2">
-                  <code title={config?.baseUrl} className="flex-1 h-9 px-3 inline-flex items-center rounded-md font-mono text-sm truncate" style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)', color: 'var(--fg-strong)' }}>
+                  <code title={config?.baseUrl ?? undefined} className="flex-1 h-9 px-3 inline-flex items-center rounded-md font-mono text-sm truncate" style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-muted)', color: 'var(--fg-strong)' }}>
                     {config?.baseUrl}
                   </code>
                   <Button variant="ghost" size="md" leading={copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />} onClick={copyUrl}>
