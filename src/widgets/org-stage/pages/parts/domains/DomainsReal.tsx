@@ -34,7 +34,12 @@ export function DomainsReal() {
   const [nonce, setNonce] = useState(0);
   const [addOpen, setAddOpen] = useState(false);
   const [confirmRemove, setConfirmRemove] = useState<OrgDomainRecord | null>(null);
-  const [busyId, setBusyId] = useState<string | null>(null);
+  // ★per-id busy 집합 — 카드별 in-flight를 독립 추적. 단일 busyId면 A의 액션 완료가 B의
+  //   busy를 mid-flight로 클리어해 B가 이중 요청/토글 뒤집힘을 일으킬 수 있었다(헬어딧 FE-1).
+  const [busyIds, setBusyIds] = useState<ReadonlySet<string>>(() => new Set());
+  const isBusy = (id: string) => busyIds.has(id);
+  const startBusy = (id: string) => { setBusyIds((s) => new Set(s).add(id)); };
+  const endBusy = (id: string) => { setBusyIds((s) => { const n = new Set(s); n.delete(id); return n; }); };
 
   useEffect(() => {
     if (!orgId) return;
@@ -50,26 +55,26 @@ export function DomainsReal() {
   const refetch = () => { setNonce((n) => n + 1); };
 
   async function doVerify(d: OrgDomainRecord) {
-    setBusyId(d.id);
+    startBusy(d.id);
     const res = await verifyDomain(orgId, d.id);
-    setBusyId(null);
+    endBusy(d.id);
     if (!res.ok) { setError(res.error); return; }
     setError(null);
     refetch();
   }
   async function doRemove(d: OrgDomainRecord) {
-    setBusyId(d.id);
+    startBusy(d.id);
     const res = await removeDomain(orgId, d.id);
-    setBusyId(null);
+    endBusy(d.id);
     setConfirmRemove(null);
     if (!res.ok) { setError(res.error); return; }
     setError(null);
     refetch();
   }
   async function doSetAutoJoin(d: OrgDomainRecord, next: boolean) {
-    setBusyId(d.id);
+    startBusy(d.id);
     const res = await setDomainAutoJoin(orgId, d.id, next);
-    setBusyId(null);
+    endBusy(d.id);
     if (!res.ok) { setError(res.error); return; }
     setError(null);
     // 서버가 돌려준 레코드로 로컬 갱신(전체 리페치 없이 즉시 반영).
@@ -104,7 +109,7 @@ export function DomainsReal() {
             <DomainCard
               key={d.id}
               domain={d}
-              busy={busyId === d.id}
+              busy={isBusy(d.id)}
               onVerify={() => { void doVerify(d); }}
               onRemove={() => { setConfirmRemove(d); }}
               onToggleAutoJoin={(next) => { void doSetAutoJoin(d, next); }}
@@ -123,7 +128,7 @@ export function DomainsReal() {
       {confirmRemove && (
         <ConfirmDialog
           open
-          busy={busyId === confirmRemove.id}
+          busy={isBusy(confirmRemove.id)}
           onCancel={() => { setConfirmRemove(null); }}
           onConfirm={() => { void doRemove(confirmRemove); }}
           title={t('domains.real.removeTitle', { domain: confirmRemove.domain })}
@@ -191,7 +196,7 @@ function DomainCard({
             checked={domain.autoJoin}
             disabled={busy}
             onChange={onToggleAutoJoin}
-            label={t('domains.autoJoin')}
+            ariaLabel={t('domains.autoJoin')}
           />
         </div>
       )}

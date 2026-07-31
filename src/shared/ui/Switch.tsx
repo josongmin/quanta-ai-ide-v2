@@ -37,11 +37,17 @@ type Props = {
    * expected to provide their own labelling).
    */
   label?: string;
+  /**
+   * Accessible name when there's no visible `label` (e.g. the row already has
+   * its own heading). Ignored when `label` is set, since `label` doubles as the
+   * name. Prevents a duplicated visible label while keeping the switch named.
+   */
+  ariaLabel?: string;
   /** Emphasises the label as a section-primary toggle. */
   primary?: boolean;
 };
 
-export function Switch({ checked, onChange, disabled, label, primary }: Props) {
+export function Switch({ checked, onChange, disabled, label, ariaLabel, primary }: Props) {
   const trackStyle: CSSProperties = {
     ...TRACK_STYLE_BASE,
     background: checked ? 'var(--intent-success-vivid)' : 'var(--bg-active)',
@@ -58,7 +64,7 @@ export function Switch({ checked, onChange, disabled, label, primary }: Props) {
       type="button"
       role="switch"
       aria-checked={checked}
-      aria-label={label}
+      aria-label={label ?? ariaLabel}
       disabled={disabled}
       onClick={() => { if (!disabled) onChange(!checked); }}
       style={trackStyle}
