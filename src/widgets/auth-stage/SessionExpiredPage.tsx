@@ -235,10 +235,13 @@ function ResumeButton({
 
 function SecurityActions() {
   const { t } = useTranslation('auth');
+  // Wire to the real destinations (was dead `#`). The user is logged out, so the
+  // auth-guarded /me/security bounces through login first — still strictly better
+  // than an inert link. (Post-login return-to-target is a future enhancement.)
   const items = [
-    { label: t('sessionExpired.reviewSessions'), href: '#' },
-    { label: t('sessionExpired.resetPassword'),  href: '#' },
-    { label: t('sessionExpired.manage2fa'),      href: '#' },
+    { label: t('sessionExpired.reviewSessions'), to: '/me/security' },
+    { label: t('sessionExpired.resetPassword'),  to: '/auth/forgot' },
+    { label: t('sessionExpired.manage2fa'),      to: '/me/security' },
   ];
   return (
     <div
@@ -249,7 +252,7 @@ function SecurityActions() {
       <span>{t('sessionExpired.security')}</span>
       {items.map((it, i) => (
         <span key={it.label}>
-          <a href={it.href} style={{ color: 'var(--fg-link)' }}>{it.label}</a>
+          <Link to={it.to as never} style={{ color: 'var(--fg-link)' }}>{it.label}</Link>
           {i < items.length - 1 && <span className="ml-3" style={{ color: 'var(--border-default)' }}>·</span>}
         </span>
       ))}
