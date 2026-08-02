@@ -306,8 +306,8 @@ function WasntMePanel() {
         >
           {t('verifyEmail.wasntMe.changePassword')}
         </Link>
-        <button
-          type="button"
+        <Link
+          to={'/support' as never}
           className="inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-md text-sm font-medium"
           style={{
             background: 'var(--bg-surface-muted)',
@@ -316,7 +316,7 @@ function WasntMePanel() {
           }}
         >
           {t('verifyEmail.wasntMe.contactSecurity')}
-        </button>
+        </Link>
       </div>
     </div>
   );
