@@ -43,8 +43,10 @@ function auditActions(t: TFunction<'org'>): { value: string; label: string }[] {
   return [
     { value: '', label: t('audit.actions.all') },
     { value: 'org.member.invited', label: t('audit.actions.orgMemberInvited') },
+    { value: 'org.member.joined', label: t('audit.actions.orgMemberJoined') },
     { value: 'org.member.removed', label: t('audit.actions.orgMemberRemoved') },
     { value: 'org.member.role_changed', label: t('audit.actions.orgMemberRoleChanged') },
+    { value: 'org.domain.unverified', label: t('audit.actions.orgDomainUnverified') },
     { value: 'org.invitation.canceled', label: t('audit.actions.orgInvitationCanceled') },
     { value: 'org.updated', label: t('audit.actions.orgUpdated') },
     { value: 'org.deleted', label: t('audit.actions.orgDeleted') },

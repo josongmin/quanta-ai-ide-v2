@@ -38,7 +38,17 @@ async function request<T>(method: Method, path: string, body?: unknown, schema?:
       return { ok: false, error: { kind: 'unauthorized', status: 401, message: 'Unauthorized' } };
     }
     if (!res.ok) {
-      return { ok: false, error: { kind: 'http', status: res.status, message: `HTTP ${res.status.toString()}` } };
+      // 백엔드 에러 body({ kind, message })의 message를 살려 실제 사유를 노출한다 — 안 그러면
+      // "domain is already claimed" 같은 문구가 전부 "HTTP 409"로 뭉개진다. body가 JSON이
+      // 아니거나 message가 없으면 상태코드로 폴백.
+      let message = `HTTP ${res.status.toString()}`;
+      try {
+        const errBody = (await res.json()) as { message?: unknown };
+        if (typeof errBody?.message === 'string' && errBody.message.trim() !== '') message = errBody.message;
+      } catch {
+        /* non-JSON / empty body — keep status-code fallback */
+      }
+      return { ok: false, error: { kind: 'http', status: res.status, message } };
     }
 
     // Empty body (204 / no-content success) is not a parse error.

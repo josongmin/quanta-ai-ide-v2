@@ -923,6 +923,8 @@
       "orgMemberInvited": "メンバー招待",
       "orgMemberRemoved": "メンバー削除",
       "orgMemberRoleChanged": "ロール変更",
+      "orgMemberJoined": "メンバー自動参加",
+      "orgDomainUnverified": "ドメイン未検証化",
       "orgInvitationCanceled": "招待取り消し",
       "orgUpdated": "組織更新",
       "orgDeleted": "組織削除",

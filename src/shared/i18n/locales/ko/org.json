@@ -923,6 +923,8 @@
       "orgMemberInvited": "멤버 초대됨",
       "orgMemberRemoved": "멤버 제거됨",
       "orgMemberRoleChanged": "역할 변경됨",
+      "orgMemberJoined": "멤버 자동가입",
+      "orgDomainUnverified": "도메인 검증 해제",
       "orgInvitationCanceled": "초대 취소됨",
       "orgUpdated": "조직 업데이트됨",
       "orgDeleted": "조직 삭제됨",

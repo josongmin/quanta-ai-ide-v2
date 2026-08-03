@@ -923,6 +923,8 @@
       "orgMemberInvited": "Member invited",
       "orgMemberRemoved": "Member removed",
       "orgMemberRoleChanged": "Role changed",
+      "orgMemberJoined": "Member joined",
+      "orgDomainUnverified": "Domain unverified",
       "orgInvitationCanceled": "Invitation canceled",
       "orgUpdated": "Org updated",
       "orgDeleted": "Org deleted",
