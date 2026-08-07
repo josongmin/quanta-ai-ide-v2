@@ -14,6 +14,7 @@ type ApiMode = 'mock' | 'real';
 // (many servers 404/redirect on a double slash, dropping the auth header).
 const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
 const apiMode: ApiMode = import.meta.env.VITE_API_MODE === 'real' ? 'real' : 'mock';
+const apiAuthToken = (import.meta.env.VITE_API_AUTH_TOKEN ?? '').trim();
 
 // Auth mirrors the api mock→real switch, but is independent: the demo runs
 // standalone with `authMode='mock'` (stub sign-in, no route guards) and only
@@ -25,6 +26,7 @@ const authMode: ApiMode = import.meta.env.VITE_AUTH_MODE === 'real' ? 'real' : '
 export const env = {
   apiBaseUrl,
   apiMode,
+  apiAuthToken,
   /** True only when a real backend is configured — the switch every data seam
    *  branches on (`env.useRealApi ? api.get(...) : simulate*()`). */
   useRealApi: apiMode === 'real' && apiBaseUrl !== '',

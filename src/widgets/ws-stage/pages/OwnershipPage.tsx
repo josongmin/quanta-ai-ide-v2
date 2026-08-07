@@ -5,7 +5,9 @@ import {
 } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Section, Button, SaveBar } from '@shared/ui/forms';
-import { shallowEqual } from '@shared/lib';
+import { InlineError, SkeletonText } from '@shared/ui';
+import { workspaceArray, workspaceObject, workspaceString } from '@entities/workspace';
+import { useWorkspaceSettingsForm } from '../lib/useWorkspaceSettingsForm';
 
 // CODEOWNERS editor.
 //
@@ -45,11 +47,53 @@ const TOTAL_FILES = 1842;
 
 export default function OwnershipPage() {
   const { t } = useTranslation('ws');
-  const [rules, setRules] = useState<Rule[]>(SEED_RULES);
-  const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [validate, setValidate] = useState<'idle' | 'checking' | 'ok'>('idle');
-
-  const dirty = !shallowEqual(rules, SEED_RULES);
+  const {
+    actionError,
+    clearActionError,
+    detail,
+    dirty,
+    discard,
+    form: rules,
+    isPending,
+    isReal,
+    loadError,
+    retryLoad,
+    save,
+    saving,
+    setForm: setRules,
+    shell,
+  } = useWorkspaceSettingsForm<Rule[]>({
+    initial: SEED_RULES,
+    fromDetail: (workspace) => {
+      const ownership = workspaceObject(workspace.raw, 'ownership', 'ownershipRules') ?? {};
+      const loaded = workspaceArray(ownership, 'rules')
+        ?? workspaceArray(workspace.raw, 'ownership_rules', 'ownershipRules', 'codeowners')
+        ?? [];
+      const rules = loaded
+        .map((item, index) => {
+          const rule = workspaceObject(item);
+          return rule ? {
+            id: workspaceString(rule, 'id') ?? `r${index.toString(36)}`,
+            pattern: workspaceString(rule, 'pattern') ?? '',
+            owners: (workspaceArray(rule, 'owners') ?? [])
+              .map((owner) => workspaceString(owner))
+              .filter((owner): owner is string => owner !== null),
+          } : null;
+        })
+        .filter((rule): rule is Rule => rule !== null && rule.pattern.trim().length > 0);
+      return rules.length > 0 ? rules : SEED_RULES;
+    },
+    toPatch: (next) => ({
+      ownership: {
+        rules: next.map((rule) => ({
+          id: rule.id,
+          pattern: rule.pattern,
+          owners: rule.owners,
+        })),
+      },
+    }),
+  });
 
   const codeowners = useMemo(() => {
     const header = `${t('ownership.generatedHeader.line1')}\n${t('ownership.generatedHeader.line2')}\n\n`;
@@ -86,14 +130,6 @@ export default function OwnershipPage() {
     setRules((all) => all.filter((r) => r.id !== id));
   };
 
-  const save = () => {
-    setSaving('saving');
-    setTimeout(() => {
-      setSaving('saved');
-      setTimeout(() => { setSaving('idle'); }, 1200);
-    }, 600);
-  };
-
   const runValidate = () => {
     setValidate('checking');
     setTimeout(() => {
@@ -104,12 +140,44 @@ export default function OwnershipPage() {
 
   const coveragePct = Math.round(((TOTAL_FILES - UNCOVERED_FILES) / TOTAL_FILES) * 100);
 
+  if (isReal && loadError) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('ownership.title')}
+        subtitle={t('ownership.subtitle')}
+      >
+        <InlineError message={loadError} onRetry={retryLoad} />
+      </WsShell>
+    );
+  }
+
+  if (isReal && isPending && !detail) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('ownership.title')}
+        subtitle={t('ownership.subtitle')}
+      >
+        <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
+          <SkeletonText lines={6} />
+        </div>
+      </WsShell>
+    );
+  }
+
   return (
     <WsShell
-      orgName="ACME, Inc."
-      orgSlug="acme"
-      wsName="monorepo"
-      wsSlug="monorepo"
+      orgName={shell.orgName}
+      orgSlug={shell.orgSlug}
+      wsName={shell.wsName}
+      wsSlug={shell.wsSlug}
       title={t('ownership.title')}
       subtitle={t('ownership.subtitle')}
       topRight={
@@ -127,6 +195,12 @@ export default function OwnershipPage() {
         </Button>
       }
     >
+      {actionError && (
+        <div className="mb-3">
+          <InlineError message={actionError} onRetry={clearActionError} />
+        </div>
+      )}
+
       {/* Coverage status band */}
       <div
         className="grid grid-cols-3 gap-3 p-4 rounded-md mb-6"
@@ -236,8 +310,8 @@ export default function OwnershipPage() {
         visible={dirty || saving !== 'idle'}
         dirty={dirty}
         savingState={saving}
-        onSave={save}
-        onDiscard={() => { setRules(SEED_RULES); }}
+        onSave={() => { void save(); }}
+        onDiscard={discard}
       />
     </WsShell>
   );

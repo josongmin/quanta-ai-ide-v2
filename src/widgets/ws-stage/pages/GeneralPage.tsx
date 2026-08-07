@@ -1,54 +1,120 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Field, Toggle, SaveBar } from '@shared/ui/forms';
-import { shallowEqual } from '@shared/lib';
+import { InlineError, SkeletonText } from '@shared/ui';
+import { useWorkspaceRouteParams } from '../lib/useWorkspaceRouteParams';
+import { useWorkspaceSettingsForm } from '../lib/useWorkspaceSettingsForm';
 
 type Form = {
   name: string;
   slug: string;
-  defaultBranch: 'main' | 'develop' | 'release';
+  defaultBranch: string;
   description: string;
   archived: boolean;
 };
 
-const BRANCHES: Form['defaultBranch'][] = ['main', 'develop', 'release'];
+const BRANCHES = ['main', 'develop', 'release'];
 
 export default function GeneralPage() {
   const { t } = useTranslation('ws');
-  const INITIAL = useMemo<Form>(() => ({
-    name: 'monorepo',
-    slug: 'monorepo',
+  const { wsSlug } = useWorkspaceRouteParams();
+  const initial = useMemo<Form>(() => ({
+    name: wsSlug,
+    slug: wsSlug,
     defaultBranch: 'main',
     description: t('general.descriptionDefault'),
     archived: false,
-  }), [t]);
-  const [form, setForm] = useState<Form>(INITIAL);
-  const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
-
-  const dirty = !shallowEqual(form, INITIAL);
-
-  const save = () => {
-    setSaving('saving');
-    setTimeout(() => {
-      setSaving('saved');
-      setTimeout(() => { setSaving('idle'); }, 1200);
-    }, 600);
-  };
+  }), [t, wsSlug]);
+  const {
+    actionError,
+    clearActionError,
+    detail,
+    dirty,
+    discard,
+    form,
+    isPending,
+    isReal,
+    loadError,
+    retryLoad,
+    save,
+    saving,
+    setForm,
+    shell,
+  } = useWorkspaceSettingsForm<Form>({
+    initial,
+    fromDetail: (workspace) => ({
+      ...initial,
+      name: workspace.name ?? initial.name,
+      slug: workspace.slug ?? initial.slug,
+      defaultBranch: workspace.defaultBranch ?? initial.defaultBranch,
+      description: workspace.description ?? initial.description,
+      archived: workspace.archived ?? initial.archived,
+    }),
+    toPatch: (next) => ({
+      name: next.name,
+      slug: next.slug,
+      default_branch: next.defaultBranch,
+      description: next.description,
+      archived: next.archived,
+    }),
+  });
+  const branches = useMemo(
+    () => Array.from(new Set(form.defaultBranch ? [...BRANCHES, form.defaultBranch] : BRANCHES)),
+    [form.defaultBranch],
+  );
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
     setForm((f) => ({ ...f, [k]: v }));
   };
 
+  if (isReal && loadError) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('general.title')}
+        subtitle={t('general.subtitle')}
+      >
+        <InlineError message={loadError} onRetry={retryLoad} />
+      </WsShell>
+    );
+  }
+
+  if (isReal && isPending && !detail) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('general.title')}
+        subtitle={t('general.subtitle')}
+      >
+        <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
+          <SkeletonText lines={4} />
+        </div>
+      </WsShell>
+    );
+  }
+
   return (
     <WsShell
-      orgName="ACME, Inc."
-      orgSlug="acme"
-      wsName="monorepo"
-      wsSlug="monorepo"
+      orgName={shell.orgName}
+      orgSlug={shell.orgSlug}
+      wsName={shell.wsName}
+      wsSlug={shell.wsSlug}
       title={t('general.title')}
       subtitle={t('general.subtitle')}
     >
+      {actionError && (
+        <div className="mb-3">
+          <InlineError message={actionError} onRetry={clearActionError} />
+        </div>
+      )}
+
       <Section title={t('general.identity.title')} hint={t('general.identity.hint')}>
         <Field
           label={t('general.displayName.label')}
@@ -77,7 +143,7 @@ export default function GeneralPage() {
         <Row label={t('general.defaultBranch.label')} sub={t('general.defaultBranch.sub')}>
           <select
             value={form.defaultBranch}
-            onChange={(e) => { set('defaultBranch', e.target.value as Form['defaultBranch']); }}
+            onChange={(e) => { set('defaultBranch', e.target.value); }}
             className="h-8 rounded-md px-2.5 text-base outline-none cursor-pointer"
             style={{
               background: 'var(--bg-surface-muted)',
@@ -86,7 +152,7 @@ export default function GeneralPage() {
               minWidth: 160,
             }}
           >
-            {BRANCHES.map((b) => <option key={b} value={b}>{b}</option>)}
+            {branches.map((b) => <option key={b} value={b}>{b}</option>)}
           </select>
         </Row>
       </Section>
@@ -104,8 +170,8 @@ export default function GeneralPage() {
         visible={dirty || saving !== 'idle'}
         dirty={dirty}
         savingState={saving}
-        onSave={save}
-        onDiscard={() => { setForm(INITIAL); }}
+        onSave={() => { void save(); }}
+        onDiscard={discard}
       />
     </WsShell>
   );

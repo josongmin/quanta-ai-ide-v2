@@ -3,8 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Plus, X, AlertTriangle, GitBranch } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
+import { InlineError, SkeletonText } from '@shared/ui';
+import {
+  workspaceArray,
+  workspaceBoolean,
+  workspaceNumber,
+  workspaceObject,
+  workspaceString,
+} from '@entities/workspace';
 import { formatNumber } from '@shared/i18n';
-import { shallowEqual } from '@shared/lib';
+import { useWorkspaceSettingsForm } from '../lib/useWorkspaceSettingsForm';
 
 type Obligation = 'no-secrets' | 'tests-pass' | 'type-check' | 'lint-clean';
 
@@ -54,13 +62,72 @@ const OBLIGATION_INFO: { id: Obligation; key: string }[] = [
 // Approximate mock spend so the warning band logic has something to react to.
 const MOCK_SPEND_USD = 1310;
 
+function isObligation(value: string | null): value is Obligation {
+  return OBLIGATION_INFO.some((item) => item.id === value);
+}
+
 export default function FixPipelinePage() {
   const { t } = useTranslation('ws');
-  const [form, setForm] = useState<Form>(INITIAL);
-  const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const {
+    actionError,
+    clearActionError,
+    detail,
+    dirty,
+    discard,
+    form,
+    isPending,
+    isReal,
+    loadError,
+    retryLoad,
+    save,
+    saving,
+    setForm,
+    shell,
+  } = useWorkspaceSettingsForm<Form>({
+    initial: INITIAL,
+    fromDetail: (workspace) => {
+      const fix = workspaceObject(workspace.raw, 'fix_pipeline', 'fixPipeline') ?? {};
+      const obligations = new Set<Obligation>(
+        (workspaceArray(fix, 'obligations', 'required_obligations', 'requiredObligations') ?? [])
+          .map((item) => workspaceString(item))
+          .filter(isObligation),
+      );
+      const branches = (workspaceArray(fix, 'branches', 'allowed_branches', 'allowedBranches') ?? [])
+        .map((item) => workspaceString(item))
+        .filter((branch): branch is string => branch !== null);
+      return {
+        allowAutoPr: workspaceBoolean(fix, 'allow_auto_pr', 'allowAutoPr') ?? INITIAL.allowAutoPr,
+        allowAutoMerge: workspaceBoolean(fix, 'allow_auto_merge', 'allowAutoMerge') ?? INITIAL.allowAutoMerge,
+        allowRollback: workspaceBoolean(fix, 'allow_rollback', 'allowRollback') ?? INITIAL.allowRollback,
+        monthlyBudgetUsd: workspaceNumber(fix, 'monthly_budget_usd', 'monthlyBudgetUsd') ?? INITIAL.monthlyBudgetUsd,
+        perRunTokenCapK: workspaceNumber(fix, 'per_run_token_cap_k', 'perRunTokenCapK') ?? INITIAL.perRunTokenCapK,
+        perRunWallMinutes: workspaceNumber(fix, 'per_run_wall_minutes', 'perRunWallMinutes') ?? INITIAL.perRunWallMinutes,
+        branches: branches.length > 0 ? branches : INITIAL.branches,
+        obligations: obligations.size > 0 ? obligations : INITIAL.obligations,
+        successChannel: workspaceString(fix, 'success_channel', 'successChannel') ?? INITIAL.successChannel,
+        failureChannel: workspaceString(fix, 'failure_channel', 'failureChannel') ?? INITIAL.failureChannel,
+        failurePageOnCall: workspaceBoolean(fix, 'failure_page_on_call', 'failurePageOnCall') ?? INITIAL.failurePageOnCall,
+        rollbackChannel: workspaceString(fix, 'rollback_channel', 'rollbackChannel') ?? INITIAL.rollbackChannel,
+      };
+    },
+    toPatch: (next) => ({
+      fix_pipeline: {
+        allow_auto_pr: next.allowAutoPr,
+        allow_auto_merge: next.allowAutoMerge,
+        allow_rollback: next.allowRollback,
+        monthly_budget_usd: next.monthlyBudgetUsd,
+        per_run_token_cap_k: next.perRunTokenCapK,
+        per_run_wall_minutes: next.perRunWallMinutes,
+        branches: next.branches,
+        obligations: Array.from(next.obligations),
+        success_channel: next.successChannel,
+        failure_channel: next.failureChannel,
+        failure_page_on_call: next.failurePageOnCall,
+        rollback_channel: next.rollbackChannel,
+      },
+    }),
+  });
   const [branchDraft, setBranchDraft] = useState('');
-
-  const dirty = !shallowEqual(form, INITIAL);
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -86,28 +153,58 @@ export default function FixPipelinePage() {
     set('branches', form.branches.filter((x) => x !== b));
   };
 
-  const save = () => {
-    setSaving('saving');
-    setTimeout(() => {
-      setSaving('saved');
-      setTimeout(() => { setSaving('idle'); }, 1200);
-    }, 600);
-  };
-
   const spendPct = form.monthlyBudgetUsd > 0
     ? Math.min(100, Math.round((MOCK_SPEND_USD / form.monthlyBudgetUsd) * 100))
     : 0;
   const overBudgetWarn = spendPct > 80;
 
+  if (isReal && loadError) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('fix.title')}
+        subtitle={t('fix.subtitle')}
+      >
+        <InlineError message={loadError} onRetry={retryLoad} />
+      </WsShell>
+    );
+  }
+
+  if (isReal && isPending && !detail) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('fix.title')}
+        subtitle={t('fix.subtitle')}
+      >
+        <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
+          <SkeletonText lines={6} />
+        </div>
+      </WsShell>
+    );
+  }
+
   return (
     <WsShell
-      orgName="ACME, Inc."
-      orgSlug="acme"
-      wsName="monorepo"
-      wsSlug="monorepo"
+      orgName={shell.orgName}
+      orgSlug={shell.orgSlug}
+      wsName={shell.wsName}
+      wsSlug={shell.wsSlug}
       title={t('fix.title')}
       subtitle={t('fix.subtitle')}
     >
+      {actionError && (
+        <div className="mb-3">
+          <InlineError message={actionError} onRetry={clearActionError} />
+        </div>
+      )}
+
       {/* Permissions */}
       <Section
         title={t('fix.permissions.title')}
@@ -336,8 +433,8 @@ export default function FixPipelinePage() {
         visible={dirty || saving !== 'idle'}
         dirty={dirty}
         savingState={saving}
-        onSave={save}
-        onDiscard={() => { setForm(INITIAL); setBranchDraft(''); }}
+        onSave={() => { void save(); }}
+        onDiscard={() => { discard(); setBranchDraft(''); }}
       />
     </WsShell>
   );

@@ -1,9 +1,16 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash2, GitBranch, Eye } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
-import { shallowEqual } from '@shared/lib';
+import { InlineError, SkeletonText } from '@shared/ui';
+import {
+  workspaceArray,
+  workspaceBoolean,
+  workspaceNumber,
+  workspaceObject,
+  workspaceString,
+} from '@entities/workspace';
+import { useWorkspaceSettingsForm } from '../lib/useWorkspaceSettingsForm';
 
 // Review policy. Five sections: required approvers, auto-assignment,
 // reviewer pool, branch overrides, block conditions.
@@ -35,6 +42,8 @@ type Form = {
   blockOnRedCI: boolean;
 };
 
+const ASSIGNMENTS: Assignment[] = ['round-robin', 'load-balanced', 'codeowners-only'];
+
 const INITIAL: Form = {
   minApprovers: 2,
   excludeAuthor: true,
@@ -58,10 +67,94 @@ const INITIAL: Form = {
 
 export default function ReviewPage() {
   const { t } = useTranslation('ws');
-  const [form, setForm] = useState<Form>(INITIAL);
-  const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const {
+    actionError,
+    clearActionError,
+    detail,
+    dirty,
+    discard,
+    form,
+    isPending,
+    isReal,
+    loadError,
+    retryLoad,
+    save,
+    saving,
+    setForm,
+    shell,
+  } = useWorkspaceSettingsForm<Form>({
+    initial: INITIAL,
+    fromDetail: (workspace) => {
+      const review = workspaceObject(workspace.raw, 'review_policy', 'reviewPolicy') ?? {};
+      const loadedTeams = workspaceArray(review, 'teams');
+      const teamFlags = new Map<string, boolean>();
+      for (const item of loadedTeams ?? []) {
+        const team = workspaceObject(item);
+        const id = workspaceString(team, 'id');
+        if (!id) continue;
+        teamFlags.set(id, workspaceBoolean(team, 'in_pool', 'inPool') ?? false);
+      }
 
-  const dirty = !shallowEqual(form, INITIAL);
+      const teams = [
+        ...INITIAL.teams.map((team) => (
+          teamFlags.has(team.id)
+            ? { ...team, inPool: teamFlags.get(team.id) ?? team.inPool }
+            : team
+        )),
+        ...(loadedTeams ?? [])
+          .map((item) => workspaceObject(item))
+          .filter((team): team is Record<string, unknown> => team !== null)
+          .map((team) => ({
+            id: workspaceString(team, 'id') ?? '',
+            inPool: workspaceBoolean(team, 'in_pool', 'inPool') ?? false,
+          }))
+          .filter((team) => team.id.length > 0 && !INITIAL.teams.some((existing) => existing.id === team.id)),
+      ];
+
+      const overrides = (workspaceArray(review, 'overrides') ?? [])
+        .map((item, index) => {
+          const rule = workspaceObject(item);
+          return rule ? {
+            id: workspaceString(rule, 'id') ?? `o${index.toString(36)}`,
+            pattern: workspaceString(rule, 'pattern') ?? '',
+            minApprovers: workspaceNumber(rule, 'min_approvers', 'minApprovers') ?? 0,
+          } : null;
+        })
+        .filter((rule): rule is BranchOverride => rule !== null);
+
+      const assignment = workspaceString(review, 'assignment');
+      return {
+        minApprovers: workspaceNumber(review, 'min_approvers', 'minApprovers') ?? INITIAL.minApprovers,
+        excludeAuthor: workspaceBoolean(review, 'exclude_author', 'excludeAuthor') ?? INITIAL.excludeAuthor,
+        dismissStaleOnPush: workspaceBoolean(review, 'dismiss_stale_on_push', 'dismissStaleOnPush') ?? INITIAL.dismissStaleOnPush,
+        assignment: ASSIGNMENTS.includes(assignment as Assignment) ? assignment as Assignment : INITIAL.assignment,
+        maxReviewersPerPR: workspaceNumber(review, 'max_reviewers_per_pr', 'maxReviewersPerPR') ?? INITIAL.maxReviewersPerPR,
+        teams: teams.length > 0 ? teams : INITIAL.teams,
+        overrides: overrides.length > 0 ? overrides : INITIAL.overrides,
+        blockSoleReviewer: workspaceBoolean(review, 'block_sole_reviewer', 'blockSoleReviewer') ?? INITIAL.blockSoleReviewer,
+        blockUnresolvedThreads: workspaceBoolean(review, 'block_unresolved_threads', 'blockUnresolvedThreads') ?? INITIAL.blockUnresolvedThreads,
+        blockOnRedCI: workspaceBoolean(review, 'block_on_red_ci', 'blockOnRedCI') ?? INITIAL.blockOnRedCI,
+      };
+    },
+    toPatch: (next) => ({
+      review_policy: {
+        min_approvers: next.minApprovers,
+        exclude_author: next.excludeAuthor,
+        dismiss_stale_on_push: next.dismissStaleOnPush,
+        assignment: next.assignment,
+        max_reviewers_per_pr: next.maxReviewersPerPR,
+        teams: next.teams.map((team) => ({ id: team.id, in_pool: team.inPool })),
+        overrides: next.overrides.map((override) => ({
+          id: override.id,
+          pattern: override.pattern,
+          min_approvers: override.minApprovers,
+        })),
+        block_sole_reviewer: next.blockSoleReviewer,
+        block_unresolved_threads: next.blockUnresolvedThreads,
+        block_on_red_ci: next.blockOnRedCI,
+      },
+    }),
+  });
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -82,23 +175,53 @@ export default function ReviewPage() {
     set('overrides', form.overrides.filter((o) => o.id !== id));
   };
 
-  const save = () => {
-    setSaving('saving');
-    setTimeout(() => {
-      setSaving('saved');
-      setTimeout(() => { setSaving('idle'); }, 1200);
-    }, 600);
-  };
+  if (isReal && loadError) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('review.title')}
+        subtitle={t('review.subtitle')}
+      >
+        <InlineError message={loadError} onRetry={retryLoad} />
+      </WsShell>
+    );
+  }
+
+  if (isReal && isPending && !detail) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('review.title')}
+        subtitle={t('review.subtitle')}
+      >
+        <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
+          <SkeletonText lines={6} />
+        </div>
+      </WsShell>
+    );
+  }
 
   return (
     <WsShell
-      orgName="ACME, Inc."
-      orgSlug="acme"
-      wsName="monorepo"
-      wsSlug="monorepo"
+      orgName={shell.orgName}
+      orgSlug={shell.orgSlug}
+      wsName={shell.wsName}
+      wsSlug={shell.wsSlug}
       title={t('review.title')}
       subtitle={t('review.subtitle')}
     >
+      {actionError && (
+        <div className="mb-3">
+          <InlineError message={actionError} onRetry={clearActionError} />
+        </div>
+      )}
+
       <Section title={t('review.requiredApprovers.title')} hint={t('review.requiredApprovers.hint')}>
         <Row label={t('review.minApprovers.label')} sub={t('review.minApprovers.sub')}>
           <NumberStepper
@@ -271,8 +394,8 @@ export default function ReviewPage() {
         visible={dirty || saving !== 'idle'}
         dirty={dirty}
         savingState={saving}
-        onSave={save}
-        onDiscard={() => { setForm(INITIAL); }}
+        onSave={() => { void save(); }}
+        onDiscard={discard}
       />
     </WsShell>
   );

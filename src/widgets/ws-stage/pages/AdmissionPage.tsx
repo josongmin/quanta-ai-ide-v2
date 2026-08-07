@@ -7,12 +7,18 @@ import {
 import type { CSSProperties } from 'react';
 import { WsShell } from '../parts/WsShell';
 import { Section, SaveBar } from '@shared/ui/forms';
-import { shallowEqual } from '@shared/lib';
+import { InlineError, SkeletonText } from '@shared/ui';
 import {
   SEED_ADMISSION_RULES,
   type AdmissionSeverity,
   type AdmissionRuleCore,
 } from '@entities/admission';
+import {
+  workspaceArray,
+  workspaceObject,
+  workspaceString,
+} from '@entities/workspace';
+import { useWorkspaceSettingsForm } from '../lib/useWorkspaceSettingsForm';
 
 // Per-workspace admission rules. Each rule inherits an org default and may
 // be locally overridden. The inheritance indicator surfaces whether the
@@ -59,13 +65,61 @@ const CATEGORIES: { id: Rule['category']; icon: React.ComponentType<{ className?
   { id: 'config',  icon: GitBranch },
 ];
 
+const SEVERITIES: Severity[] = ['block', 'warn', 'off'];
+
 export default function AdmissionPage() {
   const { t } = useTranslation('ws');
-  const [rules, setRules] = useState<Rule[]>(SEED_RULES);
+  const {
+    actionError,
+    clearActionError,
+    detail,
+    dirty,
+    discard,
+    form: rules,
+    isPending,
+    isReal,
+    loadError,
+    retryLoad,
+    save,
+    saving,
+    setForm: setRules,
+    shell,
+  } = useWorkspaceSettingsForm<Rule[]>({
+    initial: SEED_RULES,
+    fromDetail: (workspace) => {
+      const admission = workspaceObject(workspace.raw, 'admission', 'admissionRules') ?? {};
+      const loaded = workspaceArray(admission, 'rules')
+        ?? workspaceArray(workspace.raw, 'admission_rules', 'admissionRules')
+        ?? [];
+      const byId = new Map<string, Record<string, unknown>>();
+      for (const item of loaded) {
+        const rule = workspaceObject(item);
+        const id = workspaceString(rule, 'id');
+        if (!rule || !id) continue;
+        byId.set(id, rule);
+      }
+      return SEED_RULES.map((rule) => {
+        const loadedRule = byId.get(rule.id);
+        const orgDefault = workspaceString(loadedRule, 'org_default', 'orgDefault');
+        const effective = workspaceString(loadedRule, 'effective', 'severity');
+        return {
+          ...rule,
+          orgDefault: SEVERITIES.includes(orgDefault as Severity) ? orgDefault as Severity : rule.orgDefault,
+          effective: SEVERITIES.includes(effective as Severity) ? effective as Severity : rule.effective,
+        };
+      });
+    },
+    toPatch: (next) => ({
+      admission: {
+        rules: next.map((rule) => ({
+          id: rule.id,
+          org_default: rule.orgDefault,
+          effective: rule.effective,
+        })),
+      },
+    }),
+  });
   const [collapsed, setCollapsed] = useState<Set<Rule['category']>>(new Set());
-  const [saving, setSaving] = useState<'idle' | 'saving' | 'saved'>('idle');
-
-  const dirty = !shallowEqual(rules, SEED_RULES);
 
   const setSeverity = (id: string, s: Severity) => {
     setRules((all) => all.map((r) => (r.id === id ? { ...r, effective: s } : r)));
@@ -81,27 +135,57 @@ export default function AdmissionPage() {
     });
   };
 
-  const save = () => {
-    setSaving('saving');
-    setTimeout(() => {
-      setSaving('saved');
-      setTimeout(() => { setSaving('idle'); }, 1200);
-    }, 600);
-  };
-
   const totalActive   = rules.filter((r) => r.effective !== 'off').length;
   const totalBlocking = rules.filter((r) => r.effective === 'block').length;
   const inheritedCount = rules.filter((r) => r.effective === r.orgDefault).length;
 
+  if (isReal && loadError) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('admission.title')}
+        subtitle={t('admission.subtitle')}
+      >
+        <InlineError message={loadError} onRetry={retryLoad} />
+      </WsShell>
+    );
+  }
+
+  if (isReal && isPending && !detail) {
+    return (
+      <WsShell
+        orgName={shell.orgName}
+        orgSlug={shell.orgSlug}
+        wsName={shell.wsName}
+        wsSlug={shell.wsSlug}
+        title={t('admission.title')}
+        subtitle={t('admission.subtitle')}
+      >
+        <div className="rounded-md p-4" style={{ border: '1px solid var(--border-muted)' }}>
+          <SkeletonText lines={6} />
+        </div>
+      </WsShell>
+    );
+  }
+
   return (
     <WsShell
-      orgName="ACME, Inc."
-      orgSlug="acme"
-      wsName="monorepo"
-      wsSlug="monorepo"
+      orgName={shell.orgName}
+      orgSlug={shell.orgSlug}
+      wsName={shell.wsName}
+      wsSlug={shell.wsSlug}
       title={t('admission.title')}
       subtitle={t('admission.subtitle')}
     >
+      {actionError && (
+        <div className="mb-3">
+          <InlineError message={actionError} onRetry={clearActionError} />
+        </div>
+      )}
+
       {/* Summary band */}
       <div
         className="grid grid-cols-3 gap-3 p-4 rounded-md mb-6"
@@ -179,8 +263,8 @@ export default function AdmissionPage() {
         visible={dirty || saving !== 'idle'}
         dirty={dirty}
         savingState={saving}
-        onSave={save}
-        onDiscard={() => { setRules(SEED_RULES); }}
+        onSave={() => { void save(); }}
+        onDiscard={discard}
       />
     </WsShell>
   );

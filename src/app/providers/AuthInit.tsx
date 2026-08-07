@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { setUnauthorizedHandler } from '@shared/api';
+import { setAuthTokenGetter, setUnauthorizedHandler } from '@shared/api';
 import { env } from '@shared/config/env';
 import { router } from '../router/router';
 
@@ -13,10 +13,13 @@ import { router } from '../router/router';
 // No-op in mock mode.
 export function AuthInit(): null {
   useEffect(() => {
+    if (env.useRealApi) {
+      setAuthTokenGetter(() => (env.apiAuthToken.length > 0 ? env.apiAuthToken : null));
+      setUnauthorizedHandler(() => {
+        void router.navigate({ to: '/auth/session-expired' as never });
+      });
+    }
     if (!env.useRealAuth) return;
-    setUnauthorizedHandler(() => {
-      void router.navigate({ to: '/auth/session-expired' as never });
-    });
     // Dynamic import keeps better-auth out of the initial chunk (mock demo pays
     // nothing). Primes the session store so the route guard reads it warm.
     void import('@shared/auth')

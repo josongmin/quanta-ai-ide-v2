@@ -8,6 +8,8 @@ interface ImportMetaEnv {
   readonly VITE_API_BASE_URL?: string;
   /** 'mock' (default) uses in-app generators; 'real' hits VITE_API_BASE_URL. */
   readonly VITE_API_MODE?: 'mock' | 'real';
+  /** Bearer token for the product/intel API behind VITE_API_BASE_URL. */
+  readonly VITE_API_AUTH_TOKEN?: string;
   /** 'mock' (default) uses demo auth stubs; 'real' wires better-auth (accounts). */
   readonly VITE_AUTH_MODE?: 'mock' | 'real';
   /** accounts (better-auth) origin, e.g. http://localhost:4000. Empty → mock auth. */
