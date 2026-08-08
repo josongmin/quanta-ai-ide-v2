@@ -21,6 +21,10 @@
     "breadcrumbAria": "Breadcrumb",
     "settings": "Settings"
   },
+  "settingsContract": {
+    "title": "Write contract unavailable",
+    "body": "The product API does not document a writable contract for {{surface}} yet. Changes on this page stay local until the backend contract lands."
+  },
   "general": {
     "title": "General",
     "subtitle": "Identity and defaults for this workspace.",

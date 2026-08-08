@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
-import { Toggle, Checkbox } from '../primitives';
+import { Toggle, Checkbox, SaveBar } from '../primitives';
 
 // Controlled boolean primitives used across every settings surface. Lock the
 // role/aria-checked contract + the onChange(!value) toggle + disabled guard.
@@ -38,5 +38,25 @@ describe('Checkbox', () => {
     render(<Checkbox checked onChange={onChange} label="Agree" />);
     await userEvent.click(screen.getByRole('checkbox'));
     expect(onChange).toHaveBeenCalledWith(false);
+  });
+});
+
+describe('SaveBar', () => {
+  it('disables save when persistence is explicitly blocked', () => {
+    render(
+      <SaveBar
+        visible
+        dirty
+        savingState="idle"
+        onSave={vi.fn()}
+        onDiscard={vi.fn()}
+        saveDisabled
+        saveDisabledTitle="Backend contract missing"
+      />,
+    );
+
+    const save = screen.getByRole('button', { name: 'Save changes' });
+    expect(save).toBeDisabled();
+    expect(save).toHaveAttribute('title', 'Backend contract missing');
   });
 });

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { WsShell } from '../parts/WsShell';
 import { Section, Row, Field, Toggle, SaveBar } from '@shared/ui/forms';
 import { InlineError, SkeletonText } from '@shared/ui';
+import { SettingsContractNotice } from '../parts/SettingsContractNotice';
 import { useWorkspaceRouteParams } from '../lib/useWorkspaceRouteParams';
 import { useWorkspaceSettingsForm } from '../lib/useWorkspaceSettingsForm';
 
@@ -38,11 +39,16 @@ export default function GeneralPage() {
     loadError,
     retryLoad,
     save,
+    saveBlockedReason,
     saving,
     setForm,
     shell,
   } = useWorkspaceSettingsForm<Form>({
     initial,
+    // Supported by default (the documented PATCH /v1/workspaces/{id}); the hook
+    // still blocks the write at runtime if the collection route 404s (service
+    // not deployed), reusing this message for the notice.
+    realSaveMessage: t('settingsContract.body', { surface: t('general.title') }),
     fromDetail: (workspace) => ({
       ...initial,
       name: workspace.name ?? initial.name,
@@ -109,6 +115,12 @@ export default function GeneralPage() {
       title={t('general.title')}
       subtitle={t('general.subtitle')}
     >
+      {isReal && saveBlockedReason && (
+        <div className="mb-3">
+          <SettingsContractNotice title={t('settingsContract.title')} message={saveBlockedReason} />
+        </div>
+      )}
+
       {actionError && (
         <div className="mb-3">
           <InlineError message={actionError} onRetry={clearActionError} />
@@ -172,6 +184,8 @@ export default function GeneralPage() {
         savingState={saving}
         onSave={() => { void save(); }}
         onDiscard={discard}
+        saveDisabled={Boolean(saveBlockedReason)}
+        saveDisabledTitle={saveBlockedReason ?? undefined}
       />
     </WsShell>
   );

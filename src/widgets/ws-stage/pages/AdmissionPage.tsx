@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { WsShell } from '../parts/WsShell';
+import { SettingsContractNotice } from '../parts/SettingsContractNotice';
 import { Section, SaveBar } from '@shared/ui/forms';
 import { InlineError, SkeletonText } from '@shared/ui';
 import {
@@ -69,6 +70,7 @@ const SEVERITIES: Severity[] = ['block', 'warn', 'off'];
 
 export default function AdmissionPage() {
   const { t } = useTranslation('ws');
+  const blockedMessage = t('settingsContract.body', { surface: t('admission.title') });
   const {
     actionError,
     clearActionError,
@@ -81,6 +83,7 @@ export default function AdmissionPage() {
     loadError,
     retryLoad,
     save,
+    saveBlockedReason,
     saving,
     setForm: setRules,
     shell,
@@ -118,6 +121,8 @@ export default function AdmissionPage() {
         })),
       },
     }),
+    realSaveMode: 'unsupported',
+    realSaveMessage: blockedMessage,
   });
   const [collapsed, setCollapsed] = useState<Set<Rule['category']>>(new Set());
 
@@ -180,6 +185,12 @@ export default function AdmissionPage() {
       title={t('admission.title')}
       subtitle={t('admission.subtitle')}
     >
+      {isReal && saveBlockedReason && (
+        <div className="mb-3">
+          <SettingsContractNotice title={t('settingsContract.title')} message={saveBlockedReason} />
+        </div>
+      )}
+
       {actionError && (
         <div className="mb-3">
           <InlineError message={actionError} onRetry={clearActionError} />
@@ -265,6 +276,8 @@ export default function AdmissionPage() {
         savingState={saving}
         onSave={() => { void save(); }}
         onDiscard={discard}
+        saveDisabled={Boolean(saveBlockedReason)}
+        saveDisabledTitle={saveBlockedReason ?? undefined}
       />
     </WsShell>
   );

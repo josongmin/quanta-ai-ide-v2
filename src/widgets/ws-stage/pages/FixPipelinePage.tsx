@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, X, AlertTriangle, GitBranch } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
+import { SettingsContractNotice } from '../parts/SettingsContractNotice';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
 import { InlineError, SkeletonText } from '@shared/ui';
 import {
@@ -68,6 +69,7 @@ function isObligation(value: string | null): value is Obligation {
 
 export default function FixPipelinePage() {
   const { t } = useTranslation('ws');
+  const blockedMessage = t('settingsContract.body', { surface: t('fix.title') });
   const {
     actionError,
     clearActionError,
@@ -80,6 +82,7 @@ export default function FixPipelinePage() {
     loadError,
     retryLoad,
     save,
+    saveBlockedReason,
     saving,
     setForm,
     shell,
@@ -126,6 +129,8 @@ export default function FixPipelinePage() {
         rollback_channel: next.rollbackChannel,
       },
     }),
+    realSaveMode: 'unsupported',
+    realSaveMessage: blockedMessage,
   });
   const [branchDraft, setBranchDraft] = useState('');
 
@@ -199,6 +204,12 @@ export default function FixPipelinePage() {
       title={t('fix.title')}
       subtitle={t('fix.subtitle')}
     >
+      {isReal && saveBlockedReason && (
+        <div className="mb-3">
+          <SettingsContractNotice title={t('settingsContract.title')} message={saveBlockedReason} />
+        </div>
+      )}
+
       {actionError && (
         <div className="mb-3">
           <InlineError message={actionError} onRetry={clearActionError} />
@@ -435,6 +446,8 @@ export default function FixPipelinePage() {
         savingState={saving}
         onSave={() => { void save(); }}
         onDiscard={() => { discard(); setBranchDraft(''); }}
+        saveDisabled={Boolean(saveBlockedReason)}
+        saveDisabledTitle={saveBlockedReason ?? undefined}
       />
     </WsShell>
   );

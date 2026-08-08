@@ -307,13 +307,15 @@ export function Button({
 // Fixed-position save bar at the bottom. Appears (slides up) only when the
 // page has dirty edits. Dismiss = Discard.
 export function SaveBar({
-  visible, dirty, onSave, onDiscard, savingState,
+  visible, dirty, onSave, onDiscard, savingState, saveDisabled = false, saveDisabledTitle,
 }: {
   visible: boolean;
   dirty: boolean;
   onSave: () => void;
   onDiscard: () => void;
   savingState: 'idle' | 'saving' | 'saved';
+  saveDisabled?: boolean;
+  saveDisabledTitle?: string;
 }) {
   if (!visible) return null;
   return (
@@ -343,7 +345,13 @@ export function SaveBar({
         <Button variant="ghost" size="sm" onClick={onDiscard} disabled={!dirty || savingState !== 'idle'}>
           Discard
         </Button>
-        <Button variant="primary" size="sm" onClick={onSave} disabled={!dirty || savingState !== 'idle'}>
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={onSave}
+          disabled={saveDisabled || !dirty || savingState !== 'idle'}
+          title={saveDisabled ? saveDisabledTitle : undefined}
+        >
           Save changes
         </Button>
       </div>

@@ -10,11 +10,14 @@ import { shallowEqual } from '@shared/lib';
 import { useWorkspaceRouteParams } from './useWorkspaceRouteParams';
 
 type SavingState = 'idle' | 'saving' | 'saved';
+type RealSaveMode = 'supported' | 'unsupported';
 
 type Options<T> = {
   initial: T;
   fromDetail: (detail: WorkspaceRecord) => T;
   toPatch: (form: T) => WorkspacePatch;
+  realSaveMode?: RealSaveMode;
+  realSaveMessage?: string;
 };
 
 type Result<T> = {
@@ -30,6 +33,7 @@ type Result<T> = {
   actionError: string | null;
   clearActionError: () => void;
   retryLoad: () => void;
+  saveBlockedReason: string | null;
   detail: WorkspaceRecord | null;
   shell: {
     orgName: string;
@@ -43,15 +47,28 @@ export function useWorkspaceSettingsForm<T>({
   initial,
   fromDetail,
   toPatch,
+  realSaveMode = 'supported',
+  realSaveMessage,
 }: Options<T>): Result<T> {
   const { orgSlug, wsSlug } = useWorkspaceRouteParams();
-  const { detail, isPending, error, refetch } = useWorkspace(orgSlug, wsSlug);
+  const { detail, isPending, error, unavailable, refetch } = useWorkspace(orgSlug, wsSlug);
 
   const [form, setForm] = useState<T>(initial);
   const [committed, setCommitted] = useState<T>(initial);
   const [saving, setSaving] = useState<SavingState>('idle');
   const [actionError, setActionError] = useState<string | null>(null);
   const seededKey = useRef<string | null>(null);
+  // Two ways a real-mode save is blocked:
+  //   • static — the page declares its write contract isn't wired yet.
+  //   • runtime — the /v1/workspaces collection route 404s (service not deployed;
+  //     verified absent in p0-platform as of 2026-08). The read already degrades
+  //     to the local seed (no loadError); block the write here too so a
+  //     "supported" page can't fire a doomed PATCH at a missing backend.
+  const saveBlockedReason = env.useRealApi && realSaveMode === 'unsupported'
+    ? realSaveMessage ?? 'A writable backend contract is not available for this settings page yet.'
+    : env.useRealApi && unavailable
+      ? realSaveMessage ?? 'The workspace service is not available on this backend yet.'
+      : null;
 
   useEffect(() => {
     if (!env.useRealApi) return;
@@ -67,8 +84,15 @@ export function useWorkspaceSettingsForm<T>({
   const dirty = !shallowEqual(form, committed);
 
   async function save() {
-    setSaving('saving');
     setActionError(null);
+
+    if (saveBlockedReason) {
+      setSaving('idle');
+      setActionError(saveBlockedReason);
+      return;
+    }
+
+    setSaving('saving');
 
     if (!env.useRealApi) {
       setTimeout(() => {
@@ -112,6 +136,7 @@ export function useWorkspaceSettingsForm<T>({
     actionError,
     clearActionError: () => { setActionError(null); },
     retryLoad: refetch,
+    saveBlockedReason,
     detail,
     shell: {
       orgName: detail?.orgName ?? orgSlug,

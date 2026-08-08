@@ -21,6 +21,10 @@
     "breadcrumbAria": "탐색 경로",
     "settings": "설정"
   },
+  "settingsContract": {
+    "title": "쓰기 계약 없음",
+    "body": "제품 API에 아직 {{surface}}용 쓰기 계약이 문서화되지 않았습니다. 백엔드 계약이 추가되기 전까지 이 페이지의 변경은 로컬 상태로만 유지됩니다."
+  },
   "general": {
     "title": "일반",
     "subtitle": "이 워크스페이스의 식별자와 기본값입니다.",

@@ -4,6 +4,7 @@ import {
   Users, Plus, Trash2, ShieldCheck, FileWarning, CheckCircle2, X,
 } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
+import { SettingsContractNotice } from '../parts/SettingsContractNotice';
 import { Section, Button, SaveBar } from '@shared/ui/forms';
 import { InlineError, SkeletonText } from '@shared/ui';
 import { workspaceArray, workspaceObject, workspaceString } from '@entities/workspace';
@@ -47,6 +48,7 @@ const TOTAL_FILES = 1842;
 
 export default function OwnershipPage() {
   const { t } = useTranslation('ws');
+  const blockedMessage = t('settingsContract.body', { surface: t('ownership.title') });
   const [validate, setValidate] = useState<'idle' | 'checking' | 'ok'>('idle');
   const {
     actionError,
@@ -60,6 +62,7 @@ export default function OwnershipPage() {
     loadError,
     retryLoad,
     save,
+    saveBlockedReason,
     saving,
     setForm: setRules,
     shell,
@@ -93,6 +96,8 @@ export default function OwnershipPage() {
         })),
       },
     }),
+    realSaveMode: 'unsupported',
+    realSaveMessage: blockedMessage,
   });
 
   const codeowners = useMemo(() => {
@@ -195,6 +200,12 @@ export default function OwnershipPage() {
         </Button>
       }
     >
+      {isReal && saveBlockedReason && (
+        <div className="mb-3">
+          <SettingsContractNotice title={t('settingsContract.title')} message={saveBlockedReason} />
+        </div>
+      )}
+
       {actionError && (
         <div className="mb-3">
           <InlineError message={actionError} onRetry={clearActionError} />
@@ -312,6 +323,8 @@ export default function OwnershipPage() {
         savingState={saving}
         onSave={() => { void save(); }}
         onDiscard={discard}
+        saveDisabled={Boolean(saveBlockedReason)}
+        saveDisabledTitle={saveBlockedReason ?? undefined}
       />
     </WsShell>
   );

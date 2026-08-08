@@ -21,6 +21,10 @@
     "breadcrumbAria": "面包屑导航",
     "settings": "设置"
   },
+  "settingsContract": {
+    "title": "写入契约不可用",
+    "body": "产品 API 尚未为 {{surface}} 提供可写入契约。在后端契约落地前，此页面上的更改只会保留在本地状态中。"
+  },
   "general": {
     "title": "常规",
     "subtitle": "此工作区的标识与默认设置。",

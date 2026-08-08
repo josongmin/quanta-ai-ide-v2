@@ -5,6 +5,13 @@ import { useAsyncResource } from '@shared/lib';
 
 const RecordSchema = z.record(z.string(), z.unknown());
 const WORKSPACE_NOT_FOUND = 'Workspace not found.';
+// Real API on but the `/v1/workspaces` collection route 404s → the backend
+// service isn't deployed yet. This sentinel rides useAsyncResource's error
+// channel; useWorkspace maps it to the `unavailable` flag (NO user-facing error)
+// so settings pages fall back to their local seed instead of showing a scary
+// "not found". Distinct from a genuine not-found (collection exists, no match)
+// or an auth/network error, both of which still surface loudly.
+const WORKSPACE_UNAVAILABLE = '__workspace_unavailable__';
 
 export type WorkspacePayload = Record<string, unknown>;
 
@@ -28,12 +35,16 @@ export type WorkspaceActionResult =
 
 type WorkspaceReadResult =
   | { ok: true; data: WorkspaceRecord }
-  | { ok: false; error: string };
+  | { ok: false; kind: 'unavailable' | 'not-found' | 'error'; error: string };
 
 type WorkspaceState = {
   detail: WorkspaceRecord | null;
   isPending: boolean;
   error: string | null;
+  /** Real API on, but the `/v1/workspaces` collection route 404s — the backend
+   *  service isn't deployed yet. Callers fall back to local defaults instead of
+   *  surfacing an error (distinct from a genuine not-found / auth / network error). */
+  unavailable: boolean;
   refetch: () => void;
 };
 
@@ -128,11 +139,23 @@ export async function getWorkspace(orgSlug: string, workspaceSlug: string): Prom
     return { ok: true, data: toWorkspaceRecord(direct.data, { orgSlug, workspaceSlug }) };
   }
   if (!(direct.error.kind === 'http' && direct.error.status === 404)) {
-    return { ok: false, error: apiErrorMessage(direct.error, 'workspace') };
+    return { ok: false, kind: 'error', error: apiErrorMessage(direct.error, 'workspace') };
   }
 
-  const candidate = await resolveWorkspaceCandidate(workspaceSlug);
-  if (!candidate) return { ok: false, error: WORKSPACE_NOT_FOUND };
+  // Direct ref 404'd — it may be a slug the backend keys by id, so resolve via
+  // the collection. A 404 on the COLLECTION ITSELF means the service isn't
+  // deployed (an existing-but-empty collection returns 200 + an empty list, not
+  // 404), so degrade to `unavailable` rather than a hard error.
+  const list = await listWorkspacePayloads();
+  if (!list.ok) {
+    if (list.error.kind === 'http' && list.error.status === 404) {
+      return { ok: false, kind: 'unavailable', error: WORKSPACE_UNAVAILABLE };
+    }
+    return { ok: false, kind: 'error', error: apiErrorMessage(list.error, 'workspace') };
+  }
+
+  const candidate = list.data.find((c) => matchesWorkspace(c, workspaceSlug)) ?? null;
+  if (!candidate) return { ok: false, kind: 'not-found', error: WORKSPACE_NOT_FOUND };
 
   const candidateId = workspaceString(candidate, 'id');
   if (candidateId && candidateId !== workspaceSlug) {
@@ -141,7 +164,7 @@ export async function getWorkspace(orgSlug: string, workspaceSlug: string): Prom
       return { ok: true, data: toWorkspaceRecord(byId.data, { orgSlug, workspaceSlug }) };
     }
     if (!(byId.error.kind === 'http' && byId.error.status === 404)) {
-      return { ok: false, error: apiErrorMessage(byId.error, 'workspace') };
+      return { ok: false, kind: 'error', error: apiErrorMessage(byId.error, 'workspace') };
     }
   }
 
@@ -152,13 +175,18 @@ export function useWorkspace(orgSlug: string, workspaceSlug: string): WorkspaceS
   const { data, isPending, error, refetch } = useAsyncResource<WorkspaceRecord>(
     async () => {
       if (!env.useRealApi) return { ok: false, error: '__mock__' };
-      return getWorkspace(orgSlug, workspaceSlug);
+      const res = await getWorkspace(orgSlug, workspaceSlug);
+      if (res.ok) return { ok: true, data: res.data };
+      // 'unavailable' rides the error channel as a sentinel, mapped below to the
+      // `unavailable` flag (not a user-facing error). 'not-found'/'error' surface.
+      return { ok: false, error: res.error };
     },
     [orgSlug, workspaceSlug],
     `${orgSlug}/${workspaceSlug}`,
   );
-  if (!env.useRealApi) return { detail: null, isPending: false, error: null, refetch: NOOP_REFETCH };
-  return { detail: data, isPending, error, refetch };
+  if (!env.useRealApi) return { detail: null, isPending: false, error: null, unavailable: false, refetch: NOOP_REFETCH };
+  const unavailable = error === WORKSPACE_UNAVAILABLE;
+  return { detail: data, isPending, error: unavailable ? null : error, unavailable, refetch };
 }
 
 async function patchWorkspaceRef(ref: string, data: WorkspacePatch): Promise<ApiResult<unknown>> {

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash2, GitBranch, Eye } from 'lucide-react';
 import { WsShell } from '../parts/WsShell';
+import { SettingsContractNotice } from '../parts/SettingsContractNotice';
 import { Section, Row, Toggle, Button, SaveBar } from '@shared/ui/forms';
 import { InlineError, SkeletonText } from '@shared/ui';
 import {
@@ -67,6 +68,7 @@ const INITIAL: Form = {
 
 export default function ReviewPage() {
   const { t } = useTranslation('ws');
+  const blockedMessage = t('settingsContract.body', { surface: t('review.title') });
   const {
     actionError,
     clearActionError,
@@ -79,6 +81,7 @@ export default function ReviewPage() {
     loadError,
     retryLoad,
     save,
+    saveBlockedReason,
     saving,
     setForm,
     shell,
@@ -154,6 +157,8 @@ export default function ReviewPage() {
         block_on_red_ci: next.blockOnRedCI,
       },
     }),
+    realSaveMode: 'unsupported',
+    realSaveMessage: blockedMessage,
   });
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
@@ -216,6 +221,12 @@ export default function ReviewPage() {
       title={t('review.title')}
       subtitle={t('review.subtitle')}
     >
+      {isReal && saveBlockedReason && (
+        <div className="mb-3">
+          <SettingsContractNotice title={t('settingsContract.title')} message={saveBlockedReason} />
+        </div>
+      )}
+
       {actionError && (
         <div className="mb-3">
           <InlineError message={actionError} onRetry={clearActionError} />
@@ -396,6 +407,8 @@ export default function ReviewPage() {
         savingState={saving}
         onSave={() => { void save(); }}
         onDiscard={discard}
+        saveDisabled={Boolean(saveBlockedReason)}
+        saveDisabledTitle={saveBlockedReason ?? undefined}
       />
     </WsShell>
   );
