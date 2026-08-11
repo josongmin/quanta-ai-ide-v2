@@ -3,7 +3,8 @@
   "subtitle": "平台运营工具 — 每项操作都会被审计。模拟登录对目标组织可见。",
   "sections": {
     "users": "用户",
-    "orgs": "组织"
+    "orgs": "组织",
+    "domains": "域名释放"
   },
   "searchPlaceholder": "搜索邮箱或姓名…",
   "cols": {
@@ -32,9 +33,21 @@
     "impersonate": "模拟登录",
     "unban": "解除封禁",
     "ban": "封禁",
+    "promote": "设为管理员",
+    "demote": "撤销管理员",
     "overridePlan": "覆盖套餐",
     "loadMore": "加载更多",
     "cancel": "取消"
+  },
+  "domains": {
+    "body": "跨两个注册表(组织域名申领 + SSO)强制释放被已停用组织占用的域名。幂等操作。",
+    "placeholder": "acme.com",
+    "release": "释放域名",
+    "releasing": "释放中…",
+    "orgReleased": "组织域名申领已释放",
+    "orgNone": "无组织域名申领",
+    "ssoReleased": "SSO 申领已释放",
+    "ssoNone": "无 SSO 申领"
   },
   "ban": {
     "title": "封禁 {{name}}？",

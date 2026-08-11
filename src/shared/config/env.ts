@@ -23,6 +23,15 @@ const apiAuthToken = (import.meta.env.VITE_API_AUTH_TOKEN ?? '').trim();
 const accountsUrl = (import.meta.env.VITE_ACCOUNTS_URL ?? '').replace(/\/+$/, '');
 const authMode: ApiMode = import.meta.env.VITE_AUTH_MODE === 'real' ? 'real' : 'mock';
 
+// Hostname of the accounts backend — used to allowlist full-page redirects to
+// its SSO authorize entrypoint (safeNavigate defense-in-depth). Empty when
+// unconfigured / unparseable.
+function hostOf(url: string): string {
+  if (url === '') return '';
+  try { return new URL(url).hostname; } catch { return ''; }
+}
+const accountsHost = hostOf(accountsUrl);
+
 export const env = {
   apiBaseUrl,
   apiMode,
@@ -31,6 +40,8 @@ export const env = {
    *  branches on (`env.useRealApi ? api.get(...) : simulate*()`). */
   useRealApi: apiMode === 'real' && apiBaseUrl !== '',
   accountsUrl,
+  /** Hostname of the accounts backend — allowlist for SSO redirect navigation. */
+  accountsHost,
   authMode,
   /** True only when real auth is wired — gates the better-auth client, real
    *  sign-in branches, and route guards (`env.useRealAuth ? guard : free`). */

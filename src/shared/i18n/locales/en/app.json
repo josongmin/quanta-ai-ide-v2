@@ -150,5 +150,10 @@
     "openNewTab": "Open new tab",
     "newTab": "New tab",
     "searchRepos": "Search repositories"
+  },
+  "impersonation": {
+    "banner": "You are impersonating another user.",
+    "stop": "Stop impersonating",
+    "stopping": "Stopping…"
   }
 }

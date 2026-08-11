@@ -3,7 +3,8 @@
   "subtitle": "플랫폼 운영자 도구 — 모든 작업은 감사됩니다. 사용자 위장은 대상 조직에 표시됩니다.",
   "sections": {
     "users": "사용자",
-    "orgs": "조직"
+    "orgs": "조직",
+    "domains": "도메인 해제"
   },
   "searchPlaceholder": "이메일 또는 이름 검색…",
   "cols": {
@@ -32,9 +33,21 @@
     "impersonate": "위장",
     "unban": "차단 해제",
     "ban": "차단",
+    "promote": "관리자 지정",
+    "demote": "관리자 해제",
     "overridePlan": "플랜 재정의",
     "loadMore": "더 보기",
     "cancel": "취소"
+  },
+  "domains": {
+    "body": "폐업 조직이 선점한 도메인을 양쪽 레지스트리(조직 도메인 청구 + SSO)에서 강제 해제합니다. 멱등적입니다.",
+    "placeholder": "acme.com",
+    "release": "도메인 해제",
+    "releasing": "해제 중…",
+    "orgReleased": "조직 도메인 청구 해제됨",
+    "orgNone": "조직 도메인 청구 없음",
+    "ssoReleased": "SSO 청구 해제됨",
+    "ssoNone": "SSO 청구 없음"
   },
   "ban": {
     "title": "{{name}}을(를) 차단하시겠습니까?",

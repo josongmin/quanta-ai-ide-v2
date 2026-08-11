@@ -150,5 +150,10 @@
     "openNewTab": "打开新标签页",
     "newTab": "新标签页",
     "searchRepos": "搜索仓库"
+  },
+  "impersonation": {
+    "banner": "您正在模拟另一位用户。",
+    "stop": "停止模拟",
+    "stopping": "正在停止…"
   }
 }

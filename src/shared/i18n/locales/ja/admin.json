@@ -3,7 +3,8 @@
   "subtitle": "プラットフォーム運用ツール — すべての操作は監査されます。なりすましは対象組織に表示されます。",
   "sections": {
     "users": "ユーザー",
-    "orgs": "組織"
+    "orgs": "組織",
+    "domains": "ドメイン解放"
   },
   "searchPlaceholder": "メールまたは名前を検索…",
   "cols": {
@@ -32,9 +33,21 @@
     "impersonate": "なりすまし",
     "unban": "禁止解除",
     "ban": "禁止",
+    "promote": "管理者に設定",
+    "demote": "管理者を解除",
     "overridePlan": "プランを上書き",
     "loadMore": "さらに表示",
     "cancel": "キャンセル"
+  },
+  "domains": {
+    "body": "廃止された組織が占有するドメインを両方のレジストリ(組織ドメイン申請 + SSO)から強制的に解放します。冪等です。",
+    "placeholder": "acme.com",
+    "release": "ドメインを解放",
+    "releasing": "解放中…",
+    "orgReleased": "組織ドメイン申請を解放しました",
+    "orgNone": "組織ドメイン申請なし",
+    "ssoReleased": "SSO申請を解放しました",
+    "ssoNone": "SSO申請なし"
   },
   "ban": {
     "title": "{{name}} を禁止しますか？",

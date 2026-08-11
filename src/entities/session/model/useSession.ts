@@ -21,12 +21,17 @@ type SessionState = {
    *  (me-stage/Security) via the stable session id, not the token. Null when
    *  signed out / pending. */
   sessionId: string | null;
+  /** When set, this session is an admin impersonating another user (better-auth
+   *  `session.impersonatedBy` = the original admin's id). Drives the app-shell
+   *  "stop impersonating" banner. Null in a normal session. */
+  impersonatedBy: string | null;
 };
 
 export function useSession(): SessionState {
   const { data, isPending } = authClient.useSession();
   const raw = data?.user;
   const id = (data?.session as { id?: unknown } | undefined)?.id;
+  const impersonatedBy = (data?.session as { impersonatedBy?: string | null } | undefined)?.impersonatedBy;
   return {
     user: raw
       ? {
@@ -37,5 +42,6 @@ export function useSession(): SessionState {
     isAuthenticated: Boolean(data),
     isPending,
     sessionId: typeof id === 'string' ? id : null,
+    impersonatedBy: typeof impersonatedBy === 'string' && impersonatedBy !== '' ? impersonatedBy : null,
   };
 }

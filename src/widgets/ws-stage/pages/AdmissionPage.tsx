@@ -73,7 +73,6 @@ export default function AdmissionPage() {
   const blockedMessage = t('settingsContract.body', { surface: t('admission.title') });
   const {
     actionError,
-    clearActionError,
     detail,
     dirty,
     discard,
@@ -193,7 +192,7 @@ export default function AdmissionPage() {
 
       {actionError && (
         <div className="mb-3">
-          <InlineError message={actionError} onRetry={clearActionError} />
+          <InlineError message={actionError} onRetry={() => { void save(); }} />
         </div>
       )}
 

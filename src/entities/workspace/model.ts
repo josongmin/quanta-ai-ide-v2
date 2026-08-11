@@ -127,10 +127,27 @@ async function listWorkspacePayloads(): Promise<ApiResult<WorkspacePayload[]>> {
   return { ok: true, data: data.map((item) => asRecord(item)).filter((item): item is WorkspacePayload => item !== null) };
 }
 
-async function resolveWorkspaceCandidate(workspaceSlug: string): Promise<WorkspacePayload | null> {
+// The list lookup can fail three ways that must NOT all collapse to "no match":
+//   • collection-404 → service not deployed (graceful; the write is already
+//     blocked upstream, but treat like no-match so the caller's ref fallbacks run)
+//   • other http / network / auth failure → a real outage, must surface
+//   • ok but no match → genuine not-found
+// Returning a discriminated result lets updateWorkspace distinguish a real
+// outage from a true not-found instead of masking a 500 as WORKSPACE_NOT_FOUND.
+type ResolveResult =
+  | { ok: true; candidate: WorkspacePayload | null }
+  | { ok: false; error: string };
+
+async function resolveWorkspaceCandidate(workspaceSlug: string): Promise<ResolveResult> {
   const res = await listWorkspacePayloads();
-  if (!res.ok) return null;
-  return res.data.find((candidate) => matchesWorkspace(candidate, workspaceSlug)) ?? null;
+  if (!res.ok) {
+    // A 404 on the collection itself means the service isn't deployed; degrade
+    // to "no candidate" (the caller still tries id/slug refs). Any other failure
+    // is a real outage and must not be swallowed.
+    if (res.error.kind === 'http' && res.error.status === 404) return { ok: true, candidate: null };
+    return { ok: false, error: apiErrorMessage(res.error, 'workspace') };
+  }
+  return { ok: true, candidate: res.data.find((candidate) => matchesWorkspace(candidate, workspaceSlug)) ?? null };
 }
 
 export async function getWorkspace(orgSlug: string, workspaceSlug: string): Promise<WorkspaceReadResult> {
@@ -199,7 +216,14 @@ export async function updateWorkspace(input: {
   workspaceId?: string | null;
   data: WorkspacePatch;
 }): Promise<WorkspaceActionResult> {
-  const resolved = input.workspaceId ? null : await resolveWorkspaceCandidate(input.workspaceSlug);
+  let resolved: WorkspacePayload | null = null;
+  if (!input.workspaceId) {
+    const lookup = await resolveWorkspaceCandidate(input.workspaceSlug);
+    // A real list outage (500/network/auth) must surface as an error, not be
+    // masked as WORKSPACE_NOT_FOUND below.
+    if (!lookup.ok) return { ok: false, error: lookup.error };
+    resolved = lookup.candidate;
+  }
   const refs = uniqueRefs(
     input.workspaceId,
     workspaceString(resolved, 'id'),

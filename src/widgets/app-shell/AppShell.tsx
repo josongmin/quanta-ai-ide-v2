@@ -34,6 +34,14 @@ const UserMenu = lazy(() =>
   import('./UserMenu').then((m) => ({ default: m.UserMenu })),
 );
 
+// Impersonation exit banner — lazy for the same reason as UserMenu (it reads the
+// better-auth session), so the mock demo never drags the auth client into its
+// initial chunk. Only mounted in real-auth mode; self-hides unless the session
+// is actively impersonating.
+const ImpersonationBanner = lazy(() =>
+  import('./ImpersonationBanner').then((m) => ({ default: m.ImpersonationBanner })),
+);
+
 function AvatarBadge() {
   return (
     <div
@@ -132,6 +140,11 @@ export default function AppShell({ children }: { children: ReactNode }) {
       >
         Skip to main content
       </a>
+      {env.useRealAuth && (
+        <Suspense fallback={null}>
+          <ImpersonationBanner />
+        </Suspense>
+      )}
       {/* Dark-only blur: light theme uses near-opaque --bg-overlay, so an
           always-on backdrop-filter just smears the scrolled page behind the
           translucent header (it reads as content "hidden behind" the GNB)

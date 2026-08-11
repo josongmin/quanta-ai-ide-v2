@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { CreditCard } from 'lucide-react';
 import { useTheme } from '@shared/theme';
-import { safeHref } from '@shared/lib';
+import { safeNavigate } from '@shared/lib';
 import { ScrollPane, Badge, InlineError, SkeletonText, type BadgeVariant } from '@shared/ui';
 import { Button } from '@shared/ui/forms';
 import { useTabVisibility } from '@features/workspace-tabs';
@@ -20,6 +20,9 @@ import { Section, Divider } from './parts/Section';
 // contracts (the mock's rich sections) are delegated to the Stripe customer
 // portal rather than faked. Sales-led plans (free downgrade / enterprise) route
 // out of self-serve checkout.
+// Allowlist for Stripe-hosted checkout/portal redirects (safeNavigate).
+const STRIPE_HOSTS = ['*.stripe.com'] as const;
+
 const STATUS_VARIANT: Record<SubscriptionStatus, BadgeVariant> = {
   none: 'neutral',
   trialing: 'info',
@@ -46,7 +49,9 @@ export function BillingReal() {
     setActionError(null);
     const res = await startCheckout(orgId, { plan, cycle });
     if (!res.ok) { setBusy(false); setActionError(res.error); return; }
-    const dest = safeHref(res.url);
+    // Checkout/portal URLs are Stripe-hosted — pin the full-page redirect to
+    // *.stripe.com so a compromised backend can't redirect elsewhere.
+    const dest = safeNavigate(res.url, STRIPE_HOSTS);
     if (!dest) { setBusy(false); setActionError(t('linkBlocked')); return; }
     window.location.href = dest;
   }
@@ -56,7 +61,7 @@ export function BillingReal() {
     setActionError(null);
     const res = await openPortal(orgId);
     if (!res.ok) { setBusy(false); setActionError(res.error); return; }
-    const dest = safeHref(res.url);
+    const dest = safeNavigate(res.url, STRIPE_HOSTS);
     if (!dest) { setBusy(false); setActionError(t('linkBlocked')); return; }
     window.location.href = dest;
   }

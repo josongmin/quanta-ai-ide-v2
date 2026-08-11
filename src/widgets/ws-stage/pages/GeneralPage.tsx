@@ -29,7 +29,6 @@ export default function GeneralPage() {
   }), [t, wsSlug]);
   const {
     actionError,
-    clearActionError,
     detail,
     dirty,
     discard,
@@ -123,7 +122,7 @@ export default function GeneralPage() {
 
       {actionError && (
         <div className="mb-3">
-          <InlineError message={actionError} onRetry={clearActionError} />
+          <InlineError message={actionError} onRetry={() => { void save(); }} />
         </div>
       )}
 

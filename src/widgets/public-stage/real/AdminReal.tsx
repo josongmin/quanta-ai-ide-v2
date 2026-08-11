@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAsyncResource, useAppendedPages } from '@shared/lib';
 import { formatDateShort } from '@shared/i18n';
-import { UserCog, Ban, ShieldCheck, LogIn, CreditCard, Building2, Users } from 'lucide-react';
+import { UserCog, Ban, ShieldCheck, ShieldMinus, LogIn, CreditCard, Building2, Users, Globe } from 'lucide-react';
 import { AdminShell } from '../parts/AdminShell';
 import { Button, Field } from '@shared/ui/forms';
 import {
@@ -10,10 +10,10 @@ import {
   SettingsModal, ConfirmDialog, type BadgeVariant,
 } from '@shared/ui';
 import {
-  listUsers, banUser, unbanUser, impersonateUser,
-  listOrgs, overridePlan,
+  listUsers, banUser, unbanUser, impersonateUser, setPlatformRole,
+  listOrgs, overridePlan, releaseDomain,
   type AdminUser, type AdminOrg, type AdminPlan,
-  type AdminUserPage, type AdminOrgPage,
+  type AdminUserPage, type AdminOrgPage, type ReleaseDomainResult,
 } from '@entities/admin';
 
 // Real platform super-admin backoffice over accounts /v1/admin/*. Honest to the
@@ -76,6 +76,24 @@ export function AdminReal() {
     orgsRes.refetch();
   };
 
+  // domain force-release
+  const [domainInput, setDomainInput] = useState('');
+  const [domainBusy, setDomainBusy] = useState(false);
+  const [domainResult, setDomainResult] = useState<ReleaseDomainResult | null>(null);
+
+  async function doReleaseDomain() {
+    const domain = domainInput.trim().toLowerCase();
+    if (!domain || domainBusy) return;
+    setDomainBusy(true);
+    setActionError(null);
+    setDomainResult(null);
+    const res = await releaseDomain(domain);
+    if (!mountedRef.current) return;
+    setDomainBusy(false);
+    if (!res.ok) { setActionError(res.error); return; }
+    setDomainResult(res.data);
+  }
+
   // moderation modals
   const [banFor, setBanFor] = useState<AdminUser | null>(null);
   const [impersonateFor, setImpersonateFor] = useState<AdminUser | null>(null);
@@ -85,6 +103,16 @@ export function AdminReal() {
     if (busyId) return;
     setBusyId(u.id);
     const res = await unbanUser(u.id);
+    if (!mountedRef.current) return;
+    setBusyId(null);
+    if (!res.ok) { setActionError(res.error); return; }
+    refetch();
+  }
+  // Platform role toggle — promote a member to super-admin or demote an admin.
+  async function doSetRole(u: AdminUser) {
+    if (busyId) return;
+    setBusyId(u.id);
+    const res = await setPlatformRole(u.id, u.role === 'admin' ? 'user' : 'admin');
     if (!mountedRef.current) return;
     setBusyId(null);
     if (!res.ok) { setActionError(res.error); return; }
@@ -166,6 +194,9 @@ export function AdminReal() {
                     <RowMenu
                       items={[
                         { label: t('actions.impersonate'), icon: LogIn, disabled: busyId !== null || u.role === 'admin', onClick: () => { setImpersonateFor(u); } },
+                        u.role === 'admin'
+                          ? { label: t('actions.demote'), icon: ShieldMinus, disabled: busyId !== null, onClick: () => { void doSetRole(u); } }
+                          : { label: t('actions.promote'), icon: ShieldCheck, disabled: busyId !== null, onClick: () => { void doSetRole(u); } },
                         u.banned
                           ? { label: t('actions.unban'), icon: ShieldCheck, disabled: busyId !== null, onClick: () => { void doUnban(u); } }
                           : { label: t('actions.ban'), icon: Ban, danger: true, disabled: busyId !== null || u.role === 'admin', onClick: () => { setBanFor(u); } },
@@ -199,6 +230,41 @@ export function AdminReal() {
                 )}
               />
               {orgsPage.cursor && <div className="flex justify-center"><Button variant="ghost" size="md" disabled={orgsPage.loadingMore} onClick={orgsPage.loadMore}>{t('actions.loadMore')}</Button></div>}
+            </section>
+
+            {/* Domain force-release — free a domain squatted by a defunct org
+                across both registries (org-domain + SSO). Idempotent server-side. */}
+            <section id="domains" className="flex flex-col gap-3">
+              <h2 className="text-base font-semibold inline-flex items-center gap-2" style={{ color: 'var(--fg-strong)' }}>
+                <Globe className="w-4 h-4" style={{ color: 'var(--fg-muted)' }} /> {t('sections.domains')}
+              </h2>
+              <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>{t('domains.body')}</p>
+              <form
+                className="flex items-center gap-2"
+                onSubmit={(e) => { e.preventDefault(); void doReleaseDomain(); }}
+              >
+                <input
+                  value={domainInput}
+                  onChange={(e) => { setDomainInput(e.target.value); setDomainResult(null); }}
+                  placeholder={t('domains.placeholder')}
+                  aria-label={t('domains.placeholder')}
+                  className="w-72 h-9 rounded-md px-3 text-base outline-none"
+                  style={{ background: 'var(--bg-surface-muted)', border: '1px solid var(--border-default)', color: 'var(--fg-strong)' }}
+                />
+                <Button type="submit" variant="primary" size="md" disabled={domainBusy || domainInput.trim() === ''}>
+                  {domainBusy ? t('domains.releasing') : t('domains.release')}
+                </Button>
+              </form>
+              {domainResult && (
+                <div className="flex flex-wrap items-center gap-2 text-sm" style={{ color: 'var(--fg-muted)' }}>
+                  <Badge variant={domainResult.orgDomainReleased ? 'success' : 'neutral'} size="sm">
+                    {domainResult.orgDomainReleased ? t('domains.orgReleased') : t('domains.orgNone')}
+                  </Badge>
+                  <Badge variant={domainResult.ssoReleased ? 'success' : 'neutral'} size="sm">
+                    {domainResult.ssoReleased ? t('domains.ssoReleased') : t('domains.ssoNone')}
+                  </Badge>
+                </div>
+              )}
             </section>
           </>
         )}

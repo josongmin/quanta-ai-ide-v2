@@ -52,7 +52,6 @@ export default function OwnershipPage() {
   const [validate, setValidate] = useState<'idle' | 'checking' | 'ok'>('idle');
   const {
     actionError,
-    clearActionError,
     detail,
     dirty,
     discard,
@@ -208,7 +207,7 @@ export default function OwnershipPage() {
 
       {actionError && (
         <div className="mb-3">
-          <InlineError message={actionError} onRetry={clearActionError} />
+          <InlineError message={actionError} onRetry={() => { void save(); }} />
         </div>
       )}
 

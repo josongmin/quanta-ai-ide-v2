@@ -16,6 +16,9 @@ const AdminUserSchema = z.object({
 });
 export type AdminUser = z.infer<typeof AdminUserSchema>;
 
+// Platform role enum — mirrors @p0/contracts setRoleRequest ('admin'|'user').
+export type PlatformRole = 'admin' | 'user';
+
 const AdminUserPageSchema = z.object({
   // `.catch([])` keeps the type a non-null array while never rejecting a response
   // whose list is null/absent (the caller already normalizes; validation must not
@@ -60,4 +63,19 @@ export async function unbanUser(id: string): Promise<ActionResult> {
 export async function impersonateUser(id: string): Promise<ActionResult> {
   const res = await accountsApi.post(`/v1/admin/users/${encodeURIComponent(id)}/impersonate`);
   return res.ok ? { ok: true } : { ok: false, error: moderationError(res, 'impersonate') };
+}
+
+// Exit an active impersonation — restores the original admin session cookie
+// (requireSession server-side: the caller is the impersonated user, who may not
+// be an admin). Returns ok so the caller can navigate back to the app root.
+export async function stopImpersonating(): Promise<ActionResult> {
+  const res = await accountsApi.post('/v1/admin/stop-impersonating');
+  return res.ok ? { ok: true } : { ok: false, error: apiErrorMessage(res.error, 'stop impersonating') };
+}
+
+// Platform role — 'admin' promotes to super-admin, 'user' demotes. Reuses the
+// self/other-admin moderation-error friendliness (400).
+export async function setPlatformRole(id: string, role: PlatformRole): Promise<ActionResult> {
+  const res = await accountsApi.post(`/v1/admin/users/${encodeURIComponent(id)}/role`, { role });
+  return res.ok ? { ok: true } : { ok: false, error: moderationError(res, 'set role') };
 }

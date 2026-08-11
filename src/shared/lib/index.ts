@@ -18,6 +18,7 @@ export {
 } from './storageKeys';
 export { clamp, clamp01 } from './clamp';
 export { safeHref } from './safeHref';
+export { safeNavigate } from './safeNavigate';
 export { assertNever } from './assertNever';
 export { useCopyToClipboard } from './useCopyToClipboard';
 export { useRovingMenuFocus } from './useRovingMenuFocus';

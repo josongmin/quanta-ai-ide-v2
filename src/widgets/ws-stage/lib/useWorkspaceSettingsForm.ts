@@ -58,6 +58,8 @@ export function useWorkspaceSettingsForm<T>({
   const [saving, setSaving] = useState<SavingState>('idle');
   const [actionError, setActionError] = useState<string | null>(null);
   const seededKey = useRef<string | null>(null);
+  // Synchronous in-flight latch for save() — see the guard in save() below.
+  const savingRef = useRef(false);
   // Two ways a real-mode save is blocked:
   //   • static — the page declares its write contract isn't wired yet.
   //   • runtime — the /v1/workspaces collection route 404s (service not deployed;
@@ -84,11 +86,17 @@ export function useWorkspaceSettingsForm<T>({
   const dirty = !shallowEqual(form, committed);
 
   async function save() {
+    // Re-entrancy guard: the button disables on 'saving', but a programmatic /
+    // keyboard save could otherwise double-fire a PATCH. The ref latch is
+    // synchronous (unlike the `saving` state, which updates on the next render).
+    if (savingRef.current) return;
+    savingRef.current = true;
     setActionError(null);
 
     if (saveBlockedReason) {
       setSaving('idle');
       setActionError(saveBlockedReason);
+      savingRef.current = false;
       return;
     }
 
@@ -98,6 +106,7 @@ export function useWorkspaceSettingsForm<T>({
       setTimeout(() => {
         setCommitted(form);
         setSaving('saved');
+        savingRef.current = false;
         setTimeout(() => { setSaving('idle'); }, 1200);
       }, 600);
       return;
@@ -112,10 +121,18 @@ export function useWorkspaceSettingsForm<T>({
     if (!res.ok) {
       setSaving('idle');
       setActionError(res.error);
+      savingRef.current = false;
       return;
     }
     setCommitted(form);
     setSaving('saved');
+    savingRef.current = false;
+    // Server truth must win over the optimistic snapshot: the backend may
+    // normalize slug/name on write, so re-seed from the refetched detail rather
+    // than leaving the (possibly stale) local form committed. Clearing the seed
+    // latch lets the seed effect re-apply once refetch resolves the SAME id
+    // (which it otherwise short-circuits via `seededKey.current === key`).
+    seededKey.current = null;
     refetch();
     setTimeout(() => { setSaving('idle'); }, 1200);
   }

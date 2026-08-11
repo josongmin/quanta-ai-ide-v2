@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { ArrowRight, Sparkles, Loader2 } from 'lucide-react';
 import { env } from '@shared/config/env';
-import { safeHref } from '@shared/lib';
+import { safeNavigate } from '@shared/lib';
 import { useSession, updateProfile } from '@entities/session';
 import { createOrganization, setActiveOrg, inviteMember } from '@entities/org';
 import { startCheckout } from '@entities/billing';
@@ -115,9 +115,10 @@ export default function OnboardingStage() {
 
       if (data.plan.id === 'team' || data.plan.id === 'business') {
         const checkout = await startCheckout(orgId, { plan: data.plan.id, cycle: data.plan.cycle });
-        // Guard the server URL against scheme injection; a blocked URL falls
+        // Guard the server URL before the full-page redirect: safeNavigate pins
+        // it to Stripe's hosts (checkout is Stripe-hosted). A blocked URL falls
         // through to landing in the app, same as a checkout that couldn't start.
-        const dest = checkout.ok ? safeHref(checkout.url) : undefined;
+        const dest = checkout.ok ? safeNavigate(checkout.url, ['*.stripe.com']) : undefined;
         if (dest) { window.location.href = dest; return; }
         // Checkout couldn't start — land in the app; they can upgrade in Billing.
       }

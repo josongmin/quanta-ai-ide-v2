@@ -150,5 +150,10 @@
     "openNewTab": "新しいタブを開く",
     "newTab": "新しいタブ",
     "searchRepos": "リポジトリを検索"
+  },
+  "impersonation": {
+    "banner": "別のユーザーとして操作しています。",
+    "stop": "代理操作を終了",
+    "stopping": "終了中…"
   }
 }

@@ -72,7 +72,6 @@ export default function FixPipelinePage() {
   const blockedMessage = t('settingsContract.body', { surface: t('fix.title') });
   const {
     actionError,
-    clearActionError,
     detail,
     dirty,
     discard,
@@ -212,7 +211,7 @@ export default function FixPipelinePage() {
 
       {actionError && (
         <div className="mb-3">
-          <InlineError message={actionError} onRetry={clearActionError} />
+          <InlineError message={actionError} onRetry={() => { void save(); }} />
         </div>
       )}
 

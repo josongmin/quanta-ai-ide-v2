@@ -4,8 +4,11 @@ export {
   banUser,
   unbanUser,
   impersonateUser,
+  stopImpersonating,
+  setPlatformRole,
   type AdminUser,
   type AdminUserPage,
+  type PlatformRole,
 } from './model/users';
 export {
   listOrgs,
@@ -14,3 +17,7 @@ export {
   type AdminOrgPage,
   type AdminPlan,
 } from './model/orgs';
+export {
+  releaseDomain,
+  type ReleaseDomainResult,
+} from './model/domains';

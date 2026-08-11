@@ -150,5 +150,10 @@
     "openNewTab": "새 탭 열기",
     "newTab": "새 탭",
     "searchRepos": "저장소 검색"
+  },
+  "impersonation": {
+    "banner": "다른 사용자로 대행 중입니다.",
+    "stop": "대행 종료",
+    "stopping": "종료 중…"
   }
 }

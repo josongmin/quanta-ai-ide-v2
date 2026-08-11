@@ -3,7 +3,8 @@
   "subtitle": "Platform operator tools — every action is audited. Impersonation is visible to the target org.",
   "sections": {
     "users": "Users",
-    "orgs": "Organizations"
+    "orgs": "Organizations",
+    "domains": "Domain release"
   },
   "searchPlaceholder": "Search email or name…",
   "cols": {
@@ -32,9 +33,21 @@
     "impersonate": "Impersonate",
     "unban": "Unban",
     "ban": "Ban",
+    "promote": "Make admin",
+    "demote": "Revoke admin",
     "overridePlan": "Override plan",
     "loadMore": "Load more",
     "cancel": "Cancel"
+  },
+  "domains": {
+    "body": "Force-release a domain squatted by a defunct org across both registries (org-domain claim + SSO). Idempotent.",
+    "placeholder": "acme.com",
+    "release": "Release domain",
+    "releasing": "Releasing…",
+    "orgReleased": "Org-domain claim released",
+    "orgNone": "No org-domain claim",
+    "ssoReleased": "SSO claim released",
+    "ssoNone": "No SSO claim"
   },
   "ban": {
     "title": "Ban {{name}}?",

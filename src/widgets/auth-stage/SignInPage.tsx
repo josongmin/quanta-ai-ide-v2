@@ -5,7 +5,7 @@ import {
   Eye, EyeOff, Mail, KeyRound, Lock, AlertCircle, Sparkles, Check,
 } from 'lucide-react';
 import { env } from '@shared/config/env';
-import { safeHref } from '@shared/lib';
+import { safeNavigate } from '@shared/lib';
 import { signInWithPassword, signInWithProvider, type OAuthProvider } from '@entities/session';
 import { resolveSso } from '@entities/org';
 import { GithubIcon } from '@shared/ui/brand-icons';
@@ -129,10 +129,14 @@ export default function SignInPage() {
     setError(null);
     void (async () => {
       const r = await resolveSso(em);
-      // Guard the server-provided IdP URL against scheme injection before we
-      // hand the browser to it (a compromised/MITM'd backend could return a
-      // javascript: URL). safeHref allows only http(s).
-      const dest = r.sso && r.authorizationUrl ? safeHref(r.authorizationUrl) : undefined;
+      // Guard the server-provided authorize URL before we hand the browser to
+      // it via window.location. safeNavigate requires http(s) AND (when the
+      // accounts host is configured) pins the destination to that host — the
+      // authorize entrypoint lives on the accounts backend, which then 302s to
+      // the IdP. Defense-in-depth against a compromised/MITM'd backend returning
+      // a javascript:/open-redirect URL.
+      const allow = env.accountsHost !== '' ? [env.accountsHost] : undefined;
+      const dest = r.sso && r.authorizationUrl ? safeNavigate(r.authorizationUrl, allow) : undefined;
       if (dest) { window.location.href = dest; }
       else { setError(t('signIn.ssoNotConfigured')); }
     })();
