@@ -2,8 +2,7 @@
 // SemanticTokens table. Used by both the dark-palette and light-palette
 // collections in this directory.
 
-import type { SemanticTokens } from '@shared/tokens';
-import type { Tokens } from '@shared/tokens';
+import type { SemanticTokens, Tokens } from '@shared/tokens';
 
 export type Tone = 'dark' | 'light';
 
