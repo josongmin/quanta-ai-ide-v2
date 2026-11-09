@@ -1,6 +1,30 @@
+<p align="center"><img src="readme-banner.svg" alt="Quanta AI IDE v2 — A scoped workbench for code, agents, and software intelligence." width="100%"></p>
+
 # Quanta AI IDE v2
 
 A codebase visualization workbench for exploring repositories as spatial systems. React and TypeScript provide the interface, Three.js renders the scene, Zustand manages state, and Tauri supplies the optional desktop shell.
+
+
+## Engineering highlights
+
+| Mechanism | Engineering purpose |
+| :--- | :--- |
+| **Registered workspace surfaces** | The app composes a surface runtime and route registry; workspace features consume that registry through context. |
+| **Scoped workbench infrastructure** | Shared workbench and UI infrastructure own scope, keybindings, overlays, and cleanup concerns. |
+| **Agent integration boundary** | Agent-session integration lives behind the app and shared bridge layers, keeping the presentation surface distinct from the agent runtime. |
+| **Architecture and UI checks** | Import-boundary audits, UI-infrastructure checks, catalog validation, renderer tests, and bundle budgets have separate scripts. |
+
+
+## Architecture at a glance
+
+```mermaid
+flowchart TB
+    A["App providers and router"] --> R["Surface runtime registry"]
+    R --> W["Workspace tabs and workbench"]
+    W --> F["Feature slices and widgets"]
+    F --> S["Shared UI, state, and agent bridge"]
+    S --> H["Browser or Tauri host"]
+```
 
 ## What it does
 
