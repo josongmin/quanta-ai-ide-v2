@@ -2,18 +2,18 @@
 
 # Quanta AI IDE v2
 
-A codebase visualization workbench for exploring repositories as spatial systems. React and TypeScript provide the interface, Three.js renders the scene, Zustand manages state, and Tauri supplies the optional desktop shell.
+<p align="center"><a href="#engineering-highlights">Engineering</a> · <a href="#architecture-at-a-glance">Architecture</a> · <a href="#run-locally">Get started</a> · <a href="#documentation">Reference</a></p>
 
+A codebase visualization workbench for exploring repositories as spatial systems. React and TypeScript provide the interface, Three.js renders the scene, Zustand manages state, and Tauri supplies the optional desktop shell.
 
 ## Engineering highlights
 
-| Mechanism | Engineering purpose |
-| :--- | :--- |
-| **Registered workspace surfaces** | The app composes a surface runtime and route registry; workspace features consume that registry through context. |
-| **Scoped workbench infrastructure** | Shared workbench and UI infrastructure own scope, keybindings, overlays, and cleanup concerns. |
-| **Agent integration boundary** | Agent-session integration lives behind the app and shared bridge layers, keeping the presentation surface distinct from the agent runtime. |
-| **Architecture and UI checks** | Import-boundary audits, UI-infrastructure checks, catalog validation, renderer tests, and bundle budgets have separate scripts. |
-
+| Mechanism | Engineering purpose | Source |
+| :--- | :--- | :--- |
+| **Registered workspace surfaces** | The app composes a surface runtime and route registry; workspace features consume that registry through context. | [Composition](src/app/App.tsx) |
+| **Scoped workbench infrastructure** | Shared workbench and UI infrastructure own scope, keybindings, overlays, and cleanup concerns. | [Workbench](src/shared/workbench/) |
+| **Agent integration boundary** | Agent-session integration lives behind the app and shared bridge layers, keeping the presentation surface distinct from the agent runtime. | [Agent bridge](src/shared/agent-bridge/) |
+| **Architecture and UI checks** | Import-boundary audits, UI-infrastructure checks, catalog validation, renderer tests, and bundle budgets have separate scripts. | [UI audit](scripts/ui-infra-audit.mjs) |
 
 ## Architecture at a glance
 
@@ -82,3 +82,5 @@ This repository develops the visualization and interaction surfaces. Demonstrati
 - [Workbench handoff](docs/workbench-handoff.md)
 - [Design RFCs](docs/rfc)
 - [Script reference](package.json)
+
+<p align="center"><sub><a href="https://github.com/josongmin">Project map</a> · <a href="#engineering-highlights">Back to overview</a></sub></p>
